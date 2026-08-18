@@ -22,7 +22,7 @@
  *
  * GEOMETRY (K4-A): divider thickness/margins, group-label chrome, item-row
  * layout, shortcut/label tracks, panel width/padding and the trigger's
- * positioning context all live here, drained from engine inline styles and
+ * positioning context live here, drained from engine inline styles and
  * Tailwind utilities (`flex items-center justify-between gap-2`, `text-xs
  * opacity-50`, `relative`). Shipped values are transcribed verbatim; token
  * channels are family-local `--ds-context-menu-*` with fallbacks.

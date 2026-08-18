@@ -229,6 +229,17 @@ const sidebar = object({
     "itemPadding",
     "iconSize",
     "footerBg",
+    // Sidebar geometry admitted alongside the static BrandSidebarChrome
+    // fields so both transports author the same nine channels.
+    "shellPaddingInline",
+    "shellPaddingCollapsed",
+    "itemHeight",
+    "itemChildHeight",
+    "itemFontSizeChild",
+    "itemPaddingInline",
+    "iconColumnSize",
+    "itemGap",
+    "childPaddingInline",
   ]),
   groupFontWeight: FONT_WEIGHT,
   itemFontWeight: FONT_WEIGHT,
@@ -502,6 +513,38 @@ const controls = object({
   buttonGeometry,
   fieldGeometry,
   segmented,
+  textarea: object(
+    visualFields([
+      "bg",
+      "bgDisabled",
+      "filledBg",
+      "border",
+      "borderHover",
+      "borderFocus",
+      "shadowFocus",
+      "successBorder",
+      "warningBorder",
+      "errorBorder",
+      "color",
+      "colorPlaceholder",
+      "countColor",
+    ])
+  ),
+  form: object(
+    visualFields([
+      "labelColor",
+      // `labelFontWeight` is a visual value rather than FONT_WEIGHT because the
+      // static BrandFormChrome field lowers a CSS string straight into
+      // `--ds-form-label-font-weight`; both transports must admit the same type.
+      "labelFontWeight",
+      "helpColor",
+      "extraColor",
+      "requiredColor",
+      "successColor",
+      "warningColor",
+      "errorColor",
+    ])
+  ),
   buttonPrimary: buttonVariant,
   buttonSecondary: buttonVariant,
   buttonDefault: buttonVariant,
@@ -520,6 +563,232 @@ const controls = object({
   }),
   focusRing: VISUAL,
   input,
+  /**
+   * ROTTAY-T2 MASS. The DB transport authors the same closed control
+   * vocabulary the static `BrandTheme` transport does, because
+   * `chromeToVariables` is the single lowering for both. 13 containers, 163
+   * governed leaves: `select` carries 33 (the 15 C3 channels plus the 18
+   * ROTTAY-T2 added), and the twelve families below carry 130.
+   *
+   * Every leaf is a VISUAL field. There are no open maps, no legacy aliases,
+   * no slug or product branches: a customer document that names a channel
+   * outside this list is rejected before it reaches the compiler.
+   */
+  select: object(
+    visualFields([
+      "bg",
+      "bgHover",
+      "bgFocus",
+      "color",
+      "colorPlaceholder",
+      "borderColor",
+      "borderColorHover",
+      "borderColorFocus",
+      "dropdownBg",
+      "dropdownBorderColor",
+      "dropdownShadow",
+      "optionBgHover",
+      "optionBgSelected",
+      "optionColor",
+      "optionColorSelected",
+      "arrowColor",
+      "bgDisabled",
+      "border",
+      "borderFocus",
+      "borderHover",
+      "checkColor",
+      "clearColor",
+      "clearColorHover",
+      "colorDisabled",
+      "dropdownBorder",
+      "errorBorder",
+      "filledBg",
+      "optionColorDisabled",
+      "shadowFocus",
+      "successBorder",
+      "tagBg",
+      "tagColor",
+      "warningBorder",
+    ])
+  ),
+  autocomplete: object(
+    visualFields([
+      "bg",
+      "border",
+      "borderFocus",
+      "clearColor",
+      "dropdownBg",
+      "dropdownShadow",
+      "emptyColor",
+      "errorBorder",
+      "optionBgHover",
+      "warningBorder",
+    ])
+  ),
+  checkbox: object(
+    visualFields([
+      "bg",
+      "bgDisabled",
+      "border",
+      "borderHover",
+      "checkedBg",
+      "checkedBorder",
+      "checkedColor",
+      "errorBorder",
+      "errorColor",
+      "focusRing",
+      "focusRingColor",
+      "labelColor",
+      "labelColorDisabled",
+    ])
+  ),
+  datePicker: object(
+    visualFields([
+      "bg",
+      "bgDisabled",
+      "border",
+      "borderFocus",
+      "borderHover",
+      "clearColor",
+      "color",
+      "errorBorder",
+      "iconColor",
+      "separatorColor",
+      "shadowFocus",
+      "warningBorder",
+    ])
+  ),
+  inputNumber: object(
+    visualFields([
+      "addonBg",
+      "addonBorder",
+      "addonColor",
+      "affixColor",
+      "bg",
+      "bgDisabled",
+      "border",
+      "borderFocus",
+      "color",
+      "controlColor",
+      "errorBorder",
+      "shadowFocus",
+      "warningBorder",
+    ])
+  ),
+  radio: object(
+    visualFields([
+      "bg",
+      "bgDisabled",
+      "border",
+      "borderHover",
+      "checkedBg",
+      "checkedBorder",
+      "checkedDot",
+      "descriptionColor",
+      "errorBorder",
+      "errorColor",
+      "focusRing",
+      "focusRingColor",
+      "labelColor",
+      "labelColorDisabled",
+    ])
+  ),
+  rate: object(
+    visualFields([
+      "color",
+    ])
+  ),
+  slider: object(
+    visualFields([
+      "focusRing",
+      "handleBg",
+      "handleBgDisabled",
+      "handleBorder",
+      "handleShadow",
+      "markColor",
+      "railColor",
+      "trackColor",
+      "trackColorDisabled",
+    ])
+  ),
+  switch: object(
+    visualFields([
+      "bg",
+      "bgHover",
+      "checkedBg",
+      "checkedBgHover",
+      "focusRing",
+      "labelColor",
+      "thumbBg",
+      "thumbShadow",
+    ])
+  ),
+  timePicker: object(
+    visualFields([
+      "bg",
+      "bgDisabled",
+      "border",
+      "borderFocus",
+      "clearColor",
+      "color",
+      "errorBorder",
+      "iconColor",
+      "separatorColor",
+      "shadowFocus",
+      "warningBorder",
+    ])
+  ),
+  toggle: object(
+    visualFields([
+      "descriptionColor",
+      "dotBg",
+      "dotShadow",
+      "errorBg",
+      "errorColor",
+      "focusRing",
+      "innerLabelColor",
+      "labelColor",
+      "successBg",
+      "trackBg",
+      "trackBgChecked",
+      "warningBg",
+    ])
+  ),
+  transfer: object(
+    visualFields([
+      "bg",
+      "border",
+      "headerBg",
+      "headerBorder",
+      "itemBgHover",
+    ])
+  ),
+  upload: object(
+    visualFields([
+      "bg",
+      "border",
+      "borderHover",
+      "buttonBg",
+      "buttonBorder",
+      "buttonColor",
+      "cardBg",
+      "cardBorder",
+      "draggerBg",
+      "draggerBgHover",
+      "draggerBorder",
+      "draggerBorderActive",
+      "draggerIconColor",
+      "draggerTextColor",
+      "errorBorder",
+      "fileBg",
+      "fileColor",
+      "fileRemoveColor",
+      "previewBackdrop",
+      "previewOverlay",
+      "progressBar",
+      "progressTrack",
+    ])
+  ),
 });
 
 const premiumCardFields: Readonly<Record<string, TenantThemeSchemaNode>> =
@@ -595,6 +864,7 @@ const chrome = object({
       "aspectRatioMotionDuration",
       "aspectRatioMotionEasing",
       "dividerColor",
+      "dividerTextColor",
       "dividerThicknessThin",
       "dividerThicknessMedium",
       "dividerThicknessThick",
@@ -676,6 +946,8 @@ const chrome = object({
       "lineHeight",
       "letterSpacing",
       "gap",
+      "borderColor",
+      "textColor",
       "maxInlineSize",
       "chipMaxInlineSize",
       "pillMaxInlineSize",
@@ -797,8 +1069,19 @@ const chrome = object({
     ]),
     fontWeight: FONT_WEIGHT,
   }),
-  search: object(
-    visualFields([
+  search: object({
+    commandPalette: object(
+      visualFields([
+        "backdrop",
+        "bg",
+        "border",
+        "emptyColor",
+        "groupColor",
+        "itemHoverBg",
+        "shortcutBorder",
+      ])
+    ),
+    ...visualFields([
       "bg",
       "border",
       "color",
@@ -819,8 +1102,8 @@ const chrome = object({
       "resultMetaColor",
       "categoryColor",
       "emptyBg",
-    ])
-  ),
+    ]),
+  }),
   controls,
   table: object({
     anatomy: anatomy("table"),
@@ -1084,6 +1367,18 @@ const chrome = object({
   ),
   tooltip: object(
     visualFields([
+      "bg",
+      "color",
+      "shadow",
+      "defaultBg",
+      "defaultColor",
+      "primaryBg",
+      "primaryColor",
+      "secondaryBg",
+      "secondaryColor",
+      "successBg",
+      "warningBg",
+      "errorBg",
       "borderedBackground",
       "borderedForeground",
       "borderedBorder",
@@ -1161,6 +1456,11 @@ const chrome = object({
   ),
   popover: object(
     visualFields([
+      "bg",
+      "border",
+      "contentColor",
+      "shadow",
+      "titleBorder",
       "borderedBackground",
       "borderedForeground",
       "borderedMutedForeground",
@@ -1354,6 +1654,235 @@ const chrome = object({
     activeHighlightOpacity: OPACITY,
     disabledOpacity: OPACITY,
   }),
+  alert: object(
+    visualFields([
+      "errorBg",
+      "errorBorder",
+      "errorColor",
+      "errorIcon",
+      "infoBg",
+      "infoBorder",
+      "infoColor",
+      "infoIcon",
+      "successBg",
+      "successBorder",
+      "successColor",
+      "successIcon",
+      "warningBg",
+      "warningBorder",
+      "warningColor",
+      "warningIcon",
+    ])
+  ),
+  anchor: object(visualFields(["inkColor", "linkColor", "linkColorActive"])),
+  avatar: object(
+    visualFields([
+      "borderColor",
+      "defaultBg",
+      "defaultColor",
+      "errorBg",
+      "errorColor",
+      "gradientBg",
+      "gradientColor",
+      "groupBorder",
+      "groupOverflowBg",
+      "groupOverflowColor",
+      "primaryBg",
+      "primaryColor",
+      "ringColor",
+      "secondaryBg",
+      "secondaryColor",
+      "statusBorder",
+      "successBg",
+      "successColor",
+      "warningBg",
+      "warningColor",
+    ])
+  ),
+  backTop: object(visualFields(["bg", "color", "shadow"])),
+  calendar: object(
+    visualFields(["bg", "border", "dayColorOther", "headerColor"])
+  ),
+  collapse: object(
+    visualFields([
+      "bg",
+      "border",
+      "contentBg",
+      "headerBg",
+      "headerBgHover",
+      "headerColor",
+    ])
+  ),
+  descriptions: object(
+    visualFields(["bg", "border", "contentColor", "labelColor"])
+  ),
+  drawer: object(
+    visualFields([
+      "bg",
+      "bodyColor",
+      "footerBorder",
+      "headerBorder",
+      "shadow",
+      "titleColor",
+    ])
+  ),
+  dropdown: object(
+    visualFields([
+      "bg",
+      "itemBgActive",
+      "itemBgHover",
+      "itemColor",
+      "itemColorActive",
+      "itemColorHover",
+      "shadow",
+    ])
+  ),
+  empty: object(visualFields(["descriptionColor", "iconColor"])),
+  floatButton: object(
+    visualFields([
+      "badgeBg",
+      "badgeColor",
+      "defaultBg",
+      "defaultColor",
+      "descriptionColor",
+      "primaryBg",
+      "primaryColor",
+    ])
+  ),
+  liveFeed: object(
+    visualFields([
+      "badgeBg",
+      "badgeColor",
+      "bg",
+      "border",
+      "emptyColor",
+      "loadMoreColor",
+      "newBg",
+      "newBorder",
+      "newColor",
+      "refreshColor",
+      "skeletonBg",
+    ])
+  ),
+  menu: object(
+    visualFields([
+      "bg",
+      "darkBg",
+      "darkItemColor",
+      "dividerColor",
+      "focusRingColor",
+      "groupTitleColor",
+      "itemBgActive",
+      "itemBgHover",
+      "itemColor",
+      "itemColorActive",
+      "itemColorHover",
+      "itemDangerColor",
+      "itemHoverBg",
+      "itemSelectedBg",
+      "itemSelectedColor",
+      "submenuBg",
+    ])
+  ),
+  message: object(
+    visualFields(["bg", "closeColor", "closeColorHover", "shadow"])
+  ),
+  notification: object(visualFields(["bg", "shadow", "titleColor"])),
+  pagination: object(
+    visualFields([
+      "activeBg",
+      "activeColor",
+      "itemBg",
+      "itemBgActive",
+      "itemBgHover",
+      "itemBorder",
+      "itemColor",
+      "itemColorActive",
+      "itemColorHover",
+    ])
+  ),
+  progress: object(
+    visualFields([
+      "bg",
+      "fillError",
+      "fillPrimary",
+      "fillSuccess",
+      "fillWarning",
+    ])
+  ),
+  result: object(visualFields(["iconColor", "subtitleColor", "titleColor"])),
+  skeleton: object(visualFields(["bg", "highlight", "waveGradient"])),
+  spinner: object(visualFields(["color", "track"])),
+  statistic: object(
+    visualFields(["prefixColor", "suffixColor", "titleColor", "valueColor"])
+  ),
+  statsGrid: object(
+    visualFields([
+      "cardBg",
+      "cardBorder",
+      "cardFilledBg",
+      "cardGlassBg",
+      "cardGlassBorder",
+      "descriptionColor",
+      "labelColor",
+      "skeletonBg",
+      "skeletonWaveGradient",
+      "trendNegative",
+      "trendNeutral",
+      "trendPositive",
+      "valueColor",
+    ])
+  ),
+  steps: object(
+    visualFields([
+      "connectorColor",
+      "connectorColorActive",
+      "finishBg",
+      "finishBorder",
+      "itemBg",
+      "itemBgActive",
+      "itemColor",
+      "itemColorActive",
+      "processBg",
+      "processBorder",
+      "waitBg",
+      "waitBorder",
+    ])
+  ),
+  tag: object(
+    visualFields([
+      "border",
+      "defaultBg",
+      "defaultBorder",
+      "defaultColor",
+      "errorBg",
+      "errorBorder",
+      "errorColor",
+      "primaryBg",
+      "primaryBorder",
+      "primaryColor",
+      "secondaryBg",
+      "secondaryBorder",
+      "secondaryColor",
+      "successBg",
+      "successBorder",
+      "successColor",
+      "warningBg",
+      "warningBorder",
+      "warningColor",
+    ])
+  ),
+  timeline: object(
+    visualFields(["contentColor", "dotBg", "dotBorder", "lineColor"])
+  ),
+  tree: object(
+    visualFields([
+      "nodeBgHover",
+      "nodeBgSelected",
+      "nodeColor",
+      "nodeColorSelected",
+    ])
+  ),
 });
 
 const NEUTRAL_OVERRIDE_TOKENS = new Set<string>(

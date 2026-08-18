@@ -124,14 +124,14 @@ describe('css-test-utils', () => {
   });
 
   it('creates and loads tenant CSS fixtures', async () => {
-    expect(TENANT_CSS_EXPECTATIONS.rottay['--ds-color-primary-500']).toBe('#0066CC');
-    expect(createTenantCSSFixture('bithire')).toContain('[data-tenant="bithire"]');
-    expect(createTenantCSSFixture('bithire')).toContain('--ds-button-primary-bg: #6366F1;');
+    expect(TENANT_CSS_EXPECTATIONS.acme['--ds-color-primary-500']).toBe('#0066CC');
+    expect(createTenantCSSFixture('northwind')).toContain('[data-tenant="northwind"]');
+    expect(createTenantCSSFixture('northwind')).toContain('--ds-button-primary-bg: #6366F1;');
 
     const cleanup = loadTenantCSSFixtures();
     await waitForStyles(0);
 
-    document.documentElement.setAttribute('data-tenant', 'rottay');
+    document.documentElement.setAttribute('data-tenant', 'acme');
     expect(document.head.textContent).toContain('--ds-color-primary-500');
 
     cleanup();

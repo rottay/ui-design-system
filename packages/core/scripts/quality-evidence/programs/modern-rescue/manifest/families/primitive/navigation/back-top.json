@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "14fc05c81400f084e4e077094da2f36ed4e7c6585778c610dc9355e6e7d5652b"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1622 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css",
+      "packages/core/src/ui/primitives/navigation/BackTop/index.tsx",
+      "packages/core/src/ui/primitives/navigation/BackTop/contracts/index.ts",
+      "packages/core/src/ui/primitives/navigation/BackTop/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/navigation/BackTop/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx"
+    ],
+    "stableParts": [
+      "trigger"
+    ],
+    "states": [
+      "state"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The trigger keeps a 44px minimum hit target in both axes; no --ds-* channel participates in those two declarations. [at src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:94-95]",
+      "The modern trigger always carries an aria-label. [at src/ui/primitives/navigation/BackTop/engines/modern/index.tsx:291]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "navigation",
+        "scoutArtifact": "mr-anatomy-navigation.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 1,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/BackTop/engines/modern/index.tsx:292",
+            "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:211"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "data-state",
+          "meaning": "rustic-only visibility state",
+          "at": [
+            "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:212"
+          ],
+          "state": "state"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@media (forced-colors: active)",
+            "meaning": "forced colors",
+            "at": [
+              "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:129",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:133"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": "classic does not wrap an Ant BackTop: src/ui/primitives/navigation/BackTop/engines/classic/index.tsx:41 imports `FloatButton` from 'antd' (Ant retired BackTop into FloatButton). It stamps no data-part and reads no --ds-* variable. modern and rustic both stamp exactly one part, `trigger`; rustic additionally stamps data-state (:212) which modern does not, and hardcodes transition 'opacity 0.3s, transform 0.3s' at :73.",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": {
+          "distinctVariables": 29,
+          "readSites": 49,
+          "perPartDistinctVariables": {
+            "(engine-inline-style)": [
+              "--ds-backtop-bottom",
+              "--ds-backtop-right",
+              "--ds-backtop-size",
+              "--ds-backtop-z-index"
+            ],
+            "trigger": [
+              "--ds-backtop-bg",
+              "--ds-backtop-color",
+              "--ds-backtop-enter-duration",
+              "--ds-backtop-focus-ring-offset",
+              "--ds-backtop-hover-transform",
+              "--ds-backtop-inset-block-end",
+              "--ds-backtop-inset-inline-end",
+              "--ds-backtop-pressed-transform",
+              "--ds-backtop-shadow",
+              "--ds-backtop-shadow-hover",
+              "--ds-backtop-size",
+              "--ds-backtop-transition-duration",
+              "--ds-backtop-transition-timing",
+              "--ds-backtop-z-index",
+              "--ds-color-primary",
+              "--ds-color-primary-500",
+              "--ds-color-text-on-primary",
+              "--ds-density-effective-scale",
+              "--ds-elevation-2",
+              "--ds-elevation-3",
+              "--ds-focus-ring-color",
+              "--ds-focus-ring-width",
+              "--ds-motion-ease-out",
+              "--ds-motion-fast",
+              "--ds-motion-normal",
+              "--ds-touch-target-min",
+              "--ds-z-fixed"
+            ]
+          },
+          "entries": [
+            {
+              "variable": "--ds-backtop-inset-block-end",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:44",
+              "hasFallback": true,
+              "fallback": "2rem",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-inset-inline-end",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inset-inline-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:45",
+              "hasFallback": true,
+              "fallback": "2rem",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-z-index",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:46",
+              "hasFallback": true,
+              "fallback": "var(--ds-z-fixed)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-z-fixed",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:46",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:955"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:955"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-size",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inline-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:55",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inline-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:55",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656",
+                "src/foundation/tokens/css/foundation/base/density.css:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-size",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:56",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:56",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656",
+                "src/foundation/tokens/css/foundation/base/density.css:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-bg",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:63",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-primary)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2072"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2072"
+              ]
+            },
+            {
+              "variable": "--ds-color-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:63",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-color",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:64",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-text-on-primary)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2073"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2073"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-on-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:64",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:65",
+              "hasFallback": true,
+              "fallback": "var(--ds-elevation-2)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ]
+            },
+            {
+              "variable": "--ds-elevation-2",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:65",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:801",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:969",
+                "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:801"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-enter-duration",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "animation",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:68",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "animation",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:68",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "animation",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:68",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-transition-duration",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-fast)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-fast",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-transition-timing",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-transition-duration",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-fast)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-fast",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-transition-timing",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-transition-duration",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-fast)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-fast",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-transition-timing",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-hover-transform",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":hover"
+              ],
+              "atRuleContext": [
+                "@media (hover: hover)"
+              ],
+              "observableProperty": "transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:104",
+              "hasFallback": true,
+              "fallback": "translateY(-2px)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-shadow-hover",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":hover"
+              ],
+              "atRuleContext": [
+                "@media (hover: hover)"
+              ],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:108",
+              "hasFallback": true,
+              "fallback": "var(--ds-elevation-3)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-elevation-3",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":hover"
+              ],
+              "atRuleContext": [
+                "@media (hover: hover)"
+              ],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:108",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:802",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:970",
+                "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:89"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:802"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-pressed-transform",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":active"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:116",
+              "hasFallback": true,
+              "fallback": "translateY(1px)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:active",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":active"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:117",
+              "hasFallback": true,
+              "fallback": "var(--ds-elevation-2)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:active",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ]
+            },
+            {
+              "variable": "--ds-elevation-2",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":active"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:117",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:active",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:801",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:969",
+                "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:801"
+              ]
+            },
+            {
+              "variable": "--ds-focus-ring-width",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":focus-visible"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "outline",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:122",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:872"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:872"
+              ]
+            },
+            {
+              "variable": "--ds-focus-ring-color",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":focus-visible"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "outline",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:122",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-primary)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:879",
+                "src/foundation/tokens/css/foundation/themes/default.css:2140",
+                "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1956"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:879",
+                "src/foundation/tokens/css/foundation/themes/default.css:2140"
+              ]
+            },
+            {
+              "variable": "--ds-color-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":focus-visible"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "outline",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:122",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-focus-ring-offset",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":focus-visible"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "outline-offset",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:123",
+              "hasFallback": true,
+              "fallback": "2px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-touch-target-min",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [
+                "@media (hover: none), (pointer: coarse)"
+              ],
+              "observableProperty": "min-block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:152",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:921"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:921"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-bg",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:28",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-primary-500, #1677ff)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--rustic[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2072"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2072"
+              ]
+            },
+            {
+              "variable": "--ds-color-primary-500",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:28",
+              "hasFallback": true,
+              "fallback": "#1677ff",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--rustic[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/tooling/testing/fixtures/tenants/rottay.css:8",
+                "src/tooling/testing/fixtures/tenants/default.css:13",
+                "src/tooling/testing/fixtures/tenants/bithire.css:13"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/tooling/testing/fixtures/tenants/default.css:13",
+                "src/foundation/tokens/css/foundation/themes/default.css:30"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-color",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:29",
+              "hasFallback": true,
+              "fallback": "#fff",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--rustic[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2073"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2073"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:30",
+              "hasFallback": true,
+              "fallback": "0 4px 12px rgba(0, 0, 0, 0.15)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-backtop.rottay-backtop--rustic[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ]
+            },
+            {
+              "variable": "--ds-backtop-bottom",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "bottom",
+              "readAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:64",
+              "hasFallback": true,
+              "fallback": "32px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-right",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "right",
+              "readAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:65",
+              "hasFallback": true,
+              "fallback": "32px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-size",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "width",
+              "readAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:66",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-size",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "height",
+              "readAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:67",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-backtop-z-index",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "zIndex",
+              "readAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:72",
+              "hasFallback": true,
+              "fallback": "1000",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-backtop-inset-block-end",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:44"
+          },
+          {
+            "variable": "--ds-backtop-inset-inline-end",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:45"
+          },
+          {
+            "variable": "--ds-backtop-z-index",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:46"
+          },
+          {
+            "variable": "--ds-backtop-size",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:55"
+          },
+          {
+            "variable": "--ds-backtop-enter-duration",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:68"
+          },
+          {
+            "variable": "--ds-backtop-transition-duration",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75"
+          },
+          {
+            "variable": "--ds-backtop-transition-timing",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75"
+          },
+          {
+            "variable": "--ds-backtop-hover-transform",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:104"
+          },
+          {
+            "variable": "--ds-backtop-shadow-hover",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:108"
+          },
+          {
+            "variable": "--ds-backtop-pressed-transform",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:116"
+          },
+          {
+            "variable": "--ds-backtop-focus-ring-offset",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:123"
+          },
+          {
+            "variable": "--ds-backtop-bottom",
+            "firstReadAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:64"
+          },
+          {
+            "variable": "--ds-backtop-right",
+            "firstReadAt": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:65"
+          }
+        ],
+        "readsWithoutFallback": [
+          {
+            "variable": "--ds-z-fixed",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:46",
+            "observableProperty": "z-index"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:55",
+            "observableProperty": "inline-size"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:56",
+            "observableProperty": "block-size"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:63",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-color-text-on-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:64",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-elevation-2",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:65",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:68",
+            "observableProperty": "animation"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:68",
+            "observableProperty": "animation"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:75",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-elevation-3",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:108",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-elevation-2",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:117",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:122",
+            "observableProperty": "outline"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:122",
+            "observableProperty": "outline"
+          }
+        ],
+        "inertFallbackChains": {
+          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css:164-178.",
+          "blockingCount": 10,
+          "testFixtureOnlyCount": 0,
+          "entries": [
+            {
+              "variable": "--ds-backtop-bg",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:63",
+              "fallback": "var(--ds-color-primary)",
+              "observableProperty": "background",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2072"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-backtop-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:64",
+              "fallback": "var(--ds-color-text-on-primary)",
+              "observableProperty": "color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2073"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-backtop-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:65",
+              "fallback": "var(--ds-elevation-2)",
+              "observableProperty": "box-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-backtop-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:117",
+              "fallback": "var(--ds-elevation-2)",
+              "observableProperty": "box-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-focus-ring-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:122",
+              "fallback": "var(--ds-color-primary)",
+              "observableProperty": "outline",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:879",
+                "src/foundation/tokens/css/foundation/themes/default.css:2140"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-touch-target-min",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:152",
+              "fallback": "44px",
+              "observableProperty": "min-block-size",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:921"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-backtop-bg",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:28",
+              "fallback": "var(--ds-color-primary-500, #1677ff)",
+              "observableProperty": "background-color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2072"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-color-primary-500",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:28",
+              "fallback": "#1677ff",
+              "observableProperty": "background-color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/tooling/testing/fixtures/tenants/default.css:13",
+                "src/foundation/tokens/css/foundation/themes/default.css:30"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME",
+                "TEST_FIXTURE_NOT_SHIPPED"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-backtop-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:29",
+              "fallback": "#fff",
+              "observableProperty": "color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2073"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-backtop-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:30",
+              "fallback": "0 4px 12px rgba(0, 0, 0, 0.15)",
+              "observableProperty": "box-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2074"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            }
+          ],
+          "familyChannelBlockedCount": 7,
+          "foundationTokenBlockedCount": 3
+        },
+        "generatedArtifactOnlyReads": [],
+        "testOrStoryOnlyDeclaredReads": [],
+        "hardcodedValues": [
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:61",
+            "property": "border-radius",
+            "literals": [
+              "50%"
+            ],
+            "text": "border-radius: 50%;",
+            "atRuleContext": [],
+            "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+            "classification": "RATIO_CONSTANT_NOT_A_LENGTH"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:81",
+            "property": "transform",
+            "literals": [
+              "8px"
+            ],
+            "text": "transform: translateY(8px);",
+            "atRuleContext": [
+              "@keyframes ds-backtop-enter-modern"
+            ],
+            "selector": "from",
+            "classification": "UNGOVERNED_GEOMETRY"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:94",
+            "property": "min-inline-size",
+            "literals": [
+              "44px"
+            ],
+            "text": "min-inline-size: 44px;",
+            "atRuleContext": [
+              "@media (pointer: coarse)"
+            ],
+            "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+            "classification": "ACCESSIBILITY_TOUCH_FLOOR_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:95",
+            "property": "min-block-size",
+            "literals": [
+              "44px"
+            ],
+            "text": "min-block-size: 44px;",
+            "atRuleContext": [
+              "@media (pointer: coarse)"
+            ],
+            "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+            "classification": "ACCESSIBILITY_TOUCH_FLOOR_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:129",
+            "property": "border",
+            "literals": [
+              "1px"
+            ],
+            "text": "border: 1px solid ButtonText;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/back-top.css:133",
+            "property": "outline",
+            "literals": [
+              "2px"
+            ],
+            "text": "outline: 2px solid Highlight;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/back-top.css:26",
+            "property": "border-radius",
+            "literals": [
+              "50%"
+            ],
+            "text": "border-radius: 50%;",
+            "atRuleContext": [],
+            "selector": ".rottay-backtop.rottay-backtop--rustic[data-part='trigger']",
+            "classification": "RATIO_CONSTANT_NOT_A_LENGTH"
+          },
+          {
+            "at": "src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:73",
+            "property": "transition",
+            "literals": [
+              "0.3s"
+            ],
+            "text": "transition: 'opacity 0.3s, transform 0.3s'",
+            "atRuleContext": [],
+            "selector": "INLINE_STYLE",
+            "classification": "RAW_MOTION_LITERAL"
+          }
+        ],
+        "hardcodedValueClassification": {
+          "RATIO_CONSTANT_NOT_A_LENGTH": 2,
+          "UNGOVERNED_GEOMETRY": 1,
+          "ACCESSIBILITY_TOUCH_FLOOR_NOT_A_DEFECT": 2,
+          "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT": 2,
+          "RAW_MOTION_LITERAL": 1
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1650,62 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-active-indicator",
+            "prop": "color del indicador activo/seleccionado",
+            "tier": "standard",
+            "examples": [
+              "--_ds-tabs-indicator-color",
+              "--_ds-menu-item-active-color",
+              "--_ds-breadcrumb-current-color"
+            ],
+            "sockets": [
+              "--_ds-back-top-active-indicator",
+              "--_ds-backtop-bg",
+              "--_ds-backtop-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Sombras leidas y NO cubiertas (elevacion por postura global)": [
+            "--ds-backtop-shadow",
+            "--ds-backtop-shadow-hover"
+          ],
+          "Canales z NO cubiertos por adjudicacion --ds-z-* (correccion, no gusto)": [
+            "--ds-backtop-z-index"
+          ],
+          "Brazos foundation/familia-ajena compartidos": [
+            "--ds-color-primary",
+            "--ds-color-text-on-primary",
+            "--ds-elevation-2",
+            "--ds-elevation-3",
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-width",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-motion-normal",
+            "--ds-touch-target-min",
+            "--ds-z-fixed"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1713,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de nav en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1737,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de nav en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1761,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-back-top-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1789,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/menu (pinta rottay-menu--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/menu",
+            "channels": [
+              "--ds-menu-panel-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1819,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "border-radius de tab-pill/switcher/toggle de entorno",
+            "tier": "standard",
+            "examples": [
+              "--_ds-tabs-pill-radius",
+              "--_ds-environment-toggle-radius"
+            ],
+            "sockets": [
+              "--_ds-back-top-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1846,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-back-top-density-factor",
+              "--_ds-backtop-inset-block-end",
+              "--_ds-backtop-inset-inline-end",
+              "--_ds-backtop-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1877,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1890,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-transition-duration",
+              "--_ds-tabs-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-back-top-transition-duration",
+              "--_ds-backtop-enter-duration",
+              "--_ds-backtop-hover-transform",
+              "--_ds-backtop-pressed-transform",
+              "--_ds-backtop-transition-duration",
+              "--_ds-backtop-transition-timing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1923,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "NavItem/Sidebar no flotan; su activo se senala con navigation.tone, no con sombra. Sombras leidas y NO cubiertas (elevacion por postura global): --ds-backtop-shadow, --ds-backtop-shadow-hover"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1941,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "nav chrome mate; el estado activo lo da sidebar-tone, no efectos",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1954,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "este primitivo no pinta ni lee chrome de sidebar (las hojas --ds-sidebar-* las leen menu y app-shell; el placeholder <leaf> era boilerplate de grupo y viola nombre-concreto)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1972,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1989,14 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el fondo del chrome de navegacion lo emite sidebar-tone (seis hojas); una segunda fuente viola L4",
+        "source": "huecos-kimi",
+        "reasons": [],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2004,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-focus-ring-color",
+              "--_ds-tabs-focus-ring-color",
+              "--_ds-breadcrumb-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-back-top-focus-ring-color",
+              "--_ds-backtop-focus-ring-offset"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2034,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2052,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2069,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2108,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-back-top-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2134,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

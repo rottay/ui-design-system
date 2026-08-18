@@ -8,26 +8,52 @@
  */
 
 import type {
+  BrandAlertChrome,
+  BrandAnchorChrome,
+  BrandAvatarChrome,
+  BrandBackTopChrome,
   BrandBadgeChrome,
   BrandBreadcrumbChrome,
+  BrandCalendarChrome,
   BrandCardChrome,
+  BrandCollapseChrome,
   BrandControlsChrome,
+  BrandDescriptionsChrome,
+  BrandDrawerChrome,
+  BrandDropdownChrome,
+  BrandEmptyChrome,
   BrandExpressiveAxisOverrides,
   BrandFilterPillChrome,
+  BrandFloatButtonChrome,
   BrandLayoutChrome,
   BrandListingGridChrome,
+  BrandLiveFeedChrome,
+  BrandMenuChrome,
+  BrandMessageChrome,
   BrandMetricCardChrome,
   BrandModalChrome,
-  BrandPremiumCardChrome,
+  BrandNotificationChrome,
+  BrandPaginationChrome,
   BrandPopoverChrome,
+  BrandPremiumCardChrome,
+  BrandProgressChrome,
+  BrandResultChrome,
   BrandSearchChrome,
   BrandShellChrome,
   BrandSidebarChrome,
   BrandSignalCardChrome,
+  BrandSkeletonChrome,
+  BrandSpinnerChrome,
+  BrandStatisticChrome,
+  BrandStatsGridChrome,
+  BrandStepsChrome,
   BrandTableChrome,
   BrandTabsChrome,
-  BrandTooltipChrome,
+  BrandTagChrome,
+  BrandTimelineChrome,
   BrandToolbarChrome,
+  BrandTooltipChrome,
+  BrandTreeChrome,
   TenantAppearanceGeneral,
 } from "..";
 
@@ -359,6 +385,32 @@ export interface TenantThemeChrome {
   tooltip?: BrandTooltipChrome;
   popover?: BrandPopoverChrome;
   tabs?: BrandTabsChrome;
+  alert?: BrandAlertChrome;
+  anchor?: BrandAnchorChrome;
+  avatar?: BrandAvatarChrome;
+  backTop?: BrandBackTopChrome;
+  calendar?: BrandCalendarChrome;
+  collapse?: BrandCollapseChrome;
+  descriptions?: BrandDescriptionsChrome;
+  drawer?: BrandDrawerChrome;
+  dropdown?: BrandDropdownChrome;
+  empty?: BrandEmptyChrome;
+  floatButton?: BrandFloatButtonChrome;
+  liveFeed?: BrandLiveFeedChrome;
+  menu?: BrandMenuChrome;
+  message?: BrandMessageChrome;
+  notification?: BrandNotificationChrome;
+  pagination?: BrandPaginationChrome;
+  progress?: BrandProgressChrome;
+  result?: BrandResultChrome;
+  skeleton?: BrandSkeletonChrome;
+  spinner?: BrandSpinnerChrome;
+  statistic?: BrandStatisticChrome;
+  statsGrid?: BrandStatsGridChrome;
+  steps?: BrandStepsChrome;
+  tag?: BrandTagChrome;
+  timeline?: BrandTimelineChrome;
+  tree?: BrandTreeChrome;
 }
 
 export const TENANT_THEME_CHROME_FAMILIES = [
@@ -384,6 +436,32 @@ export const TENANT_THEME_CHROME_FAMILIES = [
   "tooltip",
   "popover",
   "tabs",
+  "alert",
+  "anchor",
+  "avatar",
+  "backTop",
+  "calendar",
+  "collapse",
+  "descriptions",
+  "drawer",
+  "dropdown",
+  "empty",
+  "floatButton",
+  "liveFeed",
+  "menu",
+  "message",
+  "notification",
+  "pagination",
+  "progress",
+  "result",
+  "skeleton",
+  "spinner",
+  "statistic",
+  "statsGrid",
+  "steps",
+  "tag",
+  "timeline",
+  "tree",
 ] as const satisfies readonly (keyof TenantThemeChrome)[];
 
 /**
@@ -608,6 +686,12 @@ export interface TenantThemeContrastAdjustment {
   lcAfter: number;
 }
 
+/** A tenant-owned delta for one explicit Theme mode. */
+export interface TenantThemeArtifactModeDelta {
+  mode: "light" | "dark";
+  variables: Readonly<Record<string, string>>;
+}
+
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
 export interface TenantThemeArtifact {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
@@ -628,6 +712,8 @@ export interface TenantThemeArtifact {
   coverage: readonly TenantVisualChannel[];
   normalizedAppearance: NormalizedTenantThemeAppearance;
   variables: Readonly<Record<string, string>>;
+  /** Present only when the tenant changes a non-body mode. */
+  modeDeltas?: readonly TenantThemeArtifactModeDelta[];
   /** Present only when at least one contrast autocorrect was applied. */
   adjustments?: readonly TenantThemeContrastAdjustment[];
   css: string;

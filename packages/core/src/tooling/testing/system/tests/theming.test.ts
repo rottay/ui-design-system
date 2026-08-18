@@ -3,7 +3,7 @@
  * @description Tests for CSS variables, tenant theming, and engine-specific behavior
  *
  * This file contains comprehensive tests for:
- * - Tenant-specific CSS variable overrides (rottay, bithire, default)
+ * - Tenant-specific CSS variable overrides (acme, northwind, default)
  * - Engine-specific CSS variables (classic, modern, rustic)
  * - CSS variable cascade order verification
  * - Component-specific token tests (button, input, card tokens)
@@ -80,13 +80,13 @@ describe('Theming System', () => {
 
   describe('Tenant Switching', () => {
     it('can switch between tenants', () => {
-      // Start with rottay
-      document.documentElement.setAttribute('data-tenant', 'rottay');
-      expect(document.documentElement.getAttribute('data-tenant')).toBe('rottay');
+      // Start with acme
+      document.documentElement.setAttribute('data-tenant', 'acme');
+      expect(document.documentElement.getAttribute('data-tenant')).toBe('acme');
 
-      // Switch to bithire
-      document.documentElement.setAttribute('data-tenant', 'bithire');
-      expect(document.documentElement.getAttribute('data-tenant')).toBe('bithire');
+      // Switch to northwind
+      document.documentElement.setAttribute('data-tenant', 'northwind');
+      expect(document.documentElement.getAttribute('data-tenant')).toBe('northwind');
 
       // Switch to default
       document.documentElement.setAttribute('data-tenant', 'default');
@@ -94,7 +94,7 @@ describe('Theming System', () => {
     });
 
     it('removes tenant attribute correctly', () => {
-      document.documentElement.setAttribute('data-tenant', 'rottay');
+      document.documentElement.setAttribute('data-tenant', 'acme');
       expect(document.documentElement.hasAttribute('data-tenant')).toBe(true);
 
       document.documentElement.removeAttribute('data-tenant');
@@ -210,20 +210,20 @@ describe('Theme Consistency', () => {
     });
   });
 
-  it('rottay and bithire have different primary colors', () => {
-    const rottayPrimary = TENANT_CSS_EXPECTATIONS.rottay['--ds-color-primary-500'];
-    const bithirePrimary = TENANT_CSS_EXPECTATIONS.bithire['--ds-color-primary-500'];
+  it('acme and northwind have different primary colors', () => {
+    const acmePrimary = TENANT_CSS_EXPECTATIONS.acme['--ds-color-primary-500'];
+    const northwindPrimary = TENANT_CSS_EXPECTATIONS.northwind['--ds-color-primary-500'];
 
-    expect(rottayPrimary).not.toBe(bithirePrimary);
-    expect(rottayPrimary).toBe('#0066CC'); // Rottay blue
-    expect(bithirePrimary).toBe('#6366F1'); // BitHire indigo
+    expect(acmePrimary).not.toBe(northwindPrimary);
+    expect(acmePrimary).toBe('#0066CC'); // Acme blue
+    expect(northwindPrimary).toBe('#6366F1'); // Northwind indigo
   });
 
-  it('default tenant matches rottay primary color', () => {
-    const rottayPrimary = TENANT_CSS_EXPECTATIONS.rottay['--ds-color-primary-500'];
+  it('default tenant matches acme primary color', () => {
+    const acmePrimary = TENANT_CSS_EXPECTATIONS.acme['--ds-color-primary-500'];
     const defaultPrimary = TENANT_CSS_EXPECTATIONS.default['--ds-color-primary-500'];
 
-    expect(defaultPrimary).toBe(rottayPrimary);
+    expect(defaultPrimary).toBe(acmePrimary);
   });
 });
 
@@ -244,9 +244,9 @@ describe('Tenant-Specific CSS Variable Overrides', () => {
     document.documentElement.removeAttribute('data-theme');
   });
 
-  describe('Rottay Tenant Overrides', () => {
+  describe('Acme Tenant Overrides', () => {
     beforeEach(() => {
-      document.documentElement.setAttribute('data-tenant', 'rottay');
+      document.documentElement.setAttribute('data-tenant', 'acme');
     });
 
     it('applies correct primary color palette', () => {
@@ -257,22 +257,22 @@ describe('Tenant-Specific CSS Variable Overrides', () => {
       };
 
       Object.entries(expectedColors).forEach(([varName, expectedValue]) => {
-        expect(TENANT_CSS_EXPECTATIONS.rottay[varName] || expectedValue).toBeDefined();
+        expect(TENANT_CSS_EXPECTATIONS.acme[varName] || expectedValue).toBeDefined();
       });
     });
 
     it('applies correct accent colors', () => {
-      // Rottay has specific accent colors (teal and orange)
-      const rottayAccents = ['--ds-color-accent-teal', '--ds-color-accent-orange'];
-      rottayAccents.forEach((varName) => {
+      // Acme has specific accent colors (teal and orange)
+      const acmeAccents = ['--ds-color-accent-teal', '--ds-color-accent-orange'];
+      acmeAccents.forEach((varName) => {
         expect(typeof varName).toBe('string');
       });
     });
 
     it('applies more rounded button styling', () => {
-      // Rottay uses larger border radius for buttons
-      const rottayButtonRadiusVars = ['--ds-button-md-radius', '--ds-button-lg-radius'];
-      rottayButtonRadiusVars.forEach((varName) => {
+      // Acme uses larger border radius for buttons
+      const acmeButtonRadiusVars = ['--ds-button-md-radius', '--ds-button-lg-radius'];
+      acmeButtonRadiusVars.forEach((varName) => {
         expect(varName.startsWith('--ds-')).toBe(true);
       });
     });
@@ -285,20 +285,20 @@ describe('Tenant-Specific CSS Variable Overrides', () => {
     });
   });
 
-  describe('BitHire Tenant Overrides', () => {
+  describe('Northwind Tenant Overrides', () => {
     beforeEach(() => {
-      document.documentElement.setAttribute('data-tenant', 'bithire');
+      document.documentElement.setAttribute('data-tenant', 'northwind');
     });
 
     it('applies correct indigo/purple primary color palette', () => {
       const expectedPrimary = '#6366F1';
-      expect(TENANT_CSS_EXPECTATIONS.bithire['--ds-color-primary-500']).toBe(expectedPrimary);
+      expect(TENANT_CSS_EXPECTATIONS.northwind['--ds-color-primary-500']).toBe(expectedPrimary);
     });
 
-    it('has different primary color than rottay', () => {
-      const bithirePrimary = TENANT_CSS_EXPECTATIONS.bithire['--ds-color-primary-500'];
-      const rottayPrimary = TENANT_CSS_EXPECTATIONS.rottay['--ds-color-primary-500'];
-      expect(bithirePrimary).not.toBe(rottayPrimary);
+    it('has different primary color than acme', () => {
+      const northwindPrimary = TENANT_CSS_EXPECTATIONS.northwind['--ds-color-primary-500'];
+      const acmePrimary = TENANT_CSS_EXPECTATIONS.acme['--ds-color-primary-500'];
+      expect(northwindPrimary).not.toBe(acmePrimary);
     });
 
     it('applies complete primary color scale', () => {
@@ -320,8 +320,8 @@ describe('Tenant-Specific CSS Variable Overrides', () => {
       });
     });
 
-    it('applies BitHire-specific focus ring', () => {
-      // BitHire uses indigo-tinted focus ring
+    it('applies Northwind-specific focus ring', () => {
+      // Northwind uses indigo-tinted focus ring
       const focusRingVar = '--ds-shadow-focus-ring';
       expect(focusRingVar).toBe('--ds-shadow-focus-ring');
     });
@@ -337,12 +337,12 @@ describe('Tenant-Specific CSS Variable Overrides', () => {
       expect(defaultPrimary).toBe('#0066CC');
     });
 
-    it('matches rottay tenant as fallback', () => {
+    it('matches acme tenant as fallback', () => {
       const defaultExpectations = TENANT_CSS_EXPECTATIONS.default;
-      const rottayExpectations = TENANT_CSS_EXPECTATIONS.rottay;
+      const acmeExpectations = TENANT_CSS_EXPECTATIONS.acme;
 
       Object.keys(defaultExpectations).forEach((varName) => {
-        expect(defaultExpectations[varName]).toBe(rottayExpectations[varName]);
+        expect(defaultExpectations[varName]).toBe(acmeExpectations[varName]);
       });
     });
   });
@@ -366,9 +366,9 @@ describe('Tenant-Specific CSS Variable Overrides', () => {
     });
 
     it('tenant configs have different branding colors', () => {
-      const rottayBranding = TENANT_CONFIGS.rottay.branding.primaryColor;
-      const bithireBranding = TENANT_CONFIGS.bithire.branding.primaryColor;
-      expect(rottayBranding).not.toBe(bithireBranding);
+      const acmeBranding = TENANT_CONFIGS.acme.branding.primaryColor;
+      const northwindBranding = TENANT_CONFIGS.northwind.branding.primaryColor;
+      expect(acmeBranding).not.toBe(northwindBranding);
     });
   });
 });
@@ -555,14 +555,14 @@ describe('CSS Variable Cascade Order', () => {
       // First check :root default value
       const rootValue = getRootCSSVariable('--ds-color-primary-500');
 
-      // Then set bithire tenant which should override
-      document.documentElement.setAttribute('data-tenant', 'bithire');
+      // Then set northwind tenant which should override
+      document.documentElement.setAttribute('data-tenant', 'northwind');
 
-      // The expected cascade: [data-tenant="bithire"] should override :root
-      const bithireExpected = TENANT_CSS_EXPECTATIONS.bithire['--ds-color-primary-500'];
-      expect(bithireExpected).toBe('#6366F1');
+      // The expected cascade: [data-tenant="northwind"] should override :root
+      const northwindExpected = TENANT_CSS_EXPECTATIONS.northwind['--ds-color-primary-500'];
+      expect(northwindExpected).toBe('#6366F1');
       expect(rootValue).toBe('#0066CC');
-      expect(bithireExpected).not.toBe(rootValue);
+      expect(northwindExpected).not.toBe(rootValue);
     });
 
     it('more specific selectors take precedence', () => {
@@ -570,10 +570,10 @@ describe('CSS Variable Cascade Order', () => {
       const selectorSpecificity = {
         ':root': 0,
         'html[data-tenant]': 1,
-        'html[data-tenant="bithire"]': 2,
+        'html[data-tenant="northwind"]': 2,
       };
 
-      expect(selectorSpecificity['html[data-tenant="bithire"]']).toBeGreaterThan(
+      expect(selectorSpecificity['html[data-tenant="northwind"]']).toBeGreaterThan(
         selectorSpecificity[':root']
       );
     });
@@ -1005,10 +1005,10 @@ describe('Dark Mode and Theme Switching', () => {
 
   describe('Theme and Tenant Combination', () => {
     it('can combine tenant and theme attributes', () => {
-      document.documentElement.setAttribute('data-tenant', 'bithire');
+      document.documentElement.setAttribute('data-tenant', 'northwind');
       document.documentElement.setAttribute('data-theme', 'dark');
 
-      expect(document.documentElement.getAttribute('data-tenant')).toBe('bithire');
+      expect(document.documentElement.getAttribute('data-tenant')).toBe('northwind');
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
     });
 
@@ -1027,7 +1027,7 @@ describe('Dark Mode and Theme Switching', () => {
     });
 
     it('maintains tenant identity across theme switches', () => {
-      document.documentElement.setAttribute('data-tenant', 'rottay');
+      document.documentElement.setAttribute('data-tenant', 'acme');
 
       // Switch themes multiple times
       document.documentElement.setAttribute('data-theme', 'light');
@@ -1035,7 +1035,7 @@ describe('Dark Mode and Theme Switching', () => {
       document.documentElement.setAttribute('data-theme', 'light');
 
       // Tenant should remain unchanged
-      expect(document.documentElement.getAttribute('data-tenant')).toBe('rottay');
+      expect(document.documentElement.getAttribute('data-tenant')).toBe('acme');
     });
   });
 
@@ -1088,11 +1088,11 @@ describe('CSS Variable Naming Conflicts', () => {
     });
 
     it('tenant variables maintain --ds- prefix', () => {
-      Object.keys(TENANT_CSS_EXPECTATIONS.rottay).forEach((varName) => {
+      Object.keys(TENANT_CSS_EXPECTATIONS.acme).forEach((varName) => {
         expect(varName.startsWith('--ds-')).toBe(true);
       });
 
-      Object.keys(TENANT_CSS_EXPECTATIONS.bithire).forEach((varName) => {
+      Object.keys(TENANT_CSS_EXPECTATIONS.northwind).forEach((varName) => {
         expect(varName.startsWith('--ds-')).toBe(true);
       });
     });
@@ -1140,21 +1140,21 @@ describe('CSS Variable Naming Conflicts', () => {
 
   describe('No Duplicate Variable Definitions', () => {
     it('each tenant defines unique variable values', () => {
-      // Rottay and BitHire should have different primary colors
-      const rottayPrimary = TENANT_CSS_EXPECTATIONS.rottay['--ds-color-primary-500'];
-      const bithirePrimary = TENANT_CSS_EXPECTATIONS.bithire['--ds-color-primary-500'];
+      // Acme and Northwind should have different primary colors
+      const acmePrimary = TENANT_CSS_EXPECTATIONS.acme['--ds-color-primary-500'];
+      const northwindPrimary = TENANT_CSS_EXPECTATIONS.northwind['--ds-color-primary-500'];
 
-      expect(rottayPrimary).not.toBe(bithirePrimary);
+      expect(acmePrimary).not.toBe(northwindPrimary);
     });
 
     it('variable names are unique within each scope', () => {
-      const rottayVars = Object.keys(TENANT_CSS_EXPECTATIONS.rottay);
-      const bithireVars = Object.keys(TENANT_CSS_EXPECTATIONS.bithire);
+      const acmeVars = Object.keys(TENANT_CSS_EXPECTATIONS.acme);
+      const northwindVars = Object.keys(TENANT_CSS_EXPECTATIONS.northwind);
       const defaultVars = Object.keys(TENANT_CSS_EXPECTATIONS.default);
 
       // Check for uniqueness within each tenant
-      expect(new Set(rottayVars).size).toBe(rottayVars.length);
-      expect(new Set(bithireVars).size).toBe(bithireVars.length);
+      expect(new Set(acmeVars).size).toBe(acmeVars.length);
+      expect(new Set(northwindVars).size).toBe(northwindVars.length);
       expect(new Set(defaultVars).size).toBe(defaultVars.length);
     });
   });

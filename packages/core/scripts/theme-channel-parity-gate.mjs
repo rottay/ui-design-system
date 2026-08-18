@@ -39,9 +39,11 @@ import {
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  auditDataOnlyProjections,
   buildParityCounters,
   buildThemeChannelParityGraph,
   collectDeclaredThemeFields,
+  DATA_ONLY_THEME_PROJECTIONS,
   evaluateParityBaseline,
   extractConsumedCssVariables,
   extractStringArrayExport,
@@ -65,6 +67,7 @@ const emitterFiles = [
   join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
   join(srcDir, 'infrastructure', 'compilers', 'kernel', 'runtime', 'brand-theme', 'index.ts'),
 ];
+const compilersDir = join(srcDir, 'infrastructure', 'compilers');
 const baselinePath = join(here, 'theme-channel-parity-gate.baseline.json');
 
 const SKIP_DIRS = new Set([
@@ -127,6 +130,17 @@ export function runThemeChannelParityGate(paths = {}) {
   const { registry, ambiguous } = parseTypeRegistry(contractSources);
   const declarationResult = collectDeclaredThemeFields(registry);
   const emitterResult = parseEmitterMappings(readSources(effectiveEmitters), registry);
+  // The whole compiler tree is scanned, not just the known projector: a new
+  // data-* projection added anywhere must show up as unrostered, not vanish.
+  const projectionFiles =
+    paths.projectionFiles ??
+    collectFiles(paths.compilersDir ?? compilersDir, (file) => /\.ts$/i.test(file) && isSource(file));
+  const dataOnly = auditDataOnlyProjections({
+    registry,
+    declarations: declarationResult.fields,
+    projectionSources: readSources(projectionFiles),
+    emissions: emitterResult.emissions,
+  });
   const consumerFiles = collectFiles(effectiveSource, isSource);
   const consumers = collectConsumers(consumerFiles);
   const overrideTokens = extractStringArrayExport(
@@ -140,13 +154,23 @@ export function runThemeChannelParityGate(paths = {}) {
     routedOwners: emitterResult.routedOwners,
     consumers,
     overrideTokens,
+    dataProjectedOwners: dataOnly.provenOwners,
   });
   return {
     graph,
     counters: buildParityCounters(graph),
+    dataOnly: {
+      roster: DATA_ONLY_THEME_PROJECTIONS.map((entry) => `${entry.owner} -> ${entry.attribute}`),
+      proven: [...dataOnly.provenOwners].sort(),
+      projections: dataOnly.projections.map(
+        (entry) => `${entry.attribute} <- [${entry.family}].${entry.field} (${entry.functionName})`,
+      ).sort(),
+      violations: dataOnly.violations,
+    },
     analysis: {
       contractFiles: contractFiles.length,
       emitterFiles: effectiveEmitters.map((file) => relative(root, file).replace(/\\/g, '/')),
+      projectionFiles: projectionFiles.length,
       consumerFiles: consumerFiles.length,
       overrideTokens: overrideTokens.size,
       ambiguousTypes: ambiguous,
@@ -173,6 +197,8 @@ function main() {
   const result = runThemeChannelParityGate();
   const baseline = loadBaseline();
   const evaluation = evaluateParityBaseline(result.counters, baseline);
+  const dataOnlyViolations = result.dataOnly.violations;
+  const ok = evaluation.ok && dataOnlyViolations.length === 0;
 
   if (currentJson) {
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
@@ -180,11 +206,12 @@ function main() {
   }
 
   if (update) {
-    if (!evaluation.ok) {
+    if (!ok) {
       process.stderr.write(
         '[theme-channel-parity-gate] refusing to absorb a regression/new bucket into the baseline:\n',
       );
-      for (const error of evaluation.errors) process.stderr.write(`  - ${error}\n`);
+      for (const error of [...evaluation.errors, ...dataOnlyViolations])
+        process.stderr.write(`  - ${error}\n`);
       process.exitCode = 1;
       return;
     }
@@ -214,6 +241,7 @@ function main() {
     process.stdout.write(`  declared-but-unemitted  : ${issues.declaredButUnemitted.length}\n`);
     process.stdout.write(`  emitted-but-unconsumed  : ${issues.emittedButUnconsumed.length}\n`);
     process.stdout.write(`  consumed-but-unowned    : ${issues.consumedButUnowned.length}\n`);
+    process.stdout.write(`  data-only projections   : ${result.dataOnly.proven.length}/${result.dataOnly.roster.length} rostered pairs proven\n`);
     process.stdout.write(`  unresolved declarations : ${result.analysis.unresolvedDeclarations.length}\n`);
     process.stdout.write(`  ambiguous type names    : ${result.analysis.ambiguousTypes.length}\n`);
     for (const [label, rows, field] of [
@@ -230,9 +258,15 @@ function main() {
     process.stdout.write(`  tighten opportunities (${evaluation.tighten.length}):\n`);
     for (const entry of evaluation.tighten.slice(0, 20)) process.stdout.write(`    - ${entry}\n`);
   }
+  if (dataOnlyViolations.length > 0) {
+    process.stderr.write('[theme-channel-parity-gate] data-only projection roster failed:\n');
+    for (const violation of dataOnlyViolations) process.stderr.write(`  - ${violation}\n`);
+  }
   if (!evaluation.ok) {
     process.stderr.write('[theme-channel-parity-gate] parity ratchet failed:\n');
     for (const error of evaluation.errors) process.stderr.write(`  - ${error}\n`);
+  }
+  if (!ok) {
     if (check) process.exitCode = 1;
   } else if (check && !quiet) {
     process.stdout.write('[theme-channel-parity-gate] PASS\n');

@@ -142,7 +142,7 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
 
     // The field-stack rhythm (20px between fields, 6px inside a field), the
     // label/input heights and the submit-action geometry all paint from the
-    // unlayered skeleton-compounds skin. Inline style keeps only the caller's
+    // unlayered skeleton-compounds skin. Inline style keeps the caller's
     // `style`, the per-label computed width (`60 + (index % 3) * 15`px, the
     // deterministic variety formula) and the canon animation reference.
     const containerStyle: React.CSSProperties = { ...style };

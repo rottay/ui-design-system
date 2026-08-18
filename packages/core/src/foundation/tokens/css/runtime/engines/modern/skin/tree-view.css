@@ -12,7 +12,7 @@
  * modern engine — every node row, connector, toggle, checkbox and selection
  * frame is painted by `tree.css` alone. This file owns ONLY the pattern
  * chrome the primitive does not: the search row and the loading skeleton
- * (whose geometry and pulse were Tailwind utilities + inline styles in the
+ * (whose geometry and pulse were Tailwind utilities + `style`-prop objects in the
  * hand-rolled tree). The shared `panelCardStyle` surface spread stays in
  * the untouched engine-styles helper (WO-SKIN-06 adjudication, same as
  * `live-feed.css`).

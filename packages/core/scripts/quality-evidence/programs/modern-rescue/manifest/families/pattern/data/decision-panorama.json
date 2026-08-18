@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "1a5800814a396f668ddac604d263065474c7d9166e257a9ed23a09e5ae6ab93c"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2784 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+      "packages/core/src/ui/patterns/data/decision-panorama",
+      "packages/core/src/ui/patterns/data/decision-panorama/contracts/index.ts",
+      "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx",
+      "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx",
+      "packages/core/src/ui/patterns/data/decision-panorama/index.ts"
+    ],
+    "stableParts": [
+      "actions",
+      "context",
+      "decision",
+      "fact",
+      "grid",
+      "identity",
+      "identity-visual",
+      "root"
+    ],
+    "states": [
+      "loading"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "aria-busy is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-busy) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:32]",
+      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:44, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:66]",
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:31]",
+      "<dd> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dd) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:50]",
+      "<dl> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dl) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:40]",
+      "<dt> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dt) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:49]",
+      "<footer> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: footer) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:102]",
+      "<header> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: header) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:60]",
+      "<section> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: section) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:27]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (8 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:29, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:35, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:36, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:42]",
+      "The family sets ARIA state/label attributes in source (4 sites; observed: `aria-hidden`, `aria-label`, `aria-busy`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:31, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:32, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:44, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:66]",
+      "The family renders semantic HTML elements directly (7 sites; observed: `aside`, `dl`, `dt`, `dd`, `header`); the element semantics are structural and are not a themeable choice. [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:36, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:40, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:49, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:50]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-data-merged",
+        "scoutArtifact": [
+          "mr-anatomy-pattern-data-b.json",
+          "mr-anatomy-pattern-forms.json",
+          "mr-anatomy-pattern-data-forms.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-pattern-data-b.json": "SOURCE_BOUND",
+          "mr-anatomy-pattern-data-forms.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 8,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:102"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:294",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:295",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:296",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:297",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:298"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "context",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:58"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:339",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:340",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:341",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:377"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "decision",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:77",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:39",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:54",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:62"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "fact",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:42"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:92",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:96"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "grid",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:35"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:24",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:25",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:27",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:328"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "identity",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:60"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:34",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:155",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:156"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "identity-visual",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:65"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:175",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:176",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:177",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:178",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:179"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:27",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:4",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:5",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:6",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:7",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:8"
+          ],
+          "atSiteCount": 7
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "visual-aura",
+          "scoutAnchorClaim": "class:ds-decision-panorama__visual-aura",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:207"
+          ]
+        },
+        {
+          "part": "fact-icon",
+          "scoutAnchorClaim": "class:ds-decision-panorama__fact-icon",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:130"
+          ]
+        },
+        {
+          "part": "decision-heading",
+          "scoutAnchorClaim": "class:ds-decision-panorama__decision-heading",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:261"
+          ]
+        },
+        {
+          "part": "decision-meta",
+          "scoutAnchorClaim": "class:ds-decision-panorama__decision-meta",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:311"
+          ]
+        },
+        {
+          "part": "decision-title",
+          "scoutAnchorClaim": "class:ds-decision-panorama__decision-title",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:271"
+          ]
+        },
+        {
+          "part": "identity-eyebrow",
+          "scoutAnchorClaim": "class:ds-decision-panorama__identity-eyebrow",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:97"
+          ]
+        },
+        {
+          "part": "badges",
+          "scoutAnchorClaim": "class:ds-decision-panorama__badges",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:252"
+          ]
+        },
+        {
+          "part": "score",
+          "scoutAnchorClaim": "class:ds-decision-panorama__score",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:280"
+          ]
+        },
+        {
+          "part": "title",
+          "scoutAnchorClaim": "class:ds-decision-panorama__title",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:237"
+          ]
+        },
+        {
+          "part": "visual",
+          "scoutAnchorClaim": "class:ds-decision-panorama__visual",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:198"
+          ]
+        },
+        {
+          "part": "decision-summary",
+          "scoutAnchorClaim": "class:ds-decision-panorama__decision-summary",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:300"
+          ]
+        },
+        {
+          "part": "facts",
+          "scoutAnchorClaim": "class:ds-decision-panorama__facts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:107"
+          ]
+        },
+        {
+          "part": "identity-copy",
+          "scoutAnchorClaim": "class:ds-decision-panorama__identity-copy",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:231"
+          ]
+        },
+        {
+          "part": "subtitle",
+          "scoutAnchorClaim": "class:ds-decision-panorama__subtitle",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:246"
+          ]
+        },
+        {
+          "part": "fact-copy",
+          "scoutAnchorClaim": "class:ds-decision-panorama__fact-copy",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:142"
+          ]
+        },
+        {
+          "part": "progress",
+          "scoutAnchorClaim": "class:ds-decision-panorama__progress",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:307"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "data-loading=true",
+          "at": [],
+          "state": "loading",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:317",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:318"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "[data-loading]",
+          "occurrences": 13,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:24",
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:30"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "data-loading='true'",
+          "occurrences": 2,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:342",
+            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:30"
+          ],
+          "state": "loading"
+        }
+      ],
+      "engineDivergence": {
+        "engineDivergence": {
+          "engineSiblingDirectory": "packages/core/src/ui/patterns/data/decision-panorama/engines",
+          "engines": {
+            "classic": {
+              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx",
+              "lines": 8,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": true,
+              "addsScopeClass": []
+            },
+            "foundation": {
+              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx",
+              "lines": 109,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": false,
+              "addsScopeClass": []
+            },
+            "modern": {
+              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx",
+              "lines": 23,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": true,
+              "addsScopeClass": [
+                "ds-engine-modern"
+              ]
+            },
+            "rustic": {
+              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx",
+              "lines": 8,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": true,
+              "addsScopeClass": []
+            }
+          },
+          "paintByEngine": {
+            "engine-agnostic-presentation": [
+              {
+                "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+                "paintKind": "own"
+              }
+            ]
+          },
+          "summary": "engine siblings exist and each delegates to a shared implementation; the observed divergence is a scope class plus separate modern/rustic paint sheets",
+          "engineSiblingsInSource": {
+            "classic": {
+              "lines": 8,
+              "files": [
+                "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx"
+              ],
+              "fileCount": 1
+            },
+            "foundation": {
+              "lines": 109,
+              "files": [
+                "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx"
+              ],
+              "fileCount": 1
+            },
+            "modern": {
+              "lines": 23,
+              "files": [
+                "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx"
+              ],
+              "fileCount": 1
+            },
+            "rustic": {
+              "lines": 8,
+              "files": [
+                "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx"
+              ],
+              "fileCount": 1
+            }
+          },
+          "enginesWithOwnSkinCss": [
+            "engine-agnostic"
+          ],
+          "perLayerBreakdown": {
+            "engine-agnostic": {
+              "partsStyled": 23,
+              "variablesRead": 0
+            },
+            "css:engine-agnostic": {
+              "partsStyled": 0,
+              "variablesRead": 38
+            }
+          },
+          "antdImportSites": [],
+          "inlineStyleAttributeSites": 1,
+          "templateConstructedVariableNames": [],
+          "paintDeliveryPerEngine": {
+            "classic": {
+              "paintDelivery": "NO_OWN_PAINT_DELEGATED_ENTIRELY_TO_COMPOSED_COMPONENTS",
+              "hasOwnSkinCss": false,
+              "inlineStyleAttrs": 0,
+              "rootClassMentions": 0,
+              "dsVarReads": 0,
+              "files": 1
+            },
+            "foundation": {
+              "paintDelivery": "INLINE_STYLE_OBJECTS_IN_ENGINE_TSX",
+              "hasOwnSkinCss": false,
+              "inlineStyleAttrs": 1,
+              "rootClassMentions": 1,
+              "dsVarReads": 0,
+              "files": 1
+            },
+            "modern": {
+              "paintDelivery": "NO_OWN_PAINT_DELEGATED_ENTIRELY_TO_COMPOSED_COMPONENTS",
+              "hasOwnSkinCss": false,
+              "inlineStyleAttrs": 0,
+              "rootClassMentions": 0,
+              "dsVarReads": 0,
+              "files": 1
+            },
+            "rustic": {
+              "paintDelivery": "NO_OWN_PAINT_DELEGATED_ENTIRELY_TO_COMPOSED_COMPONENTS",
+              "hasOwnSkinCss": false,
+              "inlineStyleAttrs": 0,
+              "rootClassMentions": 0,
+              "dsVarReads": 0,
+              "files": 1
+            }
+          }
+        },
+        "engines": {
+          "classic": {
+            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx",
+            "lines": 8,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": true,
+            "addsScopeClass": []
+          },
+          "foundation": {
+            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx",
+            "lines": 109,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": false,
+            "addsScopeClass": []
+          },
+          "modern": {
+            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx",
+            "lines": 23,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": true,
+            "addsScopeClass": [
+              "ds-engine-modern"
+            ]
+          },
+          "rustic": {
+            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx",
+            "lines": 8,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": true,
+            "addsScopeClass": []
+          }
+        }
+      },
+      "scoutGaps": {
+        "failureClasses": {
+          "unreadEmission": [],
+          "undeclaredRead": [
+            {
+              "variable": "--ds-decision-panorama-aura-duration",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:220",
+              "landsOnProperties": [
+                "animation"
+              ],
+              "partsThatRead": [
+                "visual-aura"
+              ],
+              "firstFallback": "calc(var(--ds-motion-glacial, 500ms) * 10)"
+            },
+            {
+              "variable": "--ds-decision-panorama-aura-timing",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:221",
+              "landsOnProperties": [
+                "animation"
+              ],
+              "partsThatRead": [
+                "visual-aura"
+              ],
+              "firstFallback": "var(--ds-motion-ease-in-out)"
+            },
+            {
+              "variable": "--ds-decision-panorama-decision-title-size",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:272",
+              "landsOnProperties": [
+                "font-size"
+              ],
+              "partsThatRead": [
+                "decision-title"
+              ],
+              "firstFallback": "var(--ds-font-size-fluid-2xl)"
+            },
+            {
+              "variable": "--ds-decision-panorama-fact-icon-size",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:138",
+              "landsOnProperties": [
+                "font-size"
+              ],
+              "partsThatRead": [
+                "fact-icon"
+              ],
+              "firstFallback": "var(--ds-font-size-sm)"
+            },
+            {
+              "variable": "--ds-decision-panorama-score-size",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:281",
+              "landsOnProperties": [
+                "font-size"
+              ],
+              "partsThatRead": [
+                "score"
+              ],
+              "firstFallback": "var(--ds-font-size-fluid-5xl)"
+            },
+            {
+              "variable": "--ds-decision-panorama-title-size",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:238",
+              "landsOnProperties": [
+                "font-size"
+              ],
+              "partsThatRead": [
+                "title"
+              ],
+              "firstFallback": "var(--ds-font-size-fluid-4xl)"
+            }
+          ],
+          "hardcodedValue": [
+            {
+              "kind": "LITERAL_RADIUS",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:210",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:210",
+              "literal": "999px",
+              "property": "border-radius",
+              "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura",
+              "position": "DIRECT",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:210",
+              "line": "border-radius: 999px;"
+            },
+            {
+              "kind": "LITERAL_DURATION",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:220",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:219",
+              "literal": "500ms",
+              "property": "animation",
+              "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura",
+              "position": "VAR_FALLBACK",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:221",
+              "line": "var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10))"
+            }
+          ],
+          "familyNamespacePrefixesSearched": [
+            "--ds-decision-panorama-",
+            "--ds-decisionpanorama-",
+            "--ds-pattern-decision-panorama-",
+            "--ds-pattern-decisionpanorama-"
+          ],
+          "familyPrefixedDeclarationCount": 0
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupIndependenceTest": {
+          "test": "a propertyGroup name is defective when it is only a coarser label for a set of stableParts, because stableParts and propertyGroups are two INDEPENDENT axes and a cell declares both",
+          "result": "PASS",
+          "reason": "every group above names a CSS landing-property axis (colour, typography, spacing, radius, elevation, motion, border, size, layout, opacity, layer), not a region of the component; each group is exposed by many parts and each part exposes many groups, so the two axes do not collapse"
+        },
+        "propertyGroupMembership": {
+          "border": {
+            "partsExposingIt": [
+              "actions",
+              "context",
+              "decision",
+              "fact",
+              "identity",
+              "root"
+            ],
+            "readSites": 23
+          },
+          "color": {
+            "partsExposingIt": [
+              "actions",
+              "decision",
+              "fact",
+              "identity",
+              "root"
+            ],
+            "readSites": 47
+          },
+          "elevation": {
+            "partsExposingIt": [
+              "root"
+            ],
+            "readSites": 5
+          },
+          "motion": {
+            "partsExposingIt": [
+              "root"
+            ],
+            "readSites": 4
+          },
+          "radius": {
+            "partsExposingIt": [
+              "root"
+            ],
+            "readSites": 3
+          },
+          "spacing": {
+            "partsExposingIt": [
+              "actions",
+              "fact",
+              "identity-visual",
+              "root"
+            ],
+            "readSites": 17
+          },
+          "typography": {
+            "partsExposingIt": [
+              "fact",
+              "root"
+            ],
+            "readSites": 23
+          }
+        },
+        "propertyGroupsObservedCssPropertyFamilies": [
+          "background",
+          "border",
+          "border-radius",
+          "box-shadow",
+          "color",
+          "font",
+          "gap",
+          "interaction",
+          "layout",
+          "margin",
+          "motion",
+          "opacity",
+          "padding",
+          "size",
+          "text"
+        ],
+        "landingPropertyBuckets": [
+          "border",
+          "color",
+          "elevation",
+          "motion",
+          "radius",
+          "spacing",
+          "typography"
+        ],
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-surface-card-border-strong",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 9,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border-strong",
+              "--ds-color-border-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 9,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-radius-2xl",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 10,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-2xl"
+            ],
+            "fallback": "20px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 15,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 15,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 15,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 15,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 15,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 18,
+            "part": "root",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-shadow-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 18,
+            "part": "root",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-shadow-md"
+            ],
+            "fallback": "0 12px 30px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 18,
+            "part": "root",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 19,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-panel-bg",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-panel-bg",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 54,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context,\n.ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 58,
+            "part": "context",
+            "landsOn": "border-inline-end",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 58,
+            "part": "context",
+            "landsOn": "border-inline-end",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 62,
+            "part": "decision",
+            "landsOn": "border-inline-start",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 62,
+            "part": "decision",
+            "landsOn": "border-inline-start",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-panel-bg",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 71,
+            "part": "decision",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 76,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__eyebrow,\n.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 77,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__eyebrow,\n.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow"
+          },
+          {
+            "variable": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 78,
+            "part": "root",
+            "landsOn": "font-weight",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-weight-bold"
+            ],
+            "fallback": "700",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__eyebrow,\n.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow"
+          },
+          {
+            "variable": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 82,
+            "part": "root",
+            "landsOn": "font-family",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-family-mono"
+            ],
+            "fallback": "ui-monospace, monospace",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__eyebrow,\n.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 88,
+            "part": "root",
+            "landsOn": "margin",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__facts"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 94,
+            "part": "fact",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 96,
+            "part": "fact",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 101,
+            "part": "fact",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 101,
+            "part": "fact",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 113,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 113,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 114,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 115,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 115,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 116,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-decision-panorama-fact-icon-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 117,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-decision-panorama-fact-icon-size",
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 117,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact-icon"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 125,
+            "part": "fact",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact dt"
+          },
+          {
+            "variable": "--ds-text-detail-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 126,
+            "part": "fact",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-text-detail-size",
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact dt"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 126,
+            "part": "fact",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact dt"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 139,
+            "part": "fact",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact strong"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 140,
+            "part": "fact",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact strong"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 141,
+            "part": "fact",
+            "landsOn": "font-weight",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-weight-semibold"
+            ],
+            "fallback": "600",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact strong"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 148,
+            "part": "fact",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact small"
+          },
+          {
+            "variable": "--ds-text-detail-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 149,
+            "part": "fact",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-text-detail-size",
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact small"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 149,
+            "part": "fact",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__fact small"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 171,
+            "part": "identity",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 171,
+            "part": "identity",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 171,
+            "part": "identity",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 171,
+            "part": "identity",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 179,
+            "part": "identity-visual",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 186,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 192,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 195,
+            "part": "root",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 195,
+            "part": "root",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-decision-panorama-aura-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 198,
+            "part": "root",
+            "landsOn": "animation",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-decision-panorama-aura-duration"
+            ],
+            "fallback": "calc(var(--ds-motion-glacial, 500ms) * 10)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 198,
+            "part": "root",
+            "landsOn": "animation",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-glacial"
+            ],
+            "fallback": "500ms",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-decision-panorama-aura-timing",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 198,
+            "part": "root",
+            "landsOn": "animation",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-decision-panorama-aura-timing",
+              "--ds-motion-ease-in-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 198,
+            "part": "root",
+            "landsOn": "animation",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-in-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 209,
+            "part": "root",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-1"
+            ],
+            "fallback": "4px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity-copy"
+          },
+          {
+            "variable": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 210,
+            "part": "root",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-5"
+            ],
+            "fallback": "20px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity-copy"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 214,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__title"
+          },
+          {
+            "variable": "--ds-decision-panorama-title-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 215,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-decision-panorama-title-size",
+              "--ds-font-size-fluid-4xl"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__title"
+          },
+          {
+            "variable": "--ds-font-size-fluid-4xl",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 215,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-fluid-4xl"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__title"
+          },
+          {
+            "variable": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 216,
+            "part": "root",
+            "landsOn": "font-weight",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-weight-bold"
+            ],
+            "fallback": "700",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__title"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 223,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__subtitle"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 224,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__subtitle"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 233,
+            "part": "root",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__badges"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 234,
+            "part": "root",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__badges"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 241,
+            "part": "root",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-heading"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 242,
+            "part": "root",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-heading"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 243,
+            "part": "root",
+            "landsOn": "padding-bottom",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-heading"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 244,
+            "part": "root",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-heading"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 244,
+            "part": "root",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-heading"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 248,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-title"
+          },
+          {
+            "variable": "--ds-decision-panorama-decision-title-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 249,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-decision-panorama-decision-title-size",
+              "--ds-font-size-fluid-2xl"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-title"
+          },
+          {
+            "variable": "--ds-font-size-fluid-2xl",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 249,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-fluid-2xl"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-title"
+          },
+          {
+            "variable": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 250,
+            "part": "root",
+            "landsOn": "font-weight",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-weight-bold"
+            ],
+            "fallback": "700",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-title"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 257,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__score"
+          },
+          {
+            "variable": "--ds-decision-panorama-score-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 258,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-decision-panorama-score-size",
+              "--ds-font-size-fluid-5xl"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__score"
+          },
+          {
+            "variable": "--ds-font-size-fluid-5xl",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 258,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-fluid-5xl"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__score"
+          },
+          {
+            "variable": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 259,
+            "part": "root",
+            "landsOn": "font-weight",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-weight-bold"
+            ],
+            "fallback": "700",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__score"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 274,
+            "part": "root",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-summary"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 275,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-summary"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 276,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-summary"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 281,
+            "part": "root",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__progress"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 285,
+            "part": "root",
+            "landsOn": "margin-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-meta"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 286,
+            "part": "root",
+            "landsOn": "padding-top",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-meta"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 287,
+            "part": "root",
+            "landsOn": "border-top",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-meta"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 287,
+            "part": "root",
+            "landsOn": "border-top",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-meta"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 288,
+            "part": "root",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-meta"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 289,
+            "part": "root",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision-meta"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 298,
+            "part": "actions",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 299,
+            "part": "actions",
+            "landsOn": "padding",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 300,
+            "part": "actions",
+            "landsOn": "border-top",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 300,
+            "part": "actions",
+            "landsOn": "border-top",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-panel-bg",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-panel-bg",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card-bg",
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 313,
+            "part": "actions",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__actions"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 335,
+            "part": "identity",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@container (max-width: 820px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 335,
+            "part": "identity",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@container (max-width: 820px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__identity"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 341,
+            "part": "context",
+            "landsOn": "border-inline-end",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@container (max-width: 820px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 341,
+            "part": "context",
+            "landsOn": "border-inline-end",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@container (max-width: 820px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__context"
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 353,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-xl"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "atRule": [
+              "@container (max-width: 540px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama[data-part='root'][data-loading]"
+          },
+          {
+            "variable": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 373,
+            "part": "decision",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-surface-card-border",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@container (max-width: 540px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "line": 373,
+            "part": "decision",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@container (max-width: 540px)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__decision"
+          }
+        ],
+        "variableCensusTsx": [],
+        "distinctVariablesRead": 38,
+        "readSiteCount": 122,
+        "emittedVariables": {},
+        "emittedVariablesTsx": {},
+        "paintOwnership": {
+          "ownCssFiles": [
+            {
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+              "engine": "engine-agnostic",
+              "lines": 459,
+              "role": "skin-css",
+              "matchedRootClasses": [
+                "ds-pattern-decision-panorama"
+              ]
+            }
+          ],
+          "composedComponents": [],
+          "sharedStyleHelpers": [],
+          "note": "Variables listed in variableCensus are read by THIS family's own CSS or its own TSX only. Paint contributed by a composed component is attributed to that component here and is NOT counted in this family's census."
+        },
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "variableNamespaceSummary": {
+          "OWN_FAMILY_NAMESPACE": 6,
+          "decl:UNDECLARED": 6,
+          "SHARED_OR_GLOBAL_NAMESPACE": 32,
+          "decl:generated-bundle-css": 32
+        },
+        "unattributedRuleCount": 0,
+        "ruleCount": 178
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 70,
+        "sitesVerified": 39,
+        "sitesWithdrawn": 31,
+        "sitesNotProbed": 0,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2812,71 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
+            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-selection-bg",
+              "--_ds-list-item-selected-bg"
+            ],
+            "sockets": [
+              "--_ds-decision-panorama-selection-bg",
+              "--_ds-decision-panorama-selection-border"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-cell-<status>-color",
+            "prop": "celdas y filas con estado",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-decision-panorama-cell-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-secondary",
+            "--ds-color-border-primary",
+            "--ds-color-border-secondary",
+            "--ds-color-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-motion-glacial",
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5",
+            "--ds-surface-card-bg",
+            "--ds-surface-card-border",
+            "--ds-surface-card-border-strong",
+            "--ds-surface-panel-bg"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2884,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-decision-panorama-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-font-weight-bold",
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2918,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-decision-panorama-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2951,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-cell-font-size",
+            "prop": "tamano de celda y header de tabla",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-decision-panorama-cell-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-font-size-fluid-2xl",
+            "--ds-font-size-fluid-4xl",
+            "--ds-font-size-fluid-5xl",
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2985,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-container-radius",
+            "prop": "marco del pattern (tabla, kanban, galeria)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-decision-panorama-container-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-radius-2xl",
+            "--ds-radius-md",
+            "--ds-radius-xl"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3017,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3030,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila, padding de celda, gap de toolbar",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-density-factor",
+              "--_ds-kanban-card-density-factor"
+            ],
+            "sockets": [
+              "--_ds-decision-panorama-density-factor",
+              "--_ds-decision-panorama-decision-title-size",
+              "--_ds-decision-panorama-score-size",
+              "--_ds-decision-panorama-title-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-text-detail-size"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3066,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3079,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Las celdas no se animan al ordenar/filtrar en la variante estandar: el re-flow de dato es instantaneo; solo la entrada de overlays de la tabla (menus) usa el socket overlay. CANDIDATOS (canales reales bajo regla de grupo MUST_NOT): --ds-decision-panorama-aura-duration, --ds-decision-panorama-aura-timing"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-motion-ease-in-out"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3102,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-widget-card-elevation",
+              "--_ds-column-menu-elevation"
+            ],
+            "sockets": [
+              "--_ds-decision-panorama-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-shadow-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3135,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Filas y celdas no llevan tinte ni glass: el scrim sobre dato es dano visual; la tabla es superficie de trabajo, no de marca."
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3152,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "El contenido de datos lo gobierna surface.*: si el tono de navegacion tine la tabla, la cascada se cruzo de eje."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3169,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3186,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "Celdas sticky usan el canal derivado sticky, no un z libre por componente."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3203,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
+            "prop": "marco del pattern y separadores internos de fila",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-decision-panorama-frame-style"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3227,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3245,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3262,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3301,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "Los indicadores dentro de celdas son marcas de estado (siguen color semantico), no iconos de la libreria de postura. CANDIDATOS (canales reales bajo regla de grupo MUST_NOT): --ds-decision-panorama-fact-icon-size"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3319,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "c545d76cdc794a4db8947def3fe90d9109dbdcc09465ff538a49804e777fb145"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2187 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/structures/workspace/table-toolbar",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css"
+    ],
+    "stableParts": [
+      "divider",
+      "root",
+      "row",
+      "left",
+      "search-field",
+      "search-input",
+      "search-icon",
+      "spacer",
+      "controls",
+      "filters",
+      "clear-filters",
+      "actions",
+      "primary-action"
+    ],
+    "states": [
+      "focus",
+      "focus-within"
+    ],
+    "variantAxes": [
+      "data-structure"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:245]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:223, packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:224, packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:227]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:175, packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:176, packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:179]",
+      "the family stamps role='search' [at packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:145]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-a.json": "SOURCE_BOUND",
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 13,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "divider",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:73"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:134"
+        },
+        {
+          "part": "row",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:138"
+        },
+        {
+          "part": "left",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:140"
+        },
+        {
+          "part": "search-field",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:144"
+        },
+        {
+          "part": "search-input",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:149"
+        },
+        {
+          "part": "search-icon",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:160"
+        },
+        {
+          "part": "spacer",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:178"
+        },
+        {
+          "part": "controls",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:184"
+        },
+        {
+          "part": "filters",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:195"
+        },
+        {
+          "part": "clear-filters",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:204"
+        },
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:219"
+        },
+        {
+          "part": "primary-action",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:226"
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "right",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:185",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:87",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:196",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:197"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "focus",
+          "state": "focus"
+        },
+        {
+          "token": ":focus",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:168"
+          ],
+          "state": "focus"
+        },
+        {
+          "token": ":focus-within",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:168"
+          ],
+          "state": "focus-within"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "structure=table-toolbar",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:227"
+          ]
+        },
+        {
+          "token": "data-structure",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:135"
+          ]
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:215"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions [data-part='primary-action']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:212"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:206",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:207"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:202",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:203"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:196",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:197",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:198"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 64rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:179",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:180"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 64rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:175",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:176"
+            ]
+          },
+          {
+            "token": "@container ds-table-toolbar (max-width: 64rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:183",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:184"
+            ]
+          },
+          {
+            "token": "@media(forced-colors: active)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:223",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:224",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:227"
+            ]
+          },
+          {
+            "token": "@media(prefers-reduced-motion: reduce)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:245"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "accessibilityAttributes": {
+        "entries": [
+          {
+            "token": "aria-label",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:146",
+              "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:164",
+              "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx:187"
+            ]
+          }
+        ],
+        "reason": "ARIA semantics. An accessibility contract of the family, not a customization axis and not an interaction state; a tenant control must never be allowed to change it."
+      },
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "first-child"
+          },
+          {
+            "token": ":first-child",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:118"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css": {
+            "rows": 61,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupEvidence": {
+          "border": {
+            "declarationCount": 2,
+            "properties": [
+              "border-bottom",
+              "border-color"
+            ]
+          },
+          "color": {
+            "declarationCount": 9,
+            "properties": [
+              "background",
+              "color"
+            ]
+          },
+          "elevation": {
+            "declarationCount": 2,
+            "properties": [
+              "box-shadow"
+            ]
+          },
+          "internal-channel": {
+            "declarationCount": 8,
+            "properties": []
+          },
+          "layout": {
+            "declarationCount": 17,
+            "properties": [
+              "container",
+              "display",
+              "flex",
+              "flex-shrink",
+              "flex-wrap",
+              "justify-content"
+            ]
+          },
+          "motion": {
+            "declarationCount": 2,
+            "properties": [
+              "transition"
+            ]
+          },
+          "radius": {
+            "declarationCount": 1,
+            "properties": [
+              "border-radius"
+            ]
+          },
+          "size": {
+            "declarationCount": 10,
+            "properties": [
+              "block-size",
+              "inline-size",
+              "max-inline-size",
+              "min-inline-size"
+            ]
+          },
+          "spacing": {
+            "declarationCount": 10,
+            "properties": [
+              "margin-inline",
+              "padding",
+              "padding-inline-end",
+              "padding-inline-start",
+              "row-gap"
+            ]
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--ds-toolbar-gap",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "--_ds-table-toolbar-section-gap",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:982"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "--_ds-table-toolbar-section-gap",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-list-shell-section-gap",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:55",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "--_ds-table-toolbar-row-gap",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "var(--ds-spacing-2, 0.5rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:541"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:55",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "--_ds-table-toolbar-row-gap",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "0.5rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-toolbar-padding",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:63",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "calc(var(--ds-spacing-2, 0.5rem) * var(--ds-density-effective-scale, 1)) calc(var(--ds-spacing-4, 1rem) * var(--ds-density-effective-scale, 1))",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:983"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:63",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.5rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:63",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:69",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:63",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:63",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:69",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-toolbar-bg",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:68",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "transparent",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:974",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1503"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-toolbar-color",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:69",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root']",
+            "states": [],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "inherit",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:977",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1506"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-toolbar-border-bottom",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:72",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar']",
+            "states": [
+              "structure=table-toolbar"
+            ],
+            "landsOn": "border-bottom",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-toolbar-border, var(--ds-color-border))",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:976",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1505"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-toolbar-border",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:72",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar']",
+            "states": [
+              "structure=table-toolbar"
+            ],
+            "landsOn": "border-bottom",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:975",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1504"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-border",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:72",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar']",
+            "states": [
+              "structure=table-toolbar"
+            ],
+            "landsOn": "border-bottom",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--_ds-table-toolbar-section-gap",
+            "part": "left",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:80",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left",
+            "states": [],
+            "landsOn": "padding-inline-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-table-toolbar-section-gap",
+            "part": "filters",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:90",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters",
+            "states": [],
+            "landsOn": "padding-inline-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-table-toolbar-section-gap",
+            "part": "actions",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:93",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions",
+            "states": [],
+            "landsOn": "padding-inline-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-toolbar-divider",
+            "part": "divider",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:103",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:981",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1510"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-border",
+            "part": "divider",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:103",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-toolbar-divider",
+            "part": "divider",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:103",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:981",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1510"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-border",
+            "part": "divider",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:103",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "divider",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:110",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']",
+            "states": [],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--_ds-table-toolbar-search-max",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:145",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "max-inline-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:59"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-table-toolbar-search-min",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:146",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "min-inline-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:60"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-toolbar-control-bg",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:148",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-bg",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame+surface",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "var(--ds-color-bg-tertiary)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:978",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1507"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-bg-tertiary",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:148",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-bg",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame+surface",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:200",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2122"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-toolbar-control-border",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:149",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-border",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "var(--ds-color-border-primary)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:979",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1508"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:149",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-border",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:230",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2135",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:29"
+            ],
+            "declarationSiteCount": 5
+          },
+          {
+            "variable": "--ds-toolbar-control-color",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:150",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-color",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "var(--ds-color-text-primary)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:980",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1509"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:150",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-color",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-type-supporting-font-size",
+            "part": "search-field",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:151",
+            "selector": ".ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field",
+            "states": [],
+            "landsOn": "--ds-input-md-font-size",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "0.8125rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:542"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-icon-sm-size",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:160",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [],
+            "landsOn": "inline-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/icon.css:18"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-icon-sm-size",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:161",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [],
+            "landsOn": "block-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/icon.css:18"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-search-icon-color",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:162",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-text-muted)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:698",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1410"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:162",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:163",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:163",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-toolbar-color",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:168",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field:focus-within .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [
+              ":focus-within",
+              ":focus"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-text-secondary)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED_ONLY_IN_GENERATED_ARTIFACT",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:977",
+              "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:1506"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "part": "search-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:168",
+            "selector": ".ds-structure.ds-table-toolbar .ds-table-toolbar__search-field:focus-within .ds-table-toolbar__search-icon[data-part='search-icon']",
+            "states": [
+              ":focus-within",
+              ":focus"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:57",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:218",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2129"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--_ds-table-toolbar-row-gap",
+            "part": "row",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:176",
+            "selector": "@container ds-table-toolbar (max-width: 64rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row",
+            "states": [
+              "@container ds-table-toolbar (max-width: 64rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row"
+            ],
+            "landsOn": "row-gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:55"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-table-toolbar-row-gap",
+            "part": "right",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:198",
+            "selector": "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right",
+            "states": [
+              "@container ds-table-toolbar (max-width: 40rem) >> .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right"
+            ],
+            "landsOn": "row-gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:55"
+            ],
+            "declarationSiteCount": 1
+          }
+        ],
+        "readCensus": {
+          "distinctVariables": 31,
+          "totalReadSites": 41,
+          "variables": [
+            {
+              "variable": "--ds-toolbar-gap",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54",
+                  "part": "root",
+                  "landsOn": "--_ds-table-toolbar-section-gap",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-3, 0.75rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1554"
+            },
+            {
+              "variable": "--ds-spacing-3",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54",
+                  "part": "root",
+                  "landsOn": "--_ds-table-toolbar-section-gap",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            },
+            {
+              "variable": "--ds-list-shell-section-gap",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:55",
+                  "part": "root",
+                  "landsOn": "--_ds-table-toolbar-row-gap",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-2, 0.5rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1188"
+            },
+            {
+              "variable": "--ds-spacing-2",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:57",
+                  "part": "root",
+                  "landsOn": "--_ds-table-toolbar-row-gap",
+                  "fallbackPresent": true,
+                  "fallback": "0.5rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:65",
+                  "part": "root",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "0.5rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            },
+            {
+              "variable": "--ds-toolbar-padding",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:63",
+                  "part": "root",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "calc(var(--ds-spacing-2, 0.5rem) * var(--ds-density-effective-scale, 1))\n      calc(var(--ds-spacing-4, 1rem) * var(--ds-density-effective-scale, 1))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1553"
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:65",
+                  "part": "root",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:66",
+                  "part": "root",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+            },
+            {
+              "variable": "--ds-spacing-4",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:66",
+                  "part": "root",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "1rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            },
+            {
+              "variable": "--ds-toolbar-bg",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:68",
+                  "part": "root",
+                  "landsOn": "background",
+                  "fallbackPresent": true,
+                  "fallback": "transparent",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1547"
+            },
+            {
+              "variable": "--ds-toolbar-color",
+              "totalReadSites": 2,
+              "parts": [
+                "root",
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:69",
+                  "part": "root",
+                  "landsOn": "color",
+                  "fallbackPresent": true,
+                  "fallback": "inherit",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:168",
+                  "part": "search-icon",
+                  "landsOn": "color",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-text-secondary)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1550"
+            },
+            {
+              "variable": "--ds-toolbar-border-bottom",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:73",
+                  "part": "root",
+                  "landsOn": "border-bottom",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-toolbar-border, var(--ds-color-border))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1549"
+            },
+            {
+              "variable": "--ds-toolbar-border",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:73",
+                  "part": "root",
+                  "landsOn": "border-bottom",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-border)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1548"
+            },
+            {
+              "variable": "--ds-color-border",
+              "totalReadSites": 3,
+              "parts": [
+                "divider",
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:73",
+                  "part": "root",
+                  "landsOn": "border-bottom",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:106",
+                  "part": "divider",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:107",
+                  "part": "divider",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:147"
+            },
+            {
+              "variable": "--_ds-table-toolbar-section-gap",
+              "totalReadSites": 3,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:80",
+                  "part": "root",
+                  "landsOn": "padding-inline-end",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:90",
+                  "part": "root",
+                  "landsOn": "padding-inline-end",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:93",
+                  "part": "root",
+                  "landsOn": "padding-inline-start",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-toolbar-divider",
+              "totalReadSites": 2,
+              "parts": [
+                "divider"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:106",
+                  "part": "divider",
+                  "landsOn": "background",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-border)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:107",
+                  "part": "divider",
+                  "landsOn": "background",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-border)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1559"
+            },
+            {
+              "variable": "--ds-color-bg-elevated",
+              "totalReadSites": 1,
+              "parts": [
+                "divider"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:110",
+                  "part": "divider",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+            },
+            {
+              "variable": "--_ds-table-toolbar-search-max",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:145",
+                  "part": "root",
+                  "landsOn": "max-inline-size",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            },
+            {
+              "variable": "--_ds-table-toolbar-search-min",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:146",
+                  "part": "root",
+                  "landsOn": "min-inline-size",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-toolbar-control-bg",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:148",
+                  "part": "root",
+                  "landsOn": "--ds-input-bg",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-bg-tertiary)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1555"
+            },
+            {
+              "variable": "--ds-color-bg-tertiary",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:148",
+                  "part": "root",
+                  "landsOn": "--ds-input-bg",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:200"
+            },
+            {
+              "variable": "--ds-toolbar-control-border",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:149",
+                  "part": "root",
+                  "landsOn": "--ds-input-border",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-border-primary)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1557"
+            },
+            {
+              "variable": "--ds-color-border-primary",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:149",
+                  "part": "root",
+                  "landsOn": "--ds-input-border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63"
+            },
+            {
+              "variable": "--ds-toolbar-control-color",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:150",
+                  "part": "root",
+                  "landsOn": "--ds-input-color",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-text-primary)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1558"
+            },
+            {
+              "variable": "--ds-color-text-primary",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:150",
+                  "part": "root",
+                  "landsOn": "--ds-input-color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:143"
+            },
+            {
+              "variable": "--ds-type-supporting-font-size",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:151",
+                  "part": "root",
+                  "landsOn": "--ds-input-md-font-size",
+                  "fallbackPresent": true,
+                  "fallback": "0.8125rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:542"
+            },
+            {
+              "variable": "--ds-icon-sm-size",
+              "totalReadSites": 2,
+              "parts": [
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:160",
+                  "part": "search-icon",
+                  "landsOn": "inline-size",
+                  "fallbackPresent": true,
+                  "fallback": "1rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:161",
+                  "part": "search-icon",
+                  "landsOn": "block-size",
+                  "fallbackPresent": true,
+                  "fallback": "1rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/presentation/components/icon.css:18"
+            },
+            {
+              "variable": "--ds-search-icon-color",
+              "totalReadSites": 1,
+              "parts": [
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:162",
+                  "part": "search-icon",
+                  "landsOn": "color",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-text-muted)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1644"
+            },
+            {
+              "variable": "--ds-color-text-muted",
+              "totalReadSites": 1,
+              "parts": [
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:162",
+                  "part": "search-icon",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:145"
+            },
+            {
+              "variable": "--ds-motion-fast",
+              "totalReadSites": 1,
+              "parts": [
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:163",
+                  "part": "search-icon",
+                  "landsOn": "transition",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "totalReadSites": 1,
+              "parts": [
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:163",
+                  "part": "search-icon",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "ease-out",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            },
+            {
+              "variable": "--ds-color-text-secondary",
+              "totalReadSites": 1,
+              "parts": [
+                "search-icon"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:168",
+                  "part": "search-icon",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:144"
+            },
+            {
+              "variable": "--_ds-table-toolbar-row-gap",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:176",
+                  "part": "root",
+                  "landsOn": "row-gap",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": "@container ds-table-toolbar (max-width: 64rem)",
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:198",
+                  "part": "root",
+                  "landsOn": "row-gap",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": "@container ds-table-toolbar (max-width: 40rem)",
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            }
+          ]
+        },
+        "undeclaredReads": [],
+        "inertFallbackChainSample": [
+          {
+            "name": "--ds-spacing-3",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:54",
+            "fallback": "0.75rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:57",
+            "fallback": "0.5rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:65",
+            "fallback": "0.5rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+          },
+          {
+            "name": "--ds-density-effective-scale",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:65",
+            "fallback": "1",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:66",
+            "fallback": "1rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+          },
+          {
+            "name": "--ds-density-effective-scale",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:66",
+            "fallback": "1",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+          },
+          {
+            "name": "--ds-type-supporting-font-size",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:151",
+            "fallback": "0.8125rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:542"
+          },
+          {
+            "name": "--ds-icon-sm-size",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:160",
+            "fallback": "1rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/presentation/components/icon.css:18"
+          },
+          {
+            "name": "--ds-icon-sm-size",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:161",
+            "fallback": "1rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/presentation/components/icon.css:18"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css:163",
+            "fallback": "ease-out",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+          }
+        ],
+        "inertFallbackChainSites": 10,
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 59,
+            "property": "--_ds-table-toolbar-search-max",
+            "literal": "30rem",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 60,
+            "property": "--_ds-table-toolbar-search-min",
+            "literal": "10rem",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 72,
+            "property": "border-bottom",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 98,
+            "property": "inline-size",
+            "literal": "2px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 99,
+            "property": "block-size",
+            "literal": "28px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 101,
+            "property": "margin-inline",
+            "literal": "4px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 102,
+            "property": "border-radius",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css",
+            "line": 110,
+            "property": "box-shadow",
+            "literal": "1px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css": {
+              "rows": 61,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 61,
+            "viaUniqueDataPartInSharedClassScope": 0,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [
+            "ds-table-toolbar",
+            "ds-table-toolbar__actions",
+            "ds-table-toolbar__divider",
+            "ds-table-toolbar__filters",
+            "ds-table-toolbar__left",
+            "ds-table-toolbar__right",
+            "ds-table-toolbar__row",
+            "ds-table-toolbar__search-field",
+            "ds-table-toolbar__search-icon",
+            "ds-table-toolbar__search-input",
+            "ds-table-toolbar__spacer"
+          ],
+          "sharedClassTokens": [
+            "ds-structure"
+          ],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 61
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 11,
+            "dataPart": 13,
+            "styleAttribute": 0
+          },
+          "perFile": {
+            "packages/core/src/ui/structures/workspace/table-toolbar/contracts/index.ts": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 47
+            },
+            "packages/core/src/ui/structures/workspace/table-toolbar/index.ts": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 17
+            },
+            "packages/core/src/ui/structures/workspace/table-toolbar/runtime/rendering/index.tsx": {
+              "classNameOccurrences": 11,
+              "dataPartOccurrences": 13,
+              "styleAttributeOccurrences": 0,
+              "lines": 244
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 61,
+          "customPropertyReadsAttributed": 41,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2215,61 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-accent-color",
+            "prop": "acentos de toolbar y filtros activos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-table-toolbar-accent-color",
+              "--_ds-toolbar-bg"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-tertiary",
+            "--ds-color-border",
+            "--ds-color-border-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-motion-fast",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4"
+          ],
+          "CONSUMO/shared (multi-lector): ownedBy pattern/data/list-toolbar.json": [
+            "--ds-search-icon-color",
+            "--ds-toolbar-border-bottom",
+            "--ds-toolbar-color",
+            "--ds-toolbar-control-color"
+          ],
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-toolbar-border",
+            "--ds-toolbar-control-bg",
+            "--ds-toolbar-control-border"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2277,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2301,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2325,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-type-supporting-font-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2355,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-panel-radius",
+            "prop": "paneles, rails, metric cards",
+            "tier": "standard",
+            "examples": [
+              "--_ds-record-facts-radius",
+              "--_ds-stats-card-radius"
+            ],
+            "sockets": [
+              "--_ds-table-toolbar-panel-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2382,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "botones de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-table-toolbar-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2406,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "padding de toolbar y field-grid",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-table-toolbar-density-factor",
+              "--_ds-icon-sm-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "CONSUMO/shared (multi-lector): ownedBy pattern/data/list-toolbar.json": [
+            "--ds-toolbar-gap"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2437,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-grid-gap",
+            "prop": "gap de grillas de widgets y de zonas de trabajo",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-table-toolbar-grid-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2461,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-panel-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-table-toolbar-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-motion-ease-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2493,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "plano de trabajo plano; lo flotante usa sockets overlay",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2506,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "El lienzo de trabajo no compite con el contenido: acabado cero en el plano de trabajo."
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2523,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2536,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de structures)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2553,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "los paneles del lienzo pintan su encabezado por familia",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "chrome.families",
+            "socketPattern": "--_ds-table-toolbar-panel-header-bg",
+            "prop": "background-color del encabezado de panel",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2574,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-rule-style",
+            "prop": "reglas de field-grid y bordes de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-table-toolbar-rule-style"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO/shared (multi-lector): ownedBy pattern/shell/pattern-page-shell.json": [
+            "--ds-toolbar-divider"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2604,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2622,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de structures)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2639,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2678,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-table-toolbar-icon-stroke-width",
+            "prop": "stroke-width de los iconos de toolbar de panel",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2699,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -37,6 +37,7 @@ import {
   buildClaimDocumentationInventory,
   collectDataPartStampsFromText,
   extractRegistryFactsFromText,
+  extractRosterProjectedRegistryFacts,
   findStaleClaimsInRecords,
   validateClaimDocumentationInventory,
 } from './lib/gat-07-static-analysis.mjs';
@@ -577,11 +578,27 @@ function measureVerticals() {
     CORE_ROOT,
     'src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts',
   );
+  const rosterPath = join(
+    CORE_ROOT,
+    'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+  );
+  // The roster is the single author of first-party identity, so the trio is
+  // READ from it. A literal ['rottay', 'bithire', 'evnto'] in this gate would
+  // be a second authority that keeps passing after the roster changes.
+  const roster = readFirstPartyRosterSource(rosterPath);
   const verticalResult = extractRegistryFactsFromText(
     read(verticalPath), workspacePath(verticalPath), 'VERTICAL_REGISTRY', ['engine', 'density', 'defaultProductProfile'],
   );
-  const tenantResult = extractRegistryFactsFromText(
-    read(tenantPath), workspacePath(tenantPath), 'KNOWN_TENANTS', ['engine', 'vertical'],
+  // `KNOWN_TENANTS` is a roster projection, not a hand-authored key-per-tenant
+  // literal: its rows are proven through the map/factory shape and the single
+  // authored literal every row reaches.
+  const tenantResult = extractRosterProjectedRegistryFacts(
+    read(tenantPath), workspacePath(tenantPath), {
+      variableName: 'KNOWN_TENANTS',
+      rosterName: 'FIRST_PARTY_VERTICAL_ROSTER',
+      slugs: roster.map((entry) => entry.slug),
+      fields: ['engine', 'vertical'],
+    },
   );
   const errors = [];
   if (!verticalResult.declaration.readonlyTypeAnnotation) {
@@ -590,36 +607,46 @@ function measureVerticals() {
   if (!tenantResult.declaration.readonlyTypeAnnotation) {
     errors.push(`KNOWN_TENANTS must retain an authored Readonly<...> type annotation: ${JSON.stringify(tenantResult.declaration.typeAnnotation)}`);
   }
+  const expectedRosterSpecifier = `@/${normalizePath(relative(join(CORE_ROOT, 'src'), dirname(rosterPath)))}`;
+  if (tenantResult.projection && tenantResult.projection.rosterModule !== expectedRosterSpecifier) {
+    errors.push(`KNOWN_TENANTS must project the canonical roster module ${expectedRosterSpecifier}: ${JSON.stringify(tenantResult.projection.rosterModule)}`);
+  }
   for (const unresolved of verticalResult.unresolvedEntries) errors.push(`vertical registry unresolved at line ${unresolved.line}: ${unresolved.reason}`);
   for (const unresolved of tenantResult.unresolvedEntries) errors.push(`tenant registry unresolved at line ${unresolved.line}: ${unresolved.reason}`);
-  const rosterPath = join(
-    CORE_ROOT,
-    'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
-  );
-  for (const { slug: key } of readFirstPartyRosterSource(rosterPath)) {
+  for (const { slug: key, verticalKey } of roster) {
     if (!literalEquals(verticalResult.facts[key]?.engine, 'modern')) {
       errors.push(`${key} vertical engine is not a literal modern value: ${JSON.stringify(verticalResult.facts[key]?.engine)}`);
     }
-  }
-  for (const key of ['rottay', 'bithire', 'evnto']) {
-    if (tenantResult.facts[key]?.engine?.kind !== 'absent') {
-      errors.push(`${key} tenant engine must be demonstrably absent: ${JSON.stringify(tenantResult.facts[key]?.engine)}`);
+    const tenantEngine = tenantResult.facts[key]?.engine;
+    if (tenantEngine?.kind !== 'absent') {
+      errors.push(`${key} tenant engine must be demonstrably absent: ${JSON.stringify(tenantEngine)}`);
+    }
+    // The projected `vertical` is proven either as the authored literal key or
+    // as the roster row's own `verticalKey`; the roster already pins the two
+    // identical, so both readings are the same fact.
+    const tenantVertical = tenantResult.facts[key]?.vertical;
+    const verticalProven = literalEquals(tenantVertical, verticalKey)
+      || (tenantVertical?.kind === 'rosterField' && tenantVertical.field === 'verticalKey');
+    if (!verticalProven) {
+      errors.push(`${key} tenant vertical must be the roster vertical key: ${JSON.stringify(tenantVertical)}`);
     }
   }
 
+  const rosterEngines = [...new Set(roster.map((entry) => entry.engine))];
+  if (rosterEngines.length !== 1) {
+    errors.push(`first-party roster must declare exactly one engine: ${JSON.stringify(rosterEngines)}`);
+  }
+  const [rosterEngine] = rosterEngines;
+  const engineLabel = `${rosterEngine.charAt(0).toUpperCase()}${rosterEngine.slice(1)}`;
   const docRequirements = {
     verticals: [
-      '| **Vertical preset engine** | modern | modern | modern |',
-      '| **First-party tenant explicit engine** | not set | not set | not set |',
+      `| **Vertical preset engine** | ${roster.map((entry) => entry.engine).join(' | ')} |`,
+      `| **First-party tenant explicit engine** | ${roster.map(() => 'not set').join(' | ')} |`,
     ],
-    tenancy: [
-      '| `rottay` | Rottay | not set |',
-      '| `bithire` | BitHire | not set |',
-      '| `evnto` | Evnto | not set |',
-    ],
+    tenancy: roster.map((entry) => `| \`${entry.slug}\` | ${entry.name} | not set |`),
     engines: [
       '| Classic | `classic` | Ant Design 5 (`antd`) | Stable | -- |',
-      '| Modern | `modern` | Rottay-native/Tailwind bridge | Stable | Rottay, BitHire, Evnto vertical presets |',
+      `| ${engineLabel} | \`${rosterEngine}\` | Rottay-native/Tailwind bridge | Stable | ${roster.map((entry) => entry.name).join(', ')} vertical presets |`,
     ],
   };
   const documentation = {};
@@ -634,18 +661,19 @@ function measureVerticals() {
   return {
     evidence: {
       classification: 'authoredInitializerProjection',
-      disclaimer: 'Static projection of direct registry object-literal initializers plus a fail-closed same-module capability-write scan; it does not assert runtime immutability outside the authored source.',
-      sourceFiles: [verticalPath, tenantPath].map((path) => ({ path: workspacePath(path), sha256: sha256(read(path)) })),
+      disclaimer: 'Static projection of direct registry object-literal initializers, plus the roster-projected factory literal reached through a proven Object.freeze/Object.fromEntries/roster.map shape, plus a fail-closed same-module capability-write scan; it does not assert runtime immutability outside the authored source.',
+      sourceFiles: [verticalPath, tenantPath, rosterPath].map((path) => ({ path: workspacePath(path), sha256: sha256(read(path)) })),
       declarations: {
         verticals: verticalResult.declaration,
         tenants: tenantResult.declaration,
       },
+      tenantProjection: tenantResult.projection,
       verticals: verticalResult.facts,
-      tenants: Object.fromEntries(['rottay', 'bithire', 'evnto'].map((key) => [key, tenantResult.facts[key]])),
+      tenants: tenantResult.facts,
       documentation,
     },
     errors,
-    inputFiles: [verticalPath, tenantPath, ...Object.values(VERTICAL_DOCS)],
+    inputFiles: [verticalPath, tenantPath, rosterPath, ...Object.values(VERTICAL_DOCS)],
   };
 }
 
@@ -821,14 +849,23 @@ function loadStaleCorpus() {
     'schemaVersion',
     'typescriptRoots',
     'cssRoots',
-    'authoredExtensionRoots',
   ]);
+  // `authoredExtensionRoots` scanned the `_source/extension.css` drain, which no
+  // longer has a single file. A retired key must be REMOVED rather than left
+  // pointing at an empty root: a corpus key that silently contributes nothing
+  // reads as coverage the gate does not have.
+  const retiredKeys = new Set(['authoredExtensionRoots']);
   const errors = [];
   if (!config || typeof config !== 'object' || Array.isArray(config)) {
     throw new Error('GAT-07 stale corpus must be an object');
   }
-  for (const key of unknownKeys(config, allowedKeys)) errors.push(`unknown stale-corpus key ${key}`);
-  if (config.schemaVersion !== 2) errors.push('stale-corpus schemaVersion must be 2');
+  for (const key of retiredKeys) {
+    if (Object.hasOwn(config, key)) errors.push(`retired stale-corpus key ${key} must be removed`);
+  }
+  for (const key of unknownKeys(config, allowedKeys)) {
+    if (!retiredKeys.has(key)) errors.push(`unknown stale-corpus key ${key}`);
+  }
+  if (config.schemaVersion !== 3) errors.push('stale-corpus schemaVersion must be 3');
 
   const resolveEntries = (key, expectedKind, extension = null) => {
     const entries = config[key];
@@ -918,17 +955,9 @@ function loadStaleCorpus() {
   const corpus = {
     typescriptRoots: resolveTypescriptRoots(),
     cssRoots: resolveEntries('cssRoots', 'directory'),
-    authoredExtensionRoots: resolveEntries('authoredExtensionRoots', 'directory'),
   };
   if (errors.length > 0) throw new Error(`invalid GAT-07 stale corpus:\n- ${errors.join('\n- ')}`);
   return corpus;
-}
-
-function authoredExtensionFiles(roots) {
-  return roots.flatMap((root) => walkFiles(
-    root,
-    (path) => normalizePath(path).endsWith('/_source/extension.css'),
-  ));
 }
 
 export function discoverStaleTypescriptFiles(roots) {
@@ -942,11 +971,10 @@ export function discoverStaleTypescriptFiles(roots) {
 function measureStaleComments() {
   const corpus = loadStaleCorpus();
   const tsFiles = discoverStaleTypescriptFiles(corpus.typescriptRoots);
-  const extensionFiles = authoredExtensionFiles(corpus.authoredExtensionRoots);
-  const cssFiles = [
-    ...corpus.cssRoots.flatMap((dir) => walkFiles(dir, (path) => path.endsWith('.css'))),
-    ...extensionFiles,
-  ].sort((a, b) => normalizePath(a).localeCompare(normalizePath(b)));
+  const cssFiles = corpus.cssRoots
+    .flatMap((dir) => walkFiles(dir, (path) => path.endsWith('.css')))
+    .sort((a, b) => normalizePath(a).localeCompare(normalizePath(b)));
+  const cssRecords = cssFiles.map((path) => ({ path: workspacePath(path), text: read(path), kind: 'css' }));
   const commentRecords = [
     ...tsFiles.map((path) => {
       const text = read(path);
@@ -957,11 +985,14 @@ function measureStaleComments() {
         inlinePaintCount: countArc09PaintInFile(text, workspacePath(path)),
       };
     }),
-    ...cssFiles.map((path) => ({ path: workspacePath(path), text: read(path), kind: 'css' })),
+    ...cssRecords,
   ];
   const comments = findStaleClaimsInRecords(commentRecords);
+  // The universal-border-floor law now reads the AUTHORED CSS corpus. It used to
+  // read the retired `_source/extension.css` drain, which is down to zero files,
+  // so the law was being asserted over nothing.
   const floors = analyzeTenantFloorCssRecords(
-    extensionFiles.map((path) => ({ path: workspacePath(path), text: read(path) })),
+    cssRecords.map(({ path, text }) => ({ path, text })),
   );
   const errors = [];
   if (comments.staleInline.length > 0) errors.push(`${comments.staleInline.length} stale inline-paint comments remain`);
@@ -1023,15 +1054,19 @@ function validateDocumentationSeal(documentPaths) {
   if (seal.requirementsRevision !== REQUIREMENTS_REVISION) {
     errors.push(`requirementsRevision must remain ${REQUIREMENTS_REVISION}`);
   }
+  // The inspected-document count is DERIVED from the documents this run
+  // actually inspected. A literal count here would drift the moment a doc joins
+  // or leaves the inspected set, and would read as a target instead of an
+  // observation.
+  const docsPaths = [...new Set(documentPaths)]
+    .filter((candidate) => candidate.startsWith(`${DOCS_ROOT}${sep}`))
+    .sort();
+  const relativeDocsPaths = docsPaths.map((path) => normalizePath(relative(DOCS_ROOT, path)));
   if (seal.documentationRevision === null) {
-    errors.push('documentationRevision is unsealed; commit the 14 inspected docs, set their implementation commit, then regenerate the artifact');
+    errors.push(`documentationRevision is unsealed; commit the ${docsPaths.length} inspected docs, set their implementation commit, then regenerate the artifact`);
   } else if (!/^[0-9a-f]{40}$/.test(seal.documentationRevision ?? '')) {
     errors.push('documentationRevision must be a full 40-character Git commit');
   } else {
-    const docsPaths = [...new Set(documentPaths)]
-      .filter((candidate) => candidate.startsWith(`${DOCS_ROOT}${sep}`))
-      .sort();
-    const relativeDocsPaths = docsPaths.map((path) => normalizePath(relative(DOCS_ROOT, path)));
     const head = spawnSync('git', ['rev-parse', 'HEAD'], {
       cwd: DOCS_ROOT,
       encoding: 'utf8',

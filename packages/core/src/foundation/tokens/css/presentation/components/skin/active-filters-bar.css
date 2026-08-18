@@ -12,7 +12,7 @@
  * including forced-colors). What this file owns: the rail's root frame, the
  * count eyebrow pill (pattern chrome, NOT a filter chip), the label/value
  * typography INSIDE the composed Tag, the layout geometry drained from the
- * engine's inline styles (logical paddings only), the entrance transition
+ * engine's inline styles (logical paddings alone), the entrance transition
  * and the forced-colors contract for the pattern-owned pieces.
  *
  * SPECIFICITY (P-48): border paint reaches the tenant floor at (0,4,0) and

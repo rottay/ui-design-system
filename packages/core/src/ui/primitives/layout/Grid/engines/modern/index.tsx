@@ -425,7 +425,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
 
   // Clear inline template values when responsive CSS will provide them via
-  // media queries, preventing the inline styles from overriding the injected rules
+  // media queries, preventing the inline styles from overriding the injected rules.
   // Only the axis the media rules own is cleared; the sibling keeps its template.
   const responsiveStyleOverrides: CSSProperties = {};
   if (hasResponsiveColumns) {

@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "2c39cc2b423c4ace56c3113f5982fa04326a2942f895ea1019dbaf2728d67116"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3030 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css",
+      "packages/core/src/ui/primitives/navigation/FloatButton/index.tsx",
+      "packages/core/src/ui/primitives/navigation/FloatButton/contracts/index.ts",
+      "packages/core/src/ui/primitives/navigation/FloatButton/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx",
+      "packages/core/src/ui/primitives/navigation/FloatButton/compound/index.ts"
+    ],
+    "stableParts": [
+      "root",
+      "trigger",
+      "panel",
+      "badge",
+      "description"
+    ],
+    "states": [
+      "open",
+      "aria-expanded"
+    ],
+    "variantAxes": [
+      "data-variant",
+      "data-shape",
+      "data-placement"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The group panel is role=\"group\" and aria-hidden when closed - a disclosure, deliberately not a menu. [at src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:377]",
+      "Under forced-colors the trigger gets a 1px ButtonText border and a 2px Highlight focus outline with 2px offset, none of it token-driven. [at src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:276]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "navigation",
+        "scoutArtifact": "mr-anatomy-navigation.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 5,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:354",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:312"
+          ]
+        },
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:197",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:212"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:393",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:336"
+          ]
+        },
+        {
+          "part": "badge",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:156",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:185"
+          ]
+        },
+        {
+          "part": "description",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:153",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:182"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "data-open",
+          "meaning": "group expanded",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:355",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:313"
+          ],
+          "state": "open"
+        },
+        {
+          "token": "aria-expanded / aria-controls",
+          "meaning": "disclosure state",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:376"
+          ],
+          "state": "aria-expanded"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-variant='dot'|'count'",
+          "meaning": "badge kind",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:156"
+          ]
+        },
+        {
+          "token": "data-shape",
+          "meaning": "trigger shape",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:199",
+            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:323"
+          ]
+        },
+        {
+          "token": "data-placement",
+          "meaning": "group placement",
+          "at": [
+            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:608"
+          ]
+        }
+      ],
+      "engineDivergence": "classic = Ant FloatButton wrapper (src/ui/primitives/navigation/FloatButton/engines/classic/index.tsx:45); no data-part, no --ds-* reads. modern and rustic stamp the same five parts. rustic hardcodes transition 'all 0.2s' twice (src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:63 and :96); modern carries motion in the skin file.",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": {
+          "distinctVariables": 58,
+          "readSites": 93,
+          "perPartDistinctVariables": {
+            "(engine-inline-style)": [
+              "--ds-floatbutton-bottom",
+              "--ds-floatbutton-gap",
+              "--ds-floatbutton-right",
+              "--ds-floatbutton-size",
+              "--ds-floatbutton-z-index"
+            ],
+            "badge": [
+              "--ds-color-error",
+              "--ds-color-text-on-primary",
+              "--ds-floatbutton-badge-bg",
+              "--ds-floatbutton-badge-color",
+              "--ds-floatbutton-badge-font-size",
+              "--ds-floatbutton-badge-line-height",
+              "--ds-floatbutton-badge-offset-block",
+              "--ds-floatbutton-badge-offset-inline",
+              "--ds-floatbutton-badge-padding-block",
+              "--ds-floatbutton-badge-padding-inline",
+              "--ds-floatbutton-dot-offset-block",
+              "--ds-floatbutton-dot-offset-inline",
+              "--ds-floatbutton-dot-size"
+            ],
+            "description": [
+              "--ds-color-text-secondary",
+              "--ds-floatbutton-description-color",
+              "--ds-font-size-xs"
+            ],
+            "panel": [
+              "--_ds-float-button-panel-closed-offset",
+              "--ds-floatbutton-panel-duration",
+              "--ds-floatbutton-panel-timing",
+              "--ds-motion-ease-out",
+              "--ds-motion-normal",
+              "--ds-spacing-2"
+            ],
+            "root": [
+              "--ds-floatbutton-offset-block-end",
+              "--ds-spacing-2",
+              "--ds-spacing-6",
+              "--ds-z-floatbutton",
+              "--ds-z-index-relative-top"
+            ],
+            "trigger": [
+              "--ds-button-active-transform",
+              "--ds-button-focus-ring",
+              "--ds-button-font-weight",
+              "--ds-button-hover-transform",
+              "--ds-button-md-font-size",
+              "--ds-button-transition",
+              "--ds-color-bg-elevated",
+              "--ds-color-primary",
+              "--ds-color-text-on-primary",
+              "--ds-color-text-primary",
+              "--ds-color-text-secondary",
+              "--ds-density-effective-scale",
+              "--ds-elevation-2",
+              "--ds-floatbutton-default-bg",
+              "--ds-floatbutton-default-color",
+              "--ds-floatbutton-hover-shadow",
+              "--ds-floatbutton-offset-block-end",
+              "--ds-floatbutton-padding-block",
+              "--ds-floatbutton-padding-inline",
+              "--ds-floatbutton-primary-bg",
+              "--ds-floatbutton-primary-color",
+              "--ds-floatbutton-shadow",
+              "--ds-floatbutton-size",
+              "--ds-floatbutton-size-coarse",
+              "--ds-floatbutton-square-radius",
+              "--ds-font-family-base",
+              "--ds-radius-lg",
+              "--ds-shadow-dialog",
+              "--ds-shadow-lg",
+              "--ds-spacing-6",
+              "--ds-surface-card",
+              "--ds-touch-target-min",
+              "--ds-z-floatbutton",
+              "--ds-z-index-relative-top"
+            ]
+          },
+          "entries": [
+            {
+              "variable": "--ds-elevation-2",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:88",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:801",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:969",
+                "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:801"
+              ]
+            },
+            {
+              "variable": "--ds-font-family-base",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "font-family",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:89",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:506",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:176",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:875"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:506"
+              ]
+            },
+            {
+              "variable": "--ds-button-font-weight",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "font-weight",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:90",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/presentation/components/button.css:318",
+                "src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:182",
+                "src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:200"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/presentation/components/button.css:318"
+              ]
+            },
+            {
+              "variable": "--ds-button-md-font-size",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "font-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:91",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/presentation/components/button.css:43"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/presentation/components/button.css:43"
+              ]
+            },
+            {
+              "variable": "--ds-button-transition",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:94",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:111",
+                "src/foundation/tokens/css/foundation/responsive/button.css:24",
+                "src/foundation/tokens/css/presentation/components/button.css:311"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:111",
+                "src/foundation/tokens/css/foundation/responsive/button.css:24",
+                "src/foundation/tokens/css/presentation/components/button.css:311"
+              ]
+            },
+            {
+              "variable": "--ds-button-hover-transform",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":hover",
+                ":not(:disabled)"
+              ],
+              "atRuleContext": [
+                "@media (hover: hover)"
+              ],
+              "observableProperty": "transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:103",
+              "hasFallback": true,
+              "fallback": "translateY(0) scale(1)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:hover:not(:disabled)",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:115",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:171",
+                "src/foundation/tokens/css/presentation/components/button.css:326"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:115",
+                "src/foundation/tokens/css/presentation/components/button.css:326"
+              ]
+            },
+            {
+              "variable": "--ds-button-active-transform",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":active",
+                ":not(:disabled)"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:107",
+              "hasFallback": true,
+              "fallback": "scale(0.98)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:active:not(:disabled)",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:119",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:172",
+                "src/foundation/tokens/css/presentation/components/button.css:327"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:119",
+                "src/foundation/tokens/css/presentation/components/button.css:327"
+              ]
+            },
+            {
+              "variable": "--ds-button-focus-ring",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":focus-visible"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:110",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/presentation/components/button.css:262",
+                "src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css:189",
+                "src/foundation/tokens/css/presentation/components/skin/search-command-bar.css:606"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/presentation/components/button.css:262"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-size",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inline-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120",
+              "hasFallback": true,
+              "fallback": "40px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inline-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656",
+                "src/foundation/tokens/css/foundation/base/density.css:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-size",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:121",
+              "hasFallback": true,
+              "fallback": "40px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:121",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656",
+                "src/foundation/tokens/css/foundation/base/density.css:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656"
+              ]
+            },
+            {
+              "variable": "--ds-radius-lg",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-shape='circle'])",
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "border-radius",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:124",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/tooling/testing/fixtures/tenants/default.css:44",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/tooling/testing/fixtures/tenants/default.css:44",
+                "src/foundation/tokens/css/foundation/themes/default.css:771"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-padding-block",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-shape='circle'])",
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "padding",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "hasFallback": true,
+              "fallback": "8px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-shape='circle'])",
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "padding",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656",
+                "src/foundation/tokens/css/foundation/base/density.css:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-padding-inline",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-shape='circle'])",
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "padding",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "hasFallback": true,
+              "fallback": "12px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-density-effective-scale",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-shape='circle'])",
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "padding",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656",
+                "src/foundation/tokens/css/foundation/base/density.css:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:656"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-size-coarse",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [
+                "@media (pointer: coarse)"
+              ],
+              "observableProperty": "inline-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:132",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-size-coarse",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [
+                "@media (pointer: coarse)"
+              ],
+              "observableProperty": "block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:133",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-color-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:139",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-variant='primary']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-on-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:140",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-variant='primary']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+              ]
+            },
+            {
+              "variable": "--ds-surface-card",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-variant='primary'])",
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:143",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-variant='primary'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:265"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-variant='primary'])",
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:144",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-variant='primary'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:143",
+                "src/ui/patterns/customization/brand-studio/index.tsx:161",
+                "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:217",
+                "src/foundation/tokens/css/foundation/themes/default.css:2128"
+              ]
+            },
+            {
+              "variable": "--ds-color-error",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:152",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:106",
+                "src/foundation/tokens/css/foundation/themes/default.css:177",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:177"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-dot-offset-block",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='dot']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-start",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:156",
+              "hasFallback": true,
+              "fallback": "-4px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='dot']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-dot-offset-inline",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='dot']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-inline-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:157",
+              "hasFallback": true,
+              "fallback": "-4px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='dot']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-dot-size",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='dot']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inline-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:158",
+              "hasFallback": true,
+              "fallback": "8px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='dot']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-dot-size",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='dot']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:159",
+              "hasFallback": true,
+              "fallback": "8px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='dot']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-badge-offset-block",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-start",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:164",
+              "hasFallback": true,
+              "fallback": "-8px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-badge-offset-inline",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-inline-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:165",
+              "hasFallback": true,
+              "fallback": "-8px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-badge-padding-block",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "padding",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169",
+              "hasFallback": true,
+              "fallback": "1px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-badge-padding-inline",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "padding",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169",
+              "hasFallback": true,
+              "fallback": "6px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-badge-font-size",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "font-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:170",
+              "hasFallback": true,
+              "fallback": "11px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-badge-line-height",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "line-height",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:171",
+              "hasFallback": true,
+              "fallback": "16px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-color-text-on-primary",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [
+                "[data-variant='count']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:176",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+              ]
+            },
+            {
+              "variable": "--ds-font-size-xs",
+              "parts": [
+                "description"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "font-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:181",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='description']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:608"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:608"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-offset-block-end",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197",
+              "hasFallback": true,
+              "fallback": "var(--ds-spacing-6)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-spacing-6",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689",
+                "src/foundation/tokens/css/foundation/base/density.css:83"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689"
+              ]
+            },
+            {
+              "variable": "--ds-spacing-6",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "inset-inline-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:198",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689",
+                "src/foundation/tokens/css/foundation/base/density.css:83"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689"
+              ]
+            },
+            {
+              "variable": "--ds-z-floatbutton",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:199",
+              "hasFallback": true,
+              "fallback": "1000",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-spacing-2",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "gap",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:203",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:685",
+                "src/foundation/tokens/css/foundation/base/density.css:79"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:685"
+              ]
+            },
+            {
+              "variable": "--ds-z-index-relative-top",
+              "parts": [
+                "root",
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:210",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern[data-part='root'] > [data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/base/z-index.css:56"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/base/z-index.css:56"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-offset-block-end",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-placement='back-top']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:219",
+              "hasFallback": true,
+              "fallback": "var(--ds-spacing-6)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-spacing-6",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-placement='back-top']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-block-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:219",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689",
+                "src/foundation/tokens/css/foundation/base/density.css:83"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689"
+              ]
+            },
+            {
+              "variable": "--ds-spacing-6",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-placement='back-top']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "inset-inline-end",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:220",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689",
+                "src/foundation/tokens/css/foundation/base/density.css:83"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:689"
+              ]
+            },
+            {
+              "variable": "--ds-z-floatbutton",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-placement='back-top']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:221",
+              "hasFallback": true,
+              "fallback": "1000",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-spacing-2",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "gap",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:239",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:685",
+                "src/foundation/tokens/css/foundation/base/density.css:79"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:685"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-duration",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-timing",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-duration",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-timing",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--_ds-float-button-panel-closed-offset",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:254",
+              "hasFallback": true,
+              "fallback": "1rem",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-panel-duration",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-timing",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-duration",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-timing",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-panel-duration",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "panel"
+              ],
+              "stateSelectors": [
+                "[data-open='false']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-touch-target-min",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [
+                "@media (hover: none), (pointer: coarse)"
+              ],
+              "observableProperty": "min-block-size",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:297",
+              "hasFallback": true,
+              "fallback": "44px",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:921"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:921"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+              "hasFallback": true,
+              "fallback": "var(--ds-shadow-dialog)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2001"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2001"
+              ]
+            },
+            {
+              "variable": "--ds-shadow-dialog",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/base/shadows.css:95"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/base/shadows.css:95"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-square-radius",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-shape='circle'])",
+                "[data-shape='circle']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "border-radius",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:43",
+              "hasFallback": true,
+              "fallback": "8px",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-shape='circle'])",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-primary-bg",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-primary)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2005"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2005"
+              ]
+            },
+            {
+              "variable": "--ds-color-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:156"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-primary-color",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-text-on-primary)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2006"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2006"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-on-primary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-default-bg",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-variant='primary'])",
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-bg-elevated)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2003"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2003"
+              ]
+            },
+            {
+              "variable": "--ds-color-bg-elevated",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-variant='primary'])",
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:140",
+                "src/ui/patterns/customization/brand-studio/index.tsx:158",
+                "src/foundation/tokens/css/foundation/themes/default.css:209"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:209",
+                "src/foundation/tokens/css/foundation/themes/default.css:2123"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-default-color",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-variant='primary'])",
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-text-secondary)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2004"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2004"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-secondary",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":not([data-variant='primary'])",
+                "[data-variant='primary']"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:144",
+                "src/ui/patterns/customization/brand-studio/index.tsx:162",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:307"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:218",
+                "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-hover-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":hover"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+              "hasFallback": true,
+              "fallback": "var(--ds-shadow-lg)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:hover",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2002"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2002"
+              ]
+            },
+            {
+              "variable": "--ds-shadow-lg",
+              "parts": [
+                "trigger"
+              ],
+              "stateSelectors": [
+                ":hover"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:hover",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:355",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:478",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:567"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:832"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-badge-bg",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-error)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button--rustic [data-part='badge']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2007"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2007"
+              ]
+            },
+            {
+              "variable": "--ds-color-error",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "background-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button--rustic [data-part='badge']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:106",
+                "src/foundation/tokens/css/foundation/themes/default.css:177",
+                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:177"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-badge-color",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-text-on-primary)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button--rustic [data-part='badge']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2008"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2008"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-on-primary",
+              "parts": [
+                "badge"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button--rustic [data-part='badge']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:225",
+                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-description-color",
+              "parts": [
+                "description"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+              "hasFallback": true,
+              "fallback": "var(--ds-color-text-secondary)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button--rustic [data-part='description']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2009"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2009"
+              ]
+            },
+            {
+              "variable": "--ds-color-text-secondary",
+              "parts": [
+                "description"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-float-button--rustic [data-part='description']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:144",
+                "src/ui/patterns/customization/brand-studio/index.tsx:162",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:307"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:218",
+                "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              ]
+            },
+            {
+              "variable": "--ds-floatbutton-size",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "width",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:70",
+              "hasFallback": true,
+              "fallback": "48px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-size",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "height",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:71",
+              "hasFallback": true,
+              "fallback": "48px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-bottom",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "bottom",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:77",
+              "hasFallback": true,
+              "fallback": "24px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-right",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "right",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:78",
+              "hasFallback": true,
+              "fallback": "24px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-z-index",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "zIndex",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:79",
+              "hasFallback": true,
+              "fallback": "1000",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-gap",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "gap",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:87",
+              "hasFallback": true,
+              "fallback": "8px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-floatbutton-gap",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "gap",
+              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:95",
+              "hasFallback": true,
+              "fallback": "8px",
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-floatbutton-size",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120"
+          },
+          {
+            "variable": "--ds-floatbutton-padding-block",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125"
+          },
+          {
+            "variable": "--ds-floatbutton-padding-inline",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125"
+          },
+          {
+            "variable": "--ds-floatbutton-size-coarse",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:132"
+          },
+          {
+            "variable": "--ds-floatbutton-dot-offset-block",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:156"
+          },
+          {
+            "variable": "--ds-floatbutton-dot-offset-inline",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:157"
+          },
+          {
+            "variable": "--ds-floatbutton-dot-size",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:158"
+          },
+          {
+            "variable": "--ds-floatbutton-badge-offset-block",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:164"
+          },
+          {
+            "variable": "--ds-floatbutton-badge-offset-inline",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:165"
+          },
+          {
+            "variable": "--ds-floatbutton-badge-padding-block",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169"
+          },
+          {
+            "variable": "--ds-floatbutton-badge-padding-inline",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169"
+          },
+          {
+            "variable": "--ds-floatbutton-badge-font-size",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:170"
+          },
+          {
+            "variable": "--ds-floatbutton-badge-line-height",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:171"
+          },
+          {
+            "variable": "--ds-floatbutton-offset-block-end",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197"
+          },
+          {
+            "variable": "--ds-z-floatbutton",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:199"
+          },
+          {
+            "variable": "--ds-floatbutton-panel-duration",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248"
+          },
+          {
+            "variable": "--ds-floatbutton-panel-timing",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248"
+          },
+          {
+            "variable": "--_ds-float-button-panel-closed-offset",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:254"
+          },
+          {
+            "variable": "--ds-floatbutton-square-radius",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:43"
+          },
+          {
+            "variable": "--ds-floatbutton-bottom",
+            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:77"
+          },
+          {
+            "variable": "--ds-floatbutton-right",
+            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:78"
+          },
+          {
+            "variable": "--ds-floatbutton-z-index",
+            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:79"
+          },
+          {
+            "variable": "--ds-floatbutton-gap",
+            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:87"
+          }
+        ],
+        "readsWithoutFallback": [
+          {
+            "variable": "--ds-elevation-2",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:88",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-font-family-base",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:89",
+            "observableProperty": "font-family"
+          },
+          {
+            "variable": "--ds-button-font-weight",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:90",
+            "observableProperty": "font-weight"
+          },
+          {
+            "variable": "--ds-button-md-font-size",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:91",
+            "observableProperty": "font-size"
+          },
+          {
+            "variable": "--ds-button-transition",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:94",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-button-focus-ring",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:110",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120",
+            "observableProperty": "inline-size"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:121",
+            "observableProperty": "block-size"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:124",
+            "observableProperty": "border-radius"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+            "observableProperty": "padding"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+            "observableProperty": "padding"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:139",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-color-text-on-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:140",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:143",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:144",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-color-error",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:152",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-color-text-on-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:176",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:181",
+            "observableProperty": "font-size"
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197",
+            "observableProperty": "inset-block-end"
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:198",
+            "observableProperty": "inset-inline-end"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:203",
+            "observableProperty": "gap"
+          },
+          {
+            "variable": "--ds-z-index-relative-top",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:210",
+            "observableProperty": "z-index"
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:219",
+            "observableProperty": "inset-block-end"
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:220",
+            "observableProperty": "inset-inline-end"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:239",
+            "observableProperty": "gap"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-shadow-dialog",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+            "observableProperty": "background-color"
+          },
+          {
+            "variable": "--ds-color-text-on-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+            "observableProperty": "background-color"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-shadow-lg",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--ds-color-error",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+            "observableProperty": "background-color"
+          },
+          {
+            "variable": "--ds-color-text-on-primary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+            "observableProperty": "color"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+            "observableProperty": "color"
+          }
+        ],
+        "inertFallbackChains": {
+          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css:164-178.",
+          "blockingCount": 12,
+          "testFixtureOnlyCount": 0,
+          "entries": [
+            {
+              "variable": "--ds-button-hover-transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:103",
+              "fallback": "translateY(0) scale(1)",
+              "observableProperty": "transform",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:115",
+                "src/foundation/tokens/css/presentation/components/button.css:326"
+              ],
+              "rootDefaultProvenance": [
+                "OTHER_SOURCE_CSS"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-button-active-transform",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:107",
+              "fallback": "scale(0.98)",
+              "observableProperty": "transform",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:119",
+                "src/foundation/tokens/css/presentation/components/button.css:327"
+              ],
+              "rootDefaultProvenance": [
+                "OTHER_SOURCE_CSS"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-touch-target-min",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:297",
+              "fallback": "44px",
+              "observableProperty": "min-block-size",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:921"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-floatbutton-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+              "fallback": "var(--ds-shadow-dialog)",
+              "observableProperty": "box-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2001"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-primary-bg",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+              "fallback": "var(--ds-color-primary)",
+              "observableProperty": "background-color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2005"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-primary-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+              "fallback": "var(--ds-color-text-on-primary)",
+              "observableProperty": "color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2006"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-default-bg",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+              "fallback": "var(--ds-color-bg-elevated)",
+              "observableProperty": "background-color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2003"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-default-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+              "fallback": "var(--ds-color-text-secondary)",
+              "observableProperty": "color",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2004"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-hover-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+              "fallback": "var(--ds-shadow-lg)",
+              "observableProperty": "box-shadow",
+              "parts": [
+                "trigger"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2002"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-badge-bg",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+              "fallback": "var(--ds-color-error)",
+              "observableProperty": "background-color",
+              "parts": [
+                "badge"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2007"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-badge-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+              "fallback": "var(--ds-color-text-on-primary)",
+              "observableProperty": "color",
+              "parts": [
+                "badge"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2008"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            },
+            {
+              "variable": "--ds-floatbutton-description-color",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+              "fallback": "var(--ds-color-text-secondary)",
+              "observableProperty": "color",
+              "parts": [
+                "description"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2009"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            }
+          ],
+          "familyChannelBlockedCount": 9,
+          "foundationTokenBlockedCount": 3
+        },
+        "generatedArtifactOnlyReads": [],
+        "testOrStoryOnlyDeclaredReads": [],
+        "hardcodedValues": [
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:119",
+            "property": "border-radius",
+            "literals": [
+              "50%"
+            ],
+            "text": "border-radius: 50%;",
+            "atRuleContext": [],
+            "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
+            "classification": "RATIO_CONSTANT_NOT_A_LENGTH"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:160",
+            "property": "border-radius",
+            "literals": [
+              "9999px"
+            ],
+            "text": "border-radius: 9999px;",
+            "atRuleContext": [],
+            "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='dot']",
+            "classification": "UNGOVERNED_GEOMETRY"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:175",
+            "property": "border-radius",
+            "literals": [
+              "9999px"
+            ],
+            "text": "border-radius: 9999px;",
+            "atRuleContext": [],
+            "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
+            "classification": "UNGOVERNED_GEOMETRY"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:276",
+            "property": "border",
+            "literals": [
+              "1px"
+            ],
+            "text": "border: 1px solid ButtonText;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:281",
+            "property": "outline",
+            "literals": [
+              "2px"
+            ],
+            "text": "outline: 2px solid Highlight;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:282",
+            "property": "outline-offset",
+            "literals": [
+              "2px"
+            ],
+            "text": "outline-offset: 2px;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:40",
+            "property": "border-radius",
+            "literals": [
+              "50%"
+            ],
+            "text": "border-radius: 50%;",
+            "atRuleContext": [],
+            "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-shape='circle']",
+            "classification": "RATIO_CONSTANT_NOT_A_LENGTH"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:66",
+            "property": "border-radius",
+            "literals": [
+              "9px"
+            ],
+            "text": "border-radius: 9px;",
+            "atRuleContext": [],
+            "selector": ".rottay-float-button--rustic [data-part='badge']",
+            "classification": "UNGOVERNED_GEOMETRY"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:82",
+            "property": "transform",
+            "literals": [
+              "16px"
+            ],
+            "text": "transform: translateY(16px);",
+            "atRuleContext": [],
+            "selector": ".rottay-float-button-group--rustic[data-part='root'] [data-part='panel'][data-open='false']",
+            "classification": "UNGOVERNED_GEOMETRY"
+          },
+          {
+            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:63",
+            "property": "transition",
+            "literals": [
+              "0.2s"
+            ],
+            "text": "transition: 'all 0.2s'",
+            "atRuleContext": [],
+            "selector": "INLINE_STYLE",
+            "classification": "RAW_MOTION_LITERAL"
+          },
+          {
+            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:96",
+            "property": "transition",
+            "literals": [
+              "0.2s"
+            ],
+            "text": "transition: 'all 0.2s'",
+            "atRuleContext": [],
+            "selector": "INLINE_STYLE",
+            "classification": "RAW_MOTION_LITERAL"
+          },
+          {
+            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:112",
+            "property": "padding",
+            "literals": [
+              "4px"
+            ],
+            "text": "padding: '0 4px'",
+            "atRuleContext": [],
+            "selector": "INLINE_STYLE",
+            "classification": "UNGOVERNED_GEOMETRY"
+          },
+          {
+            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:114",
+            "property": "lineHeight",
+            "literals": [
+              "18px"
+            ],
+            "text": "lineHeight: '18px'",
+            "atRuleContext": [],
+            "selector": "INLINE_STYLE",
+            "classification": "UNGOVERNED_GEOMETRY"
+          }
+        ],
+        "hardcodedValueClassification": {
+          "RATIO_CONSTANT_NOT_A_LENGTH": 2,
+          "UNGOVERNED_GEOMETRY": 6,
+          "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT": 3,
+          "RAW_MOTION_LITERAL": 2
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3058,64 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-active-indicator",
+            "prop": "color del indicador activo/seleccionado",
+            "tier": "standard",
+            "examples": [
+              "--_ds-tabs-indicator-color",
+              "--_ds-menu-item-active-color",
+              "--_ds-breadcrumb-current-color"
+            ],
+            "sockets": [
+              "--_ds-float-button-active-indicator"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation/familia-ajena compartidos": [
+            "--ds-button-active-transform",
+            "--ds-button-focus-ring",
+            "--ds-button-font-weight",
+            "--ds-button-hover-transform",
+            "--ds-button-md-font-size",
+            "--ds-button-transition",
+            "--ds-color-error",
+            "--ds-color-primary",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-elevation-2",
+            "--ds-font-family-base",
+            "--ds-font-size-xs",
+            "--ds-motion-ease-out",
+            "--ds-motion-normal",
+            "--ds-radius-lg",
+            "--ds-spacing-2",
+            "--ds-spacing-6",
+            "--ds-surface-card",
+            "--ds-touch-target-min",
+            "--ds-z-floatbutton",
+            "--ds-z-index-relative-top"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3123,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de nav en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3147,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de nav en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3171,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-float-button-font-size",
+              "--_ds-floatbutton-badge-font-size",
+              "--_ds-floatbutton-badge-line-height"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3202,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/menu (pinta rottay-menu--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/menu",
+            "channels": [
+              "--ds-menu-panel-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3232,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "border-radius de tab-pill/switcher/toggle de entorno",
+            "tier": "standard",
+            "examples": [
+              "--_ds-tabs-pill-radius",
+              "--_ds-environment-toggle-radius"
+            ],
+            "sockets": [
+              "--_ds-float-button-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3259,39 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-float-button-density-factor",
+              "--_ds-floatbutton-badge-offset-block",
+              "--_ds-floatbutton-badge-offset-inline",
+              "--_ds-floatbutton-badge-padding-block",
+              "--_ds-floatbutton-badge-padding-inline",
+              "--_ds-floatbutton-dot-offset-block",
+              "--_ds-floatbutton-dot-offset-inline",
+              "--_ds-floatbutton-dot-size",
+              "--_ds-floatbutton-offset-block-end",
+              "--_ds-floatbutton-padding-block",
+              "--_ds-floatbutton-padding-inline",
+              "--_ds-floatbutton-size",
+              "--_ds-floatbutton-size-coarse"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3299,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3312,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-transition-duration",
+              "--_ds-tabs-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-float-button-transition-duration",
+              "--_ds-floatbutton-panel-duration",
+              "--_ds-floatbutton-panel-timing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3342,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "NavItem/Sidebar no flotan; su activo se senala con navigation.tone, no con sombra."
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3359,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "nav chrome mate; el estado activo lo da sidebar-tone, no efectos",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3372,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "este primitivo no pinta ni lee chrome de sidebar (las hojas --ds-sidebar-* las leen menu y app-shell; el placeholder <leaf> era boilerplate de grupo y viola nombre-concreto)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3390,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3407,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el fondo del chrome de navegacion lo emite sidebar-tone (seis hojas); una segunda fuente viola L4",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3420,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-focus-ring-color",
+              "--_ds-tabs-focus-ring-color",
+              "--_ds-breadcrumb-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-float-button-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3448,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3466,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3483,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3522,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-float-button-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3548,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

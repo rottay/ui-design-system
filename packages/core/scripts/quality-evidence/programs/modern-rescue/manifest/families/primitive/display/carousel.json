@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "1c7440098016e138bedc4e1e66f908e5e2d116f8a78d3a702915275da2135a1f"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1950 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/Carousel/index.tsx",
+      "packages/core/src/ui/primitives/display/Carousel/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/Carousel/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx",
+      "packages/core/src/ui/primitives/display/Carousel/compound/Item/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+    ],
+    "stableParts": [
+      "root",
+      "track",
+      "slide",
+      "arrow",
+      "dots",
+      "dot",
+      "item"
+    ],
+    "states": [
+      "hover",
+      "active-pressed",
+      "disabled",
+      "focus-visible",
+      "selected"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "Slides keep role='group' with aria-roledescription='slide'; the dot strip keeps tablist/tab semantics. [at packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:515, packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:516, packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:590, packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:612]",
+      "The disabled edge arrow stays visually distinct under forced-colors, where opacity is stripped. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:255, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:257]",
+      "Selected and unselected dots remain distinguishable under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:261, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:265]",
+      "Arrow and dot focus rings re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:270, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:271]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-a",
+        "scoutArtifact": "mr-anatomy-display-a.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 7,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-vertical/data-fade/data-swipe axes",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:464",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:465",
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:312"
+          ]
+        },
+        {
+          "part": "track",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:478",
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:324"
+          ]
+        },
+        {
+          "part": "slide",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='group' + aria-roledescription='slide' + data-selected",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:492",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:493",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:516",
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:329"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:515"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "arrow",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-direction axis on a <button>",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:542",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:561",
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:138"
+          ]
+        },
+        {
+          "part": "dots",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='tablist'",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:588",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:590",
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:371"
+          ]
+        },
+        {
+          "part": "dot",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='tab' + data-selected axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:600",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:601",
+            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:612",
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:379",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:216"
+          ]
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute (Carousel.Item compound)",
+          "at": [
+            "packages/core/src/ui/primitives/display/Carousel/compound/Item/index.tsx:122"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "hovered",
+          "note": "arrow and unselected dot, hover-capable-gated, :not(:disabled)",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:142"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "pressed",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:155"
+          ],
+          "state": "active-pressed"
+        },
+        {
+          "token": "disabled",
+          "note": "native :disabled on the edge arrow",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:161"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:168"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "selected",
+          "note": "data-selected true/false on the dot",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:229"
+          ],
+          "state": "selected"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "prefers-reduced-motion: reduce",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:234"
+            ]
+          },
+          {
+            "token": "forced-colors: active",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:248"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": {
+        "classic": {
+          "dataPartEmissions": 0,
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1915-1950"
+        },
+        "modern": {
+          "dataPartEmissions": 8
+        },
+        "rustic": {
+          "dataPartEmissions": 7,
+          "note": "same part names; track carries aria-live='polite' which modern does not stamp",
+          "anchors": [
+            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:324"
+          ]
+        }
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "cssCustomPropertyReads": [
+          {
+            "variable": "--ds-carousel-height",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:483",
+            "landsOn": "aria-roledescription",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "300px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-rtl-factor",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:510",
+            "landsOn": "--ds-carousel-slide-transform",
+            "landingKind": "custom-property-redeclaration",
+            "hasFallback": true,
+            "fallback": "1",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:513",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:513",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:226",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "32px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:227",
+            "landsOn": "height",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "32px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-transition",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:233",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "background-color 0.2s ease",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-active-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:303",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "16px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:303",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "8px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:304",
+            "landsOn": "height",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "8px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-transition",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:306",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "all 0.3s ease",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:62",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0px",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern[data-part='root']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-slide-transform",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:101",
+            "landsOn": "transform",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "none",
+            "part": "slide",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-card",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:118",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:119",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:123",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:124",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "32px",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:124",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:125",
+            "landsOn": "block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "32px",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:125",
+            "landsOn": "block-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:126",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:128",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:128",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:129",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:129",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:130",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:130",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:131",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:131",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:132",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:132",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:139",
+            "landsOn": "border-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled)",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:139",
+            "landsOn": "border-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled)",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:140",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled)",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:143",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-ring",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:145",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-alpha-black-20)",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-alpha-black-20",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:145",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:146",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:151",
+            "landsOn": "border-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:151",
+            "landsOn": "border-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:152",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-state-press-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:153",
+            "landsOn": "transform",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-state-press-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:156",
+            "landsOn": "transform",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-state-disabled-opacity",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:163",
+            "landsOn": "opacity",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:disabled",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:169",
+            "landsOn": "outline",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible, .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:169",
+            "landsOn": "outline",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-primary)",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible, .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:169",
+            "landsOn": "outline",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible, .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:170",
+            "landsOn": "outline-offset",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible, .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size-coarse",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:175",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "44px",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size-coarse",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:176",
+            "landsOn": "block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "44px",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-touch-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:187",
+            "landsOn": "inset",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "44px",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']::after",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dots-gap",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:198",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.25rem",
+            "part": "dots",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-controls-z",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:199",
+            "landsOn": "z-index",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "10",
+            "part": "dots",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:203",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.5rem",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:204",
+            "landsOn": "block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.5rem",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:210",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:210",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:211",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:211",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:212",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:212",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:213",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:213",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-selected-inline-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:217",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1rem",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:226",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-halo",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:227",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-alpha-white-70)",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-alpha-white-70",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:227",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-carousel-dot-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:230",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-surface-card)",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-card",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:230",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-carousel-dot-ring",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:231",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-alpha-black-20)",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-alpha-black-20",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:231",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:281",
+            "landsOn": "min-block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "44px",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-slide-transform",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:32",
+            "landsOn": "transform",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "none",
+            "part": "slide",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='track'] > [data-part='slide']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:38",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(255, 255, 255, 0.9)",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='arrow'][data-part='arrow']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:39",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#ddd",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='arrow'][data-part='arrow']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:40",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "50%",
+            "part": "arrow",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='arrow'][data-part='arrow']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dots-transform",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:45",
+            "landsOn": "transform",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "dots",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='dots']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:50",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "4px",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-active-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:54",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-primary-500, #1890ff)",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:54",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#1890ff",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-carousel-dot-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:57",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#d9d9d9",
+            "part": "dot",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='false']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-item-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css:24",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "transparent",
+            "part": "item",
+            "partAttribution": "selector-data-part",
+            "selector": "* ENGINE-AGNOSTIC: `Carousel.Item` has a single render tree shared by every engine, .rottay-carousel__item[data-part='item'][data-part='item']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-item-bg-image",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css:25",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "none",
+            "part": "item",
+            "partAttribution": "selector-data-part",
+            "selector": "* ENGINE-AGNOSTIC: `Carousel.Item` has a single render tree shared by every engine, .rottay-carousel__item[data-part='item'][data-part='item']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1915",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1919",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1920",
+            "landsOn": "height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1921",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1922",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-bg-active",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1926",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1927",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-dot-gap",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1931",
+            "landsOn": "margin",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1936",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1937",
+            "landsOn": "height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1938",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1939",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1940",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1945",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-arrow-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1946",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-carousel-transition",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1950",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          }
+        ],
+        "cssCustomPropertyReadCount": 99,
+        "undeclaredReadsInThisFamily": [
+          "--ds-carousel-arrow-bg",
+          "--ds-carousel-arrow-bg-hover",
+          "--ds-carousel-arrow-border",
+          "--ds-carousel-arrow-color",
+          "--ds-carousel-arrow-radius",
+          "--ds-carousel-arrow-size",
+          "--ds-carousel-arrow-size-coarse",
+          "--ds-carousel-controls-z",
+          "--ds-carousel-dot-active-bg",
+          "--ds-carousel-dot-active-width",
+          "--ds-carousel-dot-bg",
+          "--ds-carousel-dot-bg-active",
+          "--ds-carousel-dot-gap",
+          "--ds-carousel-dot-halo",
+          "--ds-carousel-dot-radius",
+          "--ds-carousel-dot-ring",
+          "--ds-carousel-dot-selected-inline-size",
+          "--ds-carousel-dot-size",
+          "--ds-carousel-dot-touch-size",
+          "--ds-carousel-dots-gap",
+          "--ds-carousel-height",
+          "--ds-carousel-radius",
+          "--ds-carousel-transition"
+        ],
+        "templatedReads": [],
+        "channelRedeclarations": [
+          {
+            "channel": "--ds-carousel-slide-transform",
+            "firstAnchor": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:510"
+          }
+        ],
+        "cssCustomPropertyReadsRemovedAsCommentText": 4,
+        "blockedControlEdgeSitesInThisFamily": 1
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 33,
+        "sitesVerified": 32,
+        "sitesWithdrawn": 1,
+        "sitesNotProbed": 2,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1978,48 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-carousel-dot-bg",
+              "--_ds-carousel-item-bg",
+              "--_ds-carousel-item-bg-image"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-alpha-black-20",
+            "--ds-color-alpha-white-70",
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-state-press-scale",
+            "--ds-surface-card",
+            "--ds-surface-inset"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2027,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "la anatomia de carousel no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2045,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la anatomia de carousel no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2063,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de carousel no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-xs"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2086,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-carousel-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2111,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2129,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-carousel-dot-selected-inline-size",
+              "--_ds-carousel-dot-size",
+              "--_ds-carousel-dot-touch-size",
+              "--_ds-carousel-dots-gap"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2165,13 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2179,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-carousel-slide-transform"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2210,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de carousel no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2228,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de carousel no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-state-disabled-opacity"
+          ]
+        }
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2253,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "display no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de display"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2273,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2291,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "los canales z-index son correctitud estructural (orden de capas), no punto de customizacion: los gobierna la escala derivada de layer.stack. Canales leidos y NO cubiertos: --ds-carousel-controls-z"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2309,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-carousel-dot-halo",
+              "--_ds-carousel-dot-ring"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ],
+          "Correctitud estructural, no punto de customizacion": [
+            "--ds-carousel-rtl-factor"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2348,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2366,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2384,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2423,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": null,
+            "prop": "stroke-width / fill",
+            "tier": "standard",
+            "examples": [
+              "Icon"
+            ],
+            "noSocketReason": "data-icon-posture heredado + --_ds-icon-stroke-width",
+            "socketsResolved": true,
+            "carrier": "attribute+shared-socket",
+            "sockets": [
+              "--_ds-carousel-arrow-size",
+              "--_ds-carousel-arrow-size-coarse"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2453,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

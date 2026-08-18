@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "265142739f13af0ab5ef22f9ba09c1af3c270b1430be79320f11e725260bc70d"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,246 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/presentation/pages/experience/empty-state",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css"
+    ],
+    "stableParts": [
+      "content",
+      "root",
+      "secondary-actions"
+    ],
     "states": [],
+    "variantAxes": [
+      "data-chrome"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "surface-full",
+        "scoutArtifact": "mr-anatomy-surface-full.json",
+        "scoutSelfGradedConfidence": null,
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 3,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:53"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:40",
+            "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:53"
+          ]
+        },
+        {
+          "part": "secondary-actions",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        }
+      ],
+      "partCensus": {
+        "rootAnchor": {
+          "class": "ds-empty-state-surface",
+          "tierClass": "ds-surface",
+          "note": null
+        }
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "data-chrome=embedded",
+          "occurrences": 1
+        }
+      ],
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelDeclarationsEmittedByThisFamily": [
+          {
+            "channel": "--ds-empty-state-border-color",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:42"
+            ]
+          },
+          {
+            "channel": "--ds-empty-state-shadow",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:44"
+            ]
+          },
+          {
+            "channel": "--ds-empty-state-surface",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:43"
+            ]
+          }
+        ],
+        "dsVariableReadsInlineInTsx": [],
+        "dsVariableReadsViaCssSkin": [
+          {
+            "channel": "--ds-color-text-secondary",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:144",
+              "ui/patterns/customization/brand-studio/index.tsx:162",
+              "foundation/tokens/css/foundation/monochrome/index.css:57"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:56",
+                "observableProperty": "color",
+                "part": "content",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:218",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-font-size-sm",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:609"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:57",
+                "observableProperty": "font-size",
+                "part": "content",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:609",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-line-height-relaxed",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:634",
+              "infrastructure/compilers/kernel/runtime/brand-theme/index.ts:905"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:58",
+                "observableProperty": "line-height",
+                "part": "content",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:634",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          }
+        ],
+        "hardcodedValues": {
+          "count": 1,
+          "colourBearing": [],
+          "sample": [
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/empty-state-surface.css:54",
+              "property": "max-inline-size",
+              "value": "52ch",
+              "part": "content"
+            }
+          ],
+          "byProperty": {
+            "max-inline-size": 1
+          }
+        },
+        "atRuleContexts": {}
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS",
+    "sourceBindingsNote": "FAM-18: empty-state-surface.css agregado - defecto de manifiesto verificado clase-contra-css (mismo caso record-field)"
   },
   "themeControls": [
     {
@@ -41,7 +274,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "color.mode",
+            "why": "PROHIBIDO el socket privado de modo (--_ds-<comp>-dark-*): un componente con su dark local queda en el modo equivocado cuando el tenant cambia backgroundMode. El modo es el UNICO eje sin sockets de familia: se refleja exclusivamente por los overlays de los canales compartidos."
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO FAM-18 (a-vs-b resuelto)": [
+            "Surface empty-state: 0 canales propios, 0 consumo de familias compuestas, resto foundation - receta declarativa que compone, chrome propio minimo"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-text-secondary"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +300,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<page>-heading-family",
+            "prop": "familia de los titulares de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-heading-family"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +325,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<page>-heading-family",
+            "prop": "familia de los titulares de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-heading-family"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +350,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<page>-heading-size",
+            "prop": "escala tipografica de titulares y metadatos de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-heading-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-font-size-sm",
+            "--ds-line-height-relaxed"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +382,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<page>-panel-radius",
+            "prop": "border-radius de los paneles que la receta compone (paginas de experiencia)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +407,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<page>-control-radius",
+            "prop": "controles de accion de nivel pagina que la receta declara (acciones de header/toolbar propias)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-control-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +432,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<page>-density-factor",
+            "prop": "factor local que la receta compone sobre var(--ds-density-effective-scale) para todo su contenido",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-density-factor"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +457,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<page>-section-gap",
+            "prop": "aire entre secciones de la pagina via calc(base * var(--ds-rhythm-effective-scale)) - el caso central de la raiz",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-section-gap"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +482,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +495,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +508,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "remap: la vieja surfaces/presentation es surface/experience en el canon; gradient-mesh (marketing-only) y el tinte viven aca, la unica superficie con acabado",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-empty-state-surface-gradient-mesh",
+            "prop": "background-image del hero y surface-tint del lienzo de presentacion",
+            "tier": "premium"
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +529,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +542,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +555,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +568,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<page>-section-rule-style",
+            "prop": "reglas entre secciones y marcos de panel de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-section-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +593,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +611,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +624,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +663,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +676,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

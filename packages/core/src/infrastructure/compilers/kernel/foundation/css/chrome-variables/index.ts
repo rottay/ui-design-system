@@ -19,10 +19,43 @@ import type {
   BrandDetailChrome,
   BrandListChrome,
   BrandPremiumCardChrome,
+  BrandSidebarChrome,
+  BrandSurfaceChrome,
   BrandListingGridChrome,
   BrandPopoverChrome,
+  BrandThemeMode,
   BrandTooltipChrome,
+  TenantAppearanceGeneral,
+  BrandAlertChrome,
+  BrandAnchorChrome,
+  BrandAvatarChrome,
+  BrandBackTopChrome,
+  BrandCalendarChrome,
+  BrandCollapseChrome,
+  BrandDescriptionsChrome,
+  BrandDrawerChrome,
+  BrandDropdownChrome,
+  BrandEmptyChrome,
+  BrandFloatButtonChrome,
+  BrandLiveFeedChrome,
+  BrandMenuChrome,
+  BrandMessageChrome,
+  BrandNotificationChrome,
+  BrandPaginationChrome,
+  BrandProgressChrome,
+  BrandResultChrome,
+  BrandSkeletonChrome,
+  BrandSpinnerChrome,
+  BrandStatisticChrome,
+  BrandStatsGridChrome,
+  BrandStepsChrome,
+  BrandTagChrome,
+  BrandTimelineChrome,
+  BrandTreeChrome,
 } from "@/foundation/contracts/composition/tenants/themes";
+
+import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { isTenantAuthoredField } from "@/foundation/contracts/composition/tenants/themes/iso";
 
 import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
 
@@ -35,6 +68,188 @@ export interface ChromeVariableContext {
    * declares no scale, so the baseline is the channel's own identity of 1.
    */
   radiusScale?: string | number;
+  /** Effective Theme mode for semantic posture lowering. */
+  mode?: BrandThemeMode;
+  /**
+   * The Theme paths this compilation's TENANT authored, when one exists.
+   *
+   * Absent means "no provenance supplied", which every static first-party
+   * compile is: the ranked assignment then collapses to the unconditional one
+   * it replaced, so the emitted bytes cannot move.
+   */
+  tenantAuthoredPaths?: TenantAuthoredPaths;
+  /**
+   * "" for the base block, "modes.<mode>." when this call is compiling a mode
+   * overlay -- a mode block also honours the tenant's base-level statements.
+   */
+  modePrefix?: string;
+}
+
+/**
+ * The producer-kind lattice, stated ONCE for the whole compiler.
+ *
+ * Every CSS value this compiler emits was produced by one of five kinds of
+ * author, and the merge order between them is a decided law rather than an
+ * artifact of statement order:
+ *
+ *   PROFILE(0) < BASELINE_LEAF(1) < BASELINE_RECIPE(2)
+ *              < TENANT_DERIVED(3) < TENANT_LEAF(4)
+ *
+ * Read as two clauses. A profile fill is the weakest statement anyone makes,
+ * so it loses to everything. Within one authority, a RECIPE (a semantic
+ * posture such as a sidebar tone, or a seed the compiler expands) outranks a
+ * concrete LEAF of the SAME authority's lower tier but never a leaf of a
+ * HIGHER authority -- which is why a tenant's own explicit leaf beats the
+ * tenant's own tone, and why a vertical baseline's leaf loses to anything the
+ * tenant said at all.
+ *
+ * It is deliberately NOT wired into `mergeDeep` or `resolveTheme`: those two
+ * are the fail-closed core of the Theme plane and stay byte-untouched. The
+ * lattice is consulted at exactly two emission sites -- the primary-seed
+ * derivation in `runtime/brand-theme` and the sidebar tone/leaf contest below
+ * -- and both consult the closed field vocabulary
+ * `CONSULTED_PROVENANCE_FIELDS`.
+ */
+export const PRODUCER_RANK = {
+  profile: 0,
+  baselineLeaf: 1,
+  baselineRecipe: 2,
+  tenantDerived: 3,
+  tenantLeaf: 4,
+} as const;
+
+type SidebarTone = NonNullable<
+  NonNullable<TenantAppearanceGeneral["navigation"]>["sidebarTone"]
+>;
+
+/** Canonical semantic sidebar lowering used by both Theme transports. */
+export function sidebarToneToChrome(
+  tone: SidebarTone | undefined,
+  mode: BrandThemeMode = "light"
+): Partial<BrandSidebarChrome> {
+  if (tone === "subtle") {
+    return {
+      bg: "var(--ds-color-bg-secondary)",
+      text: "var(--ds-color-text-primary)",
+      textMuted: "var(--ds-color-text-muted)",
+      itemBgHover: "var(--ds-color-bg-hover)",
+      itemBgActive: `var(--ds-color-primary-${mode === "dark" ? 200 : 100})`,
+      itemColorActive: "var(--ds-color-primary-900)",
+    };
+  }
+  if (tone === "strong") {
+    if (mode === "dark") {
+      return {
+        bg: "var(--ds-color-primary-100)",
+        text: "var(--ds-color-primary-900)",
+        textMuted: "var(--ds-color-primary-700)",
+        itemBgHover: "var(--ds-color-primary-200)",
+        itemBgActive: "var(--ds-color-primary-300)",
+        itemColorActive: "var(--ds-color-primary-900)",
+      };
+    }
+    return {
+      bg: "var(--ds-color-primary-900)",
+      text: "var(--ds-color-white)",
+      textMuted: "var(--ds-color-neutral-400)",
+      itemBgHover: "var(--ds-color-primary-800)",
+      itemBgActive: "var(--ds-color-primary-700)",
+      itemColorActive: "var(--ds-color-white)",
+    };
+  }
+  if (tone === "inverse") {
+    return {
+      bg: "var(--ds-color-neutral-900)",
+      text: "var(--ds-color-neutral-100)",
+      textMuted: "var(--ds-color-neutral-500)",
+      itemBgHover: "var(--ds-color-neutral-800)",
+      itemBgActive: "var(--ds-color-neutral-700)",
+      itemColorActive:
+        mode === "dark"
+          ? "var(--ds-color-neutral-100)"
+          : "var(--ds-color-white)",
+    };
+  }
+  return {};
+}
+
+/**
+ * The CLOSED table of sidebar channels a tone lowers into, mapped to the
+ * `chrome.sidebar` leaf that states the SAME channel explicitly.
+ *
+ * These six rows are exactly the output vocabulary of `sidebarToneToChrome`;
+ * no other sidebar field is contested, and no producer outside the tone
+ * assignment consults provenance at all.
+ */
+export const SIDEBAR_TONE_LEAF_FIELDS: Readonly<Record<string, string>> = {
+  "--ds-sidebar-bg": "chrome.sidebar.bg",
+  "--ds-sidebar-text": "chrome.sidebar.text",
+  "--ds-sidebar-text-muted": "chrome.sidebar.textMuted",
+  "--ds-sidebar-item-bg-hover": "chrome.sidebar.itemBgHover",
+  "--ds-sidebar-item-bg-active": "chrome.sidebar.itemBgActive",
+  "--ds-sidebar-item-color-active": "chrome.sidebar.itemColorActive",
+};
+
+/** The Theme field carrying the semantic posture those six channels lower from. */
+export const SIDEBAR_TONE_FIELD = "chrome.sidebar.tone";
+
+/**
+ * Lower the sidebar tone into its six channels UNDER the lattice.
+ *
+ * The tone is a recipe; the six `chrome.sidebar` colour leaves are leaves. Who
+ * wins is decided per channel by `PRODUCER_RANK`, from which authority stated
+ * each side:
+ *
+ *   tenant tone (3)   vs tenant leaf (4)   -> the leaf; a tenant's explicit
+ *                                             statement beats its own posture
+ *   tenant tone (3)   vs baseline leaf (1) -> the tone   (unchanged)
+ *   baseline tone (2) vs tenant leaf (4)   -> the leaf
+ *   baseline tone (2) vs baseline leaf (1) -> the tone   (unchanged)
+ *
+ * With no tenant provenance supplied every row collapses to the two unchanged
+ * cases, so the emitted bytes are exactly what an unconditional assignment
+ * produced -- which is what keeps first-party output byte-identical.
+ */
+function assignToneUnderTenantLeaves(
+  vars: Record<string, string>,
+  toneVars: Readonly<Record<string, string>>,
+  context: ChromeVariableContext
+): void {
+  const authoredPaths = context.tenantAuthoredPaths;
+  const toneRank =
+    authoredPaths !== undefined &&
+    isTenantAuthoredField(authoredPaths, SIDEBAR_TONE_FIELD, context.modePrefix)
+      ? PRODUCER_RANK.tenantDerived
+      : PRODUCER_RANK.baselineRecipe;
+  for (const [channel, value] of Object.entries(toneVars)) {
+    const leafField = SIDEBAR_TONE_LEAF_FIELDS[channel];
+    const leafRank =
+      authoredPaths !== undefined &&
+      leafField !== undefined &&
+      isTenantAuthoredField(authoredPaths, leafField, context.modePrefix)
+        ? PRODUCER_RANK.tenantLeaf
+        : PRODUCER_RANK.baselineLeaf;
+    if (toneRank <= leafRank) continue;
+    vars[channel] = value;
+  }
+}
+
+export function sidebarToneToVariables(
+  tone: SidebarTone | undefined,
+  mode: BrandThemeMode = "light"
+): Record<string, string> {
+  const chrome = sidebarToneToChrome(tone, mode);
+  const vars: Record<string, string> = {};
+  if (chrome.bg) vars["--ds-sidebar-bg"] = chrome.bg;
+  if (chrome.text) vars["--ds-sidebar-text"] = chrome.text;
+  if (chrome.textMuted) vars["--ds-sidebar-text-muted"] = chrome.textMuted;
+  if (chrome.itemBgHover)
+    vars["--ds-sidebar-item-bg-hover"] = chrome.itemBgHover;
+  if (chrome.itemBgActive)
+    vars["--ds-sidebar-item-bg-active"] = chrome.itemBgActive;
+  if (chrome.itemColorActive)
+    vars["--ds-sidebar-item-color-active"] = chrome.itemColorActive;
+  return vars;
 }
 
 const chromeVariableMap = <T extends object>(
@@ -51,9 +266,344 @@ const chromeVariableMap = <T extends object>(
     ])
   ) as Readonly<Record<keyof T, string>>;
 
+const ALERT_CHROME_VARIABLES = chromeVariableMap<BrandAlertChrome>(
+  "--ds-alert-",
+  [
+    "errorBg",
+    "errorBorder",
+    "errorColor",
+    "errorIcon",
+    "infoBg",
+    "infoBorder",
+    "infoColor",
+    "infoIcon",
+    "successBg",
+    "successBorder",
+    "successColor",
+    "successIcon",
+    "warningBg",
+    "warningBorder",
+    "warningColor",
+    "warningIcon",
+  ] as const
+);
+
+const ANCHOR_CHROME_VARIABLES = chromeVariableMap<BrandAnchorChrome>(
+  "--ds-anchor-",
+  ["inkColor", "linkColor", "linkColorActive"] as const
+);
+
+const AVATAR_CHROME_VARIABLES = chromeVariableMap<BrandAvatarChrome>(
+  "--ds-avatar-",
+  [
+    "borderColor",
+    "defaultBg",
+    "defaultColor",
+    "errorBg",
+    "errorColor",
+    "gradientBg",
+    "gradientColor",
+    "groupBorder",
+    "groupOverflowBg",
+    "groupOverflowColor",
+    "primaryBg",
+    "primaryColor",
+    "ringColor",
+    "secondaryBg",
+    "secondaryColor",
+    "statusBorder",
+    "successBg",
+    "successColor",
+    "warningBg",
+    "warningColor",
+  ] as const
+);
+
+const BACK_TOP_CHROME_VARIABLES = chromeVariableMap<BrandBackTopChrome>(
+  "--ds-backtop-",
+  ["bg", "color", "shadow"] as const
+);
+
+const CALENDAR_CHROME_VARIABLES = chromeVariableMap<BrandCalendarChrome>(
+  "--ds-calendar-",
+  ["bg", "border", "dayColorOther", "headerColor"] as const
+);
+
+const COLLAPSE_CHROME_VARIABLES = chromeVariableMap<BrandCollapseChrome>(
+  "--ds-collapse-",
+  [
+    "bg",
+    "border",
+    "contentBg",
+    "headerBg",
+    "headerBgHover",
+    "headerColor",
+  ] as const
+);
+
+const DESCRIPTIONS_CHROME_VARIABLES =
+  chromeVariableMap<BrandDescriptionsChrome>("--ds-descriptions-", [
+    "bg",
+    "border",
+    "contentColor",
+    "labelColor",
+  ] as const);
+
+const DRAWER_CHROME_VARIABLES = chromeVariableMap<BrandDrawerChrome>(
+  "--ds-drawer-",
+  [
+    "bg",
+    "bodyColor",
+    "footerBorder",
+    "headerBorder",
+    "shadow",
+    "titleColor",
+  ] as const
+);
+
+const DROPDOWN_CHROME_VARIABLES = chromeVariableMap<BrandDropdownChrome>(
+  "--ds-dropdown-",
+  [
+    "bg",
+    "itemBgActive",
+    "itemBgHover",
+    "itemColor",
+    "itemColorActive",
+    "itemColorHover",
+    "shadow",
+  ] as const
+);
+
+const EMPTY_CHROME_VARIABLES = chromeVariableMap<BrandEmptyChrome>(
+  "--ds-empty-",
+  ["descriptionColor", "iconColor"] as const
+);
+
+const FLOAT_BUTTON_CHROME_VARIABLES = chromeVariableMap<BrandFloatButtonChrome>(
+  "--ds-floatbutton-",
+  [
+    "badgeBg",
+    "badgeColor",
+    "defaultBg",
+    "defaultColor",
+    "descriptionColor",
+    "primaryBg",
+    "primaryColor",
+  ] as const
+);
+
+const LIVE_FEED_CHROME_VARIABLES = chromeVariableMap<BrandLiveFeedChrome>(
+  "--ds-live-feed-",
+  [
+    "badgeBg",
+    "badgeColor",
+    "bg",
+    "border",
+    "emptyColor",
+    "loadMoreColor",
+    "newBg",
+    "newBorder",
+    "newColor",
+    "refreshColor",
+    "skeletonBg",
+  ] as const
+);
+
+const MENU_CHROME_VARIABLES = chromeVariableMap<BrandMenuChrome>("--ds-menu-", [
+  "bg",
+  "darkBg",
+  "darkItemColor",
+  "dividerColor",
+  "focusRingColor",
+  "groupTitleColor",
+  "itemBgActive",
+  "itemBgHover",
+  "itemColor",
+  "itemColorActive",
+  "itemColorHover",
+  "itemDangerColor",
+  "itemHoverBg",
+  "itemSelectedBg",
+  "itemSelectedColor",
+  "submenuBg",
+] as const);
+
+const MESSAGE_CHROME_VARIABLES = chromeVariableMap<BrandMessageChrome>(
+  "--ds-message-",
+  ["bg", "closeColor", "closeColorHover", "shadow"] as const
+);
+
+const NOTIFICATION_CHROME_VARIABLES =
+  chromeVariableMap<BrandNotificationChrome>("--ds-notification-", [
+    "bg",
+    "shadow",
+    "titleColor",
+  ] as const);
+
+const PAGINATION_CHROME_VARIABLES = chromeVariableMap<BrandPaginationChrome>(
+  "--ds-pagination-",
+  [
+    "activeBg",
+    "activeColor",
+    "itemBg",
+    "itemBgActive",
+    "itemBgHover",
+    "itemBorder",
+    "itemColor",
+    "itemColorActive",
+    "itemColorHover",
+  ] as const
+);
+
+const PROGRESS_CHROME_VARIABLES = chromeVariableMap<BrandProgressChrome>(
+  "--ds-progress-",
+  ["bg", "fillError", "fillPrimary", "fillSuccess", "fillWarning"] as const
+);
+
+const RESULT_CHROME_VARIABLES = chromeVariableMap<BrandResultChrome>(
+  "--ds-result-",
+  ["iconColor", "subtitleColor", "titleColor"] as const
+);
+
+const SKELETON_CHROME_VARIABLES = chromeVariableMap<BrandSkeletonChrome>(
+  "--ds-skeleton-",
+  ["bg", "highlight", "waveGradient"] as const
+);
+
+const SPINNER_CHROME_VARIABLES = chromeVariableMap<BrandSpinnerChrome>(
+  "--ds-spinner-",
+  ["color", "track"] as const
+);
+
+const STATISTIC_CHROME_VARIABLES = chromeVariableMap<BrandStatisticChrome>(
+  "--ds-statistic-",
+  ["prefixColor", "suffixColor", "titleColor", "valueColor"] as const
+);
+
+const STATS_GRID_CHROME_VARIABLES = chromeVariableMap<BrandStatsGridChrome>(
+  "--ds-stats-grid-",
+  [
+    "cardBg",
+    "cardBorder",
+    "cardFilledBg",
+    "cardGlassBg",
+    "cardGlassBorder",
+    "descriptionColor",
+    "labelColor",
+    "skeletonBg",
+    "skeletonWaveGradient",
+    "trendNegative",
+    "trendNeutral",
+    "trendPositive",
+    "valueColor",
+  ] as const
+);
+
+const STEPS_CHROME_VARIABLES = chromeVariableMap<BrandStepsChrome>(
+  "--ds-steps-",
+  [
+    "connectorColor",
+    "connectorColorActive",
+    "finishBg",
+    "finishBorder",
+    "itemBg",
+    "itemBgActive",
+    "itemColor",
+    "itemColorActive",
+    "processBg",
+    "processBorder",
+    "waitBg",
+    "waitBorder",
+  ] as const
+);
+
+const TAG_CHROME_VARIABLES = chromeVariableMap<BrandTagChrome>("--ds-tag-", [
+  "border",
+  "defaultBg",
+  "defaultBorder",
+  "defaultColor",
+  "errorBg",
+  "errorBorder",
+  "errorColor",
+  "primaryBg",
+  "primaryBorder",
+  "primaryColor",
+  "secondaryBg",
+  "secondaryBorder",
+  "secondaryColor",
+  "successBg",
+  "successBorder",
+  "successColor",
+  "warningBg",
+  "warningBorder",
+  "warningColor",
+] as const);
+
+const TIMELINE_CHROME_VARIABLES = chromeVariableMap<BrandTimelineChrome>(
+  "--ds-timeline-",
+  ["contentColor", "dotBg", "dotBorder", "lineColor"] as const
+);
+
+const TREE_CHROME_VARIABLES = chromeVariableMap<BrandTreeChrome>("--ds-tree-", [
+  "nodeBgHover",
+  "nodeBgSelected",
+  "nodeColor",
+  "nodeColorSelected",
+] as const);
+
+/**
+ * The flat component-chrome families: one closed contract slot, one
+ * compiler-owned prefix map, one lowering. Both Theme transports reach this
+ * table through the same `chromeToVariables` call, so a static BrandTheme
+ * and a DB TenantThemeDocument that author the same field paint the same
+ * declaration. Adding a family here is the only step a new one needs.
+ */
+const FLAT_CHROME_FAMILY_VARIABLES = [
+  ["alert", ALERT_CHROME_VARIABLES],
+  ["anchor", ANCHOR_CHROME_VARIABLES],
+  ["avatar", AVATAR_CHROME_VARIABLES],
+  ["backTop", BACK_TOP_CHROME_VARIABLES],
+  ["calendar", CALENDAR_CHROME_VARIABLES],
+  ["collapse", COLLAPSE_CHROME_VARIABLES],
+  ["descriptions", DESCRIPTIONS_CHROME_VARIABLES],
+  ["drawer", DRAWER_CHROME_VARIABLES],
+  ["dropdown", DROPDOWN_CHROME_VARIABLES],
+  ["empty", EMPTY_CHROME_VARIABLES],
+  ["floatButton", FLOAT_BUTTON_CHROME_VARIABLES],
+  ["liveFeed", LIVE_FEED_CHROME_VARIABLES],
+  ["menu", MENU_CHROME_VARIABLES],
+  ["message", MESSAGE_CHROME_VARIABLES],
+  ["notification", NOTIFICATION_CHROME_VARIABLES],
+  ["pagination", PAGINATION_CHROME_VARIABLES],
+  ["progress", PROGRESS_CHROME_VARIABLES],
+  ["result", RESULT_CHROME_VARIABLES],
+  ["skeleton", SKELETON_CHROME_VARIABLES],
+  ["spinner", SPINNER_CHROME_VARIABLES],
+  ["statistic", STATISTIC_CHROME_VARIABLES],
+  ["statsGrid", STATS_GRID_CHROME_VARIABLES],
+  ["steps", STEPS_CHROME_VARIABLES],
+  ["tag", TAG_CHROME_VARIABLES],
+  ["timeline", TIMELINE_CHROME_VARIABLES],
+  ["tree", TREE_CHROME_VARIABLES],
+] as const satisfies ReadonlyArray<
+  readonly [keyof BrandChrome, Readonly<Record<string, string>>]
+>;
+
 const TOOLTIP_CHROME_VARIABLES = chromeVariableMap<BrandTooltipChrome>(
   "--ds-tooltip-",
   [
+    "bg",
+    "color",
+    "shadow",
+    "defaultBg",
+    "defaultColor",
+    "primaryBg",
+    "primaryColor",
+    "secondaryBg",
+    "secondaryColor",
+    "successBg",
+    "warningBg",
+    "errorBg",
     "borderedBackground",
     "borderedForeground",
     "borderedBorder",
@@ -141,6 +691,11 @@ const TOOLTIP_CHROME_VARIABLES = chromeVariableMap<BrandTooltipChrome>(
 const POPOVER_CHROME_VARIABLES = chromeVariableMap<BrandPopoverChrome>(
   "--ds-popover-",
   [
+    "bg",
+    "border",
+    "contentColor",
+    "shadow",
+    "titleBorder",
     "borderedBackground",
     "borderedForeground",
     "borderedMutedForeground",
@@ -244,6 +799,24 @@ const BADGE_CHROME_VARIABLES = {
   lineHeight: "--ds-badge-line-height",
   letterSpacing: "--ds-badge-letter-spacing",
   gap: "--ds-badge-gap",
+  height: "--ds-badge-height",
+  paddingX: "--ds-badge-padding-x",
+  defaultBg: "--ds-badge-default-bg",
+  defaultColor: "--ds-badge-default-color",
+  primaryBg: "--ds-badge-primary-bg",
+  primaryColor: "--ds-badge-primary-color",
+  secondaryBg: "--ds-badge-secondary-bg",
+  secondaryColor: "--ds-badge-secondary-color",
+  successBg: "--ds-badge-success-bg",
+  successColor: "--ds-badge-success-color",
+  warningBg: "--ds-badge-warning-bg",
+  warningColor: "--ds-badge-warning-color",
+  errorBg: "--ds-badge-error-bg",
+  errorColor: "--ds-badge-error-color",
+  infoBg: "--ds-badge-info-bg",
+  infoColor: "--ds-badge-info-color",
+  borderColor: "--ds-badge-border-color",
+  textColor: "--ds-badge-text-color",
   maxInlineSize: "--ds-badge-max-inline-size",
   chipMaxInlineSize: "--ds-badge-chip-max-inline-size",
   pillMaxInlineSize: "--ds-badge-pill-max-inline-size",
@@ -392,6 +965,47 @@ function setButtonVariantVars(
     vars[`--ds-button-${prefix}-shadow-active`] = btn.shadowActive;
 }
 
+/**
+ * Reversed-order spelling of `bgHover`. The rustic skin reads `-hover-bg` as
+ * its PRIMARY name (not as a fallback), so one authored field has to reach
+ * both vocabularies or that engine silently drops to its hard-coded literal.
+ * Same shape as the sidebar width pair further down.
+ *
+ * This is an alias vocabulary, not a channel family: it is emitted only for
+ * the variants a Core engine actually reads under that name. Adding a variant
+ * here without a real `var(--ds-button-<variant>-hover-bg)` reader would ship
+ * a dead custom property into every tenant artifact.
+ */
+function setLegacyButtonHoverBgAlias(
+  vars: Record<string, string>,
+  prefix: string,
+  btn: Partial<BrandButtonVariantChrome> | undefined
+): void {
+  if (btn?.bgHover) vars[`--ds-button-${prefix}-hover-bg`] = btn.bgHover;
+}
+
+/**
+ * `danger` is the legacy spelling of the error variant and is what the rustic
+ * skin reads. It has no contract field of its own -- one owner, `buttonError`,
+ * reaches both vocabularies.
+ *
+ * Only the four names with real Core readers are aliased. The error variant's
+ * remaining channels (`-bg-active`, `-color-hover`, `-border-hover`, the three
+ * shadows, ...) keep their canonical `--ds-button-error-*` spelling only;
+ * nothing reads them under the `danger` name.
+ */
+function setLegacyDangerButtonAlias(
+  vars: Record<string, string>,
+  btn: Partial<BrandButtonVariantChrome> | undefined
+): void {
+  if (!btn) return;
+  if (btn.bg) vars["--ds-button-danger-bg"] = btn.bg;
+  if (btn.bgHover) vars["--ds-button-danger-hover-bg"] = btn.bgHover;
+  const color = btn.color ?? btn.text;
+  if (color) vars["--ds-button-danger-color"] = color;
+  if (btn.border) vars["--ds-button-danger-border"] = btn.border;
+}
+
 /** Map one authored control size onto an existing component token family. */
 function setControlSizeVars(
   vars: Record<string, string>,
@@ -500,6 +1114,30 @@ function setPremiumCardVars(
     vars[`--ds-${namespace}-number-font-variant`] = card.numberFontVariant;
 }
 
+/**
+ * `headerBg` / `sectionBg` / `sectionAltBg` paint the BANDED interior of a
+ * card: a tinted header strip over alternating body sections. Only two of the
+ * seven card namespaces draw that anatomy, so these three channels are
+ * emitted per namespace instead of riding the shared fan-out above -- a metric
+ * tile or a collection cell has no header strip and no section bands, and
+ * emitting the names there would ship dead custom properties into every tenant
+ * artifact.
+ *
+ * The signal card is the other one that draws bands; its two names are already
+ * emitted by its own owner further down, so they are not repeated here.
+ */
+function setCardBandVars(
+  vars: Record<string, string>,
+  chrome: BrandChrome
+): void {
+  const premium = chrome.premiumCard;
+  if (!premium) return;
+  if (premium.headerBg) vars["--ds-premium-card-header-bg"] = premium.headerBg;
+  if (premium.sectionBg) vars["--ds-premium-card-section-bg"] = premium.sectionBg;
+  if (premium.sectionAltBg)
+    vars["--ds-premium-card-section-alt-bg"] = premium.sectionAltBg;
+}
+
 /** Map listing-grid chrome used by collection/card view renderers. */
 function setListingGridVars(
   vars: Record<string, string>,
@@ -548,6 +1186,23 @@ function setListVars(
     vars["--ds-list-preview-motion-ease"] = list.previewMotionEase;
   if (list.shellSectionGap)
     vars["--ds-list-shell-section-gap"] = list.shellSectionGap;
+  if (list.bg) vars["--ds-list-bg"] = list.bg;
+  if (list.backgroundColor)
+    vars["--ds-list-background-color"] = list.backgroundColor;
+  if (list.borderColor) vars["--ds-list-border-color"] = list.borderColor;
+  if (list.itemBackgroundColor)
+    vars["--ds-list-item-background-color"] = list.itemBackgroundColor;
+  if (list.itemBgHover) vars["--ds-list-item-bg-hover"] = list.itemBgHover;
+  if (list.itemHoverBackgroundColor)
+    vars["--ds-list-item-hover-background-color"] =
+      list.itemHoverBackgroundColor;
+  if (list.metaDescriptionColor)
+    vars["--ds-list-meta-description-color"] = list.metaDescriptionColor;
+  if (list.secondaryTextColor)
+    vars["--ds-list-secondary-text-color"] = list.secondaryTextColor;
+  if (list.skeletonBg) vars["--ds-list-skeleton-bg"] = list.skeletonBg;
+  if (list.splitColor) vars["--ds-list-split-color"] = list.splitColor;
+  if (list.textColor) vars["--ds-list-text-color"] = list.textColor;
 }
 
 /** Map detail record surface chrome (hero header, section panels, rail). */
@@ -565,7 +1220,60 @@ function setDetailVars(
     vars["--ds-detail-section-border"] = detail.sectionBorder;
   if (detail.sectionShadow)
     vars["--ds-detail-section-shadow"] = detail.sectionShadow;
+  if (detail.heroSpine) vars["--ds-detail-hero-spine"] = detail.heroSpine;
+  if (detail.controlBg) vars["--ds-detail-control-bg"] = detail.controlBg;
+  if (detail.controlBorder)
+    vars["--ds-detail-control-border"] = detail.controlBorder;
+  if (detail.controlBorderHover)
+    vars["--ds-detail-control-border-hover"] = detail.controlBorderHover;
+  if (detail.continuousBoundary)
+    vars["--ds-detail-continuous-boundary"] = detail.continuousBoundary;
+  if (detail.continuousSurface)
+    vars["--ds-detail-continuous-surface"] = detail.continuousSurface;
   if (detail.railWidth) vars["--ds-detail-rail-width"] = detail.railWidth;
+}
+
+/** Shared semantic surface paint, card grid overlay, and panel elevation. */
+function setSurfaceChromeVars(
+  vars: Record<string, string>,
+  surface: Partial<BrandSurfaceChrome> | undefined
+): void {
+  if (!surface) return;
+
+  if (surface.radiusMd) vars["--ds-surface-radius-md"] = surface.radiusMd;
+  if (surface.shadow) vars["--ds-surface-shadow"] = surface.shadow;
+  if (surface.shadowHover)
+    vars["--ds-surface-shadow-hover"] = surface.shadowHover;
+  if (surface.iconBg) vars["--ds-surface-icon-bg"] = surface.iconBg;
+  if (surface.iconBorder)
+    vars["--ds-surface-icon-border"] = surface.iconBorder;
+  if (surface.chipBg) vars["--ds-surface-chip-bg"] = surface.chipBg;
+  if (surface.cardSideAccentSoft)
+    vars["--ds-card-side-accent-soft"] = surface.cardSideAccentSoft;
+  if (surface.cardGridSize)
+    vars["--ds-surface-card-grid-size"] = surface.cardGridSize;
+  if (surface.cardGridLine)
+    vars["--ds-surface-card-grid-line"] = surface.cardGridLine;
+  if (surface.cardGridBg)
+    vars["--ds-surface-card-grid-bg"] = surface.cardGridBg;
+  if (surface.popoverShadow) {
+    // One authored elevation, three vocabularies: the shadow-scale name plus
+    // the two picker panels that spell the same decision per-component.
+    vars["--ds-shadow-popover"] = surface.popoverShadow;
+    vars["--ds-datepicker-panel-shadow"] = surface.popoverShadow;
+    vars["--ds-timepicker-panel-shadow"] = surface.popoverShadow;
+  }
+  if (surface.cardCoverOverlayBg)
+    vars["--ds-card-cover-overlay-bg"] = surface.cardCoverOverlayBg;
+  if (surface.gradientDark)
+    vars["--ds-gradient-dark"] = surface.gradientDark;
+  if (surface.imageOverlayBg)
+    vars["--ds-image-overlay-bg"] = surface.imageOverlayBg;
+  if (surface.overlayBg) vars["--ds-overlay-bg"] = surface.overlayBg;
+  if (surface.watermarkColor)
+    vars["--ds-watermark-color"] = surface.watermarkColor;
+  if (surface.pageShellSubtitleColor)
+    vars["--ds-page-shell-subtitle-color"] = surface.pageShellSubtitleColor;
 }
 
 /**
@@ -614,6 +1322,25 @@ export function chromeToVariables(
     if (s.groupPaddingTop)
       vars["--ds-sidebar-group-padding-top"] = s.groupPaddingTop;
     if (s.itemIndent) vars["--ds-sidebar-item-indent"] = s.itemIndent;
+    // Axis-specific navigation geometry. `initial` is a legal authored value
+    // here: it is how a mode states "this column has no value at the tenant
+    // root", which is not the same statement as omitting the field.
+    if (s.shellPaddingInline)
+      vars["--ds-sidebar-shell-padding-inline"] = s.shellPaddingInline;
+    if (s.shellPaddingCollapsed)
+      vars["--ds-sidebar-shell-padding-collapsed"] = s.shellPaddingCollapsed;
+    if (s.itemHeight) vars["--ds-sidebar-item-height"] = s.itemHeight;
+    if (s.itemChildHeight)
+      vars["--ds-sidebar-item-child-height"] = s.itemChildHeight;
+    if (s.itemFontSizeChild)
+      vars["--ds-sidebar-item-font-size-child"] = s.itemFontSizeChild;
+    if (s.itemPaddingInline)
+      vars["--ds-sidebar-item-padding-inline"] = s.itemPaddingInline;
+    if (s.iconColumnSize)
+      vars["--ds-sidebar-icon-column-size"] = s.iconColumnSize;
+    if (s.itemGap) vars["--ds-sidebar-item-gap"] = s.itemGap;
+    if (s.childPaddingInline)
+      vars["--ds-sidebar-child-padding-inline"] = s.childPaddingInline;
     if (s.itemFontSize) vars["--ds-sidebar-item-font-size"] = s.itemFontSize;
     if (s.itemFontWeight != null)
       vars["--ds-sidebar-item-font-weight"] = String(s.itemFontWeight);
@@ -629,6 +1356,16 @@ export function chromeToVariables(
     if (s.itemPadding) vars["--ds-sidebar-item-padding"] = s.itemPadding;
     if (s.iconSize) vars["--ds-sidebar-icon-size"] = s.iconSize;
     if (s.footerBg) vars["--ds-sidebar-footer-bg"] = s.footerBg;
+    // A semantic posture is a high-level decision and therefore wins over the
+    // code-owned vertical's concrete baseline leaves. It is lowered last, once
+    // per effective mode, into the same plain canonical channels -- but it does
+    // NOT win over an explicit leaf of a higher authority, so the assignment is
+    // ranked rather than unconditional. See `assignToneUnderTenantLeaves`.
+    assignToneUnderTenantLeaves(
+      vars,
+      sidebarToneToVariables(s.tone, context.mode),
+      context
+    );
   }
 
   // Layout
@@ -639,6 +1376,10 @@ export function chromeToVariables(
     if (l.headerHeight) {
       vars["--ds-layout-header-height"] = l.headerHeight;
       vars["--ds-shell-header-block-size"] = l.headerHeight;
+      // AppShell resolves the header through
+      // `var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, …))`,
+      // so the legacy fallback spelling stays reachable from the same field.
+      vars["--ds-shell-topbar-height"] = l.headerHeight;
     }
     if (l.headerBackdrop)
       vars["--ds-layout-header-backdrop"] = l.headerBackdrop;
@@ -669,6 +1410,8 @@ export function chromeToVariables(
     if (l.aspectRatioMotionEasing)
       vars["--ds-aspect-ratio-motion-easing"] = l.aspectRatioMotionEasing;
     if (l.dividerColor) vars["--ds-divider-color"] = l.dividerColor;
+    if (l.dividerTextColor)
+      vars["--ds-divider-text-color"] = l.dividerTextColor;
     if (l.dividerThicknessThin)
       vars["--ds-divider-thickness-thin"] = l.dividerThicknessThin;
     if (l.dividerThicknessMedium)
@@ -873,6 +1616,20 @@ export function chromeToVariables(
   // Search
   if (chrome.search) {
     const se = chrome.search;
+    const cp = se.commandPalette;
+    if (cp) {
+      if (cp.backdrop) vars["--ds-command-palette-backdrop"] = cp.backdrop;
+      if (cp.bg) vars["--ds-command-palette-bg"] = cp.bg;
+      if (cp.border) vars["--ds-command-palette-border"] = cp.border;
+      if (cp.emptyColor)
+        vars["--ds-command-palette-empty-color"] = cp.emptyColor;
+      if (cp.groupColor)
+        vars["--ds-command-palette-group-color"] = cp.groupColor;
+      if (cp.itemHoverBg)
+        vars["--ds-command-palette-item-hover-bg"] = cp.itemHoverBg;
+      if (cp.shortcutBorder)
+        vars["--ds-command-palette-shortcut-border"] = cp.shortcutBorder;
+    }
     if (se.bg) vars["--ds-search-bg"] = se.bg;
     if (se.border) vars["--ds-search-border"] = se.border;
     if (se.color) vars["--ds-search-color"] = se.color;
@@ -909,6 +1666,61 @@ export function chromeToVariables(
   // Controls — all button variants
   if (chrome.controls) {
     const c = chrome.controls;
+
+    if (c.textarea) {
+      const ta = c.textarea;
+      if (ta.bg) vars["--ds-textarea-bg"] = ta.bg;
+      if (ta.bgDisabled) vars["--ds-textarea-bg-disabled"] = ta.bgDisabled;
+      if (ta.filledBg) vars["--ds-textarea-filled-bg"] = ta.filledBg;
+      if (ta.border) vars["--ds-textarea-border"] = ta.border;
+      if (ta.borderHover)
+        vars["--ds-textarea-border-hover"] = ta.borderHover;
+      if (ta.borderFocus)
+        vars["--ds-textarea-border-focus"] = ta.borderFocus;
+      if (ta.shadowFocus)
+        vars["--ds-textarea-shadow-focus"] = ta.shadowFocus;
+      if (ta.successBorder)
+        vars["--ds-textarea-success-border"] = ta.successBorder;
+      if (ta.warningBorder)
+        vars["--ds-textarea-warning-border"] = ta.warningBorder;
+      if (ta.errorBorder)
+        vars["--ds-textarea-error-border"] = ta.errorBorder;
+      if (ta.color) vars["--ds-textarea-color"] = ta.color;
+      if (ta.colorPlaceholder)
+        vars["--ds-textarea-color-placeholder"] = ta.colorPlaceholder;
+      if (ta.countColor) vars["--ds-textarea-count-color"] = ta.countColor;
+    }
+
+    if (c.form) {
+      const f = c.form;
+      if (f.labelColor) vars["--ds-form-label-color"] = f.labelColor;
+      if (f.labelFontWeight != null)
+        vars["--ds-form-label-font-weight"] = String(f.labelFontWeight);
+      if (f.helpColor) vars["--ds-form-help-color"] = f.helpColor;
+      if (f.extraColor) vars["--ds-form-extra-color"] = f.extraColor;
+      if (f.requiredColor) vars["--ds-form-required-color"] = f.requiredColor;
+      if (f.successColor) vars["--ds-form-success-color"] = f.successColor;
+      if (f.warningColor) vars["--ds-form-warning-color"] = f.warningColor;
+      if (f.errorColor) vars["--ds-form-error-color"] = f.errorColor;
+    }
+
+    if (c.semantic) {
+      const semantic = c.semantic;
+      if (semantic.ink) vars["--ds-control-ink"] = semantic.ink;
+      if (semantic.inkMuted) vars["--ds-control-ink-muted"] = semantic.inkMuted;
+      if (semantic.onBrand) vars["--ds-control-on-brand"] = semantic.onBrand;
+      if (semantic.surface) vars["--ds-control-surface"] = semantic.surface;
+      if (semantic.surfaceRaised)
+        vars["--ds-control-surface-raised"] = semantic.surfaceRaised;
+      if (semantic.brandTint)
+        vars["--ds-control-brand-tint"] = semantic.brandTint;
+      if (semantic.brandTintHover)
+        vars["--ds-control-brand-tint-hover"] = semantic.brandTintHover;
+      if (semantic.brandBorder)
+        vars["--ds-control-brand-border"] = semantic.brandBorder;
+      if (semantic.iconTileBorder)
+        vars["--ds-icon-tile-border"] = semantic.iconTileBorder;
+    }
 
     if (c.buttonGeometry) {
       const geometry = c.buttonGeometry;
@@ -1131,7 +1943,17 @@ export function chromeToVariables(
     setButtonVariantVars(vars, "info", c.buttonInfo);
     setButtonVariantVars(vars, "ai", c.buttonAI);
 
+    setLegacyDangerButtonAlias(vars, c.buttonError);
+    setLegacyButtonHoverBgAlias(vars, "primary", c.buttonPrimary);
+    setLegacyButtonHoverBgAlias(vars, "secondary", c.buttonSecondary);
+    setLegacyButtonHoverBgAlias(vars, "default", c.buttonDefault);
+    setLegacyButtonHoverBgAlias(vars, "ghost", c.buttonGhost);
+    setLegacyButtonHoverBgAlias(vars, "text", c.buttonText);
+    setLegacyButtonHoverBgAlias(vars, "dashed", c.buttonDashed);
+    setLegacyButtonHoverBgAlias(vars, "link", c.buttonLink);
+
     if (c.focusRing) vars["--ds-button-focus-ring"] = c.focusRing;
+    if (c.focusRingColor) vars["--ds-focus-ring-color"] = c.focusRingColor;
 
     if (c.disabled) {
       if (c.disabled.opacity != null)
@@ -1169,6 +1991,11 @@ export function chromeToVariables(
       if (i.borderFocus) vars["--ds-input-border-focus"] = i.borderFocus;
       if (i.borderDisabled)
         vars["--ds-input-border-disabled"] = i.borderDisabled;
+      if (i.borderColor) vars["--ds-input-border-color"] = i.borderColor;
+      if (i.borderColorHover)
+        vars["--ds-input-border-color-hover"] = i.borderColorHover;
+      if (i.borderColorFocus)
+        vars["--ds-input-border-color-focus"] = i.borderColorFocus;
       if (i.disabledOpacity != null)
         vars["--ds-input-disabled-opacity"] = String(i.disabledOpacity);
       if (i.shadowRest) vars["--ds-input-shadow-rest"] = i.shadowRest;
@@ -1273,6 +2100,288 @@ export function chromeToVariables(
         vars["--ds-input-error-shadow-focus"] = i.errorShadowFocus;
       if (i.errorColor) vars["--ds-input-error-color"] = i.errorColor;
     }
+
+    // Select / combobox (trigger + dropdown panel + options)
+    if (c.select) {
+      const s = c.select;
+      if (s.bg) vars["--ds-select-bg"] = s.bg;
+      if (s.bgHover) vars["--ds-select-bg-hover"] = s.bgHover;
+      if (s.bgFocus) vars["--ds-select-bg-focus"] = s.bgFocus;
+      if (s.color) vars["--ds-select-color"] = s.color;
+      if (s.colorPlaceholder)
+        vars["--ds-select-color-placeholder"] = s.colorPlaceholder;
+      if (s.borderColor) vars["--ds-select-border-color"] = s.borderColor;
+      if (s.borderColorHover)
+        vars["--ds-select-border-color-hover"] = s.borderColorHover;
+      if (s.borderColorFocus)
+        vars["--ds-select-border-color-focus"] = s.borderColorFocus;
+      if (s.dropdownBg) vars["--ds-select-dropdown-bg"] = s.dropdownBg;
+      if (s.dropdownBorderColor)
+        vars["--ds-select-dropdown-border-color"] = s.dropdownBorderColor;
+      if (s.dropdownShadow)
+        vars["--ds-select-dropdown-shadow"] = s.dropdownShadow;
+      if (s.optionBgHover)
+        vars["--ds-select-option-bg-hover"] = s.optionBgHover;
+      if (s.optionBgSelected)
+        vars["--ds-select-option-bg-selected"] = s.optionBgSelected;
+      if (s.optionColor) vars["--ds-select-option-color"] = s.optionColor;
+      if (s.optionColorSelected)
+        vars["--ds-select-option-color-selected"] = s.optionColorSelected;
+      // ROTTAY-T2 MASS. `border` and `borderColor` are different channels
+      // with different readers; both are lowered, neither is derived from the
+      // other here.
+      if (s.arrowColor) vars["--ds-select-arrow-color"] = s.arrowColor;
+      if (s.bgDisabled) vars["--ds-select-bg-disabled"] = s.bgDisabled;
+      if (s.border) vars["--ds-select-border"] = s.border;
+      if (s.borderFocus) vars["--ds-select-border-focus"] = s.borderFocus;
+      if (s.borderHover) vars["--ds-select-border-hover"] = s.borderHover;
+      if (s.checkColor) vars["--ds-select-check-color"] = s.checkColor;
+      if (s.clearColor) vars["--ds-select-clear-color"] = s.clearColor;
+      if (s.clearColorHover)
+        vars["--ds-select-clear-color-hover"] = s.clearColorHover;
+      if (s.colorDisabled) vars["--ds-select-color-disabled"] = s.colorDisabled;
+      if (s.dropdownBorder)
+        vars["--ds-select-dropdown-border"] = s.dropdownBorder;
+      if (s.errorBorder) vars["--ds-select-error-border"] = s.errorBorder;
+      if (s.filledBg) vars["--ds-select-filled-bg"] = s.filledBg;
+      if (s.optionColorDisabled)
+        vars["--ds-select-option-color-disabled"] = s.optionColorDisabled;
+      if (s.shadowFocus) vars["--ds-select-shadow-focus"] = s.shadowFocus;
+      if (s.successBorder) vars["--ds-select-success-border"] = s.successBorder;
+      if (s.tagBg) vars["--ds-select-tag-bg"] = s.tagBg;
+      if (s.tagColor) vars["--ds-select-tag-color"] = s.tagColor;
+      if (s.warningBorder) vars["--ds-select-warning-border"] = s.warningBorder;
+    }
+
+    // autocomplete
+    if (c.autocomplete) {
+      const ac = c.autocomplete;
+      if (ac.bg) vars["--ds-autocomplete-bg"] = ac.bg;
+      if (ac.border) vars["--ds-autocomplete-border"] = ac.border;
+      if (ac.borderFocus)
+        vars["--ds-autocomplete-border-focus"] = ac.borderFocus;
+      if (ac.clearColor) vars["--ds-autocomplete-clear-color"] = ac.clearColor;
+      if (ac.dropdownBg) vars["--ds-autocomplete-dropdown-bg"] = ac.dropdownBg;
+      if (ac.dropdownShadow)
+        vars["--ds-autocomplete-dropdown-shadow"] = ac.dropdownShadow;
+      if (ac.emptyColor) vars["--ds-autocomplete-empty-color"] = ac.emptyColor;
+      if (ac.errorBorder)
+        vars["--ds-autocomplete-error-border"] = ac.errorBorder;
+      if (ac.optionBgHover)
+        vars["--ds-autocomplete-option-bg-hover"] = ac.optionBgHover;
+      if (ac.warningBorder)
+        vars["--ds-autocomplete-warning-border"] = ac.warningBorder;
+    }
+
+    // checkbox
+    if (c.checkbox) {
+      const cb = c.checkbox;
+      if (cb.bg) vars["--ds-checkbox-bg"] = cb.bg;
+      if (cb.bgDisabled) vars["--ds-checkbox-bg-disabled"] = cb.bgDisabled;
+      if (cb.border) vars["--ds-checkbox-border"] = cb.border;
+      if (cb.borderHover) vars["--ds-checkbox-border-hover"] = cb.borderHover;
+      if (cb.checkedBg) vars["--ds-checkbox-checked-bg"] = cb.checkedBg;
+      if (cb.checkedBorder)
+        vars["--ds-checkbox-checked-border"] = cb.checkedBorder;
+      if (cb.checkedColor)
+        vars["--ds-checkbox-checked-color"] = cb.checkedColor;
+      if (cb.errorBorder) vars["--ds-checkbox-error-border"] = cb.errorBorder;
+      if (cb.errorColor) vars["--ds-checkbox-error-color"] = cb.errorColor;
+      if (cb.focusRing) vars["--ds-checkbox-focus-ring"] = cb.focusRing;
+      if (cb.focusRingColor)
+        vars["--ds-checkbox-focus-ring-color"] = cb.focusRingColor;
+      if (cb.labelColor) vars["--ds-checkbox-label-color"] = cb.labelColor;
+      if (cb.labelColorDisabled)
+        vars["--ds-checkbox-label-color-disabled"] = cb.labelColorDisabled;
+    }
+
+    // datepicker
+    if (c.datePicker) {
+      const dp = c.datePicker;
+      if (dp.bg) vars["--ds-datepicker-bg"] = dp.bg;
+      if (dp.bgDisabled) vars["--ds-datepicker-bg-disabled"] = dp.bgDisabled;
+      if (dp.border) vars["--ds-datepicker-border"] = dp.border;
+      if (dp.borderFocus) vars["--ds-datepicker-border-focus"] = dp.borderFocus;
+      if (dp.borderHover) vars["--ds-datepicker-border-hover"] = dp.borderHover;
+      if (dp.clearColor) vars["--ds-datepicker-clear-color"] = dp.clearColor;
+      if (dp.color) vars["--ds-datepicker-color"] = dp.color;
+      if (dp.errorBorder) vars["--ds-datepicker-error-border"] = dp.errorBorder;
+      if (dp.iconColor) vars["--ds-datepicker-icon-color"] = dp.iconColor;
+      if (dp.separatorColor)
+        vars["--ds-datepicker-separator-color"] = dp.separatorColor;
+      if (dp.shadowFocus) vars["--ds-datepicker-shadow-focus"] = dp.shadowFocus;
+      if (dp.warningBorder)
+        vars["--ds-datepicker-warning-border"] = dp.warningBorder;
+    }
+
+    // inputnumber
+    if (c.inputNumber) {
+      const nu = c.inputNumber;
+      if (nu.addonBg) vars["--ds-inputnumber-addon-bg"] = nu.addonBg;
+      if (nu.addonBorder)
+        vars["--ds-inputnumber-addon-border"] = nu.addonBorder;
+      if (nu.addonColor) vars["--ds-inputnumber-addon-color"] = nu.addonColor;
+      if (nu.affixColor) vars["--ds-inputnumber-affix-color"] = nu.affixColor;
+      if (nu.bg) vars["--ds-inputnumber-bg"] = nu.bg;
+      if (nu.bgDisabled) vars["--ds-inputnumber-bg-disabled"] = nu.bgDisabled;
+      if (nu.border) vars["--ds-inputnumber-border"] = nu.border;
+      if (nu.borderFocus)
+        vars["--ds-inputnumber-border-focus"] = nu.borderFocus;
+      if (nu.color) vars["--ds-inputnumber-color"] = nu.color;
+      if (nu.controlColor)
+        vars["--ds-inputnumber-control-color"] = nu.controlColor;
+      if (nu.errorBorder)
+        vars["--ds-inputnumber-error-border"] = nu.errorBorder;
+      if (nu.shadowFocus)
+        vars["--ds-inputnumber-shadow-focus"] = nu.shadowFocus;
+      if (nu.warningBorder)
+        vars["--ds-inputnumber-warning-border"] = nu.warningBorder;
+    }
+
+    // radio
+    if (c.radio) {
+      const rd = c.radio;
+      if (rd.bg) vars["--ds-radio-bg"] = rd.bg;
+      if (rd.bgDisabled) vars["--ds-radio-bg-disabled"] = rd.bgDisabled;
+      if (rd.border) vars["--ds-radio-border"] = rd.border;
+      if (rd.borderHover) vars["--ds-radio-border-hover"] = rd.borderHover;
+      if (rd.checkedBg) vars["--ds-radio-checked-bg"] = rd.checkedBg;
+      if (rd.checkedBorder)
+        vars["--ds-radio-checked-border"] = rd.checkedBorder;
+      if (rd.checkedDot) vars["--ds-radio-checked-dot"] = rd.checkedDot;
+      if (rd.descriptionColor)
+        vars["--ds-radio-description-color"] = rd.descriptionColor;
+      if (rd.errorBorder) vars["--ds-radio-error-border"] = rd.errorBorder;
+      if (rd.errorColor) vars["--ds-radio-error-color"] = rd.errorColor;
+      if (rd.focusRing) vars["--ds-radio-focus-ring"] = rd.focusRing;
+      if (rd.focusRingColor)
+        vars["--ds-radio-focus-ring-color"] = rd.focusRingColor;
+      if (rd.labelColor) vars["--ds-radio-label-color"] = rd.labelColor;
+      if (rd.labelColorDisabled)
+        vars["--ds-radio-label-color-disabled"] = rd.labelColorDisabled;
+    }
+
+    // rate
+    if (c.rate) {
+      const rt = c.rate;
+      if (rt.color) vars["--ds-rate-color"] = rt.color;
+    }
+
+    // slider
+    if (c.slider) {
+      const sl = c.slider;
+      if (sl.focusRing) vars["--ds-slider-focus-ring"] = sl.focusRing;
+      if (sl.handleBg) vars["--ds-slider-handle-bg"] = sl.handleBg;
+      if (sl.handleBgDisabled)
+        vars["--ds-slider-handle-bg-disabled"] = sl.handleBgDisabled;
+      if (sl.handleBorder) vars["--ds-slider-handle-border"] = sl.handleBorder;
+      if (sl.handleShadow) vars["--ds-slider-handle-shadow"] = sl.handleShadow;
+      if (sl.markColor) vars["--ds-slider-mark-color"] = sl.markColor;
+      if (sl.railColor) vars["--ds-slider-rail-color"] = sl.railColor;
+      if (sl.trackColor) vars["--ds-slider-track-color"] = sl.trackColor;
+      if (sl.trackColorDisabled)
+        vars["--ds-slider-track-color-disabled"] = sl.trackColorDisabled;
+    }
+
+    // switch
+    if (c.switch) {
+      const sw = c.switch;
+      if (sw.bg) vars["--ds-switch-bg"] = sw.bg;
+      if (sw.bgHover) vars["--ds-switch-bg-hover"] = sw.bgHover;
+      if (sw.checkedBg) vars["--ds-switch-checked-bg"] = sw.checkedBg;
+      if (sw.checkedBgHover)
+        vars["--ds-switch-checked-bg-hover"] = sw.checkedBgHover;
+      if (sw.focusRing) vars["--ds-switch-focus-ring"] = sw.focusRing;
+      if (sw.labelColor) vars["--ds-switch-label-color"] = sw.labelColor;
+      if (sw.thumbBg) vars["--ds-switch-thumb-bg"] = sw.thumbBg;
+      if (sw.thumbShadow) vars["--ds-switch-thumb-shadow"] = sw.thumbShadow;
+    }
+
+    // timepicker
+    if (c.timePicker) {
+      const tp = c.timePicker;
+      if (tp.bg) vars["--ds-timepicker-bg"] = tp.bg;
+      if (tp.bgDisabled) vars["--ds-timepicker-bg-disabled"] = tp.bgDisabled;
+      if (tp.border) vars["--ds-timepicker-border"] = tp.border;
+      if (tp.borderFocus) vars["--ds-timepicker-border-focus"] = tp.borderFocus;
+      if (tp.clearColor) vars["--ds-timepicker-clear-color"] = tp.clearColor;
+      if (tp.color) vars["--ds-timepicker-color"] = tp.color;
+      if (tp.errorBorder) vars["--ds-timepicker-error-border"] = tp.errorBorder;
+      if (tp.iconColor) vars["--ds-timepicker-icon-color"] = tp.iconColor;
+      if (tp.separatorColor)
+        vars["--ds-timepicker-separator-color"] = tp.separatorColor;
+      if (tp.shadowFocus) vars["--ds-timepicker-shadow-focus"] = tp.shadowFocus;
+      if (tp.warningBorder)
+        vars["--ds-timepicker-warning-border"] = tp.warningBorder;
+    }
+
+    // toggle
+    if (c.toggle) {
+      const tg = c.toggle;
+      if (tg.descriptionColor)
+        vars["--ds-toggle-description-color"] = tg.descriptionColor;
+      if (tg.dotBg) vars["--ds-toggle-dot-bg"] = tg.dotBg;
+      if (tg.dotShadow) vars["--ds-toggle-dot-shadow"] = tg.dotShadow;
+      if (tg.errorBg) vars["--ds-toggle-error-bg"] = tg.errorBg;
+      if (tg.errorColor) vars["--ds-toggle-error-color"] = tg.errorColor;
+      if (tg.focusRing) vars["--ds-toggle-focus-ring"] = tg.focusRing;
+      if (tg.innerLabelColor)
+        vars["--ds-toggle-inner-label-color"] = tg.innerLabelColor;
+      if (tg.labelColor) vars["--ds-toggle-label-color"] = tg.labelColor;
+      if (tg.successBg) vars["--ds-toggle-success-bg"] = tg.successBg;
+      if (tg.trackBg) vars["--ds-toggle-track-bg"] = tg.trackBg;
+      if (tg.trackBgChecked)
+        vars["--ds-toggle-track-bg-checked"] = tg.trackBgChecked;
+      if (tg.warningBg) vars["--ds-toggle-warning-bg"] = tg.warningBg;
+    }
+
+    // transfer
+    if (c.transfer) {
+      const tf = c.transfer;
+      if (tf.bg) vars["--ds-transfer-bg"] = tf.bg;
+      if (tf.border) vars["--ds-transfer-border"] = tf.border;
+      if (tf.headerBg) vars["--ds-transfer-header-bg"] = tf.headerBg;
+      if (tf.headerBorder)
+        vars["--ds-transfer-header-border"] = tf.headerBorder;
+      if (tf.itemBgHover) vars["--ds-transfer-item-bg-hover"] = tf.itemBgHover;
+    }
+
+    // upload
+    if (c.upload) {
+      const up = c.upload;
+      if (up.bg) vars["--ds-upload-bg"] = up.bg;
+      if (up.border) vars["--ds-upload-border"] = up.border;
+      if (up.borderHover) vars["--ds-upload-border-hover"] = up.borderHover;
+      if (up.buttonBg) vars["--ds-upload-button-bg"] = up.buttonBg;
+      if (up.buttonBorder) vars["--ds-upload-button-border"] = up.buttonBorder;
+      if (up.buttonColor) vars["--ds-upload-button-color"] = up.buttonColor;
+      if (up.cardBg) vars["--ds-upload-card-bg"] = up.cardBg;
+      if (up.cardBorder) vars["--ds-upload-card-border"] = up.cardBorder;
+      if (up.draggerBg) vars["--ds-upload-dragger-bg"] = up.draggerBg;
+      if (up.draggerBgHover)
+        vars["--ds-upload-dragger-bg-hover"] = up.draggerBgHover;
+      if (up.draggerBorder)
+        vars["--ds-upload-dragger-border"] = up.draggerBorder;
+      if (up.draggerBorderActive)
+        vars["--ds-upload-dragger-border-active"] = up.draggerBorderActive;
+      if (up.draggerIconColor)
+        vars["--ds-upload-dragger-icon-color"] = up.draggerIconColor;
+      if (up.draggerTextColor)
+        vars["--ds-upload-dragger-text-color"] = up.draggerTextColor;
+      if (up.errorBorder) vars["--ds-upload-error-border"] = up.errorBorder;
+      if (up.fileBg) vars["--ds-upload-file-bg"] = up.fileBg;
+      if (up.fileColor) vars["--ds-upload-file-color"] = up.fileColor;
+      if (up.fileRemoveColor)
+        vars["--ds-upload-file-remove-color"] = up.fileRemoveColor;
+      if (up.previewBackdrop)
+        vars["--ds-upload-preview-backdrop"] = up.previewBackdrop;
+      if (up.previewOverlay)
+        vars["--ds-upload-preview-overlay"] = up.previewOverlay;
+      if (up.progressBar) vars["--ds-upload-progress-bar"] = up.progressBar;
+      if (up.progressTrack)
+        vars["--ds-upload-progress-track"] = up.progressTrack;
+    }
+
   }
 
   // Table (full: header + row + cell)
@@ -1307,6 +2416,8 @@ export function chromeToVariables(
     if (t.rowBorder) vars["--ds-table-row-border"] = t.rowBorder;
     if (t.rowHoverShadow)
       vars["--ds-table-row-hover-shadow"] = t.rowHoverShadow;
+    if (t.rowFocusShadow)
+      vars["--ds-table-row-focus-shadow"] = t.rowFocusShadow;
     if (t.cellPadding) vars["--ds-table-cell-padding"] = t.cellPadding;
     if (t.cellPaddingCompact)
       vars["--ds-table-padding-compact"] = t.cellPaddingCompact;
@@ -1671,10 +2782,12 @@ export function chromeToVariables(
       vars["--ds-signal-card-top-line-display"] = sc.topLineDisplay;
   }
 
+  setPremiumCardVars(vars, "premium-card", chrome.premiumCard);
   setPremiumCardVars(vars, "workspace-card", chrome.workspaceCard);
   setPremiumCardVars(vars, "compact-card", chrome.compactCard);
   setPremiumCardVars(vars, "tall-card", chrome.tallCard);
   setPremiumCardVars(vars, "collection-card", chrome.collectionCard);
+  setCardBandVars(vars, chrome);
   setListingGridVars(vars, chrome.listingGrid);
   setListVars(vars, chrome.list);
   setDetailVars(vars, chrome.detail);
@@ -1702,7 +2815,14 @@ export function chromeToVariables(
   }
 
   setMappedChromeVars(vars, chrome.tooltip, TOOLTIP_CHROME_VARIABLES);
+  if (chrome.tooltip?.zIndex != null) {
+    // Scale-shaped and component-shaped spellings of one stacking decision.
+    const z = String(chrome.tooltip.zIndex);
+    vars["--ds-z-index-tooltip"] = z;
+    vars["--ds-tooltip-z-index"] = z;
+  }
   setMappedChromeVars(vars, chrome.popover, POPOVER_CHROME_VARIABLES);
+  setSurfaceChromeVars(vars, chrome.surface);
 
   // Tabs chrome
   if (chrome.tabs) {
@@ -1879,6 +2999,14 @@ export function chromeToVariables(
     if (tb.lgPadding) vars["--ds-tabs-lg-padding"] = tb.lgPadding;
     if (tb.lgFontSize) vars["--ds-tabs-lg-font-size"] = tb.lgFontSize;
     if (tb.lgIconSize) vars["--ds-tabs-lg-icon-size"] = tb.lgIconSize;
+  }
+
+  for (const [family, mapping] of FLAT_CHROME_FAMILY_VARIABLES) {
+    setMappedChromeVars(
+      vars,
+      chrome[family] as Record<string, string> | undefined,
+      mapping as Readonly<Record<string, string>>
+    );
   }
 
   // Last, over the composed map: one owner for the law, and a radius channel

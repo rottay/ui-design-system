@@ -29,23 +29,23 @@
     "assessmentState": "SOURCE_BOUND",
     "partCensusCompleteness": "MODERN_ROOT_AND_SEPARATOR_BOUND_FRAGMENT_FLATTENING_REQUIRES_BROWSER_PROOF",
     "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Space/index.ts",
       "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Space/engines/classic/index.tsx",
       "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Space/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/space.css",
       "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
     ],
     "stableParts": [
       "root",
       "separator"
     ],
-    "states": [
-      "horizontal",
-      "vertical",
-      "wrapped",
-      "baseline-aligned",
-      "split",
-      "legacy-size-alias",
-      "numeric-size",
-      "tuple-size"
+    "states": [],
+    "variantAxes": [
+      "data-direction",
+      "data-size",
+      "data-with-split"
     ],
     "propertyGroups": [
       "axis-and-wrap",
@@ -62,8 +62,170 @@
       "A numeric tuple is public [horizontal,vertical] order and emits CSS gap shorthand in row-gap then column-gap order.",
       "Preset gaps may follow tenant density and rhythm; numeric and tuple gaps remain exact instance geometry.",
       "Fragments are recursively flattened so every member receives the same separator law.",
-      "Numeric zero children remain renderable and preserve separator position."
+      "Numeric zero children remain renderable and preserve separator position.",
+      "The separator is aria-hidden and role=presentation: a visual split never becomes a semantic item. [at Space/engines/modern/index.tsx:153-154]"
     ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "layout",
+        "scoutArtifact": "mr-anatomy-layout.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 2,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"root\" + class pair rottay-space / --modern",
+          "at": [
+            "Space/engines/modern/index.tsx:171"
+          ]
+        },
+        {
+          "part": "separator",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"separator\" + class rottay-space-separator, aria-hidden + role=presentation",
+          "at": [
+            "Space/engines/modern/index.tsx:155"
+          ]
+        }
+      ],
+      "partCensus": {},
+      "stateCensus": "No interaction or lifecycle state is distinguished.",
+      "demotedFromStates": {
+        "entries": [
+          "horizontal",
+          "vertical",
+          "wrapped",
+          "baseline-aligned",
+          "split",
+          "legacy-size-alias",
+          "numeric-size",
+          "tuple-size"
+        ],
+        "reason": "RULING R-5: `states` is interaction and lifecycle only."
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "data-direction / data-align / data-wrap",
+          "at": [
+            "Space/engines/modern/index.tsx:172"
+          ]
+        },
+        {
+          "token": "data-size",
+          "at": [
+            "Space/engines/modern/index.tsx:175"
+          ]
+        },
+        {
+          "token": "data-with-split",
+          "at": [
+            "Space/engines/modern/index.tsx:176"
+          ]
+        }
+      ],
+      "partAddressingAttributes": [
+        {
+          "token": "data-component",
+          "at": [
+            "Space/engines/modern/index.tsx:177"
+          ]
+        }
+      ],
+      "engineDivergence": "Three engine siblings. PARTS: only the modern engine stamps data-part (root and separator, modern/index.tsx:155, 171); classic and rustic stamp none. READS: the --ds-space-motion-* pair and the density/rhythm multipliers are modern-scoped in the shared skin; the three --ds-space-{small,middle,large}-size channels are engine-independent (Space/contracts/index.ts:161-163).",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "var": "--ds-space-instance-gap",
+            "part": "root",
+            "at": "skin/layout-primitives.css:614, 639",
+            "fallback": "var(--ds-space-small-size, var(--ds-spacing-2))",
+            "lands": "gap",
+            "note": "INSTANCE_API projection."
+          },
+          {
+            "var": "--ds-space-small-size",
+            "part": "root",
+            "at": "skin/layout-primitives.css:614, 639; Space/contracts/index.ts:161",
+            "fallback": "var(--ds-spacing-2)",
+            "lands": "gap"
+          },
+          {
+            "var": "--ds-space-middle-size",
+            "part": "root",
+            "at": "Space/contracts/index.ts:162",
+            "fallback": null,
+            "lands": "gap"
+          },
+          {
+            "var": "--ds-space-large-size",
+            "part": "root",
+            "at": "Space/contracts/index.ts:163",
+            "fallback": null,
+            "lands": "gap"
+          },
+          {
+            "var": "--ds-space-motion-duration",
+            "part": "root",
+            "at": "skin/layout-primitives.css:616, 618",
+            "fallback": "var(--ds-motion-fast)",
+            "lands": "transition-duration"
+          },
+          {
+            "var": "--ds-space-motion-easing",
+            "part": "root",
+            "at": "skin/layout-primitives.css:617, 619",
+            "fallback": "var(--ds-motion-ease-out)",
+            "lands": "transition-timing-function"
+          },
+          {
+            "var": "--ds-density-effective-scale",
+            "part": "root (modern preset gaps)",
+            "at": "skin/layout-primitives.css:639",
+            "fallback": null,
+            "lands": "multiplier inside calc() on gap"
+          },
+          {
+            "var": "--ds-rhythm-effective-scale",
+            "part": "root (modern preset gaps)",
+            "at": "skin/layout-primitives.css:639",
+            "fallback": "1",
+            "lands": "multiplier inside calc() on gap"
+          }
+        ],
+        "censusTotals": {
+          "distinctDsNamesScoped": 9,
+          "readOccurrencesScoped": 16,
+          "distinctDsNamesTsOwners": 3
+        },
+        "declarationOwner": {
+          "at": "foundation/tokens/css/presentation/components/space.css:21-24",
+          "declares": [
+            "--ds-space-small-size: 0.5rem",
+            "--ds-space-middle-size: 1rem",
+            "--ds-space-large-size: 1.5rem",
+            "--ds-space-default-size: var(--ds-space-small-size)"
+          ]
+        },
+        "tenantConditionalDeclaration": {
+          "at": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1371-1451",
+          "emits": [
+            "--ds-space-motion-duration",
+            "--ds-space-motion-easing"
+          ]
+        }
+      }
+    },
     "evidenceIds": [],
     "nextAction": "BROWSER_PROVE_ROOT_SEPARATOR_GAP_RTL_FRAGMENT_LARGE_TEXT_AND_MOTION_GEOMETRY_WITH_SOURCE_HASH"
   },
@@ -83,7 +245,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_ENGINE_ROOT_AND_WRAPPER_PAINT_INVARIANCE_SEPARATE_FROM_SPLIT_CONTENT"
+      "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_ENGINE_ROOT_AND_WRAPPER_PAINT_INVARIANCE_SEPARATE_FROM_SPLIT_CONTENT",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -96,7 +268,18 @@
         "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_BASELINE_AND_WRAP_WITH_EACH_PAIRING"
+      "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_BASELINE_AND_WRAP_WITH_EACH_PAIRING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -108,7 +291,18 @@
         "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_GAP_SEPARATOR_AND_MAX_INLINE_SIZE_WITH_LONG_CONTENT_ACROSS_FONT_STACKS"
+      "nextAction": "PROVE_GAP_SEPARATOR_AND_MAX_INLINE_SIZE_WITH_LONG_CONTENT_ACROSS_FONT_STACKS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -128,7 +322,18 @@
         "split-separator"
       ],
       "evidenceIds": [],
-      "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_FOR_BOTH_DIRECTIONS_WRAP_AND_SPLIT"
+      "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_FOR_BOTH_DIRECTIONS_WRAP_AND_SPLIT",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -140,7 +345,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_ROOT_AND_SEPARATOR_RADIUS_REMAIN_UNOWNED_ACROSS_STOPS"
+      "nextAction": "PROVE_ROOT_AND_SEPARATOR_RADIUS_REMAIN_UNOWNED_ACROSS_STOPS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -152,7 +367,17 @@
         "packages/core/src/ui/primitives/layout/Space/contracts/index.ts"
       ],
       "evidenceIds": [],
-      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_IDENTICAL_SPACE_GEOMETRY"
+      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_IDENTICAL_SPACE_GEOMETRY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "layout no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -183,7 +408,30 @@
         "separator count direction wrap alignment and touch ownership remain unchanged"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_CANONICAL_AND_LEGACY_PRESETS_AT_DENSITY_STOPS_STATIC_DB_WITH_NUMERIC_NEGATIVES_AND_EXACT_RESET"
+      "nextAction": "PROVE_CANONICAL_AND_LEGACY_PRESETS_AT_DENSITY_STOPS_STATIC_DB_WITH_NUMERIC_NEGATIVES_AND_EXACT_RESET",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-collapse-density-factor",
+            "prop": "padding de header/body de Collapse (unica familia layout con filas); Box/Flex/Grid no densifican",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-space-small-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
+            "--ds-space-instance-gap"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -269,7 +517,22 @@
         "Canonical and legacy aliases must restore to identical computed values and preserve caller-authored style precedence."
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_0_85_1_1_2_CANONICAL_LEGACY_PRESET_GAPS_STATIC_DB_NUMERIC_TUPLE_NEGATIVES_AND_EXACT_RESTORE"
+      "nextAction": "PROVE_0_85_1_1_2_CANONICAL_LEGACY_PRESET_GAPS_STATIC_DB_NUMERIC_TUPLE_NEGATIVES_AND_EXACT_RESTORE",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -298,7 +561,31 @@
         "direct space duration precedence must be explicit rather than accidental"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_DIAL_WITH_AND_WITHOUT_SPACE_SPECIFIC_DURATION_STATIC_DB_AND_REDUCED_MOTION_PRECEDENCE"
+      "nextAction": "PROVE_DIAL_WITH_AND_WITHOUT_SPACE_SPECIFIC_DURATION_STATIC_DB_AND_REDUCED_MOTION_PRECEDENCE",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-space-motion-duration",
+              "--_ds-space-motion-easing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -310,7 +597,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_ROOT_AND_SEPARATOR_SHADOW_BACKGROUND_AND_BORDER_GEOMETRY_ARE_UNCHANGED"
+      "nextAction": "PROVE_ROOT_AND_SEPARATOR_SHADOW_BACKGROUND_AND_BORDER_GEOMETRY_ARE_UNCHANGED",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -322,7 +619,19 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT"
+      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
+        "source": "huecos-kimi",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -334,7 +643,19 @@
         "packages/core/src/ui/primitives/layout/Space/contracts/index.ts"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_SPACE"
+      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_SPACE",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el layout no pinta chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "layout no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de layout"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -347,7 +668,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_DELTA_TO_SPACING_MOTION_OR_ANOTHER_GOVERNED_AXIS"
+      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_DELTA_TO_SPACING_MOTION_OR_ANOTHER_GOVERNED_AXIS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -359,7 +690,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS"
+      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "layout no crea capas propias: el orden z lo gobierna la escala derivada de layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -371,7 +712,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_LAYOUT_ANATOMY_ATTRIBUTE_HAS_NO_SPACE_SELECTOR_OR_COMPUTED_DELTA"
+      "nextAction": "PROVE_LAYOUT_ANATOMY_ATTRIBUTE_HAS_NO_SPACE_SELECTOR_OR_COMPUTED_DELTA",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de space no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -388,7 +739,17 @@
         "unknown and non-allowlisted channels fail closed"
       ],
       "evidenceIds": [],
-      "nextAction": "RESOLVE_ALLOWLIST_MEMBERSHIP_THEN_PROVE_AUTHORIZED_SIZE_OR_MOTION_CHANNELS_AND_EXACT_RESET"
+      "nextAction": "RESOLVE_ALLOWLIST_MEMBERSHIP_THEN_PROVE_AUTHORIZED_SIZE_OR_MOTION_CHANNELS_AND_EXACT_RESET",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -401,7 +762,17 @@
         "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_RECIPE_PROFILE_PRESERVES_IDENTICAL_ROOT_SEPARATOR_AND_SEQUENCE"
+      "nextAction": "PROVE_RECIPE_PROFILE_PRESERVES_IDENTICAL_ROOT_SEPARATOR_AND_SEQUENCE",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -413,7 +784,38 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_SPACE_SELECTOR_OR_PAINT_BINDING"
+      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_SPACE_SELECTOR_OR_PAINT_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -425,7 +827,17 @@
         "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_OR_SPLIT_CONTENT_ONLY"
+      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_OR_SPLIT_CONTENT_ONLY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria (flechas/grips son geometria propia, ver palette/chrome.anatomy)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -438,7 +850,17 @@
         "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_SPACE_DIRECTION_WRAP_SIZE_OR_ALIGNMENT"
+      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_SPACE_DIRECTION_WRAP_SIZE_OR_ALIGNMENT",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

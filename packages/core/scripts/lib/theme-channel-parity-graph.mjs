@@ -11,6 +11,15 @@
  *   emitted channel or consumer;
  * - comments, tests, stories, fixtures and generated artifacts are not real
  *   consumers.
+ *
+ * One class of declared leaf is legitimately never a CSS channel: a bounded
+ * data-only selection that the compiler projects into a root `data-*`
+ * attribute. Those leaves are exempted from "declared-but-unemitted" only
+ * through the closed roster below, and only when the source itself proves the
+ * projection (see auditDataOnlyProjections). The exemption is therefore an
+ * assertion, not a suppression: an unrostered data-only projection, a rostered
+ * pair with no projection, an open-typed field, and a rostered field that emits
+ * a `--ds-*` variable are all hard failures.
  */
 import ts from "typescript";
 import { stripScriptComments } from "./script-source-comment-stripper.mjs";
@@ -1025,6 +1034,445 @@ export function extractConsumedCssVariables(text, file = "consumer.css") {
   return names;
 }
 
+const DATA_ATTRIBUTE_NAME = /^data-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/**
+ * The closed roster of declared visual leaves that are data-only by contract:
+ * each pair states which BrandTheme leaf projects into which root `data-*`
+ * attribute, and which neutral value must stamp nothing. Nothing is exempted
+ * by prefix, by name shape, or by folder; a leaf leaves the CSS-channel
+ * denominator only if it appears here AND the compiler source proves the
+ * projection.
+ */
+export const DATA_ONLY_THEME_PROJECTIONS = Object.freeze([
+  Object.freeze({
+    owner: "BrandCardChrome.anatomy",
+    themePath: "chrome.cardComponent.anatomy",
+    family: "cardComponent",
+    field: "anatomy",
+    attribute: "data-anatomy-card",
+    neutralValue: "default",
+  }),
+  Object.freeze({
+    owner: "BrandLayoutChrome.anatomy",
+    themePath: "chrome.layout.anatomy",
+    family: "layout",
+    field: "anatomy",
+    attribute: "data-anatomy-layout",
+    neutralValue: "default",
+  }),
+  Object.freeze({
+    owner: "BrandSidebarChrome.anatomy",
+    themePath: "chrome.sidebar.anatomy",
+    family: "sidebar",
+    field: "anatomy",
+    attribute: "data-anatomy-sidebar",
+    neutralValue: "default",
+  }),
+  Object.freeze({
+    owner: "BrandTableChrome.anatomy",
+    themePath: "chrome.table.anatomy",
+    family: "table",
+    field: "anatomy",
+    attribute: "data-anatomy-table",
+    neutralValue: "default",
+  }),
+]);
+
+/** Module-level `{ family: "data-*" }` literals: the closed attribute domain. */
+function collectDataAttributeMaps(source) {
+  const maps = new Map();
+  for (const statement of source.statements) {
+    if (!ts.isVariableStatement(statement)) continue;
+    for (const declaration of statement.declarationList.declarations) {
+      if (!ts.isIdentifier(declaration.name) || !declaration.initializer)
+        continue;
+      const expression = unwrapStaticExpression(declaration.initializer);
+      if (!expression || !ts.isObjectLiteralExpression(expression)) continue;
+      const entries = new Map();
+      let allStatic = expression.properties.length > 0;
+      for (const property of expression.properties) {
+        if (!ts.isPropertyAssignment(property)) {
+          allStatic = false;
+          break;
+        }
+        const key = propertyName(property.name);
+        const value = unwrapStaticExpression(property.initializer);
+        if (
+          !key ||
+          !value ||
+          !ts.isStringLiteralLike(value) ||
+          !DATA_ATTRIBUTE_NAME.test(value.text)
+        ) {
+          allStatic = false;
+          break;
+        }
+        entries.set(key, value.text);
+      }
+      if (allStatic && entries.size > 0)
+        maps.set(declaration.name.text, entries);
+    }
+  }
+  return maps;
+}
+
+function objectKeysTarget(node) {
+  const expression = unwrapStaticExpression(node);
+  if (!expression || !ts.isCallExpression(expression)) return null;
+  const callee = expression.expression;
+  if (!ts.isPropertyAccessExpression(callee) || callee.name.text !== "keys")
+    return null;
+  if (!ts.isIdentifier(callee.expression) || callee.expression.text !== "Object")
+    return null;
+  const argument = unwrapStaticExpression(expression.arguments[0]);
+  return argument && ts.isIdentifier(argument) ? argument.text : null;
+}
+
+function isMapIndexedByLoopVariable(node, mapName, loopVariable) {
+  const expression = unwrapStaticExpression(node);
+  if (!expression || !ts.isElementAccessExpression(expression)) return false;
+  const base = unwrapStaticExpression(expression.expression);
+  const index = unwrapStaticExpression(expression.argumentExpression);
+  return (
+    !!base &&
+    ts.isIdentifier(base) &&
+    base.text === mapName &&
+    !!index &&
+    ts.isIdentifier(index) &&
+    index.text === loopVariable
+  );
+}
+
+/** `<source>[loopVariable]?.<field>` -> `<field>`; anything else -> null. */
+function familyFieldRead(node, loopVariable) {
+  const expression = unwrapStaticExpression(node);
+  if (!expression || !ts.isPropertyAccessExpression(expression)) return null;
+  const base = unwrapStaticExpression(expression.expression);
+  if (!base || !ts.isElementAccessExpression(base)) return null;
+  const index = unwrapStaticExpression(base.argumentExpression);
+  if (!index || !ts.isIdentifier(index) || index.text !== loopVariable)
+    return null;
+  return expression.name.text;
+}
+
+function analyzeAttributeProjectionLoop(statement, context, projections) {
+  const { file, functionName, maps } = context;
+  const mapName = objectKeysTarget(statement.expression);
+  const attributes = mapName ? maps.get(mapName) : null;
+  if (!attributes) return;
+  const initializer = statement.initializer;
+  if (
+    !ts.isVariableDeclarationList(initializer) ||
+    initializer.declarations.length !== 1
+  )
+    return;
+  const loopName = initializer.declarations[0].name;
+  if (!ts.isIdentifier(loopName)) return;
+  const loopVariable = loopName.text;
+
+  const aliasFields = new Map();
+  const comparedLiterals = new Map();
+  const writes = [];
+
+  function collectAliases(node) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.initializer
+    ) {
+      const field = familyFieldRead(node.initializer, loopVariable);
+      if (field) aliasFields.set(node.name.text, field);
+    }
+    ts.forEachChild(node, collectAliases);
+  }
+  collectAliases(statement.statement);
+
+  function collectUses(node) {
+    if (ts.isBinaryExpression(node)) {
+      const kind = node.operatorToken.kind;
+      if (
+        kind === ts.SyntaxKind.EqualsEqualsEqualsToken ||
+        kind === ts.SyntaxKind.ExclamationEqualsEqualsToken
+      ) {
+        for (const [left, right] of [
+          [node.left, node.right],
+          [node.right, node.left],
+        ]) {
+          const alias = unwrapStaticExpression(left);
+          const literal = unwrapStaticExpression(right);
+          if (
+            alias &&
+            ts.isIdentifier(alias) &&
+            aliasFields.has(alias.text) &&
+            literal &&
+            ts.isStringLiteralLike(literal)
+          ) {
+            const values = comparedLiterals.get(alias.text) ?? new Set();
+            values.add(literal.text);
+            comparedLiterals.set(alias.text, values);
+          }
+        }
+      }
+      if (kind === ts.SyntaxKind.EqualsToken) {
+        const left = node.left;
+        if (
+          ts.isElementAccessExpression(left) &&
+          isMapIndexedByLoopVariable(
+            left.argumentExpression,
+            mapName,
+            loopVariable
+          )
+        ) {
+          const right = unwrapStaticExpression(node.right);
+          if (right && ts.isIdentifier(right) && aliasFields.has(right.text)) {
+            writes.push({
+              field: aliasFields.get(right.text),
+              alias: right.text,
+            });
+          } else {
+            const direct = familyFieldRead(node.right, loopVariable);
+            if (direct) writes.push({ field: direct, alias: null });
+          }
+        }
+      }
+    }
+    ts.forEachChild(node, collectUses);
+  }
+  collectUses(statement.statement);
+
+  for (const write of writes) {
+    const neutralValues = write.alias
+      ? new Set(comparedLiterals.get(write.alias) ?? [])
+      : new Set();
+    for (const [family, attribute] of attributes) {
+      projections.push({
+        file,
+        functionName,
+        mapName,
+        family,
+        field: write.field,
+        attribute,
+        neutralValues: [...neutralValues].sort(),
+      });
+    }
+  }
+}
+
+/**
+ * Discover, from source only, every `theme.<...>[family].<field>` value that a
+ * compiler writes into a closed `data-*` attribute domain. This is a positive
+ * causal read: the family set is exactly the keys of the attribute map the loop
+ * iterates, the destination is exactly that map's value, and the projected
+ * field is the property actually assigned. Nothing here is inferred from a name.
+ */
+export function collectDataOnlyAttributeProjections(sources) {
+  const projections = [];
+  for (const { file, text } of sources) {
+    const source = sourceFileFor(file, text);
+    const maps = collectDataAttributeMaps(source);
+    if (maps.size === 0) continue;
+    function visit(node, functionName) {
+      let scope = functionName;
+      if (
+        (ts.isFunctionDeclaration(node) || ts.isFunctionExpression(node)) &&
+        node.name
+      ) {
+        scope = node.name.text;
+      } else if (
+        ts.isVariableDeclaration(node) &&
+        ts.isIdentifier(node.name) &&
+        node.initializer &&
+        (ts.isArrowFunction(node.initializer) ||
+          ts.isFunctionExpression(node.initializer))
+      ) {
+        scope = node.name.text;
+      }
+      if (ts.isForOfStatement(node)) {
+        analyzeAttributeProjectionLoop(
+          node,
+          { file, functionName: scope, maps },
+          projections
+        );
+      }
+      ts.forEachChild(node, (child) => visit(child, scope));
+    }
+    visit(source, "<module>");
+  }
+  return projections;
+}
+
+/** Resolve a declared field type to a closed string-literal union, or null. */
+function closedStringLiteralUnion(node, registry, stack = new Set()) {
+  if (!node) return null;
+  if (ts.isParenthesizedTypeNode(node))
+    return closedStringLiteralUnion(node.type, registry, stack);
+  if (ts.isLiteralTypeNode(node)) {
+    return ts.isStringLiteral(node.literal) ? [node.literal.text] : null;
+  }
+  if (ts.isUnionTypeNode(node)) {
+    const values = [];
+    for (const part of node.types) {
+      if (
+        part.kind === ts.SyntaxKind.UndefinedKeyword ||
+        part.kind === ts.SyntaxKind.NullKeyword
+      )
+        continue;
+      const resolved = closedStringLiteralUnion(part, registry, stack);
+      if (!resolved) return null;
+      values.push(...resolved);
+    }
+    return values.length > 0 ? values : null;
+  }
+  if (ts.isTypeReferenceNode(node) && ts.isIdentifier(node.typeName)) {
+    const name = node.typeName.text;
+    if (WRAPPER_TYPES.has(name))
+      return closedStringLiteralUnion(node.typeArguments?.[0], registry, stack);
+    if (stack.has(name)) return null;
+    const entry = registry?.get(name);
+    if (!entry?.type) return null;
+    return closedStringLiteralUnion(
+      entry.type,
+      registry,
+      new Set(stack).add(name)
+    );
+  }
+  return null;
+}
+
+/**
+ * Prove the closed data-only roster against source. Returns the owners that may
+ * leave the CSS-channel denominator plus every violation found. Violations are
+ * gate failures, never counters: absorbing them into the ratchet would let a
+ * dead channel hide behind an "it's data-only" claim.
+ */
+export function auditDataOnlyProjections({
+  registry,
+  declarations,
+  projectionSources = [],
+  emissions = [],
+  roster = DATA_ONLY_THEME_PROJECTIONS,
+  rootType = "BrandTheme",
+}) {
+  const projections = collectDataOnlyAttributeProjections(projectionSources);
+  const emittedByOwner = new Map();
+  for (const emission of emissions) {
+    for (const owner of emission.owners ?? []) {
+      const names = emittedByOwner.get(owner) ?? new Set();
+      names.add(emission.name ?? emission.pattern);
+      emittedByOwner.set(owner, names);
+    }
+  }
+
+  const projectionByKey = new Map();
+  for (const projection of projections) {
+    const key = `${projection.family}.${projection.field}`;
+    if (!projectionByKey.has(key)) projectionByKey.set(key, projection);
+  }
+  const rosterKeys = new Set(
+    roster.map((entry) => `${entry.family}.${entry.field}`)
+  );
+
+  const violations = [];
+  const provenOwners = new Set();
+
+  for (const entry of roster) {
+    const problems = [];
+    const key = `${entry.family}.${entry.field}`;
+
+    const declared = declarations?.get(entry.owner) ?? null;
+    if (!declared) {
+      problems.push(
+        `${entry.owner}: rostered data-only owner is not a declared visual theme field`
+      );
+    } else if (!declared.themePaths.includes(entry.themePath)) {
+      problems.push(
+        `${entry.owner}: declared theme paths [${declared.themePaths.join(
+          ", "
+        )}] do not include rostered ${entry.themePath}`
+      );
+    }
+
+    const resolvedOwner = ownerForPath(
+      registry,
+      rootType,
+      entry.themePath.split(".")
+    );
+    if (resolvedOwner !== entry.owner) {
+      problems.push(
+        `${entry.themePath}: resolves to ${
+          resolvedOwner ?? "<unresolved>"
+        }, not rostered ${entry.owner}`
+      );
+    }
+
+    const [typeName, fieldName] = entry.owner.split(".");
+    const member =
+      typeName && fieldName
+        ? typeEntryForProperty(registry, typeName, fieldName)
+        : null;
+    const union = member
+      ? closedStringLiteralUnion(member.type, registry)
+      : null;
+    if (!union) {
+      problems.push(
+        `${entry.owner}: data-only fields must declare a closed string-literal union; an open value type is a CSS field, not a data selection`
+      );
+    } else if (!union.includes(entry.neutralValue)) {
+      problems.push(
+        `${entry.owner}: closed vocabulary [${union.join(
+          ", "
+        )}] is missing the neutral value "${entry.neutralValue}"`
+      );
+    }
+
+    const projection = projectionByKey.get(key);
+    if (!projection) {
+      problems.push(
+        `${entry.owner}: no compiler source projects ${entry.themePath} into a data-* attribute`
+      );
+    } else {
+      if (projection.attribute !== entry.attribute) {
+        problems.push(
+          `${entry.owner}: projected into ${projection.attribute}, rostered as ${entry.attribute}`
+        );
+      }
+      if (!projection.neutralValues.includes(entry.neutralValue)) {
+        problems.push(
+          `${entry.owner}: ${projection.functionName} never guards the neutral value "${entry.neutralValue}" before stamping ${projection.attribute}`
+        );
+      }
+    }
+
+    const emitted = emittedByOwner.get(entry.owner);
+    if (emitted?.size) {
+      problems.push(
+        `${entry.owner}: declared data-only but emits CSS variable(s) ${[
+          ...emitted,
+        ]
+          .sort()
+          .join(", ")}`
+      );
+    }
+
+    if (problems.length === 0) provenOwners.add(entry.owner);
+    violations.push(...problems);
+  }
+
+  for (const projection of projections) {
+    const key = `${projection.family}.${projection.field}`;
+    if (rosterKeys.has(key)) continue;
+    violations.push(
+      `unrostered data-only projection: ${projection.attribute} <- [${projection.family}].${projection.field} in ${projection.functionName} (${projection.file})`
+    );
+  }
+
+  return {
+    projections,
+    provenOwners,
+    violations: [...new Set(violations)].sort(),
+  };
+}
+
 function namespaceOf(name) {
   return /^--ds-([a-z0-9]+)(?:-|$)/i.exec(name)?.[1]?.toLowerCase() ?? null;
 }
@@ -1040,6 +1488,7 @@ export function buildThemeChannelParityGraph({
   routedOwners = new Set(),
   consumers,
   overrideTokens = new Set(),
+  dataProjectedOwners = new Set(),
 }) {
   const emittedNames = new Set();
   const emittedPatterns = [];
@@ -1064,10 +1513,15 @@ export function buildThemeChannelParityGraph({
     ownersByVariable.set(token, owners);
   }
 
+  // A data-only leaf is not "unemitted debt": it has no CSS channel by
+  // contract. It is exempted only when auditDataOnlyProjections proved that
+  // exact owner from source; an unproven owner stays in the census.
   const declaredButUnemitted = [...declarations.values()]
     .filter(
       (field) =>
-        !emittedOwners.has(field.owner) && !routedOwners.has(field.owner)
+        !emittedOwners.has(field.owner) &&
+        !routedOwners.has(field.owner) &&
+        !dataProjectedOwners.has(field.owner)
     )
     .map((field) => ({ ...field, id: field.owner }))
     .sort((a, b) => a.id.localeCompare(b.id));

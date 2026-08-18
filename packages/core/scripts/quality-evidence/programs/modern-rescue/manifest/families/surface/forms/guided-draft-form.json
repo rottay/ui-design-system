@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "38501c51cb6b00be70ec43b4bea67004d79e1e5ee1e20e83d024e869cb22f451"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2005 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css"
+    ],
+    "stableParts": [
+      "draft-recovery-copy",
+      "draft-recovery-icon",
+      "draft-status",
+      "draft-status-dot",
+      "draft-status-label",
+      "loading-skeleton-title",
+      "progress",
+      "progress-bar",
+      "progress-count",
+      "section-card-complete",
+      "section-card-description",
+      "section-card-errors",
+      "section-card-icon",
+      "section-nav",
+      "section-nav-item-error-dot",
+      "section-nav-item-icon",
+      "section-nav-item-label",
+      "section-nav-item-main",
+      "section-nav-item-row",
+      "section-nav-label",
+      "section-nav-list",
+      "section-nav-select",
+      "submit-bar",
+      "submit-bar-panel",
+      "submit-bar-progress",
+      "submit-bar-secondary",
+      "template-card-icon",
+      "template-picker",
+      "title",
+      "title-copy",
+      "validation-issue-dot",
+      "content",
+      "content-body",
+      "draft-recovery-actions",
+      "draft-recovery-description",
+      "draft-recovery-title",
+      "loading-skeleton",
+      "root",
+      "section-card-header",
+      "section-card-title",
+      "submit-bar-actions",
+      "submit-bar-progress-placeholder",
+      "subtitle",
+      "template-card-description",
+      "template-card-title",
+      "title-bar",
+      "validation-issue",
+      "validation-issue-field",
+      "validation-issue-list",
+      "validation-issue-message",
+      "validation-issue-overflow",
+      "validation-summary-header",
+      "validation-summary-title",
+      "draft-recovery",
+      "section-card",
+      "section-nav-item",
+      "submit-primary",
+      "submit-secondary"
+    ],
+    "states": [
+      "unsaved",
+      "saving",
+      "saved",
+      "error",
+      "active",
+      "errors"
+    ],
+    "variantAxes": [
+      "data-layout",
+      "data-severity",
+      "data-action-bar"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "surface-full",
+        "scoutArtifact": "mr-anatomy-surface-full.json",
+        "scoutSelfGradedConfidence": null,
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 53,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "draft-recovery-copy",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:284"
+          ]
+        },
+        {
+          "part": "draft-recovery-icon",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:272"
+          ]
+        },
+        {
+          "part": "draft-status",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:70",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:448",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:461"
+          ]
+        },
+        {
+          "part": "draft-status-dot",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:82",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:89",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:93"
+          ]
+        },
+        {
+          "part": "draft-status-label",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:105"
+          ]
+        },
+        {
+          "part": "loading-skeleton-title",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:416"
+          ]
+        },
+        {
+          "part": "progress",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:52"
+          ]
+        },
+        {
+          "part": "progress-bar",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:56"
+          ]
+        },
+        {
+          "part": "progress-count",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:61"
+          ]
+        },
+        {
+          "part": "section-card-complete",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:313",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:319"
+          ]
+        },
+        {
+          "part": "section-card-description",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:323"
+          ]
+        },
+        {
+          "part": "section-card-errors",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:313",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:319"
+          ]
+        },
+        {
+          "part": "section-card-icon",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:308"
+          ]
+        },
+        {
+          "part": "section-nav",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:123",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:132",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:136"
+          ]
+        },
+        {
+          "part": "section-nav-item-error-dot",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:236",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:442"
+          ]
+        },
+        {
+          "part": "section-nav-item-icon",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:227",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:232"
+          ]
+        },
+        {
+          "part": "section-nav-item-label",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:221"
+          ]
+        },
+        {
+          "part": "section-nav-item-main",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:216"
+          ]
+        },
+        {
+          "part": "section-nav-item-row",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:212"
+          ]
+        },
+        {
+          "part": "section-nav-label",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:116",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:150"
+          ]
+        },
+        {
+          "part": "section-nav-list",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:136"
+          ]
+        },
+        {
+          "part": "section-nav-select",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:127"
+          ]
+        },
+        {
+          "part": "submit-bar",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:363",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:369",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:380"
+          ]
+        },
+        {
+          "part": "submit-bar-panel",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:373",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:380",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:387"
+          ]
+        },
+        {
+          "part": "submit-bar-progress",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:403",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:408"
+          ]
+        },
+        {
+          "part": "submit-bar-secondary",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:395"
+          ]
+        },
+        {
+          "part": "template-card-icon",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:258"
+          ]
+        },
+        {
+          "part": "template-picker",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:248",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:254"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:48"
+          ]
+        },
+        {
+          "part": "title-copy",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:43",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:48"
+          ]
+        },
+        {
+          "part": "validation-issue-dot",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:339",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:347",
+            "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:351"
+          ]
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "content-body",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "draft-recovery-actions",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "draft-recovery-description",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "draft-recovery-title",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "loading-skeleton",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "section-card-header",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "section-card-title",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "submit-bar-actions",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "submit-bar-progress-placeholder",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "subtitle",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "template-card-description",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "template-card-title",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "title-bar",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-issue",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-issue-field",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-issue-list",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-issue-message",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-issue-overflow",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-summary-header",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "validation-summary-title",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "draft-recovery",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-guided-draft-form__draft-recovery` bound by the root pair `.ds-surface.ds-guided-draft-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:268"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "section-card",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-guided-draft-form__section-card` bound by the root pair `.ds-surface.ds-guided-draft-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:296",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:300",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:304"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "section-nav-item",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-guided-draft-form__section-nav-item` bound by the root pair `.ds-surface.ds-guided-draft-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:157",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:165",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:175"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "submit-primary",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-guided-draft-form__submit-primary` bound by the root pair `.ds-surface.ds-guided-draft-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:391",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:430"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "submit-secondary",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-guided-draft-form__submit-secondary` bound by the root pair `.ds-surface.ds-guided-draft-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:399",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:431"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        }
+      ],
+      "partCensus": {
+        "rootAnchor": {
+          "class": "ds-guided-draft-form",
+          "tierClass": "ds-surface",
+          "note": null
+        }
+      },
+      "stateAnchors": [
+        {
+          "token": "data-status=unsaved",
+          "occurrences": 1,
+          "state": "unsaved"
+        },
+        {
+          "token": "data-status=saving",
+          "occurrences": 1,
+          "state": "saving"
+        },
+        {
+          "token": "data-status=saved",
+          "occurrences": 1,
+          "state": "saved"
+        },
+        {
+          "token": "data-status=error",
+          "occurrences": 1,
+          "state": "error"
+        },
+        {
+          "token": "data-active=true",
+          "occurrences": 4,
+          "state": "active"
+        },
+        {
+          "token": "data-errors=true",
+          "occurrences": 1,
+          "state": "errors"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-layout=dropdown",
+          "occurrences": 1
+        },
+        {
+          "token": "data-layout=pills",
+          "occurrences": 4
+        },
+        {
+          "token": "data-layout=sidebar",
+          "occurrences": 5
+        },
+        {
+          "token": "data-severity=error",
+          "occurrences": 1
+        },
+        {
+          "token": "data-severity=warning",
+          "occurrences": 1
+        },
+        {
+          "token": "data-action-bar=inline",
+          "occurrences": 1
+        },
+        {
+          "token": "data-action-bar=floating",
+          "occurrences": 1
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "data-mobile=true",
+            "occurrences": 6
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": ":first-child",
+            "occurrences": 1
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelDeclarationsEmittedByThisFamily": [
+          {
+            "channel": "--ds-button-font-weight",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:182",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:200"
+            ]
+          },
+          {
+            "channel": "--ds-button-ghost-bg",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:167",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:176",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:187",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:195"
+            ]
+          },
+          {
+            "channel": "--ds-button-ghost-bg-hover",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:170",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:179",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:190",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:198"
+            ]
+          },
+          {
+            "channel": "--ds-button-ghost-border",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:168",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:177",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:188",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:196"
+            ]
+          },
+          {
+            "channel": "--ds-button-ghost-border-hover",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:171",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:180"
+            ]
+          },
+          {
+            "channel": "--ds-button-ghost-color",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:169",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:178",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:189",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:197",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:207"
+            ]
+          },
+          {
+            "channel": "--ds-button-ghost-color-hover",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:172",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:181",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:191",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:199",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:208"
+            ]
+          },
+          {
+            "channel": "--ds-button-md-height",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:432"
+            ]
+          },
+          {
+            "channel": "--ds-button-sm-height",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:427"
+            ]
+          },
+          {
+            "channel": "--ds-button-sm-radius",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:166",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:186"
+            ]
+          },
+          {
+            "channel": "--ds-card-bordered-border-color",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:269",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:301",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:305",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:332",
+              "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:336"
+            ]
+          }
+        ],
+        "dsVariableReadsInlineInTsx": [],
+        "dsVariableReadsViaCssSkin": [
+          {
+            "channel": "--ds-color-bg-elevated",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:140",
+              "ui/patterns/customization/brand-studio/index.tsx:158",
+              "foundation/tokens/css/foundation/themes/default.css:209"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:376",
+                "observableProperty": "background",
+                "part": "submit-bar-panel",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-surface-card, var(--ds-color-bg-tertiary))",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:209",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-bg-tertiary",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:200",
+              "foundation/tokens/css/foundation/themes/default.css:2122"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:74",
+                "observableProperty": "background",
+                "part": "draft-status",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:280",
+                "observableProperty": "background",
+                "part": "draft-recovery-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:376",
+                "observableProperty": "background",
+                "part": "submit-bar-panel",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:200",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-border",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:147",
+              "ui/patterns/customization/brand-studio/index.tsx:165",
+              "foundation/tokens/css/foundation/monochrome/index.css:62"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:377",
+                "observableProperty": "border-block-start",
+                "part": "submit-bar-panel",
+                "fallbackPresent": true,
+                "fallbackValue": "transparent",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar-panel']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:382",
+                "observableProperty": "border",
+                "part": "submit-bar-panel",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar'][data-action-bar='floating'] [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:229",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-border-secondary",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:148",
+              "ui/patterns/customization/brand-studio/index.tsx:166",
+              "foundation/tokens/css/foundation/monochrome/index.css:64"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:382",
+                "observableProperty": "border",
+                "part": "submit-bar-panel",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-color-border)",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar'][data-action-bar='floating'] [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:231",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-error",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:106",
+              "foundation/tokens/css/foundation/themes/default.css:177",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:102",
+                "observableProperty": "background",
+                "part": "draft-status-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='error']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:241",
+                "observableProperty": "background",
+                "part": "section-nav-item-error-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav-item-error-dot']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:348",
+                "observableProperty": "background",
+                "part": "validation-issue-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'][data-severity='error']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:177",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-info",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:108",
+              "foundation/tokens/css/foundation/themes/default.css:179",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:281",
+                "observableProperty": "color",
+                "part": "draft-recovery-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:179",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-info-bg",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:109",
+              "foundation/tokens/css/foundation/themes/default.css:251"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:280",
+                "observableProperty": "background",
+                "part": "draft-recovery-icon",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-color-bg-tertiary)",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:251",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-primary",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:156",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+              "infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:261",
+                "observableProperty": "color",
+                "part": "template-card-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='template-card-icon']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:310",
+                "observableProperty": "color",
+                "part": "section-card-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-card-icon']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:156",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-success",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:102",
+              "foundation/tokens/css/foundation/themes/default.css:175",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:127"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:98",
+                "observableProperty": "background",
+                "part": "draft-status-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='saved']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:175",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-text-muted",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:145",
+              "ui/patterns/customization/brand-studio/index.tsx:163",
+              "foundation/tokens/css/foundation/monochrome/index.css:59"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:94",
+                "observableProperty": "background",
+                "part": "draft-status-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='saving']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:223",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-warning",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:104",
+              "foundation/tokens/css/foundation/themes/default.css:176",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:128"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:90",
+                "observableProperty": "background",
+                "part": "draft-status-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='unsaved']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:352",
+                "observableProperty": "background",
+                "part": "validation-issue-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'][data-severity='warning']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:176",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-elevation-2",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:801",
+              "infrastructure/compilers/kernel/runtime/brand-theme/index.ts:969",
+              "infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:384",
+                "observableProperty": "box-shadow",
+                "part": "submit-bar-panel",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar'][data-action-bar='floating'] [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:801",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-font-size-2xl",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:613"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:260",
+                "observableProperty": "font-size",
+                "part": "template-card-icon",
+                "fallbackPresent": true,
+                "fallbackValue": "1.25rem",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='template-card-icon']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:613",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-letter-spacing-wide",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/responsive/language-arabic.css:99",
+              "foundation/tokens/css/foundation/responsive/language-arabic-root.css:37",
+              "foundation/tokens/css/foundation/themes/default.css:641"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:120",
+                "observableProperty": "letter-spacing",
+                "part": "section-nav-label",
+                "fallbackPresent": true,
+                "fallbackValue": "0.025em",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav-label']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/responsive/language-arabic-root.css:37",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-motion-ease-out",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:75",
+                "observableProperty": "transition",
+                "part": "draft-status",
+                "fallbackPresent": true,
+                "fallbackValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:75",
+                "observableProperty": "transition",
+                "part": "draft-status",
+                "fallbackPresent": true,
+                "fallbackValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/animations/transitions.css:123",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-motion-fast",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/runtime/personality.css:925",
+              "foundation/tokens/css/foundation/animations/transitions.css:94",
+              "foundation/tokens/css/foundation/animations/transitions.css:398"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:75",
+                "observableProperty": "transition",
+                "part": "draft-status",
+                "fallbackPresent": true,
+                "fallbackValue": "120ms",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:75",
+                "observableProperty": "transition",
+                "part": "draft-status",
+                "fallbackPresent": true,
+                "fallbackValue": "120ms",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/runtime/personality.css:925",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-radius-lg",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:771"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:383",
+                "observableProperty": "border-radius",
+                "part": "submit-bar-panel",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar'][data-action-bar='floating'] [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:771",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-radius-sm",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:769"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:73",
+                "observableProperty": "border-radius",
+                "part": "draft-status",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:279",
+                "observableProperty": "border-radius",
+                "part": "draft-recovery-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:769",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-1",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:684",
+              "foundation/tokens/css/foundation/base/density.css:78"
+            ],
+            "readSiteCount": 10,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:49",
+                "observableProperty": "margin-block-end",
+                "part": "title",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='title-copy'] [data-part='title']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:71",
+                "observableProperty": "padding-block",
+                "part": "draft-status",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:124",
+                "observableProperty": "margin-block-end",
+                "part": "section-nav",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='dropdown']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:133",
+                "observableProperty": "margin-block-end",
+                "part": "section-nav",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:684",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-2",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:685",
+              "foundation/tokens/css/foundation/base/density.css:79"
+            ],
+            "readSiteCount": 6,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:83",
+                "observableProperty": "inline-size",
+                "part": "draft-status-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status-dot']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:84",
+                "observableProperty": "block-size",
+                "part": "draft-status-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status-dot']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:118",
+                "observableProperty": "margin-block-end",
+                "part": "section-nav-label",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav-label']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:237",
+                "observableProperty": "inline-size",
+                "part": "section-nav-item-error-dot",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav-item-error-dot']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:685",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-3",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:686",
+              "foundation/tokens/css/foundation/base/density.css:80"
+            ],
+            "readSiteCount": 6,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:72",
+                "observableProperty": "padding-inline",
+                "part": "draft-status",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-status']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:151",
+                "observableProperty": "margin-block-end",
+                "part": "section-nav-label",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] [data-part='section-nav-label']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:152",
+                "observableProperty": "padding-inline-start",
+                "part": "section-nav-label",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] [data-part='section-nav-label']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:251",
+                "observableProperty": "gap",
+                "part": "template-picker",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='template-picker']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:686",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-4",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:687",
+              "foundation/tokens/css/foundation/base/density.css:81"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:146",
+                "observableProperty": "inset-block-start",
+                "part": "section-nav",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:297",
+                "observableProperty": "scroll-margin-block-start",
+                "part": null,
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:375",
+                "observableProperty": "padding-inline",
+                "part": "submit-bar-panel",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:687",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-8",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:690",
+              "foundation/tokens/css/foundation/base/density.css:85"
+            ],
+            "readSiteCount": 2,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:273",
+                "observableProperty": "inline-size",
+                "part": "draft-recovery-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']"
+              },
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:274",
+                "observableProperty": "block-size",
+                "part": "draft-recovery-icon",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:690",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-surface-card",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:265"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:376",
+                "observableProperty": "background",
+                "part": "submit-bar-panel",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-color-bg-tertiary)",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-guided-draft-form [data-part='submit-bar-panel']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:265",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          }
+        ],
+        "hardcodedValues": {
+          "count": 9,
+          "colourBearing": [],
+          "sample": [
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:53",
+              "property": "min-inline-size",
+              "value": "120px",
+              "part": "progress"
+            },
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:143",
+              "property": "inline-size",
+              "value": "220px",
+              "part": "section-nav"
+            },
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:250",
+              "property": "grid-template-columns",
+              "value": "repeat(auto-fill, minmax(min(200px, 100%), 1fr))",
+              "part": "template-picker"
+            },
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:255",
+              "property": "grid-template-columns",
+              "value": "1fr",
+              "part": "template-picker"
+            },
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:286",
+              "property": "min-inline-size",
+              "value": "12ch",
+              "part": "draft-recovery-copy"
+            },
+            {
+              "at": "foundation/tokens/css/presentation/components/skin/guided-draft-form.css:449",
+              "property": "border",
+              "value": "1px solid CanvasText",
+              "part": "draft-status"
+            }
+          ],
+          "byProperty": {
+            "min-inline-size": 2,
+            "grid-template-columns": 2,
+            "inline-size": 1,
+            "border": 1,
+            "outline": 1,
+            "transition-duration": 1,
+            "animation-duration": 1
+          }
+        },
+        "atRuleContexts": {
+          "@media (pointer: coarse)": 2,
+          "@media (forced-colors: active)": 3,
+          "@media (prefers-reduced-motion: reduce)": 1
+        }
+      },
+      "classModifierTokensNotAdmitted": {
+        "tokens": [
+          "active",
+          "error",
+          "errors",
+          "warning"
+        ],
+        "reason": "RULING R-8 excludes state and modifier classes from part admission. These are measured and recorded so the evidence survives, but they are NOT parts and are NOT written into the enforced `states` or `variantAxes` arrays: R-5 classifies data-attribute tokens, and the owner has not extended it to BEM modifier classes. Under-claiming is the safe error."
+      },
+      "surfaceSkinBinding": {
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css",
+        "rootAnchor": ".ds-surface.ds-guided-draft-form",
+        "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
+        "partsAdmittedThisPass": [
+          "draft-recovery",
+          "section-card",
+          "section-nav-item",
+          "submit-primary",
+          "submit-secondary"
+        ]
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2033,46 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "color.mode",
+            "why": "PROHIBIDO el socket privado de modo (--_ds-<comp>-dark-*): un componente con su dark local queda en el modo equivocado cuando el tenant cambia backgroundMode. El modo es el UNICO eje sin sockets de familia: se refleja exclusivamente por los overlays de los canales compartidos."
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO FAM-18 (a-vs-b resuelto)": [
+            "Surface guided-draft-form: 0 canales propios, 0 consumo de familias compuestas, resto foundation - receta declarativa que compone, chrome propio minimo"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-secondary",
+            "--ds-color-bg-tertiary",
+            "--ds-color-border",
+            "--ds-color-border-secondary",
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-info-bg",
+            "--ds-color-primary",
+            "--ds-color-success",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning",
+            "--ds-elevation-2",
+            "--ds-motion-fast",
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-8",
+            "--ds-surface-card"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2080,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<page>-heading-family",
+            "prop": "familia de los titulares de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-heading-family"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-font-weight-semibold",
+            "--ds-letter-spacing-wide"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2112,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<page>-heading-family",
+            "prop": "familia de los titulares de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-heading-family"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2137,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<page>-heading-size",
+            "prop": "escala tipografica de titulares y metadatos de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-heading-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-font-size-2xl"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2168,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<page>-panel-radius",
+            "prop": "border-radius de los paneles que la receta compone (paginas de formulario)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2201,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<page>-control-radius",
+            "prop": "controles de accion de nivel pagina que la receta declara (acciones de header/toolbar propias)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-control-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2226,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<page>-density-factor",
+            "prop": "factor local que la receta compone sobre var(--ds-density-effective-scale) para todo su contenido",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-density-factor"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2251,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<page>-section-gap",
+            "prop": "aire entre secciones de la pagina via calc(base * var(--ds-rhythm-effective-scale)) - el caso central de la raiz",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-section-gap"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2276,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-motion-ease-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2295,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2308,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2321,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2334,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2347,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2360,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<page>-section-rule-style",
+            "prop": "reglas entre secciones y marcos de panel de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-guided-draft-form-section-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2385,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2403,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2416,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2455,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2468,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

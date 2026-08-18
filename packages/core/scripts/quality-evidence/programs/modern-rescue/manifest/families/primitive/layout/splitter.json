@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "280803dfe20ac73157982c2bd3a1e18e3231e6e7feca146e3b561556ab026b8b"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,264 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Splitter/index.ts",
+      "packages/core/src/ui/primitives/layout/Splitter/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Splitter/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/layout/Splitter/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Splitter/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/splitter.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/splitter.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+    ],
+    "stableParts": [
+      "root",
+      "panel",
+      "gutter"
+    ],
+    "states": [
+      "dragging",
+      "hover",
+      "focus-visible",
+      "collapsed"
+    ],
+    "variantAxes": [
+      "data-resizable",
+      "data-orientation"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "Gutters are real role=\"separator\" keyboard controls: Tab reaches them and arrow/Home/End resize. [at Splitter/engines/modern/index.tsx:17]",
+      "aria-valuenow reports the leading panel's percentage and must fall inside the advertised range. [at Splitter/engines/modern/index.tsx:172]",
+      "A fully collapsed panel is aria-hidden AND inert, so focus can never land on hidden content. [at Splitter/engines/modern/index.tsx:26]",
+      "Collapsing to zero is guarded against the state where a panel would remain visible while aria-valuenow reads 0. [at Splitter/engines/modern/index.tsx:199]",
+      "aria-keyshortcuts advertises the exact key set for the orientation ('ArrowUp ArrowDown Home End' vs 'ArrowLeft ArrowRight Home End'). [at Splitter/engines/modern/index.tsx:483-484]",
+      "Pointer-down handlers are attached only when the gutter is operable, and the pointer-up path clears the drag state rather than leaving data-dragging set. [at Splitter/engines/modern/index.tsx:486]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "layout",
+        "scoutArtifact": "mr-anatomy-layout.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 3,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"root\"",
+          "at": [
+            "Splitter/engines/modern/index.tsx:461"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"panel\"",
+          "at": [
+            "Splitter/engines/modern/index.tsx:207"
+          ]
+        },
+        {
+          "part": "gutter",
+          "anchorKind": "data-part",
+          "anchor": "'data-part': 'gutter'",
+          "at": [
+            "Splitter/engines/modern/index.tsx:489"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "dragging",
+          "at": [
+            "Splitter/engines/modern/index.tsx:297-299"
+          ],
+          "state": "dragging"
+        },
+        {
+          "token": "hover",
+          "at": [
+            "modern/skin/splitter.css:97"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "modern/skin/splitter.css:179-180"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "collapsed",
+          "at": [],
+          "state": "collapsed",
+          "citationsUnverified": [
+            "Splitter/engines/modern/index.tsx:185"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "resizable",
+          "at": [
+            "Splitter/engines/modern/index.tsx:492"
+          ]
+        },
+        {
+          "token": "data-orientation",
+          "at": [
+            "Splitter/engines/modern/index.tsx:462"
+          ]
+        }
+      ],
+      "engineDivergence": "Three engine siblings. PARTS: modern and rustic both expose root/panel/gutter; classic renders the AntD .ant-splitter tree with no data-part. STATES: modern distinguishes dragging/resizable/hover/focus-visible/collapsed; rustic distinguishes gutter :hover only (rustic/skin/splitter.css:38); classic distinguishes :hover only. READS: modern and rustic use DIFFERENT hover channel names (-bg-hover vs -hover-bg) so a tenant cannot set both with one value; classic reads --ds-splitter-transition, which neither of the other engines reads.",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "var": "--ds-splitter-gutter-bg",
+            "part": "gutter",
+            "at": "modern/skin/splitter.css:65",
+            "fallback": "var(--ds-material-panel-background, var(--ds-surface-panel))",
+            "lands": "background",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-transition-duration",
+            "part": "gutter",
+            "at": "modern/skin/splitter.css:78",
+            "fallback": "var(--ds-motion-fast)",
+            "lands": "transition-duration",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-transition-timing",
+            "part": "gutter",
+            "at": "modern/skin/splitter.css:79",
+            "fallback": "var(--ds-motion-ease-out)",
+            "lands": "transition-timing-function",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-bg-hover",
+            "part": "gutter:hover",
+            "at": "modern/skin/splitter.css:97",
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel)))",
+            "lands": "background",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-bg-dragging",
+            "part": "gutter[data-dragging='true']",
+            "at": "modern/skin/splitter.css:121",
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-material-panel-background, var(--ds-surface-panel)))",
+            "lands": "background",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-grip-color",
+            "part": "gutter grip",
+            "at": "modern/skin/splitter.css:140",
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent)",
+            "lands": "background",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-grip-length",
+            "part": "gutter grip",
+            "at": "modern/skin/splitter.css:147",
+            "fallback": "16px",
+            "lands": "block-size / inline-size",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-focus-ring-offset",
+            "part": "gutter",
+            "at": "modern/skin/splitter.css:180",
+            "fallback": "1px",
+            "lands": "outline-offset",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-focus-ring-width / -color",
+            "part": "gutter",
+            "at": "modern/skin/splitter.css:179",
+            "fallback": "--ds-focus-ring-color falls back to var(--ds-color-primary)",
+            "lands": "outline"
+          },
+          {
+            "var": "--ds-radius-full",
+            "part": "gutter grip",
+            "at": "modern/skin/splitter.css:139",
+            "fallback": null,
+            "lands": "border-radius"
+          },
+          {
+            "var": "--ds-splitter-gutter-size",
+            "part": "gutter",
+            "at": "Splitter/engines/rustic/index.tsx:76",
+            "fallback": "8px",
+            "lands": "inline-size / block-size",
+            "occurrences": 4,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-splitter-gutter-hover-bg",
+            "part": "gutter:hover (rustic)",
+            "at": "rustic/skin/splitter.css:38",
+            "fallback": "var(--ds-color-primary-500, #1890ff)",
+            "lands": "background",
+            "note": "UNDECLARED READ. Note the NAME SCHISM: the modern skin uses --ds-splitter-gutter-bg-hover, the rustic skin uses --ds-splitter-gutter-hover-bg. They are different channels."
+          },
+          {
+            "var": "--ds-color-neutral-200",
+            "part": "gutter (rustic)",
+            "at": "rustic/skin/splitter.css:32",
+            "fallback": "#e8e8e8",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-splitter-{gutter-bg,transition,gutter-hover-bg,gutter-size}",
+            "part": "classic .ant-splitter-bar tree",
+            "at": "runtime/engines/classic/theme.css:2186, 2187, 2191, 2195, 2199",
+            "fallback": "NONE on any of the four",
+            "lands": "background, transition, width, height"
+          }
+        ],
+        "censusTotals": {
+          "distinctDsNames": 21,
+          "readOccurrences": 38
+        }
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 9,
+        "sitesVerified": 8,
+        "sitesWithdrawn": 1,
+        "sitesNotProbed": 0,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +292,43 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-splitter-gutter-grip-length"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-primary",
+            "--ds-color-text-primary"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-surface-panel"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +336,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +355,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +374,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de splitter no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +393,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de splitter no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +416,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "layout no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +434,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-collapse-density-factor",
+            "prop": "padding de header/body de Collapse (unica familia layout con filas); Box/Flex/Grid no densifican",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-splitter-gutter-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +465,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de splitter no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +483,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-splitter-gutter-transition-duration",
+              "--_ds-splitter-gutter-transition-timing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +515,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de splitter no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +533,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-material-panel-background"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de splitter no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +558,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el layout no pinta chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "layout no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de layout"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +578,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +596,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "layout no crea capas propias: el orden z lo gobierna la escala derivada de layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +614,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-divider-style",
+            "prop": "estilo del Divider",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-splitter-gutter-focus-ring-offset"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +644,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +662,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +680,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +719,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria (flechas/grips son geometria propia, ver palette/chrome.anatomy)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +737,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -1,11 +1,14 @@
 /**
  * Runtime verification and ownership for tenant visual artifacts.
  *
- * This file is a compatibility facade over `admission` (snapshot, verification,
- * mount proof, SSR receipt minting, and authority resolution) and `retention`
- * (MutationObserver watch, document ledger, prepared claims, and diagnostics).
+ * This file is a compatibility facade over `foundation/admission` (snapshot,
+ * verification, mount proof, SSR receipt minting, and authority resolution) and
+ * `runtime/retention` (MutationObserver watch, document ledger, prepared
+ * claims, and diagnostics). Those are this owner's two layers, not two peers:
+ * retention consumes admission and never the reverse.
  *
- * @deprecated Prefer importing from `./admission` or `./retention` directly.
+ * @deprecated Prefer importing from `./foundation/admission` or
+ * `./runtime/retention` directly.
  */
 
 export {
@@ -23,7 +26,7 @@ export {
   auditTenantThemeArtifactSsrReceipt,
   appearanceMatchesArtifact,
   resolveVisualAuthority,
-} from "./admission";
+} from "./foundation/admission";
 export type {
   VisualAuthority,
   VisualAuthorityOrigin,
@@ -38,7 +41,7 @@ export type {
   TenantThemeArtifactSsrEmission,
   VisualAuthorityInput,
   VisualAuthorityResolution,
-} from "./admission";
+} from "./foundation/admission";
 
 export {
   retainMountedTenantThemeArtifact,
@@ -46,8 +49,8 @@ export {
   prepareMountedTenantThemeArtifactClaim,
   resetVisualAuthorityDiagnostics,
   reportVisualAuthorityConflict,
-} from "./retention";
+} from "./runtime/retention";
 export type {
   RetainedArtifactWatchHandle,
   PreparedTenantThemeArtifactClaim,
-} from "./retention";
+} from "./runtime/retention";

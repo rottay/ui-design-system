@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "b84d436a02eeecbf70867486fba196a650d906a7cd80488c528ab806ffde800a"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1021 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/presentation/pages/forms/form",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+    ],
+    "stableParts": [
+      "root",
+      "actions",
+      "description",
+      "error-banner",
+      "aside-card",
+      "error-card"
+    ],
+    "states": [
+      "disabled",
+      "error",
+      "focus"
+    ],
+    "variantAxes": [
+      "data-stacked",
+      "data-layout",
+      "data-size",
+      "data-kind"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "surface-full",
+        "scoutArtifact": "mr-anatomy-surface-full.json",
+        "scoutSelfGradedConfidence": null,
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 4,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:43",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:50",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:62"
+          ]
+        },
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "description",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "error-banner",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "aside-card",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-form__aside-card` bound by the root pair `.ds-surface.ds-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:30",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:61"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "error-card",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-form__error-card` bound by the root pair `.ds-surface.ds-form`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:23",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:56"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "error-list",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:397",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:451"
+          ]
+        },
+        {
+          "part": "feedback-icon",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:451"
+          ]
+        },
+        {
+          "part": "help-text",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:201"
+          ]
+        },
+        {
+          "part": "item",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:158",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:201",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:451"
+          ]
+        },
+        {
+          "part": "label-text",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:201",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:211",
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:214"
+          ]
+        },
+        {
+          "part": "required-mark",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:451"
+          ]
+        },
+        {
+          "part": "tooltip-icon",
+          "scoutAnchorClaim": "cssAddressedParts",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "foundation/tokens/css/runtime/engines/modern/skin/form.css:451"
+          ]
+        }
+      ],
+      "partCensus": {
+        "rootAnchor": {
+          "class": "ds-form",
+          "tierClass": "ds-surface",
+          "note": null
+        }
+      },
+      "stateAnchors": [
+        {
+          "token": "data-disabled=true",
+          "occurrences": 2,
+          "state": "disabled"
+        },
+        {
+          "token": "data-error=true",
+          "occurrences": 1,
+          "state": "error"
+        },
+        {
+          "token": ":focus",
+          "occurrences": 1,
+          "state": "focus"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-stacked=false",
+          "occurrences": 1
+        },
+        {
+          "token": "data-layout=vertical",
+          "occurrences": 1
+        },
+        {
+          "token": "data-layout=horizontal",
+          "occurrences": 1
+        },
+        {
+          "token": "data-layout=inline",
+          "occurrences": 2
+        },
+        {
+          "token": "data-size=sm",
+          "occurrences": 2
+        },
+        {
+          "token": "data-size=md",
+          "occurrences": 2
+        },
+        {
+          "token": "data-size=lg",
+          "occurrences": 2
+        },
+        {
+          "token": "data-kind=optional",
+          "occurrences": 1
+        }
+      ],
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelDeclarationsEmittedByThisFamily": [
+          {
+            "channel": "--_ds-form-control-height",
+            "declarationSites": [
+              "foundation/tokens/css/runtime/engines/modern/skin/form.css:95",
+              "foundation/tokens/css/runtime/engines/modern/skin/form.css:98",
+              "foundation/tokens/css/runtime/engines/modern/skin/form.css:101"
+            ]
+          },
+          {
+            "channel": "--ds-card-bordered-border-color",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/form-surface.css:57"
+            ]
+          }
+        ],
+        "dsVariableReadsInlineInTsx": [],
+        "dsVariableReadsViaCssSkin": [
+          {
+            "channel": "--_ds-form-field-label-color-focus",
+            "ownership": [
+              "OUT_OF_MANIFEST_SCOPE"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:202",
+                "observableProperty": "color",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-color-primary)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern:not([data-disabled='true']) .ds-form-item.ds-form-item--modern[data-part='item']:focus-within:not(:has([data-part='help-text'][data-error='true'])) [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-border-subtle",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/monochrome/index.css:65",
+              "foundation/tokens/css/foundation/themes/default.css:232",
+              "foundation/tokens/css/foundation/themes/default.css:2112"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:398",
+                "observableProperty": "border",
+                "part": "error-list",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'] .ds-form-error-list.ds-form-error-list--modern[data-part='error-list']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:232",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-error",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:106",
+              "foundation/tokens/css/foundation/themes/default.css:177",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:398",
+                "observableProperty": "border",
+                "part": "error-list",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'] .ds-form-error-list.ds-form-error-list--modern[data-part='error-list']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:177",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-primary",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:156",
+              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+              "infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:202",
+                "observableProperty": "color",
+                "part": "label-text",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern:not([data-disabled='true']) .ds-form-item.ds-form-item--modern[data-part='item']:focus-within:not(:has([data-part='help-text'][data-error='true'])) [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:156",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-text-primary",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:143",
+              "ui/patterns/customization/brand-studio/index.tsx:161",
+              "ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:45",
+                "observableProperty": "color",
+                "part": "root",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:217",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-density-effective-scale",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:656",
+              "foundation/tokens/css/foundation/base/density.css:69"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:57",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "1",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='vertical']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:65",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "1",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='horizontal']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:74",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "1",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='inline']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:656",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-disabled-opacity",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:80",
+                "observableProperty": "opacity",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "0.58",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-disabled='true']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-action-dock-reserved-space",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/form-surface.css:53",
+                "observableProperty": "padding-block-end",
+                "part": null,
+                "fallbackPresent": true,
+                "fallbackValue": "6rem",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-form.ds-form--sticky-actions"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-field-lg-label-font-size",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:218",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-input-label-font-size, 18px)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='lg'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-field-sm-label-font-size",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:212",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-input-label-font-size, 14px)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='sm'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-gap",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:1586"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:57",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-spacing-4)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='vertical']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:65",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-spacing-4)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='horizontal']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:74",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-spacing-3)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='inline']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:1586",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-label-font-size-lg",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:218",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-form-field-lg-label-font-size, var(--ds-input-label-font-size, 18px))",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='lg'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-label-font-size-md",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:215",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-input-label-font-size, 16px)",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='md'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-form-label-font-size-sm",
+            "ownership": [
+              "UNADJUDICATED_DEBT"
+            ],
+            "declaration": "UNDECLARED",
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:212",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-form-field-sm-label-font-size, var(--ds-input-label-font-size, 14px))",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='sm'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "LIVE",
+            "globalDefaultSite": null,
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "declaredInFullBundle": false,
+              "globalDefaultInTenantBundle": {
+                "rottay": false,
+                "bithire": false,
+                "evnto": false
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-input-label-font-size",
+            "ownership": [
+              "TENANT_REACHABLE",
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/runtime/engines/modern/skin/form-field.css:208",
+              "foundation/tokens/css/runtime/engines/modern/skin/form-field.css:223",
+              "foundation/tokens/css/presentation/components/input.css:207"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:212",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "14px",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='sm'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:215",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "16px",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='md'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:218",
+                "observableProperty": "font-size",
+                "part": "label-text",
+                "fallbackPresent": true,
+                "fallbackValue": "18px",
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-size='lg'] .ds-form-item.ds-form-item--modern [data-part='label-text']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/presentation/components/input.css:207",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-3",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:686",
+              "foundation/tokens/css/foundation/base/density.css:80"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:74",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='inline']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:686",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-4",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:687",
+              "foundation/tokens/css/foundation/base/density.css:81"
+            ],
+            "readSiteCount": 3,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/form-surface.css:63",
+                "observableProperty": "inset-block-start",
+                "part": null,
+                "fallbackPresent": true,
+                "fallbackValue": "1rem",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-form[data-stacked='false'] .ds-form__aside-card"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:57",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='vertical']"
+              },
+              {
+                "at": "foundation/tokens/css/runtime/engines/modern/skin/form.css:65",
+                "observableProperty": "gap",
+                "part": "root",
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-form.ds-form--modern[data-part='root'][data-layout='horizontal']"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:687",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          }
+        ],
+        "hardcodedValues": {
+          "count": 0,
+          "colourBearing": [],
+          "sample": [],
+          "byProperty": {}
+        },
+        "atRuleContexts": {
+          "@media (forced-colors: active)": 1
+        }
+      },
+      "classModifierTokensNotAdmitted": {
+        "tokens": [
+          "sticky-actions"
+        ],
+        "reason": "RULING R-8 excludes state and modifier classes from part admission. These are measured and recorded so the evidence survives, but they are NOT parts and are NOT written into the enforced `states` or `variantAxes` arrays: R-5 classifies data-attribute tokens, and the owner has not extended it to BEM modifier classes. Under-claiming is the safe error."
+      },
+      "surfaceSkinBinding": {
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+        "rootAnchor": ".ds-surface.ds-form",
+        "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
+        "partsAdmittedThisPass": [
+          "aside-card",
+          "error-card"
+        ]
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1049,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "color.mode",
+            "why": "PROHIBIDO el socket privado de modo (--_ds-<comp>-dark-*): un componente con su dark local queda en el modo equivocado cuando el tenant cambia backgroundMode. El modo es el UNICO eje sin sockets de familia: se refleja exclusivamente por los overlays de los canales compartidos."
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO FAM-18 (a-vs-b resuelto)": [
+            "Surface form: 0 canales propios, 1 consumo de familias compuestas, resto foundation - receta declarativa que compone, chrome propio minimo"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-error",
+            "--ds-spacing-4"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1076,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<page>-heading-family",
+            "prop": "familia de los titulares de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-heading-family"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1101,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<page>-heading-family",
+            "prop": "familia de los titulares de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-heading-family"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1126,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<page>-heading-size",
+            "prop": "escala tipografica de titulares y metadatos de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-heading-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1151,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<page>-panel-radius",
+            "prop": "border-radius de los paneles que la receta compone (paginas de formulario)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1176,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<page>-control-radius",
+            "prop": "controles de accion de nivel pagina que la receta declara (acciones de header/toolbar propias)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-control-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1201,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "CONSUMO, no propio (test de duplicado): namespace de otra familia - ownedBy primitive/inputs/form.json": [
+            "--ds-form-action-dock-reserved-space"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/inputs/form (pinta el form) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/inputs/form",
+            "channels": [
+              "--ds-form-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1236,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<page>-section-gap",
+            "prop": "aire entre secciones de la pagina via calc(base * var(--ds-rhythm-effective-scale)) - el caso central de la raiz",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-section-gap"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1261,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1274,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1287,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1300,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1313,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1326,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1339,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<page>-section-rule-style",
+            "prop": "reglas entre secciones y marcos de panel de la receta",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-form-section-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1364,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1382,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1395,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1434,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1447,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

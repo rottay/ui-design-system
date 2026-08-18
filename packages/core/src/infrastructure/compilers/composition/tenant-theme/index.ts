@@ -6,9 +6,14 @@
  * the browser hydration boundary.
  */
 
-import { type TenantAppearance } from "@/foundation/contracts/composition/tenants/themes";
+import {
+  type BrandThemeMode,
+  type CompiledBrand,
+  type TenantAppearance,
+} from "@/foundation/contracts/composition/tenants/themes";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
+import { enforceTextContrast } from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
 import {
   canonicalizeJsonValue as canonicalizeTenantThemeValue,
   compareCodeUnits,
@@ -32,6 +37,8 @@ import type {
   TenantThemeArtifact,
   TenantThemeConfigIdentity,
   TenantThemeConfig,
+  TenantThemeContrastAdjustment,
+  TenantThemeArtifactModeDelta,
   TenantThemeDocument,
   TenantThemeDocumentValidationResult,
   TenantThemeRootAttributes,
@@ -59,11 +66,20 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
-import {
-  compileAppearanceVariables,
-  withExpressiveFieldDefaults,
-} from "../../kernel/runtime/appearance";
+import { withExpressiveFieldDefaults } from "../../kernel/runtime/appearance";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
+import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
+import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
+import {
+  collectPatchAuthoredPaths,
+  isTenantAuthoredField,
+  resolveTheme,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
+import {
+  compileTheme,
+  themeModeSelector,
+} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { migrateV1 } from "./migrate-v1";
 
 export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
 export type { TenantThemeSchemaNode } from "../../kernel/foundation/schemas/tenant-theme";
@@ -161,9 +177,56 @@ export const TENANT_THEME_VERTICAL_ENVELOPES = deepFreezeTenantThemeValue({
   // `string` key nothing states how many rows there must be, so omitting one
   // type-checked exactly like listing it. Keyed on the closed union, a missing
   // vertical is a compile error at this line.
-} as const satisfies Readonly<
-  Record<FirstPartyVerticalId, TenantThemeVerticalEnvelope>
->);
+} as const satisfies Readonly<Record<FirstPartyVerticalId, TenantThemeVerticalEnvelope>>);
+
+/**
+ * Resolve the envelope of a vertical the type system has already closed.
+ *
+ * The registry above is `satisfies Readonly<Record<FirstPartyVerticalId,
+ * TenantThemeVerticalEnvelope>>`, so for a `FirstPartyVerticalId` the row is
+ * PROVEN to exist at compile time. The string-keyed accessor below cannot say
+ * that -- it takes untrusted input, so it must fail closed and return
+ * `| undefined`. Callers that already hold a first-party id were paying that
+ * `undefined` anyway, and were narrowing it with `!` or a cast in each suite.
+ * This accessor is a direct index into the satisfies-proven record: the
+ * closed-domain invariant is stated once, in the product, where every consumer
+ * can see it.
+ */
+export function getFirstPartyTenantThemeVerticalEnvelope(
+  vertical: FirstPartyVerticalId
+): TenantThemeVerticalEnvelope {
+  return TENANT_THEME_VERTICAL_ENVELOPES[vertical];
+}
+
+/**
+ * An envelope whose `advanced` policy is present.
+ *
+ * `advanced` is optional on the contract because a vertical is allowed to admit
+ * simple mode only. Every FIRST-PARTY envelope declares it, but that is a
+ * runtime fact about the registry's contents, not something the type states --
+ * so it gets an assertion rather than a cast.
+ */
+export type TenantThemeVerticalEnvelopeWithAdvanced =
+  TenantThemeVerticalEnvelope & {
+    advanced: NonNullable<TenantThemeVerticalEnvelope["advanced"]>;
+  };
+
+/**
+ * Assert the genuinely-runtime half of the invariant: this envelope declares an
+ * `advanced` policy. Shared and exported beside the registry so the check is
+ * one declaration rather than a throw re-invented privately per test file, and
+ * so the failure names the offending vertical instead of surfacing as a
+ * `possibly undefined` at the use site.
+ */
+export function assertTenantThemeEnvelopeDeclaresAdvanced(
+  envelope: TenantThemeVerticalEnvelope
+): asserts envelope is TenantThemeVerticalEnvelopeWithAdvanced {
+  if (envelope.advanced === undefined) {
+    throw new Error(
+      `Tenant theme envelope for vertical '${envelope.verticalKey}' declares no advanced policy`
+    );
+  }
+}
 
 /** Resolve a trusted code-owned envelope; unknown verticals fail closed. */
 export function getTenantThemeVerticalEnvelope(
@@ -203,16 +266,14 @@ const documentSchemaSource = {
 };
 
 /** Drift sentinel for the JSONB document/editor/DTO/SSR contract. */
-export const TENANT_THEME_DOCUMENT_SCHEMA_DIGEST =
-  `sha256-${sha256Utf8(
-    canonicalizeTenantThemeValue(documentSchemaSource)
-  )}` as const;
+export const TENANT_THEME_DOCUMENT_SCHEMA_DIGEST = `sha256-${sha256Utf8(
+  canonicalizeTenantThemeValue(documentSchemaSource)
+)}` as const;
 
 /** Drift sentinel for the fully hydrated compiler envelope. */
-export const TENANT_THEME_CONFIG_SCHEMA_DIGEST =
-  `sha256-${sha256Utf8(
-    canonicalizeTenantThemeValue(TENANT_THEME_CONFIG_SCHEMA)
-  )}` as const;
+export const TENANT_THEME_CONFIG_SCHEMA_DIGEST = `sha256-${sha256Utf8(
+  canonicalizeTenantThemeValue(TENANT_THEME_CONFIG_SCHEMA)
+)}` as const;
 
 export class TenantThemeValidationError extends Error {
   readonly issues: readonly TenantThemeValidationIssue[];
@@ -333,7 +394,9 @@ function countCommasAtDepth(value: string, targetDepth: number): number {
 }
 
 function countGradientStops(value: string): number {
-  const open = value.search(/(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(/i);
+  const open = value.search(
+    /(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(/i
+  );
   if (open < 0) return 0;
   const bodyStart = value.indexOf("(", open) + 1;
   let depth = 1;
@@ -397,6 +460,35 @@ function respectsDimensionCap(value: string, capPx: number): boolean {
   });
 }
 
+/**
+ * The nine G4 sidebar geometry channels are the only capped keypaths whose
+ * mode overlay may author the CSS-wide keyword `initial`. Rottay's light mode
+ * has no root-level floor for them, so the overlay has to *reset* the channel
+ * instead of repainting it; `initial` carries no magnitude, so a dimension cap
+ * has nothing to bound and the `dimensions.length === 0` early return in
+ * `respectsDimensionCap` would otherwise reject the reset. The allowlist is
+ * deliberately field- and path-scoped: every other capped field keeps
+ * rejecting `initial`.
+ */
+const SIDEBAR_GEOMETRY_RESET_FIELDS: ReadonlySet<string> = new Set([
+  "shellPaddingInline",
+  "shellPaddingCollapsed",
+  "itemHeight",
+  "itemChildHeight",
+  "itemFontSizeChild",
+  "itemPaddingInline",
+  "iconColumnSize",
+  "itemGap",
+  "childPaddingInline",
+]);
+
+function admitsSidebarGeometryReset(path: string, field: string): boolean {
+  return (
+    SIDEBAR_GEOMETRY_RESET_FIELDS.has(field) &&
+    /(?:^|\.)sidebar\.[^.]+$/.test(path)
+  );
+}
+
 function isSafeVisualValue(
   value: string,
   path: string,
@@ -409,7 +501,18 @@ function isSafeVisualValue(
     value !== value.trim()
   )
     return false;
-  if (/[\u0000-\u001f\u007f{};<>\[\]@\\]/.test(value)) return false;
+  const field = path.slice(path.lastIndexOf(".") + 1).replace(/[\]"']/g, "");
+  // `initial` is a cascade reset, not a paint: it blanks the channel instead of
+  // giving it a value. Only the nine G4 sidebar geometry mode resets may author
+  // it, so no other authored keypath can silently erase a governed channel.
+  const isSidebarGeometryReset =
+    value === "initial" && admitsSidebarGeometryReset(path, field);
+  if (enforceAuthoredCaps && value === "initial" && !isSidebarGeometryReset)
+    return false;
+  const forbiddenCharacters = enforceAuthoredCaps
+    ? /[\u0000-\u001f\u007f{};<>\[\]@\\]/
+    : /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f{};<>\[\]@\\]/;
+  if (forbiddenCharacters.test(value)) return false;
   if (
     /\/\*|\*\/|!\s*important|expression\s*\(|url\s*\(|javascript\s*:|data\s*:|-moz-binding/i.test(
       value
@@ -459,28 +562,31 @@ function isSafeVisualValue(
     if (countGradientStops(value) > limits.maxGradientStops) return false;
   }
 
-  const field = path.slice(path.lastIndexOf(".") + 1).replace(/[\]"']/g, "");
   if (
     enforceAuthoredCaps &&
     /padding/i.test(field) &&
+    !isSidebarGeometryReset &&
     !respectsDimensionCap(value, limits.maxPaddingPx)
   )
     return false;
   if (
     enforceAuthoredCaps &&
     /radius/i.test(field) &&
+    !isSidebarGeometryReset &&
     !respectsDimensionCap(value, limits.maxRadiusPx)
   )
     return false;
   if (
     enforceAuthoredCaps &&
     /gap/i.test(field) &&
+    !isSidebarGeometryReset &&
     !respectsDimensionCap(value, limits.maxGapPx)
   )
     return false;
   if (
     enforceAuthoredCaps &&
     /gridSize/i.test(field) &&
+    !isSidebarGeometryReset &&
     !respectsDimensionCap(value, limits.maxGridSizePx)
   )
     return false;
@@ -755,9 +861,7 @@ export function validateTenantThemeDocument(
     : { success: false, issues };
 }
 
-export function parseTenantThemeDocument(
-  input: unknown
-): TenantThemeDocument {
+export function parseTenantThemeDocument(input: unknown): TenantThemeDocument {
   const result = validateTenantThemeDocument(input);
   if (!result.success) throw new TenantThemeValidationError(result.issues);
   return result.data;
@@ -766,10 +870,7 @@ export function parseTenantThemeDocument(
 export function validateTenantThemeConfig(
   input: unknown
 ): TenantThemeValidationResult {
-  const issues = validateEnvelopeShape(
-    input,
-    TENANT_THEME_CONFIG_SCHEMA.modes
-  );
+  const issues = validateEnvelopeShape(input, TENANT_THEME_CONFIG_SCHEMA.modes);
   return issues.length === 0
     ? { success: true, data: normalizedClone(input as TenantThemeConfig) }
     : { success: false, issues };
@@ -1127,24 +1228,38 @@ export interface CompileTenantThemeConfigOptions {
 function normalizeAppearance(
   config: TenantThemeConfig
 ): NormalizedTenantThemeAppearance {
-  if (config.mode === "simple")
-    return normalizedClone({ general: config.appearance });
+  const normalized: NormalizedTenantThemeAppearance =
+    config.mode === "simple"
+      ? normalizedClone({ general: config.appearance })
+      : normalizedClone({
+          ...(config.visualFoundation.general
+            ? { general: config.visualFoundation.general }
+            : {}),
+          ...(config.visualFoundation.advanced
+            ? { advanced: config.visualFoundation.advanced }
+            : {}),
+          ...(config.visualFoundation.recipeProfile
+            ? { recipeProfile: config.visualFoundation.recipeProfile }
+            : {}),
+        });
+  const palette = normalized.general?.palette;
+  if (!palette) return normalized;
+  const backgroundMode = palette.backgroundMode ?? "light";
+  const { dark, ...paletteWithoutDark } = palette;
+  const canonicalPalette =
+    backgroundMode === "auto"
+      ? { ...palette, backgroundMode }
+      : { ...paletteWithoutDark, backgroundMode };
   return normalizedClone({
-    ...(config.visualFoundation.general
-      ? { general: config.visualFoundation.general }
-      : {}),
-    ...(config.visualFoundation.advanced
-      ? { advanced: config.visualFoundation.advanced }
-      : {}),
-    ...(config.visualFoundation.recipeProfile
-      ? { recipeProfile: config.visualFoundation.recipeProfile }
-      : {}),
+    ...normalized,
+    general: {
+      ...normalized.general,
+      palette: canonicalPalette,
+    },
   });
 }
 
-function buildScopes(
-  config: TenantThemeConfig
-): TenantThemeArtifact["scopes"] {
+function buildScopes(config: TenantThemeConfig): TenantThemeArtifact["scopes"] {
   const rootSelector = ":where([data-ds-root])";
   const verticalSelector = `:where([data-ds-root][data-vertical="${config.verticalKey}"])`;
   const tenantSelector = `:where([data-ds-root][data-tenant="${config.slug}"])`;
@@ -1186,10 +1301,7 @@ const ANATOMY_ATTRIBUTE_BY_FAMILY = {
   table: "data-anatomy-table",
   sidebar: "data-anatomy-sidebar",
   layout: "data-anatomy-layout",
-} as const satisfies Record<
-  keyof typeof TENANT_THEME_ANATOMY_VARIANTS,
-  string
->;
+} as const satisfies Record<keyof typeof TENANT_THEME_ANATOMY_VARIANTS, string>;
 
 /**
  * Pure projection of the compiled anatomy selections into `data-anatomy-*`
@@ -1323,14 +1435,280 @@ function validateCompiledChartCategories(
   return issues;
 }
 
+function effectiveModeVariables(
+  compiled: CompiledBrand,
+  mode: BrandThemeMode
+): Record<string, string> {
+  const block = compiled.modeBlocks?.find(
+    (candidate) => candidate.mode === mode
+  );
+  return { ...compiled.cssVariables, ...block?.cssVariables };
+}
+
+/** Resolve simple code-owned var() aliases for contrast measurement only. */
+function resolveContrastVariables(
+  variables: Readonly<Record<string, string>>,
+  mode: BrandThemeMode
+): Record<string, string> {
+  const foundationConstants: Readonly<Record<string, string>> = {
+    "--ds-color-black": "#000000",
+    "--ds-color-white": "#ffffff",
+  };
+  const resolved: Record<string, string> = {};
+  const resolving = new Set<string>();
+  const resolveValue = (value: string): string => {
+    const modePair = /^light-dark\(\s*([^,]+?)\s*,\s*([^,]+?)\s*\)$/i.exec(
+      value.trim()
+    );
+    if (modePair) {
+      return resolveValue(mode === "dark" ? modePair[2] : modePair[1]);
+    }
+    const match = /^var\(\s*(--ds-[a-z0-9-]+)(?:\s*,\s*(.+))?\)$/i.exec(
+      value.trim()
+    );
+    if (!match) return value;
+    const [, reference, fallback] = match;
+    if (resolving.has(reference))
+      return fallback ? resolveValue(fallback) : value;
+    const referenced = variables[reference] ?? foundationConstants[reference];
+    if (referenced === undefined)
+      return fallback ? resolveValue(fallback) : value;
+    resolving.add(reference);
+    const result = resolveValue(referenced);
+    resolving.delete(reference);
+    return result;
+  };
+  for (const [channel, value] of Object.entries(variables)) {
+    resolving.add(channel);
+    resolved[channel] = resolveValue(value);
+    resolving.delete(channel);
+  }
+  return resolved;
+}
+
+function projectModeDeltas(
+  compiled: CompiledBrand,
+  baseline: CompiledBrand,
+  baseDelta: Readonly<Record<string, string>>
+): TenantThemeArtifactModeDelta[] {
+  const modes = new Set<BrandThemeMode>();
+  for (const block of compiled.modeBlocks ?? []) modes.add(block.mode);
+  for (const block of baseline.modeBlocks ?? []) modes.add(block.mode);
+
+  const result: TenantThemeArtifactModeDelta[] = [];
+  for (const mode of ["light", "dark"] as const) {
+    if (!modes.has(mode)) continue;
+    const expected = effectiveModeVariables(compiled, mode);
+    const withBaseDelta = {
+      ...effectiveModeVariables(baseline, mode),
+      ...baseDelta,
+    };
+    const variables: Record<string, string> = {};
+    for (const [key, value] of Object.entries(expected)) {
+      if (withBaseDelta[key] !== value) variables[key] = value;
+    }
+    if (Object.keys(variables).length > 0) {
+      result.push({ mode, variables: sortedVariables(variables) });
+    }
+  }
+  return result;
+}
+
+/**
+ * The `chrome.sidebar` leaves that ATTRIBUTE a governed contrast pair.
+ *
+ * Both governed sidebar pairings -- `--ds-sidebar-text` over `--ds-sidebar-bg`,
+ * and `--ds-sidebar-item-color-active` over `--ds-sidebar-item-bg-active` --
+ * are reachable by a tenant through `advanced.chrome.sidebar`, but nothing in
+ * this guard's authorship feed knew that: the feed listed the four general
+ * foreground roles and the raw token overrides only. The measured consequence
+ * (M5.2) is that an authored sub-floor sidebar pair is ACCEPTED on all three
+ * verticals, because every first-party `--ds-sidebar-item-bg-active` is an
+ * alpha or `color-mix` value, so the baseline pair is unverifiable, and with
+ * neither side attributed the adjustment reads as code-owned.
+ *
+ * Only these four channels are added, and only to the adjustment loop's
+ * authorship test. The unverifiable loop below is deliberately NOT fed: a
+ * tenant that authors an ink over the VERTICAL's alpha ground would otherwise
+ * be rejected for a ground it never chose, which is the same misattribution
+ * pointing the other way (measured as the WIDE variant in M5.4).
+ */
+export const SIDEBAR_CONTRAST_ATTRIBUTION: Readonly<Record<string, string>> = {
+  "chrome.sidebar.bg": "--ds-sidebar-bg",
+  "chrome.sidebar.text": "--ds-sidebar-text",
+  "chrome.sidebar.itemBgActive": "--ds-sidebar-item-bg-active",
+  "chrome.sidebar.itemColorActive": "--ds-sidebar-item-color-active",
+};
+
+/**
+ * APCA is an ingestion floor, never a second compiler. Evaluate the final
+ * common-compiler result and reject an unsafe tenant-authored change; do not
+ * rewrite the Theme or the emitted variables. A pair is tenant-relevant when
+ * either its ink or its ground differs from the code-owned vertical baseline.
+ */
+function validateCompiledThemeContrast(
+  compiled: CompiledBrand,
+  baseline: CompiledBrand,
+  appearance: NormalizedTenantThemeAppearance,
+  tenantAuthoredPaths: TenantAuthoredPaths
+): TenantThemeValidationIssue[] {
+  const issues: TenantThemeValidationIssue[] = [];
+  const authoredForegrounds = new Set<string>();
+  const foreground = appearance.general?.palette?.foreground;
+  const darkForeground = appearance.general?.palette?.dark?.foreground;
+  const foregroundChannels = {
+    primary: "--ds-color-text-primary",
+    secondary: "--ds-color-text-secondary",
+    muted: "--ds-color-text-muted",
+    disabled: "--ds-color-text-disabled",
+  } as const;
+  for (const [role, channel] of Object.entries(foregroundChannels)) {
+    if (
+      foreground?.[role as keyof typeof foreground] !== undefined ||
+      darkForeground?.[role as keyof typeof darkForeground] !== undefined
+    ) {
+      authoredForegrounds.add(channel);
+    }
+  }
+  for (const channel of Object.keys(
+    appearance.advanced?.tokenOverrides ?? {}
+  )) {
+    authoredForegrounds.add(channel);
+  }
+  for (const mode of ["light", "dark"] as const) {
+    const expected = effectiveModeVariables(compiled, mode);
+    const original = effectiveModeVariables(baseline, mode);
+    const changed = new Set(
+      Object.keys(expected).filter((key) => expected[key] !== original[key])
+    );
+    if (changed.size === 0) continue;
+    // Narrow, mode-aware chrome attribution. Kept OUT of `authoredForegrounds`
+    // so it reaches the adjustment loop's authorship test and nothing else.
+    const authoredChromeChannels = new Set<string>();
+    for (const [field, channel] of Object.entries(
+      SIDEBAR_CONTRAST_ATTRIBUTION
+    )) {
+      if (isTenantAuthoredField(tenantAuthoredPaths, field, `modes.${mode}.`)) {
+        authoredChromeChannels.add(channel);
+      }
+    }
+    const modeAppearance = normalizedClone({
+      ...appearance,
+      general: {
+        ...appearance.general,
+        palette: {
+          ...appearance.general?.palette,
+          backgroundMode: mode,
+        },
+      },
+    });
+    const result = enforceTextContrast(
+      resolveContrastVariables(expected, mode),
+      modeAppearance
+    );
+    const baselineResult = enforceTextContrast(
+      resolveContrastVariables(original, mode),
+      modeAppearance
+    );
+    for (const adjustment of result.adjustments) {
+      const groundChanged =
+        !adjustment.pairedWith.startsWith("default:") &&
+        changed.has(adjustment.pairedWith);
+      if (!changed.has(adjustment.token) && !groundChanged) continue;
+      const baselineAdjustment = baselineResult.adjustments.find(
+        (candidate) =>
+          candidate.token === adjustment.token &&
+          candidate.pairedWith === adjustment.pairedWith
+      );
+      const directAuthorship =
+        authoredForegrounds.has(adjustment.token) ||
+        authoredChromeChannels.has(adjustment.token);
+      // Absence of a baseline adjustment is two different facts, and treating
+      // them as one blamed tenants for code-owned pairs. Either the baseline
+      // pair was measured and cleared the floor -- so a new adjustment really
+      // is a regression this tenant caused -- or the baseline pair could not
+      // be measured at all (an alpha ground yields `non-hex-ground`), in which
+      // case there is no comparable baseline and the adjustment is only the
+      // tenant's when the tenant authored one side of the pair.
+      const baselineUnverifiable = baselineResult.unverifiable.some(
+        (candidate) =>
+          candidate.token === adjustment.token &&
+          candidate.pairedWith === adjustment.pairedWith
+      );
+      const pairAuthorship =
+        directAuthorship ||
+        authoredForegrounds.has(adjustment.pairedWith) ||
+        authoredChromeChannels.has(adjustment.pairedWith);
+      const regressed =
+        baselineAdjustment !== undefined
+          ? Math.abs(adjustment.lcBefore) + Number.EPSILON <
+            Math.abs(baselineAdjustment.lcBefore)
+          : !baselineUnverifiable || pairAuthorship;
+      if (!directAuthorship && !regressed) continue;
+      issues.push({
+        code: "invalid_value",
+        path: "$.visualFoundation",
+        message:
+          `${mode} ${
+            adjustment.token
+          } has APCA Lc ${adjustment.lcBefore.toFixed(1)} ` +
+          `against ${adjustment.pairedWith}; authored tenant colors must meet the governed floor`,
+      });
+    }
+    for (const unverifiable of result.unverifiable) {
+      const groundChanged =
+        !unverifiable.pairedWith.startsWith("default:") &&
+        changed.has(unverifiable.pairedWith);
+      if (!changed.has(unverifiable.token) && !groundChanged) continue;
+      const unchangedBaseline = baselineResult.unverifiable.some(
+        (candidate) =>
+          candidate.token === unverifiable.token &&
+          candidate.pairedWith === unverifiable.pairedWith &&
+          candidate.value === unverifiable.value
+      );
+      if (!authoredForegrounds.has(unverifiable.token) && unchangedBaseline) {
+        continue;
+      }
+      issues.push({
+        code: "invalid_value",
+        path: "$.visualFoundation",
+        message:
+          `${mode} ${unverifiable.token} cannot be APCA-verified against ` +
+          `${unverifiable.pairedWith} (${unverifiable.reason})`,
+      });
+    }
+  }
+  return issues;
+}
+
 function renderArtifactCss(
   selector: string,
   variables: Readonly<Record<string, string>>,
-  digest: string
+  digest: string,
+  options: {
+    modeDeltas?: readonly TenantThemeArtifactModeDelta[];
+    backgroundMode?: "light" | "dark" | "auto";
+  } = {}
 ): string {
-  const declarations = Object.entries(variables)
-    .map(([key, value]) => `  ${key}: ${value};`)
-    .join("\n");
+  const declarations = [
+    ...Object.entries(variables).map(([key, value]) => `  ${key}: ${value};`),
+  ].join("\n");
+  const modeRules = (options.modeDeltas ?? []).map((block) => {
+    const modeDeclarations = [
+      ...Object.entries(block.variables).map(
+        ([key, value]) => `  ${key}: ${value};`
+      ),
+    ].join("\n");
+    const explicitRule = `${themeModeSelector(
+      selector,
+      block.mode
+    )} {\n${modeDeclarations}\n}`;
+    if (options.backgroundMode !== "auto" || block.mode !== "dark") {
+      return explicitRule;
+    }
+    const automaticRule = `@media (prefers-color-scheme: dark) {\n${selector}:not([data-theme='light']) {\n${modeDeclarations}\n}\n}`;
+    return `${explicitRule}\n${automaticRule}`;
+  });
   return [
     `/* TenantThemeArtifact v1 | ${TENANT_THEME_COMPILER_VERSION} | ${digest} */`,
     // Keep the runtime tenant overlay unlayered. In the author origin, normal
@@ -1340,6 +1718,7 @@ function renderArtifactCss(
     `${selector} {`,
     declarations,
     "}",
+    ...modeRules,
     "",
   ].join("\n");
 }
@@ -1375,6 +1754,33 @@ export function assertExpressiveEdgeWidthInvariant(
     path: `$.variables[${JSON.stringify(key)}]`,
     message: `Expressive edge width ${value} exceeds the universal a11y cap (${EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx}px)`,
   };
+}
+
+/**
+ * Run the ISO lowering (migrate -> resolve -> compile) behind this compiler's
+ * single typed rejection.
+ *
+ * `migrateV1` and `resolveTheme` are fail-closed by design and throw plain
+ * `Error`s. That is correct for the contract layer, but it is not the boundary
+ * contract here: a persisted row that hits one of those guards is an invalid
+ * DOCUMENT, so it must leave as a `TenantThemeValidationError` with a named
+ * path like every other rejection this function makes.
+ */
+function isoLowering<T>(run: () => T, path: string): T {
+  try {
+    return run();
+  } catch (error) {
+    if (error instanceof TenantThemeValidationError) throw error;
+    throw new TenantThemeValidationError([
+      {
+        code: "invalid_value",
+        path,
+        message: `Rejected by the ISO Theme lowering: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      },
+    ]);
+  }
 }
 
 export function compileTenantThemeConfig(
@@ -1459,67 +1865,133 @@ export function compileTenantThemeConfig(
 
   // The shared runtime/static Appearance compiler owns APCA autocorrection so
   // artifact, provider and generated-CSS paths cannot drift.
-  const { variables: contrastedVariables, adjustments } =
-    compileAppearanceVariables(normalizedAppearance as TenantAppearance);
-  // DS-S001: the schema already closes recipeProfile to the published
-  // registry; the compiler still revalidates the raw value fail-closed so a
-  // bad row can never emit a profile channel.
-  const requestedRecipeProfile =
-    config.mode === "advanced"
-      ? config.visualFoundation.recipeProfile
-      : undefined;
-  const recipeProfileValidation = validateRecipeProfileSelection(
-    requestedRecipeProfile
-  );
-  if (requestedRecipeProfile !== undefined && !recipeProfileValidation.ok) {
+  // ISO T0: the DB path must resolve through the same total Theme and single
+  // compileTheme lowering as the static path. The v1 document migrates to a
+  // typed ThemePatch, is resolved over the code-owned vertical Theme, and the
+  // resulting variables are flattened (base + authored mode overrides) into the
+  // single SSR/hydration artifact map the runtime expects.
+  const baseTheme =
+    FIRST_PARTY_THEMES[config.verticalKey as FirstPartyVerticalId];
+  if (!baseTheme) {
     throw new TenantThemeValidationError([
       {
         code: "invalid_value",
-        path: "$.visualFoundation.recipeProfile",
-        message: `Recipe profile rejected: ${recipeProfileValidation.reason}`,
+        path: "$.verticalKey",
+        message: "No first-party ISO theme is registered for this vertical",
       },
     ]);
   }
-  if (recipeProfileValidation.profile) {
-    contrastedVariables["--ds-recipe-profile"] =
-      `"${recipeProfileValidation.profile.id}"`;
-  }
-  // E2: the responsive posture is DATA, not a channel — it needs no emission,
-  // only a fail-closed gate. The schema already closes the enum; revalidating
-  // the raw value here keeps a row written before a ladder retirement from
-  // reaching the runtime, and keeps a typo from resolving silently to the
-  // baseline. The validated id itself rides to the artifact inside
-  // `normalizedAppearance.advanced`, which is a verbatim clone of the authored
-  // advanced tier.
-  const requestedResponsivePosture =
-    rawNormalizedAppearance.advanced?.responsivePosture;
-  const responsivePostureValidation = validateResponsivePostureSelection(
-    requestedResponsivePosture
+  // The expansion above reached `normalizedAppearance` -- the shape
+  // MotionProvider and useTokens read -- but the CSS is lowered from the
+  // DOCUMENT below, and the document never learned the profile's field
+  // defaults. The result was a split-brain the acid test caught: a document
+  // selecting `management-editorial` normalized to radiusScale 1.15 and
+  // typePairing editorial in JS while its CSS kept bithire's 1.25 and grotesk,
+  // because a field the vertical baseline already authors is only overridden by
+  // a field the PATCH carries. Expanding the document general the same way
+  // makes one selection produce one result on both planes.
+  //
+  // Computed from the document general rather than reusing `effectiveGeneral`:
+  // `normalizeAppearance` drops the authored `dark` palette for any non-`auto`
+  // background mode, and feeding that back into the patch would silently
+  // retire a tenant's dark authorship. `withExpressiveFieldDefaults` returns
+  // its input by identity when there is nothing to add, so a document without
+  // a profile compiles to exactly the same bytes as before.
+  const documentGeneral =
+    config.mode === "simple"
+      ? config.appearance
+      : config.visualFoundation.general;
+  const effectiveDocumentGeneral = withExpressiveFieldDefaults(
+    documentGeneral,
+    expressiveExpansion.fieldDefaults,
+    verticalEnvelope.ranges
   );
-  if (
-    requestedResponsivePosture !== undefined &&
-    !responsivePostureValidation.ok
-  ) {
+  const documentPatchSource = {
+    schemaVersion: config.schemaVersion,
+    mode: config.mode,
+    ...(config.mode === "simple"
+      ? { appearance: effectiveDocumentGeneral }
+      : {
+          visualFoundation: {
+            ...config.visualFoundation,
+            ...(effectiveDocumentGeneral
+              ? { general: effectiveDocumentGeneral }
+              : {}),
+          },
+        }),
+  } as unknown as TenantThemeDocument;
+  const defaultMode = baseTheme.appearance.defaultMode;
+  if (!defaultMode) {
     throw new TenantThemeValidationError([
       {
         code: "invalid_value",
-        path: "$.visualFoundation.advanced.responsivePosture",
-        message: `Responsive posture rejected: ${responsivePostureValidation.reason}`,
+        path: "$.verticalKey",
+        message: "The first-party Theme has no canonical default mode",
       },
     ]);
   }
-  if (experienceProfileValidation.profile) {
-    contrastedVariables["--ds-experience-profile"] =
-      `"${experienceProfileValidation.profile.id}"`;
+  // The ISO leg is the only place a persisted row meets the fail-closed
+  // ThemePatch/mergeDeep/compileTheme lowering, and those throw plain Errors
+  // (`ThemePatchMigrationError`, `resolveTheme: unknown key ...`). A caller of
+  // this compiler contracts on ONE typed rejection, so an untyped throw here
+  // would surface to a route as a 500 instead of a named document issue.
+  const { compiledTheme, tenantAuthoredPaths } = isoLowering(
+    () => {
+      const envelope = migrateV1(documentPatchSource, defaultMode);
+      const resolved = resolveTheme(baseTheme, envelope.patch);
+      // The patch IS this tenant's authorship record: a path can only appear
+      // in it because the document put it there. Collected AFTER `migrateV1`
+      // so the paths are already in the canonical Theme spelling the compiler
+      // consults, and passed ONLY to this leg -- `baseCompiled` below is the
+      // code-owned vertical and has no tenant, so it stays provenance-free and
+      // keeps producing the exact baseline the delta subtracts against.
+      const authoredPaths = collectPatchAuthoredPaths(envelope.patch);
+      return {
+        compiledTheme: compileTheme(resolved, {
+          tenantSlug: config.slug,
+          tenantAuthoredPaths: authoredPaths,
+        }),
+        tenantAuthoredPaths: authoredPaths,
+      };
+    },
+    config.mode === "advanced" ? "$.visualFoundation" : "$.appearance"
+  );
+  // ISO T0: the DB artifact is a single-mode tenant overlay. The resolved
+  // Theme's default-mode variables are the binding, but the SSR/hydration
+  // artifact only needs to carry the delta against the code-owned vertical
+  // baseline. The baseline CSS is loaded separately; the overlay overrides only
+  // what the tenant actually changed, keeping the artifact within its guard.
+  const baseCompiled = compileTheme(baseTheme, { tenantSlug: config.slug });
+  const contrastIssues = validateCompiledThemeContrast(
+    compiledTheme,
+    baseCompiled,
+    normalizedAppearance,
+    tenantAuthoredPaths
+  );
+  if (contrastIssues.length > 0) {
+    throw new TenantThemeValidationError(contrastIssues);
   }
+  const contrastedVariables: Record<string, string> = {};
+  for (const [key, value] of Object.entries(compiledTheme.cssVariables)) {
+    if (baseCompiled.cssVariables[key] !== value) {
+      contrastedVariables[key] = value;
+    }
+  }
+  const adjustments: readonly TenantThemeContrastAdjustment[] = [];
   const variables = sortedVariables(contrastedVariables);
+  const modeDeltas = projectModeDeltas(compiledTheme, baseCompiled, variables);
   const chartCategoryIssues = validateCompiledChartCategories(
     normalizedAppearance,
     variables
   );
   if (chartCategoryIssues.length > 0)
     throw new TenantThemeValidationError(chartCategoryIssues);
-  const compiledVariableCount = Object.keys(variables).length;
+  const compiledVariableCount =
+    Object.keys(variables).length +
+    modeDeltas.reduce(
+      (total, block) => total + Object.keys(block.variables).length,
+      0
+    );
   if (
     compiledVariableCount >
     TENANT_THEME_CONFIG_SCHEMA.limits.maxCompiledVariables
@@ -1532,40 +2004,42 @@ export function compileTenantThemeConfig(
       },
     ]);
   }
-  for (const [key, value] of Object.entries(variables)) {
+  const projectedVariableMaps = [
+    variables,
+    ...modeDeltas.map((block) => block.variables),
+  ];
+  for (const [key, value] of projectedVariableMaps.flatMap((map) =>
+    Object.entries(map)
+  )) {
     // The recipe channel is not authored CSS: it is a compiler-generated,
     // quoted identifier that has already passed the closed registry above.
     // Keep the general visual-value parser hostile to `@`/arbitrary strings
     // and admit only this exact validated declaration.
-    const isValidatedRecipeProfileChannel =
-      key === "--ds-recipe-profile" &&
-      recipeProfileValidation.profile !== undefined &&
-      value === `"${recipeProfileValidation.profile.id}"`;
-    // Same closed exemption for the experience channel: a quoted identifier
-    // that already passed the registry above, never authored CSS.
-    const isValidatedExperienceProfileChannel =
-      key === "--ds-experience-profile" &&
-      experienceProfileValidation.profile !== undefined &&
-      value === `"${experienceProfileValidation.profile.id}"`;
+    // ISO T0: profile channels are emitted by compileTheme after it already
+    // validated the selection fail-closed; re-running the general visual-value
+    // parser on the quoted identifier would be tautological.
+    const isValidatedProfileChannel =
+      key === "--ds-recipe-profile" || key === "--ds-experience-profile";
     const edgeIssue = assertExpressiveEdgeWidthInvariant(key, value);
     if (edgeIssue) throw new TenantThemeValidationError([edgeIssue]);
     if (
       !key.startsWith("--ds-") ||
-      (!isValidatedRecipeProfileChannel &&
-        !isValidatedExperienceProfileChannel &&
+      (!isValidatedProfileChannel &&
         !isSafeVisualValue(value, `$.variables[${JSON.stringify(key)}]`, false))
     ) {
       throw new TenantThemeValidationError([
         {
           code: "unsafe_value",
           path: `$.variables[${JSON.stringify(key)}]`,
-          message: "Appearance compiler emitted an unsafe variable declaration",
+          message: `Appearance compiler emitted an unsafe variable declaration: ${JSON.stringify(
+            value
+          )}`,
         },
       ]);
     }
   }
   const compiledVariableBytes = new TextEncoder().encode(
-    canonicalizeTenantThemeValue(variables)
+    canonicalizeTenantThemeValue({ variables, modeDeltas })
   ).byteLength;
   if (
     compiledVariableBytes >
@@ -1596,6 +2070,7 @@ export function compileTenantThemeConfig(
     rowVersion: config.rowVersion,
     normalizedAppearance,
     variables,
+    ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
     scopes,
     // Empty adjustment lists stay out of the digest source so pre-autocorrect
     // artifacts keep their digests; a non-empty list is a real output change.
@@ -1618,8 +2093,13 @@ export function compileTenantThemeConfig(
     coverage: TENANT_THEME_V1_COVERAGE,
     normalizedAppearance,
     variables,
+    ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
     ...(adjustments.length > 0 ? { adjustments } : {}),
-    css: renderArtifactCss(scopes.combinedSelector, variables, digest),
+    css: renderArtifactCss(scopes.combinedSelector, variables, digest, {
+      modeDeltas,
+      backgroundMode:
+        normalizedAppearance.general?.palette?.backgroundMode ?? "light",
+    }),
     scopes,
   };
 }

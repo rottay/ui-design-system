@@ -17,13 +17,13 @@
  * radius personality instead of sitting on frozen literals (scale 1 renders
  * byte-identical to the historical 4px/6px/8px).
  *
- * LAYOUT (P2 second pass): all static geometry that used to ride inline styles
- * in the compound TSX — column stacks, row grids, gaps, paddings, block sizes
+ * LAYOUT (P2 second pass): all static geometry that used to ride the compound
+ * TSX `style` props — column stacks, row grids, gaps, paddings, block sizes
  * and the varied line widths — lives here now, so tenant density retunes every
  * placeholder from the same channels (spacing steps are density-scaled; the
  * Card body padding rides the bare --ds-card-body-padding channel, mirroring
- * the real Card's density). Inline style keeps only TRUE instance geometry:
- * the contract dimension props (SkeletonText width, SkeletonParagraph
+ * the real Card's density). What inline style still keeps is TRUE instance
+ * geometry: the contract dimension props (SkeletonText width, SkeletonParagraph
  * lastLineWidth, Avatar size, Button size presets, the Form label variety
  * formula, the Table track template) and the pinned animation reference.
  *

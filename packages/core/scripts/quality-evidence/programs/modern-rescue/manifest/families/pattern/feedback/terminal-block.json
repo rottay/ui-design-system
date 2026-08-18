@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "990adcebb1df47db74023433e9007298486eb4ae38533923f233d9ac4f167bf4"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,376 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+      "packages/core/src/ui/patterns/feedback/terminal-block/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css"
+    ],
+    "stableParts": [
+      "body",
+      "line",
+      "prompt",
+      "root",
+      "scanlines",
+      "title-bar"
+    ],
     "states": [],
+    "variantAxes": [],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 6,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:132"
+          ]
+        },
+        {
+          "part": "line",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:142"
+          ]
+        },
+        {
+          "part": "prompt",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:156"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:125"
+          ]
+        },
+        {
+          "part": "scanlines",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:126"
+          ]
+        },
+        {
+          "part": "title-bar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:128"
+          ]
+        }
+      ],
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-color-mono-1000",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 17,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "root",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-surface-ink",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 18,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-hairline",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 19,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-terminal-block-radius",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 22,
+            "fallback": true,
+            "fallbackValue": "0",
+            "cssProperty": "border-radius",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-mono",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 23,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "root",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-texture-backdrop-opacity",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 29,
+            "fallback": true,
+            "fallbackValue": "0.03",
+            "cssProperty": "opacity",
+            "propertyGroup": "state-affordance",
+            "part": "scanlines",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-texture-backdrop-ink",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 32,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-image",
+            "propertyGroup": "surface",
+            "part": "scanlines",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-texture-backdrop-ink",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-image",
+            "propertyGroup": "surface",
+            "part": "scanlines",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 45,
+            "fallback": true,
+            "fallbackValue": "0.75rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title-bar",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-mono-700",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title-bar",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-hairline",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "title-bar",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-terminal-block-body-padding",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "1rem 1.25rem",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "body",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "0.875rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "body",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-mono-600",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "prompt",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-terminal-block-char-cadence",
+            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "22ms (JS literal, index.tsx:14)",
+            "cssProperty": "getComputedStyle(node).getPropertyValue",
+            "propertyGroup": "motion",
+            "part": "root",
+            "site": "js-computed-style-read",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--_ds-terminal-block-line-gap",
+            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "220ms (JS literal, index.tsx:15)",
+            "cssProperty": "getComputedStyle(node).getPropertyValue",
+            "propertyGroup": "motion",
+            "part": "root",
+            "site": "js-computed-style-read",
+            "declaration": "UNDECLARED_ANYWHERE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 19,
+            "literal": "1px solid",
+            "cssProperty": "border"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 22,
+            "literal": "0",
+            "cssProperty": "border-radius (fallback position)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 29,
+            "literal": "0.03",
+            "cssProperty": "opacity (fallback position)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 35,
+            "literal": "3px",
+            "cssProperty": "repeating-linear-gradient stop"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 42,
+            "literal": "0.5rem",
+            "cssProperty": "padding-block"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 43,
+            "literal": "1rem",
+            "cssProperty": "padding-inline"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 45,
+            "literal": "0.75rem",
+            "cssProperty": "font-size (fallback position)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 46,
+            "literal": "0.08em",
+            "cssProperty": "letter-spacing"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 52,
+            "literal": "1px solid",
+            "cssProperty": "border-block-end"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 59,
+            "literal": "0.375rem",
+            "cssProperty": "gap"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 61,
+            "literal": "1rem 1.25rem",
+            "cssProperty": "padding (fallback position)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 62,
+            "literal": "0.875rem",
+            "cssProperty": "font-size (fallback position)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "line": 63,
+            "literal": "1.6",
+            "cssProperty": "line-height"
+          },
+          {
+            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "line": 14,
+            "literal": "22",
+            "cssProperty": "CHAR_INTERVAL_MS (JS motion fallback)"
+          },
+          {
+            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "line": 15,
+            "literal": "220",
+            "cssProperty": "LINE_GAP_MS (JS motion fallback)"
+          }
+        ],
+        "censusRowCount": 16
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +404,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-hairline",
+            "--ds-color-mono-1000",
+            "--ds-color-mono-600",
+            "--ds-color-mono-700",
+            "--ds-color-surface-ink"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +431,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +451,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (pattern/feedback/empty-state). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/feedback/empty-state",
+            "channels": [
+              "--ds-empty-state-title-family"
+            ]
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +486,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-terminal-block-font-size",
+            "prop": "tamano del texto (la FAMILIA mono del terminal es fija; el tamano si escala)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-terminal-block-font-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +518,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +537,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el CTA del empty-state es un Button primitivo: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +557,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +577,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +597,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-terminal-block-char-cadence: la coreografia obedece al dial",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +617,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "adaptive-overlay flota; empty-state y terminal-block componen en flujo, sin plano propio",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +637,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "backdrop de overlay: de los pocos lugares sancionados para glass",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de terminal-block no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-texture-backdrop-ink",
+            "--ds-texture-backdrop-opacity"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +663,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "feedback no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "communication/feedback no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +683,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +703,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "regiones pintadas por familia; precedente vivo --_ds-terminal-block-body-*",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack; los flotantes internos usan los canales --ds-z-* compartidos"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +723,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-terminal-block-border-style",
+            "prop": "borde del panel de cada familia",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-terminal-block-border-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +749,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +767,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +787,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +826,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "empty-state sigue la postura; terminal-block son caracteres y queda fuera",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +846,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

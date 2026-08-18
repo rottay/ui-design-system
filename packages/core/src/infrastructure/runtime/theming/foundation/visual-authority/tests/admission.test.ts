@@ -5,7 +5,7 @@ import type { TenantThemeArtifact } from '@/foundation/contracts/composition/ten
 import {
   resolveVisualAuthority as resolveFromAdmission,
   verifyTenantThemeArtifactV1,
-} from '../admission';
+} from '../foundation/admission';
 import {
   resolveVisualAuthority as resolveFromFacade,
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
@@ -13,8 +13,8 @@ import {
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
 } from '..';
 import { resolveVisualAuthority as resolveFromPublic } from '@/entrypoints/public/runtime/visual-authority';
-import * as retention from '../retention';
-import type { RuntimeVisualPayloadCensus } from '../admission';
+import * as retention from '../runtime/retention';
+import type { RuntimeVisualPayloadCensus } from '../foundation/admission';
 
 /**
  * A hand-authored artifact fixture, NOT produced by `compileTenantThemeConfig`.

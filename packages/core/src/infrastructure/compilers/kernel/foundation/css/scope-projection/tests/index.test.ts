@@ -99,25 +99,28 @@ describe('first-party static dual-scope projection', () => {
     expect(projected).not.toContain(`[data-vertical='bithire'][data-tenant='bithire']`);
   });
 
-  it('projects both the compiler block and declared extension without cross-tenant leakage', () => {
+  it('projects the sole compiled block without widening it to another tenant', () => {
+    // The artifact has ONE authored source, so there is one projected block to
+    // count. `--ds-color-text-primary` is supplied because the renderer fails
+    // closed without it: the document-root ink is artifact-format semantics and
+    // has no literal fallback to fall back to.
     const artifact = renderVerticalArtifact({
       tenantSlug: 'bithire',
       verticalKey: 'bithire',
       authoredThemePath: 'foundation/tokens/ts/presentation/brand-themes/bithire/index.ts',
       displayName: 'BitHire',
       selector: BITHIRE_LEGACY,
-      compiledCssVariables: { '--ds-color-primary': '#123456' },
-      extensionCss: [
-        `${BITHIRE_LEGACY}[data-theme='dark'] { --ds-color-text: white; }`,
-        `html[data-tenant='evnto'] { --foreign: untouched; }`,
-      ].join('\n'),
+      compiledCssVariables: {
+        '--ds-color-primary': '#123456',
+        '--ds-color-text-primary': '#0b0b0b',
+      },
       regenerateCommand: 'pnpm build:vertical-css',
     });
 
-    expect(artifact.split(BITHIRE_ROOT)).toHaveLength(3);
-    expect(artifact).toContain(`${BITHIRE_DUAL} {\n  --ds-color-primary: #123456;`);
-    expect(artifact).toContain(`${BITHIRE_DUAL}[data-theme='dark']`);
-    expect(artifact).toContain(`html[data-tenant='evnto'] { --foreign: untouched; }`);
+    expect(artifact.split(BITHIRE_ROOT)).toHaveLength(2);
+    expect(artifact).toContain(
+      `${BITHIRE_DUAL} {\n  color: var(--ds-color-text-primary);\n  --ds-color-primary: #123456;`,
+    );
     expect(artifact).not.toContain("data-vertical='evnto'");
   });
 

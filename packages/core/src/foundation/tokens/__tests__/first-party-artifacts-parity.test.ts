@@ -47,8 +47,14 @@ function collectDeclaredValues(css: string): Map<string, Set<string>> {
   return declared;
 }
 
-function normalizeCssValue(value: string): string {
-  return value.trim().replace(/\s+/g, ' ');
+/**
+ * Whitespace-insensitive comparison, for the same reason the drain table is:
+ * the extension hand-spaced `color-mix( in srgb, ...` and the compiler emits
+ * the canonical spacing. The value is what has to survive, not the authoring
+ * whitespace.
+ */
+function bareCssValue(value: string | undefined): string {
+  return (value ?? '').replace(/\s+/g, '');
 }
 
 describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
@@ -84,37 +90,47 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
   },
 );
 
-describe('bithire declared extension authority', () => {
-  const extension = readFileSync(
-    resolve(ARTIFACTS_DIR, 'bithire/_source/extension.css'),
-    'utf8',
-  );
-  const declared = collectDeclaredValues(extension);
-  // Channels the compiler does not emit, so the declared extension is their
-  // only author and its value is the contract. Channels the compiler DOES emit
-  // are no longer listed here: R1-P made the BrandTheme their single author,
-  // and artifact-provenance-gate.mjs enforces that for every channel at once
-  // rather than for a hand-kept list of nine.
-  const expectedValues: Record<string, string> = {
+// PARTIALLY EXCISED (SEV-2). This describe opened by reading the deleted
+// `artifacts/bithire/_source/extension.css` into `declared`, so it threw at
+// collection. Three assertions over `declared` are gone: "declares no custom
+// property at all", the `declared.has(property)` half of the C1-retirement
+// rows, and the `declared.get(property)` shadow check. All three were forms of
+// "the extension declares nothing", which
+// `scripts/first-party-single-author-gate.mjs` law G2 now makes unconditional.
+// Every COMPILER-side assertion survives untouched below — those are the ones
+// that pin where the four channels went, and they never read a file.
+describe('bithire channels the retired extension used to own', () => {
+  const compiledBithire = compileBrandTheme({
+    brandTheme: bithireBrandTheme,
+    tenantSlug: 'bithire',
+  });
+  // MASS C3-BITHIRE-ALL drained the file, so "does not shadow" is no longer a
+  // per-channel question: the extension declares nothing and can shadow
+  // nothing. What is worth pinning is where the four channels it used to own
+  // alone went. Three moved to the BrandTheme with their value intact; the
+  // fourth left with the C1 roster (app-only, zero productive Core readers)
+  // and now has no author anywhere.
+  const migratedToCompiler: Record<string, string> = {
     '--ds-surface-icon-bg':
       'color-mix( in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card) )',
     '--ds-premium-card-bg': 'var(--ds-surface-card)',
     '--ds-premium-card-sheen': 'none',
-    '--ds-shell-breadcrumb-bg':
-      'color-mix( in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card) )',
   };
+  const retiredWithC1 = ['--ds-shell-breadcrumb-bg'];
 
-  it.each(Object.entries(expectedValues))(
-    'does not shadow the compiled %s contract with stale paint',
+  it.each(Object.entries(migratedToCompiler))(
+    'compiles %s with the value the extension used to declare',
     (property, expected) => {
-      const values = [...(declared.get(property) ?? [])].map(normalizeCssValue);
-      expect(values.length).toBeGreaterThan(0);
-      expect(new Set(values)).toEqual(new Set([normalizeCssValue(expected)]));
+      expect(bareCssValue(compiledBithire.cssVariables[property])).toBe(bareCssValue(expected));
     },
   );
 
+  it.each(retiredWithC1)('leaves %s unauthored after the C1 retirement', (property) => {
+    expect(compiledBithire.cssVariables[property]).toBeUndefined();
+  });
+
   it('serves the previously extension-shadowed channels from the compiled block', () => {
-    const compiled = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const compiled = compiledBithire;
     // `--ds-workspace-shell-shadow` is the reason this list shrank: the
     // extension declared `0 1px 2px rgba(20,40,59,.06)` inside the CLEAR MODE
     // GUARD, so the compiled elevation never rendered.
@@ -123,8 +139,6 @@ describe('bithire declared extension authority', () => {
     // shadows nothing in the shipped state.
     for (const property of ['--ds-table-sheen', '--ds-workspace-shell-shadow', '--ds-command-glow']) {
       expect(compiled.cssVariables[property]).toBeDefined();
-      const shadowed = [...(declared.get(property) ?? [])];
-      expect(shadowed, `${property} is re-declared by the extension`).toEqual([]);
     }
   });
 });

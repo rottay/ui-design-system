@@ -13,64 +13,64 @@
  * Advanced produces fine-grained overrides (chrome, raw token overrides).
  */
 
-import { withArabicSafeFallback } from '@/foundation/kernel/typography';
+import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import type {
   TenantAppearance,
   TenantAppearanceGeneral,
   TenantAppearanceAdvanced,
-} from '@/foundation/contracts/composition/tenants/themes';
+} from "@/foundation/contracts/composition/tenants/themes";
 import {
   TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_RHYTHM_FACTORS,
   TENANT_THEME_RHYTHM_SCALE_BOUNDS,
-  TENANT_THEME_TYPE_SCALE_BOUNDS,
-} from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   RAMP_STEPS,
   deriveOklchRamp,
   type RampSurface,
-} from '@/foundation/kernel/color/oklch/ramp';
-import { deriveChartSeriesPalette } from '@/foundation/kernel/color/oklch/chart-series';
+} from "@/foundation/kernel/color/oklch/ramp";
+import { deriveChartSeriesPalette } from "@/foundation/kernel/color/oklch/chart-series";
 import {
   enforceTextContrast,
   type TextContrastResult,
-} from '@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect';
-import { contrastRatio } from '@/foundation/kernel/color/contrast';
+} from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
+import { contrastRatio } from "@/foundation/kernel/color/contrast";
 import {
   ON_TONE_ROLES,
   deriveReadableInk,
   measureReadableInk,
   onToneChannel,
-} from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
-import { deriveInteractionFloor } from '@/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor';
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import { deriveInteractionFloor } from "@/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor";
 import {
   clampDensityIntoExpressiveEnvelope,
   clampIntoExpressiveEnvelope,
   resolveExpressiveAxes,
   sanitizeExpressiveOverrides,
-} from '@/foundation/tokens/ts/presentation/expressive-profiles';
+} from "@/foundation/tokens/ts/presentation/expressive-profiles";
 import {
   expandExpressiveProfiles,
   type ExpressiveFieldDefaultSet,
-} from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
-import { appearancePostureToVariables } from '../../foundation/css/appearance-posture';
+} from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { appearancePostureToVariables } from "../../foundation/css/appearance-posture";
 import {
   clampValue,
   isHexColor,
   isValidCssColor,
   normalizeHexColor,
-} from '../../foundation/css/color-math';
+} from "../../foundation/css/color-math";
 import {
   chromeToVariables,
+  sidebarToneToVariables,
   type ChromeVariableContext,
-} from '../../foundation/css/chrome-variables';
+} from "../../foundation/css/chrome-variables";
 import {
   deriveBorderSubtle,
   deriveGroundLadder,
   derivePaletteSemantics,
   type GroundLadder,
-} from '../../foundation/css/color-math/palette-derivations';
-import { TENANT_THEME_CONFIG_SCHEMA } from '../../foundation/schemas/tenant-theme';
+} from "../../foundation/css/color-math/palette-derivations";
+import { TENANT_THEME_CONFIG_SCHEMA } from "../../foundation/schemas/tenant-theme";
 
 /** Raw tokenOverrides entry cap; the schema limits object is the sole authority. */
 const MAX_TOKEN_OVERRIDES: number =
@@ -79,19 +79,27 @@ const MAX_TOKEN_OVERRIDES: number =
 // ── Validation helpers ──────────────────────────────────────
 
 /** Only set a CSS color var if the value is a valid CSS color. */
-function setColor(vars: Record<string, string>, key: string, value: string | undefined): void {
+function setColor(
+  vars: Record<string, string>,
+  key: string,
+  value: string | undefined
+): void {
   if (value && isValidCssColor(value)) vars[key] = value;
 }
 
 /** Set any CSS var (non-color values like fonts, padding, etc). */
-function setVar(vars: Record<string, string>, key: string, value: string | number | undefined | null): void {
+function setVar(
+  vars: Record<string, string>,
+  key: string,
+  value: string | number | undefined | null
+): void {
   if (value != null) vars[key] = String(value);
 }
 
 function resolveModeColor(
   light: string | undefined,
   dark: string | undefined,
-  mode: "light" | "dark" | "auto" | undefined,
+  mode: "light" | "dark" | "auto" | undefined
 ): string | undefined {
   if (mode === "dark") return dark ?? light;
   if (mode === "auto" && light && dark) return `light-dark(${light}, ${dark})`;
@@ -105,7 +113,7 @@ function setResolvedColor(
   key: string,
   light: string | undefined,
   dark: string | undefined,
-  mode: "light" | "dark" | "auto" | undefined,
+  mode: "light" | "dark" | "auto" | undefined
 ): void {
   const value = resolveModeColor(light, dark, mode);
   if (value) setVar(vars, key, value);
@@ -120,7 +128,7 @@ function setResolvedColor(
  * cannot drift from this math.
  */
 function deriveAppearanceOnToneInks(
-  compiledBaseVariables: Readonly<Record<string, string>>,
+  compiledBaseVariables: Readonly<Record<string, string>>
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const role of ON_TONE_ROLES) {
@@ -146,12 +154,15 @@ function deriveAppearanceOnToneInks(
 function mergeDerivedModeHalves(
   light: Record<string, string>,
   dark: Record<string, string> | undefined,
-  requireBothHalves: readonly string[] = [],
+  requireBothHalves: readonly string[] = []
 ): Record<string, string> {
   if (!dark) return light;
   const merged: Record<string, string> = {};
   const pairedOnly = new Set(requireBothHalves);
-  for (const channel of new Set([...Object.keys(light), ...Object.keys(dark)])) {
+  for (const channel of new Set([
+    ...Object.keys(light),
+    ...Object.keys(dark),
+  ])) {
     const lightValue = light[channel];
     const darkValue = dark[channel];
     if (lightValue && darkValue) {
@@ -182,30 +193,37 @@ function mergeDerivedModeHalves(
  * palettes without changing this deterministic v2 artifact contract.
  */
 const APPEARANCE_RAMP_GROUNDS: Record<RampSurface, string> = {
-  light: '#FFFFFF',
-  dark: '#0C0C0E',
+  light: "#FFFFFF",
+  dark: "#0C0C0E",
 };
 
-const FUNCTIONAL_RAMP_SEED_WEIGHTS = [8, 16, 28, 42, 64, 100, 84, 66, 48, 28] as const;
+const FUNCTIONAL_RAMP_SEED_WEIGHTS = [
+  8, 16, 28, 42, 64, 100, 84, 66, 48, 28,
+] as const;
 
 function deriveFunctionalOklchRamp(
   seed: string,
   surface: RampSurface,
-  ground: string,
+  ground: string
 ): Record<number, string> {
-  const far = surface === 'dark' ? APPEARANCE_RAMP_GROUNDS.light : '#161616';
+  const far = surface === "dark" ? APPEARANCE_RAMP_GROUNDS.light : "#161616";
 
-  return Object.fromEntries(RAMP_STEPS.map((step, index) => {
-    const seedWeight = FUNCTIONAL_RAMP_SEED_WEIGHTS[index];
-    const mixTarget = index <= 5 ? ground : far;
-    return [step, seedWeight === 100
-      ? seed
-      : `color-mix(in oklch, ${seed} ${seedWeight}%, ${mixTarget})`];
-  }));
+  return Object.fromEntries(
+    RAMP_STEPS.map((step, index) => {
+      const seedWeight = FUNCTIONAL_RAMP_SEED_WEIGHTS[index];
+      const mixTarget = index <= 5 ? ground : far;
+      return [
+        step,
+        seedWeight === 100
+          ? seed
+          : `color-mix(in oklch, ${seed} ${seedWeight}%, ${mixTarget})`,
+      ];
+    })
+  );
 }
 
 type TenantAppearanceDarkSeeds = NonNullable<
-  NonNullable<TenantAppearanceGeneral['palette']>['dark']
+  NonNullable<TenantAppearanceGeneral["palette"]>["dark"]
 >;
 
 /**
@@ -221,7 +239,7 @@ type TenantAppearanceDarkSeeds = NonNullable<
  * mean this compiler still recognises a name nothing can write.
  */
 function resolveAppearanceDarkGround(
-  darkSeeds: TenantAppearanceDarkSeeds | undefined,
+  darkSeeds: TenantAppearanceDarkSeeds | undefined
 ): string {
   const authored = darkSeeds?.background;
   if (authored && isHexColor(authored)) return normalizeHexColor(authored);
@@ -230,11 +248,12 @@ function resolveAppearanceDarkGround(
 
 function resolveAppearanceRampGround(
   surface: RampSurface,
-  compiledBaseVariables: Readonly<Record<string, string>>,
+  compiledBaseVariables: Readonly<Record<string, string>>
 ): string {
-  const candidates = surface === 'dark'
-    ? ['--ds-color-bg-primary']
-    : ['--ds-color-bg-primary', '--ds-color-background', '--ds-color-bg'];
+  const candidates =
+    surface === "dark"
+      ? ["--ds-color-bg-primary"]
+      : ["--ds-color-bg-primary", "--ds-color-background", "--ds-color-bg"];
   for (const name of candidates) {
     const candidate = compiledBaseVariables[name];
     if (candidate && isHexColor(candidate)) return normalizeHexColor(candidate);
@@ -254,27 +273,37 @@ function resolveAppearanceRampGround(
  */
 export function deriveAppearanceColorRamps(
   general: TenantAppearanceGeneral,
-  compiledBaseVariables: Readonly<Record<string, string>> = appearanceGeneralToVariables(general),
+  compiledBaseVariables: Readonly<
+    Record<string, string>
+  > = appearanceGeneralToVariables(general)
 ): Record<string, string> {
   const palette = general.palette;
-  const surface: RampSurface = palette?.backgroundMode === 'dark' ? 'dark' : 'light';
+  const surface: RampSurface =
+    palette?.backgroundMode === "dark" ? "dark" : "light";
   const ground = resolveAppearanceRampGround(surface, compiledBaseVariables);
   const vars: Record<string, string> = {};
 
   // Dual emission is only honest under `auto` with authored dark seeds; a
   // single-mode tenant keeps today's deterministic single-value ramps.
-  const darkSeeds = palette?.backgroundMode === 'auto' ? palette.dark : undefined;
+  const darkSeeds =
+    palette?.backgroundMode === "auto" ? palette.dark : undefined;
   const dualActive =
-    darkSeeds !== undefined
-    && Object.values(darkSeeds).some(
-      (seed) => typeof seed === 'string' && isValidCssColor(seed),
+    darkSeeds !== undefined &&
+    Object.values(darkSeeds).some(
+      (seed) => typeof seed === "string" && isValidCssColor(seed)
     );
   const darkGround = dualActive
     ? resolveAppearanceDarkGround(darkSeeds)
     : APPEARANCE_RAMP_GROUNDS.dark;
 
   for (const role of [
-    'primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info',
+    "primary",
+    "secondary",
+    "accent",
+    "success",
+    "warning",
+    "error",
+    "info",
   ] as const) {
     const seed = compiledBaseVariables[`--ds-color-${role}`];
     if (!seed || !isValidCssColor(seed)) continue;
@@ -282,20 +311,25 @@ export function deriveAppearanceColorRamps(
       ? deriveOklchRamp(normalizeHexColor(seed), ground, surface)
       : deriveFunctionalOklchRamp(seed, surface, ground);
     if (!dualActive) {
-      for (const step of RAMP_STEPS) vars[`--ds-color-${role}-${step}`] = ramp[step];
+      for (const step of RAMP_STEPS)
+        vars[`--ds-color-${role}-${step}`] = ramp[step];
       continue;
     }
     const authoredDarkSeed =
-      role === 'primary' || role === 'secondary' || role === 'accent'
+      role === "primary" || role === "secondary" || role === "accent"
         ? darkSeeds?.[role]
         : undefined;
     const darkSeed =
-      authoredDarkSeed && isValidCssColor(authoredDarkSeed) ? authoredDarkSeed : seed;
+      authoredDarkSeed && isValidCssColor(authoredDarkSeed)
+        ? authoredDarkSeed
+        : seed;
     const darkRamp = isHexColor(darkSeed)
-      ? deriveOklchRamp(normalizeHexColor(darkSeed), darkGround, 'dark')
-      : deriveFunctionalOklchRamp(darkSeed, 'dark', darkGround);
+      ? deriveOklchRamp(normalizeHexColor(darkSeed), darkGround, "dark")
+      : deriveFunctionalOklchRamp(darkSeed, "dark", darkGround);
     for (const step of RAMP_STEPS) {
-      vars[`--ds-color-${role}-${step}`] = `light-dark(${ramp[step]}, ${darkRamp[step]})`;
+      vars[
+        `--ds-color-${role}-${step}`
+      ] = `light-dark(${ramp[step]}, ${darkRamp[step]})`;
     }
     if (darkSeed !== seed) {
       vars[`--ds-color-${role}`] = `light-dark(${seed}, ${darkSeed})`;
@@ -303,7 +337,7 @@ export function deriveAppearanceColorRamps(
   }
 
   // Consumed by the theme bridge; the artifact block stays custom-properties-only.
-  if (dualActive) vars['--ds-color-scheme'] = 'light dark';
+  if (dualActive) vars["--ds-color-scheme"] = "light dark";
 
   return vars;
 }
@@ -338,69 +372,69 @@ export function appearanceGeneralToVariables(
       vars,
       mergeDerivedModeHalves(
         derivePaletteSemantics(
-          mode === 'dark'
+          mode === "dark"
             ? darkSeeds
-            : { primary: p.primary, background: p.background },
+            : { primary: p.primary, background: p.background }
         ),
-        mode === 'auto' ? derivePaletteSemantics(darkSeeds) : undefined,
-      ),
+        mode === "auto" ? derivePaletteSemantics(darkSeeds) : undefined
+      )
     );
 
     setColor(
       vars,
-      '--ds-color-primary',
-      mode === 'dark' ? p.dark?.primary ?? p.primary : p.primary,
+      "--ds-color-primary",
+      mode === "dark" ? p.dark?.primary ?? p.primary : p.primary
     );
     setColor(
       vars,
-      '--ds-color-secondary',
-      mode === 'dark' ? p.dark?.secondary ?? p.secondary : p.secondary,
+      "--ds-color-secondary",
+      mode === "dark" ? p.dark?.secondary ?? p.secondary : p.secondary
     );
     setColor(
       vars,
-      '--ds-color-accent',
-      mode === 'dark' ? p.dark?.accent ?? p.accent : p.accent,
+      "--ds-color-accent",
+      mode === "dark" ? p.dark?.accent ?? p.accent : p.accent
     );
     const background = resolveModeColor(p.background, p.dark?.background, mode);
     if (background) {
-      setVar(vars, '--ds-color-bg-primary', background);
-      setVar(vars, '--ds-color-bg', background);
-      setVar(vars, '--ds-color-background', background);
+      setVar(vars, "--ds-color-bg-primary", background);
+      setVar(vars, "--ds-color-bg", background);
+      setVar(vars, "--ds-color-background", background);
     }
     setResolvedColor(
       vars,
-      '--ds-color-text-primary',
+      "--ds-color-text-primary",
       p.foreground?.primary,
       p.dark?.foreground?.primary,
-      mode,
+      mode
     );
     setResolvedColor(
       vars,
-      '--ds-color-text-secondary',
+      "--ds-color-text-secondary",
       p.foreground?.secondary,
       p.dark?.foreground?.secondary,
-      mode,
+      mode
     );
     setResolvedColor(
       vars,
-      '--ds-color-text-muted',
+      "--ds-color-text-muted",
       p.foreground?.muted,
       p.dark?.foreground?.muted,
-      mode,
+      mode
     );
     setResolvedColor(
       vars,
-      '--ds-color-text-disabled',
+      "--ds-color-text-disabled",
       p.foreground?.disabled,
       p.dark?.foreground?.disabled,
-      mode,
+      mode
     );
     setResolvedColor(
       vars,
-      '--ds-color-border-primary',
+      "--ds-color-border-primary",
       p.border?.primary,
       p.dark?.border?.primary,
-      mode,
+      mode
     );
     // `--ds-color-border` is the unqualified name of that same separator, and
     // the one components actually read. The static contract's `borderColor`
@@ -408,17 +442,17 @@ export function appearanceGeneralToVariables(
     // cell that declares both, so the two share one source here as well.
     setResolvedColor(
       vars,
-      '--ds-color-border',
+      "--ds-color-border",
       p.border?.primary,
       p.dark?.border?.primary,
-      mode,
+      mode
     );
     setResolvedColor(
       vars,
-      '--ds-color-border-secondary',
+      "--ds-color-border-secondary",
       p.border?.secondary,
       p.dark?.border?.secondary,
-      mode,
+      mode
     );
 
     // Surface family + primary ink derivation. Without these channels the
@@ -429,22 +463,25 @@ export function appearanceGeneralToVariables(
     // default theme's own elevation distances; light canvas: tenant-tinted
     // near-white, the static artifacts' pure-white card grammar) and still
     // loses to Advanced tokenOverrides, which merge after General.
-    const resolvedPrimary = mode === 'dark' ? p.dark?.primary ?? p.primary : p.primary;
-    const measuredPrimaryInk = (seed: string | undefined): Record<string, string> => {
+    const resolvedPrimary =
+      mode === "dark" ? p.dark?.primary ?? p.primary : p.primary;
+    const measuredPrimaryInk = (
+      seed: string | undefined
+    ): Record<string, string> => {
       if (!seed) return {};
       const measurement = measureReadableInk(seed);
-      return measurement.status === 'measured' && measurement.meetsAA
-        ? { '--ds-color-text-on-primary': measurement.ink }
+      return measurement.status === "measured" && measurement.meetsAA
+        ? { "--ds-color-text-on-primary": measurement.ink }
         : {};
     };
-    if (mode === 'auto' && p.primary && p.dark?.primary) {
+    if (mode === "auto" && p.primary && p.dark?.primary) {
       Object.assign(
         vars,
         mergeDerivedModeHalves(
           measuredPrimaryInk(p.primary),
           measuredPrimaryInk(p.dark.primary),
-          ['--ds-color-text-on-primary'],
-        ),
+          ["--ds-color-text-on-primary"]
+        )
       );
     } else {
       Object.assign(vars, measuredPrimaryInk(resolvedPrimary));
@@ -477,21 +514,18 @@ export function appearanceGeneralToVariables(
     // whose focus ring, link colour and link-hover shade were all computed
     // from its LIGHT brand colour. `--ds-button-primary-bg-hover` paired and
     // `--ds-color-link-hover` did not, from the same pair of seeds.
-    if (mode === 'auto' && p.primary && darkSeeds.primary) {
+    if (mode === "auto" && p.primary && darkSeeds.primary) {
       Object.assign(
         vars,
         mergeDerivedModeHalves(
           deriveInteractionFloor(p.primary).variables,
           deriveInteractionFloor(darkSeeds.primary).variables,
-          [
-            '--ds-color-primary-foreground',
-            '--ds-color-link-hover',
-          ],
-        ),
+          ["--ds-color-primary-foreground", "--ds-color-link-hover"]
+        )
       );
     } else if (resolvedPrimary) {
       for (const [channel, value] of Object.entries(
-        deriveInteractionFloor(resolvedPrimary).variables,
+        deriveInteractionFloor(resolvedPrimary).variables
       )) {
         setVar(vars, channel, value);
       }
@@ -500,34 +534,33 @@ export function appearanceGeneralToVariables(
     // The ladder itself now lives in the shared derivation module, so the DB
     // path and the static path cannot drift apart; this tier keeps only the
     // `light-dark()` pairing, which is a DB-only concern.
-    const emitSurfaces = (
-      light: GroundLadder,
-      dark?: GroundLadder,
-    ): void => {
+    const emitSurfaces = (light: GroundLadder, dark?: GroundLadder): void => {
       const channel = {
-        secondary: '--ds-color-bg-secondary',
-        tertiary: '--ds-color-bg-tertiary',
-        elevated: '--ds-color-bg-elevated',
-        input: '--ds-color-bg-input',
+        secondary: "--ds-color-bg-secondary",
+        tertiary: "--ds-color-bg-tertiary",
+        elevated: "--ds-color-bg-elevated",
+        input: "--ds-color-bg-input",
       } as const;
       for (const key of Object.keys(channel) as Array<keyof typeof channel>) {
         setVar(
           vars,
           channel[key],
-          dark ? `light-dark(${light[key]}, ${dark[key]})` : light[key],
+          dark ? `light-dark(${light[key]}, ${dark[key]})` : light[key]
         );
       }
     };
     const lightBg =
-      p.background && isHexColor(p.background) ? normalizeHexColor(p.background) : undefined;
+      p.background && isHexColor(p.background)
+        ? normalizeHexColor(p.background)
+        : undefined;
     const darkBg =
       p.dark?.background && isHexColor(p.dark.background)
         ? normalizeHexColor(p.dark.background)
         : undefined;
-    if (mode === 'auto' && lightBg && darkBg) {
+    if (mode === "auto" && lightBg && darkBg) {
       emitSurfaces(deriveGroundLadder(lightBg), deriveGroundLadder(darkBg));
     } else {
-      const resolvedBg = mode === 'dark' ? darkBg ?? lightBg : lightBg;
+      const resolvedBg = mode === "dark" ? darkBg ?? lightBg : lightBg;
       if (resolvedBg) emitSurfaces(deriveGroundLadder(resolvedBg));
     }
 
@@ -543,26 +576,26 @@ export function appearanceGeneralToVariables(
     const subtleOf = (border: string | undefined, ground: string | undefined) =>
       border && ground ? deriveBorderSubtle(border, ground) : undefined;
     const darkBorder = p.dark?.border?.primary ?? p.border?.primary;
-    if (mode === 'auto' && lightBg && darkBg) {
+    if (mode === "auto" && lightBg && darkBg) {
       setResolvedColor(
         vars,
-        '--ds-color-border-subtle',
+        "--ds-color-border-subtle",
         subtleOf(p.border?.primary, lightBg),
         subtleOf(darkBorder, darkBg),
-        mode,
+        mode
       );
     } else {
       setVar(
         vars,
-        '--ds-color-border-subtle',
-        mode === 'dark'
+        "--ds-color-border-subtle",
+        mode === "dark"
           ? subtleOf(darkBorder, darkBg ?? lightBg)
-          : subtleOf(p.border?.primary, lightBg),
+          : subtleOf(p.border?.primary, lightBg)
       );
     }
 
-    if (mode === 'auto' && p.dark && Object.keys(p.dark).length > 0) {
-      vars['--ds-color-scheme'] = 'light dark';
+    if (mode === "auto" && p.dark && Object.keys(p.dark).length > 0) {
+      vars["--ds-color-scheme"] = "light dark";
     }
   }
 
@@ -575,13 +608,22 @@ export function appearanceGeneralToVariables(
     vars,
     appearancePostureToVariables({
       typePairing: general.typography?.typePairing,
+      typeScale:
+        typeof general.typography?.scale === "number" &&
+        Number.isFinite(general.typography.scale)
+          ? clampIntoExpressiveEnvelope(
+              envelopeProfileId,
+              "typeScale",
+              general.typography.scale
+            )
+          : general.typography?.scale,
       buttonStyle: general.shape?.buttonStyle,
       radiusScale:
-        typeof general.shape?.radiusScale === 'number' &&
+        typeof general.shape?.radiusScale === "number" &&
         Number.isFinite(general.shape.radiusScale)
           ? clampIntoExpressiveEnvelope(
               envelopeProfileId,
-              'radiusScale',
+              "radiusScale",
               general.shape.radiusScale
             )
           : general.shape?.radiusScale,
@@ -591,87 +633,49 @@ export function appearanceGeneralToVariables(
       ),
       motion:
         general.motion &&
-        typeof general.motion.intensity === 'number' &&
+        typeof general.motion.intensity === "number" &&
         Number.isFinite(general.motion.intensity)
           ? {
               ...general.motion,
               intensity: clampIntoExpressiveEnvelope(
                 envelopeProfileId,
-                'motionIntensity',
+                "motionIntensity",
                 general.motion.intensity
               ),
             }
           : general.motion,
       elevation: general.surfaces?.elevation,
-    }),
+    })
   );
 
-  // Typography — free-form families and scale override the pairing preset.
+  // Typography — free-form families override the pairing preset. Type scale
+  // already lowered through the shared posture table above.
   if (general.typography) {
     const t = general.typography;
     if (t.fontFamilyBase)
-      vars['--ds-font-family-base'] = withArabicSafeFallback(t.fontFamilyBase);
+      vars["--ds-font-family-base"] = withArabicSafeFallback(t.fontFamilyBase);
     if (t.fontFamilyHeading)
-      vars['--ds-font-family-heading'] = withArabicSafeFallback(
+      vars["--ds-font-family-heading"] = withArabicSafeFallback(
         t.fontFamilyHeading
       );
-    if (typeof t.scale === 'number' && Number.isFinite(t.scale)) {
-      setVar(
-        vars,
-        '--ds-type-scale',
-        clampValue(
-          clampIntoExpressiveEnvelope(envelopeProfileId, 'typeScale', t.scale),
-          TENANT_THEME_TYPE_SCALE_BOUNDS.min,
-          TENANT_THEME_TYPE_SCALE_BOUNDS.max,
-        ),
-      );
-    }
   }
 
-  // Navigation — sidebarTone maps to real sidebar chrome variables
-  if (general.navigation?.sidebarTone) {
-    const tone = general.navigation.sidebarTone;
-    switch (tone) {
-      case 'subtle':
-        vars['--ds-sidebar-bg'] = 'var(--ds-color-bg-secondary)';
-        vars['--ds-sidebar-text'] = 'var(--ds-color-text-primary)';
-        vars['--ds-sidebar-text-muted'] = 'var(--ds-color-text-muted)';
-        vars['--ds-sidebar-item-bg-hover'] = 'var(--ds-color-bg-hover)';
-        vars['--ds-sidebar-item-bg-active'] = 'var(--ds-color-primary-100)';
-        vars['--ds-sidebar-item-color-active'] = 'var(--ds-color-primary)';
-        break;
-      case 'strong':
-        vars['--ds-sidebar-bg'] = 'var(--ds-color-primary-900)';
-        vars['--ds-sidebar-text'] = 'var(--ds-color-white)';
-        vars['--ds-sidebar-text-muted'] = 'var(--ds-color-neutral-400)';
-        vars['--ds-sidebar-item-bg-hover'] = 'var(--ds-color-primary-800)';
-        vars['--ds-sidebar-item-bg-active'] = 'var(--ds-color-primary-700)';
-        vars['--ds-sidebar-item-color-active'] = 'var(--ds-color-white)';
-        break;
-      case 'inverse':
-        vars['--ds-sidebar-bg'] = 'var(--ds-color-neutral-900)';
-        vars['--ds-sidebar-text'] = 'var(--ds-color-neutral-100)';
-        vars['--ds-sidebar-text-muted'] = 'var(--ds-color-neutral-500)';
-        vars['--ds-sidebar-item-bg-hover'] = 'var(--ds-color-neutral-800)';
-        vars['--ds-sidebar-item-bg-active'] = 'var(--ds-color-neutral-700)';
-        vars['--ds-sidebar-item-color-active'] = 'var(--ds-color-white)';
-        break;
-    }
-  }
+  // Navigation uses the same semantic lowering as BrandTheme.chrome.sidebar.
+  Object.assign(vars, sidebarToneToVariables(general.navigation?.sidebarTone));
 
   // Surfaces / elevation is emitted by the shared posture lowering above.
   if (
-    typeof general.surfaces?.effectIntensity === 'number'
-    && Number.isFinite(general.surfaces.effectIntensity)
+    typeof general.surfaces?.effectIntensity === "number" &&
+    Number.isFinite(general.surfaces.effectIntensity)
   ) {
     setVar(
       vars,
-      '--ds-effect-intensity',
+      "--ds-effect-intensity",
       clampValue(
         general.surfaces.effectIntensity,
         TENANT_THEME_EFFECT_INTENSITY_BOUNDS.min,
-        TENANT_THEME_EFFECT_INTENSITY_BOUNDS.max,
-      ),
+        TENANT_THEME_EFFECT_INTENSITY_BOUNDS.max
+      )
     );
   }
 
@@ -702,24 +706,25 @@ export function appearanceGeneralToVariables(
   // this exported function.
   const authoredRhythm: unknown = general.rhythm;
   if (
-    typeof authoredRhythm === 'string'
-    && Object.prototype.hasOwnProperty.call(
+    typeof authoredRhythm === "string" &&
+    Object.prototype.hasOwnProperty.call(
       TENANT_THEME_RHYTHM_FACTORS,
-      authoredRhythm,
+      authoredRhythm
     )
   ) {
-    const factor = TENANT_THEME_RHYTHM_FACTORS[
-      authoredRhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
-    ];
-    if (typeof factor === 'number' && Number.isFinite(factor)) {
+    const factor =
+      TENANT_THEME_RHYTHM_FACTORS[
+        authoredRhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
+      ];
+    if (typeof factor === "number" && Number.isFinite(factor)) {
       setVar(
         vars,
-        '--ds-rhythm-scale',
+        "--ds-rhythm-scale",
         clampValue(
           factor,
           TENANT_THEME_RHYTHM_SCALE_BOUNDS.min,
-          TENANT_THEME_RHYTHM_SCALE_BOUNDS.max,
-        ),
+          TENANT_THEME_RHYTHM_SCALE_BOUNDS.max
+        )
       );
     }
   }
@@ -756,8 +761,8 @@ export function appearanceAdvancedToVariables(
       vars,
       chromeToVariables(advanced.chrome, {
         radiusScale:
-          advanced.tokenOverrides?.['--ds-radius-scale'] ?? context.radiusScale,
-      }),
+          advanced.tokenOverrides?.["--ds-radius-scale"] ?? context.radiusScale,
+      })
     );
   }
 
@@ -785,14 +790,14 @@ export function appearanceAdvancedToVariables(
   // narrowed.
   if (advanced.tokenOverrides) {
     const entries = Object.entries(advanced.tokenOverrides).filter(
-      ([key, value]) => key.startsWith('--ds-') && value != null,
+      ([key, value]) => key.startsWith("--ds-") && value != null
     );
     // Over-budget rejects outright: silently dropping entries would paint a
     // theme the author never approved.
     if (entries.length > MAX_TOKEN_OVERRIDES) {
       throw new Error(
         `[Appearance] tokenOverrides has ${entries.length} entries; the bound is ` +
-          `${MAX_TOKEN_OVERRIDES} (TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides).`,
+          `${MAX_TOKEN_OVERRIDES} (TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides).`
       );
     }
     for (const [key, value] of entries) {
@@ -852,7 +857,10 @@ export function withExpressiveFieldDefaults(
     fieldDefaults.buttonStyle !== undefined &&
     source.shape?.buttonStyle === undefined
   ) {
-    target().shape = { ...target().shape, buttonStyle: fieldDefaults.buttonStyle };
+    target().shape = {
+      ...target().shape,
+      buttonStyle: fieldDefaults.buttonStyle,
+    };
   }
   if (
     fieldDefaults.radiusScale !== undefined &&
@@ -929,8 +937,8 @@ export function appearanceToVariables(
     Object.assign(
       vars,
       appearanceAdvancedToVariables(appearance.advanced, {
-        radiusScale: vars['--ds-radius-scale'],
-      }),
+        radiusScale: vars["--ds-radius-scale"],
+      })
     );
   }
 
@@ -938,9 +946,9 @@ export function appearanceToVariables(
   // convenience. Advanced raw overrides are allowed to replace the front of
   // these stacks, but cannot remove the Arabic-safe fallback.
   for (const key of [
-    '--ds-font-family-base',
-    '--ds-font-family-heading',
-    '--ds-font-family-display',
+    "--ds-font-family-base",
+    "--ds-font-family-heading",
+    "--ds-font-family-display",
   ] as const) {
     if (vars[key]) vars[key] = withArabicSafeFallback(vars[key]);
   }
@@ -950,26 +958,33 @@ export function appearanceToVariables(
   // TenantTheme's closed schema rejects those names at the DB boundary too.
   // The chart-series seed is read BEFORE the ramp merge: dual (light-dark)
   // emission may rewrite `--ds-color-primary` into a non-hex function value.
-  const chartSeriesSeed = vars['--ds-color-primary'];
-  Object.assign(vars, deriveAppearanceColorRamps(appearance.general ?? {}, vars));
+  const chartSeriesSeed = vars["--ds-color-primary"];
+  Object.assign(
+    vars,
+    deriveAppearanceColorRamps(appearance.general ?? {}, vars)
+  );
   Object.assign(vars, deriveAppearanceOnToneInks(vars));
 
   // Generated categorical series are compiler-owned and always emitted when a
   // concrete seed exists. Tenant-authored `--ds-chart-category-N` stays the
   // authoritative channel in the palette resolver's fallback chain.
   if (chartSeriesSeed && isHexColor(chartSeriesSeed)) {
-    const mode = appearance.general?.palette?.backgroundMode ?? 'light';
-    const surface: RampSurface = mode === 'dark' ? 'dark' : 'light';
+    const mode = appearance.general?.palette?.backgroundMode ?? "light";
+    const surface: RampSurface = mode === "dark" ? "dark" : "light";
     const grounds: string[] = [];
-    if (mode !== 'dark') grounds.push(resolveAppearanceRampGround('light', vars));
-    if (mode === 'dark') grounds.push(resolveAppearanceRampGround('dark', vars));
-    if (mode === 'auto') {
-      grounds.push(resolveAppearanceDarkGround(appearance.general?.palette?.dark));
+    if (mode !== "dark")
+      grounds.push(resolveAppearanceRampGround("light", vars));
+    if (mode === "dark")
+      grounds.push(resolveAppearanceRampGround("dark", vars));
+    if (mode === "auto") {
+      grounds.push(
+        resolveAppearanceDarkGround(appearance.general?.palette?.dark)
+      );
     }
     const series = deriveChartSeriesPalette(
       normalizeHexColor(chartSeriesSeed),
       grounds,
-      surface,
+      surface
     );
     series.forEach((color, index) => {
       vars[`--ds-chart-series-${index + 1}`] = color;
@@ -983,10 +998,9 @@ export function appearanceToVariables(
  * Compile Appearance for a runtime consumer that will actually paint UI.
  *
  * `appearanceToVariables()` intentionally remains the deterministic raw
- * projection used by low-level compiler tests and composition passes. Runtime
- * providers and generated tenant CSS must use this function instead so the
- * exact same APCA autocorrection contract protects both first-party compiled
- * artifacts and DB-authored Appearance documents.
+ * projection used by low-level compiler tests and compatibility consumers.
+ * Canonical static and DB themes resolve a total Theme through `compileTheme`
+ * and apply their shared reject-only APCA admission after that one lowering.
  *
  * Returning the full contrast result keeps adjustments and unverifiable pairs
  * observable by tenant editors instead of silently mutating authored colors.

@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "_comment": "Sealed inventory of checkpoint-generated reds. Every row is a failure whose only operand is a generated build output, so no source-plane edit can close it. Paired with SEALED_RED_IDENTITIES in red-inventory-gate.mjs: edit both or the gate fails. Liveness is proven by red-inventory-gate.mjs --reconcile against a real census run, never by --check alone.",
+  "rows": [
+    {
+      "id": "artifact-bytes-rottay",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts",
+      "test": "rottay artifact is a generated build output matches the committed artifact byte-for-byte (regenerate-and-diff)",
+      "titleSource": "matches the committed artifact byte-for-byte (regenerate-and-diff)",
+      "failureShape": "to be '/* GENERATED — do not edit */",
+      "reason": "the committed rottay artifact no longer equals what the authored Theme renders; only a regeneration wave can close it",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-bytes-bithire",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts",
+      "test": "bithire artifact is a generated build output matches the committed artifact byte-for-byte (regenerate-and-diff)",
+      "titleSource": "matches the committed artifact byte-for-byte (regenerate-and-diff)",
+      "failureShape": "to be '/* GENERATED — do not edit */",
+      "reason": "the committed bithire artifact no longer equals what the authored Theme renders; only a regeneration wave can close it",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-bytes-evnto",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts",
+      "test": "evnto artifact is a generated build output matches the committed artifact byte-for-byte (regenerate-and-diff)",
+      "titleSource": "matches the committed artifact byte-for-byte (regenerate-and-diff)",
+      "failureShape": "to be '/* GENERATED — do not edit */",
+      "reason": "the committed evnto artifact no longer equals what the authored Theme renders; only a regeneration wave can close it",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/evnto/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-parity-rottay",
+      "class": "generated-artifact-projection-staleness",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/first-party-artifacts-parity.test.ts",
+      "test": "rottay artifact to BrandTheme parity projects every compiled BrandTheme variable into the artifact with an equal value",
+      "titleSource": "projects every compiled BrandTheme variable into the artifact with an equal value",
+      "failureShape": "to deeply equal []",
+      "reason": "compiled rottay variables the committed artifact does not carry at an equal value; the divergent set is the regeneration delta, so its size is deliberately not pinned",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-parity-bithire",
+      "class": "generated-artifact-projection-staleness",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/first-party-artifacts-parity.test.ts",
+      "test": "bithire artifact to BrandTheme parity projects every compiled BrandTheme variable into the artifact with an equal value",
+      "titleSource": "projects every compiled BrandTheme variable into the artifact with an equal value",
+      "failureShape": "to deeply equal []",
+      "reason": "compiled bithire variables the committed artifact does not carry at an equal value; the divergent set is the regeneration delta, so its size is deliberately not pinned",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-parity-evnto",
+      "class": "generated-artifact-projection-staleness",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/first-party-artifacts-parity.test.ts",
+      "test": "evnto artifact to BrandTheme parity projects every compiled BrandTheme variable into the artifact with an equal value",
+      "titleSource": "projects every compiled BrandTheme variable into the artifact with an equal value",
+      "failureShape": "to deeply equal []",
+      "reason": "compiled evnto variables the committed artifact does not carry at an equal value; the divergent set is the regeneration delta, so its size is deliberately not pinned",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/evnto/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-tone-channel-bithire",
+      "class": "generated-artifact-missing-channel",
+      "surface": "census1",
+      "file": "src/foundation/tokens/__tests__/bithire-motion-interaction.test.ts",
+      "test": "bithire artifact carries the ledger interaction defaults (§8.2) compiles the tone channels the ledger interaction layer binds to",
+      "titleSource": "compiles the tone channels the ledger interaction layer binds to",
+      "failureShape": "to match /--ds-tint-8: color-mix",
+      "reason": "the committed bithire artifact predates the tint tone channels the compiler now emits",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
+        ]
+      }
+    },
+    {
+      "id": "dist-styles-default",
+      "class": "dist-resolution-required",
+      "surface": "census1",
+      "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/tests/i0-inventory.test.ts",
+      "test": "public CSS export surface (from package.json) './styles/default' — all condition keys resolve to existing dist file",
+      "titleSource": "$subpath — all condition keys resolve to existing dist file",
+      "failureShape": "./styles/default -> ./dist/rottay.css must exist: expected false to be true",
+      "reason": "the assertion resolves a published dist file; no source edit creates dist/, only a package build",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "dist-resolution",
+        "operands": [
+          "dist/rottay.css"
+        ]
+      }
+    },
+    {
+      "id": "dist-styles-rottay",
+      "class": "dist-resolution-required",
+      "surface": "census1",
+      "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/tests/i0-inventory.test.ts",
+      "test": "public CSS export surface (from package.json) './styles/rottay' — all condition keys resolve to existing dist file",
+      "titleSource": "$subpath — all condition keys resolve to existing dist file",
+      "failureShape": "./styles/rottay -> ./dist/rottay.css must exist: expected false to be true",
+      "reason": "the assertion resolves a published dist file; no source edit creates dist/, only a package build",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "dist-resolution",
+        "operands": [
+          "dist/rottay.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-rt-residue-bithire",
+      "class": "generated-artifact-residue",
+      "surface": "census2",
+      "file": "src/tooling/testing/integration/monochrome/namespace/tests/index.test.tsx",
+      "test": "app-prefix namespace ratchet (decrease-only) introduces no new --rt-* custom property anywhere in the package's production source",
+      "titleSource": "introduces no new --rt-* custom property anywhere in the package's production source",
+      "failureShape": "expected [ '--rt-premium-card-grid' ] to deeply equal []",
+      "reason": "the committed bithire artifact still carries --rt-premium-card-grid, a name no authored source mints any more",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
+        ]
+      }
+    },
+    {
+      "id": "artifact-dual-scope-rottay",
+      "class": "generated-artifact-missing-channel",
+      "surface": "census2",
+      "file": "src/tooling/testing/system/tests/source-governance.test.ts",
+      "test": "source governance ships dual-scoped compiled artifacts and an explicitly delimited extension",
+      "titleSource": "ships dual-scoped compiled artifacts and an explicitly delimited extension",
+      "failureShape": "to deeply equal []",
+      "reason": "the committed rottay artifact predates the dual-scope selector shape (bithire and evnto already carry theirs, so the failing set is rottay alone)",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
+        ]
+      }
+    },
+    {
+      "id": "styles-bundle-rottay",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "staleness",
+      "file": "scripts/vertical-css-staleness.gate.mjs",
+      "test": "styles/rottay.css is in sync with its build inputs",
+      "titleSource": "${rel} is in sync with its build inputs",
+      "failureShape": "styles/rottay.css is stale or hand-edited",
+      "reason": "the committed styles/rottay.css bundle predates its build inputs; build:vertical-css is a generated-plane wave",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "styles/rottay.css"
+        ]
+      }
+    },
+    {
+      "id": "styles-bundle-bithire",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "staleness",
+      "file": "scripts/vertical-css-staleness.gate.mjs",
+      "test": "styles/bithire.css is in sync with its build inputs",
+      "titleSource": "${rel} is in sync with its build inputs",
+      "failureShape": "styles/bithire.css is stale or hand-edited",
+      "reason": "the committed styles/bithire.css bundle predates its build inputs; build:vertical-css is a generated-plane wave",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "styles/bithire.css"
+        ]
+      }
+    },
+    {
+      "id": "styles-bundle-evnto",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "staleness",
+      "file": "scripts/vertical-css-staleness.gate.mjs",
+      "test": "styles/evnto.css is in sync with its build inputs",
+      "titleSource": "${rel} is in sync with its build inputs",
+      "failureShape": "styles/evnto.css is stale or hand-edited",
+      "reason": "the committed styles/evnto.css bundle predates its build inputs; build:vertical-css is a generated-plane wave",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "styles/evnto.css"
+        ]
+      }
+    },
+    {
+      "id": "styles-bundle-index",
+      "class": "generated-artifact-byte-staleness",
+      "surface": "staleness",
+      "file": "scripts/vertical-css-staleness.gate.mjs",
+      "test": "styles/index.css is in sync with its build inputs",
+      "titleSource": "${rel} is in sync with its build inputs",
+      "failureShape": "styles/index.css is stale or hand-edited",
+      "reason": "the committed styles/index.css bundle predates its build inputs; build:vertical-css is a generated-plane wave",
+      "owner": "modern-rescue/generated-plane",
+      "proof": {
+        "kind": "generated-operand",
+        "operands": [
+          "styles/index.css"
+        ]
+      }
+    }
+  ]
+}

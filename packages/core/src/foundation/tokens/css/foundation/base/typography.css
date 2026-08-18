@@ -285,10 +285,28 @@
   /* ---------------------------------------------------------------------
    * Fluid type ramp (WO-ARC-05).
    *
-   * Each fluid step is bounded by two ADJACENT static steps above -- no new
-   * magnitudes enter the system, only the path between two that already exist.
-   * The ramp interpolates linearly between 360px and 1280px, the same widths
-   * the WO-ENG-12 capture law photographs, and hits each bound exactly there.
+   * Each fluid step is bounded by two ADJACENT steps of the SHIPPED static ramp
+   * -- no new magnitudes enter the system, only the path between two that
+   * already exist. The ramp interpolates linearly between 360px and 1280px, the
+   * same widths the WO-ENG-12 capture law photographs, and hits each bound
+   * exactly there.
+   *
+   * "Shipped" is load-bearing and is not this file. `base/*.css` and
+   * `themes/default.css` land in the same `rottay-tokens` layer, default.css
+   * second, so where both declare a step the theme wins. 3xl/4xl/5xl were
+   * authored against this file's own 1.875rem/2.25rem, which default.css has
+   * always overridden with 1.5rem/2rem and which `edf91a41f` then deleted
+   * outright -- so those two bounds were never shipped magnitudes at all. They
+   * are rebound here onto the winning ladder (… 1.25, 1.5, 2, 2.5, 3 …), which
+   * is also the unique continuation of the chain the five smaller ramps already
+   * form, each starting where the previous one ends.
+   *
+   * This moves real type at the display end: 3xl's ceiling 1.875 -> 2rem, 4xl
+   * 1.875 -> 2rem floor and 2.25 -> 2.5rem ceiling, 5xl's floor 2.25 -> 2.5rem
+   * (its 3rem ceiling was already a shipped magnitude and does not move).
+   * Consumers that see it: the `Typography` runtime's xl/2xl/3xl heading sizes,
+   * the modern skin's display step, the pricing-table price amount and the
+   * metric-card value.
    *
    * The interpolation unit is `cqi`, not `vw`: a design system renders the same
    * component at rail width, half width and full width inside one viewport, and
@@ -311,9 +329,9 @@
   --ds-font-size-fluid-lg: clamp(1rem, 0.9511rem + 0.2174cqi, 1.125rem);
   --ds-font-size-fluid-xl: clamp(1.125rem, 1.0761rem + 0.2174cqi, 1.25rem);
   --ds-font-size-fluid-2xl: clamp(1.25rem, 1.1522rem + 0.4348cqi, 1.5rem);
-  --ds-font-size-fluid-3xl: clamp(1.5rem, 1.3533rem + 0.6522cqi, 1.875rem);
-  --ds-font-size-fluid-4xl: clamp(1.875rem, 1.7283rem + 0.6522cqi, 2.25rem);
-  --ds-font-size-fluid-5xl: clamp(2.25rem, 1.9565rem + 1.3043cqi, 3rem);
+  --ds-font-size-fluid-3xl: clamp(1.5rem, 1.3043rem + 0.8696cqi, 2rem);
+  --ds-font-size-fluid-4xl: clamp(2rem, 1.8043rem + 0.8696cqi, 2.5rem);
+  --ds-font-size-fluid-5xl: clamp(2.5rem, 2.3043rem + 0.8696cqi, 3rem);
 }
 
 /*

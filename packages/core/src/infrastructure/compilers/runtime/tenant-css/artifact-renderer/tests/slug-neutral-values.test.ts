@@ -43,8 +43,6 @@ const THEMES: readonly [string, BrandTheme][] = [
   ['rottay', rottayBrandTheme],
 ];
 
-const EXTENSION = '/* extension body with no tenant reference */\n';
-
 /**
  * Synthetic tenants. Real slugs would make a passing test ambiguous: `bithire`
  * appears in that theme's own font stacks and asset paths, so a rename-based
@@ -56,8 +54,7 @@ const BETA = { slug: 'loudtenanttwo', verticalKey: 'loudverticaltwo' };
 
 function render(
   brandTheme: BrandTheme,
-  tenant: { slug: string; verticalKey: string },
-  extensionCss = EXTENSION
+  tenant: { slug: string; verticalKey: string }
 ): string {
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: tenant.slug });
   return renderVerticalArtifact({
@@ -69,7 +66,6 @@ function render(
     compiledCssVariables: compiled.cssVariables,
     colorScheme: compiled.colorScheme,
     modeBlocks: compiled.modeBlocks,
-    extensionCss,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   });
 }
@@ -224,7 +220,6 @@ describe('SLUG-NEUTRAL · drill', () => {
         compiledCssVariables: cssVariables,
         colorScheme: compiled.colorScheme,
         modeBlocks: compiled.modeBlocks,
-        extensionCss: EXTENSION,
         regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
       });
     };

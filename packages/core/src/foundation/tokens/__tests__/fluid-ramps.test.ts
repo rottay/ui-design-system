@@ -19,12 +19,24 @@
  * base declarations, and the bounds it had been certifying turned out never to
  * have been shipped magnitudes.
  *
- * `--ds-font-size-fluid-{3xl,4xl,5xl}` are red for that reason and the red is
- * the finding: 1.875rem and 2.25rem are the base file's retired 3xl/4xl, which
- * default.css has always overridden with 1.5rem and 2rem. Re-anchoring them is
- * a repaint of the whole eight-ramp family across three verticals -- the five
- * that pass do so on overlapping values, not on a convention the shipped ramp
- * supports -- so it is a wave, not a test edit.
+ * `--ds-font-size-fluid-{3xl,4xl,5xl}` were red for that reason: 1.875rem and
+ * 2.25rem are the base file's retired 3xl/4xl, which default.css has always
+ * overridden with 1.5rem and 2rem. The finding was accepted and the SOURCE was
+ * rebound -- the test was not relaxed. Nothing here moved to admit the ramps;
+ * they moved to satisfy what was already written.
+ *
+ * The five ramps that always passed form a chain, each starting where the
+ * previous one ends (0.75 -> 0.875 -> 1 -> 1.125 -> 1.25 -> 1.5). Continuing
+ * that chain through the shipped ladder's next magnitudes (2, 2.5, 3) is the
+ * only rebinding that satisfies membership, keeps max above min, and leaves the
+ * family one convention rather than five-plus-three. It is therefore forced,
+ * not chosen -- which is why it could land as an edit rather than a wave.
+ *
+ * It is not free: 3xl's ceiling, 4xl's floor and ceiling, and 5xl's floor all
+ * move (see the causal note above the declarations in `base/typography.css` for
+ * the exact deltas and the affected consumers). The corpus floor below is what
+ * keeps that honest -- the membership check gets easier as the ladder shrinks,
+ * so a future deletion cannot quietly re-legalise a bound by removing its rival.
  */
 
 import { readFileSync } from 'node:fs';

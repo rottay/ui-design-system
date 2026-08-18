@@ -23,6 +23,7 @@ import {
 import type {
   BrandTheme,
   BrandPalette,
+  BrandPaletteAliases,
   BrandThemeMode,
   BrandThemeModeOverlay,
   CompileBrandTheme,
@@ -30,12 +31,16 @@ import type {
   CompiledBrandModeBlock,
   BrandCompilerInput,
 } from "@/foundation/contracts/composition/tenants/themes";
-import type { EngineName } from "@/foundation/contracts/runtime/engine";
+import type {
+  Theme,
+  TenantAuthoredPaths,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
-  DENSITY_MODE_FACTOR_VARIABLE,
-  isDensityPreference,
-  resolveDensityModeFactor,
-} from "@/foundation/tokens/ts/foundation/base/density";
+  completeChromeShape,
+  isTenantAuthoredField,
+  themeToBrandTheme,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
+import type { EngineName } from "@/foundation/contracts/runtime/engine";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import {
   resolveExpressiveAxes,
@@ -49,7 +54,10 @@ import {
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { appearancePostureToVariables } from "../../foundation/css/appearance-posture";
 import type { TenantTokenOverrides } from "@/foundation/contracts/composition/tenants";
-import type { PartialPersonalityTokens, PersonalityTokens } from "@/foundation/contracts/kernel/tokens/personality";
+import type {
+  PartialPersonalityTokens,
+  PersonalityTokens,
+} from "@/foundation/contracts/kernel/tokens/personality";
 import {
   SEMANTIC_SURFACE_ROLES,
   type SemanticSurfaceRoleMap,
@@ -64,8 +72,16 @@ import {
   deriveOklchRamp,
   type RampSurface,
 } from "@/foundation/kernel/color/oklch/ramp";
-import { chromeToVariables } from "../../foundation/css/chrome-variables";
-import { derivePaletteSemantics } from "../../foundation/css/color-math/palette-derivations";
+import { deriveChartSeriesPalette } from "@/foundation/kernel/color/oklch/chart-series";
+import {
+  PRODUCER_RANK,
+  SIDEBAR_TONE_LEAF_FIELDS,
+  chromeToVariables,
+} from "../../foundation/css/chrome-variables";
+import {
+  derivePaletteSemantics,
+  derivePrimarySemantics,
+} from "../../foundation/css/color-math/palette-derivations";
 import { isHexColor } from "../../foundation/css/color-math";
 import { deriveInteractionFloor } from "../../foundation/css/color-math/interaction-floor";
 import {
@@ -143,8 +159,8 @@ export function brandThemeToPersonality(
     resolveExpressiveAxes(
       bt.expressive?.experienceProfile,
       sanitizeExpressiveOverrides(bt.expressive?.profiles),
-      bt.expressive?.schemaVersion,
-    ),
+      bt.expressive?.schemaVersion
+    )
   ).fieldDefaults.motion;
 
   if (bt.motion || expressiveMotion) {
@@ -418,8 +434,7 @@ export function semanticSurfaceRolesToCssVariables(
   }
 
   const card = surfaceRoles.card;
-  if (card?.background)
-    vars["--ds-surface-card-bg"] = "var(--ds-surface-card)";
+  if (card?.background) vars["--ds-surface-card-bg"] = "var(--ds-surface-card)";
   if (card?.border)
     vars["--ds-surface-card-border"] = "var(--ds-material-card-border)";
   if (card?.borderStrong)
@@ -466,51 +481,149 @@ export const semanticMaterialsToCssVariables =
  * extension, which is how a static vertical ended up with a second theme
  * author. One field reaches exactly one channel, so a value that ships today
  * moves into the contract without changing.
+ *
+ * Spelled as a static `field -> --ds-*` record so the channel-parity graph can
+ * read every edge from source. Encoded as tuples or computed keys these 31
+ * emissions are invisible to it and each one reappears as a phantom
+ * declared-but-unemitted finding.
  */
-const EXTENDED_PALETTE_CHANNELS: readonly (readonly [
-  keyof BrandPalette,
-  string,
-])[] = [
-  ["primaryHoverColor", "--ds-color-primary-hover"],
-  ["secondaryHoverColor", "--ds-color-secondary-hover"],
-  ["accentHoverColor", "--ds-color-accent-hover"],
-  ["onPrimaryColor", "--ds-color-text-on-primary"],
-  ["primaryForegroundColor", "--ds-color-primary-foreground"],
-  ["textTertiaryColor", "--ds-color-text-tertiary"],
-  ["borderColor", "--ds-color-border"],
-  ["borderTertiaryColor", "--ds-color-border-tertiary"],
-  ["borderSubtleColor", "--ds-color-border-subtle"],
-  ["borderFocusColor", "--ds-color-border-focus"],
-  ["backgroundSecondaryColor", "--ds-color-bg-secondary"],
-  ["backgroundTertiaryColor", "--ds-color-bg-tertiary"],
-  ["backgroundElevatedColor", "--ds-color-bg-elevated"],
-  ["backgroundSurfaceColor", "--ds-color-bg-surface"],
-  ["backgroundOverlayColor", "--ds-color-bg-overlay"],
-  ["successBgColor", "--ds-color-success-bg"],
-  ["successBorderColor", "--ds-color-success-border"],
-  ["warningBgColor", "--ds-color-warning-bg"],
-  ["warningBorderColor", "--ds-color-warning-border"],
-  ["errorBgColor", "--ds-color-error-bg"],
-  ["errorBorderColor", "--ds-color-error-border"],
-  ["infoBgColor", "--ds-color-info-bg"],
-  ["infoBorderColor", "--ds-color-info-border"],
-  ["linkColor", "--ds-color-link"],
-  ["linkHoverColor", "--ds-color-link-hover"],
-  ["linkVisitedColor", "--ds-color-link-visited"],
-  ["interactiveBorderColor", "--ds-color-interactive-border"],
-  ["interactiveBgHoverColor", "--ds-color-interactive-bg-hover"],
-  ["interactiveBgActiveColor", "--ds-color-interactive-bg-active"],
-  ["interactiveBgMutedColor", "--ds-color-interactive-bg-muted"],
-];
+const EXTENDED_PALETTE_CHANNELS = {
+  primaryHoverColor: "--ds-color-primary-hover",
+  secondaryHoverColor: "--ds-color-secondary-hover",
+  accentHoverColor: "--ds-color-accent-hover",
+  onPrimaryColor: "--ds-color-text-on-primary",
+  primaryForegroundColor: "--ds-color-primary-foreground",
+  textTertiaryColor: "--ds-color-text-tertiary",
+  borderColor: "--ds-color-border",
+  borderTertiaryColor: "--ds-color-border-tertiary",
+  borderSubtleColor: "--ds-color-border-subtle",
+  borderFocusColor: "--ds-color-border-focus",
+  backgroundSecondaryColor: "--ds-color-bg-secondary",
+  backgroundTertiaryColor: "--ds-color-bg-tertiary",
+  backgroundElevatedColor: "--ds-color-bg-elevated",
+  backgroundSurfaceColor: "--ds-color-bg-surface",
+  backgroundOverlayColor: "--ds-color-bg-overlay",
+  successBgColor: "--ds-color-success-bg",
+  successBorderColor: "--ds-color-success-border",
+  warningBgColor: "--ds-color-warning-bg",
+  warningBorderColor: "--ds-color-warning-border",
+  errorBgColor: "--ds-color-error-bg",
+  errorBorderColor: "--ds-color-error-border",
+  infoBgColor: "--ds-color-info-bg",
+  infoBorderColor: "--ds-color-info-border",
+  infoInkColor: "--ds-color-info-ink",
+  linkColor: "--ds-color-link",
+  linkHoverColor: "--ds-color-link-hover",
+  linkVisitedColor: "--ds-color-link-visited",
+  interactiveBorderColor: "--ds-color-interactive-border",
+  interactiveBgHoverColor: "--ds-color-interactive-bg-hover",
+  interactiveBgActiveColor: "--ds-color-interactive-bg-active",
+  interactiveBgMutedColor: "--ds-color-interactive-bg-muted",
+  alphaBlack50: "--ds-color-alpha-black-50",
+  alphaBlack100: "--ds-color-alpha-black-100",
+  alphaWhite50: "--ds-color-alpha-white-50",
+  alphaPrimary10: "--ds-color-alpha-primary-10",
+  alphaPrimary20: "--ds-color-alpha-primary-20",
+  alphaSecondary10: "--ds-color-alpha-secondary-10",
+  alphaSecondary20: "--ds-color-alpha-secondary-20",
+  alphaSuccess10: "--ds-color-alpha-success-10",
+  alphaSuccess20: "--ds-color-alpha-success-20",
+  alphaWarning10: "--ds-color-alpha-warning-10",
+  alphaWarning20: "--ds-color-alpha-warning-20",
+  alphaError10: "--ds-color-alpha-error-10",
+  alphaError20: "--ds-color-alpha-error-20",
+  alphaInfo10: "--ds-color-alpha-info-10",
+  bgHoverColor: "--ds-color-bg-hover",
+  bgInfoColor: "--ds-color-bg-info",
+  bgSubtleColor: "--ds-color-bg-subtle",
+  neutralZeroColor: "--ds-color-neutral-0",
+  primarySubtleColor: "--ds-color-primary-subtle",
+  shadowColor: "--ds-color-shadow",
+  surfaceColor: "--ds-color-surface",
+  surfaceMutedColor: "--ds-color-surface-muted",
+  surfaceSecondaryColor: "--ds-color-surface-secondary",
+  textColor: "--ds-color-text",
+  textInverseColor: "--ds-color-text-inverse",
+} as const satisfies Readonly<Partial<Record<keyof BrandPalette, string>>>;
+
+/**
+ * The unprefixed alias namespace. Same shape as the record above, keyed on
+ * `BrandPalette.aliases` instead of the palette root, and exhaustive over that
+ * type so a new alias leaf fails type review until it has a destination.
+ */
+const PALETTE_ALIAS_CHANNELS = {
+  textPrimary: "--ds-text-primary",
+  textSecondary: "--ds-text-secondary",
+  textTertiary: "--ds-text-tertiary",
+  textDisabled: "--ds-text-disabled",
+  textInverse: "--ds-text-inverse",
+  borderColor: "--ds-border-color",
+  borderColorDefault: "--ds-border-color-default",
+  borderColorMuted: "--ds-border-color-muted",
+  borderColorStrong: "--ds-border-color-strong",
+  borderColorHover: "--ds-border-color-hover",
+  borderColorFocus: "--ds-border-color-focus",
+} as const satisfies Readonly<Record<keyof BrandPaletteAliases, string>>;
+
+/**
+ * Derive `--ds-color-{primary,secondary}-rgb` from the resolved seed.
+ *
+ * The channel is a comma-separated sRGB triplet, which is what a `rgb(var(...)
+ * / <alpha>)` reader needs and what a hex seed cannot supply directly. It is
+ * DERIVED, never authored: a theme that could write the triplet by hand could
+ * write one that disagrees with its own seed, which is a second color
+ * authority. A non-hex seed (a `var()` forward, a color function) has no
+ * verified triplet, so the channel is omitted and the reader keeps its floor.
+ */
+function seedRgbTriplet(seed: string | undefined): string | undefined {
+  if (typeof seed !== "string") return undefined;
+  const hex = seed.trim();
+  const match = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex);
+  if (!match) return undefined;
+  const digits = match[1];
+  const full =
+    digits.length === 3
+      ? digits
+          .split("")
+          .map((d) => d + d)
+          .join("")
+      : digits;
+  const r = Number.parseInt(full.slice(0, 2), 16);
+  const g = Number.parseInt(full.slice(2, 4), 16);
+  const b = Number.parseInt(full.slice(4, 6), 16);
+  return `${r}, ${g}, ${b}`;
+}
+
+function setSeedRgbVariables(
+  vars: Record<string, string>,
+  palette: BrandPalette
+): void {
+  const primary = seedRgbTriplet(palette.primaryColor);
+  if (primary) vars["--ds-color-primary-rgb"] = primary;
+  const secondary = seedRgbTriplet(palette.secondaryColor);
+  if (secondary) vars["--ds-color-secondary-rgb"] = secondary;
+}
 
 function setExtendedPaletteVariables(
   vars: Record<string, string>,
   palette: BrandPalette
 ): void {
-  for (const [field, variable] of EXTENDED_PALETTE_CHANNELS) {
+  for (const [field, variable] of Object.entries(
+    EXTENDED_PALETTE_CHANNELS
+  ) as ReadonlyArray<readonly [keyof BrandPalette, string]>) {
     const value = palette[field];
     if (typeof value === "string" && value) vars[variable] = value;
   }
+  const aliases = palette.aliases;
+  if (aliases) {
+    for (const [field, variable] of Object.entries(
+      PALETTE_ALIAS_CHANNELS
+    ) as ReadonlyArray<readonly [keyof BrandPaletteAliases, string]>) {
+      const value = aliases[field];
+      if (typeof value === "string" && value) vars[variable] = value;
+    }
+  }
+  setSeedRgbVariables(vars, palette);
 }
 
 /**
@@ -536,6 +649,27 @@ export function deriveExtendedPaletteFloor(
   return deriveInteractionFloor(effectivePrimary).variables;
 }
 
+/**
+ * Drop own-enumerable keys whose value is `undefined` before a spread.
+ *
+ * The ISO bridge materializes COMPLETE containers, so a resolved `Theme` lowered
+ * back through `themeToBrandTheme` carries role keys that are present with the
+ * value `undefined`. A plain spread copies those keys and stomps the layer below
+ * it — the engine defaults inside the role emitter, and the authored label case
+ * in its caller — after which `String(undefined)` ships the literal text
+ * "undefined" as a CSS value. Compacting the spread SOURCE (never the guards,
+ * never the precedence order) is what makes the two lowerings agree: an authored
+ * value still wins, and a key that carries no value simply does not participate.
+ */
+function omitUndefined<T extends object>(source: T | undefined): Partial<T> {
+  if (source === undefined) return {};
+  const compacted: Partial<T> = {};
+  for (const key of Object.keys(source) as Array<keyof T>) {
+    const value = source[key];
+    if (value !== undefined) compacted[key] = value;
+  }
+  return compacted;
+}
 
 /**
  * Compile one BrandTheme block.
@@ -600,7 +734,7 @@ function brandThemeToCssVariables(
     typeof authoredRhythm === "string" &&
     Object.prototype.hasOwnProperty.call(
       TENANT_THEME_RHYTHM_FACTORS,
-      authoredRhythm,
+      authoredRhythm
     )
   ) {
     const rhythmFactor =
@@ -611,8 +745,8 @@ function brandThemeToCssVariables(
       vars["--ds-rhythm-scale"] = String(
         Math.min(
           TENANT_THEME_RHYTHM_SCALE_BOUNDS.max,
-          Math.max(TENANT_THEME_RHYTHM_SCALE_BOUNDS.min, rhythmFactor),
-        ),
+          Math.max(TENANT_THEME_RHYTHM_SCALE_BOUNDS.min, rhythmFactor)
+        )
       );
     }
   }
@@ -628,33 +762,27 @@ function brandThemeToCssVariables(
   // Before this bridge a static selection changed density/radius only while
   // type pairing, button silhouette, elevation and motion were DB-only.
   Object.assign(vars, appearancePostureToVariables(expansion.fieldDefaults));
-  // Semantic posture — the static path's equivalent of the DB Appearance
-  // compiler. Same canonical resolver, same single channel, so a code-owned
-  // vertical is no longer limited to the structural scale. Absent posture
-  // emits nothing: the channel's `var(…, 1)` default already is the identity,
-  // so an explicit `1` would add no value while claiming the channel against
-  // every lower-precedence writer — including a root `data-density` boundary
-  // reached through an inline injection of this same variable map. The
-  // expressive density default participates only where the theme itself is
-  // silent, mirroring the DB path's field-default law.
-  const authoredPosture =
-    bt.surfaces?.density ?? expansion.fieldDefaults.density;
-  if (isDensityPreference(authoredPosture)) {
-    vars[DENSITY_MODE_FACTOR_VARIABLE] = String(
-      resolveDensityModeFactor(authoredPosture),
-    );
-  }
-  // Authored static motion stays above the profile default, matching the DB
-  // field precedence. Duration-scale remains profile-owned because the legacy
-  // BrandMotion contract has no equivalent authored field.
+  // Every Standard posture, regardless of whether it arrived from a static
+  // Theme or a DB ThemePatch, lowers through this one canonical table. The
+  // expressive profile already wrote its defaults above; these authored fields
+  // intentionally overwrite only the channels they own.
   Object.assign(
     vars,
     appearancePostureToVariables({
-      motion:
-        bt.motion?.intensity === undefined
-          ? undefined
-          : { intensity: bt.motion.intensity },
-    }),
+      typePairing: bt.typography?.typePairing,
+      typeScale: bt.typography?.scale,
+      buttonStyle: bt.surfaces?.buttonStyle,
+      radiusScale: bt.surfaces?.radiusScale,
+      density: bt.surfaces?.density,
+      motion: bt.motion
+        ? {
+            intensity: bt.motion.intensity,
+            durationScale: bt.motion.durationScale,
+            ambient: bt.motion.ambient,
+          }
+        : undefined,
+      elevation: bt.surfaces?.elevation,
+    })
   );
   if (bt.palette) {
     // Semantic defaults come FIRST, so every authored layer outranks them:
@@ -822,6 +950,26 @@ function brandThemeToCssVariables(
       if (su.shadows.md) vars["--ds-shadow-md"] = su.shadows.md;
       if (su.shadows.lg) vars["--ds-shadow-lg"] = su.shadows.lg;
       if (su.shadows.xl) vars["--ds-shadow-xl"] = su.shadows.xl;
+      if (su.shadows.xs) vars["--ds-shadow-xs"] = su.shadows.xs;
+      // `2xl` cannot be an identifier, so the field is `xxl` and the channel
+      // keeps the scale's own spelling.
+      if (su.shadows.xxl) vars["--ds-shadow-2xl"] = su.shadows.xxl;
+      if (su.shadows.inner) vars["--ds-shadow-inner"] = su.shadows.inner;
+      if (su.shadows.focusRing)
+        vars["--ds-shadow-focus-ring"] = su.shadows.focusRing;
+      if (su.shadows.focusRingError)
+        vars["--ds-shadow-focus-ring-error"] = su.shadows.focusRingError;
+    }
+    if (su.elevations) {
+      // Authored AFTER the governed posture preset on purpose: the preset is
+      // the floor a tenant selects, an authored ladder is the ceiling it
+      // states outright, and it is never the other way around.
+      if (su.elevations.level0) vars["--ds-elevation-0"] = su.elevations.level0;
+      if (su.elevations.level1) vars["--ds-elevation-1"] = su.elevations.level1;
+      if (su.elevations.level2) vars["--ds-elevation-2"] = su.elevations.level2;
+      if (su.elevations.level3) vars["--ds-elevation-3"] = su.elevations.level3;
+      if (su.elevations.level4) vars["--ds-elevation-4"] = su.elevations.level4;
+      if (su.elevations.level5) vars["--ds-elevation-5"] = su.elevations.level5;
     }
     if (su.glass) {
       // 'none' is legacy zero-decoration suppression. The premium.css defaults + the
@@ -860,6 +1008,26 @@ function brandThemeToCssVariables(
   // derives against its own ground through the same call — one channel family,
   // two blocks, never a namespaced twin.
   Object.assign(vars, deriveTenantColorRamps(bt.palette, surface));
+  const chartSeed = bt.palette?.primaryColor;
+  if (chartSeed && isHexColor(chartSeed)) {
+    const chartGrounds = [
+      bt.palette?.backgroundColor ??
+        (surface === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND),
+      ...Object.values(
+        bt.surfaces?.surfaceRoles ?? bt.surfaces?.materials ?? {}
+      )
+        .map((role) => role?.background)
+        .filter((value): value is string => typeof value === "string"),
+    ];
+    deriveChartSeriesPalette(chartSeed, chartGrounds, surface).forEach(
+      (color, index) => {
+        vars[`--ds-chart-series-${index + 1}`] = color;
+      }
+    );
+  }
+  bt.charts?.categoryColors?.forEach((color, index) => {
+    if (index < 10 && color) vars[`--ds-chart-category-${index + 1}`] = color;
+  });
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);
   // `labelStyle` is an AUTHORED case decision and must sit in the authored
@@ -867,14 +1035,14 @@ function brandThemeToCssVariables(
   // Historically it fed personality only, which let the label role channel
   // silently ignore it; the finer `typography.roles.label` surface still
   // wins over this mapping when both are authored.
-  const authoredLabelCase: 'uppercase' | 'capitalize' | 'none' | undefined =
+  const authoredLabelCase: "uppercase" | "capitalize" | "none" | undefined =
     bt.typography?.labelStyle === undefined
       ? undefined
-      : bt.typography.labelStyle === 'uppercase'
-        ? 'uppercase'
-        : bt.typography.labelStyle === 'capitalize'
-          ? 'capitalize'
-          : 'none';
+      : bt.typography.labelStyle === "uppercase"
+      ? "uppercase"
+      : bt.typography.labelStyle === "capitalize"
+      ? "capitalize"
+      : "none";
   const authoredRoles =
     authoredLabelCase === undefined
       ? bt.typography?.roles
@@ -882,7 +1050,7 @@ function brandThemeToCssVariables(
           ...bt.typography?.roles,
           label: {
             textTransform: authoredLabelCase,
-            ...bt.typography?.roles?.label,
+            ...omitUndefined(bt.typography?.roles?.label),
           },
         };
   setSemanticTypographyVariables(
@@ -1137,8 +1305,7 @@ export function setSemanticTypographyVariables(
   for (const role of SEMANTIC_TYPOGRAPHY_ROLES) {
     // Single-writer precedence for every `--ds-type-{role}-*` channel:
     // engine defaults < expressive profile overlay < authored roles.
-    const overlay =
-      profileOverlay?.[role as keyof ExpressiveTypeRoleOverlay];
+    const overlay = profileOverlay?.[role as keyof ExpressiveTypeRoleOverlay];
     const value = {
       ...DEFAULT_SEMANTIC_TYPOGRAPHY[role],
       ...(overlay?.letterSpacing !== undefined
@@ -1150,7 +1317,7 @@ export function setSemanticTypographyVariables(
       ...(overlay?.fontVariantNumeric !== undefined
         ? { fontVariantNumeric: overlay.fontVariantNumeric }
         : {}),
-      ...authored?.[role],
+      ...omitUndefined(authored?.[role]),
     };
     const kebabRole = role.replace(
       /[A-Z]/g,
@@ -1169,7 +1336,9 @@ export function setSemanticTypographyVariables(
     vars[`${prefix}-letter-spacing`] = String(value.letterSpacing);
     vars[`${prefix}-text-transform`] = String(value.textTransform);
     vars[`${prefix}-font-variant-numeric`] = String(value.fontVariantNumeric);
-    vars[prefix] = `var(${prefix}-font-weight) var(${prefix}-font-size)/var(${prefix}-line-height) var(${prefix}-font-family)`;
+    vars[
+      prefix
+    ] = `var(${prefix}-font-weight) var(${prefix}-font-size)/var(${prefix}-line-height) var(${prefix}-font-family)`;
   }
 }
 
@@ -1299,7 +1468,12 @@ export function applyModeOverlay(
       | undefined,
     typography: mergeModeOverlay(bt.typography, overlay.typography),
     surfaces: mergeModeOverlay(bt.surfaces, overlay.surfaces),
-    chrome: mergeModeOverlay(bt.chrome, overlay.chrome),
+    // The merge base is completed to the canonical chrome shape so both
+    // transports place an overlay-only key at the SAME (shape) position:
+    // sparse static chrome would otherwise APPEND it while the ISO bridge's
+    // materialized chrome carries the shape slot, and the authored-order
+    // emitters make that placement observable in the mode block's css.
+    chrome: mergeModeOverlay(completeChromeShape(bt.chrome), overlay.chrome),
   };
 }
 
@@ -1313,9 +1487,193 @@ export function applyModeOverlay(
  * authored once (the tint scale mixes against `--ds-color-bg-primary`)
  * re-resolve against the mode's own ground instead of being duplicated.
  */
+function modeOverlayHasValues(overlay: BrandThemeModeOverlay): boolean {
+  for (const family of Object.values(overlay)) {
+    if (family && typeof family === "object") {
+      for (const value of Object.values(family)) {
+        if (value === undefined) continue;
+        if (value !== null && typeof value === "object") {
+          if (modeOverlayHasValues(value as BrandThemeModeOverlay)) return true;
+        } else {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/** The Theme field a tenant sets to re-seed the primary family. */
+export const PRIMARY_SEED_FIELD = "palette.primaryColor";
+
+/**
+ * Every channel the primary seed derives, mapped to the Theme leaves that
+ * SHADOW it -- the explicit statements that name the same channel directly.
+ *
+ * The key set is not hand-authored law: it is exactly the union of what
+ * `derivePrimarySemantics` and `deriveInteractionFloor` emit for a seed, and
+ * a test asserts that. This table only records, per channel, WHICH field an
+ * author would use to overrule the derivation. `--ds-button-primary-color`
+ * carries two because its emitter falls back from `.color` to `.text`, so both
+ * spellings are the same statement about the same channel.
+ */
+export const SEED_SHADOWING_FIELDS: Readonly<
+  Record<string, readonly string[]>
+> = {
+  "--ds-button-primary-bg": ["chrome.controls.buttonPrimary.bg"],
+  "--ds-button-primary-bg-hover": ["chrome.controls.buttonPrimary.bgHover"],
+  "--ds-button-primary-border": ["chrome.controls.buttonPrimary.border"],
+  "--ds-button-primary-color": [
+    "chrome.controls.buttonPrimary.color",
+    "chrome.controls.buttonPrimary.text",
+  ],
+  "--ds-input-border-focus": ["chrome.controls.input.borderFocus"],
+  "--ds-input-shadow-focus": ["chrome.controls.input.shadowFocus"],
+  "--ds-color-primary-foreground": ["palette.primaryForegroundColor"],
+  "--ds-color-border-focus": ["palette.borderFocusColor"],
+  "--ds-color-link": ["palette.linkColor"],
+  "--ds-color-link-hover": ["palette.linkHoverColor"],
+};
+
+const CUSTOM_PROPERTY_NAME = /--[a-z0-9-]+/gi;
+const BAKED_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/i;
+
+/**
+ * Does this value bake a colour OF ITS OWN, or does it only point at one?
+ *
+ * The distinction decides whether a tenant's seed may replace an assembled
+ * value. `var(--ds-button-primary-bg)` and `var(--ds-control-on-brand)` bake
+ * nothing: they resolve THROUGH channels this same derivation re-seeds, so
+ * they already carry the tenant's brand and rewriting them would change bytes
+ * without changing a pixel. `var(--ds-material-control-border-active, #3A6FB0)`
+ * does bake one -- the vertical's blue survives in the fallback no matter what
+ * the tenant seeds -- so it is genuinely stale and must be re-derived.
+ *
+ * Custom-property NAMES are stripped before the test because a channel name is
+ * a reference, never a colour; what remains is only literal values, including
+ * the ones hiding in a `var()` fallback.
+ */
+function bakesItsOwnColor(value: string): boolean {
+  return BAKED_COLOR.test(value.replace(CUSTOM_PROPERTY_NAME, ""));
+}
+
+/** What one compiled block needs to know about its tenant's authorship. */
+interface TenantSeedProvenance {
+  readonly authoredPaths: TenantAuthoredPaths;
+  /** "" for the base block, "modes.<mode>." for a mode overlay block. */
+  readonly modePrefix: string;
+  /** Whether the seed THIS block compiles from is the tenant's own. */
+  readonly seedIsTenantAuthored: boolean;
+}
+
+/**
+ * Re-derive the primary family a TENANT seed owns, over an assembled block.
+ *
+ * A tenant that sets its primary colour and nothing else must get a sidebar,
+ * a focus ring and a link colour that are ITS brand, not the vertical's. Today
+ * the vertical baseline's concrete leaves sit in the assembled map and outrank
+ * the derivation purely because they were written later, which is a
+ * white-label defect: a BASELINE_LEAF cannot beat a TENANT_DERIVED value.
+ *
+ * Three guards keep the repair from becoming a repaint:
+ *
+ *  1. No provenance, or a seed this block did not get from the tenant, and the
+ *     function returns without touching a byte. Every static first-party
+ *     compile takes this path.
+ *  2. A tenant leaf that names the channel directly (`SEED_SHADOWING_FIELDS`)
+ *     is TENANT_LEAF and outranks the tenant's own seed, so the derivation
+ *     skips it.
+ *  3. A value that bakes no colour of its own already tracks the seed, so it
+ *     is left exactly as assembled -- the indirection survives.
+ *
+ * The values themselves come from the SAME two owners the unseeded path uses,
+ * called with the same arguments. There is no second derivation and no
+ * arithmetic here.
+ */
+function applyTenantSeedDerivations(
+  vars: Record<string, string>,
+  effectivePrimary: string | undefined,
+  provenance: TenantSeedProvenance | undefined
+): void {
+  if (!provenance || !provenance.seedIsTenantAuthored) return;
+  const derived: Record<string, string> = {
+    ...derivePrimarySemantics({ primary: effectivePrimary }),
+    ...deriveInteractionFloor(effectivePrimary).variables,
+  };
+  for (const [channel, derivedValue] of Object.entries(derived)) {
+    const currentRank = (SEED_SHADOWING_FIELDS[channel] ?? []).some((field) =>
+      isTenantAuthoredField(
+        provenance.authoredPaths,
+        field,
+        provenance.modePrefix
+      )
+    )
+      ? PRODUCER_RANK.tenantLeaf
+      : PRODUCER_RANK.baselineLeaf;
+    if (PRODUCER_RANK.tenantDerived <= currentRank) continue;
+    const current = vars[channel];
+    if (current !== undefined && !bakesItsOwnColor(current)) continue;
+    vars[channel] = derivedValue;
+  }
+}
+
+/**
+ * Keep a tenant's base-authored sidebar leaf authoritative INSIDE a mode.
+ *
+ * A mode overlay is a statement about the other mode, not a statement about
+ * who outranks whom. `applyModeOverlay` merges structurally, so the vertical
+ * baseline's `modes.dark.chrome.sidebar.*` lands on top of the tenant's base
+ * leaf purely because it is more specific -- and that is the same
+ * BASELINE_LEAF(1) beating TENANT_LEAF(4) inversion this wave exists to close,
+ * displaced by one block. A tenant that states its sidebar colour once, without
+ * qualifying a mode, has stated it for every mode; only the TENANT can narrow
+ * that statement, by authoring the mode leaf itself.
+ *
+ * So the base block's emitted value is restored whenever the tenant authored
+ * the leaf at the base and did NOT restate it for this mode. The delta filter
+ * downstream then withdraws the channel entirely, which is the visible
+ * signature of the rule: a tenant sidebar colour produces no mode row at all,
+ * rather than a row painting it back to the vertical's.
+ *
+ * Scope is Site B's closed table and nothing else. It is deliberately NOT
+ * generalised to every authored chrome field: an overlay that carries a
+ * genuinely mode-specific value (a dark card surface against a light one) is
+ * not an inversion, and re-ranking those is a separate contest this wave has
+ * no standing in.
+ *
+ * Rank does not consult the shape of the value. Site A's `bakesItsOwnColor`
+ * predicate governs SEED-DERIVED rewriting, where the question is whether an
+ * assembled value already tracks the seed; it has no authority here. A tenant
+ * leaf holding `var(--ds-tint-8)` is a TENANT_LEAF(4) statement exactly as
+ * much as one holding `#101014`, and filtering on literal-vs-reference would
+ * hand the channel back to the baseline overlay it outranks. If carrying a
+ * reference across a mode makes a contrast pair unverifiable, that is an
+ * intake question for the document, answered at ingestion -- not a reason to
+ * demote the rank.
+ */
+function keepTenantBaseSidebarLeaves(
+  modeVars: Record<string, string>,
+  baseVars: Record<string, string>,
+  authoredPaths: TenantAuthoredPaths | undefined,
+  modePrefix: string
+): void {
+  if (authoredPaths === undefined) return;
+  for (const [channel, field] of Object.entries(SIDEBAR_TONE_LEAF_FIELDS)) {
+    // Base authorship only -- `isTenantAuthoredField` would also answer yes for
+    // a mode-qualified path, and a tenant's own mode leaf is exactly the case
+    // that must NOT be overwritten here.
+    if (!authoredPaths.has(field)) continue;
+    if (authoredPaths.has(`${modePrefix}${field}`)) continue;
+    const base = baseVars[channel];
+    if (base === undefined) continue;
+    modeVars[channel] = base;
+  }
+}
+
 function compileModeBlocks(
   bt: BrandTheme,
-  baseVars: Record<string, string>
+  baseVars: Record<string, string>,
+  authoredPaths: TenantAuthoredPaths | undefined
 ): CompiledBrandModeBlock[] {
   const modes = bt.modes;
   if (!modes) return [];
@@ -1325,16 +1683,41 @@ function compileModeBlocks(
     const overlay = modes[mode];
     if (!overlay) continue;
     if (mode === defaultMode) {
+      // Canonical ISO Themes always carry both mode slots; an empty default-mode
+      // overlay is a structural placeholder, not an authority violation.
+      if (!modeOverlayHasValues(overlay)) continue;
       throw new Error(
         `BrandTheme '${bt.id}' authors modes.${mode}, but ${mode} is its declared defaultMode. ` +
           `The default mode's values belong in the theme body; a mode overlay describes the OTHER mode.`
       );
     }
     const merged = applyModeOverlay(bt, overlay);
+    const modePrefix = `modes.${mode}.`;
     const modeVars = {
       ...brandThemeToCssVariables(merged, mode),
-      ...brandThemeToChromeVariables(merged),
+      ...brandThemeToChromeVariables(merged, mode, authoredPaths, modePrefix),
     };
+    // The seed this block compiles from is `merged.palette.primaryColor`. It is
+    // the TENANT'S only when the tenant stated it for this mode, or stated it
+    // at the base and the overlay does not restate it -- an overlay-authored
+    // seed belongs to whoever wrote that overlay, and re-deriving a baseline's
+    // own mode seed would be a baseline-versus-baseline fight this site has no
+    // standing in.
+    applyTenantSeedDerivations(
+      modeVars,
+      merged.palette?.primaryColor,
+      authoredPaths === undefined
+        ? undefined
+        : {
+            authoredPaths,
+            modePrefix,
+            seedIsTenantAuthored:
+              authoredPaths.has(`${modePrefix}${PRIMARY_SEED_FIELD}`) ||
+              (overlay.palette?.primaryColor === undefined &&
+                authoredPaths.has(PRIMARY_SEED_FIELD)),
+          }
+    );
+    keepTenantBaseSidebarLeaves(modeVars, baseVars, authoredPaths, modePrefix);
     const cssVariables: Record<string, string> = {};
     for (const [key, value] of Object.entries(modeVars)) {
       if (baseVars[key] !== value) cssVariables[key] = value;
@@ -1384,8 +1767,15 @@ export function brandModeSelector(
   tenantSlug: string,
   mode: BrandThemeMode
 ): string {
-  const base = brandTenantSelector(tenantSlug);
-  return `${base}[data-theme='${mode}'], ${base}.${mode}`;
+  return themeModeSelector(brandTenantSelector(tenantSlug), mode);
+}
+
+/** Shared explicit-mode selector grammar for static and DB artifact renderers. */
+export function themeModeSelector(
+  baseSelector: string,
+  mode: BrandThemeMode
+): string {
+  return `${baseSelector}[data-theme='${mode}'], ${baseSelector}.${mode}`;
 }
 
 /** Build one compiled mode block's CSS. */
@@ -1414,10 +1804,17 @@ function buildModeCssString(
  * since TenantAppearanceAdvanced.chrome is the same shape as BrandTheme.chrome.
  */
 export function brandThemeToChromeVariables(
-  bt: BrandTheme
+  bt: BrandTheme,
+  mode: BrandThemeMode = bt.appearance?.defaultMode ?? "light",
+  /** Tenant authorship, when this compile has a tenant. See `ChromeVariableContext`. */
+  tenantAuthoredPaths?: TenantAuthoredPaths,
+  modePrefix = ""
 ): Record<string, string> {
   return chromeToVariables(bt.chrome, {
     radiusScale: brandThemeRadiusScale(bt),
+    mode,
+    tenantAuthoredPaths,
+    modePrefix,
   });
 }
 
@@ -1440,9 +1837,13 @@ function brandThemeRadiusScale(bt: BrandTheme): string {
     )
   );
   return (
+    appearancePostureToVariables({ radiusScale: bt.surfaces?.radiusScale })[
+      "--ds-radius-scale"
+    ] ??
     appearancePostureToVariables(expansion.fieldDefaults)[
       "--ds-radius-scale"
-    ] ?? "1"
+    ] ??
+    "1"
   );
 }
 
@@ -1469,14 +1870,28 @@ export {
   apcaContrast,
 } from "@/foundation/kernel/accessibility/branding-contrast";
 
+/**
+ * `BrandCompilerInput` plus the optional tenant authorship record.
+ *
+ * Widened HERE rather than on the contract because provenance is a property of
+ * one COMPILE, not of the BrandTheme shape the contract describes, and because
+ * every existing caller stays valid: the field is optional, so omitting it is
+ * the documented "no provenance supplied" case that must reproduce today's
+ * bytes exactly.
+ */
+type BrandCompilerProvenanceInput = BrandCompilerInput & {
+  tenantAuthoredPaths?: TenantAuthoredPaths;
+};
+
 export const compileBrandTheme: CompileBrandTheme = (
-  input: BrandCompilerInput
+  input: BrandCompilerProvenanceInput
 ): CompiledBrand => {
   const {
     brandTheme,
     tenantSlug,
     verticalPersonality,
     verticalTokenOverrides,
+    tenantAuthoredPaths,
   } = input;
 
   // Merge personality: vertical baseline -> brandTheme
@@ -1495,8 +1910,25 @@ export const compileBrandTheme: CompileBrandTheme = (
 
   // CSS variables from palette + typography + surfaces + chrome
   const paletteVars = brandThemeToCssVariables(brandTheme);
-  const chromeVars = brandThemeToChromeVariables(brandTheme);
+  const chromeVars = brandThemeToChromeVariables(
+    brandTheme,
+    undefined,
+    tenantAuthoredPaths
+  );
   const cssVariables = { ...paletteVars, ...chromeVars };
+  // The base block's seed is the tenant's exactly when the tenant stated it;
+  // there is no overlay above this block to restate it.
+  applyTenantSeedDerivations(
+    cssVariables,
+    brandTheme.palette?.primaryColor,
+    tenantAuthoredPaths === undefined
+      ? undefined
+      : {
+          authoredPaths: tenantAuthoredPaths,
+          modePrefix: "",
+          seedIsTenantAuthored: tenantAuthoredPaths.has(PRIMARY_SEED_FIELD),
+        }
+  );
 
   // DS-S001: governed recipe-profile selection. Fail-closed — an unknown id,
   // malformed id or foreign schema version compiles to engine defaults.
@@ -1532,7 +1964,11 @@ export const compileBrandTheme: CompileBrandTheme = (
   // The declared mode of the values above; the non-default modes are compiled
   // from the typed `modes` overlays into their own blocks below.
   const colorScheme = brandTheme.appearance?.defaultMode;
-  const modeBlocks = compileModeBlocks(brandTheme, cssVariables);
+  const modeBlocks = compileModeBlocks(
+    brandTheme,
+    cssVariables,
+    tenantAuthoredPaths
+  );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while
     // doing so. The guard reads the block's own emission, not the base's.
@@ -1545,9 +1981,7 @@ export const compileBrandTheme: CompileBrandTheme = (
   // CSS string with tenant selectors
   const cssString = [
     buildCssString(cssVariables, tenantSlug, colorScheme),
-    ...modeBlocks.map((block) =>
-      buildModeCssString(block, tenantSlug)
-    ),
+    ...modeBlocks.map((block) => buildModeCssString(block, tenantSlug)),
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -1568,3 +2002,38 @@ export const compileBrandTheme: CompileBrandTheme = (
     ...(modeBlocks.length > 0 ? { modeBlocks } : {}),
   };
 };
+
+/** ISO T0: the single lowering for a resolved Theme. */
+export function compileTheme(
+  theme: Theme,
+  options?: {
+    tenantSlug?: string;
+    verticalPersonality?: BrandCompilerInput["verticalPersonality"];
+    verticalTokenOverrides?: BrandCompilerInput["verticalTokenOverrides"];
+    /**
+     * Which paths of this Theme the TENANT authored, collected from the patch
+     * that produced it (`collectPatchAuthoredPaths`). Supplied only for the
+     * tenant leg of a DB compile; a baseline compile supplies nothing and
+     * therefore compiles exactly as it did before provenance existed.
+     */
+    tenantAuthoredPaths?: TenantAuthoredPaths;
+  }
+): CompiledBrand {
+  const input: BrandCompilerProvenanceInput = {
+    brandTheme: themeToBrandTheme(theme),
+    tenantSlug: options?.tenantSlug ?? theme.id,
+    verticalPersonality: options?.verticalPersonality,
+    verticalTokenOverrides: options?.verticalTokenOverrides,
+    tenantAuthoredPaths: options?.tenantAuthoredPaths,
+  };
+  return compileBrandTheme(input);
+}
+
+export type CompiledTheme = CompiledBrand;
+export type CompileTheme = typeof compileTheme;
+
+/**
+ * @deprecated Use `compileTheme` with a complete resolved `Theme`. Kept as a
+ * compatibility alias for one migration window.
+ */
+export const compileBrandThemeDeprecated: CompileBrandTheme = compileBrandTheme;

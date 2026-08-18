@@ -115,18 +115,25 @@ const SHAPE_MAP: Record<string, 'default' | 'circle' | 'round'> = {
 const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   // Ant's Button owns the root DOM node, so the engine part is stamped through
   // the canonical imperative boundary; the stamp re-runs after every commit so
-  // a caller-supplied data-part can never rename this engine's anatomy.
+  // the resolved part survives Ant's own re-renders. Per P-79 the caller's
+  // `data-part` wins and `trigger` is only this engine's default — that is what
+  // keeps the engine-agnostic skins that select a caller part (the filter panel's
+  // preset chip, the preview rail's close square) true under classic too.
   const rootRef = React.useRef<HTMLElement | null>(null);
   React.useLayoutEffect(() => {
-    if (rootRef.current) stampDataPart(rootRef.current, 'trigger');
+    if (rootRef.current) stampDataPart(rootRef.current, dataPart ?? 'trigger');
   });
   const mergedRef = React.useCallback(
     (node: HTMLElement | null) => {
       rootRef.current = node;
-      if (node) stampDataPart(node, 'trigger');
+      if (node) stampDataPart(node, dataPart ?? 'trigger');
       if (typeof ref === 'function') ref(node);
       else if (ref) (ref as React.MutableRefObject<HTMLElement | null>).current = node;
     },
+    // Deliberately not keyed on `dataPart`: the identifier is destructured below,
+    // so an eager dependency read would hit its temporal dead zone. The ref
+    // callback only needs to stamp the node it just received, and the dep-less
+    // layout effect above re-resolves the part on every subsequent commit.
     [ref],
   );
   const {
@@ -154,6 +161,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
     style,
     id,
     'aria-label': ariaLabel,
+    'data-part': dataPart,
     'data-testid': dataTestId,
     tabIndex,
     ...nativeButtonProps

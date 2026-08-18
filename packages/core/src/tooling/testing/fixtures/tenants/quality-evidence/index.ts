@@ -306,6 +306,12 @@ export const EDITORIAL_FLAT_DOCUMENT = {
         "--ds-color-text-primary": "#25231F",
         "--ds-color-text-secondary": "#5B554B",
         "--ds-color-text-muted": "#756E62",
+        // Authored, not inherited. The derived disabled ink for this ground
+        // measured Lc 31.7 against `#F7F2E8` and the governed disabled floor is
+        // 45, so a fixture that stayed silent here was publishing a document no
+        // tenant could actually save. `#8A8271` measures Lc 58.1 on the same
+        // ground: lighter than the muted ink above it, and still admissible.
+        "--ds-color-text-disabled": "#8A8271",
         "--ds-color-border-primary": "#CFC6B7",
         "--ds-color-border-secondary": "#B8AE9F",
         "--ds-surface-canvas": "#F7F2E8",
@@ -313,9 +319,24 @@ export const EDITORIAL_FLAT_DOCUMENT = {
         "--ds-surface-panel": "#FBF8F1",
         "--ds-surface-card": "#FFFCF7",
         "--ds-surface-inset": "#EEE7DA",
-        "--ds-surface-control": "#FFFFFF",
+        // Warm paper, not the DS base white. An override whose value already
+        // equals the base is elided from the artifact -- correctly, since it
+        // authors nothing -- so a fixture that wrote `#FFFFFF` here was silently
+        // publishing seven of the eight surface roles while claiming eight.
+        "--ds-surface-control": "#FFFDF8",
         "--ds-surface-raised": "#FFFFFF",
-        "--ds-surface-overlay": "rgba(37, 35, 31, 0.88)",
+        // The overlay ground is authored OPAQUE and its ink is authored with
+        // it. A translucent `rgba(37, 35, 31, 0.88)` ground cannot be verified
+        // by the ingestion law at all -- the guard reports the pair as
+        // non-hex-ground and simply cannot decide it -- which is the one
+        // outcome a torture fixture must never produce: an authored surface
+        // that silently escapes admission. `#3E3C37` is that same ink composited
+        // over this fixture's own canvas, so nothing about the rendered result
+        // changes; it only becomes measurable. `#FFFFFF` over it measures
+        // Lc -99.3 and matches the overlay foreground this fixture's own
+        // surface-role map already declares.
+        "--ds-surface-overlay": "#3E3C37",
+        "--ds-material-overlay-foreground": "#FFFFFF",
         "--ds-material-card-border": "#C8BEAE",
         "--ds-material-card-border-strong": "#766D61",
         "--ds-material-card-background-hover": "#F9F3E8",
@@ -353,7 +374,16 @@ export const TECHNICAL_DARK_DOCUMENT = {
   visualFoundation: {
     general: {
       palette: {
-        primary: "#77B7FF",
+        // A tenant cannot publish a luminous `#77B7FF` fill and still get a
+        // readable button. The compiler derives the on-primary ink rather than
+        // letting a document author it -- `--ds-color-text-on-primary` and
+        // `--ds-button-primary-color` are deliberately outside the token
+        // override allowlist -- and the derived white measured Lc -45.5 against
+        // that fill, under a floor of 60. The seed is the only lever a tenant
+        // owns here, so the fixture authors one that survives admission:
+        // white over `#3C7FBF` measures Lc -74.3. The luminous blue stays where
+        // it costs nothing, on the card border-hover and focus ring below.
+        primary: "#3C7FBF",
         secondary: "#61D4C8",
         accent: "#F0A45D",
         backgroundMode: "dark",
@@ -382,7 +412,11 @@ export const TECHNICAL_DARK_DOCUMENT = {
         "--ds-color-background": "#07101C",
         "--ds-color-text-primary": "#EDF5FF",
         "--ds-color-text-secondary": "#C0D1E2",
-        "--ds-color-text-muted": "#8DA3B7",
+        // `#8DA3B7` measured Lc -50.6 against this fixture's own near-black
+        // ground, under the 60 floor that governs muted body text. `#A6BCD0`
+        // measures -64.3 and stays a step below the secondary ink above it, so
+        // the three-level ink hierarchy this fixture is about survives intact.
+        "--ds-color-text-muted": "#A6BCD0",
         "--ds-color-border-primary": "#29445F",
         "--ds-color-border-secondary": "#3B6082",
         "--ds-surface-canvas": "#07101C",
@@ -392,7 +426,39 @@ export const TECHNICAL_DARK_DOCUMENT = {
         "--ds-surface-inset": "#06101B",
         "--ds-surface-control": "#0B1A2A",
         "--ds-surface-raised": "#14283D",
-        "--ds-surface-overlay": "rgba(3, 8, 15, 0.94)",
+        // Opaque for the same reason the editorial overlay is: a translucent
+        // ground is unverifiable, and an unverifiable authored surface is the
+        // one thing this fixture exists to catch. `#030810` is the authored
+        // `rgba(3, 8, 15, 0.94)` composited over this fixture's own canvas.
+        "--ds-surface-overlay": "#030810",
+        // A tenant that repaints all eight surface grounds owns the inks on
+        // them too. The inks the compiler derives are derived from the DS base
+        // ground, not from the grounds authored above, so against this
+        // fixture's own near-black surfaces they measured Lc 0.0 -- literally
+        // invisible text -- for canvas, shell, panel, card, control and raised,
+        // and Lc -12.8 on inset. These are the eight foregrounds this fixture's
+        // own surface-role map already declares, now authored where the
+        // ingestion law can see them.
+        "--ds-material-canvas-foreground": "#EDF5FF",
+        "--ds-material-shell-foreground": "#EDF5FF",
+        "--ds-material-panel-foreground": "#EDF5FF",
+        "--ds-material-card-foreground": "#F3F8FF",
+        "--ds-material-inset-foreground": "#D5E5F5",
+        "--ds-material-control-foreground": "#F3F8FF",
+        "--ds-material-raised-foreground": "#F3F8FF",
+        "--ds-material-overlay-foreground": "#F7FAFF",
+        // The muted step of exactly three of those roles, because exactly three
+        // failed: the derived muted ink measured about Lc -27 on the authored
+        // panel, card and control grounds. The other five are left to the
+        // compiler on purpose. Authoring all eight was measured and rejected --
+        // the dark-mode `--ds-surface-raised` is not a plain hex ground, so an
+        // authored muted ink there becomes a pair the law cannot verify, and an
+        // unverifiable authored pair is exactly the failure the opaque overlay
+        // above was written to remove. `#A6BCD0` measures about -63 on all
+        // three grounds it is authored for.
+        "--ds-material-panel-foreground-muted": "#A6BCD0",
+        "--ds-material-card-foreground-muted": "#A6BCD0",
+        "--ds-material-control-foreground-muted": "#A6BCD0",
         "--ds-material-card-border": "#31506D",
         "--ds-material-card-border-strong": "#72A8D8",
         "--ds-material-card-background-hover": "#142941",
@@ -456,16 +522,30 @@ export const HUMANIST_SOFT_DOCUMENT = {
         "--ds-color-text-primary": "#20303A",
         "--ds-color-text-secondary": "#465B66",
         "--ds-color-text-muted": "#6C7D85",
+        // Same gap as the editorial fixture, in this fixture's own cool hue:
+        // the derived disabled ink measured Lc 30.4 against `#F3F0E9`, under
+        // the 45 floor. `#7C8D95` measures 53.1 and stays a step lighter than
+        // the muted ink above it.
+        "--ds-color-text-disabled": "#7C8D95",
         "--ds-color-border-primary": "#D0DCE1",
         "--ds-color-border-secondary": "#A7BBC4",
         "--ds-surface-canvas": "#F3F0E9",
         "--ds-surface-shell": "#F9F7F2",
         "--ds-surface-panel": "#FCFDFC",
-        "--ds-surface-card": "#FFFFFF",
+        // Same reason as the editorial control ground: `#FFFFFF` is the base
+        // value, so authoring it authors nothing and the channel never reaches
+        // the artifact. These two are the cool whites this fixture actually
+        // means -- the brightest surface it owns, and the control chrome a step
+        // below it.
+        "--ds-surface-card": "#FDFEFF",
         "--ds-surface-inset": "#E8EDEB",
-        "--ds-surface-control": "#FFFFFF",
+        "--ds-surface-control": "#FBFDFE",
         "--ds-surface-raised": "#F7FAFB",
-        "--ds-surface-overlay": "rgba(31, 48, 58, 0.88)",
+        // `rgba(31, 48, 58, 0.88)` composited over this fixture's own canvas,
+        // so the scrim looks identical and becomes verifiable; `#FFFFFF` over
+        // it measures Lc -96.5 and matches this fixture's declared overlay ink.
+        "--ds-surface-overlay": "#38474F",
+        "--ds-material-overlay-foreground": "#FFFFFF",
         "--ds-material-card-border": "#CAD8DE",
         "--ds-material-card-border-strong": "#7F9FAC",
         "--ds-material-card-background-hover": "#EEF5F8",

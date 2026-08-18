@@ -100,6 +100,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       translate,
       title,
       children,
+      'data-part': dataPart,
       className = '',
       style,
       ...restProps
@@ -198,7 +199,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           title={title}
           {...restProps}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={headingStyle}
@@ -247,6 +248,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       translate,
       title,
       children,
+      'data-part': dataPart,
       className = '',
       style,
       ...restProps
@@ -336,7 +338,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
           title={title}
           {...restProps}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={resolvedTextStyle}
@@ -379,6 +381,7 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       translate,
       title,
       children,
+      'data-part': dataPart,
       className = '',
       style,
       ...restProps
@@ -453,7 +456,7 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           title={title}
           {...restProps}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={paragraphStyle}
@@ -501,6 +504,7 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
       title,
       onClick,
       children,
+      'data-part': dataPart,
       className = '',
       style,
       ...restProps
@@ -595,7 +599,7 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
           title={title}
           {...restProps}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}

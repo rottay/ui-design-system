@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "7692c31a36828f6b33fdde39ed40b5768cffaa84d7f424f81dfc56a450a9e46c"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,239 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/presentation/pages/admin/integration",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css"
+    ],
+    "stableParts": [
+      "root",
+      "divider",
+      "endpoint",
+      "secret"
+    ],
     "states": [],
+    "variantAxes": [],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "surface-full",
+        "scoutArtifact": "mr-anatomy-surface-full.json",
+        "scoutSelfGradedConfidence": null,
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 1,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "cssAddressedParts",
+          "at": [
+            "foundation/tokens/css/presentation/components/skin/integration.css:45"
+          ]
+        },
+        {
+          "part": "divider",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-integration__divider` bound by the root pair `.ds-surface.ds-integration`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css:37",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css:51"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "endpoint",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-integration__endpoint` bound by the root pair `.ds-surface.ds-integration`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css:46"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "secret",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-integration__secret` bound by the root pair `.ds-surface.ds-integration`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css:45"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        }
+      ],
+      "partCensus": {
+        "rootAnchor": {
+          "class": "ds-integration",
+          "tierClass": "ds-surface",
+          "note": null
+        }
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelDeclarationsEmittedByThisFamily": [],
+        "dsVariableReadsInlineInTsx": [],
+        "dsVariableReadsViaCssSkin": [
+          {
+            "channel": "--ds-color-border",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "ui/patterns/customization/brand-studio/index.tsx:147",
+              "ui/patterns/customization/brand-studio/index.tsx:165",
+              "foundation/tokens/css/foundation/monochrome/index.css:62"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/integration.css:42",
+                "observableProperty": "border-block-end",
+                "part": null,
+                "fallbackPresent": true,
+                "fallbackValue": "var(--ds-color-border-subtle)",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-integration .ds-integration__divider:not(:last-child)"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:229",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-color-border-subtle",
+            "ownership": [
+              "DS_OWNED_FOUNDATION",
+              "DS_OWNED_COMPONENT"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/monochrome/index.css:65",
+              "foundation/tokens/css/foundation/themes/default.css:232",
+              "foundation/tokens/css/foundation/themes/default.css:2112"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/integration.css:42",
+                "observableProperty": "border-block-end",
+                "part": null,
+                "fallbackPresent": false,
+                "fallbackValue": null,
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-integration .ds-integration__divider:not(:last-child)"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:232",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          },
+          {
+            "channel": "--ds-spacing-2",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:685",
+              "foundation/tokens/css/foundation/base/density.css:79"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/integration.css:38",
+                "observableProperty": "padding-block",
+                "part": null,
+                "fallbackPresent": true,
+                "fallbackValue": "8px",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-integration .ds-integration__divider"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:685",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          }
+        ],
+        "hardcodedValues": {
+          "count": 0,
+          "colourBearing": [],
+          "sample": [],
+          "byProperty": {}
+        },
+        "atRuleContexts": {
+          "@media (forced-colors: active)": 1
+        }
+      },
+      "surfaceSkinBinding": {
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/integration.css",
+        "rootAnchor": ".ds-surface.ds-integration",
+        "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
+        "partsAdmittedThisPass": [
+          "divider",
+          "endpoint",
+          "secret"
+        ]
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +267,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica) - la superficie los lee en directo (veredicto: receta declarativa)": [
+            "--ds-color-border",
+            "--ds-color-border-subtle"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +291,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +310,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +329,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +348,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +367,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "una surface es una receta declarativa de pagina, no un control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +386,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +405,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica) - la superficie los lee en directo (veredicto: receta declarativa)": [
+            "--ds-spacing-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +429,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +449,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +469,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +489,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "la superficie no es chrome de navegacion: la sidebar es componente (primitive/navigation)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +509,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente ni superficie lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +529,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "la superficie no crea capas z propias: lo que flota dentro usa sockets de componente"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +549,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la superficie integration no lee ningun canal propio de este control: es receta declarativa, lo gobierna la raiz compartida (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +568,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +586,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +606,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +645,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la superficie no porta iconos propios: los iconos viven en los componentes huesped"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +665,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

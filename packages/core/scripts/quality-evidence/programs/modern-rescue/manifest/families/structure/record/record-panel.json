@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "ca337a7ff8bff2963fb475ac91c9ad4de0af5586e2fa2563ff500922673d4873"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,555 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/structures/record/panel",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+    ],
+    "stableParts": [
+      "panel"
+    ],
     "states": [],
+    "variantAxes": [
+      "data-mono",
+      "data-structure",
+      "data-variant"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646, packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647, packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-a.json": "SOURCE_BOUND",
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 1,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/record/panel/index.tsx:29"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "mono=false",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "mono=true",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "structure=record",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:575",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:576",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:577"
+          ]
+        },
+        {
+          "token": "variant=default",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "variant=editorial",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "variant=governance",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "variant=metrics",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "variant=technical",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+          ]
+        },
+        {
+          "token": "data-structure",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/record/panel/index.tsx:30"
+          ]
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@media(forced-colors: active)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:646",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:647",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:648"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css": {
+            "rows": 8,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupEvidence": {
+          "border": {
+            "declarationCount": 2,
+            "properties": [
+              "border",
+              "border-color"
+            ]
+          },
+          "color": {
+            "declarationCount": 3,
+            "properties": [
+              "background",
+              "background-image"
+            ]
+          },
+          "radius": {
+            "declarationCount": 1,
+            "properties": [
+              "border-radius"
+            ]
+          },
+          "size": {
+            "declarationCount": 1,
+            "properties": [
+              "inline-size"
+            ]
+          },
+          "spacing": {
+            "declarationCount": 1,
+            "properties": [
+              "padding"
+            ]
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--_ds-record-density",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:571",
+            "selector": ".ds-structure.ds-record[data-part='panel']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:115"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:575",
+            "selector": ".ds-structure.ds-record[data-part='panel'][data-structure='record']",
+            "states": [
+              "structure=record"
+            ],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "18px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:576",
+            "selector": ".ds-structure.ds-record[data-part='panel'][data-structure='record']",
+            "states": [
+              "structure=record"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:576",
+            "selector": ".ds-structure.ds-record[data-part='panel'][data-structure='record']",
+            "states": [
+              "structure=record"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:30"
+            ],
+            "declarationSiteCount": 7
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:577",
+            "selector": ".ds-structure.ds-record[data-part='panel'][data-structure='record']",
+            "states": [
+              "structure=record"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-bg-elevated)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:577",
+            "selector": ".ds-structure.ds-record[data-part='panel'][data-structure='record']",
+            "states": [
+              "structure=record"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          }
+        ],
+        "readCensus": {
+          "distinctVariables": 6,
+          "totalReadSites": 6,
+          "variables": [
+            {
+              "variable": "--_ds-record-density",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:571",
+                  "part": "panel",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-radius-xl",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:575",
+                  "part": "panel",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "18px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772"
+            },
+            {
+              "variable": "--ds-edge-standard-width",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:576",
+                  "part": "panel",
+                  "landsOn": "border",
+                  "fallbackPresent": true,
+                  "fallback": "1px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728"
+            },
+            {
+              "variable": "--ds-color-border-secondary",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:576",
+                  "part": "panel",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:148"
+            },
+            {
+              "variable": "--ds-surface-card",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:577",
+                  "part": "panel",
+                  "landsOn": "background",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-bg-elevated)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            },
+            {
+              "variable": "--ds-color-bg-elevated",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:577",
+                  "part": "panel",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+            }
+          ]
+        },
+        "undeclaredReads": [],
+        "inertFallbackChainSample": [
+          {
+            "name": "--ds-radius-xl",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:575",
+            "fallback": "18px",
+            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:576",
+            "fallback": "1px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728"
+          },
+          {
+            "name": "--ds-surface-card",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:577",
+            "fallback": "var(--ds-color-bg-elevated)",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+          }
+        ],
+        "inertFallbackChainSites": 3,
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+            "line": 571,
+            "property": "padding",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css": {
+              "rows": 8,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 0,
+            "viaUniqueDataPartInSharedClassScope": 8,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [],
+          "sharedClassTokens": [
+            "ds-record",
+            "ds-structure"
+          ],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 8
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 1,
+            "dataPart": 1,
+            "styleAttribute": 1
+          },
+          "perFile": {
+            "packages/core/src/ui/structures/record/panel/index.tsx": {
+              "classNameOccurrences": 1,
+              "dataPartOccurrences": 1,
+              "styleAttributeOccurrences": 1,
+              "lines": 37
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 8,
+          "customPropertyReadsAttributed": 6,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +583,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-primary",
+            "--ds-color-bg-secondary",
+            "--ds-color-border",
+            "--ds-color-border-secondary",
+            "--ds-color-error",
+            "--ds-color-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-text-tertiary",
+            "--ds-motion-fast",
+            "--ds-surface-canvas",
+            "--ds-surface-card"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +625,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels/valores del record sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-type-numeric-font-variant-numeric"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +655,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels/valores del record sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +685,47 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-title-size / --_ds-<comp>-value-size",
+            "prop": "titulos de pagina y valores de metricas",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-record-panel-title-size",
+              "--_ds-record-panel-value-size"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "canal compartido via cascada (nivel 2 de la forma canonica)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO (cola-32, caso 5, regla extendida): el elemento que usa el canal es [data-part=summary-item-value] dentro de data-part=summary-strip, pintado por record-summary-strip (summary-strip/index.tsx:63,91+). El dueno por pintor es record-summary-strip, no el grupo.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "structure/record/record-summary-strip",
+            "channels": [
+              "--ds-record-heading-font-size"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-font-size-lg",
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "remediatedFrom": "cola-32-revision"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +733,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-panel-radius",
+            "prop": "paneles, rails, metric cards",
+            "tier": "standard",
+            "examples": [
+              "--_ds-record-facts-radius",
+              "--_ds-stats-card-radius"
+            ],
+            "sockets": [
+              "--_ds-record-panel-panel-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-radius-lg",
+            "--ds-radius-sm",
+            "--ds-radius-xl"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +768,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "las acciones del record son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +781,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "padding de toolbar y field-grid",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-record-panel-density-factor"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-edge-standard-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +811,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es pattern/data/record-facts (pinta ds-record-facts) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/data/record-facts",
+            "channels": [
+              "--ds-record-facts-section-gap"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +841,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la ficha no anima por si misma; sus interactivos heredan sockets de inputs",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-motion-ease-out",
+            "--ds-typography-label-transform"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +861,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "Las fichas de registro componen cards; una segunda sombra anidada duplica el plano."
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +878,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de trabajo: mate",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +891,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "Las fichas viven en el lienzo de contenido, no en el chrome."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +908,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +921,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-record-facts-header-tint",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "chrome.families",
+            "socketPattern": "--_ds-record-header-tint",
+            "prop": "background-color del encabezado de record-facts",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +942,46 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-rule-style",
+            "prop": "reglas de field-grid y bordes de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-record-panel-rule-style"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-record-action-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-record-panel-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-divider-style",
+            "--ds-divider-width",
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +989,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1007,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1020,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1059,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-stroke-width",
+            "prop": "stroke-width",
+            "tier": "standard",
+            "examples": [
+              "--_ds-record-field-icon-stroke-width"
+            ],
+            "sockets": [
+              "--_ds-record-panel-icon-stroke-width"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1085,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

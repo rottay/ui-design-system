@@ -2,6 +2,53 @@
   "schemaVersion": 1,
   "principle": "Few governed product inputs compose many semantic, recipe and family-private outputs.",
   "cardinalityLaw": "One public control has one semantic lowering authority, emits many governed internal channels, and reaches many canonical families, parts and states. Internal channels may have many productive consumers but never competing semantic owners.",
+  "namespaceLifecycle": {
+    "law": "--ds-* is the public canon; --_ds-* is a governed private/provisional namespace; data-* is the governed DOM-attribute axis. Product or vertical dialects are forbidden in both token namespaces.",
+    "publicCanon": {
+      "prefix": "--ds-*",
+      "mintingAuthority": "contract/control declaredOutputs or Expert allowlist entry",
+      "forbiddenPatterns": [
+        "event",
+        "ticket",
+        "dashboard",
+        "rottay",
+        "bithire",
+        "evnto",
+        "--rt-"
+      ],
+      "note": "Minting a public channel requires an atomic migration with static/DB lowering, consumer propagation, exact restore and predecessor retirement."
+    },
+    "privateProvisional": {
+      "prefix": "--_ds-*",
+      "scope": "component-private or family-prototype socket below the tenant pipeline",
+      "requiredFields": [
+        "owner",
+        "producer",
+        "fallbackAuthority",
+        "productiveConsumerFamilyIds",
+        "promotionCriteria",
+        "retirementCriteria"
+      ],
+      "allowedDispositions": [
+        "PROMOTE",
+        "DERIVE",
+        "RETIRE"
+      ],
+      "forbidden": [
+        "Theme keypaths",
+        "compiled tenant emissions",
+        "public control declaredOutputs",
+        "contracts",
+        "documentation",
+        "using extension declarations as a deferral mechanism"
+      ]
+    },
+    "attributeAxis": {
+      "prefix": "data-*",
+      "scope": "root attributes and host adaptation, not a token namespace"
+    },
+    "drainLaw": "A drain cohort may not move an extension declaration into --_ds-* merely to defer a decision. Each cohort migrates, derives or retires its declarations; provisional sockets are for evaluation with a written exit, not for parking extension debt."
+  },
   "executionTraversal": {
     "strategy": "control-calibration-then-family-once",
     "designFirst": "Materialize every active Standard and Pro control against all 255 canonical family IDs before broad propagation. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks family completion. Proposed controls live only in the target model and never create certifying cells or block R0-R6.",
@@ -27,6 +74,17 @@
     "stable-dom-part",
     "observable-property"
   ],
+  "transportEquality": {
+    "law": "Static BrandTheme and DB TenantThemeDocument are transports only. Both resolve to the same complete nested Theme and enter exactly one compileTheme. Equivalent values produce identical keypaths, channel inventory, deterministic order, CSS and digest. ThemePatch exists only at ingestion and never reaches the compiler.",
+    "inventory": "public-layer only: --ds-* emissions, root attributes, deterministic order, CSS and digest. Private --_ds-* sockets are downstream of lowering and must resolve identically per transport because they read the same derived channels.",
+    "forbidden": [
+      "second compiler",
+      "subset/intersection parity fixture",
+      "invented neutral Theme",
+      "silent default vertical",
+      "slug or product branch in compiler"
+    ]
+  },
   "artDirectionProjection": {
     "contract": "tenant-art-direction.json",
     "law": "Art direction is expressed through the existing pipeline; it is not a new tier, compiler, CSS authority or tenant branch.",

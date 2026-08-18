@@ -129,8 +129,8 @@ function buildInitialKeys(
  * which also owns the per-appearance shell/header/content geometry drained
  * from this engine (the former `getSectionShellStyles` and the header/content
  * padding maps). INLINE BOUNDARY: Typography owns font-size inline by
- * architecture (the engine stamps it per node), so the only inline styles
- * left are the facts-card title's family-private 17px
+ * architecture (the engine stamps it per node), so the inline styles left
+ * here are the facts-card title's family-private 17px
  * (`--_ds-form-sections-facts-title-size`, exact fallback) and the
  * consumer `style` passthrough. Everything else typographic — weights via
  * the `Text` weight classes, line-heights, measures, tracking, letter-case,

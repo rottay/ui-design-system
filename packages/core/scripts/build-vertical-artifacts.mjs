@@ -1,14 +1,15 @@
 /**
- * Regenerate first-party vertical CSS artifacts from their authored sources.
+ * Regenerate first-party vertical CSS artifacts from their authored source.
  *
  * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
- *   index.css = compileBrandTheme(<slug>BrandTheme) + <slug>/_source/extension.css
+ *   index.css = compileBrandTheme(<slug>BrandTheme)
  *
- * The brand compiler owns the theme variables (palette, typography, surfaces,
- * chrome). The declared extension carries what the compiler cannot express
- * (oklch DaisyUI bridge, color scales, semantic sets, dark-mode blocks, and
- * component rules). This keeps the artifact a pure projection of authored
- * sources so drift cannot accumulate by hand-editing.
+ * The brand compiler owns every theme variable the artifact carries (palette,
+ * typography, surfaces, chrome) and every mode block, so the artifact is a pure
+ * projection of ONE authored source. There is no second authored input to merge:
+ * an artifact with two authors is an artifact whose value can be decided by
+ * whichever author is read last, which is exactly the drift this generator exists
+ * to make impossible.
  *
  * Scope: every slug in FIRST_PARTY_ARTIFACT_SPECS (bithire, evnto, rottay).
  * themanagementmiami and the torture fixtures are deliberately not registered
@@ -151,12 +152,10 @@ const apcaFailures = [];
 for (const spec of artifacts) {
   const { slug, brandTheme } = spec;
   const artifactPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/index.css`);
-  const extensionPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/_source/extension.css`);
 
   const { css: output, compiled } = renderFirstPartyArtifact({
     spec,
     brandTheme,
-    extensionCss: readFileSync(extensionPath, 'utf-8'),
     regenerateCommand: REGENERATE_COMMAND,
   });
   apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled));
@@ -165,7 +164,7 @@ for (const spec of artifacts) {
     const current = existsSync(artifactPath) ? readFileSync(artifactPath, 'utf-8') : '';
     if (current !== output) {
       stale += 1;
-      console.error(`✗ artifacts/${slug}/index.css is out of sync with its authored sources.`);
+      console.error(`✗ artifacts/${slug}/index.css is out of sync with its authored source.`);
       console.error(firstDiff(current, output));
     } else {
       console.log(`✓ artifacts/${slug}/index.css is up to date.`);

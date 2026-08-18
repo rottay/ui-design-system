@@ -20,7 +20,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "e53ba6ee342dd03f17fbdedd23628b3f2f17c26b722d11de6aa145fd1e1c6a92"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -28,13 +28,2333 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/visualization/tree-view/contracts/index.ts",
+      "packages/core/src/ui/patterns/visualization/tree-view/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx",
+      "packages/core/src/ui/patterns/visualization/tree-view/index.ts",
+      "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/contracts/index.ts",
+      "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx",
+      "packages/core/src/ui/patterns/visualization/tree-view/presentation/interactive/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css"
+    ],
+    "stableParts": [
+      "body",
+      "checkbox",
+      "connector",
+      "drag-handle",
+      "empty",
+      "group",
+      "item",
+      "label",
+      "link",
+      "node",
+      "node-row",
+      "root",
+      "row",
+      "search-input",
+      "search-row",
+      "search-status",
+      "skeleton",
+      "skeleton-list",
+      "toggle",
+      "tree"
+    ],
+    "states": [
+      "checked",
+      "disabled",
+      "expanded",
+      "loading",
+      "selected",
+      "visible"
+    ],
+    "variantAxes": [
+      "data-depth"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "the ONLY colour literals in the cohort are here, all three in var() fallback position on the rustic skin [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:5, packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:15, packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:28]",
+      "the family spans two namespaces: the engine legs use ds-pattern-tree-view, the engine-independent TreeViewConnector uses rt-tree-view [at packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:48, packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx, packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-visualization",
+        "scoutArtifact": "mr-anatomy-pattern-visualization.json",
+        "scoutSelfGradedConfidence": "MEDIUM",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 20,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "body",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:246",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:277",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:31"
+          ]
+        },
+        {
+          "part": "checkbox",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:40"
+          ]
+        },
+        {
+          "part": "connector",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:35"
+          ]
+        },
+        {
+          "part": "drag-handle",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:45"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:312",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:74"
+          ]
+        },
+        {
+          "part": "group",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:51"
+          ]
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:32"
+          ]
+        },
+        {
+          "part": "label",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:40"
+          ]
+        },
+        {
+          "part": "link",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:42"
+          ]
+        },
+        {
+          "part": "node",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:178"
+          ]
+        },
+        {
+          "part": "node-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:27"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:240",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:271",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:230",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:240",
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css:20"
+          ],
+          "atSiteCount": 22
+        },
+        {
+          "part": "row",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:33"
+          ]
+        },
+        {
+          "part": "search-input",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:243",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:11"
+          ]
+        },
+        {
+          "part": "search-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:248",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:37"
+          ]
+        },
+        {
+          "part": "search-status",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:303"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:261",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:69"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "skeleton-list",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:259",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:43"
+          ]
+        },
+        {
+          "part": "toggle",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:33"
+          ]
+        },
+        {
+          "part": "tree",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:252"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "checked",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:182"
+          ],
+          "state": "checked"
+        },
+        {
+          "token": "disabled",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:183",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:189"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "expanded",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:180",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:198"
+          ],
+          "state": "expanded"
+        },
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:240",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:272",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:230",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:240"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "selected",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:181",
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:188"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "visible",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:197"
+          ],
+          "state": "visible"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "depth",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:179"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "empty",
+            "at": [
+              "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:273",
+              "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:240"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineDivergence": {
+          "enginesPresent": [
+            "classic",
+            "modern",
+            "rustic"
+          ],
+          "engineSwitched": true,
+          "rootAnchor": {
+            "modern": {
+              "class": "ds-pattern-tree-view ds-engine-modern",
+              "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:48"
+            },
+            "rustic": {
+              "class": "ds-pattern-tree-view ds-engine-rustic",
+              "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:25"
+            },
+            "classic": {
+              "class": null,
+              "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/classic/index.tsx:105",
+              "note": "<Card className={className} style={style}> - AntD Card, no DS anchor"
+            }
+          },
+          "divergence": "modern 7 parts, rustic 9, plus 7 parts owned by the engine-independent TreeViewConnector under presentation/connector/. TreeViewConnector uses the rt- namespace, not ds-.",
+          "classicDisposition": "NOT_APPLICABLE_WITH_REASON",
+          "classicReason": "R-2 AS NARROWED APPLIES. Sub-regions are AntD Tree/Input at tree-view/engines/classic/index.tsx:114 and :123 (imported :21). The root is an AntD Card at :105/:112 carrying ONLY the caller-supplied className, which R-8 explicitly refuses to admit as an anchor, so there is no DS-owned anchor of either kind anywhere in this engine.",
+          "r2AsNarrowedApplies": true,
+          "r2Version": "narrowed: applies ONLY where a classic sub-region is addressable exclusively through third-party AntD vocabulary. Where classic stamps its own DS-owned anchor of either R-8 kind, the region IS addressable and R-2 does not apply."
+        },
+        "engines": [
+          "classic",
+          "modern",
+          "rustic",
+          "shared"
+        ]
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "16 of 44 reads carry no part binding (tree-view-connector.css is class-keyed)",
+          "--_ds-tree-view-row-rhythm is read at packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:26 and declared by nothing in any of the three detector forms"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupMembership": {
+          "frame": [
+            "border",
+            "border-block-end",
+            "border-block-end-color",
+            "box-shadow",
+            "outline"
+          ],
+          "geometry": [
+            "block-size",
+            "border-radius",
+            "gap",
+            "margin-block-end",
+            "padding",
+            "padding-block",
+            "width"
+          ],
+          "ink": [
+            "accent-color",
+            "color"
+          ],
+          "motion": [
+            "animation",
+            "transition"
+          ],
+          "state-affordance": [
+            "cursor"
+          ],
+          "surface": [
+            "background"
+          ],
+          "typography": [
+            "font-family",
+            "font-size",
+            "line-height"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "variable": "--ds-font-family-base",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:53",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-family-base"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:59",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "width",
+            "propertyGroupPrior": "geometry",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:71",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "cursor",
+            "propertyGroupPrior": "state-affordance",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:94",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "cursor",
+            "propertyGroupPrior": "state-affordance",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-elevation-1",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css:21",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']",
+            "atRules": [],
+            "landsOn": "box-shadow",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-elevation-1"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-tree-view-body-padding",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:32",
+            "part": "body",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] > [data-part='body']",
+            "atRules": [],
+            "landsOn": "padding",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-body-padding",
+              "--ds-spacing-3"
+            ],
+            "fallback": "var(--ds-spacing-3, 12px)",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-search-margin-block-end",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:38",
+            "part": "search-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']   .ds-tree-view-modern__search-row[data-part='search-row']",
+            "atRules": [],
+            "landsOn": "margin-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-search-margin-block-end",
+              "--ds-spacing-2"
+            ],
+            "fallback": "var(--ds-spacing-2, 8px)",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-gap",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:45",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "gap",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-skeleton-gap",
+              "--ds-spacing-2"
+            ],
+            "fallback": "var(--ds-spacing-2, 8px)",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-padding",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:46",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "padding",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-skeleton-padding",
+              "--ds-spacing-5"
+            ],
+            "fallback": "var(--ds-spacing-5, 20px)",
+            "hasFallback": true,
+            "terminalLiteral": "20px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-duration",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:48",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "animation",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-tree-view-skeleton-duration",
+              "--ds-motion-deliberate"
+            ],
+            "fallback": "var(--ds-motion-deliberate, 720ms)",
+            "hasFallback": true,
+            "terminalLiteral": "720ms",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-motion-ease-in-out",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:49",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "animation",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-motion-ease-in-out"
+            ],
+            "fallback": "ease-in-out",
+            "hasFallback": true,
+            "terminalLiteral": "ease-in-out",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-row-height",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:53",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "block-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-skeleton-row-height"
+            ],
+            "fallback": "24px",
+            "hasFallback": true,
+            "terminalLiteral": "24px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:54",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:55",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-panel"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-8",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:77",
+            "part": "empty",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "atRules": [],
+            "landsOn": "padding-block",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-8"
+            ],
+            "fallback": "2rem",
+            "hasFallback": true,
+            "terminalLiteral": "2rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:4",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-900"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-0",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:5",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-neutral-0"
+            ],
+            "fallback": "#fff",
+            "hasFallback": true,
+            "terminalLiteral": "#fff",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:6",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:7",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:12",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-neutral-300"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:13",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-0",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:15",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-neutral-0"
+            ],
+            "fallback": "#fff",
+            "hasFallback": true,
+            "terminalLiteral": "#fff",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:16",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-900"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:21",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:23",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-900"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:28",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-primary-50"
+            ],
+            "fallback": "#eff6ff",
+            "hasFallback": true,
+            "terminalLiteral": "#eff6ff",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-primary-700",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:29",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-primary-700"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-500",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:36",
+            "part": "toggle",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__toggle[data-part='toggle']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-500"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-primary-600",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:41",
+            "part": "checkbox",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__checkbox[data-part='checkbox']",
+            "atRules": [],
+            "landsOn": "accent-color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-primary-600"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:46",
+            "part": "drag-handle",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__drag-handle[data-part='drag-handle']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-300"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:51",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:52",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:22",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-mono"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:23",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "0.875rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.875rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--_ds-tree-view-row-rhythm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:26",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "line-height",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--_ds-tree-view-row-rhythm"
+            ],
+            "fallback": "1.7",
+            "hasFallback": true,
+            "terminalLiteral": "1.7",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:27",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline-strong",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:42",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__connector",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-hairline-strong"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:59",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__label",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:68",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link",
+            "atRules": [],
+            "landsOn": "border-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-hairline"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-duration-fast",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-duration-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:76",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link:hover",
+            "atRules": [
+              "@media (hover: hover)"
+            ],
+            "landsOn": "border-block-end-color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "terminalLiteral": "2px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          }
+        ],
+        "censusTotals": {
+          "readSites": 44,
+          "distinctVariables": 32,
+          "byPropertyGroup": {
+            "typography": 7,
+            "frame": 7,
+            "geometry": 11,
+            "motion": 4,
+            "surface": 5,
+            "ink": 10
+          },
+          "readSitesWithFallback": 18,
+          "readSitesWithoutFallback": 26,
+          "undeclaredDistinct": 7,
+          "undeclaredNames": [
+            "--_ds-tree-view-row-rhythm",
+            "--ds-tree-view-body-padding",
+            "--ds-tree-view-search-margin-block-end",
+            "--ds-tree-view-skeleton-duration",
+            "--ds-tree-view-skeleton-gap",
+            "--ds-tree-view-skeleton-padding",
+            "--ds-tree-view-skeleton-row-height"
+          ],
+          "generatedArtifactOnlyReads": 0,
+          "chains": 18,
+          "whollyInert": 7,
+          "partiallyInert": 4,
+          "live": 7,
+          "multiRungChains": 5,
+          "readSitesWithNoPartBinding": 16,
+          "distinctLandingProperties": 19
+        },
+        "variableCensus": [
+          {
+            "variable": "--ds-font-family-base",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:53",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-family-base"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:59",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "width",
+            "propertyGroupPrior": "geometry",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:71",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "cursor",
+            "propertyGroupPrior": "state-affordance",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:94",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "cursor",
+            "propertyGroupPrior": "state-affordance",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-elevation-1",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css:21",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']",
+            "atRules": [],
+            "landsOn": "box-shadow",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-elevation-1"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-tree-view-body-padding",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:32",
+            "part": "body",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] > [data-part='body']",
+            "atRules": [],
+            "landsOn": "padding",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-body-padding",
+              "--ds-spacing-3"
+            ],
+            "fallback": "var(--ds-spacing-3, 12px)",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-search-margin-block-end",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:38",
+            "part": "search-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']   .ds-tree-view-modern__search-row[data-part='search-row']",
+            "atRules": [],
+            "landsOn": "margin-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-search-margin-block-end",
+              "--ds-spacing-2"
+            ],
+            "fallback": "var(--ds-spacing-2, 8px)",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-gap",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:45",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "gap",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-skeleton-gap",
+              "--ds-spacing-2"
+            ],
+            "fallback": "var(--ds-spacing-2, 8px)",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-padding",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:46",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "padding",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-skeleton-padding",
+              "--ds-spacing-5"
+            ],
+            "fallback": "var(--ds-spacing-5, 20px)",
+            "hasFallback": true,
+            "terminalLiteral": "20px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-duration",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:48",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "animation",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-tree-view-skeleton-duration",
+              "--ds-motion-deliberate"
+            ],
+            "fallback": "var(--ds-motion-deliberate, 720ms)",
+            "hasFallback": true,
+            "terminalLiteral": "720ms",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-motion-ease-in-out",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:49",
+            "part": "skeleton-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
+            "atRules": [],
+            "landsOn": "animation",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-motion-ease-in-out"
+            ],
+            "fallback": "ease-in-out",
+            "hasFallback": true,
+            "terminalLiteral": "ease-in-out",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-tree-view-skeleton-row-height",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:53",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "block-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-tree-view-skeleton-row-height"
+            ],
+            "fallback": "24px",
+            "hasFallback": true,
+            "terminalLiteral": "24px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:54",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:55",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-panel"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-8",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:77",
+            "part": "empty",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "atRules": [],
+            "landsOn": "padding-block",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-8"
+            ],
+            "fallback": "2rem",
+            "hasFallback": true,
+            "terminalLiteral": "2rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:4",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-900"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-0",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:5",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-neutral-0"
+            ],
+            "fallback": "#fff",
+            "hasFallback": true,
+            "terminalLiteral": "#fff",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:6",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:7",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:12",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-neutral-300"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:13",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-0",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:15",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-neutral-0"
+            ],
+            "fallback": "#fff",
+            "hasFallback": true,
+            "terminalLiteral": "#fff",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:16",
+            "part": "search-input",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-900"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:21",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:23",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-900"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:28",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-primary-50"
+            ],
+            "fallback": "#eff6ff",
+            "hasFallback": true,
+            "terminalLiteral": "#eff6ff",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-primary-700",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:29",
+            "part": "node-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-primary-700"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-500",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:36",
+            "part": "toggle",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__toggle[data-part='toggle']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-500"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-primary-600",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:41",
+            "part": "checkbox",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__checkbox[data-part='checkbox']",
+            "atRules": [],
+            "landsOn": "accent-color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-primary-600"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:46",
+            "part": "drag-handle",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__drag-handle[data-part='drag-handle']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-neutral-300"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:51",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:52",
+            "part": "skeleton",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:22",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-mono"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:23",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "0.875rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.875rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--_ds-tree-view-row-rhythm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:26",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "line-height",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--_ds-tree-view-row-rhythm"
+            ],
+            "fallback": "1.7",
+            "hasFallback": true,
+            "terminalLiteral": "1.7",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:27",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline-strong",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:42",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__connector",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-hairline-strong"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:59",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__label",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:68",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link",
+            "atRules": [],
+            "landsOn": "border-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-hairline"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-duration-fast",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-duration-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:76",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link:hover",
+            "atRules": [
+              "@media (hover: hover)"
+            ],
+            "landsOn": "border-block-end-color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "terminalLiteral": "2px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-tree-view__link:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          }
+        ]
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -43,7 +2363,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-hairline",
+            "--ds-color-hairline-strong"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-surface-fg",
+            "--ds-surface-panel"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -51,7 +2397,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-column-title-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -59,7 +2427,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-column-title-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-mono"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.scale",
@@ -67,7 +2462,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<familia>-label-size",
+            "prop": "labels de la vista. EXCEPCION: ascii-diagram tiene par grid-size/line-cadence propio con piso 9px; su tamano es del contenido",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-pattern-tree-view-label-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -75,7 +2493,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-card-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -83,7 +2528,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (pattern/visualization/pattern-calendar-view).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-calendar-view",
+            "channels": [
+              "--ds-calendar-view-nav-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -91,7 +2558,48 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-card-density-factor"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-tree-view-body-padding",
+              "--_ds-tree-view-skeleton-gap",
+              "--_ds-tree-view-skeleton-padding",
+              "--_ds-tree-view-skeleton-row-height"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -99,7 +2607,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-tree-view-search-margin-block-end"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-5",
+            "--ds-spacing-8"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -107,7 +2642,42 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-ascii-diagram-line-cadence",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-kanban-line-cadence",
+            "prop": "animation-duration de ascii-diagram y transiciones de kanban/tree",
+            "tier": "standard"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-duration-fast",
+              "--_ds-tree-view-skeleton-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-ease-out"
+          ],
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-deliberate",
+            "--ds-motion-ease-in-out"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -115,7 +2685,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de pattern-tree-view no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -123,7 +2710,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de lectura/trabajo como charts: acabado cero",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de pattern-tree-view no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -131,7 +2730,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "estos patterns no son chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -139,7 +2750,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -147,7 +2770,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "regiones pintadas por familia dentro del plano de visualizacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack (canales --ds-z-* compartidos)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -155,7 +2790,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (pattern/visualization/pattern-calendar-view).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-calendar-view",
+            "channels": [
+              "--ds-calendar-view-frame-style"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -163,7 +2820,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -171,7 +2838,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -179,7 +2858,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -187,7 +2897,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -195,7 +2917,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -110,10 +110,7 @@ input.rottay-input.rottay-input--modern {
 
 .rottay-input.rottay-input--modern > .rottay-input__control::placeholder,
 input.rottay-input.rottay-input--modern::placeholder {
-  color: var(
-    --ds-input-placeholder,
-    var(--ds-input-color-placeholder, var(--ds-color-text-muted))
-  );
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
   opacity: var(--ds-input-placeholder-opacity);
 }
 

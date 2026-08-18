@@ -102,20 +102,13 @@ describe('embedded CSS certified data producers', () => {
   it('executes the first-party static compiler and proves its generated block is custom-property-only', () => {
     // FIRST-PARTY STATIC producer: compileBrandTheme -> renderFirstPartyArtifact.
     // `compiled.cssVariables` / `compiled.modeBlocks[].cssVariables` are the
-    // GENERATED portion of the artifact -- the certified data channel. The
-    // hand-authored `_source/extension.css` merged into `.css` alongside it
-    // is real component/paint source, not generated data, and is deliberately
-    // excluded from this assertion (see the module header above).
+    // GENERATED portion of the artifact -- the certified data channel. There is
+    // no longer a hand-authored source merged in alongside it: the artifact has
+    // exactly one author, so the generated portion and the artifact's own
+    // declarations no longer need separating (see the module header above).
     const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === 'bithire');
     if (!spec) throw new Error('no first-party artifact spec for slug "bithire"');
-    const extensionCss = readFileSync(
-      resolve(
-        dirname(fileURLToPath(import.meta.url)),
-        `../src/foundation/tokens/css/facade/artifacts/${spec.slug}/_source/extension.css`,
-      ),
-      'utf8',
-    );
-    const { compiled } = renderFirstPartyArtifact({ spec, brandTheme: bithireBrandTheme, extensionCss });
+    const { compiled } = renderFirstPartyArtifact({ spec, brandTheme: bithireBrandTheme });
 
     const generatedBlocks = [
       compiled.cssVariables,
@@ -133,9 +126,9 @@ describe('embedded CSS certified data producers', () => {
   it('executes the tenant/DB compiler and proves every artifact declaration is a custom property', () => {
     // TENANT/DB producer: TenantThemeDocument -> compileTenantThemeConfig.
     // `artifact.css` is rendered solely from `artifact.variables` (see
-    // renderArtifactCss in composition/tenant-theme), so -- unlike the
+    // renderArtifactCss in composition/tenant-theme), so -- exactly like the
     // first-party artifact above -- the whole rendered block is generated
-    // data with no hand-authored extension merged in.
+    // data with no hand-authored source merged in.
     const identity: TenantThemeConfigIdentity = {
       tenantId: 'embedded-css-contract',
       slug: 'embedded-css-contract',

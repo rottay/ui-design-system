@@ -27,11 +27,27 @@ import { bithireBrandTheme } from "../ts/presentation/brand-themes/bithire";
 import { evntoBrandTheme } from "../ts/presentation/brand-themes/evnto";
 import { rottayBrandTheme } from "../ts/presentation/brand-themes/rottay";
 
+// EXCISED (SEV-2): `type GateResult` — the return shape of the deleted
+// artifact-provenance gate (per-slug bytes/declarations/literals, capability
+// gap count, and the observed capability-gap channel + region-size sets). It
+// had no remaining referent once the gate and its four ratchet tests went; the
+// shape is recorded here rather than kept as an unused declaration.
+
+// EXCISED (SEV-2): `loadArtifactProvenanceGate()`. It dynamically imported
+// `scripts/artifact-provenance-gate.mjs`, which was deleted in the same tranche
+// as the three extension sources it measured. The gate ratcheted the VOLUME of
+// a second authored source (bytes/declarations/literals/capability-gap regions
+// per slug); with no second source, every one of its ceilings is vacuously
+// satisfied, and a vacuously green ratchet is worse than none — it reads as
+// enforcement. Its successor is `scripts/first-party-single-author-gate.mjs`,
+// which forbids the source outright instead of bounding its size.
+
 const ROOT = process.cwd();
 const TOKENS_DIR = join(ROOT, "src/foundation/tokens");
-const ARTIFACTS_DIR = join(TOKENS_DIR, "css/facade/artifacts");
+// EXCISED (SEV-2): `ARTIFACTS_DIR` — every remaining reader of it resolved a
+// `_source/extension.css` path.
 const LEDGER_PATH = join(TOKENS_DIR, "residual-adjudication.json");
-const BASELINE_PATH = join(ROOT, "scripts/artifact-provenance-gate.baseline.json");
+// EXCISED (SEV-2): `BASELINE_PATH` — the deleted gate's baseline JSON.
 
 const ROTTAY_DEAD_49 = [
   "--ds-anchor-border-color",
@@ -103,6 +119,130 @@ const BITHIRE_DEAD_13 = [
 
 const DEAD_61 = [...new Set([...ROTTAY_DEAD_49, ...BITHIRE_DEAD_13])].sort();
 const DEAD_SET = new Set(DEAD_61);
+
+const D1_ROSTER = [
+  "--ds-bg-primary",
+  "--ds-bg-secondary",
+  "--ds-border-color-disabled",
+  "--ds-text-muted",
+] as const;
+const D1_SET: Set<string> = new Set(D1_ROSTER);
+
+const D1_ROSTER_SHA256 = "6b3a72860e140376a58029e7824cfbc06e5b3810d8055c1a96f9fb9d515da06a";
+const D1_MODE_MEMBERSHIP_SHA256 = "1cfe1b350da8f79a2e1869f9a12ace776ec35c26d2238e9dd43cce3fe033ecb9";
+const D1_VALUE_SHA256 = "e86e51390530f9df1e3a358cec14a2741265a4c582ce4cad88b6224f59291b05";
+
+type D1HistoricalValues = Record<string, Record<string, Record<string, string>>>;
+
+/** Canonical D1 mode-membership hash: every slug/mode/channel triple, sorted, LF-terminated. */
+function d1ModeMembershipHash(
+  roster: readonly string[],
+  historicalValues: D1HistoricalValues,
+): string {
+  const lines: string[] = [];
+  for (const slug of Object.keys(historicalValues).sort()) {
+    for (const mode of Object.keys(historicalValues[slug]).sort()) {
+      for (const ch of roster.slice().sort()) {
+        lines.push(`${slug}/${mode}/${ch}`);
+      }
+    }
+  }
+  return createHash("sha256").update(lines.join("\n") + "\n").digest("hex");
+}
+
+/** Canonical D1 value hash: every slug/mode/channel=value triple, sorted, LF-terminated. */
+function d1ValueHash(roster: readonly string[], historicalValues: D1HistoricalValues): string {
+  const lines: string[] = [];
+  for (const slug of Object.keys(historicalValues).sort()) {
+    for (const mode of Object.keys(historicalValues[slug]).sort()) {
+      for (const ch of roster.slice().sort()) {
+        lines.push(`${slug}/${mode}/${ch}=${historicalValues[slug][mode][ch]}`);
+      }
+    }
+  }
+  return createHash("sha256").update(lines.join("\n") + "\n").digest("hex");
+}
+
+/**
+ * Pure shared validator for the VERTICAL-DEAD-4 ledger receipt and its
+ * relationship to the global entries/distribution. Used by the live test and by
+ * every causal mutant: any mutation that breaks receipt rosters, counts,
+ * historical values, derived hashes, generated-pending status, entry count or
+ * the absence of D1 names from entries makes this throw.
+ */
+function assertD1Ledger(candidate: typeof ledger): void {
+  const receipt = candidate.verticalDead4SourceDrain as {
+    id: string;
+    checkpoint: string;
+    date: string;
+    scope: string;
+    roster: string[];
+    names: number;
+    verticalMemberships: number;
+    declarationsRemoved: number;
+    perVertical: Record<string, { names: number; declarations: number }>;
+    rosterSha256: Record<string, string>;
+    historicalValues: D1HistoricalValues;
+    generatedProjection: string;
+    mandate: string;
+  };
+
+  expect(receipt.id, "receipt.id").toBe("VERTICAL-DEAD-4");
+  expect(receipt.checkpoint, "receipt.checkpoint").toBe("VERTICAL-PALETTE-90/89");
+  expect(receipt.date, "receipt.date").toBe("2026-08-14");
+  expect(receipt.scope, "receipt.scope").toBe("source-only");
+  expect(receipt.roster, "receipt.roster").toEqual(D1_ROSTER);
+  expect(receipt.names, "receipt.names").toBe(4);
+  expect(receipt.verticalMemberships, "receipt.verticalMemberships").toBe(4);
+  expect(receipt.declarationsRemoved, "receipt.declarationsRemoved").toBe(8);
+  expect(receipt.perVertical.rottay, "receipt.perVertical.rottay").toEqual({ names: 4, declarations: 8 });
+  expect(receipt.perVertical.bithire, "receipt.perVertical.bithire").toEqual({ names: 0, declarations: 0 });
+  expect(receipt.perVertical.evnto, "receipt.perVertical.evnto").toEqual({ names: 0, declarations: 0 });
+  expect(receipt.generatedProjection, "receipt.generatedProjection").toBe("GENERATED-PENDING");
+
+  expect(receipt.rosterSha256.global, "rosterSha256.global").toBe(rosterHash(receipt.roster));
+  expect(receipt.rosterSha256.modeMembership, "rosterSha256.modeMembership").toBe(
+    d1ModeMembershipHash(receipt.roster, receipt.historicalValues),
+  );
+  expect(receipt.rosterSha256.value, "rosterSha256.value").toBe(d1ValueHash(receipt.roster, receipt.historicalValues));
+
+  expect(receipt.historicalValues.rottay.dark["--ds-bg-primary"]).toBe("#0C0C0E");
+  expect(receipt.historicalValues.rottay.dark["--ds-bg-secondary"]).toBe("#131316");
+  expect(receipt.historicalValues.rottay.dark["--ds-border-color-disabled"]).toBe("#222226");
+  expect(receipt.historicalValues.rottay.dark["--ds-text-muted"]).toBe("#6B6B72");
+  expect(receipt.historicalValues.rottay.light["--ds-bg-primary"]).toBe("#FAFAF9");
+  expect(receipt.historicalValues.rottay.light["--ds-bg-secondary"]).toBe("#F4F4F3");
+  expect(receipt.historicalValues.rottay.light["--ds-border-color-disabled"]).toBe("#EDEDEC");
+  expect(receipt.historicalValues.rottay.light["--ds-text-muted"]).toBe("#9C9C9C");
+
+  expect(receipt.mandate).toMatch(/Kimi 2\.7/);
+  expect(receipt.mandate).toMatch(/Fable 5/);
+  expect(receipt.mandate).toMatch(/Kimi 3/);
+  expect(receipt.mandate).toMatch(/Codex/);
+  expect(receipt.mandate).not.toMatch(/Turing/);
+  expect(receipt.mandate).toBe("Kimi 2.7 implementation; Fable 5 + Kimi 3 audit; Codex DT.");
+
+  const entries = candidate.entries as Record<string, unknown>;
+  expect(Object.keys(entries).length, "entries count").toBe(301);
+  expect("--ds-text-muted" in entries, "--ds-text-muted must not be an entry").toBe(false);
+  expect("--ds-border-color-disabled" in entries, "--ds-border-color-disabled must not be an entry").toBe(false);
+
+  const computed = new Map<string, number>();
+  for (const e of Object.values(entries as Record<string, { finalState: string }>)) {
+    computed.set(e.finalState, (computed.get(e.finalState) ?? 0) + 1);
+  }
+  const expectedDistribution: Record<string, number> = {};
+  for (const [state, count] of computed) expectedDistribution[state] = count;
+  const distribution = (candidate.finalStateVocabulary as { distribution: Record<string, number> }).distribution;
+  expect(distribution, "finalStateVocabulary.distribution reconciles from entries").toEqual(expectedDistribution);
+
+  const batch = (candidate.faseBExecution as { legacyAliasBatch: { executed: Record<string, string> } }).legacyAliasBatch
+    .executed;
+  expect(batch["--ds-text-muted"]).toMatch(/VERTICAL-DEAD-4/);
+  expect(batch["--ds-text-muted"]).toMatch(/GENERATED-PENDING/);
+  expect(batch["--ds-border-color-disabled"]).toMatch(/VERTICAL-DEAD-4/);
+  expect(batch["--ds-border-color-disabled"]).toMatch(/GENERATED-PENDING/);
+}
 
 const PALETTE_ROTTAY_35 = [
   "--ds-color-primary-hover",
@@ -223,11 +363,7 @@ function compileRosterEffectiveHash(
 }
 
 const ledger = JSON.parse(readFileSync(LEDGER_PATH, "utf8")) as Record<string, unknown>;
-const baseline = JSON.parse(readFileSync(BASELINE_PATH, "utf8")) as {
-  capabilityGaps: Record<string, number>;
-  metrics: Record<string, { bytes: number; rules: number; declarations: number; literals: number }>;
-  grandfather: Record<string, { capabilityGapRegionSizes?: Record<string, number> }>;
-};
+// EXCISED (SEV-2): the parsed `baseline` document, with its file.
 
 /** Sorted roster + final newline, the hashing convention for these authorities. */
 function rosterHash(names: readonly string[]): string {
@@ -367,13 +503,10 @@ function createSourceFile(source: string, fileName: string): ts.SourceFile {
     ? ts.ScriptKind.TSX
     : fileName.endsWith(".jsx")
       ? ts.ScriptKind.JSX
-      : fileName.endsWith(".mts")
-        ? ts.ScriptKind.MTS
-        : fileName.endsWith(".cts")
-          ? ts.ScriptKind.CTS
-          : fileName.endsWith(".mjs") || fileName.endsWith(".js") || fileName.endsWith(".cjs")
-            ? ts.ScriptKind.JS
-            : ts.ScriptKind.TS;
+      : fileName.endsWith(".mjs") || fileName.endsWith(".js") || fileName.endsWith(".cjs")
+        ? ts.ScriptKind.JS
+        : ts.ScriptKind.TS;
+  // .mts / .cts are treated as TS by this installed compiler (ScriptKind lacks MTS/CTS).
   return ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, scriptKind);
 }
 
@@ -452,13 +585,13 @@ type ConsumerHit = { name: string; kind: "css-var" | "cssom" };
  * removeProperty calls with lexical const binding (TypeChecker), PropertyAccess
  * or static ElementAccess callee, and simple static concatenations.
  */
-function scanDeadConsumerSource(text: string, fileName: string): ConsumerHit[] {
+function scanConsumerSource(text: string, fileName: string, roster: Set<string>): ConsumerHit[] {
   if (fileName.endsWith(".css")) {
     const root = postcss.parse(text, { from: fileName });
     const hits: ConsumerHit[] = [];
     root.walkDecls((d) => {
       for (const name of cssVarArguments(d.value)) {
-        if (DEAD_SET.has(name)) hits.push({ name, kind: "css-var" });
+        if (roster.has(name)) hits.push({ name, kind: "css-var" });
       }
     });
     return hits;
@@ -476,19 +609,23 @@ function scanDeadConsumerSource(text: string, fileName: string): ConsumerHit[] {
     const staticText = extractStaticString(node);
     if (staticText !== undefined) {
       for (const name of cssVarArguments(staticText)) {
-        if (DEAD_SET.has(name)) hits.push({ name, kind: "css-var" });
+        if (roster.has(name)) hits.push({ name, kind: "css-var" });
       }
     }
 
     if (ts.isCallExpression(node) && isCssomCallee(node.expression)) {
       const val = resolveCallArg(node.arguments[0], sf, getChecker);
-      if (val && DEAD_SET.has(val)) hits.push({ name: val, kind: "cssom" });
+      if (val && roster.has(val)) hits.push({ name: val, kind: "cssom" });
     }
 
     ts.forEachChild(node, visit);
   }
   visit(sf);
   return hits;
+}
+
+function scanDeadConsumerSource(text: string, fileName: string): ConsumerHit[] {
+  return scanConsumerSource(text, fileName, DEAD_SET);
 }
 
 function sourceFiles() {
@@ -531,12 +668,12 @@ function sourceFiles() {
 }
 
 /** Shared filesystem consumer scanner. */
-function scanDeadConsumers(): Record<string, { file: string; count: number }[]> {
+function scanConsumers(roster: Set<string>): Record<string, { file: string; count: number }[]> {
   const all: Record<string, { file: string; count: number }[]> = {};
   for (const f of sourceFiles()) {
     const tally = new Map<string, number>();
     const text = readFileSync(f, "utf8");
-    for (const { name } of scanDeadConsumerSource(text, f)) {
+    for (const { name } of scanConsumerSource(text, f, roster)) {
       tally.set(name, (tally.get(name) ?? 0) + 1);
     }
     for (const [name, count] of tally) {
@@ -546,15 +683,23 @@ function scanDeadConsumers(): Record<string, { file: string; count: number }[]> 
   return all;
 }
 
-/** Shared extension absence enforcer used by live tests and re-insert mutants. */
-function enforceExtensionDeadAbsent(cssText: string, roster: Set<string>): string[] {
-  const root = postcss.parse(cssText);
-  const violations: string[] = [];
-  root.walkDecls((d) => {
-    if (roster.has(d.prop)) violations.push(d.prop);
-  });
-  return [...new Set(violations)].sort();
+function scanDeadConsumers(): Record<string, { file: string; count: number }[]> {
+  return scanConsumers(DEAD_SET);
 }
+
+function scanD1Consumers(): Record<string, { file: string; count: number }[]> {
+  return scanConsumers(D1_SET);
+}
+
+// EXCISED (SEV-2): `enforceExtensionDeadAbsent()`. Its entire corpus was the
+// three deleted `_source/extension.css` files, so it had no input left to
+// enforce over. Every live caller and every re-insertion mutant that shared it
+// is excised alongside it (each site carries its own note). The claim it
+// carried — "no retired roster name is re-declared by a second authored
+// source" — is now unconditional under law G2 of
+// `scripts/first-party-single-author-gate.mjs`: there is no second source to
+// declare anything. Every LEDGER, SCANNER and COMPILED assertion in this file
+// is untouched.
 
 // ── authority pins ─────────────────────────────────────────────────────────
 
@@ -610,6 +755,43 @@ describe("VERTICAL-DEAD-61 authority pins", () => {
     ]);
     expect(DEAD_61.filter((n) => paletteUnion.has(n))).toEqual([]);
     expect(DEAD_61.filter((n) => conflict.has(n))).toEqual([]);
+  });
+});
+
+describe("VERTICAL-DEAD-4 authority pins", () => {
+  it("roster is the signed four names and hashes to the signed values", () => {
+    const receipt = ledger.verticalDead4SourceDrain as {
+      roster: string[];
+      historicalValues: D1HistoricalValues;
+    };
+    expect(receipt.roster.length).toBe(4);
+    expect(receipt.roster).toEqual(D1_ROSTER);
+    expect(rosterHash(receipt.roster)).toBe(D1_ROSTER_SHA256);
+    expect(d1ModeMembershipHash(receipt.roster, receipt.historicalValues)).toBe(D1_MODE_MEMBERSHIP_SHA256);
+    expect(d1ValueHash(receipt.roster, receipt.historicalValues)).toBe(D1_VALUE_SHA256);
+  });
+
+  it("D1 is disjoint from DEAD-61, CONFLICT9 and PALETTE-89", () => {
+    const dead61: Set<string> = new Set(DEAD_61);
+    const conflict: Set<string> = new Set([
+      "--ds-card-shadow-elevated",
+      "--ds-color-bg-input",
+      "--ds-color-error",
+      "--ds-color-info",
+      "--ds-font-family-base",
+      "--ds-font-family-display",
+      "--ds-font-family-heading",
+      "--ds-color-bg-primary",
+      "--ds-surface-card-border-strong",
+    ]);
+    const palette: Set<string> = new Set(PALETTE_MEMBERSHIP_89);
+    expect(D1_ROSTER.filter((n) => dead61.has(n))).toEqual([]);
+    expect(D1_ROSTER.filter((n) => conflict.has(n))).toEqual([]);
+    expect(D1_ROSTER.filter((n) => palette.has(n))).toEqual([]);
+  });
+
+  it("accent-live is not in the D1 roster", () => {
+    expect(D1_SET.has("--ds-color-accent-live")).toBe(false);
   });
 });
 
@@ -777,64 +959,43 @@ describe("ledger is closed and the residue distribution is durable", () => {
   });
 });
 
-// ── extension absence ──────────────────────────────────────────────────────
-
-describe("extensions no longer declare the DEAD names", () => {
-  function extensionText(slug: string) {
-    return readFileSync(join(ARTIFACTS_DIR, slug, "_source/extension.css"), "utf8");
-  }
-
-  it("rottay extension removed exactly the 49 DEAD names", () => {
-    expect(enforceExtensionDeadAbsent(extensionText("rottay"), new Set(ROTTAY_DEAD_49))).toEqual([]);
-  });
-
-  it("bithire extension removed exactly the 13 DEAD names", () => {
-    expect(enforceExtensionDeadAbsent(extensionText("bithire"), new Set(BITHIRE_DEAD_13))).toEqual([]);
-  });
-
-  it("evnto extension never carried any DEAD name", () => {
-    expect(enforceExtensionDeadAbsent(extensionText("evnto"), DEAD_SET)).toEqual([]);
-  });
-
-  it("longer-prefix homonyms survive exact-name deletion", () => {
-    const root = postcss.parse(extensionText("rottay"));
-    let homonyms = 0;
-    root.walkDecls((d) => {
-      if (d.prop === "--ds-calendar-day-color-other") homonyms++;
-    });
-    expect(homonyms).toBe(2); // dark + light
+describe("VERTICAL-DEAD-4 ledger receipt", () => {
+  it("ledger satisfies the shared D1 validator", () => {
+    assertD1Ledger(ledger);
   });
 });
+
+// ── extension absence ──────────────────────────────────────────────────────
+
+// EXCISED (SEV-2): the three per-slug `<slug> extension removed exactly the N
+// DEAD names` tests. They read the deleted sources through the retired
+// enforcer; G2 now forbids the sources themselves. The longer-prefix homonym
+// claim below survives on its COMPILED half, which was already the stronger
+// reading (ROTTAY-T3 had migrated the homonym into the theme).
+describe("the DEAD retirement spared its longer-prefix homonyms", () => {
+  it("longer-prefix homonyms survive exact-name deletion", () => {
+    expect(
+      compileBrandTheme({ brandTheme: rottayBrandTheme, tenantSlug: "rottay" })
+        .cssVariables["--ds-calendar-day-color-other"]
+    ).toBeTruthy();
+  });
+});
+
+// ── VERTICAL-DEAD-4 extension absence ──────────────────────────────────────
+
+// EXCISED (SEV-2): describe "extensions no longer declare the D1 names" and
+// both of its tests. Same shape as the DEAD absence block above: a retired
+// enforcer over a deleted corpus, discharged by G2. The D1 ledger, scanner and
+// compiled-propagation blocks are untouched.
 
 // ── VERTICAL-PALETTE-90/89 extension absence ───────────────────────────────
 
-describe("extensions no longer declare the PALETTE channels", () => {
-  function extensionText(slug: string) {
-    return readFileSync(join(ARTIFACTS_DIR, slug, "_source/extension.css"), "utf8");
-  }
-
-  it("rottay extension removed exactly the 35 PALETTE names", () => {
-    expect(enforceExtensionDeadAbsent(extensionText("rottay"), new Set(PALETTE_ROTTAY_35))).toEqual([]);
-  });
-
-  it("bithire extension removed exactly the 29 executed PALETTE names", () => {
-    expect(enforceExtensionDeadAbsent(extensionText("bithire"), new Set(PALETTE_BITHIRE_29))).toEqual([]);
-  });
-
-  it("bithire extension still does not declare the pre-retired --ds-color-bg-primary", () => {
-    const root = postcss.parse(extensionText("bithire"));
-    const violations: string[] = [];
-    root.walkDecls((d) => {
-      if (d.prop === "--ds-color-bg-primary") violations.push(d.prop);
-    });
-    expect(violations).toEqual([]);
-  });
-
-  it("evnto extension removed exactly the 25 PALETTE names", () => {
-    expect(enforceExtensionDeadAbsent(extensionText("evnto"), new Set(PALETTE_EVNTO_25))).toEqual([]);
-  });
-
-});
+// EXCISED (SEV-2): describe "extensions no longer declare the PALETTE
+// channels" and all four of its tests, including the pre-retired
+// `--ds-color-bg-primary` guard. All four read the deleted sources; G2
+// discharges them. The PALETTE roster hashes, the double-counting negative and
+// the compile-time propagation block below all survive untouched — those are
+// the assertions that pin WHERE the 89 channels went.
 
 // ── VERTICAL-PALETTE-90/89 compile-time propagation ────────────────────────
 
@@ -954,6 +1115,7 @@ describe("compileBrandTheme full roster parity (channel=value hash)", () => {
 
   it("same-length value drift breaks the roster parity hash", () => {
     const mutated = JSON.parse(JSON.stringify(rottayBrandTheme)) as typeof rottayBrandTheme;
+    if (!mutated.palette?.ramps?.neutral) throw new Error("Missing rottay neutral ramp");
     mutated.palette.ramps.neutral[700] = "#A4A4A8";
     const { hash } = compileRosterEffectiveHash(mutated, "rottay", PALETTE_ROTTAY_35, "default");
     expect(hash).not.toBe("4c56c2cc2127928edc2eb328751cc85b8ad18479c85c8dedac528300069403dc");
@@ -961,11 +1123,13 @@ describe("compileBrandTheme full roster parity (channel=value hash)", () => {
 
   it("evnto dark neutral ramp deletion or mutation breaks the dark roster parity hash", () => {
     const deleted = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
+    if (!deleted.modes?.dark?.palette?.ramps) throw new Error("Missing evnto dark palette ramps");
     delete (deleted.modes.dark.palette.ramps as { neutral?: unknown }).neutral;
     const { hash: deletedHash } = compileRosterEffectiveHash(deleted, "evnto", PALETTE_EVNTO_25, "dark");
     expect(deletedHash).not.toBe("b49d1045c5476d50e85ceb362dc7e8de5489af87d0d9968cc06ff5ccb35fe7c3");
 
     const changed = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
+    if (!changed.modes?.dark?.palette?.ramps?.neutral) throw new Error("Missing evnto dark neutral ramp");
     changed.modes.dark.palette.ramps.neutral[500] = "#555555";
     const { hash: changedHash } = compileRosterEffectiveHash(changed, "evnto", PALETTE_EVNTO_25, "dark");
     expect(changedHash).not.toBe("b49d1045c5476d50e85ceb362dc7e8de5489af87d0d9968cc06ff5ccb35fe7c3");
@@ -974,81 +1138,20 @@ describe("compileBrandTheme full roster parity (channel=value hash)", () => {
 
 // ── durable baseline / gate contract ───────────────────────────────────────
 
-describe("artifact provenance gate ratchets hold after the drain", () => {
-  it("no DEAD name is among the live capability-gap re-declared channels", async () => {
-    const gate = (await import("../../../../scripts/artifact-provenance-gate.mjs")) as {
-      run: (opts: { baseline: unknown }) => { results: GateResult[] };
-    };
-    const { results } = gate.run({ baseline });
-    const liveChannels = new Set<string>();
-    for (const r of results) {
-      for (const ch of r.observed.capabilityGapChannels) liveChannels.add(ch);
-    }
-    expect(DEAD_61.filter((n) => liveChannels.has(n))).toEqual([]);
-  });
-
-  it("R/B live volumes are at or below the post-DEAD baseline (decrease-only)", async () => {
-    const gate = (await import("../../../../scripts/artifact-provenance-gate.mjs")) as {
-      run: (opts: { baseline: unknown }) => { results: GateResult[] };
-    };
-    const { results } = gate.run({ baseline });
-    for (const slug of ["rottay", "bithire"] as const) {
-      const r = results.find((x) => x.slug === slug)!;
-      const cap = baseline.metrics[slug];
-      expect(r.metrics.total.bytes, `${slug} bytes`).toBeLessThanOrEqual(cap.bytes);
-      expect(r.metrics.total.declarations, `${slug} declarations`).toBeLessThanOrEqual(cap.declarations);
-      expect(r.metrics.total.literals, `${slug} literals`).toBeLessThanOrEqual(cap.literals);
-      expect(r.capabilityGaps, `${slug} capabilityGaps`).toBeLessThanOrEqual(baseline.capabilityGaps[slug]);
-
-      const allowedSizes = baseline.grandfather[slug].capabilityGapRegionSizes ?? {};
-      const liveSizes = new Map(r.observed.capabilityGapRegionSizes);
-      for (const [key, ceiling] of Object.entries(allowedSizes)) {
-        expect(liveSizes.get(key) ?? 0, `${slug} ${key}`).toBeLessThanOrEqual(ceiling);
-      }
-    }
-  });
-
-  it("R/B/E live volumes are at or below the post-PALETTE baseline (decrease-only)", async () => {
-    const gate = (await import("../../../../scripts/artifact-provenance-gate.mjs")) as {
-      run: (opts: { baseline: unknown }) => { results: GateResult[] };
-    };
-    const { results } = gate.run({ baseline });
-    for (const slug of ["rottay", "bithire", "evnto"] as const) {
-      const r = results.find((x) => x.slug === slug)!;
-      const cap = baseline.metrics[slug];
-      expect(r.metrics.total.bytes, `${slug} bytes`).toBeLessThanOrEqual(cap.bytes);
-      expect(r.metrics.total.declarations, `${slug} declarations`).toBeLessThanOrEqual(cap.declarations);
-      expect(r.metrics.total.literals, `${slug} literals`).toBeLessThanOrEqual(cap.literals);
-      expect(r.capabilityGaps, `${slug} capabilityGaps`).toBeLessThanOrEqual(baseline.capabilityGaps[slug]);
-
-      const allowedSizes = baseline.grandfather[slug].capabilityGapRegionSizes ?? {};
-      const liveSizes = new Map(r.observed.capabilityGapRegionSizes);
-      for (const [key, ceiling] of Object.entries(allowedSizes)) {
-        expect(liveSizes.get(key) ?? 0, `${slug} ${key}`).toBeLessThanOrEqual(ceiling);
-      }
-    }
-  });
-
-  it("no PALETTE name is among the live capability-gap re-declared channels", async () => {
-    const gate = (await import("../../../../scripts/artifact-provenance-gate.mjs")) as {
-      run: (opts: { baseline: unknown }) => { results: GateResult[] };
-    };
-    const { results } = gate.run({ baseline });
-    const paletteSet = new Set(PALETTE_UNION_36);
-    const liveChannels = new Set<string>();
-    for (const r of results) {
-      for (const ch of r.observed.capabilityGapChannels) liveChannels.add(ch);
-    }
-    expect([...paletteSet].filter((n) => liveChannels.has(n))).toEqual([]);
-  });
-
-  type GateResult = {
-    slug: string;
-    observed: { capabilityGapChannels: Iterable<string>; capabilityGapRegionSizes: Iterable<[string, number]> };
-    metrics: { total: { bytes: number; declarations: number; literals: number } };
-    capabilityGaps: number;
-  };
-});
+// EXCISED (SEV-2): describe "artifact provenance gate ratchets hold after the
+// drain" and its four tests -- the two decrease-only volume ratchets (R/B post
+// DEAD, R/B/E post PALETTE) and the two "no DEAD/PALETTE name is a live
+// capability-gap channel" assertions. All four executed
+// `scripts/artifact-provenance-gate.mjs` against
+// `scripts/artifact-provenance-gate.baseline.json`; both files are deleted in
+// this tranche. A byte/declaration/literal ceiling on a file that no longer
+// exists is satisfied by zero, so keeping these would have manufactured four
+// permanently-green tests that assert nothing. The successor law does not
+// bound the second author's volume -- it forbids the second author:
+// `scripts/first-party-single-author-gate.mjs` (G1 roster exactness, G2
+// resurrection scan, G3 API/marker scan, G4 delegated ink causality), drilled
+// by `scripts/first-party-single-author-gate.test.mjs` and wired blocking in
+// `scripts/ci-gates.manifest.mjs`.
 
 // ── productive-consumer scan ───────────────────────────────────────────────
 
@@ -1068,6 +1171,14 @@ describe("zero productive consumers in Core + Showroom", () => {
   it("scanner respects exact token boundaries (homonym green)", () => {
     const sample = "var(--ds-calendar-day-color) var(--ds-calendar-day-color-other)";
     expect(cssVarArguments(sample).filter((n) => n === "--ds-calendar-day-color")).toHaveLength(1);
+  });
+});
+
+// ── VERTICAL-DEAD-4 productive-consumer scan ───────────────────────────────
+
+describe("zero productive D1 consumers in Core + Showroom", () => {
+  it("no D1 name has a productive var()/property-access consumer", () => {
+    expect(scanD1Consumers()).toEqual({});
   });
 });
 
@@ -1165,53 +1276,16 @@ describe("shared scanner scope and callee boundaries", () => {
 // ── planted mutants turn red ───────────────────────────────────────────────
 
 describe("planted mutants turn red", () => {
-  function insertDecl(cssText: string, selector: string, prop: string, value: string): string {
-    const root = postcss.parse(cssText);
-    root.walkRules((rule) => {
-      if (rule.selector === selector) rule.append(postcss.decl({ prop, value }));
-    });
-    return root.toString();
-  }
-
-  it("re-inserting a rottay dark dead declaration is detected by the shared enforcer", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "rottay/_source/extension.css"), "utf8"),
-      "html[data-tenant='rottay']:not([data-theme='light']):not(.light)",
-      "--ds-bg-hover",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(ROTTAY_DEAD_49))).toContain("--ds-bg-hover");
-  });
-
-  it("re-inserting a rottay light dead declaration is detected by the shared enforcer", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "rottay/_source/extension.css"), "utf8"),
-      "html[data-tenant='rottay'][data-theme='light'],\nhtml[data-tenant='rottay'].light",
-      "--ds-bg-hover",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(ROTTAY_DEAD_49))).toContain("--ds-bg-hover");
-  });
-
-  it("re-inserting a bithire root dead declaration is detected by the shared enforcer", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "bithire/_source/extension.css"), "utf8"),
-      'html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark)',
-      "--ds-chip-bg",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(BITHIRE_DEAD_13))).toContain("--ds-chip-bg");
-  });
-
-  it("re-inserting a bithire dark dead declaration is detected by the shared enforcer", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "bithire/_source/extension.css"), "utf8"),
-      'html[data-tenant="bithire"][data-theme="dark"],\nhtml[data-tenant="bithire"].dark',
-      "--ds-color-accent-live-bg",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(BITHIRE_DEAD_13))).toContain("--ds-color-accent-live-bg");
-  });
+  // EXCISED (SEV-2): `insertDecl()` and every re-insertion mutant that used it.
+  // Each one read a `_source/extension.css` off disk and planted a declaration
+  // into it. With the three files deleted there is no live pre-image to plant
+  // into, and rewriting the mutants to plant into an empty string would keep a
+  // green while silently dropping the claim ("this enforcer sees a real
+  // re-insertion into the real file"). The enforcer they exercised
+  // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
+  // extension source is now caught by law G2 of
+  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // are untouched — they never read the artifact tree.
 
   it("a new CSS consumer of a DEAD name is detected by the shared scanner", () => {
     const fixture = ".x { color: var(/*gap*/--ds-chip-bg); }";
@@ -1225,10 +1299,11 @@ describe("planted mutants turn red", () => {
 
   it("ledger missing-row mutant fails closed", () => {
     const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
-    const entry = (mutated.entries as Record<string, { finalState: string; brandAuthoredResidue?: { retiredBy?: string } }>)["--ds-chip-bg"];
+    const entries = mutated.entries as Record<string, { finalState: string; brandAuthoredResidue?: { retiredBy?: string } }>;
+    const entry = entries["--ds-chip-bg"];
     entry.finalState = "OWNER_DECISION";
     delete entry.brandAuthoredResidue?.retiredBy;
-    const retired = Object.entries(mutated.entries).filter(([_, e]) => e.brandAuthoredResidue?.retiredBy === "VERTICAL-DEAD-61").length;
+    const retired = Object.entries(entries).filter(([_, e]) => e.brandAuthoredResidue?.retiredBy === "VERTICAL-DEAD-61").length;
     expect(retired).not.toBe(61);
   });
 
@@ -1242,46 +1317,93 @@ describe("planted mutants turn red", () => {
   });
 });
 
+// ── VERTICAL-DEAD-4 planted mutants ────────────────────────────────────────
+
+describe("VERTICAL-DEAD-4 planted mutants turn red", () => {
+  // EXCISED (SEV-2): `insertDecl()` and every re-insertion mutant that used it.
+  // Each one read a `_source/extension.css` off disk and planted a declaration
+  // into it. With the three files deleted there is no live pre-image to plant
+  // into, and rewriting the mutants to plant into an empty string would keep a
+  // green while silently dropping the claim ("this enforcer sees a real
+  // re-insertion into the real file"). The enforcer they exercised
+  // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
+  // extension source is now caught by law G2 of
+  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // are untouched — they never read the artifact tree.
+
+  it("a new CSS consumer of a D1 name is detected by the shared scanner", () => {
+    const fixture = ".x { color: var(/*gap*/--ds-text-muted); }";
+    expect(namesFrom(scanConsumerSource(fixture, "x.css", D1_SET))).toContain("--ds-text-muted");
+  });
+
+  it("a new TS consumer of a D1 name is detected by the shared scanner", () => {
+    const fixture = "const x = `--ds-text-muted`; el.style.setProperty(x, 'red');";
+    expect(namesFrom(scanConsumerSource(fixture, "x.ts", D1_SET))).toEqual(["--ds-text-muted"]);
+  });
+
+  // EXCISED (SEV-2): `strict-prefix homonyms are not counted as D1 names`. It fed a
+  // synthetic prefix-homonym fixture to `enforceExtensionDeadAbsent`, which is
+  // retired above with its corpus — a boundary negative on a function nothing
+  // calls guards nothing. The same exact-name-vs-prefix property is still
+  // drilled on the SCANNER, which does still have live inputs, by "does not
+  // count longer-prefix homonyms" earlier in this file.
+
+  it("receipt count mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    (mutated.verticalDead4SourceDrain as { names: number }).names = 5;
+    expect(() => assertD1Ledger(mutated)).toThrow();
+  });
+
+  it("roster same-count swap mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.verticalDead4SourceDrain as { roster: string[] };
+    receipt.roster = ["--ds-color-bg-primary", ...D1_ROSTER.slice(1)];
+    expect(receipt.roster.length).toBe(4);
+    expect(() => assertD1Ledger(mutated)).toThrow();
+  });
+
+  it("historical value mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.verticalDead4SourceDrain as { historicalValues: D1HistoricalValues };
+    receipt.historicalValues.rottay.dark["--ds-bg-primary"] = "#000000";
+    expect(() => assertD1Ledger(mutated)).toThrow();
+  });
+
+  it("missing mode mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.verticalDead4SourceDrain as { historicalValues: D1HistoricalValues };
+    delete (receipt.historicalValues.rottay as Record<string, Record<string, string>>).light;
+    expect(() => assertD1Ledger(mutated)).toThrow();
+  });
+
+  it("hash mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.verticalDead4SourceDrain as { rosterSha256: Record<string, string> };
+    receipt.rosterSha256.modeMembership = "0000000000000000000000000000000000000000000000000000000000000000";
+    expect(() => assertD1Ledger(mutated)).toThrow();
+  });
+
+  it("prohibited D1 entry mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const entries = mutated.entries as Record<string, unknown>;
+    entries["--ds-text-muted"] = { finalState: "EXECUTED" };
+    expect(() => assertD1Ledger(mutated)).toThrow();
+  });
+});
+
 // ── VERTICAL-PALETTE-90/89 planted mutants ─────────────────────────────────
 
 describe("VERTICAL-PALETTE-90/89 planted mutants turn red", () => {
-  function insertDecl(cssText: string, selector: string, prop: string, value: string): string {
-    const root = postcss.parse(cssText);
-    root.walkRules((rule) => {
-      if (rule.selector === selector) rule.append(postcss.decl({ prop, value }));
-    });
-    return root.toString();
-  }
-
-  it("re-inserting a rottay PALETTE declaration is detected", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "rottay/_source/extension.css"), "utf8"),
-      "html[data-tenant='rottay']:not([data-theme='light']):not(.light)",
-      "--ds-color-bg-overlay",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_ROTTAY_35))).toContain("--ds-color-bg-overlay");
-  });
-
-  it("re-inserting a bithire PALETTE declaration is detected", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "bithire/_source/extension.css"), "utf8"),
-      'html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark)',
-      "--ds-color-bg-surface",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_BITHIRE_29))).toContain("--ds-color-bg-surface");
-  });
-
-  it("re-inserting an evnto PALETTE declaration is detected", () => {
-    const mutated = insertDecl(
-      readFileSync(join(ARTIFACTS_DIR, "evnto/_source/extension.css"), "utf8"),
-      "html[data-tenant='evnto']:not([data-theme='dark']):not(.dark)",
-      "--ds-color-text-primary",
-      "red",
-    );
-    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_EVNTO_25))).toContain("--ds-color-text-primary");
-  });
+  // EXCISED (SEV-2): `insertDecl()` and every re-insertion mutant that used it.
+  // Each one read a `_source/extension.css` off disk and planted a declaration
+  // into it. With the three files deleted there is no live pre-image to plant
+  // into, and rewriting the mutants to plant into an empty string would keep a
+  // green while silently dropping the claim ("this enforcer sees a real
+  // re-insertion into the real file"). The enforcer they exercised
+  // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
+  // extension source is now caught by law G2 of
+  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // are untouched — they never read the artifact tree.
 
   it("double-counting the pre-retired --ds-color-bg-primary in B29 is wrong", () => {
     const b30AsB29 = [...PALETTE_BITHIRE_29, "--ds-color-bg-primary"];
@@ -1291,6 +1413,7 @@ describe("VERTICAL-PALETTE-90/89 planted mutants turn red", () => {
 
   it("an evnto dark reset pin omitted from modes.dark.palette is a compile regression", () => {
     const theme = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
+    if (!theme.modes?.dark?.palette) throw new Error("Missing evnto dark palette");
     delete (theme.modes.dark.palette as Record<string, unknown>).backgroundOverlayColor;
     const { modeBlocks } = compileBrandTheme({
       brandTheme: theme as never,
@@ -1302,16 +1425,394 @@ describe("VERTICAL-PALETTE-90/89 planted mutants turn red", () => {
     expect(dark!.cssVariables["--ds-color-bg-overlay"]).not.toBe("rgba(2, 6, 23, 0.88)");
   });
 
-  it("longer-prefix homonyms are not counted as PALETTE names", () => {
-    // Plant a custom property whose name is a strict prefix extension of a
-    // PALETTE channel. The shared enforcer matches declaration names exactly,
-    // so the homonym must stay green.
-    const mutated = [
-      "html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {",
-      "  --ds-color-text-primary-other: red;",
-      "}",
-      "",
-    ].join("\n");
-    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_EVNTO_25))).toEqual([]);
+  // EXCISED (SEV-2): `longer-prefix homonyms are not counted as PALETTE names`. It fed a
+  // synthetic prefix-homonym fixture to `enforceExtensionDeadAbsent`, which is
+  // retired above with its corpus — a boundary negative on a function nothing
+  // calls guards nothing. The same exact-name-vs-prefix property is still
+  // drilled on the SCANNER, which does still have live inputs, by "does not
+  // count longer-prefix homonyms" earlier in this file.
+});
+
+// ── SEV-DEAD-21 source drain ───────────────────────────────────────────────
+
+const SEV_DEAD_21_ROSTER = [
+  "--ds-avatar-bg",
+  "--ds-avatar-color",
+  "--ds-collapse-content-color",
+  "--ds-color-alpha-black-200",
+  "--ds-color-alpha-black-300",
+  "--ds-color-alpha-black-400",
+  "--ds-color-alpha-black-500",
+  "--ds-color-alpha-white-100",
+  "--ds-color-alpha-white-200",
+  "--ds-color-alpha-white-300",
+  "--ds-color-alpha-white-400",
+  "--ds-color-alpha-white-500",
+  "--ds-premium-card-header-top-line-display",
+  "--ds-shell-breadcrumb-height",
+  "--ds-surface-chip-text",
+  "--ds-surface-radius-lg",
+  "--ds-surface-radius-sm",
+  "--ds-table-header-bubble-bg",
+  "--rt-premium-card-grid",
+  "--ds-input-focus-border",
+  "--ds-input-text",
+] as const;
+
+const SEV_DEAD_21_SET: Set<string> = new Set(SEV_DEAD_21_ROSTER);
+
+const SEV_DEAD_21_ROSTER_SHA256 =
+  "e2301dc78bcc2c159a5241bb5bd3b8d413a9b1c9f1d2bda538bee1aa1a0fddfe";
+const SEV_DEAD_21_MODE_MEMBERSHIP_SHA256 =
+  "191837a2296706048f12274cdda65240daadd7f24fa16851e866185cea86b8f0";
+const SEV_DEAD_21_SLUG_CHANNEL_SHA256 =
+  "57f8bdba52dbed3a3d63b52cb083bd5668f4465ae07821776925391b0fbff7a5";
+
+type SevDead21HistoricalValues = Record<string, Record<string, Record<string, string>>>;
+
+const SEV_DEAD_21_HISTORICAL_VALUES: SevDead21HistoricalValues = {
+  rottay: {
+    dark: {
+      "--ds-avatar-bg": "rgba(255, 255, 255, 0.08)",
+      "--ds-avatar-color": "#ECECEC",
+      "--ds-collapse-content-color": "#A0A0A5",
+      "--ds-color-alpha-black-200": "rgba(0, 0, 0, 0.30)",
+      "--ds-color-alpha-black-300": "rgba(0, 0, 0, 0.40)",
+      "--ds-color-alpha-black-400": "rgba(0, 0, 0, 0.50)",
+      "--ds-color-alpha-black-500": "rgba(0, 0, 0, 0.60)",
+      "--ds-color-alpha-white-100": "rgba(255, 255, 255, 0.08)",
+      "--ds-color-alpha-white-200": "rgba(255, 255, 255, 0.14)",
+      "--ds-color-alpha-white-300": "rgba(255, 255, 255, 0.20)",
+      "--ds-color-alpha-white-400": "rgba(255, 255, 255, 0.28)",
+      "--ds-color-alpha-white-500": "rgba(255, 255, 255, 0.40)",
+    },
+    light: {
+      "--ds-avatar-bg": "rgba(0, 0, 0, 0.06)",
+      "--ds-avatar-color": "#1A1A1A",
+      "--ds-collapse-content-color": "#6B6B6B",
+      "--ds-color-alpha-black-200": "rgba(0, 0, 0, 0.10)",
+      "--ds-color-alpha-black-300": "rgba(0, 0, 0, 0.16)",
+      "--ds-color-alpha-black-400": "rgba(0, 0, 0, 0.24)",
+      "--ds-color-alpha-black-500": "rgba(0, 0, 0, 0.36)",
+      "--ds-color-alpha-white-100": "rgba(255, 255, 255, 0.60)",
+      "--ds-color-alpha-white-200": "rgba(255, 255, 255, 0.70)",
+      "--ds-color-alpha-white-300": "rgba(255, 255, 255, 0.80)",
+      "--ds-color-alpha-white-400": "rgba(255, 255, 255, 0.88)",
+      "--ds-color-alpha-white-500": "rgba(255, 255, 255, 0.94)",
+    },
+  },
+  bithire: {
+    all: {
+      "--ds-premium-card-header-top-line-display": "none",
+      "--rt-premium-card-grid":
+        "linear-gradient(\n      var(--ds-surface-card-grid-line) 1px,\n      transparent 1px\n    ),\n    linear-gradient(\n      90deg,\n      var(--ds-surface-card-grid-line) 1px,\n      transparent 1px\n    )",
+    },
+    light: {
+      "--ds-premium-card-header-top-line-display": "none",
+      "--ds-shell-breadcrumb-height": "28px",
+      "--ds-surface-chip-text": "var(--ds-color-primary)",
+      "--ds-surface-radius-lg": "var(--ds-radius-md)",
+      "--ds-surface-radius-sm": "var(--ds-radius-sm)",
+      "--ds-table-header-bubble-bg": "transparent",
+    },
+  },
+  evnto: {
+    dark: {
+      "--ds-input-focus-border": "#A89880",
+      "--ds-input-text": "#E8E8E0",
+    },
+  },
+};
+
+const SEV_DEAD_21_HASH_RECIPE = {
+  global: "sha256(sorted receipt.roster lines joined with LF plus trailing LF)",
+  modeMembership:
+    "sha256(sorted canonical lines '<slug>/<mode>/<channel>' for every declaration in historicalValues, using modes dark/light/all, joined with LF plus trailing LF)",
+  slugChannel:
+    "sha256(sorted canonical lines '<slug>|<channel>' for every channel in receipt.roster per slug, joined with LF plus trailing LF)",
+};
+
+function sevDead21HashLines(lines: readonly string[]): string {
+  return createHash("sha256").update([...lines].sort().join("\n") + "\n").digest("hex");
+}
+
+function deriveSevDead21Roster(historicalValues: SevDead21HistoricalValues): string[] {
+  const bySlug = new Map<string, Set<string>>();
+  const slugs: string[] = [];
+  for (const [slug, modes] of Object.entries(historicalValues)) {
+    if (!bySlug.has(slug)) slugs.push(slug);
+    const set = bySlug.get(slug) ?? new Set<string>();
+    for (const channels of Object.values(modes)) {
+      for (const ch of Object.keys(channels)) set.add(ch);
+    }
+    bySlug.set(slug, set);
+  }
+  const roster: string[] = [];
+  for (const slug of slugs) {
+    roster.push(...[...bySlug.get(slug)!.values()].sort());
+  }
+  return roster;
+}
+
+function deriveSevDead21ModeMembershipLines(
+  historicalValues: SevDead21HistoricalValues,
+): string[] {
+  const lines: string[] = [];
+  for (const slug of Object.keys(historicalValues).sort()) {
+    for (const mode of Object.keys(historicalValues[slug]).sort()) {
+      for (const ch of Object.keys(historicalValues[slug][mode]).sort()) {
+        lines.push(`${slug}/${mode}/${ch}`);
+      }
+    }
+  }
+  return lines;
+}
+
+function deriveSevDead21SlugChannelLines(
+  historicalValues: SevDead21HistoricalValues,
+): string[] {
+  const bySlug = new Map<string, Set<string>>();
+  for (const [slug, modes] of Object.entries(historicalValues)) {
+    const set = bySlug.get(slug) ?? new Set<string>();
+    for (const channels of Object.values(modes)) {
+      for (const ch of Object.keys(channels)) set.add(ch);
+    }
+    bySlug.set(slug, set);
+  }
+  const lines: string[] = [];
+  for (const slug of [...bySlug.keys()].sort()) {
+    for (const ch of [...bySlug.get(slug)!.values()].sort()) {
+      lines.push(`${slug}|${ch}`);
+    }
+  }
+  return lines;
+}
+
+/**
+ * Pure shared validator for the SEV-DEAD-21 ledger receipt. Used by the live
+ * test and by every causal mutant: any mutation that breaks receipt rosters,
+ * counts, historical values, derived hashes, source/generated status or the
+ * mandate makes this throw.
+ */
+function assertSevDead21Ledger(candidate: typeof ledger): void {
+  const receipt = candidate.sevDead21SourceDrain as {
+    id: string;
+    checkpoint: string;
+    date: string;
+    scope: string;
+    roster: string[];
+    names: number;
+    declarationsRemoved: number;
+    perVertical: Record<string, { names: number; declarations: number }>;
+    hashRecipe: Record<string, string>;
+    rosterSha256: Record<string, string>;
+    canonicalLines: { modeMembership: string[]; slugChannel: string[] };
+    historicalValues: SevDead21HistoricalValues;
+    source: string;
+    generatedProjection: string;
+    mandate: string;
+  };
+
+  expect(receipt.id, "receipt.id").toBe("SEV-DEAD-21");
+  expect(receipt.checkpoint, "receipt.checkpoint").toBe("VERTICAL-PALETTE-90/89");
+  expect(receipt.date, "receipt.date").toBe("2026-08-14");
+  expect(receipt.scope, "receipt.scope").toBe("source-only");
+  expect(receipt.roster, "receipt.roster").toEqual(SEV_DEAD_21_ROSTER);
+  expect(receipt.names, "receipt.names").toBe(21);
+  expect(receipt.declarationsRemoved, "receipt.declarationsRemoved").toBe(34);
+  expect(receipt.perVertical.rottay, "receipt.perVertical.rottay").toEqual({
+    names: 12,
+    declarations: 24,
+  });
+  expect(receipt.perVertical.bithire, "receipt.perVertical.bithire").toEqual({
+    names: 7,
+    declarations: 8,
+  });
+  expect(receipt.perVertical.evnto, "receipt.perVertical.evnto").toEqual({
+    names: 2,
+    declarations: 2,
+  });
+  expect(receipt.source, "receipt.source").toBe("EXECUTED");
+  expect(receipt.generatedProjection, "receipt.generatedProjection").toBe("PENDING");
+  expect(receipt.mandate, "receipt.mandate").toBe(
+    "Kimi 2.7 implementation; Fable 5 + Kimi 3 audit; Codex DT.",
+  );
+
+  expect(receipt.hashRecipe, "hashRecipe").toEqual(SEV_DEAD_21_HASH_RECIPE);
+
+  const derivedRoster = deriveSevDead21Roster(receipt.historicalValues);
+  expect(receipt.roster, "roster derived from historicalValues").toEqual(derivedRoster);
+  expect(receipt.rosterSha256.global, "rosterSha256.global").toBe(rosterHash(receipt.roster));
+
+  const derivedModeLines = deriveSevDead21ModeMembershipLines(receipt.historicalValues);
+  expect(receipt.canonicalLines.modeMembership, "canonicalLines.modeMembership").toEqual(
+    derivedModeLines,
+  );
+  expect(receipt.canonicalLines.modeMembership.length, "modeMembership count").toBe(34);
+  expect(sevDead21HashLines(receipt.canonicalLines.modeMembership), "modeMembership stored hash").toBe(
+    SEV_DEAD_21_MODE_MEMBERSHIP_SHA256,
+  );
+  expect(sevDead21HashLines(derivedModeLines), "modeMembership derived hash").toBe(
+    SEV_DEAD_21_MODE_MEMBERSHIP_SHA256,
+  );
+  expect(receipt.rosterSha256.modeMembership, "rosterSha256.modeMembership").toBe(
+    SEV_DEAD_21_MODE_MEMBERSHIP_SHA256,
+  );
+
+  const derivedSlugChannelLines = deriveSevDead21SlugChannelLines(receipt.historicalValues);
+  expect(receipt.canonicalLines.slugChannel, "canonicalLines.slugChannel").toEqual(
+    derivedSlugChannelLines,
+  );
+  expect(receipt.canonicalLines.slugChannel.length, "slugChannel count").toBe(21);
+  expect(sevDead21HashLines(receipt.canonicalLines.slugChannel), "slugChannel stored hash").toBe(
+    SEV_DEAD_21_SLUG_CHANNEL_SHA256,
+  );
+  expect(sevDead21HashLines(derivedSlugChannelLines), "slugChannel derived hash").toBe(
+    SEV_DEAD_21_SLUG_CHANNEL_SHA256,
+  );
+  expect(receipt.rosterSha256.slugChannel, "rosterSha256.slugChannel").toBe(
+    SEV_DEAD_21_SLUG_CHANNEL_SHA256,
+  );
+
+  expect(receipt.historicalValues, "historicalValues pinned map").toEqual(SEV_DEAD_21_HISTORICAL_VALUES);
+}
+
+function scanSevDead21Consumers(): Record<string, { file: string; count: number }[]> {
+  return scanConsumers(SEV_DEAD_21_SET);
+}
+
+// EXCISED (SEV-2): the module-scope `extensionText()` helper used by the
+// SEV-DEAD-21 block below.
+
+describe("SEV-DEAD-21 source drain", () => {
+  it("roster is the signed 21 names and hashes to the signed values", () => {
+    const receipt = ledger.sevDead21SourceDrain as {
+      roster: string[];
+      rosterSha256: Record<string, string>;
+    };
+    expect(receipt.roster.length).toBe(21);
+    expect(receipt.roster).toEqual(SEV_DEAD_21_ROSTER);
+    expect(rosterHash(receipt.roster)).toBe(SEV_DEAD_21_ROSTER_SHA256);
+    expect(receipt.rosterSha256.modeMembership).toBe(SEV_DEAD_21_MODE_MEMBERSHIP_SHA256);
+    expect(receipt.rosterSha256.slugChannel).toBe(SEV_DEAD_21_SLUG_CHANNEL_SHA256);
+  });
+
+  it("ledger satisfies the shared SEV-DEAD-21 validator", () => {
+    assertSevDead21Ledger(ledger);
+  });
+
+  // EXCISED (SEV-2): the three per-slug `<slug> extension removed exactly the N
+  // SEV-DEAD-21 names` tests (12 rottay / 7 bithire / 2 evnto). Deleted corpus,
+  // retired enforcer, discharged by G2. The signed roster, the ledger
+  // validator, the zero-consumer scan and the disjointness proof below are the
+  // assertions that actually pin this tranche, and all of them survive.
+
+  it("no SEV-DEAD-21 name has a productive var()/property-access consumer", () => {
+    expect(scanSevDead21Consumers()).toEqual({});
+  });
+
+  // EXCISED (SEV-2): `no --rt-* name is declared in any _source extension`. It
+  // walked the three deleted sources for the --rt-* product dialect; with no
+  // `_source` tree, G2 makes the claim unconditional.
+
+  it("SEV-DEAD-21 is disjoint from DEAD-61, D1, CONFLICT9 and PALETTE-89", () => {
+    const dead61: Set<string> = new Set(DEAD_61);
+    const d1: Set<string> = new Set(D1_ROSTER);
+    const conflict = new Set([
+      "--ds-card-shadow-elevated",
+      "--ds-color-bg-input",
+      "--ds-color-error",
+      "--ds-color-info",
+      "--ds-font-family-base",
+      "--ds-font-family-display",
+      "--ds-font-family-heading",
+      "--ds-color-bg-primary",
+      "--ds-surface-card-border-strong",
+    ]);
+    const palette = new Set(PALETTE_MEMBERSHIP_89);
+    expect(SEV_DEAD_21_ROSTER.filter((n) => dead61.has(n))).toEqual([]);
+    expect(SEV_DEAD_21_ROSTER.filter((n) => d1.has(n))).toEqual([]);
+    expect(SEV_DEAD_21_ROSTER.filter((n) => conflict.has(n))).toEqual([]);
+    expect(SEV_DEAD_21_ROSTER.filter((n) => palette.has(n))).toEqual([]);
+  });
+});
+
+describe("SEV-DEAD-21 planted mutants turn red", () => {
+  // EXCISED (SEV-2): `insertDecl()` and every re-insertion mutant that used it.
+  // Each one read a `_source/extension.css` off disk and planted a declaration
+  // into it. With the three files deleted there is no live pre-image to plant
+  // into, and rewriting the mutants to plant into an empty string would keep a
+  // green while silently dropping the claim ("this enforcer sees a real
+  // re-insertion into the real file"). The enforcer they exercised
+  // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
+  // extension source is now caught by law G2 of
+  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // are untouched — they never read the artifact tree.
+
+  it("a new CSS consumer of a SEV-DEAD-21 name is detected by the shared scanner", () => {
+    const fixture = ".x { color: var(/*gap*/--ds-avatar-bg); }";
+    expect(namesFrom(scanConsumerSource(fixture, "x.css", SEV_DEAD_21_SET))).toContain("--ds-avatar-bg");
+  });
+
+  it("a new TS consumer of a SEV-DEAD-21 name is detected by the shared scanner", () => {
+    const fixture = "const x = `--ds-avatar-bg`; el.style.setProperty(x, 'red');";
+    expect(namesFrom(scanConsumerSource(fixture, "x.ts", SEV_DEAD_21_SET))).toEqual(["--ds-avatar-bg"]);
+  });
+
+  // EXCISED (SEV-2): `strict-prefix homonyms are not counted as SEV-DEAD-21 names`. It fed a
+  // synthetic prefix-homonym fixture to `enforceExtensionDeadAbsent`, which is
+  // retired above with its corpus — a boundary negative on a function nothing
+  // calls guards nothing. The same exact-name-vs-prefix property is still
+  // drilled on the SCANNER, which does still have live inputs, by "does not
+  // count longer-prefix homonyms" earlier in this file.
+
+  it("receipt count mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    (mutated.sevDead21SourceDrain as { names: number }).names = 22;
+    expect(() => assertSevDead21Ledger(mutated)).toThrow();
+  });
+
+  it("roster same-count swap mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.sevDead21SourceDrain as { roster: string[] };
+    receipt.roster = ["--ds-color-primary", ...SEV_DEAD_21_ROSTER.slice(1)];
+    expect(receipt.roster.length).toBe(21);
+    expect(() => assertSevDead21Ledger(mutated)).toThrow();
+  });
+
+  it("canonical line same-count swap mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.sevDead21SourceDrain as {
+      canonicalLines: { modeMembership: string[] };
+    };
+    const lines = receipt.canonicalLines.modeMembership;
+    [lines[0], lines[1]] = [lines[1], lines[0]];
+    expect(lines.length).toBe(34);
+    expect(() => assertSevDead21Ledger(mutated)).toThrow();
+  });
+
+  it("wrong-mode all→light mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.sevDead21SourceDrain as { historicalValues: SevDead21HistoricalValues };
+    receipt.historicalValues.bithire.light = {
+      ...receipt.historicalValues.bithire.all,
+      ...receipt.historicalValues.bithire.light,
+    };
+    delete receipt.historicalValues.bithire.all;
+    expect(() => assertSevDead21Ledger(mutated)).toThrow();
+  });
+
+  it("hash mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.sevDead21SourceDrain as { rosterSha256: Record<string, string> };
+    receipt.rosterSha256.modeMembership = "0000000000000000000000000000000000000000000000000000000000000000";
+    expect(() => assertSevDead21Ledger(mutated)).toThrow();
+  });
+
+  it("historical value mutant is rejected by the shared validator", () => {
+    const mutated = JSON.parse(JSON.stringify(ledger)) as typeof ledger;
+    const receipt = mutated.sevDead21SourceDrain as { historicalValues: SevDead21HistoricalValues };
+    receipt.historicalValues.bithire.light["--ds-shell-breadcrumb-height"] = "99px";
+    expect(() => assertSevDead21Ledger(mutated)).toThrow();
   });
 });

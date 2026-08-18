@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "3c9d0a1f785d1f3fc0cd68a836780453d896cfed78e6c8c8f91842e5c847a843"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3266 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/shell/workbench-header/index.ts",
+      "packages/core/src/ui/patterns/shell/workbench-header/contracts/index.ts",
+      "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
+    ],
+    "stableParts": [
+      "action",
+      "actions",
+      "exception",
+      "eyebrow",
+      "header-icon",
+      "header-row",
+      "lead",
+      "root",
+      "skeleton",
+      "skeleton-actions",
+      "skeleton-column",
+      "skeleton-lead",
+      "skeleton-row",
+      "subtitle",
+      "tab",
+      "tabs",
+      "title",
+      "title-row",
+      "titles"
+    ],
+    "states": [
+      "active",
+      "loading"
+    ],
+    "variantAxes": [
+      "data-has-actions",
+      "data-has-icon",
+      "data-has-tabs",
+      "data-size",
+      "data-tenant",
+      "data-theme",
+      "data-variant"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 19,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "action",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:66",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:135",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:144",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:150"
+          ]
+        },
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:324",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:431",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:436",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:498"
+          ]
+        },
+        {
+          "part": "exception",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:189",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:319",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:500"
+          ]
+        },
+        {
+          "part": "eyebrow",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:286",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:122"
+          ]
+        },
+        {
+          "part": "header-icon",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:463",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:497",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:513"
+          ]
+        },
+        {
+          "part": "header-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:275",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:256",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:426"
+          ]
+        },
+        {
+          "part": "lead",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:277",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:264"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:224",
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:267",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:103"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:127",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:387",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:391",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:399",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:404",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:409"
+          ]
+        },
+        {
+          "part": "skeleton-actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:247",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:382"
+          ]
+        },
+        {
+          "part": "skeleton-column",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:240",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:376"
+          ]
+        },
+        {
+          "part": "skeleton-lead",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:370"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:364"
+          ]
+        },
+        {
+          "part": "subtitle",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:310"
+          ]
+        },
+        {
+          "part": "tab",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:107",
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:214",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:229"
+          ]
+        },
+        {
+          "part": "tabs",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:337",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:354",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:499"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:291",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:301"
+          ]
+        },
+        {
+          "part": "title-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:277"
+          ]
+        },
+        {
+          "part": "titles",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:272"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "active=isActive ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:108"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:349",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:484",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:501"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:496"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:268"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:225"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "has-actions=hasActions ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:227",
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:270"
+          ]
+        },
+        {
+          "token": "has-icon=hasIcon ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:226",
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:269"
+          ]
+        },
+        {
+          "token": "has-tabs=hasTabs ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:228",
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:271"
+          ]
+        },
+        {
+          "token": "size=action",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:414"
+          ]
+        },
+        {
+          "token": "size=avatar",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:391"
+          ]
+        },
+        {
+          "token": "size=eyebrow",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:399"
+          ]
+        },
+        {
+          "token": "size=props.size",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:128"
+          ]
+        },
+        {
+          "token": "size=subtitle",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:409"
+          ]
+        },
+        {
+          "token": "size=tabs",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:419"
+          ]
+        },
+        {
+          "token": "size=title",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:404"
+          ]
+        },
+        {
+          "token": "tenant",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:14"
+          ]
+        },
+        {
+          "token": "theme",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:14"
+          ]
+        },
+        {
+          "token": "variant=danger",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:473"
+          ]
+        },
+        {
+          "token": "variant=default",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:478"
+          ]
+        },
+        {
+          "token": "variant=primary",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:144",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css:467"
+          ]
+        },
+        {
+          "token": "variant=variant",
+          "at": [
+            "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx:67"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "lines": 151
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx",
+            "lines": 355
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "2 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 60,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "--ds-workbench-header-padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 60,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "--ds-workbench-header-padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 60,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-workbench-header-padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "--ds-workbench-header-section-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap",
+              "margin-block-start"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-workbench-header-section-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap",
+              "margin-block-start"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))",
+            "cssProperty": "--ds-workbench-header-item-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "--ds-workbench-header-item-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-workbench-header-item-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 63,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "--ds-workbench-header-action-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 63,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-workbench-header-action-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 71,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 71,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 72,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 73,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 79,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-lg)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 79,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 81,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-shadow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 82,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-1)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-slow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 84,
+            "fallback": true,
+            "fallbackValue": "320ms",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 84,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 85,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 86,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 86,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-calm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 88,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 92,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-workspace-card-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 95,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": "--ds-workbench-header-bg, --ds-card-header-bg, 112deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, inset",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": "--ds-workbench-header-bg, --ds-card-header-bg, 112deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, inset",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "var(--ds-workspace-card-border, var(--ds-color-border))",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-shadow-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 100,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-2)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 100,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-icon-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 106,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "width",
+            "propertyGroup": "geometry",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workbench-header-icon-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 107,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "height",
+            "propertyGroup": "geometry",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-card-icon-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 109,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 110,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-icon-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-card)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-icon-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 114,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 116,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 116,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "header-icon",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 124,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 125,
+            "fallback": true,
+            "fallbackValue": "ui-monospace, monospace",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 126,
+            "fallback": true,
+            "fallbackValue": "0.625rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 127,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 139,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 140,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 142,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 147,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 148,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 152,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.ds",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 158,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.ds",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 162,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 163,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 168,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:focus:not(:disabled), .ds-pattern-workbench-header.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 177,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 179,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-family-base)",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 179,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 183,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "subtitle",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='subtitle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 190,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 191,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 192,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 193,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 194,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-control-height-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 198,
+            "fallback": true,
+            "fallbackValue": "32px",
+            "cssProperty": "min-height",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-toolbar-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 200,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 200,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-toolbar-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 201,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-lg)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 201,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-toolbar-control-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 202,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-card)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 202,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 203,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-actions-backdrop",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 207,
+            "fallback": true,
+            "fallbackValue": "none",
+            "cssProperty": "backdrop-filter",
+            "propertyGroup": "surface",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-tab-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 215,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 215,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-item-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 218,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-md)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 218,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tab-color-active",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 222,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 222,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-active-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 223,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-card)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 223,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-list-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 224,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 224,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-active-shadow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 225,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-1)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 225,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tab-color-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 230,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']), .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 230,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']), .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tab-bg-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 231,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-50)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']), .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 231,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']), .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-list-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 232,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']), .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 232,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']), .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 241,
+            "fallback": true,
+            "fallbackValue": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 241,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-list-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 246,
+            "fallback": true,
+            "fallbackValue": "3px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-tabs-list-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 247,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-inset)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 247,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-list-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 248,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 248,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-list-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 249,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-lg)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 249,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 251,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-section-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 261,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "header-row",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='header-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-workbench-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 268,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "lead",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='lead']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-workbench-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 280,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "title-row",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-workbench-header-action-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 288,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-font-size-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 303,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 304,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 305,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 306,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 312,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='subtitle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 313,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='subtitle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 324,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 325,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 327,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "exception",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='exception']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-md-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 335,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "min-height",
+            "propertyGroup": "geometry",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-tabs-md-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 336,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-tabs-md-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 338,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-tabs-item-font-weight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 339,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 340,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 342,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 342,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 343,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 343,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 344,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 344,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 345,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 345,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 346,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 346,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-item-font-weight-active",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 350,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "tab",
+            "selector": "color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), border-color var(--ds-mot",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-tabs-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 357,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-section-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 358,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "tabs",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-workbench-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 373,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-lead",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-lead']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 379,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-column",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-column']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-action-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 384,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-actions",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-motion-attention",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 388,
+            "fallback": true,
+            "fallbackValue": "1.5s",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 388,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workbench-header-section-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 422,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='tabs']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-workbench-header-skeleton-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 444,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-sm)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 444,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 445,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 459,
+            "fallback": true,
+            "fallbackValue": "var(--ds-workspace-card-border, var(--ds-color-border))",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 459,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 459,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-shadow-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 460,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-2)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 460,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 468,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 469,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 470,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 474,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 475,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 479,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 480,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 481,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tab-color-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 485,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 485,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tab-bg-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 486,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-50)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 486,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-tabs-list-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 487,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 487,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 526,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "tab",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='tab']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 530,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "action",
+            "selector": ".ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 40,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 42,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 42,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 61,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 75,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 77,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 77,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 88,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 98,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-color",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/classic/index.tsx",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx",
+            "line": 237,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx",
+            "line": 252,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 60,
+            "literal": "16px",
+            "text": "--ds-workbench-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 60,
+            "literal": "24px",
+            "text": "--ds-workbench-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 61,
+            "literal": "16px",
+            "text": "--ds-workbench-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 62,
+            "literal": "12px",
+            "text": "--ds-workbench-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 63,
+            "literal": "8px",
+            "text": "--ds-workbench-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 81,
+            "literal": "1px",
+            "text": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 84,
+            "literal": "320ms",
+            "text": "background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 95,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 106,
+            "literal": "40px",
+            "text": "width: var(--ds-workbench-header-icon-size, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 107,
+            "literal": "40px",
+            "text": "height: var(--ds-workbench-header-icon-size, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 109,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 114,
+            "literal": "1px",
+            "text": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 115,
+            "literal": "8px",
+            "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 115,
+            "literal": "18px",
+            "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 115,
+            "literal": "14px",
+            "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 119,
+            "literal": "1px",
+            "text": "transform: translateY(-1px) scale(1.025);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 123,
+            "literal": "4px",
+            "text": "margin-bottom: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 126,
+            "literal": "0.625rem",
+            "text": "font-size: var(--ds-font-size-2xs, 0.625rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 128,
+            "literal": "0.11em",
+            "text": "letter-spacing: 0.11em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 141,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-primary);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 153,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-error-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 163,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 193,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-error-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 194,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 198,
+            "literal": "32px",
+            "text": "min-height: calc(var(--ds-control-height-sm, 32px) + 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 198,
+            "literal": "8px",
+            "text": "min-height: calc(var(--ds-control-height-sm, 32px) + 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 199,
+            "literal": "3px",
+            "text": "padding: 3px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 200,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 203,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 217,
+            "literal": "1px",
+            "text": "border: 1px solid transparent;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 226,
+            "literal": "1px",
+            "text": "transform: translateY(-1px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 241,
+            "literal": "3px",
+            "text": "box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 246,
+            "literal": "3px",
+            "text": "padding: var(--ds-tabs-list-padding, 3px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 248,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 251,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 251,
+            "literal": "2px",
+            "text": "box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 311,
+            "literal": "4px",
+            "text": "margin: 4px 0 0;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 322,
+            "literal": "4px",
+            "text": "gap: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 323,
+            "literal": "2px",
+            "text": "padding: 2px 10px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 323,
+            "literal": "10px",
+            "text": "padding: 2px 10px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 379,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 388,
+            "literal": "1.5s",
+            "text": "animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 393,
+            "literal": "40px",
+            "text": "width: 40px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 394,
+            "literal": "40px",
+            "text": "height: 40px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 400,
+            "literal": "96px",
+            "text": "width: 96px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 401,
+            "literal": "10px",
+            "text": "height: 10px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 405,
+            "literal": "200px",
+            "text": "width: 200px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 406,
+            "literal": "22px",
+            "text": "height: 22px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 410,
+            "literal": "300px",
+            "text": "width: 300px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 411,
+            "literal": "14px",
+            "text": "height: 14px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 415,
+            "literal": "80px",
+            "text": "width: 80px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 416,
+            "literal": "34px",
+            "text": "height: 34px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 421,
+            "literal": "36px",
+            "text": "height: 36px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 425,
+            "literal": "640px",
+            "text": "@container ds-workbench-header (max-width: 640px) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 449,
+            "literal": "8px",
+            "text": "from { opacity: 0; transform: translateY(8px) scale(0.995); }"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 464,
+            "literal": "1px",
+            "text": "transform: translateY(-1px) scale(1.025);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 506,
+            "literal": "2px",
+            "text": "outline: 2px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 507,
+            "literal": "1px",
+            "text": "outline-offset: 1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 526,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+            "line": 530,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          }
+        ],
+        "censusRowCount": 187
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3294,70 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.seeds",
+            "prop": "tintas",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-workbench-header-actions-backdrop"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-border",
+            "--ds-color-border-primary",
+            "--ds-color-error-100",
+            "--ds-color-error-200",
+            "--ds-color-error-300",
+            "--ds-color-error-50",
+            "--ds-color-error-600",
+            "--ds-color-error-700",
+            "--ds-color-neutral-100",
+            "--ds-color-neutral-300",
+            "--ds-color-neutral-50",
+            "--ds-color-primary",
+            "--ds-color-primary-600",
+            "--ds-color-text-muted",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-surface-card",
+            "--ds-surface-panel",
+            "--ds-tab-bg-hover",
+            "--ds-tab-color",
+            "--ds-tab-color-active",
+            "--ds-tab-color-hover",
+            "--ds-tabs-active-bg",
+            "--ds-tabs-list-bg",
+            "--ds-tabs-list-border",
+            "--ds-toolbar-border",
+            "--ds-toolbar-control-bg",
+            "--ds-workspace-card-border",
+            "--ds-workspace-card-border-hover",
+            "--ds-workspace-card-icon-bg",
+            "--ds-workspace-card-icon-border",
+            "--ds-workspace-card-icon-color"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3365,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulares del shell sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold",
+            "--ds-letter-spacing-heading",
+            "--ds-tabs-item-font-weight",
+            "--ds-tabs-item-font-weight-active"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3398,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulares del shell sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-base",
+            "--ds-font-family-heading",
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3430,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "escala sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xs",
+            "--ds-font-size-sm",
+            "--ds-font-size-xl",
+            "--ds-font-size-xs",
+            "--ds-line-height-body",
+            "--ds-line-height-heading",
+            "--ds-tabs-md-font-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3466,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-page-panel-radius",
+            "prop": "radio de paneles del shell (slug vivo: page)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-panel-radius",
+              "--_ds-workbench-header-skeleton-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm",
+            "--ds-tabs-item-radius",
+            "--ds-tabs-list-radius",
+            "--ds-toolbar-radius",
+            "--ds-workspace-card-radius"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3505,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los controles del shell (header actions) son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3518,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el shell es chrome de composicion, no superficie de filas; lo que densifica es su contenido (tablas/listas) por sus propios sockets",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "CANDIDATOS (canales reales bajo regla de grupo MUST_NOT): --ds-workbench-header-action-gap, --ds-workbench-header-item-gap, --ds-workbench-header-padding"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-control-height-sm",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-6",
+            "--ds-surface-inset",
+            "--ds-tabs-gap",
+            "--ds-tabs-list-padding",
+            "--ds-tabs-md-height",
+            "--ds-tabs-md-padding",
+            "--ds-touch-target-min",
+            "--ds-workspace-card-gap"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3554,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-section-gap",
+            "prop": "ritmo interno de page-shell/cockpit",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-workbench-header-section-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3578,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "la paleta obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-page-transition-duration",
+            "prop": "transition-duration de entrada/salida de la command palette",
+            "tier": "standard"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-attention",
+            "--ds-motion-calm",
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-motion-slow"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3610,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-elevation"
+            ],
+            "sockets": [
+              "--_ds-workbench-header-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1",
+            "--ds-elevation-2",
+            "--ds-tabs-active-shadow",
+            "--ds-workspace-card-shadow",
+            "--ds-workspace-card-shadow-hover"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3646,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de shell mate; el glass vive en los scrims de overlay, no en la paleta",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3659,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-bg",
+            "prop": "background-color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-app-shell-sidebar-bg"
+            ],
+            "sockets": [
+              "--_ds-workbench-header-sidebar-bg"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3685,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3698,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "layer.stack",
+            "socketPattern": "--_ds-<comp>-z-index",
+            "prop": "z-index",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-z-index"
+            ],
+            "sockets": [
+              "--_ds-workbench-header-z-index"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3724,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-page-rule-style",
+            "prop": "reglas de seccion y bordes de panel del shell",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3755,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3773,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3786,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3825,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria dentro de la paleta",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-page-icon-stroke-width",
+            "prop": "stroke-width de los iconos de comandos y resultados",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-workbench-header-icon-size"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3850,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

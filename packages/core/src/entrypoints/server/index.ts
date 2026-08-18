@@ -144,7 +144,14 @@ export {
   brandModeSelector,
   brandTenantSelector,
   compileBrandTheme,
+  compileTheme,
 } from '../../infrastructure/compilers/kernel/runtime/brand-theme';
+export type {
+  Theme,
+  ThemePatch,
+  ThemePatchEnvelope,
+  Governed,
+} from '../../foundation/contracts/composition/tenants/themes/iso';
 export type {
   NormalizedTenantThemeAppearance,
   TenantThemeAdvancedAppearance,

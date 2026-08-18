@@ -19,8 +19,8 @@
  * Every other part (blockquote, lists, tables, code, task checkbox) keeps its
  * inline paint in `index.tsx`. Inline styles
  * cannot express :hover/:focus-visible or pseudo-elements, and inline style
- * producer consts are counted paint by the engine-token-audit (the
- * component's inline-paint counter is decrease-only), which is why those
+ * producer consts are counted paint by the engine-token-audit; that
+ * component counter is decrease-only, which is why those
  * aspects live here.
  *
  * Hover deepens the link ink 28% toward the source's own primary text ink --
@@ -95,7 +95,7 @@
 /* W10: the heading type ramp replaces the browser-default h1-h6 scale with
  * the foundation type scale, so markdown documents share the system's
  * typographic hierarchy. The skin owns the ramp wholesale (inline style
- * producers are counted paint by the engine-token-audit and the component's
+ * producers are counted paint by the engine-token-audit; that component
  * counter is decrease-only); the tag carries the level. Large levels get the
  * display weight and slight negative tracking; the smallest level gets
  * positive tracking so it stays legible next to body copy. */

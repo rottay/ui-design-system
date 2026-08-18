@@ -6,7 +6,7 @@
  * still yields to a caller's inline `style`.
  *
  * SINGLE PAINT OWNER. The modern engine stamps anatomy only (`data-part`
- * hooks, `data-size`, `data-current`, `aria-current`) — no inline styles, no
+ * hooks, `data-size`, `data-current`, `aria-current`); no inline styles, no
  * DaisyUI classes, no Tailwind utilities. The stale "DaisyUI join pattern"
  * docblock this file's previous header warned about was removed from the
  * engine in the same wave; `personality.css`'s PAGINATION block still targets

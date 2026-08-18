@@ -201,9 +201,6 @@ export function auditCascadeEntrypoint(path) {
  * 2026-08-02 without a single gate complaining.
  */
 export const UNREACHABLE_BY_DESIGN = new Map([
-  ["facade/artifacts/bithire/_source/extension.css", "declared build input to the bithire artifact generator"],
-  ["facade/artifacts/evnto/_source/extension.css", "declared build input to the evnto artifact generator"],
-  ["facade/artifacts/rottay/_source/extension.css", "declared build input to the rottay artifact generator"],
   ["foundation/typography/font-packs/editorial-display/index.css", "font pack no vertical currently selects"],
   ["foundation/typography/font-packs/editorial-text/index.css", "font pack no vertical currently selects"],
   ["foundation/typography/font-packs/geometric-display/index.css", "font pack no vertical currently selects"],

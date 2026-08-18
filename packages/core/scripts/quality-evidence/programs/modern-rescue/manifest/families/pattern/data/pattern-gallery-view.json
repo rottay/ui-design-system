@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "f41908428e54a8d0c7bd135aaed6efe21cbd1292ad38d6cd627cb3df8851e85f"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1628 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+      "packages/core/src/ui/patterns/data/gallery-view",
+      "packages/core/src/ui/patterns/data/gallery-view/contracts/index.ts",
+      "packages/core/src/ui/patterns/data/gallery-view/index.ts",
+      "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx",
+      "packages/core/src/ui/patterns/data/gallery-view/runtime/item-identity/index.ts",
+      "packages/core/src/ui/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts"
+    ],
+    "stableParts": [
+      "caption",
+      "caption-text",
+      "card",
+      "checkbox",
+      "empty-state",
+      "image",
+      "image-frame",
+      "image-placeholder",
+      "image-placeholder-icon",
+      "root",
+      "skeleton-caption",
+      "skeleton-card"
+    ],
+    "states": [
+      "checked",
+      "empty",
+      "selected",
+      "focus-visible",
+      "hover"
+    ],
+    "variantAxes": [
+      "data-clickable"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:270]",
+      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:559]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (14 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:87, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:95, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:130, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:137]",
+      "The family assigns explicit ARIA roles in source (1 sites; roles observed: `on`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:236]",
+      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-label`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:270]",
+      "The family implements keyboard interaction handlers (1 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:559]",
+      "The family manages `tabIndex` explicitly (5 sites); focus order is owned by the component, not by theming. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:180, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:198, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:238]",
+      "The family generates stable ids with React `useId` (1 sites) to bind labels and controls; those bindings must not be broken by a recipe. [at packages/core/src/ui/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts:58]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-data-merged",
+        "scoutArtifact": [
+          "mr-anatomy-pattern-data-b.json",
+          "mr-anatomy-pattern-forms.json",
+          "mr-anatomy-pattern-data-forms.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-pattern-data-b.json": "PARTIAL",
+          "mr-anatomy-pattern-data-forms.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 12,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "caption",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:147"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:34",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:35"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "caption-text",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:148"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:42",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:43",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:45"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "card",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:51",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:53",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:57"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:54"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "checkbox",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:259"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:96",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:97"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "empty-state",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:541"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:166"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "image",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:136"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:11",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:12",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:13",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:14",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:15"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "image-frame",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:6",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:7"
+          ]
+        },
+        {
+          "part": "image-placeholder",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:86"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:19",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:20",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:21"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "image-placeholder-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:95"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:25",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:27"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:310",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:533",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:552"
+          ],
+          "atSiteCount": 9,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:140",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:141",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:150"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "skeleton-caption",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:330"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:145",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:146"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "skeleton-card",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:318"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:133",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:134",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:135",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:136"
+          ],
+          "anchorStatus": "verified"
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "skeleton-image",
+          "scoutAnchorClaim": "class:ds-gallery-view__skeleton-image",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:161"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "checked",
+          "at": [],
+          "state": "checked",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:116"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "data-empty=true",
+          "at": [],
+          "state": "empty",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:158",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:159",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:160",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:162"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "data-selected=false",
+          "at": [],
+          "state": "selected",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:197"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "data-selected=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:86"
+          ],
+          "state": "selected",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:65",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:191",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:192",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:193"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "token": "focus-visible",
+          "at": [],
+          "state": "focus-visible",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:127",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:201",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:202"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "hover",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:110"
+          ],
+          "state": "hover",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:75",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:76",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:80",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:179"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "token": "pseudo:hover",
+          "occurrences": 7,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:94"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "data-selected='true'",
+          "occurrences": 6,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:84",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:233",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:262"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "data-empty='true'",
+          "occurrences": 5,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:178",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:314",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:537",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:556"
+          ],
+          "state": "empty"
+        },
+        {
+          "token": "pseudo:focus-visible",
+          "occurrences": 4,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:146"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "data-selected='false'",
+          "occurrences": 2,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:89",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:233",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:262"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "pseudo:checked",
+          "occurrences": 1,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:136"
+          ],
+          "state": "checked"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-clickable=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:61"
+          ]
+        },
+        {
+          "token": "data-clickable='true'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:80",
+            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:235"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblingDirectory": null,
+        "engines": {},
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "summary": "no engines/ sibling directory exists for this family; it renders one implementation for every engine",
+        "engineSiblingsInSource": {},
+        "enginesWithOwnSkinCss": [
+          "engine-agnostic"
+        ],
+        "perLayerBreakdown": {
+          "engine-agnostic": {
+            "partsStyled": 12,
+            "variablesRead": 0
+          },
+          "css:engine-agnostic": {
+            "partsStyled": 0,
+            "variablesRead": 24
+          }
+        },
+        "antdImportSites": [],
+        "inlineStyleAttributeSites": 7,
+        "templateConstructedVariableNames": [],
+        "paintDeliveryPerEngine": {}
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "1 role attributes are runtime expressions"
+        ],
+        "failureClasses": {
+          "unreadEmission": [],
+          "undeclaredRead": [],
+          "hardcodedValue": [],
+          "familyNamespacePrefixesSearched": [
+            "--ds-gallery-card-",
+            "--ds-gallery-checkbox-",
+            "--ds-gallery-view-",
+            "--ds-gallerycard-",
+            "--ds-gallerycheckbox-",
+            "--ds-galleryview-",
+            "--ds-pattern-gallery-card-",
+            "--ds-pattern-gallery-checkbox-",
+            "--ds-pattern-gallery-view-",
+            "--ds-pattern-gallerycard-",
+            "--ds-pattern-gallerycheckbox-",
+            "--ds-pattern-galleryview-",
+            "--ds-pattern-pattern-gallery-view-",
+            "--ds-pattern-patterngalleryview-",
+            "--ds-patterngalleryview-"
+          ],
+          "familyPrefixedDeclarationCount": 0
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupIndependenceTest": {
+          "test": "a propertyGroup name is defective when it is only a coarser label for a set of stableParts, because stableParts and propertyGroups are two INDEPENDENT axes and a cell declares both",
+          "result": "PASS",
+          "reason": "every group above names a CSS landing-property axis (colour, typography, spacing, radius, elevation, motion, border, size, layout, opacity, layer), not a region of the component; each group is exposed by many parts and each part exposes many groups, so the two axes do not collapse"
+        },
+        "propertyGroupMembership": {
+          "border": {
+            "partsExposingIt": [
+              "card",
+              "root",
+              "skeleton-card"
+            ],
+            "readSites": 15
+          },
+          "color": {
+            "partsExposingIt": [
+              "caption",
+              "caption-text",
+              "card",
+              "checkbox",
+              "empty-state",
+              "image-placeholder",
+              "root",
+              "skeleton-card"
+            ],
+            "readSites": 9
+          },
+          "elevation": {
+            "partsExposingIt": [
+              "card",
+              "checkbox"
+            ],
+            "readSites": 7
+          },
+          "motion": {
+            "partsExposingIt": [
+              "card",
+              "checkbox",
+              "image"
+            ],
+            "readSites": 12
+          },
+          "other": {
+            "partsExposingIt": [
+              "image-placeholder-icon",
+              "root"
+            ],
+            "readSites": 3
+          },
+          "radius": {
+            "partsExposingIt": [
+              "card",
+              "checkbox",
+              "root",
+              "skeleton-card"
+            ],
+            "readSites": 4
+          },
+          "spacing": {
+            "partsExposingIt": [
+              "caption",
+              "checkbox",
+              "root",
+              "skeleton-caption"
+            ],
+            "readSites": 6
+          }
+        },
+        "propertyGroupsObservedCssPropertyFamilies": [
+          "background",
+          "border",
+          "border-radius",
+          "box-shadow",
+          "color",
+          "filter",
+          "font",
+          "interaction",
+          "layout",
+          "motion",
+          "opacity",
+          "other:-webkit-backdrop-filter",
+          "other:block-size",
+          "other:inline-size",
+          "outline",
+          "padding",
+          "size",
+          "text"
+        ],
+        "landingPropertyBuckets": [
+          "border",
+          "color",
+          "elevation",
+          "motion",
+          "other",
+          "radius",
+          "spacing"
+        ],
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 15,
+            "part": "image",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-normal"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card [data-part='image']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 15,
+            "part": "image",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card [data-part='image']"
+          },
+          {
+            "variable": "--ds-color-bg-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 20,
+            "part": "image-placeholder",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-tertiary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='image-placeholder']"
+          },
+          {
+            "variable": "--ds-color-text-disabled",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 21,
+            "part": "image-placeholder",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-disabled"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='image-placeholder']"
+          },
+          {
+            "variable": "--ds-icon-xl-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 25,
+            "part": "image-placeholder-icon",
+            "landsOn": "inline-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-icon-xl-size"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='image-placeholder-icon']"
+          },
+          {
+            "variable": "--ds-icon-xl-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 26,
+            "part": "image-placeholder-icon",
+            "landsOn": "block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-icon-xl-size"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='image-placeholder-icon']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 33,
+            "part": "caption",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card [data-part='caption']"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 35,
+            "part": "caption",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card [data-part='caption']"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 45,
+            "part": "caption-text",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view\n  .ds-gallery-card\n  .ds-gallery-view__caption-text.ds-gallery-view__caption-text.ds-gallery-view__caption-text"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 53,
+            "part": "card",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 54,
+            "part": "card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 57,
+            "part": "card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-normal"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 57,
+            "part": "card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 57,
+            "part": "card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-normal"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 57,
+            "part": "card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 57,
+            "part": "card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-normal"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 57,
+            "part": "card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 65,
+            "part": "card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 65,
+            "part": "card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 66,
+            "part": "card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 66,
+            "part": "card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 70,
+            "part": "card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false']"
+          },
+          {
+            "variable": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 70,
+            "part": "card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false']"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 75,
+            "part": "card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:hover"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 86,
+            "part": "card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']:hover"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 86,
+            "part": "card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']:hover"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 86,
+            "part": "card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']:hover"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 94,
+            "part": "checkbox",
+            "landsOn": "inset-block-start",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 95,
+            "part": "checkbox",
+            "landsOn": "inset-inline-start",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 100,
+            "part": "checkbox",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 101,
+            "part": "checkbox",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 102,
+            "part": "checkbox",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-elevation-1"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 104,
+            "part": "checkbox",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 104,
+            "part": "checkbox",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 104,
+            "part": "checkbox",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 104,
+            "part": "checkbox",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 126,
+            "part": "card",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:focus-visible"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 126,
+            "part": "card",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:focus-visible"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 126,
+            "part": "card",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:focus-visible"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 127,
+            "part": "card",
+            "landsOn": "outline-offset",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-offset"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:focus-visible"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 134,
+            "part": "skeleton-card",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card']"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 135,
+            "part": "skeleton-card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card']"
+          },
+          {
+            "variable": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 135,
+            "part": "skeleton-card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card']"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 136,
+            "part": "skeleton-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 145,
+            "part": "skeleton-caption",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='skeleton-caption']"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 152,
+            "part": "root",
+            "landsOn": "block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-view__skeleton-caption"
+          },
+          {
+            "variable": "--ds-spacing-8",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 158,
+            "part": "root",
+            "landsOn": "padding",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-8"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true']"
+          },
+          {
+            "variable": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 158,
+            "part": "root",
+            "landsOn": "padding",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-5"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true']"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 160,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true']"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 161,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true']"
+          },
+          {
+            "variable": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 161,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true']"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 162,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true']"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 166,
+            "part": "empty-state",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state']"
+          },
+          {
+            "variable": "--ds-border-width-thin",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 193,
+            "part": "card",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-border-width-thin"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (forced-colors: active)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 201,
+            "part": "card",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (forced-colors: active)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:focus-visible"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "line": 202,
+            "part": "card",
+            "landsOn": "outline-offset",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-offset"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (forced-colors: active)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-gallery-view .ds-gallery-card:focus-visible"
+          }
+        ],
+        "variableCensusTsx": [],
+        "distinctVariablesRead": 24,
+        "readSiteCount": 56,
+        "emittedVariables": {},
+        "emittedVariablesTsx": {},
+        "paintOwnership": {
+          "ownCssFiles": [
+            {
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+              "engine": "engine-agnostic",
+              "lines": 235,
+              "role": "skin-css",
+              "matchedRootClasses": [
+                "ds-gallery-card",
+                "ds-gallery-checkbox",
+                "ds-pattern-gallery-view"
+              ]
+            }
+          ],
+          "composedComponents": [
+            {
+              "component": "Box",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/layout/Box",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:21"
+              ],
+              "renderSiteCount": 9,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Checkbox",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/inputs/Checkbox",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:26"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Flex",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/layout/Flex",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:22"
+              ],
+              "renderSiteCount": 2,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Pagination",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/navigation/Pagination",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:27"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Skeleton",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/feedback/Skeleton",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:23"
+              ],
+              "renderSiteCount": 2,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Stack",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/layout/Stack",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:24"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Text",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/display/Typography/compound/Text",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:25"
+              ],
+              "renderSiteCount": 2,
+              "engines": [
+                "shared"
+              ]
+            }
+          ],
+          "sharedStyleHelpers": [],
+          "note": "Variables listed in variableCensus are read by THIS family's own CSS or its own TSX only. Paint contributed by a composed component is attributed to that component here and is NOT counted in this family's census."
+        },
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "variableNamespaceSummary": {
+          "SHARED_OR_GLOBAL_NAMESPACE": 24,
+          "decl:generated-bundle-css": 24
+        },
+        "unattributedRuleCount": 0,
+        "ruleCount": 81
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 93,
+        "sitesVerified": 36,
+        "sitesWithdrawn": 57,
+        "sitesNotProbed": 3,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1656,70 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
+            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-selection-bg",
+              "--_ds-list-item-selected-bg"
+            ],
+            "sockets": [
+              "--_ds-gallery-view-selection-bg",
+              "--_ds-gallery-view-selection-border"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-cell-<status>-color",
+            "prop": "celdas y filas con estado",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-gallery-view-cell-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO (a-vs-b)": [
+            "pattern-gallery-view: 1 propios socketeables, 0 consumo, resto foundation/multi-lector"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-bg-primary",
+            "--ds-color-bg-secondary",
+            "--ds-color-bg-tertiary",
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-text-disabled",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-elevation-1",
+            "--ds-motion-fast",
+            "--ds-motion-normal",
+            "--ds-spacing-2",
+            "--ds-spacing-5",
+            "--ds-spacing-8"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1727,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-gallery-view-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1754,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-gallery-view-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1781,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-cell-font-size",
+            "prop": "tamano de celda y header de tabla",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-gallery-view-cell-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-font-size-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1811,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-container-radius",
+            "prop": "marco del pattern (tabla, kanban, galeria)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-gallery-view-container-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1843,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1856,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila, padding de celda, gap de toolbar",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-density-factor",
+              "--_ds-kanban-card-density-factor"
+            ],
+            "sockets": [
+              "--_ds-gallery-view-density-factor"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-icon-xl-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1889,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1902,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Las celdas no se animan al ordenar/filtrar en la variante estandar: el re-flow de dato es instantaneo; solo la entrada de overlays de la tabla (menus) usa el socket overlay."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-motion-ease-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1925,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-widget-card-elevation",
+              "--_ds-column-menu-elevation"
+            ],
+            "sockets": [
+              "--_ds-gallery-view-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1952,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Filas y celdas no llevan tinte ni glass: el scrim sobre dato es dano visual; la tabla es superficie de trabajo, no de marca."
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1969,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "El contenido de datos lo gobierna surface.*: si el tono de navegacion tine la tabla, la cascada se cruzo de eje."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1986,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2003,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "Celdas sticky usan el canal derivado sticky, no un z libre por componente."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2020,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
+            "prop": "marco del pattern y separadores internos de fila",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-gallery-view-frame-style",
+              "--_ds-border-width-thin"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2053,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2071,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2088,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2127,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "Los indicadores dentro de celdas son marcas de estado (siguen color semantico), no iconos de la libreria de postura."
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2144,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

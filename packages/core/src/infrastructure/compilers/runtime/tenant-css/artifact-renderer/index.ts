@@ -102,7 +102,6 @@ export interface RenderVerticalArtifactInput {
   colorScheme?: 'light' | 'dark';
   /** Compiled deltas for every mode the theme authors beyond its default. */
   modeBlocks?: readonly CompiledBrandModeBlock[];
-  extensionCss: string;
   regenerateCommand: string;
 }
 
@@ -117,7 +116,6 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     compiledCssVariables,
     colorScheme,
     modeBlocks,
-    extensionCss,
     regenerateCommand,
   } = input;
 
@@ -126,17 +124,33 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     '/*',
     ` * ${displayName} tenant theme.`,
     ' *',
-    ' * This file is a BUILD OUTPUT assembled from two authored sources; any manual',
+    ' * This file is a BUILD OUTPUT compiled from ONE authored source; any manual',
     ' * edit is reverted by the DS artifact parity/guard gates:',
-    ` *   1. ${authoredThemePath} (compiled via compileBrandTheme)`,
-    ` *   2. foundation/tokens/css/facade/artifacts/${tenantSlug}/_source/extension.css (declared extension)`,
+    ` *   ${authoredThemePath} (compiled via compileBrandTheme)`,
     ' *',
     ` * Regenerate: ${regenerateCommand}`,
     ' */',
   ].join('\n');
 
+  // The document-root ink is artifact-format semantics, not theme content: this
+  // file is the top-level stylesheet a host page loads, so it owns the root
+  // chrome declaration. It is welded to the channel NAME and never to a value —
+  // a DB tenant moves the same ink by moving --ds-color-text-primary through the
+  // shared compileTheme lowering, with no slug branch and no second authority
+  // here. Fail closed rather than paint an unauthored root: a literal fallback
+  // would silently become a second theme author for every theme that lost the
+  // channel, which is the exact failure this severance exists to end.
+  const rootInk = compiledCssVariables['--ds-color-text-primary'];
+  if (!rootInk || rootInk.trim() === '') {
+    throw new Error(
+      `renderVerticalArtifact: ${tenantSlug} has no compiled --ds-color-text-primary; ` +
+        'the artifact cannot author the document root ink without it.',
+    );
+  }
+
   const compiledDecls = [
     ...(colorScheme ? [`  color-scheme: ${colorScheme};`] : []),
+    '  color: var(--ds-color-text-primary);',
     ...Object.keys(compiledCssVariables)
       .sort()
       .map((key) => `  ${key}: ${compiledCssVariables[key]};`),
@@ -150,8 +164,9 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
 
   // One block per authored non-default mode, from BrandTheme.modes. Each holds
   // only the channels that mode moves; the base block above still supplies the
-  // rest. These used to be hand-written blocks in the extension, which made the
-  // extension a second theme author for every state but the default one.
+  // rest. These used to be hand-written blocks in the declared extension source,
+  // which made that source a second theme author for every state but the default
+  // one. That authority no longer exists: this renderer has one authored input.
   const modeBlockSections = (modeBlocks ?? []).map((block) =>
     [
       `/* === Compiled from BrandTheme.modes.${block.mode} — do not edit === */`,
@@ -166,15 +181,8 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     ].join('\n'),
   );
 
-  const extensionSection = [
-    '/* === Declared artifact extension (authored source, mechanically scoped) === */',
-    extensionCss.replace(/^\s+/, '').replace(/\s+$/, ''),
-  ].join('\n');
-
   return projectFirstPartyArtifactScopes(
-    [header, compiledBlock, ...modeBlockSections, extensionSection].join(
-      '\n\n',
-    ) + '\n',
+    [header, compiledBlock, ...modeBlockSections].join('\n\n') + '\n',
     tenantSlug,
     verticalKey,
   );
@@ -184,7 +192,6 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
 export interface RenderFirstPartyArtifactInput {
   spec: FirstPartyArtifactSpec;
   brandTheme: BrandTheme;
-  extensionCss: string;
   regenerateCommand?: string;
 }
 
@@ -202,7 +209,7 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
   css: string;
   compiled: CompiledBrand;
 } {
-  const { spec, brandTheme, extensionCss, regenerateCommand } = input;
+  const { spec, brandTheme, regenerateCommand } = input;
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: spec.slug });
   return {
     compiled,
@@ -215,7 +222,6 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
       compiledCssVariables: compiled.cssVariables,
       colorScheme: compiled.colorScheme,
       modeBlocks: compiled.modeBlocks,
-      extensionCss,
       regenerateCommand: regenerateCommand ?? FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
     }),
   };

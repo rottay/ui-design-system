@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "b035ac5e164ccc7b8d2eb50b21eceff23662aca9510a6a73c6b4e5ce37289426"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3294 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/navigation/workspace-switcher/index.ts",
+      "packages/core/src/ui/patterns/navigation/workspace-switcher/contracts/index.ts",
+      "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css"
+    ],
+    "stableParts": [
+      "avatar",
+      "avatar-frame",
+      "avatar-img",
+      "badge",
+      "check",
+      "chevron",
+      "create",
+      "create-row",
+      "current-user",
+      "current-user-copy",
+      "current-user-email",
+      "current-user-name",
+      "divider",
+      "empty",
+      "header",
+      "header-title",
+      "item",
+      "item-controls",
+      "item-copy",
+      "item-meta",
+      "item-name",
+      "item-online",
+      "item-plan",
+      "item-row",
+      "item-title-row",
+      "list",
+      "meta",
+      "online-dot",
+      "panel",
+      "root",
+      "search",
+      "settings",
+      "skeleton",
+      "trigger",
+      "trigger-name",
+      "user-email"
+    ],
+    "states": [
+      "active",
+      "focus",
+      "focused",
+      "loading",
+      "open"
+    ],
+    "variantAxes": [
+      "data-frame"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 36,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "avatar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:180",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:252",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:361",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:16",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:44"
+          ]
+        },
+        {
+          "part": "avatar-frame",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:360",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:453",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:545",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:198"
+          ]
+        },
+        {
+          "part": "avatar-img",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:366",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:50"
+          ]
+        },
+        {
+          "part": "badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:487",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:291",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:94"
+          ]
+        },
+        {
+          "part": "check",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:464",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:275",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:577",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:81"
+          ]
+        },
+        {
+          "part": "chevron",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:374",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:535"
+          ]
+        },
+        {
+          "part": "create",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:526",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:335"
+          ]
+        },
+        {
+          "part": "create-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:521",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:430"
+          ]
+        },
+        {
+          "part": "current-user",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:544",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:463"
+          ]
+        },
+        {
+          "part": "current-user-copy",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:548",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:471"
+          ]
+        },
+        {
+          "part": "current-user-email",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:551",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:486"
+          ]
+        },
+        {
+          "part": "current-user-name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:549",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:478"
+          ]
+        },
+        {
+          "part": "divider",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:520",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:543",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:327",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:356",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:124",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:563"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:422",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:228"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:383",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:561",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:64"
+          ]
+        },
+        {
+          "part": "header-title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:238"
+          ]
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:444",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:307",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:504",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:514",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:17"
+          ]
+        },
+        {
+          "part": "item-controls",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:481",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:403"
+          ]
+        },
+        {
+          "part": "item-copy",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:457",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:351"
+          ]
+        },
+        {
+          "part": "item-meta",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:468",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:377"
+          ]
+        },
+        {
+          "part": "item-name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:461",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:364",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:371"
+          ]
+        },
+        {
+          "part": "item-online",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:472",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:389"
+          ]
+        },
+        {
+          "part": "item-plan",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:470",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:385"
+          ]
+        },
+        {
+          "part": "item-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:434",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:100",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:299",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:321",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:330"
+          ]
+        },
+        {
+          "part": "item-title-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:458",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:358"
+          ]
+        },
+        {
+          "part": "list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:413",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:293"
+          ]
+        },
+        {
+          "part": "meta",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:278",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:85"
+          ]
+        },
+        {
+          "part": "online-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:474",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:396",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:580",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:89"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:380",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:14",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:249"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:324",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:339",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:83"
+          ]
+        },
+        {
+          "part": "search",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:390",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:562"
+          ]
+        },
+        {
+          "part": "settings",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:501",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:306",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:330",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:346"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:448",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:455",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:459",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:541",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:592"
+          ]
+        },
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:105",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:352",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:39",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:150"
+          ]
+        },
+        {
+          "part": "trigger-name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:370",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:165"
+          ]
+        },
+        {
+          "part": "user-email",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:121"
+          ]
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "${part}",
+          "scoutAnchorClaim": null,
+          "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:127"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:10",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:22",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:25"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=isActive",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:436",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:445",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:461",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:235"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:321",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:371",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:566",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:72"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "focused",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:21",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:24"
+          ],
+          "state": "focus"
+        },
+        {
+          "token": "focused=isFocused",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:437",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:446",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:502",
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx:236"
+          ],
+          "state": "focused"
+        },
+        {
+          "token": "focused=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:100",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:424",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:572",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css:77"
+          ],
+          "state": "focused"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:342"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:326"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "open=open ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:341"
+          ],
+          "state": "open"
+        },
+        {
+          "token": "open=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:60"
+          ],
+          "state": "open"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "frame=item",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:453",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:208"
+          ]
+        },
+        {
+          "token": "frame=trigger",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:360",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:203"
+          ]
+        },
+        {
+          "token": "frame=user",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:545",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:213"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "position=position",
+            "at": [
+              "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:325",
+              "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx:340"
+            ]
+          },
+          {
+            "token": "position=sidebar",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:160",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:198",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:203",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:259",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:265",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css:279"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "lines": 366
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx",
+            "lines": 561
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "lines": 401
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "9 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 41,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 43,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 44,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 44,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:active, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:active, .ds-p",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "chevron",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "chevron",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 67,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 70,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 71,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 80,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 84,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-item-frame-active",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-primary) 34%, transparent)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 97,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 101,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 105,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "check",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='check']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "online-dot",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 113,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 114,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 119,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 125,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": "divider",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 130,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 131,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 135,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-trigger-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 153,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-trigger-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 154,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-trigger-padding-inline",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-trigger-name-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 169,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "trigger-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger-name']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-trigger-name-font-weight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 170,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-weight-semibold, 600)",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "trigger-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger-name']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 170,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "trigger-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 190,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "avatar-frame",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 216,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "avatar-frame",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'][data-frame='user']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 226,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "search",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='search']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 231,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 239,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header-title",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='header-title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 240,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header-title",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='header-title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 241,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "header-title",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='header-title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-panel-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 253,
+            "fallback": true,
+            "fallbackValue": "18rem",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 254,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-panel-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 262,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-inline-start",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": "var(--ds-workspace-switcher-panel-width, 18rem), .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-panel-gap-block",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 268,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root']:not([data-position='sidebar']) [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-panel-gap-block",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 283,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-list-max-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 294,
+            "fallback": true,
+            "fallbackValue": "16rem",
+            "cssProperty": "max-block-size",
+            "propertyGroup": "geometry",
+            "part": "list",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='list']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 304,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 304,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 312,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 326,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 326,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 326,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-row",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover:not([data-active='true'])",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 340,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 341,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 341,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 343,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 347,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "settings",
+            "selector": "in srgb, var(--ds-color-primary) 7%, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 366,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "item-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 372,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "item-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-name'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-meta-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 381,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "item-meta",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-meta']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 381,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "item-meta",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 382,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "item-meta",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-meta-numeric",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 393,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "item-online",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-online']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 400,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "online-dot",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 415,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 419,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 419,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 420,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 420,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 441,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 443,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 443,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-trigger-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 449,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 450,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 451,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-attention",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 452,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 452,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 480,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "current-user-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 481,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "current-user-name",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-meta-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 488,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "current-user-email",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-email']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 488,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "current-user-email",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 489,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "current-user-email",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 498,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:focus-visible, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focu",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 498,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:focus-visible, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focu",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 498,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:focus-visible, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focu",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 499,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:focus-visible, .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focu",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 505,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 505,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 505,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 506,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 516,
+            "fallback": true,
+            "fallbackValue": "var(--ds-touch-target-min, 44px)",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'], .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'], .ds-pattern-works",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 516,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'], .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'], .ds-pattern-works",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 35,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 40,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "avatar",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 40,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "avatar",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger'] [data-part='avatar'], .ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'] [",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 47,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "avatar",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger'] [data-part='avatar'], .ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'] [",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 55,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-primary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shadow-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 61,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 65,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 69,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 69,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 73,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-muted)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 73,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 74,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-100)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 78,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "check",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='check']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 86,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "meta",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 90,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "online-dot",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='online-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 102,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 104,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "settings",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='settings']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 108,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "divider",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='divider']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 108,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "divider",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='divider']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 113,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 114,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create'][data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 118,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "create",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create'][data-part='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "user-email",
+            "selector": ".ds-pattern-workspace-switcher.ds-engine-rustic [data-part='user-email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200, #e5e7eb)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "#e5e7eb",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-500, #737373)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-500",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "#737373",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-hover-bg",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 135,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 135,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-active-bg",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 137,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary-50)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary-50",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 137,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-active-border",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 140,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary-500)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 140,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-avatar-bg",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 157,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary-500)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-avatar-color",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse, var(--ds-color-bg-base))",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-base)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-base",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 158,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-active-indicator",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 181,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary-500)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 181,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-meta-color",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 192,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-secondary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 192,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-user-avatar-bg",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 264,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-success-500, var(--ds-color-success))",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-success-500",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 264,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-success)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 264,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-user-avatar-color",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 265,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse, var(--ds-color-bg-base))",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 265,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-base)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-base",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 265,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-meta-color",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 280,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-secondary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 280,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-avatar-bg",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 318,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary-500)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 318,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-switcher-avatar-color",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 319,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse, var(--ds-color-bg-base))",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 319,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-base)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-base",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 319,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-switcher-meta-color",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 343,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-secondary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/classic/index.tsx",
+            "line": 343,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 50,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 195,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 266,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 278,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 335,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 375,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
+            "line": 385,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 75,
+            "literal": "4px",
+            "text": "from { opacity: 0; transform: translateY(4px); }"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 80,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 84,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 96,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 0 0 1px"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 125,
+            "literal": "1px",
+            "text": "border-top: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 135,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 153,
+            "literal": "8px",
+            "text": "gap: var(--ds-workspace-switcher-trigger-gap, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 154,
+            "literal": "40px",
+            "text": "block-size: var(--ds-workspace-switcher-trigger-height, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 156,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-workspace-switcher-trigger-padding-inline, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 169,
+            "literal": "14px",
+            "text": "font-size: var(--ds-workspace-switcher-trigger-name-font-size, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 199,
+            "literal": "32px",
+            "text": "inline-size: 32px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 200,
+            "literal": "32px",
+            "text": "block-size: 32px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 204,
+            "literal": "24px",
+            "text": "inline-size: 24px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 205,
+            "literal": "24px",
+            "text": "block-size: 24px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 209,
+            "literal": "36px",
+            "text": "inline-size: 36px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 210,
+            "literal": "36px",
+            "text": "block-size: 36px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 214,
+            "literal": "28px",
+            "text": "inline-size: 28px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 215,
+            "literal": "28px",
+            "text": "block-size: 28px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 216,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 222,
+            "literal": "4px",
+            "text": "padding-block: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 223,
+            "literal": "12px",
+            "text": "padding-inline: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 226,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 231,
+            "literal": "16px",
+            "text": "padding-block: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 240,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 242,
+            "literal": "0.05em",
+            "text": "letter-spacing: 0.05em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 253,
+            "literal": "18rem",
+            "text": "var(--ds-workspace-switcher-panel-width, 18rem),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 254,
+            "literal": "16px",
+            "text": "calc(100vw - 2 * var(--ds-spacing-4, 16px))"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 262,
+            "literal": "8px",
+            "text": "margin-inline-start: var(--ds-workspace-switcher-panel-gap, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 268,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 278,
+            "literal": "30rem",
+            "text": "@media (max-width: 30rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 283,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 288,
+            "literal": "6px",
+            "text": "padding-block: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 289,
+            "literal": "12px",
+            "text": "padding-inline: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 294,
+            "literal": "16rem",
+            "text": "max-block-size: var(--ds-workspace-switcher-list-max-height, 16rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 295,
+            "literal": "4px",
+            "text": "padding-block: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 302,
+            "literal": "6px",
+            "text": "gap: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 303,
+            "literal": "12px",
+            "text": "padding-inline: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 312,
+            "literal": "12px",
+            "text": "gap: var(--ds-workspace-switcher-item-gap, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 313,
+            "literal": "8px",
+            "text": "padding-block: 8px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 361,
+            "literal": "6px",
+            "text": "gap: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 380,
+            "literal": "8px",
+            "text": "gap: 8px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 392,
+            "literal": "4px",
+            "text": "gap: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 398,
+            "literal": "6px",
+            "text": "inline-size: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 399,
+            "literal": "6px",
+            "text": "block-size: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 400,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 406,
+            "literal": "6px",
+            "text": "gap: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 412,
+            "literal": "24px",
+            "text": "inline-size: 24px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 413,
+            "literal": "24px",
+            "text": "block-size: 24px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 431,
+            "literal": "8px",
+            "text": "padding-block: 8px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 432,
+            "literal": "12px",
+            "text": "padding-inline: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 436,
+            "literal": "4px",
+            "text": "gap: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 438,
+            "literal": "32px",
+            "text": "block-size: 32px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 440,
+            "literal": "12px",
+            "text": "padding-inline: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 449,
+            "literal": "40px",
+            "text": "block-size: var(--ds-workspace-switcher-trigger-height, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 460,
+            "literal": "12rem",
+            "text": "inline-size: 12rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 466,
+            "literal": "8px",
+            "text": "gap: 8px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 467,
+            "literal": "8px",
+            "text": "padding-block: 8px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 468,
+            "literal": "12px",
+            "text": "padding-inline: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 498,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 499,
+            "literal": "2px",
+            "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 505,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 506,
+            "literal": "2px",
+            "text": "outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 516,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-workspace-switcher-touch-target-min, var(--ds-touch-target-min, 44px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 527,
+            "literal": "10px",
+            "text": "inset: -10px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 567,
+            "literal": "2px",
+            "text": "outline: 2px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 568,
+            "literal": "2px",
+            "text": "outline-offset: -2px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 573,
+            "literal": "1px",
+            "text": "outline: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
+            "line": 574,
+            "literal": "1px",
+            "text": "outline-offset: -1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 35,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 47,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 56,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 61,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 69,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 74,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 0 0 1px var(--ds-color-primary);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 97,
+            "literal": "9px",
+            "text": "border-radius: 9px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 104,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 114,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher.css",
+            "line": 118,
+            "literal": "1px",
+            "text": "border: 1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary));"
+          }
+        ],
+        "censusRowCount": 170
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3322,51 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.seeds",
+            "prop": "tintas y fondos",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-workspace-switcher-item-frame-active",
+              "--_ds-workspace-switcher-meta-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-card-bg",
+            "--ds-color-bg-secondary",
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-neutral-100",
+            "--ds-color-primary",
+            "--ds-color-success",
+            "--ds-color-text-muted",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-surface-card"
+          ],
+          "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
+            "--ds-workspace-switcher-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3374,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold"
+          ],
+          "Peso/espaciado -> tabla de pairing": [
+            "--ds-workspace-switcher-meta-numeric",
+            "--ds-workspace-switcher-trigger-name-font-weight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3409,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3433,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "tamanos de label sobre la rampa multiplicada compartida",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-workspace-switcher-trigger-name-font-size"
+            ],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3465,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<familia>-panel-radius",
+            "prop": "radio de paneles propios (panel del locale-switcher y equivalentes)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-workspace-switcher-control-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3498,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "controles del locale-switcher y equivalentes",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-workspace-switcher-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3522,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<familia>-item-density-factor",
+            "prop": "padding de items de los switchers/menus del grupo",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-workspace-switcher-control-item-density-factor",
+              "--_ds-workspace-switcher-item-gap",
+              "--_ds-workspace-switcher-list-max-height",
+              "--_ds-workspace-switcher-panel-gap",
+              "--_ds-workspace-switcher-panel-gap-block",
+              "--_ds-workspace-switcher-panel-width",
+              "--_ds-workspace-switcher-trigger-gap",
+              "--_ds-workspace-switcher-trigger-height",
+              "--_ds-workspace-switcher-trigger-padding-inline"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-4",
+            "--ds-surface-inset",
+            "--ds-touch-target-min",
+            "--ds-workspace-switcher-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3564,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3577,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-workspace-switcher-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-attention",
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-motion-normal"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3613,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-2",
+            "--ds-elevation-3"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3633,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3646,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-<leaf>",
+            "prop": "background-color / color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-section-label-color"
+            ],
+            "sockets": [
+              "--_ds-workspace-switcher-sidebar-<leaf>"
+            ],
+            "socketsResolved": false
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3672,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3685,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3698,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-item-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-workspace-switcher-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3732,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3750,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3763,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3802,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-workspace-switcher-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3828,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

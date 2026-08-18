@@ -8,8 +8,8 @@
  * belongs to the composed FormField primitive, wizard chrome to Steps, every
  * action to Button. All visuals come from CSS custom properties for full
  * theme compliance; every static geometry lives in the modern skin
- * (`runtime/engines/modern/skin/form-builder.css`). The ONLY inline styles
- * left are runtime-computed values pinned by the responsive tests:
+ * (`runtime/engines/modern/skin/form-builder.css`). Inline style here carries
+ * runtime-computed values pinned by the responsive tests:
  * `grid-template-columns` on the fields container and `grid-column: span N`
  * on each field wrapper, the collapse `max-height`/`opacity`, the caller
  * `maxHeight`-style `gap` numbers, and the color swatch's user-picked

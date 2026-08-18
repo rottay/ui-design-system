@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "31b71c3b23b6cedd208657df989e0b666d242414e412e904aabd3541123d0bb0"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,863 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/visualization/ascii-diagram/contracts/index.ts",
+      "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css"
+    ],
+    "stableParts": [
+      "grid",
+      "root"
+    ],
+    "states": [
+      "visible",
+      "overflowing"
+    ],
+    "variantAxes": [
+      "data-fitted",
+      "data-reveal"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "zero colour literals anywhere in source or paint [at hex/rgb/hsl scan over 2 source files and 1 paint file: 0 hits]",
+      "the data-part surface is stamped but never painted: 0 of the 2 parts carry a CSS rule keyed on [data-part]; all paint is keyed on rt-ascii-diagram BEM classes [at packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css, packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:438, packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:451]",
+      "the family's one sizing axis is written imperatively from TS, not declared in CSS [at packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:411-414, packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:46]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-visualization",
+        "scoutArtifact": "mr-anatomy-pattern-visualization.json",
+        "scoutSelfGradedConfidence": "HIGH",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 2,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "grid",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:451"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:438"
+          ]
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "visually-hidden",
+          "scoutAnchorClaim": "ds-class-pair",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:446",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:21"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "visible",
+          "note": "reveal completion flag; paints the revealed end-state",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:440"
+          ],
+          "state": "visible"
+        },
+        {
+          "token": "overflowing",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:441"
+          ],
+          "state": "overflowing"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "fitted",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:442"
+          ]
+        },
+        {
+          "token": "reveal",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:439"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineDivergence": {
+          "enginesPresent": [
+            "none"
+          ],
+          "engineSwitched": false,
+          "rootAnchor": {
+            "kind": "bem-class",
+            "class": "rt-ascii-diagram",
+            "at": "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:432",
+            "appliedAt": "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:437"
+          },
+          "divergence": "NONE_BY_CONSTRUCTION: one implementation, no engines/ folder. It renders identically under classic, modern and rustic.",
+          "classicDisposition": "INVARIANT_WITH_REASON",
+          "classicReason": "no engine switch at all; there is nothing for classic to diverge from. Unchanged by the narrowing.",
+          "r2AsNarrowedApplies": false,
+          "r2Version": "narrowed: applies ONLY where a classic sub-region is addressable exclusively through third-party AntD vocabulary. Where classic stamps its own DS-owned anchor of either R-8 kind, the region IS addressable and R-2 does not apply."
+        },
+        "engines": [
+          "shared"
+        ]
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "16 of 16 reads have partResolution NONE: the paint file addresses BEM classes, so no read can be bound to a data-part"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupMembership": {
+          "frame": [
+            "outline"
+          ],
+          "geometry": [
+            "padding-inline"
+          ],
+          "ink": [
+            "color",
+            "scrollbar-color"
+          ],
+          "motion": [
+            "transition"
+          ],
+          "surface": [
+            "background"
+          ],
+          "typography": [
+            "font-family",
+            "font-size"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:18",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-font-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:43",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-mono"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--_ds-ascii-diagram-grid-size",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:46",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--_ds-ascii-diagram-grid-size"
+            ],
+            "fallback": "0.8125rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.8125rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline-strong",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:52",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "scrollbar-color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-hairline-strong"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:71",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "padding-inline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "0.5rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.5rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-font-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:73",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-mono"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:74",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "0.875rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.875rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:75",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-surface-bg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:79",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-bg"
+            ],
+            "fallback": "transparent",
+            "hasFallback": true,
+            "terminalLiteral": "transparent",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline-strong",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:87",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"] .rt-ascii-diagram__grid::-webkit-scrollbar-thumb",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-hairline-strong"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "terminalLiteral": "2px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-duration-slow",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-duration-slow"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-duration-slow",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-duration-slow"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          }
+        ],
+        "censusTotals": {
+          "readSites": 16,
+          "distinctVariables": 10,
+          "byPropertyGroup": {
+            "ink": 3,
+            "typography": 4,
+            "geometry": 1,
+            "surface": 2,
+            "frame": 2,
+            "motion": 4
+          },
+          "readSitesWithFallback": 8,
+          "readSitesWithoutFallback": 8,
+          "undeclaredDistinct": 0,
+          "undeclaredNames": [],
+          "generatedArtifactOnlyReads": 0,
+          "chains": 8,
+          "whollyInert": 3,
+          "partiallyInert": 0,
+          "live": 5,
+          "multiRungChains": 0,
+          "readSitesWithNoPartBinding": 16,
+          "distinctLandingProperties": 8
+        },
+        "variableCensus": [
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:18",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-font-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:43",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-mono"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--_ds-ascii-diagram-grid-size",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:46",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--_ds-ascii-diagram-grid-size"
+            ],
+            "fallback": "0.8125rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.8125rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline-strong",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:52",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "scrollbar-color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-hairline-strong"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:71",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "padding-inline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "0.5rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.5rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-font-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:73",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "font-family",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-mono"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:74",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "0.875rem",
+            "hasFallback": true,
+            "terminalLiteral": "0.875rem",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:75",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-surface-bg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:79",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-bg"
+            ],
+            "fallback": "transparent",
+            "hasFallback": true,
+            "terminalLiteral": "transparent",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-hairline-strong",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:87",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-overflowing=\"true\"] .rt-ascii-diagram__grid::-webkit-scrollbar-thumb",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-hairline-strong"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "terminalLiteral": "2px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-fg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram__grid:focus-visible",
+            "atRules": [],
+            "landsOn": "outline",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-surface-fg"
+            ],
+            "fallback": "currentColor",
+            "hasFallback": true,
+            "terminalLiteral": "currentColor",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-duration-slow",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-duration-slow"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-duration-slow",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-duration-slow"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "part": null,
+            "partResolution": "ROOT_SCOPE",
+            "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          }
+        ]
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +891,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-hairline-strong"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-surface-bg",
+            "--ds-surface-fg"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +924,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-column-title-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +954,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-column-title-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-mono"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +989,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<familia>-label-size",
+            "prop": "labels de la vista. EXCEPCION: ascii-diagram tiene par grid-size/line-cadence propio con piso 9px; su tamano es del contenido",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-ascii-diagram-label-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1020,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-card-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1050,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (pattern/visualization/pattern-calendar-view).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-calendar-view",
+            "channels": [
+              "--ds-calendar-view-nav-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1080,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-card-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1115,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de ascii-diagram no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1140,37 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-ascii-diagram-line-cadence",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-kanban-line-cadence",
+            "prop": "animation-duration de ascii-diagram y transiciones de kanban/tree",
+            "tier": "standard"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-duration-slow"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-ease-out"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1178,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de ascii-diagram no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1198,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de lectura/trabajo como charts: acabado cero",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de ascii-diagram no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1218,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "estos patterns no son chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1238,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1258,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "regiones pintadas por familia dentro del plano de visualizacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack (canales --ds-z-* compartidos)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1278,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (pattern/visualization/pattern-calendar-view).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-calendar-view",
+            "channels": [
+              "--ds-calendar-view-frame-style"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1308,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1326,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1346,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1385,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1405,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

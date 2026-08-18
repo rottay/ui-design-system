@@ -10,7 +10,7 @@
  * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
  *
  * OWNERSHIP: ring diameter and stroke per `data-size`, the spin cadence and
- * the label typography all live here — the engine stamps no inline style.
+ * the label typography all live here; the engine stamps no inline style.
  * The cadence rides --ds-spinner-duration (default: two --ds-motion-slow
  * rungs), which the motion authority zeroes under reduced motion; the
  * explicit media guard below is the second net.

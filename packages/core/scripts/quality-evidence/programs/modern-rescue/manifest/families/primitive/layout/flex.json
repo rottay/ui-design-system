@@ -29,22 +29,24 @@
     "assessmentState": "SOURCE_BOUND",
     "partCensusCompleteness": "MODERN_ROOT_BOUND_RESPONSIVE_STYLE_ARTIFACT_REQUIRES_BROWSER_PROOF",
     "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/index.ts",
       "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
       "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
       "packages/core/src/ui/primitives/layout/Flex/runtime/responsive/index.ts",
+      "packages/core/src/ui/primitives/layout/Flex/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/engines/rustic/index.tsx",
       "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
     ],
     "stableParts": [
       "root"
     ],
-    "states": [
-      "scalar",
-      "responsive",
-      "wrapped",
-      "inline",
-      "reversed-axis",
-      "rearranging"
+    "states": [],
+    "variantAxes": [
+      "data-direction",
+      "data-gap-preset",
+      "data-column-gap-preset",
+      "data-layout-motion"
     ],
     "propertyGroups": [
       "axis-and-flow",
@@ -61,8 +63,136 @@
       "A gap tuple is public [column,row] order and is projected to CSS column-gap and row-gap respectively.",
       "Preset gaps stay on the tenant spacing ramp; numeric gaps are exact instance geometry.",
       "Consumer style is merged after engine parameters and therefore remains the final inline override.",
-      "Flex never reorders DOM children; reverse direction changes visual flow only."
+      "Flex never reorders DOM children; reverse direction changes visual flow only.",
+      "Rhythm scaling is applied only under :where(.rottay-flex--modern) at zero added specificity, so the modern rhythm dial cannot outrank a consumer's own gap rule by specificity. [at skin/layout-primitives.css:138]",
+      "The rhythm multiplier read is the clamped --ds-rhythm-effective-scale with a fallback of 1; a missing dial is identity, never zero. [at skin/layout-primitives.css:125]"
     ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "layout",
+        "scoutArtifact": "mr-anatomy-layout.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 0,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "ds-class-pair",
+          "anchor": "component-identity pair rottay-flex + rottay-flex--{engine}",
+          "at": [
+            "Flex/engines/classic/index.tsx:67",
+            "Flex/engines/modern/index.tsx:125",
+            "Flex/engines/rustic/index.tsx:66"
+          ]
+        }
+      ],
+      "partCensus": {
+        "noFurtherParts": "The family has NO stable addressable part beyond its root, and no data-part at all."
+      },
+      "stateCensus": "No interaction or lifecycle state is distinguished.",
+      "demotedFromStates": {
+        "entries": [
+          "scalar",
+          "responsive",
+          "wrapped",
+          "inline",
+          "reversed-axis",
+          "rearranging"
+        ],
+        "reason": "RULING R-5: `states` is interaction and lifecycle only."
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "data-direction / data-wrap / data-justify / data-align / data-inline / data-gap",
+          "at": [
+            "Flex/runtime/presentation/index.ts:21-26"
+          ]
+        },
+        {
+          "token": "data-gap-preset",
+          "at": [
+            "Flex/contracts/index.ts:240"
+          ]
+        },
+        {
+          "token": "data-column-gap-preset / data-row-gap-preset",
+          "at": [
+            "Flex/runtime/presentation/index.ts:35"
+          ]
+        },
+        {
+          "token": "data-layout-motion",
+          "at": [
+            "Flex/runtime/presentation/index.ts:37"
+          ]
+        }
+      ],
+      "engineDivergence": "Three engine siblings, all class-anchored with no data-part. The preset gap RHYTHM SCALING is modern-only: the base preset rules apply to every engine, and only the :where(.rottay-flex--modern) twins multiply by --ds-rhythm-effective-scale (skin/layout-primitives.css:125-151). Only the modern engine stamps data-component (modern/index.tsx:145).",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "var": "--ds-flex-gap",
+            "part": "root[data-gap='uniform']",
+            "at": "skin/layout-primitives.css:84, 125",
+            "fallback": null,
+            "lands": "gap",
+            "note": "INSTANCE_API projection: the engine assigns this channel via style['--ds-flex-gap']."
+          },
+          {
+            "var": "--ds-flex-column-gap",
+            "part": "root[data-gap='split']",
+            "at": "skin/layout-primitives.css:88, 138",
+            "fallback": null,
+            "lands": "column-gap",
+            "note": "INSTANCE_API projection."
+          },
+          {
+            "var": "--ds-flex-row-gap",
+            "part": "root[data-gap='split']",
+            "at": "skin/layout-primitives.css:89, 151",
+            "fallback": null,
+            "lands": "row-gap",
+            "note": "INSTANCE_API projection."
+          },
+          {
+            "var": "--ds-rhythm-effective-scale",
+            "part": "root (modern only)",
+            "at": "skin/layout-primitives.css:125, 138, 151; Flex/contracts/index.ts:235",
+            "fallback": "1",
+            "lands": "multiplier inside calc() on gap",
+            "note": "The CLAMPED dial. The raw --ds-rhythm-scale is never read here."
+          },
+          {
+            "var": "--ds-spacing-1,2,4,6,8,10,12,16",
+            "part": "root (TS preset map)",
+            "at": "Flex/contracts/index.ts:137-144",
+            "fallback": "0.25rem..4rem",
+            "lands": "gap"
+          },
+          {
+            "var": "--ds-transition-rearrange",
+            "part": "root",
+            "at": "Flex/runtime/presentation/index.ts:137",
+            "fallback": null,
+            "lands": "transition"
+          }
+        ],
+        "censusTotals": {
+          "distinctDsNamesScoped": 5,
+          "readOccurrencesScoped": 12,
+          "distinctDsNamesTsOwners": 10
+        }
+      }
+    },
     "evidenceIds": [],
     "nextAction": "BROWSER_PROVE_ROOT_GEOMETRY_RESPONSIVE_RULE_PRECEDENCE_RTL_AND_LARGE_TEXT_WITH_SOURCE_HASH"
   },
@@ -83,7 +213,22 @@
         "gap"
       ],
       "evidenceIds": [],
-      "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_ROOT_LAYOUT_GEOMETRY_AND_ENGINE_OWNED_PAINT_ARE_UNCHANGED"
+      "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_ROOT_LAYOUT_GEOMETRY_AND_ENGINE_OWNED_PAINT_ARE_UNCHANGED",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border-subtle"
+          ]
+        },
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -96,7 +241,18 @@
         "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_WRAP_MIN_INLINE_SIZE_WITH_EACH_PAIRING"
+      "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_WRAP_MIN_INLINE_SIZE_WITH_EACH_PAIRING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -108,7 +264,18 @@
         "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_ROOT_HAS_NO_FAMILY_SPECIFIC_FONT_CONSUMER_AND_LONG_CONTENT_REMAINS_OVERFLOW_SAFE"
+      "nextAction": "PROVE_ROOT_HAS_NO_FAMILY_SPECIFIC_FONT_CONSUMER_AND_LONG_CONTENT_REMAINS_OVERFLOW_SAFE",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -127,7 +294,18 @@
         "consumer-overflow-policy"
       ],
       "evidenceIds": [],
-      "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_AT_ALL_DIRECTIONS_AND_WRAP_STATES"
+      "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_AT_ALL_DIRECTIONS_AND_WRAP_STATES",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -139,7 +317,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_BORDER_RADIUS_AND_OVERFLOW_CLIP_DO_NOT_CHANGE_ACROSS_RADIUS_STOPS"
+      "nextAction": "PROVE_BORDER_RADIUS_AND_OVERFLOW_CLIP_DO_NOT_CHANGE_ACROSS_RADIUS_STOPS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -151,7 +339,17 @@
         "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_PROVE_IDENTICAL_ROOT_GEOMETRY"
+      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_PROVE_IDENTICAL_ROOT_GEOMETRY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "layout no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -183,7 +381,25 @@
         "direction wrap align justify and touch ownership remain unchanged"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_PRESET_COMPUTED_GAPS_FOR_COMPACT_NORMAL_SPACIOUS_STATIC_AND_DB_PLUS_EXACT_RESET"
+      "nextAction": "PROVE_PRESET_COMPUTED_GAPS_FOR_COMPACT_NORMAL_SPACIOUS_STATIC_AND_DB_PLUS_EXACT_RESET",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
+            "--ds-flex-column-gap",
+            "--ds-flex-gap",
+            "--ds-flex-row-gap"
+          ]
+        },
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -268,7 +484,24 @@
         "Responsive gap remediation must preserve consumer style precedence and exact numeric geometry."
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_0_85_1_1_2_COMPUTED_GAPS_FOR_SCALAR_AND_RESPONSIVE_PRESET_AXES_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE"
+      "nextAction": "PROVE_0_85_1_1_2_COMPUTED_GAPS_FOR_SCALAR_AND_RESPONSIVE_PRESET_AXES_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-stack-divider-inset",
+            "--ds-stack-divider-opacity",
+            "--ds-stack-divider-size"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -295,7 +528,17 @@
         "prefers-reduced-motion forces rearrange duration to zero"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_DIAL_STOPS_ONLY_CHANGE_REARRANGE_CADENCE_AND_REDUCED_MOTION_WINS_STATIC_AND_DB"
+      "nextAction": "PROVE_DIAL_STOPS_ONLY_CHANGE_REARRANGE_CADENCE_AND_REDUCED_MOTION_WINS_STATIC_AND_DB",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -307,7 +550,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_BOX_SHADOW_BACKGROUND_AND_BORDER_ARE_UNCHANGED_ACROSS_ELEVATION_POSTURES"
+      "nextAction": "PROVE_BOX_SHADOW_BACKGROUND_AND_BORDER_ARE_UNCHANGED_ACROSS_ELEVATION_POSTURES",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -319,7 +572,19 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT"
+      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
+        "source": "huecos-kimi",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -331,7 +596,19 @@
         "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_FLEX"
+      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_FLEX",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el layout no pinta chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "layout no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de layout"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -344,7 +621,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_GEOMETRY_DELTA_TO_A_GOVERNED_UNDERLYING_AXIS"
+      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_GEOMETRY_DELTA_TO_A_GOVERNED_UNDERLYING_AXIS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -356,7 +643,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS"
+      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "layout no crea capas propias: el orden z lo gobierna la escala derivada de layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -368,7 +665,17 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_LAYOUT_ANATOMY_ROOT_ATTRIBUTE_HAS_NO_FLEX_SELECTOR_OR_COMPUTED_DELTA"
+      "nextAction": "PROVE_LAYOUT_ANATOMY_ROOT_ATTRIBUTE_HAS_NO_FLEX_SELECTOR_OR_COMPUTED_DELTA",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de flex no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -386,7 +693,17 @@
         "unknown and non-allowlisted channels fail closed"
       ],
       "evidenceIds": [],
-      "nextAction": "RESOLVE_EXPERT_ALLOWLIST_MEMBERSHIP_THEN_PROVE_ONLY_AUTHORIZED_GAP_OR_MOTION_CHANNELS_MOVE_AND_RESET_EXACTLY"
+      "nextAction": "RESOLVE_EXPERT_ALLOWLIST_MEMBERSHIP_THEN_PROVE_ONLY_AUTHORIZED_GAP_OR_MOTION_CHANNELS_MOVE_AND_RESET_EXACTLY",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -399,7 +716,17 @@
         "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_RECIPE_PROFILE_SELECTION_PRESERVES_IDENTICAL_FLEX_ROOT_AND_LAYOUT"
+      "nextAction": "PROVE_RECIPE_PROFILE_SELECTION_PRESERVES_IDENTICAL_FLEX_ROOT_AND_LAYOUT",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -411,7 +738,38 @@
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
       ],
       "evidenceIds": [],
-      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_FLEX_SELECTOR_OR_PAINT_BINDING"
+      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_FLEX_SELECTOR_OR_PAINT_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -423,7 +781,17 @@
         "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_ICONS_ONLY_AND_NOT_FLEX_OWNED_ANATOMY"
+      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_ICONS_ONLY_AND_NOT_FLEX_OWNED_ANATOMY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria (flechas/grips son geometria propia, ver palette/chrome.anatomy)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -436,7 +804,17 @@
         "packages/core/src/infrastructure/runtime/responsive/runtime/style-properties"
       ],
       "evidenceIds": [],
-      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_FLEX_BREAKPOINTS_OR_ROOT_GEOMETRY"
+      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_FLEX_BREAKPOINTS_OR_ROOT_GEOMETRY",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

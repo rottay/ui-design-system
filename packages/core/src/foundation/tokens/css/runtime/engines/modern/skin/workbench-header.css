@@ -45,7 +45,7 @@
  * differ in geometry, so each block carries a `data-size` attribute and, where
  * it deviates from the default, its radius on the sanctioned inline
  * `--ds-workbench-header-skeleton-radius` custom-property data channel
- * (uncounted). The only remaining inline style in the engine is the caller's
+ * (uncounted). The remaining inline style in the engine is the caller's
  * own `style` prop on the root.
  */
 

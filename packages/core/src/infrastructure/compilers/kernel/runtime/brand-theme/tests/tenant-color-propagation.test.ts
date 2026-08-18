@@ -38,14 +38,7 @@
  * remaining author of that floor now that the competing retired-branding
  * emitter which used to force this compiler to defer to it is retired. See
  * "one channel, one author" below.
- *
- * The drill closes the loop with EXTENSION-CANNOT-BEAT-TENANT: a channel that
- * stays frozen while its seed moves is exactly what a planted extension
- * re-declaration produces, and the shared detector in
- * `runtime/tenant-css/artifact-renderer/tests/support` is what flags it. One
- * mechanic, asserted from both directions.
  */
-import postcss from 'postcss';
 import { describe, expect, it } from 'vitest';
 
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
@@ -54,14 +47,6 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import {
-  FIRST_PARTY_ARTIFACT_SPECS,
-  renderFirstPartyArtifact,
-} from '@/infrastructure/compilers/runtime/tenant-css';
-import {
-  ruleRootStates,
-  tenantOverrideConflicts,
-} from '@/infrastructure/compilers/runtime/tenant-css/artifact-renderer/tests/support';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import { compileBrandTheme } from '../index';
@@ -222,10 +207,11 @@ describe('TENANT-COLOR PROPAGATION · the reach a seed has today', () => {
   });
 
   it('a new background moves the grounds', () => {
-    // Was 3 and 5: the page ground and its aliases. Now the whole ladder the
-    // derivation builds off it — secondary, tertiary, elevated, input.
+    // The first-party static theme authors a wider ground ladder. A DB
+    // document is a delta over that vertical and therefore carries only the
+    // three canonical aliases of the page ground it actually changed.
     expect(count(BACKGROUND_MOVED, 'grounds')).toBeGreaterThanOrEqual(3);
-    expect(count(DB_BACKGROUND_MOVED, 'grounds')).toBeGreaterThanOrEqual(7);
+    expect(count(DB_BACKGROUND_MOVED, 'grounds')).toBeGreaterThanOrEqual(3);
   });
 
   it('a new background re-derives the tint steps of the other ramps', () => {
@@ -243,7 +229,8 @@ describe('TENANT-COLOR PROPAGATION · the reach a seed has today', () => {
     // those channels would otherwise reach, which is the merge order working.
     expect(PRIMARY_MOVED.length).toBeGreaterThanOrEqual(11);
     expect(BACKGROUND_MOVED.length).toBeGreaterThanOrEqual(39);
-    expect(DB_PRIMARY_MOVED.length).toBeGreaterThanOrEqual(22);
+    // Eleven primary channels + ten categorical chart slots.
+    expect(DB_PRIMARY_MOVED.length).toBeGreaterThanOrEqual(21);
     expect(DB_BACKGROUND_MOVED.length).toBeGreaterThanOrEqual(25);
   });
 });
@@ -298,13 +285,12 @@ const FORMERLY_INERT: readonly {
   // see "one channel, one author" below for why.
   { family: 'links', seed: 'primary', floor: 2, paths: ['static'] },
   // `cards` reaches its ground through `--ds-color-bg-elevated`. The DB path
-  // emits that channel, so the chain closes there. The static path does not —
-  // all three first-party extensions author the ground ladder by hand, and a
-  // compiled channel underneath an extension is precisely what
-  // EXTENSION-CANNOT-BEAT-TENANT forbids. So the alias is emitted on both
-  // paths and only resolves to a derived value on the one that owns the
-  // ground. Draining this means moving those extension literals into
-  // `palette.background*Color`, which is a repaint decision, not a mechanical one.
+  // emits that channel, so the chain closes there. The static path does not:
+  // the three first-party themes still author their ground ladder as chrome
+  // literals rather than as `palette.background*Color` seeds, so the alias is
+  // emitted on both paths and only resolves to a derived value on the one that
+  // owns the ground. Draining this means moving those literals onto the palette,
+  // which is a repaint decision, not a mechanical one.
   { family: 'cards', seed: 'background', floor: 1, paths: ['db'] },
 ];
 
@@ -334,20 +320,45 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
     );
   });
 
-  it('the DB document path reaches the same families, and one more', () => {
-    // Same derivation module, so neither path can invent its own vocabulary.
+  it('the DB document remains a delta over the authored vertical', () => {
+    // A customer patch does not erase bithire's authored chrome. The delta
+    // contains seed-coupled families; unchanged authored component families
+    // remain in the separately loaded vertical baseline.
+    //
+    // `button primary chrome` and `inputs` used to be listed here as families
+    // the primary seed did NOT reach. That was the deferral, not the law: the
+    // compiler could not tell the customer's `palette.primary` from bithire's
+    // own leaf, so the leaf stood and these families went on pointing at a blue
+    // the customer had replaced. Now that authorship is carried, a tenant's
+    // seed re-derives the family it owns, and the reach is asserted as an exact
+    // set rather than an emptiness.
     const seeded = { ...DB_SEED, background: '#F4F8FB' };
-    expectFamiliesReached(
-      'db',
-      reachFrom(
-        dbVariables({ ...seeded, primary: NEW_PRIMARY }),
-        movedBetween(
-          dbVariables(seeded),
-          dbVariables({ ...seeded, primary: NEW_PRIMARY })
-        )
-      ),
-      reachFrom(dbVariables({ ...seeded, background: NEW_BACKGROUND }), DB_BACKGROUND_MOVED)
+    const primaryReach = reachFrom(
+      dbVariables({ ...seeded, primary: NEW_PRIMARY }),
+      movedBetween(
+        dbVariables(seeded),
+        dbVariables({ ...seeded, primary: NEW_PRIMARY })
+      )
     );
+    const backgroundReach = reachFrom(
+      dbVariables({ ...seeded, background: NEW_BACKGROUND }),
+      DB_BACKGROUND_MOVED
+    );
+    expect(primaryReach.filter(FAMILIES['button primary chrome'])).toEqual([
+      '--ds-button-primary-bg',
+      '--ds-button-primary-bg-hover',
+    ]);
+    expect(primaryReach.filter(FAMILIES.inputs)).toEqual([
+      '--ds-input-border-focus',
+      '--ds-input-shadow-focus',
+    ]);
+    // The background seed is a separate authority and gains nothing here: cards
+    // still reach their ground through the alias chain, not through the primary
+    // derivation. Keeping this emptiness pins that the two seeds stayed apart.
+    expect(backgroundReach.filter(FAMILIES.cards)).toEqual([]);
+    expect(count(primaryReach, 'primary ramp')).toBeGreaterThanOrEqual(11);
+    expect(count(primaryReach, 'chart series')).toBeGreaterThanOrEqual(10);
+    expect(count(backgroundReach, 'grounds')).toBeGreaterThanOrEqual(3);
   });
 
   it('the reach totals are floors, not anecdotes', () => {
@@ -398,20 +409,31 @@ describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
     expect(MINIMAL_BASE['--ds-color-link']).toBe(MINIMAL.palette!.primaryColor);
   });
 
-  it('a palette-only DB-document tenant also gets both channels, through the same shared floor', () => {
-    // The retired retired-branding emitter this pin used to be about took a
-    // bare `TenantConfig.branding` literal with no BrandTheme at all -- a
-    // shape neither surviving compile path accepts. The DB document path
-    // (already exercised elsewhere in this file via `dbVariables`) is the
-    // sanctioned modern equivalent of "just a palette, nothing else": this
-    // only asserts PRESENCE through it, not novelty, since the DB path's own
-    // history with this floor is not this file's claim to make.
+  it('the DB delta carries these channels from the one author, at the tenant seed', () => {
+    // This used to assert the two channels were ABSENT from the DB delta, on
+    // the reasoning that they were unchanged. They were only ever "unchanged"
+    // because the compiler could not see that the customer, not bithire, had
+    // authored the seed they derive from; it kept the vertical's leaf and the
+    // delta had nothing to carry. With authorship carried they move, so the
+    // absence is gone. What the section is actually about survives intact and
+    // is asserted directly: ONE author. The shared floor derives them from the
+    // tenant's seed, the retired emitter contributes nothing, and no second
+    // value competes.
     const seeded = { primary: '#B4322A', secondary: '#5B7C99', accent: '#6f92b0' };
-    const vars = dbVariables(seeded);
+    const delta = dbVariables(seeded);
     for (const channel of NOW_CLAIMED_BY_THIS_COMPILER) {
-      expect({ channel, emitted: channel in vars }).toEqual({ channel, emitted: true });
+      // Pass-through, exactly as on the static path: the floor restates the
+      // seed verbatim, so the emitted value IS the tenant's primary.
+      expect({ channel, value: delta[channel] }).toEqual({
+        channel,
+        value: seeded.primary,
+      });
+      // ... and it is not the vertical's, which is what the old emitter would
+      // have left standing here.
+      expect(BASE[channel]).toBeTruthy();
+      expect(delta[channel]).not.toBe(BASE[channel]);
     }
-    expect(vars['--ds-color-link']).toBe('#B4322A');
+    expect(BASE['--ds-color-link']).toBe(bithireBrandTheme.palette!.linkColor);
   });
 });
 
@@ -512,70 +534,5 @@ describe('TENANT-COLOR PROPAGATION · authored chrome outranks the derivation', 
     expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-border-focus');
     expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-link');
     expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-link-hover');
-  });
-});
-
-describe('TENANT-COLOR PROPAGATION · a frozen channel is a detected override', () => {
-  const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire')!;
-  const CLEAN_EXTENSION = '/* no extension authorship */\n';
-  const VICTIM = '--ds-color-primary-500';
-
-  const render = (brandTheme: BrandTheme, extensionCss: string) =>
-    renderFirstPartyArtifact({ spec, brandTheme, extensionCss }).css;
-
-  /**
-   * The value the artifact serves in the DEFAULT state.
-   *
-   * Not simply the last declaration in the file: bithire's compiled dark mode
-   * block comes after the base block and restates the same channels, so a
-   * naive last-wins read reports the dark value and never moves when the light
-   * seed does. Only rules that can author the default state compete for it.
-   */
-  const servedValue = (css: string, channel: string): string | undefined => {
-    let value: string | undefined;
-    postcss.parse(css).walkRules((rule) => {
-      // postcss narrows `.parent` per node kind, so walking the chain with the
-      // inferred type re-narrows on every hop; the walk only reads `type`.
-      type CssAncestor = { type: string; parent?: CssAncestor };
-      for (
-        let parent = rule.parent as CssAncestor | undefined;
-        parent;
-        parent = parent.parent
-      ) {
-        if (parent.type === 'atrule') return;
-      }
-      if (!ruleRootStates(rule).has('default')) return;
-      rule.walkDecls(channel, (decl) => {
-        value = decl.value.trim();
-      });
-    });
-    return value;
-  };
-
-  it('the victim is a channel that genuinely tracks its seed', () => {
-    expect(PRIMARY_MOVED).toContain(VICTIM);
-  });
-
-  it('drill · an extension literal freezes it while the seed moves, and that is flagged', () => {
-    const pinned = `html[data-tenant='bithire'] {\n  ${VICTIM}: #123456;\n}\n`;
-    const before = render(bithireBrandTheme, pinned);
-    const after = render(withPalette({ primaryColor: NEW_PRIMARY }), pinned);
-
-    // The seed moved and the compiled block moved with it…
-    expect(compile(withPalette({ primaryColor: NEW_PRIMARY }))[VICTIM]).not.toBe(BASE[VICTIM]);
-    // …while the value the artifact actually serves is frozen at the literal.
-    expect(servedValue(before, VICTIM)).toBe('#123456');
-    expect(servedValue(after, VICTIM)).toBe('#123456');
-
-    // And this is precisely what the shared detector calls a tenant override.
-    expect(tenantOverrideConflicts(after)).toContain(VICTIM);
-  });
-
-  it('without the plant the same channel tracks its seed and is not flagged', () => {
-    const before = render(bithireBrandTheme, CLEAN_EXTENSION);
-    const after = render(withPalette({ primaryColor: NEW_PRIMARY }), CLEAN_EXTENSION);
-
-    expect(servedValue(after, VICTIM)).not.toBe(servedValue(before, VICTIM));
-    expect(tenantOverrideConflicts(after)).not.toContain(VICTIM);
   });
 });

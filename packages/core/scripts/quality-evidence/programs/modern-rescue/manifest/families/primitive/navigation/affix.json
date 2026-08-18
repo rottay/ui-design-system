@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "741839fa354a0c381cdbf61ecd80990ce4bf68b1e8754b5bb8fdc9cd8a8e7353"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,889 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/affix.css",
+      "packages/core/src/ui/primitives/navigation/Affix/index.ts",
+      "packages/core/src/ui/primitives/navigation/Affix/contracts/index.ts",
+      "packages/core/src/ui/primitives/navigation/Affix/runtime/rendering/index.tsx",
+      "packages/core/src/ui/primitives/navigation/Affix/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/navigation/Affix/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/navigation/Affix/engines/rustic/index.tsx"
+    ],
+    "stableParts": [
+      "root",
+      "placeholder"
+    ],
     "states": [],
+    "variantAxes": [
+      "data-sticky",
+      "data-affix-edge"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The affixed keyline is a paint-only ::after with pointer-events:none, so a tenant cannot make it capture pointer input. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:80-91]",
+      "The keyline is a pseudo-element rather than a composed box-shadow layer specifically so a tenant setting --ds-affix-affixed-shadow: none cannot delete the optical edge. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:31-35]",
+      "Under forced-colors the affixed bar is forced to system Canvas with box-shadow:none, backdrop-filter:none and a 1px ButtonText cut on the content-facing edge; no --ds-* channel participates, so no tenant value can reintroduce a transparent fixed bar there. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:113-124]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "navigation",
+        "scoutArtifact": "mr-anatomy-navigation.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 2,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/Affix/runtime/rendering/index.tsx:33",
+            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:402",
+            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:442",
+            "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:318",
+            "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:357"
+          ]
+        },
+        {
+          "part": "placeholder",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:425"
+          ],
+          "citationsUnverified": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+          ],
+          "anchorStatus": "verified"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-sticky",
+          "meaning": "affixed (advanced onChange mode only)",
+          "at": [
+            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:443",
+            "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:358",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:60"
+          ]
+        },
+        {
+          "token": "data-affix-edge='top'|'bottom'",
+          "meaning": "content-facing edge selector",
+          "at": [
+            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:403",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:92",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:95"
+          ]
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@media (prefers-reduced-motion: reduce)",
+            "meaning": "reduced motion",
+            "at": [
+              "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:101"
+            ]
+          },
+          {
+            "token": "@media (forced-colors: active)",
+            "meaning": "forced colors",
+            "at": [
+              "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:113"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": "classic = Ant Affix wrapper (src/ui/primitives/navigation/Affix/engines/classic/index.tsx:47 imports `Affix as AntAffix` from 'antd'); it stamps no data-part and reads no --ds-* variable (0 matches in that file). modern stamps root + placeholder + data-affix-edge and carries all governed paint in the skin file. rustic stamps only root and DECLARES four family channels inline (--ds-affix-z-index :289, --ds-affix-offset-top :290, --ds-affix-offset-bottom :291, --ds-affix-transition :292) then reads --ds-affix-transition with NO fallback at src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:335 and :340.",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": {
+          "distinctVariables": 19,
+          "readSites": 25,
+          "perPartDistinctVariables": {
+            "(engine-inline-style)": [
+              "--ds-affix-transition",
+              "--ds-z-affix"
+            ],
+            "root": [
+              "--_ds-affix-affixed-keyline",
+              "--ds-affix-affixed-backdrop",
+              "--ds-affix-affixed-bg",
+              "--ds-affix-affixed-radius",
+              "--ds-affix-affixed-shadow",
+              "--ds-affix-runtime-z-index",
+              "--ds-affix-shadow",
+              "--ds-affix-transition-duration",
+              "--ds-affix-transition-timing",
+              "--ds-color-border-secondary",
+              "--ds-effect-intensity",
+              "--ds-elevation-1",
+              "--ds-material-card-background",
+              "--ds-motion-ease-out",
+              "--ds-motion-normal",
+              "--ds-surface-card",
+              "--ds-z-affix",
+              "--ds-z-index-affix"
+            ]
+          },
+          "entries": [
+            {
+              "variable": "--ds-affix-runtime-z-index",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "COMPILER_OR_ENGINE_STAMPED",
+              "declaredAt": [
+                "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:232"
+              ],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-z-affix",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+              "hasFallback": true,
+              "fallback": "var(--ds-z-index-affix, 100)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-z-index-affix",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "z-index",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+              "hasFallback": true,
+              "fallback": "100",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-affix-transition-duration",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-affix-transition-timing",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-affix-transition-duration",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-normal)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/runtime/personality.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              ]
+            },
+            {
+              "variable": "--ds-affix-transition-timing",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": true,
+              "fallback": "var(--ds-motion-ease-out)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              ]
+            },
+            {
+              "variable": "--ds-affix-affixed-bg",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-material-card-background",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "hasFallback": true,
+              "fallback": "var(--ds-surface-card)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:332"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:332"
+              ]
+            },
+            {
+              "variable": "--ds-surface-card",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:265"
+              ]
+            },
+            {
+              "variable": "--ds-affix-affixed-shadow",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65",
+              "hasFallback": true,
+              "fallback": "var(--ds-elevation-1)",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-elevation-1",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:800",
+                "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:968",
+                "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:87"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:800"
+              ]
+            },
+            {
+              "variable": "--ds-affix-affixed-radius",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "border-radius",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:66",
+              "hasFallback": true,
+              "fallback": "0",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-affix-affixed-backdrop",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "backdrop-filter",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:67",
+              "hasFallback": true,
+              "fallback": "none",
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--_ds-affix-affixed-keyline",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "::after",
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after",
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-color-border-secondary",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "::after",
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/ui/patterns/customization/brand-studio/index.tsx:148",
+                "src/ui/patterns/customization/brand-studio/index.tsx:166",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:231",
+                "src/foundation/tokens/css/foundation/themes/default.css:2136"
+              ]
+            },
+            {
+              "variable": "--ds-effect-intensity",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "::after",
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "modern-skin-css",
+              "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
+                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/animations/premium.css:27"
+              ]
+            },
+            {
+              "variable": "--ds-affix-shadow",
+              "parts": [
+                "root"
+              ],
+              "stateSelectors": [
+                "[data-sticky]"
+              ],
+              "atRuleContext": [],
+              "observableProperty": "box-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/affix.css:17",
+              "hasFallback": true,
+              "fallback": "0 2px 8px rgba(0, 0, 0, 0.15)",
+              "layer": "rustic-skin-css",
+              "selector": ".rottay-affix.rottay-affix--rustic[data-part='root'][data-sticky]",
+              "declarationStatus": "DECLARED_DEFAULT_CSS",
+              "declaredAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2079"
+              ],
+              "outerRungRootDefault": true,
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2079"
+              ]
+            },
+            {
+              "variable": "--ds-z-affix",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "(unresolved-property-in-ts)",
+              "readAt": "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:229",
+              "hasFallback": true,
+              "fallback": "${AFFIX_DEFAULTS.zIndex}",
+              "layer": "engine-inline:modern",
+              "selector": null,
+              "declarationStatus": "NO_DECLARER",
+              "declaredAt": [],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-affix-transition",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:335",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "COMPILER_OR_ENGINE_STAMPED",
+              "declaredAt": [
+                "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:292"
+              ],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            },
+            {
+              "variable": "--ds-affix-transition",
+              "parts": [
+                "(engine-inline-style)"
+              ],
+              "stateSelectors": [],
+              "atRuleContext": [],
+              "observableProperty": "transition",
+              "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:340",
+              "hasFallback": false,
+              "fallback": null,
+              "layer": "engine-inline:rustic",
+              "selector": null,
+              "declarationStatus": "COMPILER_OR_ENGINE_STAMPED",
+              "declaredAt": [
+                "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:292"
+              ],
+              "outerRungRootDefault": false,
+              "rootDefaultAt": []
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-z-affix",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44"
+          },
+          {
+            "variable": "--ds-z-index-affix",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44"
+          },
+          {
+            "variable": "--ds-affix-transition-duration",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49"
+          },
+          {
+            "variable": "--ds-affix-transition-timing",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49"
+          },
+          {
+            "variable": "--ds-affix-affixed-bg",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64"
+          },
+          {
+            "variable": "--ds-affix-affixed-shadow",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65"
+          },
+          {
+            "variable": "--ds-affix-affixed-radius",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:66"
+          },
+          {
+            "variable": "--ds-affix-affixed-backdrop",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:67"
+          },
+          {
+            "variable": "--_ds-affix-affixed-keyline",
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90"
+          }
+        ],
+        "readsWithoutFallback": [
+          {
+            "variable": "--ds-affix-runtime-z-index",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+            "observableProperty": "z-index"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-affix-affixed-bg",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-elevation-1",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65",
+            "observableProperty": "box-shadow"
+          },
+          {
+            "variable": "--_ds-affix-affixed-keyline",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-effect-intensity",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+            "observableProperty": "background"
+          },
+          {
+            "variable": "--ds-affix-transition",
+            "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:335",
+            "observableProperty": "transition"
+          },
+          {
+            "variable": "--ds-affix-transition",
+            "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:340",
+            "observableProperty": "transition"
+          }
+        ],
+        "inertFallbackChains": {
+          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css:164-178.",
+          "blockingCount": 2,
+          "testFixtureOnlyCount": 0,
+          "entries": [
+            {
+              "variable": "--ds-material-card-background",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "fallback": "var(--ds-surface-card)",
+              "observableProperty": "background",
+              "parts": [
+                "root"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:332"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": false
+            },
+            {
+              "variable": "--ds-affix-shadow",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/affix.css:17",
+              "fallback": "0 2px 8px rgba(0, 0, 0, 0.15)",
+              "observableProperty": "box-shadow",
+              "parts": [
+                "root"
+              ],
+              "rootDefaultAt": [
+                "src/foundation/tokens/css/foundation/themes/default.css:2079"
+              ],
+              "rootDefaultProvenance": [
+                "SHIPPED_DEFAULT_THEME"
+              ],
+              "blocksInProduction": true,
+              "outerRungIsFamilyChannel": true
+            }
+          ],
+          "familyChannelBlockedCount": 1,
+          "foundationTokenBlockedCount": 1
+        },
+        "generatedArtifactOnlyReads": [],
+        "testOrStoryOnlyDeclaredReads": [],
+        "hardcodedValues": [
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:84",
+            "property": "block-size",
+            "literals": [
+              "1px"
+            ],
+            "text": "block-size: 1px;",
+            "atRuleContext": [],
+            "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after",
+            "classification": "STRUCTURAL_HAIRLINE"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:120",
+            "property": "border-block-end",
+            "literals": [
+              "1px"
+            ],
+            "text": "border-block-end: 1px solid ButtonText;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky][data-affix-edge='top']",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          },
+          {
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:123",
+            "property": "border-block-start",
+            "literals": [
+              "1px"
+            ],
+            "text": "border-block-start: 1px solid ButtonText;",
+            "atRuleContext": [
+              "@media (forced-colors: active)"
+            ],
+            "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky][data-affix-edge='bottom']",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
+          }
+        ],
+        "hardcodedValueClassification": {
+          "STRUCTURAL_HAIRLINE": 1,
+          "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT": 2
+        }
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 10,
+        "sitesVerified": 9,
+        "sitesWithdrawn": 1,
+        "sitesNotProbed": 5,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +917,55 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-active-indicator",
+            "prop": "color del indicador activo/seleccionado",
+            "tier": "standard",
+            "examples": [
+              "--_ds-tabs-indicator-color",
+              "--_ds-menu-item-active-color",
+              "--_ds-breadcrumb-current-color"
+            ],
+            "sockets": [
+              "--_ds-affix-active-indicator",
+              "--_ds-affix-affixed-backdrop"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Sombras leidas y NO cubiertas (elevacion por postura global)": [
+            "--ds-affix-affixed-shadow"
+          ],
+          "Brazos foundation/familia-ajena compartidos": [
+            "--ds-color-border-secondary",
+            "--ds-effect-intensity",
+            "--ds-elevation-1",
+            "--ds-material-card-background",
+            "--ds-motion-ease-out",
+            "--ds-motion-normal",
+            "--ds-surface-card",
+            "--ds-z-affix",
+            "--ds-z-index-affix"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +973,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de nav en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +997,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de nav en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1021,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-affix-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1049,40 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-menu-panel-radius",
+            "prop": "radio de paneles de menu y contenedores de navegacion (slug vivo: menu)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-affix-affixed-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/menu (pinta rottay-menu--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/menu",
+            "channels": [
+              "--ds-menu-panel-radius"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1090,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "border-radius de tab-pill/switcher/toggle de entorno",
+            "tier": "standard",
+            "examples": [
+              "--_ds-tabs-pill-radius",
+              "--_ds-environment-toggle-radius"
+            ],
+            "sockets": [
+              "--_ds-affix-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1117,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-affix-density-factor"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1144,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1157,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-transition-duration",
+              "--_ds-tabs-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-affix-transition-duration",
+              "--_ds-affix-transition-timing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1186,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "NavItem/Sidebar no flotan; su activo se senala con navigation.tone, no con sombra. Sombras leidas y NO cubiertas (elevacion por postura global): --ds-affix-affixed-shadow"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1204,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "nav chrome mate; el estado activo lo da sidebar-tone, no efectos",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1217,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "este primitivo no pinta ni lee chrome de sidebar (las hojas --ds-sidebar-* las leen menu y app-shell; el placeholder <leaf> era boilerplate de grupo y viola nombre-concreto)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1235,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1252,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el fondo del chrome de navegacion lo emite sidebar-tone (seis hojas); una segunda fuente viola L4",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1265,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-focus-ring-color",
+              "--_ds-tabs-focus-ring-color",
+              "--_ds-breadcrumb-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-affix-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1293,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1311,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1328,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1367,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-item-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-affix-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1393,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

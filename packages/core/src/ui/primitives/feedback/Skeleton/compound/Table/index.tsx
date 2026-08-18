@@ -154,8 +154,8 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
 
     // The frame clip, the row grid rhythm (gap/padding) and every cell
     // geometry (header 70%, body first-column 50% / others 80%) paint from the
-    // unlayered skeleton-compounds skin. Inline style keeps only the caller's
-    // `style` and the ONE truly dynamic value: the track count, which the
+    // unlayered skeleton-compounds skin. Inline style keeps the caller's
+    // `style` and the one truly dynamic value: the track count, which the
     // `columns` prop computes per instance.
     const containerStyle: React.CSSProperties = { ...style };
 

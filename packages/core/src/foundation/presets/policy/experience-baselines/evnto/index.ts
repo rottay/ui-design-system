@@ -9,7 +9,7 @@ import type { BrandTheme } from '@/foundation/contracts/composition/tenants/them
  */
 export const EVNTO_CANONICAL_SURFACES = {
   densityScale: 1.125,
-  borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' },
+  borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px', full: '9999px' },
   shadows: {
     sm: '0 1px 3px rgba(0, 0, 0, 0.04)',
     md: '0 4px 12px rgba(0, 0, 0, 0.06)',

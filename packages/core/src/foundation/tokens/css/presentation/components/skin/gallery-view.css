@@ -4,7 +4,7 @@
  * the exact former injected stylesheet, now anchored to the gallery scope.
  *
  * OWNERSHIP: every static geometry/paint declaration the engine once carried
- * inline lives here. The only inline styles left in the engine are runtime
+ * inline lives here. The engine's surviving `style`-prop writes are runtime
  * instance values owned by props (grid template, gap, aspectRatio) — never
  * paint.
  *

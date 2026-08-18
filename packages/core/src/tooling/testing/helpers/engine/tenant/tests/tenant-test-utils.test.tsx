@@ -1,12 +1,32 @@
 /**
  * @fileoverview Tests for tenant test utilities: renderWithTenant,
  * renderWithAllTenants, describeEachTenant, and cross-engine x tenant matrix.
+ *
+ * The four mounting suites here were red for a reason worth stating, because
+ * the failure was in the fixture and not in the helper: `TEST_TENANTS` used to
+ * name the code-owned first-party identities `rottay` and `bithire`, and
+ * `TenantProvider` throws `ReservedTenantIdentityError` on exactly those. Every
+ * assertion that mounted a provider died before rendering.
+ *
+ * Renaming the roster to synthetic customers fixes it, but a rename is only as
+ * durable as what guards it, so two fences are asserted below rather than
+ * assumed: `ships only non-reserved customer identities` classifies the shipped
+ * roster and fails the moment a first-party slug is reintroduced, and
+ * `refuses to mount a reserved first-party identity` drives a first-party slug
+ * through `renderWithTenant` itself and proves the runtime -- not this test --
+ * is what rejects it.
  */
 
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  ReservedTenantIdentityError,
+  classifyTenantIdentity,
+} from '@/foundation/tokens/ts/presentation/brand-themes';
+
+import {
+  TENANT_CONFIGS,
   TEST_TENANTS,
   assertAcrossEnginesAndTenants,
   assertAcrossTenants,
@@ -43,32 +63,60 @@ describe('tenant-test-utils', () => {
   });
 
   it('sets and clears the tenant attribute on the document root', () => {
-    setTenantAttribute('bithire');
-    expect(document.documentElement.getAttribute('data-tenant')).toBe('bithire');
+    setTenantAttribute('northwind');
+    expect(document.documentElement.getAttribute('data-tenant')).toBe('northwind');
 
     clearTenantAttribute();
     expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
   });
 
+  it('ships only non-reserved customer identities', () => {
+    for (const tenant of TEST_TENANTS) {
+      const config = TENANT_CONFIGS[tenant];
+
+      expect(
+        classifyTenantIdentity({
+          slug: config.slug,
+          name: config.name,
+          companyName: config.branding?.companyName,
+        })
+      ).toEqual({ kind: 'customer' });
+    }
+  });
+
+  it('refuses to mount a reserved first-party identity', () => {
+    // Driven through renderWithTenant, not through the classifier directly, so
+    // the refusal is proved on the path the helper actually offers callers.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    expect(() =>
+      renderWithTenant(<div>Reserved</div>, 'acme', {
+        tenantConfig: { slug: 'rottay', name: 'Rottay' },
+      })
+    ).toThrow(ReservedTenantIdentityError);
+
+    consoleError.mockRestore();
+  });
+
   it('renders a component with an explicit tenant wrapper', () => {
-    const result = renderWithTenant(<div>Tenant ready</div>, 'rottay', {
+    const result = renderWithTenant(<div>Tenant ready</div>, 'acme', {
       tenantConfig: {
         branding: {
-          companyName: 'Rottay QA',
+          companyName: 'Acme QA',
           primaryColor: '#0f62fe',
         },
       },
     });
 
     expect(result.getByText('Tenant ready')).toBeInTheDocument();
-    expect(document.documentElement.getAttribute('data-tenant')).toBe('rottay');
+    expect(document.documentElement.getAttribute('data-tenant')).toBe('acme');
   });
 
   it('renders the same component with all test tenants', () => {
     const results = renderWithAllTenants(<div>All tenants</div>);
 
-    expect(results.rottay.container).toHaveTextContent('All tenants');
-    expect(results.bithire.container).toHaveTextContent('All tenants');
+    expect(results.acme.container).toHaveTextContent('All tenants');
+    expect(results.northwind.container).toHaveTextContent('All tenants');
     expect(results.default.container).toHaveTextContent('All tenants');
   });
 
@@ -92,7 +140,7 @@ describe('tenant-test-utils', () => {
     });
 
     expect(seen).toHaveLength(STABLE_ENGINES.length * TEST_TENANTS.length);
-    expect(seen[0]).toBe('classic:rottay');
+    expect(seen[0]).toBe('classic:acme');
     expect(seen.at(-1)).toBe('rustic:default');
   });
 
@@ -157,7 +205,7 @@ describe('tenant-test-utils', () => {
 
     const matrix = describeEachSpy.mock.calls[0]?.[0] ?? [];
     expect(matrix).toHaveLength(STABLE_ENGINES.length * TEST_TENANTS.length);
-    expect(matrix[0]).toEqual(['classic', 'rottay']);
+    expect(matrix[0]).toEqual(['classic', 'acme']);
     expect(matrix.at(-1)).toEqual(['rustic', 'default']);
     expect(eachRegistrar).toHaveBeenCalledWith('Matrix helper - %s engine / %s tenant', callback);
 
@@ -168,10 +216,10 @@ describe('tenant-test-utils', () => {
   });
 
   it('exposes tenant configs and type guards', () => {
-    expect(getTenantConfig('rottay').branding?.companyName).toBe('Rottay');
-    expect(getTenantConfig('bithire').branding?.companyName).toBe('BitHire');
-    expect(isTestTenant('rottay')).toBe(true);
+    expect(getTenantConfig('acme').branding?.companyName).toBe('Acme Industries');
+    expect(getTenantConfig('northwind').branding?.companyName).toBe('Northwind Trading');
+    expect(isTestTenant('acme')).toBe(true);
     expect(isTestTenant('default')).toBe(true);
-    expect(isTestTenant('platform')).toBe(false);
+    expect(isTestTenant('rottay')).toBe(false);
   });
 });

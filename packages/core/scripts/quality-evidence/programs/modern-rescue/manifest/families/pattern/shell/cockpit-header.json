@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "0a98556df8fe966e01ba2dc409ce52b639731d3980234042a7bfc1945cefa5a1"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3499 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/shell/cockpit-header/index.ts",
+      "packages/core/src/ui/patterns/shell/cockpit-header/contracts/index.ts",
+      "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+    ],
+    "stableParts": [
+      "actions",
+      "back",
+      "breadcrumb",
+      "crumb",
+      "crumb-item",
+      "crumb-list",
+      "eyebrow",
+      "header-icon",
+      "lead",
+      "main-row",
+      "root",
+      "separator",
+      "skeleton",
+      "skeleton-actions",
+      "skeleton-column",
+      "skeleton-lead",
+      "skeleton-row",
+      "skeleton-stack",
+      "status",
+      "status-list",
+      "subtitle",
+      "title",
+      "title-row",
+      "titles"
+    ],
+    "states": [
+      "loading"
+    ],
+    "variantAxes": [
+      "data-compact",
+      "data-has-actions",
+      "data-has-icon",
+      "data-interactive",
+      "data-size",
+      "data-sticky",
+      "data-tenant",
+      "data-theme",
+      "data-variant"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 24,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:355",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:350",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:475",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:480",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:550"
+          ]
+        },
+        {
+          "part": "back",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:358",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:362"
+          ]
+        },
+        {
+          "part": "breadcrumb",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:276",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:255",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:548"
+          ]
+        },
+        {
+          "part": "crumb",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:69",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:135"
+          ]
+        },
+        {
+          "part": "crumb-item",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:275"
+          ]
+        },
+        {
+          "part": "crumb-list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:266"
+          ]
+        },
+        {
+          "part": "eyebrow",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:322",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:165"
+          ]
+        },
+        {
+          "part": "header-icon",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:528",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:549",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:558"
+          ]
+        },
+        {
+          "part": "lead",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:311",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:324"
+          ]
+        },
+        {
+          "part": "main-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:309",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:317",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:470"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:206",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:98"
+          ]
+        },
+        {
+          "part": "separator",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:290",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:140",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:310"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:220",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:227",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:233",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:234",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:235",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:242"
+          ]
+        },
+        {
+          "part": "skeleton-actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:240",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:435"
+          ]
+        },
+        {
+          "part": "skeleton-column",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:429"
+          ]
+        },
+        {
+          "part": "skeleton-lead",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:224",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:423"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:223",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:416"
+          ]
+        },
+        {
+          "part": "skeleton-stack",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:217",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:410"
+          ]
+        },
+        {
+          "part": "status",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:210"
+          ]
+        },
+        {
+          "part": "status-list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:336",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:344"
+          ]
+        },
+        {
+          "part": "subtitle",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:388"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:328",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:368",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:378",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:559"
+          ]
+        },
+        {
+          "part": "title-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:323",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:337"
+          ]
+        },
+        {
+          "part": "titles",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:321",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:332"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:263"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:207"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "compact=isCompact ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:211",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:265"
+          ]
+        },
+        {
+          "token": "compact=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:378",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:384"
+          ]
+        },
+        {
+          "token": "has-actions=actions ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:213",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:267"
+          ]
+        },
+        {
+          "token": "has-icon=icon ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:212",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:266"
+          ]
+        },
+        {
+          "token": "interactive=false",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:135"
+          ]
+        },
+        {
+          "token": "interactive=true",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:70",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:532"
+          ]
+        },
+        {
+          "token": "size=action",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:243",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:248",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:464"
+          ]
+        },
+        {
+          "token": "size=crumb",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:220",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:444"
+          ]
+        },
+        {
+          "token": "size=icon",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:449"
+          ]
+        },
+        {
+          "token": "size=subtitle",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:235",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:459"
+          ]
+        },
+        {
+          "token": "size=title",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:454"
+          ]
+        },
+        {
+          "token": "sticky",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:98",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:492",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:500",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:506",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:547"
+          ]
+        },
+        {
+          "token": "sticky=sticky ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:210",
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:264"
+          ]
+        },
+        {
+          "token": "sticky=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:109"
+          ]
+        },
+        {
+          "token": "tenant",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:14"
+          ]
+        },
+        {
+          "token": "theme",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:14"
+          ]
+        },
+        {
+          "token": "variant=default",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:215"
+          ]
+        },
+        {
+          "token": "variant=error",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:205"
+          ]
+        },
+        {
+          "token": "variant=info",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:210"
+          ]
+        },
+        {
+          "token": "variant=status.variant",
+          "at": [
+            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:131"
+          ]
+        },
+        {
+          "token": "variant=success",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:195"
+          ]
+        },
+        {
+          "token": "variant=warning",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:200"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "last=false",
+            "at": [
+              "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:71",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:135"
+            ]
+          },
+          {
+            "token": "last=isLast ? 'true' : 'false'",
+            "at": [
+              "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:84"
+            ]
+          },
+          {
+            "token": "last=true",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:132",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:306"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "partAddressingAttributes": [
+        {
+          "token": "anatomy-layout=flat",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:500"
+          ]
+        },
+        {
+          "token": "anatomy-layout=floating",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:506"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "lines": 223
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "lines": 362
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "3 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "--ds-cockpit-header-padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "--ds-cockpit-header-padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-cockpit-header-padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 53,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "--ds-cockpit-header-padding-compact",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 53,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-cockpit-header-padding-compact",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "--ds-cockpit-header-padding-compact",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "--ds-cockpit-header-padding-compact",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-cockpit-header-padding-compact",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "padding"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 55,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "--ds-cockpit-header-section-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 55,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-cockpit-header-section-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))",
+            "cssProperty": "--ds-cockpit-header-item-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap",
+              "margin-block-end"
+            ],
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "--ds-cockpit-header-item-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap",
+              "margin-block-end"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-cockpit-header-item-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap",
+              "margin-block-end"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 57,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "--ds-cockpit-header-action-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 57,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "--ds-cockpit-header-action-gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "landsOn": [
+              "gap"
+            ],
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 67,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 73,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-lg)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 73,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 75,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-shadow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 76,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-1)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 76,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-calm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 77,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 83,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-motion-slow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "320ms",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 86,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 86,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 87,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 88,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 88,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-padding-compact",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 91,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-cockpit-header-bg, --ds-card-header-bg, 112deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, inset 0",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-cockpit-header-sticky-top",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 95,
+            "fallback": true,
+            "fallbackValue": "env(safe-area-inset-top, 0px)",
+            "cssProperty": "top",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-cockpit-header-sticky-z",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "100",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-card-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-subtle)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 103,
+            "fallback": true,
+            "fallbackValue": "var(--ds-workspace-card-border, var(--ds-color-border-subtle))",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 103,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-subtle)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 103,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-shadow-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 104,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-2)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 104,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 110,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'][data-compact='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 116,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-breadcrumb-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 123,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-subtle)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 124,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-breadcrumb-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 125,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 125,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 125,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 126,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 130,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 133,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 136,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 143,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "separator",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='separator']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-icon-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 149,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "width",
+            "propertyGroup": "geometry",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-cockpit-header-icon-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 150,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "height",
+            "propertyGroup": "geometry",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-workspace-card-icon-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 152,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 152,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-icon-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 154,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-card)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 154,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-icon-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 155,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 155,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 159,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "header-icon",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 168,
+            "fallback": true,
+            "fallbackValue": "ui-monospace, monospace",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 169,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 170,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "eyebrow",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='eyebrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 181,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 185,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:focus, .ds-pattern-cockpit-header.ds-engine-modern[data-part='",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 186,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:focus, .ds-pattern-cockpit-header.ds-engine-modern[data-part='",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 187,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:focus, .ds-pattern-cockpit-header.ds-engine-modern[data-part='",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 193,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 196,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 197,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 198,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 201,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 202,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 203,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 206,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 207,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 208,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 211,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 212,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 213,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 216,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 217,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 218,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 223,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 225,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-family-base)",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 225,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 229,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "subtitle",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-control-height-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 235,
+            "fallback": true,
+            "fallbackValue": "32px",
+            "cssProperty": "min-height",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-toolbar-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 237,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 237,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-toolbar-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 238,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-lg)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 238,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-toolbar-control-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 239,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-card)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 239,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 240,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-actions-backdrop",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 243,
+            "fallback": true,
+            "fallbackValue": "none",
+            "cssProperty": "backdrop-filter",
+            "propertyGroup": "surface",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-cockpit-header-skeleton-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 249,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-sm)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 249,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 250,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 258,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 259,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 260,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 261,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 269,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "crumb-list",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb-list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 278,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "crumb-item",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb-item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 284,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 284,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 284,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 285,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 295,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 296,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 296,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 302,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 302,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 302,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 303,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 311,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "separator",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='separator']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-section-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 321,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "main-row",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='main-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-cockpit-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 328,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "lead",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='lead']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-cockpit-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 341,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "title-row",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 347,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "status-list",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status-list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-action-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 354,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-font-size-2xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 370,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 371,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 372,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 373,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 375,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 375,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 379,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 385,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-rhythm-effective-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 385,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "breadcrumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] [data-part='breadcrumb']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 390,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 391,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-badge-padding-y",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 399,
+            "fallback": true,
+            "fallbackValue": "0",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-badge-padding-x",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 399,
+            "fallback": true,
+            "fallbackValue": "0.375rem",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 400,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 401,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 403,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "status",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 413,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-stack",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-stack']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-cockpit-header-section-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 420,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-cockpit-header-item-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 426,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-lead",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-lead']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 432,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-column",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-column']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-cockpit-header-action-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 437,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-actions",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-motion-attention",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 441,
+            "fallback": true,
+            "fallbackValue": "1.5s",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 441,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 508,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": "[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 509,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": "[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 510,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 524,
+            "fallback": true,
+            "fallbackValue": "var(--ds-workspace-card-border, var(--ds-color-border-subtle))",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 524,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-subtle)",
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 524,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-workspace-card-shadow-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 525,
+            "fallback": true,
+            "fallbackValue": "var(--ds-elevation-2)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 525,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 533,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 537,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 538,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 539,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 574,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "crumb",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 578,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 579,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-inline-size",
+            "propertyGroup": "geometry",
+            "part": "back",
+            "selector": ".ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .rottay-button",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 73,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 75,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 75,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 80,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 81,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 97,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 129,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 180,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "line": 204,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "line": 229,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "line": 244,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "line": 249,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 51,
+            "literal": "16px",
+            "text": "--ds-cockpit-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 51,
+            "literal": "24px",
+            "text": "--ds-cockpit-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 53,
+            "literal": "12px",
+            "text": "calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 54,
+            "literal": "16px",
+            "text": "calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 54,
+            "literal": "24px",
+            "text": "calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 55,
+            "literal": "16px",
+            "text": "--ds-cockpit-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 56,
+            "literal": "12px",
+            "text": "--ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 57,
+            "literal": "8px",
+            "text": "--ds-cockpit-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 75,
+            "literal": "1px",
+            "text": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 85,
+            "literal": "320ms",
+            "text": "background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 95,
+            "literal": "0px",
+            "text": "top: var(--ds-cockpit-header-sticky-top, env(safe-area-inset-top, 0px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 99,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 121,
+            "literal": "4px",
+            "text": "padding: 4px 9px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 121,
+            "literal": "9px",
+            "text": "padding: 4px 9px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 123,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 126,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 149,
+            "literal": "40px",
+            "text": "width: var(--ds-cockpit-header-icon-size, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 150,
+            "literal": "40px",
+            "text": "height: var(--ds-cockpit-header-icon-size, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 152,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 157,
+            "literal": "1px",
+            "text": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 158,
+            "literal": "8px",
+            "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 158,
+            "literal": "18px",
+            "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 158,
+            "literal": "14px",
+            "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 162,
+            "literal": "1px",
+            "text": "transform: translateY(-1px) scale(1.025);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 166,
+            "literal": "4px",
+            "text": "margin-bottom: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 171,
+            "literal": "0.11em",
+            "text": "letter-spacing: 0.11em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 198,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-success-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 203,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-warning-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 208,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-error-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 213,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-info-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 218,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 235,
+            "literal": "32px",
+            "text": "min-height: calc(var(--ds-control-height-sm, 32px) + 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 235,
+            "literal": "8px",
+            "text": "min-height: calc(var(--ds-control-height-sm, 32px) + 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 236,
+            "literal": "3px",
+            "text": "padding: 3px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 237,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 240,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 258,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 269,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 278,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 284,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 285,
+            "literal": "2px",
+            "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 302,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 303,
+            "literal": "2px",
+            "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 347,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 385,
+            "literal": "8px",
+            "text": "margin-block-end: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 389,
+            "literal": "4px",
+            "text": "margin: 4px 0 0;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 399,
+            "literal": "0.375rem",
+            "text": "padding: var(--ds-badge-padding-y, 0) var(--ds-badge-padding-x, 0.375rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 402,
+            "literal": "0.01em",
+            "text": "letter-spacing: 0.01em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 432,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 441,
+            "literal": "1.5s",
+            "text": "animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 445,
+            "literal": "160px",
+            "text": "width: 160px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 446,
+            "literal": "12px",
+            "text": "height: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 450,
+            "literal": "34px",
+            "text": "width: 34px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 451,
+            "literal": "34px",
+            "text": "height: 34px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 455,
+            "literal": "260px",
+            "text": "width: 260px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 456,
+            "literal": "24px",
+            "text": "height: 24px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 460,
+            "literal": "180px",
+            "text": "width: 180px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 461,
+            "literal": "14px",
+            "text": "height: 14px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 465,
+            "literal": "80px",
+            "text": "width: 80px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 466,
+            "literal": "34px",
+            "text": "height: 34px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 469,
+            "literal": "640px",
+            "text": "@container ds-cockpit-header (max-width: 640px) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 508,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 510,
+            "literal": "8px",
+            "text": "margin: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 514,
+            "literal": "8px",
+            "text": "from { opacity: 0; transform: translateY(8px) scale(0.995); }"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 529,
+            "literal": "1px",
+            "text": "transform: translateY(-1px) scale(1.025);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 574,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 578,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "line": 579,
+            "literal": "44px",
+            "text": "min-inline-size: var(--ds-touch-target-min, 44px);"
+          }
+        ],
+        "censusRowCount": 191
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3527,71 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.seeds",
+            "prop": "tintas",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-cockpit-header-actions-backdrop"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-breadcrumb-bg",
+            "--ds-breadcrumb-border",
+            "--ds-color-bg-elevated",
+            "--ds-color-border",
+            "--ds-color-border-primary",
+            "--ds-color-border-subtle",
+            "--ds-color-error-100",
+            "--ds-color-error-200",
+            "--ds-color-error-700",
+            "--ds-color-info-100",
+            "--ds-color-info-200",
+            "--ds-color-info-700",
+            "--ds-color-neutral-100",
+            "--ds-color-neutral-200",
+            "--ds-color-neutral-50",
+            "--ds-color-neutral-700",
+            "--ds-color-primary",
+            "--ds-color-success-100",
+            "--ds-color-success-200",
+            "--ds-color-success-700",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning-100",
+            "--ds-color-warning-200",
+            "--ds-color-warning-700",
+            "--ds-surface-card",
+            "--ds-surface-panel",
+            "--ds-toolbar-border",
+            "--ds-toolbar-control-bg",
+            "--ds-workspace-card-border",
+            "--ds-workspace-card-border-hover",
+            "--ds-workspace-card-icon-bg",
+            "--ds-workspace-card-icon-border",
+            "--ds-workspace-card-icon-color"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3599,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulares del shell sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-bold",
+            "--ds-font-weight-semibold",
+            "--ds-letter-spacing-heading"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3631,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulares del shell sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-base",
+            "--ds-font-family-heading",
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3663,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "escala sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xl",
+            "--ds-font-size-2xs",
+            "--ds-font-size-lg",
+            "--ds-font-size-sm",
+            "--ds-font-size-xs",
+            "--ds-line-height-body",
+            "--ds-line-height-heading"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3699,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-page-panel-radius",
+            "prop": "radio de paneles del shell (slug vivo: page)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-panel-radius",
+              "--_ds-cockpit-header-skeleton-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-sm",
+            "--ds-toolbar-radius",
+            "--ds-workspace-card-radius"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3735,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los controles del shell (header actions) son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3748,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el shell es chrome de composicion, no superficie de filas; lo que densifica es su contenido (tablas/listas) por sus propios sockets",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "CANDIDATOS (canales reales bajo regla de grupo MUST_NOT): --ds-cockpit-header-action-gap, --ds-cockpit-header-item-gap, --ds-cockpit-header-padding, --ds-cockpit-header-padding-compact, --ds-cockpit-header-sticky-top. CANDIDATOS (propiedad remediada, celda MUST_NOT de grupo): --ds-badge-padding-y"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-badge-padding-x",
+            "--ds-badge-padding-y",
+            "--ds-control-height-sm",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-6",
+            "--ds-touch-target-min",
+            "--ds-workspace-card-gap"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3781,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-section-gap",
+            "prop": "ritmo interno de page-shell/cockpit",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-cockpit-header-section-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3805,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "la paleta obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-page-transition-duration",
+            "prop": "transition-duration de entrada/salida de la command palette",
+            "tier": "standard"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-attention",
+            "--ds-motion-calm",
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-motion-normal",
+            "--ds-motion-slow"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3838,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-elevation"
+            ],
+            "sockets": [
+              "--_ds-cockpit-header-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1",
+            "--ds-elevation-2",
+            "--ds-workspace-card-shadow",
+            "--ds-workspace-card-shadow-hover"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3873,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de shell mate; el glass vive en los scrims de overlay, no en la paleta",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3886,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-bg",
+            "prop": "background-color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-app-shell-sidebar-bg"
+            ],
+            "sockets": [
+              "--_ds-cockpit-header-sidebar-bg"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3912,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3925,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "layer.stack",
+            "socketPattern": "--_ds-<comp>-z-index",
+            "prop": "z-index",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-z-index"
+            ],
+            "sockets": [
+              "--_ds-cockpit-header-z-index"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales z NO cubiertos por adjudicacion --ds-z-* (correccion, no gusto)": [
+            "--ds-cockpit-header-sticky-z"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3957,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-page-rule-style",
+            "prop": "reglas de seccion y bordes de panel del shell",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3990,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +4008,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +4021,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +4060,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria dentro de la paleta",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-page-icon-stroke-width",
+            "prop": "stroke-width de los iconos de comandos y resultados",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-cockpit-header-icon-size"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +4085,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -62,6 +62,37 @@ Architecture documentation remains authoritative for architecture. If an
 execution finding changes architecture, update its owning contract rather than
 writing another programme.
 
+## Binding constitution
+
+The following are machine-checked by `program-check.mjs` and are not subject to
+prose reinterpretation:
+
+- **Control tiers.** Operational product truth is exactly 13 Standard controls
+  and 7 Pro capabilities recorded in `customization-model.json` and
+  `program.json`. The proposed 9 Standard + 7 Pro taxonomy is a design target
+  with `implementationState: PROPOSED_NOT_IMPLEMENTED`; it never counts as
+  coverage and may not coexist with an equivalent operational control. Expert
+  is a closed 294-entry exact allowlist with at most 200 overrides per document;
+  it is frozen during the drain unless the owner separately authorizes a bounded
+  addition.
+- **Namespace lifecycle.** `--ds-*` is the public canon. `--_ds-*` is a governed
+  private/provisional namespace used only below the tenant pipeline for
+  component-private or family-prototype sockets; it requires an owner, producer,
+  fallback authority, productive consumer and an explicit promotion/derivation/
+  retirement disposition. `data-*` is the governed DOM-attribute axis. Product or
+  vertical dialects (`event`, `ticket`, `dashboard`, `rottay`, `bithire`,
+  `evnto`, `--rt-*`, slug-derived names) are forbidden in both token namespaces,
+  contracts and Theme keypaths.
+- **Transport equality.** Static `BrandTheme` and DB `TenantThemeDocument` are
+  transports only. Both resolve to the same complete nested Theme, enter exactly
+  one `compileTheme`, and produce identical keypaths, channel inventory,
+  deterministic order, CSS and digest for equivalent values. `ThemePatch` exists
+  only at ingestion and never reaches the compiler.
+- **Topology.** One status authority, one static/DB normalization model, one
+  semantic icon supplier, no tenant selectors or tenant-conditional component
+  trees, no family writer mints public `--ds-*` channels, no second compiler, no
+  application-private DS patch, no hand-edited generated artifact or baseline.
+
 ## Fixed scope and honest progress
 
 The closure universe is every canonical ID in `family-inventory.json`.
@@ -299,7 +330,7 @@ consolidated.
 6. Classify any red test before changing it.
 7. Work one control slice at a time with disjoint file ownership.
 8. Update the machine records and this generated checkpoint, audit the cached
-   diff, then create a local commit.
+   diff, then request explicit owner authorization before any local commit.
 
 Do not restart historical waves, infer status from filenames, or create a new
 handoff document. A successor updates this tree.
@@ -317,12 +348,21 @@ Builds, servers and browsers are serialized at reconciliation points.
 
 ## Roles
 
-- Codex is the final source, evidence and sighted auditor, stager and local
-  committer.
-- Claude may coordinate architecture and implementation in a bounded packet.
-- Fable and Kimi are independent read-only advisors. Their narratives are
-  ephemeral inputs; accepted findings are reproduced and recorded here or in
-  the owning JSON. Neither creates programme authority.
+- **Codex** is the DT/coordinator: resolves disagreements, owns the canonical
+  programme tree, and authorizes packets. It does not implement source changes
+  directly except within a packet it explicitly owns.
+- The **Cloud Opus implementer pool** is the sole implementer for source changes
+  delegated by Codex. No other model may write programme source, contracts,
+  manifests or evidence.
+  - Succession: **Kimi 2.7** held this seat until the explicit owner order of
+    2026-08-17, which transferred it to the Cloud Opus implementer pool. The
+    seat is transferred, not removed — exactly one implementer authority exists
+    before and after — and the succession removes no audit capacity.
+- **Fable 5** and **Kimi K3** are independent read-only advisors. Their
+  narratives are ephemeral inputs; accepted findings are reproduced against
+  source and recorded in the owning JSON. Neither creates programme authority.
+  **Kimi K3 retains its full read-only audit seat** under the 2026-08-17
+  succession.
 - Mechanical writers receive disjoint, pre-proven ownership only.
 
 Disagreement is recorded as a finding and resolved against source. Model names
@@ -333,8 +373,9 @@ never override evidence.
 - Modern Rescue executes R0–R6 only. R7 remains machine-documented with
   `enabled: false` until a future explicit owner authorization.
 - Never push.
-- Local commits are allowed after an audited packet. Publication requires an
-  explicit release window and authorization.
+- **No stage, commit or merge** without an explicit owner order for that exact
+  change. An "audited packet" is not permission to commit; it is a prerequisite
+  for requesting the order.
 - Classic and Rustic are read-only.
 - No tenant selector, tenant-conditional component tree, second compiler,
   second icon supplier or application-private DS patch.

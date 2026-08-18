@@ -24,9 +24,9 @@
  * reopens the document), and a tighter gap for blocks nested inside a list
  * item (they belong to the item's marker). The heading type ramp (size
  * 3xl→sm, heading/display weights, tight leading, slight negative tracking
- * on the large levels) is owned WHOLESALE by the family skin -- inline style
- * producers are counted paint by the engine-token-audit and this file's
- * counter is decrease-only.
+ * on the large levels) is owned by the family skin -- inline style producers
+ * are counted paint by the engine-token-audit, and that counter ratchets
+ * downward for this file.
  *
  * Security invariant (independent of which element tag wraps the text):
  *   (a) every node is built via React element construction with escaped

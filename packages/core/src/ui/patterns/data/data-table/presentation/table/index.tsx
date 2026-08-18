@@ -16,7 +16,7 @@ import { Box } from "@/ui/primitives/layout/Box";
 import { Button } from "@/ui/primitives/inputs/Button";
 import { Flex } from "@/ui/primitives/layout/Flex";
 import { Stack } from "@/ui/primitives/layout/Stack";
-import { Text } from "@/ui/primitives/display/Typography/compound/Text";
+import { Text } from "@/ui/primitives/display/Typography";
 import { VisuallyHidden } from "@/ui/primitives/foundation/VisuallyHidden";
 import {
   AlertTriangleIcon,

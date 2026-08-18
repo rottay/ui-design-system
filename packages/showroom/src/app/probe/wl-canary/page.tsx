@@ -78,8 +78,11 @@ import {
  * Candidate fixture names stay English on every locale per probe convention —
  * no fixture value here is product content.
  *
- * Inline styles are LAYOUT ONLY (grid/flex/gap/padding). Zero paint: colors,
- * borders and shadows come from the components. No Daisy classes, no new CSS.
+ * Inline styles carry layout (grid/flex/gap/padding) plus two measured paint
+ * pairs: the canary ground sets background/color from DS tokens, and the
+ * source-did-not-mount fallback hardcodes its own red so a failed mount stays
+ * legible without the DS ground. Borders and shadows come from the components.
+ * No Daisy classes, no new CSS.
  */
 
 // The probe's axes ARE the ground's governed vocabulary, aliased rather than

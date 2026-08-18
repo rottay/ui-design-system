@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { posix } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import ts from 'typescript';
 
@@ -1195,21 +1197,1778 @@ export function extractRegistryFactsFromText(text, fileName, variableName, field
   };
 }
 
+/**
+ * Extract registry facts for a registry whose rows are PROJECTED from the
+ * first-party roster instead of authored key by key.
+ *
+ * A direct-object-literal proof cannot read a projection, and weakening the
+ * absence claim to "the text contains no `engine:`" would be a grep, not a
+ * proof. The fail-closed shape proven here is exactly
+ *
+ *     Object.freeze(Object.fromEntries(
+ *       ROSTER.map((entry) => [entry.slug, factory(entry)]),
+ *     ))
+ *
+ * over an IMPORTED roster binding, with `factory` a same-module function whose
+ * single return resolves to one authored object literal. That shape is what
+ * lets one literal answer for every row: the map callback is total over the
+ * roster, the key is the row's own slug, and no row can reach a different
+ * literal. Field states therefore project per slug, and a field may be proven
+ * absent, an authored literal, or a named roster field -- never inferred.
+ *
+ * Anything outside the shape (a spread, a second return, a computed key, a
+ * write through the projected object, an unproven identity wrapper) resolves to
+ * nothing and is reported as an unresolved entry.
+ */
+export function extractRosterProjectedRegistryFacts(text, fileName, options) {
+  const { variableName, rosterName, slugs, fields } = options;
+  const record = { path: fileName, kind: 'registry', text };
+  const { checker, program, recordByFile } = typedRecordProgram([record]);
+  const source = program.getSourceFiles().find((candidate) => recordByFile.has(candidate.fileName));
+  if (!source) throw new Error(`${fileName}: cannot load roster-projected registry source`);
+
+  const topLevel = [];
+  for (const statement of source.statements) {
+    if (!ts.isVariableStatement(statement)) continue;
+    for (const declaration of statement.declarationList.declarations) {
+      if (ts.isIdentifier(declaration.name) && declaration.name.text === variableName) {
+        topLevel.push({ declaration, statement });
+      }
+    }
+  }
+  if (topLevel.length === 0) {
+    throw new Error(`${fileName}: cannot find exact top-level object variable ${variableName}`);
+  }
+  const selected = topLevel[0];
+  const typeAnnotation = selected.declaration.type?.getText(source) ?? null;
+  const modifiers = ts.canHaveModifiers(selected.statement) ? ts.getModifiers(selected.statement) : undefined;
+  const declaration = {
+    line: sourceLine(source, selected.declaration),
+    topLevel: true,
+    exported: Boolean(modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)),
+    evidenceKind: 'rosterProjectedFactoryLiteral',
+    typeAnnotation,
+    readonlyTypeAnnotation: /^Readonly\s*</.test(typeAnnotation ?? ''),
+  };
+
+  const unresolvedEntries = [];
+  for (const duplicate of topLevel.slice(1)) {
+    unresolvedEntries.push({
+      line: sourceLine(source, duplicate.declaration),
+      reason: `duplicate top-level ${variableName} declaration`,
+    });
+  }
+  const reject = (node, reason) => {
+    unresolvedEntries.push({ line: sourceLine(source, node), reason });
+    unresolvedEntries.push(...registryCapabilityMutationFindings(text, fileName, variableName));
+    return {
+      facts: {},
+      projection: null,
+      unresolvedEntries: unresolvedEntries.sort((a, b) => a.line - b.line || a.reason.localeCompare(b.reason)),
+      declaration,
+    };
+  };
+  const SHAPE = `${variableName} initializer must be Object.freeze(Object.fromEntries(${rosterName}.map((entry) => [entry.slug, factory(entry)])))`;
+
+  const isUnshadowedGlobal = (node, expected) => {
+    const expression = unwrap(node);
+    if (!expression || !ts.isIdentifier(expression) || expression.text !== expected) return false;
+    const symbol = checker.getSymbolAtLocation(expression);
+    return !symbol?.declarations?.some((candidate) => candidate.getSourceFile() === source);
+  };
+  const globalMemberCall = (node, owner, method, arity) => {
+    const call = unwrap(node);
+    if (!call || !ts.isCallExpression(call) || call.arguments.length !== arity) return null;
+    const callee = unwrap(call.expression);
+    if (!callee || !ts.isPropertyAccessExpression(callee) || callee.name.text !== method) return null;
+    return isUnshadowedGlobal(callee.expression, owner) ? call : null;
+  };
+  const sameFileFunction = (node) => {
+    const expression = unwrap(node);
+    if (!expression || !ts.isIdentifier(expression)) return null;
+    const declarations = checker.getSymbolAtLocation(expression)?.declarations ?? [];
+    if (declarations.length !== 1) return null;
+    const [candidate] = declarations;
+    if (candidate.getSourceFile() !== source) return null;
+    return ts.isFunctionDeclaration(candidate) && candidate.body ? candidate : null;
+  };
+
+  const frozen = globalMemberCall(selected.declaration.initializer, 'Object', 'freeze', 1);
+  if (!frozen) return reject(selected.declaration, SHAPE);
+  const fromEntries = globalMemberCall(frozen.arguments[0], 'Object', 'fromEntries', 1);
+  if (!fromEntries) return reject(selected.declaration, SHAPE);
+  const mapCall = unwrap(fromEntries.arguments[0]);
+  if (!mapCall || !ts.isCallExpression(mapCall) || mapCall.arguments.length !== 1) {
+    return reject(selected.declaration, SHAPE);
+  }
+  const mapCallee = unwrap(mapCall.expression);
+  if (!mapCallee || !ts.isPropertyAccessExpression(mapCallee) || mapCallee.name.text !== 'map') {
+    return reject(selected.declaration, SHAPE);
+  }
+  const rosterReference = unwrap(mapCallee.expression);
+  if (!rosterReference || !ts.isIdentifier(rosterReference) || rosterReference.text !== rosterName) {
+    return reject(selected.declaration, SHAPE);
+  }
+  const rosterDeclarations = checker.getSymbolAtLocation(rosterReference)?.declarations ?? [];
+  const rosterImport = rosterDeclarations.length === 1 && ts.isImportSpecifier(rosterDeclarations[0])
+    ? rosterDeclarations[0]
+    : null;
+  const rosterModuleSpecifier = rosterImport
+    ? unwrap(rosterImport.parent.parent.parent.moduleSpecifier)
+    : null;
+  if (!rosterModuleSpecifier || !ts.isStringLiteralLike(rosterModuleSpecifier)) {
+    return reject(rosterReference, `${rosterName} must resolve to a single imported roster binding`);
+  }
+
+  const callback = unwrap(mapCall.arguments[0]);
+  if (
+    !callback || !(ts.isArrowFunction(callback) || ts.isFunctionExpression(callback)) ||
+    callback.parameters.length !== 1
+  ) {
+    return reject(selected.declaration, SHAPE);
+  }
+  const parameter = callback.parameters[0];
+  if (!ts.isIdentifier(parameter.name) || parameter.dotDotDotToken || parameter.initializer) {
+    return reject(parameter, `${variableName} projection callback must take one plain roster row parameter`);
+  }
+  const rowSymbol = checker.getSymbolAtLocation(parameter.name);
+  const isRowReference = (node) => {
+    const expression = unwrap(node);
+    return Boolean(expression && ts.isIdentifier(expression) && checker.getSymbolAtLocation(expression) === rowSymbol);
+  };
+
+  let pair = unwrap(callback.body);
+  if (pair && ts.isBlock(pair)) {
+    const [only] = pair.statements;
+    if (pair.statements.length !== 1 || !only || !ts.isReturnStatement(only) || !only.expression) {
+      return reject(callback, `${variableName} projection callback must be a single returned pair`);
+    }
+    pair = unwrap(only.expression);
+  }
+  if (
+    !pair || !ts.isArrayLiteralExpression(pair) || pair.elements.length !== 2 ||
+    pair.elements.some((element) => ts.isSpreadElement(element))
+  ) {
+    return reject(callback, SHAPE);
+  }
+  const keyExpression = unwrap(pair.elements[0]);
+  if (
+    !keyExpression || !ts.isPropertyAccessExpression(keyExpression) ||
+    keyExpression.name.text !== 'slug' || !isRowReference(keyExpression.expression)
+  ) {
+    return reject(pair.elements[0], `${variableName} projection key must be the roster row slug`);
+  }
+  const factoryCall = unwrap(pair.elements[1]);
+  if (
+    !factoryCall || !ts.isCallExpression(factoryCall) || factoryCall.arguments.length !== 1 ||
+    !isRowReference(factoryCall.arguments[0])
+  ) {
+    return reject(pair.elements[1], `${variableName} projection value must be a same-module factory called with the roster row`);
+  }
+  const factory = sameFileFunction(factoryCall.expression);
+  const factoryName = ts.isIdentifier(unwrap(factoryCall.expression) ?? factoryCall)
+    ? unwrap(factoryCall.expression).text
+    : '<computed>';
+  if (!factory || factory.parameters.length !== 1 || !ts.isIdentifier(factory.parameters[0].name)) {
+    return reject(factoryCall, `${factoryName} must be a same-module factory declaration taking one named roster row`);
+  }
+  // Inside the factory the roster row is the FACTORY's parameter, not the map
+  // callback's: the call above proves the two are the same row, and the factory
+  // may legitimately name its parameter anything.
+  const factoryRowSymbol = checker.getSymbolAtLocation(factory.parameters[0].name);
+  const isFactoryRowReference = (node) => {
+    const expression = unwrap(node);
+    return Boolean(
+      expression && ts.isIdentifier(expression) &&
+      checker.getSymbolAtLocation(expression) === factoryRowSymbol,
+    );
+  };
+
+  const collectReturns = (fn) => {
+    const returns = [];
+    (function walk(node) {
+      if (node !== fn.body && ts.isFunctionLike(node)) return;
+      if (ts.isReturnStatement(node)) returns.push(node);
+      ts.forEachChild(node, walk);
+    })(fn.body);
+    return returns;
+  };
+  const factoryReturns = collectReturns(factory);
+  if (factoryReturns.length !== 1 || !factoryReturns[0].expression) {
+    return reject(factory, `${factoryName} must project exactly one returned value`);
+  }
+
+  // An identity wrapper (a hardening `deepFreeze`) may sit between the authored
+  // literal and the return, but only when it provably returns the SAME object
+  // it received and never writes a key through it. `Object.assign(value, ...)`
+  // is not an identity wrapper, and neither is anything that hands the
+  // parameter to an unproven call.
+  const PROVEN_PARAMETER_READS = new Set([
+    'Object.entries', 'Object.freeze', 'Object.isFrozen', 'Object.keys',
+    'Object.getOwnPropertyNames', 'Object.values',
+  ]);
+  const globalMemberName = (node) => {
+    const callee = unwrap(node);
+    if (!callee || !ts.isPropertyAccessExpression(callee)) return null;
+    for (const owner of ['Object', 'Reflect', 'JSON']) {
+      if (isUnshadowedGlobal(callee.expression, owner)) return `${owner}.${callee.name.text}`;
+    }
+    return null;
+  };
+  const identityWrapperReason = (fn, name) => {
+    if (fn.parameters.length !== 1 || !ts.isIdentifier(fn.parameters[0].name)) {
+      return `${name} is not a single-parameter identity wrapper`;
+    }
+    const wrappedSymbol = checker.getSymbolAtLocation(fn.parameters[0].name);
+    const isWrapped = (node) => {
+      const expression = unwrap(node);
+      return Boolean(
+        expression && ts.isIdentifier(expression) &&
+        checker.getSymbolAtLocation(expression) === wrappedSymbol,
+      );
+    };
+    const rootedAtWrapped = (node) => {
+      let expression = unwrap(node);
+      while (expression && (ts.isPropertyAccessExpression(expression) || ts.isElementAccessExpression(expression))) {
+        expression = unwrap(expression.expression);
+      }
+      return Boolean(expression && isWrapped(expression));
+    };
+    const returnsIdentity = (node) => {
+      const expression = unwrap(node);
+      if (!expression) return false;
+      if (isWrapped(expression)) return true;
+      if (ts.isConditionalExpression(expression)) {
+        return returnsIdentity(expression.whenTrue) && returnsIdentity(expression.whenFalse);
+      }
+      const member = ts.isCallExpression(expression) ? globalMemberName(expression.expression) : null;
+      if (member === 'Object.freeze' && expression.arguments.length === 1) {
+        return returnsIdentity(expression.arguments[0]);
+      }
+      return false;
+    };
+    let reason = null;
+    (function walk(node) {
+      if (reason) return;
+      if (
+        ts.isBinaryExpression(node) &&
+        node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+        node.operatorToken.kind <= ts.SyntaxKind.LastAssignment &&
+        rootedAtWrapped(node.left)
+      ) {
+        reason = `${name} writes through the wrapped projection`;
+      } else if (ts.isDeleteExpression(node) && rootedAtWrapped(node.expression)) {
+        reason = `${name} deletes through the wrapped projection`;
+      } else if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
+        const member = ts.isCallExpression(node) ? globalMemberName(node.expression) : null;
+        for (const argument of node.arguments ?? []) {
+          if (!isWrapped(argument)) continue;
+          if (!member || !PROVEN_PARAMETER_READS.has(member)) {
+            reason = `${name} passes the wrapped projection to an unproven call`;
+          }
+        }
+        if (!reason && ts.isCallExpression(node) && !member && rootedAtWrapped(node.expression)) {
+          reason = `${name} invokes an unproven method on the wrapped projection`;
+        }
+      }
+      ts.forEachChild(node, walk);
+    })(fn.body);
+    if (reason) return reason;
+    const wrapperReturns = collectReturns(fn);
+    if (wrapperReturns.length === 0) return `${name} never returns the wrapped projection`;
+    for (const statement of wrapperReturns) {
+      if (!statement.expression || !returnsIdentity(statement.expression)) {
+        return `${name} has a return path that is not the wrapped projection`;
+      }
+    }
+    return null;
+  };
+
+  const wrappers = [];
+  const resolveAuthoredLiteral = (node, depth = 0) => {
+    const expression = unwrap(node);
+    if (!expression || depth > 4) return { literal: null, reason: `${factoryName} projection is not a resolvable authored literal` };
+    if (ts.isObjectLiteralExpression(expression)) return { literal: expression, reason: null };
+    if (ts.isIdentifier(expression)) {
+      const declarations = checker.getSymbolAtLocation(expression)?.declarations ?? [];
+      if (declarations.length !== 1) {
+        return { literal: null, reason: `${factoryName} projection binding ${expression.text} is not uniquely declared` };
+      }
+      const [binding] = declarations;
+      if (
+        !ts.isVariableDeclaration(binding) || !binding.initializer ||
+        !(binding.parent.flags & ts.NodeFlags.Const) ||
+        !(binding.getStart(source) >= factory.body.getStart(source) && binding.getEnd() <= factory.body.getEnd())
+      ) {
+        return { literal: null, reason: `${factoryName} projection binding ${expression.text} is not a local const literal` };
+      }
+      const mutation = localProjectionMutationReason(binding, expression.text);
+      if (mutation) return { literal: null, reason: mutation };
+      return resolveAuthoredLiteral(binding.initializer, depth + 1);
+    }
+    if (ts.isCallExpression(expression) && expression.arguments.length === 1) {
+      const wrapper = sameFileFunction(expression.expression);
+      const wrapperName = ts.isIdentifier(unwrap(expression.expression) ?? expression)
+        ? unwrap(expression.expression).text
+        : '<computed>';
+      if (!wrapper) {
+        return { literal: null, reason: `${factoryName} projection wrapper ${wrapperName} is not a same-module declaration` };
+      }
+      const reason = identityWrapperReason(wrapper, wrapperName);
+      if (reason) return { literal: null, reason };
+      wrappers.push({ name: wrapperName, line: sourceLine(source, wrapper) });
+      return resolveAuthoredLiteral(expression.arguments[0], depth + 1);
+    }
+    return { literal: null, reason: `${factoryName} projection is not a resolvable authored literal` };
+  };
+
+  // The projected object is immutable in the factory too: the only use of it
+  // beyond the return that cannot widen its keys is a weak-collection key,
+  // which is exactly how the governed-behavior side table is keyed by identity.
+  function localProjectionMutationReason(binding, name) {
+    const localSymbol = checker.getSymbolAtLocation(binding.name);
+    const isLocal = (node) => {
+      const expression = unwrap(node);
+      return Boolean(
+        expression && ts.isIdentifier(expression) && checker.getSymbolAtLocation(expression) === localSymbol,
+      );
+    };
+    const rootedAtLocal = (node) => {
+      let expression = unwrap(node);
+      while (expression && (ts.isPropertyAccessExpression(expression) || ts.isElementAccessExpression(expression))) {
+        expression = unwrap(expression.expression);
+      }
+      return Boolean(expression && isLocal(expression));
+    };
+    const weakKeyMethods = new Set(['add', 'delete', 'get', 'has', 'set']);
+    const isWeakCollectionKey = (call, index) => {
+      if (index !== 0) return false;
+      const callee = unwrap(call.expression);
+      if (!callee || !ts.isPropertyAccessExpression(callee) || !weakKeyMethods.has(callee.name.text)) return false;
+      const owner = checker.getTypeAtLocation(callee.expression).getSymbol()?.getName() ?? '';
+      return owner === 'WeakMap' || owner === 'WeakSet';
+    };
+    let reason = null;
+    (function walk(node) {
+      if (reason) return;
+      if (
+        ts.isBinaryExpression(node) &&
+        node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+        node.operatorToken.kind <= ts.SyntaxKind.LastAssignment &&
+        node !== binding && rootedAtLocal(node.left)
+      ) {
+        reason = `${factoryName} writes through the projected ${name}`;
+      } else if (ts.isDeleteExpression(node) && rootedAtLocal(node.expression)) {
+        reason = `${factoryName} deletes through the projected ${name}`;
+      } else if (
+        (ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node)) &&
+        [ts.SyntaxKind.PlusPlusToken, ts.SyntaxKind.MinusMinusToken].includes(node.operator) &&
+        rootedAtLocal(node.operand)
+      ) {
+        reason = `${factoryName} updates through the projected ${name}`;
+      } else if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
+        (node.arguments ?? []).forEach((argument, index) => {
+          if (reason || !isLocal(argument)) return;
+          if (!(ts.isCallExpression(node) && isWeakCollectionKey(node, index))) {
+            reason = `${factoryName} passes the projected ${name} to an unproven call`;
+          }
+        });
+      }
+      ts.forEachChild(node, walk);
+    })(factory.body);
+    return reason;
+  }
+
+  const resolved = resolveAuthoredLiteral(factoryReturns[0].expression);
+  if (!resolved.literal) return reject(factoryReturns[0], resolved.reason);
+
+  const directPropertyName = (name) =>
+    name && (ts.isIdentifier(name) || ts.isStringLiteralLike(name)) ? name.text : null;
+  for (const member of resolved.literal.properties) {
+    if (ts.isSpreadAssignment(member)) {
+      unresolvedEntries.push({
+        line: sourceLine(source, member),
+        reason: `${factoryName} projection literal contains a spread`,
+      });
+    } else if (!directPropertyName(member.name)) {
+      unresolvedEntries.push({
+        line: sourceLine(source, member),
+        reason: `${factoryName} projection literal contains a computed key`,
+      });
+    }
+  }
+  const projected = {};
+  for (const field of fields) {
+    const matching = resolved.literal.properties.filter((member) =>
+      !ts.isSpreadAssignment(member) && directPropertyName(member.name) === field);
+    if (matching.length === 0) {
+      projected[field] = { kind: 'absent' };
+      continue;
+    }
+    if (matching.length !== 1 || !ts.isPropertyAssignment(matching[0])) {
+      projected[field] = { kind: 'nonLiteral', reason: `ambiguous/non-data ${field} property` };
+      unresolvedEntries.push({
+        line: sourceLine(source, matching[0]),
+        reason: `${factoryName} projection ${field} is not a unique data property`,
+      });
+      continue;
+    }
+    const initializer = unwrap(matching[0].initializer);
+    if (initializer && ts.isPropertyAccessExpression(initializer) && isFactoryRowReference(initializer.expression)) {
+      projected[field] = { kind: 'rosterField', field: initializer.name.text };
+      continue;
+    }
+    const state = literalState(matching[0].initializer);
+    projected[field] = state;
+    if (state.kind !== 'literal') {
+      unresolvedEntries.push({
+        line: sourceLine(source, matching[0]),
+        reason: `${factoryName} projection ${field} is neither an authored literal nor a roster field`,
+      });
+    }
+  }
+
+  const facts = {};
+  for (const slug of slugs) {
+    facts[slug] = Object.fromEntries(fields.map((field) => [field, projected[field]]));
+  }
+  unresolvedEntries.push(...registryCapabilityMutationFindings(text, fileName, variableName));
+
+  return {
+    facts,
+    projection: {
+      rosterName,
+      rosterModule: rosterModuleSpecifier.text,
+      keySource: 'roster row slug',
+      factory: { name: factoryName, line: sourceLine(source, factory) },
+      wrappers,
+      literalLine: sourceLine(source, resolved.literal),
+      projectedSlugs: [...slugs],
+    },
+    unresolvedEntries: unresolvedEntries.sort((a, b) => a.line - b.line || a.reason.localeCompare(b.reason)),
+    declaration,
+  };
+}
+
+/*
+ * Transitive canonical-forwarder proof (B-1).
+ *
+ * The former hardcoded Box/Stack/Text module-suffix map is gone. A JSX tag is
+ * accepted as a canonical forwarder only when BOTH conjuncts hold:
+ *
+ *   1. the tag's local binding is a value import from a canonical DS module
+ *      boundary (package public barrel, UI tier/category/family module, family
+ *      engines/<engine> module, or a generated icon role module); and
+ *   2. that export transitively proves that a caller-supplied `data-part`
+ *      reaches a rendered element, descending every engine of an
+ *      engine-switched component.
+ *
+ * Forwarding evidence terminates at the render root the carrier is spread onto.
+ * An intrinsic DOM element is the strong terminal. A render root that provably
+ * originates in a third-party package (a bare specifier this package cannot
+ * resolve into `<root>/src/`) is the weaker terminal: the pass-through inside
+ * that library is not observable from here, so the accepting mechanism records
+ * the exact specifier (`rest-spread-external-root: antd`) instead of claiming a
+ * DOM proof. This terminal is required, not a convenience — the Classic engine
+ * of Box, Stack and Text renders through Ant Design, and the reconciled plan
+ * mandates that those three be re-derived by this proof with no grandfathering.
+ * Relative, `@/` and `@rottay/design-system` roots are in-package and are never
+ * trusted this way; they must prove.
+ *
+ * Reaching a render root is necessary but not sufficient: the caller's part must
+ * still SURVIVE there, and the bag that reaches the root must still CONTAIN it.
+ * Four negations and one extra terminal enforce that, because without them a
+ * spread that is immediately overwritten — or one the part was taken out of —
+ * reads as forwarding.
+ *   C1 An override written AFTER the carrier on the same element defeats the
+ *      evidence; the same override written BEFORE it does not, because JSX
+ *      resolves duplicate props last-wins. `Tag` is the living
+ *      literal-before-spread counterexample that stays proven.
+ *   C2 A pinned canonical helper called for effect with a part that is not the
+ *      caller's re-stamps the root on every commit, so that engine cannot
+ *      forward at all — the whole component is unproven, not one branch.
+ *   C3 Aggregate proofs carry each member's own terminal, so a weaker
+ *      external-root proof is never laundered into a bare engine list.
+ *   C4 A rest bag whose pattern destructured `data-part` out no longer carries
+ *      the part: spreading it forwards everything else and drops the anatomy,
+ *      so it proves nothing until the part is re-attached from its own carrier.
+ *      Aliasing the stripped bag does not launder the strip.
+ *   C5 The mirror of C2: a pinned helper called for effect WITH the caller's
+ *      part is a terminal in its own right, `imperative-part-forward`. It is
+ *      the only mechanism available to an engine whose render root belongs to a
+ *      third-party library (Button classic under Ant Design), and it is weaker
+ *      than an attribute terminal — the node identity comes from the ref/effect
+ *      wiring rather than from a proof — so it is reached only after every
+ *      attribute path has failed and it never borrows an attribute's name.
+ *
+ * Every step is depth-bounded, cycle-guarded and fail-closed: an unreadable
+ * module, an unresolvable export, a non-static engine map, or a component with
+ * no forwarding evidence yields no proof, so the sink falls to the unresolved
+ * channel with the tag recorded. The mechanism that produced the proof is
+ * recorded as provenance, never hidden.
+ */
+const UI_TIER_SEGMENTS = ['primitives', 'patterns', 'structures', 'surfaces'];
+const CANONICAL_ENGINE_NAMES = ['classic', 'modern', 'rustic'];
+const FORWARDER_MAX_DEPTH = 16;
+const FORWARDER_MAX_CARRIER_PASSES = 8;
+
+/**
+ * Canonical data-part stamping mechanisms, pinned by the module that owns the
+ * declaration rather than by the imported name. `partAttributes` carries the
+ * part in argument 0; `stampDataPart` carries it in argument 1.
+ */
+const PINNED_STAMP_HELPERS = {
+  stampDataPart: {
+    ownerModule: '/src/infrastructure/runtime/dom/foundation/data-part',
+    partArgumentIndex: 1,
+  },
+  partAttributes: {
+    ownerModule: '/src/foundation/behavior/kernel/anatomy',
+    partArgumentIndex: 0,
+  },
+};
+
+const ANALYSIS_PACKAGE_ROOT = fileURLToPath(import.meta.url).replaceAll('\\', '/').split('/scripts/lib/')[0];
+
+function moduleFileCandidates(base) {
+  return [`${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`];
+}
+
+/**
+ * Default module reader. Maps a workspace-relative module base onto disk using
+ * the package root this analyzer itself lives in, and refuses to read anything
+ * outside that package.
+ */
+function createSourceModuleReader(workspacePackageRoot) {
+  if (!workspacePackageRoot || !ANALYSIS_PACKAGE_ROOT.endsWith(workspacePackageRoot)) return null;
+  const cache = new Map();
+  return (base) => {
+    if (cache.has(base)) return cache.get(base);
+    let record = null;
+    if (base.startsWith(`${workspacePackageRoot}/src/`)) {
+      const relative = base.slice(workspacePackageRoot.length);
+      for (const candidate of moduleFileCandidates(relative)) {
+        const absolute = `${ANALYSIS_PACKAGE_ROOT}${candidate}`;
+        if (existsSync(absolute) && statSync(absolute).isFile()) {
+          record = { path: `${workspacePackageRoot}${candidate}`, text: readFileSync(absolute, 'utf8') };
+          break;
+        }
+      }
+    }
+    cache.set(base, record);
+    return record;
+  };
+}
+
+function valueBinding(bindings, name) {
+  const entries = (bindings.get(name) ?? []).filter((entry) => !entry.typeOnly);
+  return entries.length === 1 ? entries[0] : null;
+}
+
+function staticPropertyName(name) {
+  if (!name) return null;
+  if (ts.isIdentifier(name) || ts.isStringLiteralLike(name)) return name.text;
+  return null;
+}
+
+/** Value-export table for one module: local values, aliases, re-exports, stars. */
+function moduleExportTable(source) {
+  const named = new Map();
+  const stars = [];
+  for (const statement of source.statements) {
+    if (ts.isExportDeclaration(statement)) {
+      if (statement.isTypeOnly) continue;
+      const specifier = statement.moduleSpecifier;
+      const from = specifier && ts.isStringLiteralLike(specifier) ? specifier.text : null;
+      if (!statement.exportClause) {
+        if (from) stars.push(from);
+        continue;
+      }
+      if (!ts.isNamedExports(statement.exportClause)) continue;
+      for (const element of statement.exportClause.elements) {
+        if (element.isTypeOnly) continue;
+        const imported = element.propertyName?.text ?? element.name.text;
+        named.set(
+          element.name.text,
+          from ? { kind: 'reexport', from, imported } : { kind: 'local-name', localName: imported },
+        );
+      }
+      continue;
+    }
+    if (ts.isExportAssignment(statement)) {
+      if (!statement.isExportEquals) named.set('default', { kind: 'value', node: statement.expression });
+      continue;
+    }
+    const modifiers = ts.canHaveModifiers(statement) ? ts.getModifiers(statement) : undefined;
+    if (!modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) continue;
+    const isDefault = modifiers.some((modifier) => modifier.kind === ts.SyntaxKind.DefaultKeyword);
+    if (ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) {
+        if (ts.isIdentifier(declaration.name) && declaration.initializer) {
+          named.set(declaration.name.text, { kind: 'value', node: declaration.initializer });
+        }
+      }
+      continue;
+    }
+    if (ts.isFunctionDeclaration(statement)) {
+      if (isDefault) named.set('default', { kind: 'value', node: statement });
+      if (statement.name) named.set(statement.name.text, { kind: 'value', node: statement });
+    }
+  }
+  return { named, stars };
+}
+
+function createForwarderProver({ workspacePackageRoot, readModule }) {
+  const modules = new Map();
+  const componentMemo = new Map();
+  const componentActive = new Set();
+
+  function loadModule(base) {
+    if (modules.has(base)) return modules.get(base);
+    let record = null;
+    const file = readModule ? readModule(base) : null;
+    if (file) {
+      try {
+        const source = parseSource(file.text, file.path);
+        record = {
+          path: file.path,
+          dir: posix.dirname(file.path),
+          source,
+          bindings: buildBindings(source),
+          exports: moduleExportTable(source),
+        };
+      } catch {
+        record = null;
+      }
+    }
+    modules.set(base, record);
+    return record;
+  }
+
+  function resolveSpecifier(fromDir, specifier) {
+    if (!specifier) return null;
+    if (specifier.startsWith('.')) {
+      return posix.normalize(posix.join(fromDir, specifier)).replace(/\.(?:ts|tsx|mts|cts)$/, '');
+    }
+    if (specifier.startsWith('@/')) return `${workspacePackageRoot}/src/${specifier.slice(2)}`;
+    if (specifier === '@rottay/design-system') return `${workspacePackageRoot}/src/index`;
+    return null;
+  }
+
+  function importedModule(module, importSource) {
+    const base = resolveSpecifier(module.dir, importSource ?? '');
+    return base ? loadModule(base) : null;
+  }
+
+  function resolveValueDeclaration(module, name, depth) {
+    if (depth > FORWARDER_MAX_DEPTH) return null;
+    const binding = valueBinding(module.bindings, name);
+    if (!binding) return null;
+    if (binding.kind === 'variable' && binding.initializer) return { module, node: binding.initializer };
+    if (binding.kind === 'function') return { module, node: binding.declaration };
+    if (binding.kind === 'import' || binding.kind === 'default-import') {
+      const target = importedModule(module, binding.importSource);
+      if (!target) return null;
+      const exportName = binding.kind === 'default-import' ? 'default' : binding.importedName;
+      return resolveExportValue(target, exportName, depth + 1);
+    }
+    return null;
+  }
+
+  function resolveExportValue(module, name, depth) {
+    if (depth > FORWARDER_MAX_DEPTH) return null;
+    const record = module.exports.named.get(name);
+    if (record) {
+      if (record.kind === 'value') return { module, node: record.node };
+      if (record.kind === 'local-name') return resolveValueDeclaration(module, record.localName, depth + 1);
+      if (record.kind === 'reexport') {
+        const target = importedModule(module, record.from);
+        return target ? resolveExportValue(target, record.imported, depth + 1) : null;
+      }
+    }
+    for (const star of module.exports.stars) {
+      const target = importedModule(module, star);
+      const found = target ? resolveExportValue(target, name, depth + 1) : null;
+      if (found) return found;
+    }
+    return null;
+  }
+
+  function constObjectMember(module, objectNode, member) {
+    const literal = unwrap(objectNode);
+    if (!literal || !ts.isObjectLiteralExpression(literal)) return null;
+    for (const property of literal.properties) {
+      if (!ts.isPropertyAssignment(property)) continue;
+      if (staticPropertyName(property.name) === member) return property.initializer;
+    }
+    return null;
+  }
+
+  function intrinsicTagName(module, node, depth, seen = new Set()) {
+    if (depth > FORWARDER_MAX_DEPTH) return null;
+    const expression = unwrap(node);
+    if (!expression || seen.has(expression)) return null;
+    const nextSeen = new Set(seen).add(expression);
+    if (ts.isStringLiteralLike(expression)) {
+      return /^[a-z][a-z0-9-]*$/.test(expression.text) ? expression.text : null;
+    }
+    if (ts.isIdentifier(expression)) {
+      const binding = valueBinding(module.bindings, expression.text);
+      if (binding && ['parameter', 'variable'].includes(binding.kind) && binding.initializer) {
+        return intrinsicTagName(module, binding.initializer, depth + 1, nextSeen);
+      }
+      const resolved = resolveValueDeclaration(module, expression.text, depth + 1);
+      return resolved ? intrinsicTagName(resolved.module, resolved.node, depth + 1, nextSeen) : null;
+    }
+    if (ts.isPropertyAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      if (!owner || !ts.isIdentifier(owner)) return null;
+      const resolved = resolveValueDeclaration(module, owner.text, depth + 1);
+      if (!resolved) return null;
+      const member = constObjectMember(resolved.module, resolved.node, expression.name.text);
+      return member ? intrinsicTagName(resolved.module, member, depth + 1, nextSeen) : null;
+    }
+    return null;
+  }
+
+  /** Resolve a pinned stamping helper import to its owning declaration module. */
+  function resolveHelperPin(fromDir, importSource, importedName) {
+    const pin = PINNED_STAMP_HELPERS[importedName];
+    if (!pin) return null;
+    const base = resolveSpecifier(fromDir, importSource ?? '');
+    const target = base ? loadModule(base) : null;
+    const resolved = target ? resolveExportValue(target, importedName, 0) : null;
+    if (!resolved) return null;
+    const owner = resolved.module.path.replace(/\.(?:ts|tsx)$/, '').replace(/\/index$/, '');
+    if (!owner.endsWith(pin.ownerModule)) return null;
+    return {
+      mechanism: importedName,
+      partArgumentIndex: pin.partArgumentIndex,
+      ownerModule: owner,
+    };
+  }
+
+  function pinnedHelperCall(module, node) {
+    const call = unwrap(node);
+    if (!call || !ts.isCallExpression(call)) return null;
+    const callee = unwrap(call.expression);
+    if (!callee || !ts.isIdentifier(callee)) return null;
+    const binding = valueBinding(module.bindings, callee.text);
+    if (binding?.kind !== 'import') return null;
+    return resolveHelperPin(module.dir, binding.importSource, binding.importedName);
+  }
+
+  function referencesCarrier(node, carriers, seen = new Set()) {
+    const expression = unwrap(node);
+    if (!expression || seen.has(expression)) return false;
+    const nextSeen = new Set(seen).add(expression);
+    if (ts.isIdentifier(expression)) return carriers.has(expression.text);
+    if (ts.isObjectLiteralExpression(expression)) {
+      return expression.properties.some(
+        (property) => ts.isSpreadAssignment(property) && referencesCarrier(property.expression, carriers, nextSeen),
+      );
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return referencesCarrier(expression.whenTrue, carriers, nextSeen) &&
+        referencesCarrier(expression.whenFalse, carriers, nextSeen);
+    }
+    return false;
+  }
+
+  function referencesPartCarrier(node, partCarriers, carriers, seen = new Set()) {
+    const expression = unwrap(node);
+    if (!expression || seen.has(expression)) return false;
+    const nextSeen = new Set(seen).add(expression);
+    if (ts.isIdentifier(expression)) return partCarriers.has(expression.text);
+    if (
+      ts.isBinaryExpression(expression) &&
+      [ts.SyntaxKind.QuestionQuestionToken, ts.SyntaxKind.BarBarToken].includes(expression.operatorToken.kind)
+    ) {
+      return referencesPartCarrier(expression.left, partCarriers, carriers, nextSeen);
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return referencesPartCarrier(expression.whenTrue, partCarriers, carriers, nextSeen) &&
+        referencesPartCarrier(expression.whenFalse, partCarriers, carriers, nextSeen);
+    }
+    if (ts.isElementAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      const argument = unwrap(expression.argumentExpression);
+      return Boolean(
+        owner && ts.isIdentifier(owner) && carriers.has(owner.text) &&
+        argument && ts.isStringLiteralLike(argument) && argument.text === 'data-part',
+      );
+    }
+    return false;
+  }
+
+  function isReactCreateElement(module, callee) {
+    if (!callee) return false;
+    if (ts.isPropertyAccessExpression(callee)) {
+      if (callee.name.text !== 'createElement') return false;
+      const owner = unwrap(callee.expression);
+      if (!owner || !ts.isIdentifier(owner)) return false;
+      const binding = valueBinding(module.bindings, owner.text);
+      return Boolean(
+        binding && binding.importSource === 'react' &&
+        ['default-import', 'namespace-import'].includes(binding.kind),
+      );
+    }
+    if (!ts.isIdentifier(callee)) return false;
+    const binding = valueBinding(module.bindings, callee.text);
+    return binding?.kind === 'import' && binding.importSource === 'react' && binding.importedName === 'createElement';
+  }
+
+  /** Does this object pattern pull `data-part` out of the object it destructures? */
+  function patternExtractsPart(pattern) {
+    return pattern.elements.some((element) => (
+      ts.isBindingElement(element) && !element.dotDotDotToken &&
+      (staticPropertyName(element.propertyName) ?? (ts.isIdentifier(element.name) ? element.name.text : null)) === 'data-part'
+    ));
+  }
+
+  function collectCarriers(fn) {
+    const carriers = new Set();
+    const partCarriers = new Set();
+    const strippedCarriers = new Set();
+    const parameter = fn.parameters?.[0];
+    if (!parameter) return { carriers, partCarriers, strippedCarriers };
+    if (ts.isIdentifier(parameter.name)) {
+      carriers.add(parameter.name.text);
+      return { carriers, partCarriers, strippedCarriers };
+    }
+    if (!ts.isObjectBindingPattern(parameter.name)) return { carriers, partCarriers, strippedCarriers };
+    const stripsPart = patternExtractsPart(parameter.name);
+    for (const element of parameter.name.elements) {
+      if (!ts.isBindingElement(element) || !ts.isIdentifier(element.name)) continue;
+      if (element.dotDotDotToken) {
+        carriers.add(element.name.text);
+        if (stripsPart) strippedCarriers.add(element.name.text);
+        continue;
+      }
+      const key = staticPropertyName(element.propertyName) ?? element.name.text;
+      if (key === 'data-part') partCarriers.add(element.name.text);
+    }
+    return { carriers, partCarriers, strippedCarriers };
+  }
+
+  function expandCarriers(fn, carriers, partCarriers, strippedCarriers, carrierInitializers) {
+    const declarations = [];
+    (function collect(node) {
+      if (ts.isVariableDeclaration(node)) declarations.push(node);
+      ts.forEachChild(node, collect);
+    })(fn);
+    for (let pass = 0; pass < FORWARDER_MAX_CARRIER_PASSES; pass += 1) {
+      let changed = false;
+      for (const declaration of declarations) {
+        if (!declaration.initializer) continue;
+        if (ts.isObjectBindingPattern(declaration.name)) {
+          const initializer = unwrap(declaration.initializer);
+          if (!initializer || !ts.isIdentifier(initializer) || !carriers.has(initializer.text)) continue;
+          // C4. A rest binding inherits the part only when neither this pattern
+          // nor the object it destructures has already taken it away.
+          const stripsPart = patternExtractsPart(declaration.name) || strippedCarriers.has(initializer.text);
+          for (const element of declaration.name.elements) {
+            if (!ts.isBindingElement(element) || !ts.isIdentifier(element.name)) continue;
+            if (element.dotDotDotToken) {
+              if (!carriers.has(element.name.text)) {
+                carriers.add(element.name.text);
+                changed = true;
+              }
+              if (stripsPart && !strippedCarriers.has(element.name.text)) {
+                strippedCarriers.add(element.name.text);
+                changed = true;
+              }
+              continue;
+            }
+            const key = staticPropertyName(element.propertyName) ?? element.name.text;
+            if (key === 'data-part' && !partCarriers.has(element.name.text)) {
+              partCarriers.add(element.name.text);
+              changed = true;
+            }
+          }
+          continue;
+        }
+        if (!ts.isIdentifier(declaration.name) || carriers.has(declaration.name.text)) continue;
+        if (referencesCarrier(declaration.initializer, carriers)) {
+          carriers.add(declaration.name.text);
+          // Kept so C4 can follow an alias back to what it actually copied.
+          carrierInitializers.set(declaration.name.text, declaration.initializer);
+          changed = true;
+        }
+      }
+      if (!changed) break;
+    }
+  }
+
+  /**
+   * C4 accept-and-drop negation. `referencesCarrier` answers "is this the props
+   * bag?", which is not the same question as "does this still hold the caller's
+   * part?". A component that destructures `data-part` out and then spreads only
+   * the rest forwards everything EXCEPT the anatomy part — the caller's part is
+   * silently dropped, so such a spread proves nothing. The part comes back only
+   * when the same expression re-attaches it from its own part carrier, and an
+   * alias is followed to whatever it copied so the strip cannot be laundered
+   * through `const merged = { ...rest }`.
+   */
+  function carriesPartForward(node, carriers, strippedCarriers, partCarriers, carrierInitializers, seen = new Set()) {
+    const expression = unwrap(node);
+    if (!expression || seen.has(expression)) return false;
+    const nextSeen = new Set(seen).add(expression);
+    const recurse = (child, childSeen = nextSeen) =>
+      carriesPartForward(child, carriers, strippedCarriers, partCarriers, carrierInitializers, childSeen);
+    if (ts.isIdentifier(expression)) {
+      if (!carriers.has(expression.text) || strippedCarriers.has(expression.text)) return false;
+      const initializer = carrierInitializers.get(expression.text);
+      if (initializer && !seen.has(expression.text)) {
+        return recurse(initializer, new Set(nextSeen).add(expression.text));
+      }
+      return true;
+    }
+    if (ts.isObjectLiteralExpression(expression)) {
+      for (const property of expression.properties) {
+        if (
+          ts.isPropertyAssignment(property) && staticPropertyName(property.name) === 'data-part' &&
+          referencesPartCarrier(property.initializer, partCarriers, carriers)
+        ) {
+          return true;
+        }
+        if (ts.isSpreadAssignment(property) && recurse(property.expression)) return true;
+      }
+      return false;
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return recurse(expression.whenTrue) && recurse(expression.whenFalse);
+    }
+    return false;
+  }
+
+  /**
+   * Resolve a JSX tag to the third-party package it is imported from, when the
+   * tag provably originates outside this package. A bare specifier that
+   * `resolveSpecifier` cannot map into `<root>/src/` is out-of-package by
+   * construction; relative, `@/` and `@rottay/design-system` specifiers are
+   * in-package and must be proven, never trusted.
+   */
+  function externalImportSpecifier(module, name, depth, seen = new Set()) {
+    if (depth > FORWARDER_MAX_DEPTH || seen.has(name)) return null;
+    const nextSeen = new Set(seen).add(name);
+    const binding = valueBinding(module.bindings, name);
+    if (!binding) return null;
+    if (['import', 'default-import', 'namespace-import'].includes(binding.kind)) {
+      const specifier = binding.importSource ?? '';
+      if (!specifier || specifier.startsWith('.') || specifier.startsWith('@/')) return null;
+      if (specifier === '@rottay/design-system') return null;
+      return resolveSpecifier(module.dir, specifier) ? null : specifier;
+    }
+    if (binding.kind !== 'variable') return null;
+    let root = binding.initializer;
+    if (!root && binding.declaration && ts.isBindingElement(binding.declaration)) {
+      let owner = binding.declaration.parent;
+      while (owner && !ts.isVariableDeclaration(owner)) owner = owner.parent;
+      root = owner?.initializer ?? null;
+    }
+    const expression = root ? unwrap(root) : null;
+    if (!expression) return null;
+    if (ts.isIdentifier(expression)) {
+      return externalImportSpecifier(module, expression.text, depth + 1, nextSeen);
+    }
+    if (ts.isPropertyAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      return owner && ts.isIdentifier(owner)
+        ? externalImportSpecifier(module, owner.text, depth + 1, nextSeen)
+        : null;
+    }
+    return null;
+  }
+
+  function externalComponentSpecifier(module, node, depth) {
+    const expression = unwrap(node);
+    if (!expression) return null;
+    if (ts.isIdentifier(expression)) {
+      return externalImportSpecifier(module, expression.text, depth);
+    }
+    if (ts.isPropertyAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      return owner && ts.isIdentifier(owner)
+        ? externalImportSpecifier(module, owner.text, depth)
+        : null;
+    }
+    return null;
+  }
+
+  /**
+   * C1 override negation, part one: does this attribute stamp a part that is NOT
+   * the caller's? JSX resolves duplicate props last-wins, so such an attribute
+   * discards a caller part that reached the element through an earlier spread. A
+   * `data-part` whose value cannot be proven to carry the caller's part counts as
+   * an override (fail-closed); a pinned canonical helper counts when its part
+   * argument is a literal or otherwise opaque, which is exactly the shape of
+   * `partAttributes('trigger', interaction)`.
+   */
+  function literalPartOverride(module, attribute, partCarriers, carriers) {
+    if (ts.isJsxAttribute(attribute)) {
+      if (attribute.name.getText(module.source) !== 'data-part') return null;
+      const initializer = attribute.initializer;
+      if (
+        initializer && ts.isJsxExpression(initializer) &&
+        referencesPartCarrier(initializer.expression, partCarriers, carriers)
+      ) return null;
+      return 'attribute';
+    }
+    if (!ts.isJsxSpreadAttribute(attribute)) return null;
+    const pin = pinnedHelperCall(module, attribute.expression);
+    if (pin) {
+      const call = unwrap(attribute.expression);
+      const argument = call.arguments[pin.partArgumentIndex];
+      return argument && referencesPartCarrier(argument, partCarriers, carriers)
+        ? null
+        : `helper:${pin.mechanism}`;
+    }
+    const object = unwrap(attribute.expression);
+    if (object && ts.isObjectLiteralExpression(object)) {
+      const property = object.properties.find(
+        (entry) => ts.isPropertyAssignment(entry) && staticPropertyName(entry.name) === 'data-part',
+      );
+      if (property) {
+        return referencesPartCarrier(property.initializer, partCarriers, carriers) ? null : 'object-literal';
+      }
+    }
+    return null;
+  }
+
+  /**
+   * C1 override negation, part two: ORDER. Only an override written after the
+   * evidence on the same element defeats it. `Tag` is the living
+   * literal-before-spread counterexample that must stay proven — modern stamps
+   * `data-part="root"` and then spreads `restProps`, so the caller still wins —
+   * while rustic Typography and rustic Button spread the carrier first and
+   * overwrite it afterwards.
+   */
+  function overrideAfter(module, attribute, partCarriers, carriers) {
+    const attributes = attribute.parent?.properties;
+    if (!attributes) return null;
+    const index = attributes.indexOf(attribute);
+    if (index === -1) return null;
+    for (let next = index + 1; next < attributes.length; next += 1) {
+      const override = literalPartOverride(module, attributes[next], partCarriers, carriers);
+      if (override) return override;
+    }
+    return null;
+  }
+
+  /** The `React.createElement` analogue of `overrideAfter`, over a props object. */
+  function createdElementOverride(module, node, partCarriers, carriers) {
+    const object = unwrap(node);
+    if (!object || !ts.isObjectLiteralExpression(object)) return null;
+    let spreadSeen = false;
+    for (const property of object.properties) {
+      if (ts.isSpreadAssignment(property)) {
+        if (referencesCarrier(property.expression, carriers)) {
+          spreadSeen = true;
+          continue;
+        }
+        if (!spreadSeen) continue;
+        const pin = pinnedHelperCall(module, property.expression);
+        if (!pin) continue;
+        const call = unwrap(property.expression);
+        const argument = call.arguments[pin.partArgumentIndex];
+        if (!argument || !referencesPartCarrier(argument, partCarriers, carriers)) {
+          return `helper:${pin.mechanism}`;
+        }
+        continue;
+      }
+      if (!spreadSeen || !ts.isPropertyAssignment(property)) continue;
+      if (staticPropertyName(property.name) !== 'data-part') continue;
+      if (!referencesPartCarrier(property.initializer, partCarriers, carriers)) return 'property';
+    }
+    return null;
+  }
+
+  /**
+   * C2 imperative-override negation and its C5 mirror image. A pinned canonical
+   * helper called for effect writes the attribute directly onto a live node, so
+   * the part it is given decides the whole component:
+   *
+   * - `literal` — the part is NOT the caller's. The stamp re-runs on every
+   *   commit, so NOTHING this component renders can carry a caller part.
+   * - `forward` — the part IS the caller's. This is the component's real
+   *   forwarding mechanism, and C5 accepts it as a terminal in its own right
+   *   (Button classic under Ant Design, which owns its root DOM node, has no
+   *   attribute to forward through). It is deliberately recorded as
+   *   `imperative-part-forward` rather than folded into an attribute proof:
+   *   the node identity is taken from the ref/effect wiring rather than proven,
+   *   so a reviewer must see which mechanism was relied on.
+   *
+   * Only calls whose result is discarded qualify — a helper call that produces a
+   * value is attribute evidence, judged by C1.
+   */
+  function imperativeStamps(module, fn, partCarriers, carriers) {
+    const found = { literal: null, forward: null };
+    (function walk(node) {
+      if (found.literal) return;
+      if (ts.isCallExpression(node)) {
+        const parent = node.parent;
+        const forEffect = Boolean(
+          parent && (
+            ts.isExpressionStatement(parent) ||
+            (ts.isArrowFunction(parent) && parent.body === node)
+          ),
+        );
+        if (forEffect) {
+          const pin = pinnedHelperCall(module, node);
+          if (pin) {
+            const argument = node.arguments[pin.partArgumentIndex];
+            if (!argument || !referencesPartCarrier(argument, partCarriers, carriers)) {
+              found.literal = pin.mechanism;
+              return;
+            }
+            found.forward ??= pin.mechanism;
+          }
+        }
+      }
+      ts.forEachChild(node, walk);
+    })(fn);
+    return found;
+  }
+
+  /** C3. One terminal, kept legible instead of collapsed into a count. */
+  function proofSummary(result) {
+    if (!result.proven) return result.reason;
+    return result.detail ? `${result.mechanism}:${result.detail}` : result.mechanism;
+  }
+
+  function proveFunctionForwards(module, fn, depth) {
+    const { carriers, partCarriers, strippedCarriers } = collectCarriers(fn);
+    if (carriers.size === 0 && partCarriers.size === 0) {
+      return { proven: false, reason: 'no-props-carrier' };
+    }
+    const carrierInitializers = new Map();
+    expandCarriers(fn, carriers, partCarriers, strippedCarriers, carrierInitializers);
+    /** The local object a name is bound to, so a hoisted props bag can be read. */
+    const localInitializer = (name) => {
+      let found = null;
+      const walk = (node) => {
+        if (found) return;
+        if (
+          ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) &&
+          node.name.text === name && node.initializer
+        ) {
+          found = node.initializer;
+          return;
+        }
+        ts.forEachChild(node, walk);
+      };
+      walk(fn);
+      return found;
+    };
+    /**
+     * Does the value of this expression carry the caller's part? Beyond the
+     * carrier bags themselves this follows a locally hoisted props object and
+     * credits a pinned helper spread inside it, because an object assembled
+     * before the JSX (`anatomyProps`) forwards exactly as a literal one does.
+     */
+    const carriesPart = (node, seen = new Set()) => {
+      const expression = unwrap(node);
+      if (!expression || seen.has(expression)) return false;
+      const next = new Set(seen).add(expression);
+      if (carriesPartForward(expression, carriers, strippedCarriers, partCarriers, carrierInitializers)) {
+        return true;
+      }
+      if (ts.isIdentifier(expression)) {
+        if (carriers.has(expression.text)) return false;
+        const initializer = localInitializer(expression.text);
+        return initializer ? carriesPart(initializer, next) : false;
+      }
+      if (ts.isObjectLiteralExpression(expression)) {
+        for (const property of expression.properties) {
+          if (
+            ts.isPropertyAssignment(property) && staticPropertyName(property.name) === 'data-part' &&
+            referencesPartCarrier(property.initializer, partCarriers, carriers)
+          ) {
+            return true;
+          }
+          if (!ts.isSpreadAssignment(property)) continue;
+          const pin = pinnedHelperCall(module, property.expression);
+          if (pin) {
+            const call = unwrap(property.expression);
+            const argument = call.arguments[pin.partArgumentIndex];
+            if (argument && referencesPartCarrier(argument, partCarriers, carriers)) return true;
+          }
+          if (carriesPart(property.expression, next)) return true;
+        }
+        return false;
+      }
+      if (ts.isConditionalExpression(expression)) {
+        return carriesPart(expression.whenTrue, next) && carriesPart(expression.whenFalse, next);
+      }
+      return false;
+    };
+    const imperative = imperativeStamps(module, fn, partCarriers, carriers);
+    if (imperative.literal) {
+      return { proven: false, reason: `imperative-literal-stamp:${imperative.literal}` };
+    }
+    let proof = null;
+    const attempts = [];
+    // C1/C4 are component-wide, not per-branch: a sibling branch that forwards
+    // does not make a root that drops the caller part honest. Verdicts are
+    // therefore accumulated per render root, and a defeated root vetoes.
+    const NO_ROOT = Symbol('not-an-element');
+    const verdicts = new Map();
+    const rootOf = (node) => {
+      if (ts.isJsxAttribute(node) || ts.isJsxSpreadAttribute(node)) {
+        const owner = node.parent?.parent ?? null;
+        if (!owner) return NO_ROOT;
+        return ts.isJsxOpeningElement(owner) ? (owner.parent ?? owner) : owner;
+      }
+      if (ts.isCallExpression(node)) return node;
+      return NO_ROOT;
+    };
+    /** Does any spread on this element hand the root the caller's part back? */
+    const spreadRestoresPart = (element) => {
+      if (element === NO_ROOT) return false;
+      const attributes = ts.isJsxElement(element)
+        ? element.openingElement.attributes.properties
+        : element.attributes?.properties ?? null;
+      if (!attributes) return false;
+      for (const attribute of attributes) {
+        if (!ts.isJsxSpreadAttribute(attribute)) continue;
+        if (referencesCarrier(attribute.expression, carriers)) continue;
+        if (!carriesPart(attribute.expression)) continue;
+        if (overrideAfter(module, attribute, partCarriers, carriers)) continue;
+        return true;
+      }
+      return false;
+    };
+    const isRenderRoot = (element) => {
+      if (element === NO_ROOT) return false;
+      let current = element.parent;
+      while (current && current !== fn) {
+        if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current)) return false;
+        if (ts.isCallExpression(current) && isReactCreateElement(module, unwrap(current.expression))) return false;
+        current = current.parent;
+      }
+      return true;
+    };
+    const verdictFor = (node) => {
+      const key = rootOf(node);
+      let entry = verdicts.get(key);
+      if (!entry) {
+        entry = { proven: null, defeat: null, root: isRenderRoot(key) };
+        verdicts.set(key, entry);
+      }
+      return entry;
+    };
+    const record = (node, mechanism, detail) => {
+      verdictFor(node).proven ??= { mechanism, detail };
+      if (!proof) proof = { proven: true, mechanism, detail };
+    };
+    const note = (node, reason) => {
+      if (!reason) return;
+      if (attempts.length < 3) attempts.push(reason);
+      verdictFor(node).defeat ??= reason;
+    };
+    function scan(node) {
+      if (ts.isJsxSpreadAttribute(node) && referencesCarrier(node.expression, carriers)) {
+        const override = overrideAfter(module, node, partCarriers, carriers);
+        const tag = node.parent?.parent?.tagName;
+        if (override) {
+          note(node, `spread-overridden-by-literal:${override}`);
+        } else if (!carriesPart(node.expression)) {
+          note(node, 'part-stripped-carrier-spread');
+        } else if (tag && ts.isIdentifier(tag) && /^[a-z]/.test(tag.text)) {
+          record(node, 'rest-spread-intrinsic', tag.text);
+        } else if (tag) {
+          const intrinsic = intrinsicTagName(module, tag, depth + 1);
+          if (intrinsic) {
+            record(node, 'rest-spread-prop-defaulted-intrinsic', intrinsic);
+          } else {
+            const nested = proveComponentValue(module, tag, depth + 1);
+            if (nested.proven) {
+              record(node, 'rest-spread-forwarder', proofSummary(nested));
+            } else {
+              const external = externalComponentSpecifier(module, tag, depth + 1);
+              if (external) record(node, 'rest-spread-external-root', external);
+              else note(node, `spread-tag:${nested.reason}`);
+            }
+          }
+        }
+      } else if (
+        ts.isJsxAttribute(node) && node.name.getText(module.source) === 'data-part' &&
+        node.initializer && ts.isJsxExpression(node.initializer) &&
+        referencesPartCarrier(node.initializer.expression, partCarriers, carriers)
+      ) {
+        const override = overrideAfter(module, node, partCarriers, carriers);
+        if (override) note(node, `part-forward-overridden-by-literal:${override}`);
+        else record(node, 'explicit-part-forward', node.parent?.parent?.tagName?.getText(module.source) ?? '<unknown>');
+      } else if (ts.isJsxSpreadAttribute(node) || ts.isSpreadAssignment(node)) {
+        const pin = pinnedHelperCall(module, node.expression);
+        if (pin) {
+          const call = unwrap(node.expression);
+          const argument = call.arguments[pin.partArgumentIndex];
+          if (!argument || !referencesPartCarrier(argument, partCarriers, carriers)) {
+            note(node, `helper-stamps-literal-part:${pin.mechanism}`);
+          } else {
+            const override = ts.isJsxSpreadAttribute(node)
+              ? overrideAfter(module, node, partCarriers, carriers)
+              : null;
+            if (override) note(node, `helper-forward-overridden-by-literal:${override}`);
+            else record(node, 'pinned-stamp-helper', pin.mechanism);
+          }
+        }
+      } else if (ts.isCallExpression(node) && isReactCreateElement(module, unwrap(node.expression))) {
+        if (node.arguments.length >= 2 && referencesCarrier(node.arguments[1], carriers)) {
+          const override = createdElementOverride(module, node.arguments[1], partCarriers, carriers);
+          const stripped = !override && !carriesPart(node.arguments[1]);
+          const intrinsic = override || stripped ? null : intrinsicTagName(module, node.arguments[0], depth + 1);
+          if (override) {
+            note(node, `created-element-overridden-by-literal:${override}`);
+          } else if (stripped) {
+            note(node, 'part-stripped-carrier-props');
+          } else if (intrinsic) {
+            record(node, 'created-element-intrinsic', intrinsic);
+          } else {
+            const nested = proveComponentValue(module, node.arguments[0], depth + 1);
+            if (nested.proven) {
+              record(node, 'created-element-forwarder', proofSummary(nested));
+            } else {
+              const external = externalComponentSpecifier(module, node.arguments[0], depth + 1);
+              if (external) record(node, 'created-element-external-root', external);
+              else note(node, `created-element:${nested.reason}`);
+            }
+          }
+        }
+      }
+      ts.forEachChild(node, scan);
+    }
+    scan(fn);
+    // A render root that receives the carrier and drops the caller part vetoes
+    // the whole component, whatever a sibling root does: `<Text as="span">` must
+    // not be able to lose the caller anatomy just because `<Text as="p">` keeps
+    // it. Only roots are policed — an inner element that re-spreads the carrier
+    // under its own literal part is not a root and cannot lose the anatomy.
+    // A strip is cured by an imperative forward (C5) that re-stamps the node
+    // after commit; a literal override is not, because C1 is dominant.
+    const CURABLE_DEFEATS = new Set(['part-stripped-carrier-spread', 'part-stripped-carrier-props']);
+    for (const [element, verdict] of verdicts) {
+      if (!verdict.root || verdict.proven || !verdict.defeat) continue;
+      if (!CURABLE_DEFEATS.has(verdict.defeat)) {
+        return { proven: false, reason: `no-forwarding-evidence[root-drops-part:${verdict.defeat}]` };
+      }
+      // A strip is cured either by an imperative forward that re-stamps the
+      // node after commit (C5) or by a sibling spread on the same element that
+      // does carry the part: spreading a bag WITHOUT the key cannot delete a
+      // key another spread set, so position does not matter here — only a
+      // literal override written after the curing spread would.
+      if (imperative.forward) continue;
+      if (spreadRestoresPart(element)) continue;
+      return { proven: false, reason: `no-forwarding-evidence[root-drops-part:${verdict.defeat}]` };
+    }
+    if (proof) return proof;
+    // C5. Weaker than an attribute terminal, so it is only reached once every
+    // attribute path has failed, and it keeps its own mechanism name.
+    if (imperative.forward) {
+      return { proven: true, mechanism: 'imperative-part-forward', detail: imperative.forward };
+    }
+    return {
+      proven: false,
+      reason: attempts.length > 0 ? `no-forwarding-evidence[${attempts.join(';')}]` : 'no-forwarding-evidence',
+    };
+  }
+
+  function engineSwitchFactories(module, args) {
+    if (args.length < 2) return null;
+    const literal = unwrap(args[1]);
+    if (!literal || !ts.isObjectLiteralExpression(literal) || literal.properties.length === 0) return null;
+    const entries = [];
+    for (const property of literal.properties) {
+      if (!ts.isPropertyAssignment(property)) return null;
+      const engine = staticPropertyName(property.name);
+      if (!engine || !CANONICAL_ENGINE_NAMES.includes(engine)) return null;
+      const arrow = unwrap(property.initializer);
+      const body = arrow && ts.isArrowFunction(arrow) ? unwrap(arrow.body) : null;
+      const specifier = body && ts.isCallExpression(body) &&
+        body.expression.kind === ts.SyntaxKind.ImportKeyword &&
+        body.arguments.length === 1 && ts.isStringLiteralLike(body.arguments[0])
+        ? body.arguments[0].text
+        : null;
+      if (!specifier) return null;
+      const base = resolveSpecifier(module.dir, specifier);
+      if (!base) return null;
+      entries.push({ engine, base });
+    }
+    return entries;
+  }
+
+  function proveFactoryReturn(module, fn, depth) {
+    const returned = [];
+    if (ts.isArrowFunction(fn) && fn.body && !ts.isBlock(fn.body)) {
+      returned.push(fn.body);
+    } else if (fn.body) {
+      (function collect(node) {
+        if (
+          ts.isFunctionDeclaration(node) || ts.isFunctionExpression(node) ||
+          ts.isArrowFunction(node) || ts.isClassDeclaration(node)
+        ) return;
+        if (ts.isReturnStatement(node) && node.expression) returned.push(node.expression);
+        ts.forEachChild(node, collect);
+      })(fn.body);
+    }
+    if (returned.length === 0) return { proven: false, reason: 'factory-no-return' };
+    const results = returned.map((value) => proveComponentValue(module, value, depth + 1));
+    const failedReturn = results.findIndex((result) => !result.proven);
+    if (failedReturn !== -1) {
+      return { proven: false, reason: `factory-return-unproven[${results[failedReturn].reason}]` };
+    }
+    return { proven: true, mechanism: 'pinned-factory-return', detail: proofSummary(results[0]) };
+  }
+
+  function computeComponentValue(module, expression, depth) {
+    if (
+      ts.isFunctionDeclaration(expression) || ts.isFunctionExpression(expression) ||
+      ts.isArrowFunction(expression)
+    ) {
+      return proveFunctionForwards(module, expression, depth);
+    }
+    if (ts.isIdentifier(expression)) {
+      const resolved = resolveValueDeclaration(module, expression.text, depth + 1);
+      return resolved
+        ? proveComponentValue(resolved.module, resolved.node, depth + 1)
+        : { proven: false, reason: 'unresolved-identifier' };
+    }
+    if (ts.isPropertyAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      if (owner && ts.isIdentifier(owner)) {
+        const resolved = resolveValueDeclaration(module, owner.text, depth + 1);
+        const member = resolved ? constObjectMember(resolved.module, resolved.node, expression.name.text) : null;
+        if (member) return proveComponentValue(resolved.module, member, depth + 1);
+      }
+      return { proven: false, reason: 'unresolved-member' };
+    }
+    if (ts.isElementAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      if (!owner || !ts.isIdentifier(owner)) return { proven: false, reason: 'unresolved-element-access' };
+      const resolved = resolveValueDeclaration(module, owner.text, depth + 1);
+      const literal = resolved ? unwrap(resolved.node) : null;
+      if (!literal || !ts.isObjectLiteralExpression(literal) || literal.properties.length === 0) {
+        return { proven: false, reason: 'unresolved-element-access' };
+      }
+      const members = [];
+      for (const property of literal.properties) {
+        const key = ts.isPropertyAssignment(property) ? staticPropertyName(property.name) : null;
+        if (!key) return { proven: false, reason: 'non-static-component-map' };
+        members.push({ key, node: property.initializer });
+      }
+      const results = members.map((member) => proveComponentValue(resolved.module, member.node, depth + 1));
+      const failed = results.findIndex((result) => !result.proven);
+      return failed === -1
+        ? {
+          proven: true,
+          mechanism: 'component-map-complete',
+          detail: members.map((member, index) => `${member.key}=${proofSummary(results[index])}`).sort().join('+'),
+        }
+        : { proven: false, reason: `component-map-incomplete[${members[failed].key}:${results[failed].reason}]` };
+    }
+    if (
+      ts.isBinaryExpression(expression) &&
+      [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(expression.operatorToken.kind)
+    ) {
+      const left = proveComponentValue(module, expression.left, depth + 1);
+      const right = proveComponentValue(module, expression.right, depth + 1);
+      return left.proven && right.proven
+        ? { proven: true, mechanism: 'all-branches', detail: `${proofSummary(left)}+${proofSummary(right)}` }
+        : { proven: false, reason: `branch-unproven[${(left.proven ? right : left).reason}]` };
+    }
+    if (ts.isCallExpression(expression)) {
+      const args = [...expression.arguments];
+      const engines = engineSwitchFactories(module, args);
+      if (engines) {
+        const results = engines.map(({ base }) => {
+          const target = loadModule(base);
+          if (!target) return { proven: false, reason: 'engine-module-unreadable' };
+          const resolved = resolveExportValue(target, 'default', depth + 1);
+          return resolved
+            ? proveComponentValue(resolved.module, resolved.node, depth + 1)
+            : { proven: false, reason: 'engine-default-unresolved' };
+        });
+        const failed = results.findIndex((result) => !result.proven);
+        return failed === -1
+          ? {
+            proven: true,
+            mechanism: 'engine-switch-complete',
+            // C3: each engine's own terminal stays visible here, so a weaker
+            // external-root proof is never laundered into a bare engine list.
+            detail: engines
+              .map(({ engine }, index) => `${engine}=${proofSummary(results[index])}`)
+              .sort()
+              .join('+'),
+          }
+          : {
+            proven: false,
+            reason: `engine-switch-incomplete[${engines[failed].engine}:${results[failed].reason}]`,
+          };
+      }
+      const callee = unwrap(expression.expression);
+      const calleeName = callee && ts.isIdentifier(callee)
+        ? callee.text
+        : callee && ts.isPropertyAccessExpression(callee)
+        ? callee.name.text
+        : null;
+      if (['forwardRef', 'memo'].includes(calleeName) && args.length >= 1) {
+        return proveComponentValue(module, args[0], depth + 1);
+      }
+      if (
+        calleeName === 'assign' && callee && ts.isPropertyAccessExpression(callee) &&
+        ts.isIdentifier(unwrap(callee.expression)) && unwrap(callee.expression).text === 'Object' &&
+        args.length >= 1
+      ) {
+        return proveComponentValue(module, args[0], depth + 1);
+      }
+      if (callee && ts.isIdentifier(callee)) {
+        const resolved = resolveValueDeclaration(module, callee.text, depth + 1);
+        const factory = resolved ? unwrap(resolved.node) : null;
+        if (
+          factory && (ts.isFunctionDeclaration(factory) || ts.isFunctionExpression(factory) ||
+            ts.isArrowFunction(factory))
+        ) {
+          return proveFactoryReturn(resolved.module, factory, depth + 1);
+        }
+      }
+      return { proven: false, reason: 'unproven-call' };
+    }
+    return { proven: false, reason: `unsupported-${ts.SyntaxKind[expression.kind]}` };
+  }
+
+  function proveComponentValue(module, node, depth) {
+    if (depth > FORWARDER_MAX_DEPTH) return { proven: false, reason: 'depth-exhausted' };
+    const expression = unwrap(node);
+    if (!expression) return { proven: false, reason: 'unresolvable-expression' };
+    const key = `${module.path}@${expression.pos}:${expression.end}`;
+    if (componentActive.has(key)) return { proven: false, reason: 'cycle-guard' };
+    if (componentMemo.has(key)) return componentMemo.get(key);
+    componentActive.add(key);
+    let result;
+    try {
+      result = computeComponentValue(module, expression, depth);
+    } finally {
+      componentActive.delete(key);
+    }
+    componentMemo.set(key, result);
+    return result;
+  }
+
+  return {
+    proveExport(base, exportName) {
+      const module = loadModule(base);
+      if (!module) return { proven: false, reason: 'module-unreadable' };
+      const resolved = resolveExportValue(module, exportName, 0);
+      if (!resolved) return { proven: false, reason: 'export-unresolved' };
+      return proveComponentValue(resolved.module, resolved.node, 0);
+    },
+    resolveHelperPin,
+  };
+}
+
+const forwarderProverCache = new Map();
+
+function forwarderProverFor(workspacePackageRoot, injectedReader) {
+  if (injectedReader) return createForwarderProver({ workspacePackageRoot, readModule: injectedReader });
+  if (!workspacePackageRoot) return createForwarderProver({ workspacePackageRoot, readModule: null });
+  if (!forwarderProverCache.has(workspacePackageRoot)) {
+    forwarderProverCache.set(
+      workspacePackageRoot,
+      createForwarderProver({
+        workspacePackageRoot,
+        readModule: createSourceModuleReader(workspacePackageRoot),
+      }),
+    );
+  }
+  return forwarderProverCache.get(workspacePackageRoot);
+}
+
 /** Collect only exact data-part sinks with statically provable values. */
-export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
+export function collectDataPartStampsFromText(text, fileName = 'source.tsx', options = {}) {
   const source = parseSource(text, fileName);
   const bindings = buildBindings(source);
   const stamps = [];
   const unresolved = [];
 
-  function finiteStaticPartValues(node, seen = new Set(), followConstBindings = false) {
+  function bindingNameEntries(nameNode, base, out) {
+    if (ts.isIdentifier(nameNode)) {
+      out.push({ ...base, name: nameNode.text });
+      return;
+    }
+    if (!ts.isObjectBindingPattern(nameNode) && !ts.isArrayBindingPattern(nameNode)) return;
+    for (const element of nameNode.elements) {
+      if (!ts.isBindingElement(element)) continue;
+      bindingNameEntries(
+        element.name,
+        { ...base, initializer: element.initializer ?? null, declaration: element },
+        out,
+      );
+    }
+  }
+
+  /**
+   * Innermost lexical declaration of `name` visible from `useNode`. The
+   * file-global binding table cannot answer this: names like `props` and
+   * `dataPart` recur across sibling components in one file, and a global
+   * uniqueness test would fail closed on every one of them. Ambiguity inside a
+   * single scope still fails closed.
+   */
+  function lexicalBinding(useNode, name) {
+    let current = useNode?.parent ?? null;
+    while (current) {
+      const declared = [];
+      if (
+        ts.isFunctionDeclaration(current) || ts.isFunctionExpression(current) ||
+        ts.isArrowFunction(current) || ts.isMethodDeclaration(current) ||
+        ts.isConstructorDeclaration(current)
+      ) {
+        for (const parameter of current.parameters) {
+          bindingNameEntries(
+            parameter.name,
+            { kind: 'parameter', initializer: parameter.initializer ?? null, declaration: parameter },
+            declared,
+          );
+        }
+      }
+      const statements = ts.isSourceFile(current) || ts.isBlock(current) || ts.isModuleBlock(current)
+        ? current.statements
+        : null;
+      if (statements) {
+        for (const statement of statements) {
+          if (!ts.isVariableStatement(statement)) continue;
+          for (const declaration of statement.declarationList.declarations) {
+            bindingNameEntries(
+              declaration.name,
+              { kind: 'variable', initializer: declaration.initializer ?? null, declaration },
+              declared,
+            );
+          }
+        }
+      }
+      const matches = declared.filter((entry) => entry.name === name);
+      if (matches.length === 1) return matches[0];
+      if (matches.length > 1) return null;
+      current = current.parent ?? null;
+    }
+    return null;
+  }
+
+  function resolvedBinding(useNode, name) {
+    return lexicalBinding(useNode, name) ?? uniqueBinding(bindings, name);
+  }
+
+  /**
+   * Governing declaration of a binding when it is a parameter, plus the
+   * inline-object-type member key it was destructured from (null for a plain
+   * identifier parameter).
+   */
+  function parameterAnnotation(binding) {
+    if (binding?.kind !== 'parameter' || !binding.declaration) return null;
+    const declaration = binding.declaration;
+    if (ts.isParameter(declaration)) return { annotation: declaration.type ?? null, memberKey: null };
+    if (!ts.isBindingElement(declaration)) return null;
+    const pattern = declaration.parent;
+    const parameter = pattern?.parent;
+    if (!pattern || !ts.isObjectBindingPattern(pattern) || !parameter || !ts.isParameter(parameter)) return null;
+    const memberKey = staticPropertyName(declaration.propertyName) ??
+      (ts.isIdentifier(declaration.name) ? declaration.name.text : null);
+    return memberKey ? { annotation: parameter.type ?? null, memberKey } : null;
+  }
+
+  function typeLiteralMemberType(annotation, key) {
+    if (!annotation || !ts.isTypeLiteralNode(annotation)) return null;
+    for (const member of annotation.members) {
+      if (ts.isPropertySignature(member) && staticPropertyName(member.name) === key) return member.type ?? null;
+    }
+    return null;
+  }
+
+  /**
+   * R-B: keys of a same-file `as const` object literal referenced through
+   * `keyof typeof C`. Fail-closed on a missing `as const`, a computed or spread
+   * key, an imported C, or any interface/type-alias indirection.
+   */
+  function keyofConstTypeKeys(typeNode) {
+    if (!typeNode || !ts.isTypeOperatorNode(typeNode) || typeNode.operator !== ts.SyntaxKind.KeyOfKeyword) return null;
+    const query = typeNode.type;
+    if (!query || !ts.isTypeQueryNode(query) || !ts.isIdentifier(query.exprName)) return null;
+    const binding = resolvedBinding(query, query.exprName.text);
+    const declarationList = binding?.declaration?.parent;
+    if (
+      binding?.kind !== 'variable' || !binding.initializer ||
+      !declarationList || !ts.isVariableDeclarationList(declarationList) ||
+      (declarationList.flags & ts.NodeFlags.Const) === 0
+    ) return null;
+    const asConst = binding.initializer;
+    if (
+      !ts.isAsExpression(asConst) || !asConst.type || !ts.isTypeReferenceNode(asConst.type) ||
+      !ts.isIdentifier(asConst.type.typeName) || asConst.type.typeName.text !== 'const'
+    ) return null;
+    const literal = unwrap(asConst);
+    if (!literal || !ts.isObjectLiteralExpression(literal) || literal.properties.length === 0) return null;
+    const keys = new Set();
+    for (const property of literal.properties) {
+      if (ts.isSpreadAssignment(property)) return null;
+      if (!ts.isPropertyAssignment(property) && !ts.isShorthandPropertyAssignment(property)) return null;
+      const key = staticPropertyName(property.name);
+      if (!key) return null;
+      keys.add(key);
+    }
+    return keys.size > 0 && keys.size <= 16 ? keys : null;
+  }
+
+  function keyofConstParameterValues(expression) {
+    if (ts.isIdentifier(expression)) {
+      const info = parameterAnnotation(resolvedBinding(expression, expression.text));
+      if (!info) return null;
+      return info.memberKey === null
+        ? keyofConstTypeKeys(info.annotation)
+        : keyofConstTypeKeys(typeLiteralMemberType(info.annotation, info.memberKey));
+    }
+    if (ts.isPropertyAccessExpression(expression)) {
+      const owner = unwrap(expression.expression);
+      if (!owner || !ts.isIdentifier(owner)) return null;
+      const info = parameterAnnotation(resolvedBinding(owner, owner.text));
+      if (!info || info.memberKey !== null) return null;
+      return keyofConstTypeKeys(typeLiteralMemberType(info.annotation, expression.name.text));
+    }
+    return null;
+  }
+
+  /**
+   * R-A left operand: a bare identifier bound to a caller-supplied prop or
+   * parameter of the enclosing component, so every non-nullish value it can
+   * carry originates at a caller sink proven in its own right. Any other left
+   * operand (call, member access, complex expression) stays unresolved.
+   */
+  function callerSuppliedIdentifier(node, depth = 0) {
+    const expression = unwrap(node);
+    if (!expression || !ts.isIdentifier(expression) || depth > 4) return false;
+    const binding = resolvedBinding(expression, expression.text);
+    if (!binding || !['parameter', 'variable'].includes(binding.kind)) return false;
+    const declaration = binding.declaration;
+    if (!declaration) return false;
+    if (ts.isParameter(declaration)) return depth > 0;
+    if (!ts.isBindingElement(declaration) || declaration.dotDotDotToken) return false;
+    const pattern = declaration.parent;
+    if (!pattern || !ts.isObjectBindingPattern(pattern)) return false;
+    const owner = pattern.parent;
+    if (!owner) return false;
+    if (ts.isParameter(owner)) return true;
+    if (ts.isVariableDeclaration(owner)) return callerSuppliedIdentifier(owner.initializer, depth + 1);
+    return false;
+  }
+
+  function finiteStaticPartValues(node, seen = new Set(), followConstBindings = false, rules = null) {
     const expression = unwrap(node);
     if (!expression || seen.has(expression)) return null;
     const nextSeen = new Set(seen).add(expression);
     if (ts.isStringLiteralLike(expression)) return new Set([expression.text]);
     if (ts.isConditionalExpression(expression)) {
-      const left = finiteStaticPartValues(expression.whenTrue, nextSeen, followConstBindings);
-      const right = finiteStaticPartValues(expression.whenFalse, nextSeen, followConstBindings);
+      const left = finiteStaticPartValues(expression.whenTrue, nextSeen, followConstBindings, rules);
+      const right = finiteStaticPartValues(expression.whenFalse, nextSeen, followConstBindings, rules);
       if (!left || !right || left.size + right.size > 16) return null;
       return new Set([...left, ...right]);
     }
@@ -1217,14 +2976,24 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
       ts.isBinaryExpression(expression) &&
       expression.operatorToken.kind === ts.SyntaxKind.PlusToken
     ) {
-      const left = finiteStaticPartValues(expression.left, nextSeen, followConstBindings);
-      const right = finiteStaticPartValues(expression.right, nextSeen, followConstBindings);
+      const left = finiteStaticPartValues(expression.left, nextSeen, followConstBindings, rules);
+      const right = finiteStaticPartValues(expression.right, nextSeen, followConstBindings, rules);
       return left && right ? combineStrings(left, right, 16) : null;
+    }
+    if (
+      ts.isBinaryExpression(expression) &&
+      expression.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken
+    ) {
+      if (!callerSuppliedIdentifier(expression.left)) return null;
+      const fallback = finiteStaticPartValues(expression.right, nextSeen, followConstBindings, rules);
+      if (!fallback || fallback.size === 0 || fallback.size > 16) return null;
+      rules?.add('defaulted-fallback');
+      return fallback;
     }
     if (ts.isTemplateExpression(expression)) {
       let values = new Set([expression.head.text]);
       for (const span of expression.templateSpans) {
-        const substitutions = finiteStaticPartValues(span.expression, nextSeen, followConstBindings);
+        const substitutions = finiteStaticPartValues(span.expression, nextSeen, followConstBindings, rules);
         if (!substitutions) return null;
         values = combineStrings(values, substitutions, 16);
         if (!values) return null;
@@ -1240,8 +3009,13 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
         declarationList && ts.isVariableDeclarationList(declarationList) &&
         (declarationList.flags & ts.NodeFlags.Const) !== 0
       ) {
-        return finiteStaticPartValues(binding.initializer, nextSeen, true);
+        return finiteStaticPartValues(binding.initializer, nextSeen, true, rules);
       }
+    }
+    const keyofValues = keyofConstParameterValues(expression);
+    if (keyofValues) {
+      rules?.add('keyof-const-parameter');
+      return keyofValues;
     }
     return null;
   }
@@ -1258,11 +3032,15 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
   }
 
   function addCanonicalStamp(node, valueNode, syntax, sinkKind, provenance) {
-    const values = finiteStaticPartValues(valueNode);
+    const valueRules = new Set();
+    const values = finiteStaticPartValues(valueNode, new Set(), false, valueRules);
     if (!values || values.size === 0) {
       unresolvedSink(node, `${syntax}-dynamic-value`, valueNode, [], provenance);
       return;
     }
+    const stampProvenance = valueRules.size > 0
+      ? { ...provenance, valueProof: [...valueRules].sort() }
+      : provenance;
     const staticValues = [...values].sort();
     for (const part of staticValues) {
       if (!/^[a-z0-9][a-z0-9-]*$/i.test(part)) {
@@ -1275,7 +3053,7 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
         line: sourceLine(source, node),
         syntax,
         sinkKind,
-        provenance,
+        provenance: stampProvenance,
         staticValues,
       });
     }
@@ -1300,43 +3078,71 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
       suffixes.some((suffix) => resolved === suffix.replace(/^\/src/, '@'));
   }
 
-  function canonicalForwarder(tagName) {
-    if (!ts.isIdentifier(tagName)) return null;
-    const binding = uniqueBinding(bindings, tagName.text);
-    const exactModuleSuffixes = {
-      Box: [
-        '/src/ui/primitives/layout',
-        '/src/ui/primitives/layout/index',
-        '/src/ui/primitives/layout/Box',
-      ],
-      Stack: [
-        '/src/ui/primitives/layout',
-        '/src/ui/primitives/layout/index',
-        '/src/ui/primitives/layout/Stack',
-      ],
-      Text: [
-        '/src/ui/primitives/display',
-        '/src/ui/primitives/display/index',
-        '/src/ui/primitives/display/Typography',
-      ],
-    };
+  const prover = forwarderProverFor(sourcePackageRoot, options.moduleReader ?? null);
+
+  /** Normalize an import target onto a workspace-relative module base. */
+  function packageRelativeModule(resolved) {
+    if (!sourcePackageRoot) return null;
+    if (resolved === '@rottay/design-system') return `${sourcePackageRoot}/src/index`;
+    if (resolved.startsWith('@/')) return `${sourcePackageRoot}/src/${resolved.slice(2)}`;
+    if (resolved.startsWith(`${sourcePackageRoot}/src/`)) return resolved;
+    return null;
+  }
+
+  /**
+   * Canonical DS module boundary. A deep intra-family path is NOT a boundary:
+   * only the package public barrel, a UI tier/category/family module, a family
+   * `engines/<engine>` module, and a generated icon role module qualify.
+   */
+  function canonicalModuleBoundary(resolved) {
+    const absolute = packageRelativeModule(resolved);
+    if (!absolute) return null;
+    const trimmed = absolute.slice(sourcePackageRoot.length).replace(/\/index$/, '');
+    const segments = trimmed.split('/').filter(Boolean);
+    if (segments[0] !== 'src') return null;
+    const tail = segments.slice(1);
+    if (tail.length === 0) return { base: absolute, boundary: 'package-public-barrel' };
+    if (tail[0] === 'ui' && UI_TIER_SEGMENTS.includes(tail[1])) {
+      const rest = tail.slice(2);
+      if (rest.length === 0) return { base: absolute, boundary: 'ui-tier' };
+      if (rest.length === 1) return { base: absolute, boundary: 'ui-category' };
+      if (rest.length === 2) return { base: absolute, boundary: 'ui-family' };
+      if (rest.length === 4 && rest[2] === 'engines' && CANONICAL_ENGINE_NAMES.includes(rest[3])) {
+        return { base: absolute, boundary: 'ui-family-engine' };
+      }
+      return null;
+    }
     if (
-      binding?.kind !== 'import' || binding.typeOnly ||
-      !Object.hasOwn(exactModuleSuffixes, binding.importedName)
-    ) return null;
+      tail.length === 7 &&
+      tail.slice(0, 6).join('/') === 'graphics/icons/presentation/semantic/generated/roles'
+    ) {
+      return { base: absolute, boundary: 'icon-role' };
+    }
+    return null;
+  }
+
+  function canonicalForwarder(tagName) {
+    if (!ts.isIdentifier(tagName)) return { proven: false, reason: 'non-identifier-tag' };
+    const binding = valueBinding(bindings, tagName.text);
+    if (!binding || !['import', 'default-import'].includes(binding.kind)) {
+      return { proven: false, reason: 'tag-not-single-value-import' };
+    }
     const resolved = resolvedImportPath(binding.importSource ?? '');
-    const commonBarrel = resolved === '@rottay/design-system' || resolved === '@/ui/primitives' ||
-      canonicalSourceModule(resolved, ['/src/ui/primitives', '/src/ui/primitives/index']);
-    const exactModule = canonicalSourceOrAliasModule(
-      resolved,
-      exactModuleSuffixes[binding.importedName],
-    );
-    if (!commonBarrel && !exactModule) return null;
+    const boundary = canonicalModuleBoundary(resolved);
+    if (!boundary) return { proven: false, reason: 'non-canonical-module-boundary' };
+    const exportName = binding.kind === 'default-import' ? 'default' : binding.importedName;
+    const proof = prover.proveExport(boundary.base, exportName);
+    if (!proof.proven) return { proven: false, reason: `forwarding-unproven:${proof.reason}` };
     return {
-      canonicalComponent: binding.importedName,
-      localName: tagName.text,
-      importSource: binding.importSource,
-      resolvedModule: resolved,
+      proven: true,
+      provenance: {
+        canonicalComponent: exportName,
+        localName: tagName.text,
+        importSource: binding.importSource,
+        resolvedModule: resolved,
+        moduleBoundary: boundary.boundary,
+        forwardingProof: proof.detail ? `${proof.mechanism}:${proof.detail}` : proof.mechanism,
+      },
     };
   }
 
@@ -1351,28 +3157,33 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
       };
     }
     const forwarder = canonicalForwarder(tagName);
-    return forwarder
-      ? { sinkKind: 'canonical-forwarder', provenance: forwarder }
-      : null;
+    return forwarder.proven
+      ? { sinkKind: 'canonical-forwarder', provenance: forwarder.provenance }
+      : { sinkKind: null, reason: forwarder.reason };
   }
 
+  /**
+   * A pinned canonical stamping mechanism, recognized by the module that owns
+   * the declaration (resolved through re-export barrels), never by name alone.
+   */
   function canonicalStampHelper(call) {
     const callee = unwrap(call.expression);
     if (!callee || !ts.isIdentifier(callee)) return null;
-    const binding = uniqueBinding(bindings, callee.text);
-    if (
-      binding?.kind !== 'import' || binding.typeOnly || binding.importedName !== 'stampDataPart' ||
-      !canonicalSourceModule(
-        resolvedImportPath(binding.importSource ?? ''),
-        ['/src/infrastructure/runtime/dom/foundation/data-part'],
-      )
-    ) {
-      return null;
-    }
+    const binding = valueBinding(bindings, callee.text);
+    if (binding?.kind !== 'import' || !Object.hasOwn(PINNED_STAMP_HELPERS, binding.importedName)) return null;
+    const pin = prover.resolveHelperPin(
+      posix.dirname(normalizedSourcePath),
+      binding.importSource,
+      binding.importedName,
+    );
+    if (!pin) return null;
     return {
       localName: callee.text,
       importSource: binding.importSource,
       resolvedModule: resolvedImportPath(binding.importSource ?? ''),
+      mechanism: pin.mechanism,
+      ownerModule: pin.ownerModule,
+      partArgumentIndex: pin.partArgumentIndex,
     };
   }
 
@@ -1574,14 +3385,17 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
       const valueNode = node.initializer && ts.isJsxExpression(node.initializer)
         ? node.initializer.expression
         : node.initializer;
-      if (!sink) {
+      if (!sink || !sink.sinkKind) {
         const values = finiteStaticPartValues(valueNode);
         unresolvedSink(
           node,
           'jsx-custom-unproven-forwarder',
           node,
           values ? [...values] : [],
-          { tagName: node.parent?.parent?.tagName?.getText(source) ?? '<unknown>' },
+          {
+            tagName: node.parent?.parent?.tagName?.getText(source) ?? '<unknown>',
+            reason: sink?.reason ?? 'no-tag-name',
+          },
         );
       } else {
         addCanonicalStamp(
@@ -1608,7 +3422,7 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
       if (helper) {
         addCanonicalStamp(
           node,
-          node.arguments[1],
+          node.arguments[helper.partArgumentIndex],
           'canonical-data-part-helper',
           'canonical-helper',
           helper,

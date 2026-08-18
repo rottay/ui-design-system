@@ -14,7 +14,7 @@
  *
  * R2+R3: every inline style the state components used to carry (title
  * weights, skeleton geometry, banner rhythm, capability-anatomy grid) lives
- * here now, on governed tokens — the engines stamp anatomy only. No
+ * here now, on governed tokens; the engines stamp anatomy only. No
  * hardcoded color literals: the stale-banner fallbacks derive from
  * --ds-color-info via color-mix.
  *

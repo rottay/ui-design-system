@@ -94,6 +94,31 @@ const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
  * Baseline document authoring EVERY active capability, so each mutation below
  * is a value CHANGE rather than a first appearance — a first appearance would
  * prove emission (already covered elsewhere), not propagation.
+ *
+ * ## The palette is authored to CLEAR the ingestion floor, not to dodge it
+ *
+ * APCA admission is a rejection law, never a repaint: `compileTenantThemeConfig`
+ * throws when a tenant-attributable pair lands under its governed floor, and it
+ * does so before any propagation could be measured. A propagation fixture that
+ * cannot be ingested measures nothing, so the reading hierarchy here is authored
+ * explicitly rather than left to derivation, and every value was MEASURED
+ * against the ground the compiler actually emits:
+ *
+ *   light  muted    #4A463C on #FBF6EC  Lc  86.6  (floor 60)
+ *   light  disabled #6B665A on #FBF6EC  Lc  73.5  (floor 45)
+ *   dark   muted    #C4BCAB on #141311  Lc -66.0  (floor 60)
+ *   dark   disabled #A8A294 on #141311  Lc -51.5  (floor 45)
+ *   dark   on-primary (derived white) on #12655E  Lc -88.4  (floor 60)
+ *
+ * `backgroundMode: 'auto'` publishes BOTH ramps, so a clear-scheme ink is also
+ * an admission operand in dark: the light hierarchy alone is rejected against
+ * `#141311`. Both halves are therefore authored, and both stay inside the
+ * fixture's own warm editorial hue rather than collapsing to black/white.
+ *
+ * The dark seed is a deep teal (`#12655E`) rather than the light teal it was:
+ * the derived on-primary ink over the light teal measured Lc -54.1, under the
+ * body floor of 60. Nothing here relaxes a floor, exempts a pair, or repaints a
+ * compiled value — the fixture simply authors colors a tenant could publish.
  */
 const BASE_DOC: Doc = {
   schemaVersion: 1,
@@ -105,8 +130,13 @@ const BASE_DOC: Doc = {
         secondary: '#8C6D46',
         accent: '#E2725B',
         background: '#FBF6EC',
+        foreground: { muted: '#4A463C', disabled: '#6B665A' },
         backgroundMode: 'auto',
-        dark: { primary: '#4FB3AA', background: '#141311' },
+        dark: {
+          primary: '#12655E',
+          background: '#141311',
+          foreground: { muted: '#C4BCAB', disabled: '#A8A294' },
+        },
       },
       typography: {
         typePairing: 'editorial',
@@ -156,7 +186,11 @@ const MUTATORS: Record<string, Mutators> = {
     static: (b) => { b.palette!.primaryColor = '#B3123C'; return b; },
   },
   'palette.dark-mode': {
-    db: (d) => { d.visualFoundation!.general!.palette!.dark!.primary = '#FF9A3C'; return d; },
+    // A deep amber, not the light amber this once was: the mutated document is
+    // ingested by the same admission law as the baseline, and a light dark-mode
+    // seed leaves the derived on-primary ink at Lc -45.6, under the body floor.
+    // Measured: derived white over #C2610A is Lc -73.8.
+    db: (d) => { d.visualFoundation!.general!.palette!.dark!.primary = '#C2610A'; return d; },
   },
   'typography.pairing': {
     db: (d) => { d.visualFoundation!.general!.typography!.typePairing = 'geometric'; return d; },
@@ -223,15 +257,21 @@ const MUTATORS: Record<string, Mutators> = {
     db: (d) => { d.visualFoundation!.general!.experienceProfile = 'rottay/bithire-technical@1'; return d; },
   },
   'chrome.families': {
+    // A clear-scheme parchment, not the near-black this once was: the card inks
+    // are the vertical's clear-scheme inks, and dropping a dark ground under
+    // them makes the card pair unreadable and the mutated document inadmissible
+    // (measured Lc 0.0 for both `--ds-card-title-color` and
+    // `--ds-card-body-color`). The channel still MOVES, which is all this leg
+    // measures; it now moves to a value a tenant could publish.
     db: (d) => {
-      (d.visualFoundation!.advanced!.chrome as Record<string, Record<string, unknown>>).cardComponent!.bg = '#101820';
+      (d.visualFoundation!.advanced!.chrome as Record<string, Record<string, unknown>>).cardComponent!.bg = '#EFE7D6';
       return d;
     },
     static: (b) => {
       const chrome = b as unknown as { chrome?: Record<string, Record<string, unknown>> };
       chrome.chrome = {
         ...(chrome.chrome ?? {}),
-        cardComponent: { ...(chrome.chrome?.cardComponent ?? {}), bg: '#101820' },
+        cardComponent: { ...(chrome.chrome?.cardComponent ?? {}), bg: '#EFE7D6' },
       };
       return b;
     },
@@ -337,17 +377,41 @@ const ACTIVE = TENANT_CAPABILITY_REGISTRY.filter(
   (capability) => capability.status === 'active'
 );
 
+/**
+ * The artifact publishes its channels in TWO blocks, and reading only the first
+ * under-measures the system.
+ *
+ * `variables` is the unscoped root block. Everything a dual-ramp tenant author
+ * moves in the dark scheme lands in `modeDeltas` instead — `palette.dark-mode`
+ * moves `--ds-color-primary`, `--ds-color-link`, `--ds-color-border-focus` and
+ * the chart series, and NONE of them appear in the root block. A measurement
+ * that ignored the deltas would report the dark-mode dial inert, which is a
+ * defect in the instrument rather than in the system.
+ *
+ * The delta channels are keyed `mode:name` so a light value and a dark value
+ * for the same channel cannot silently cancel each other out.
+ */
 function compileDb(document: Doc) {
   const artifact = compileTenantThemeConfig(
     hydrateTenantThemeConfig(document, IDENTITY),
     { verticalEnvelope: ENVELOPE }
   );
+  const modeChannels: Record<string, string> = {};
+  for (const delta of artifact.modeDeltas ?? []) {
+    for (const [name, value] of Object.entries(delta.variables)) {
+      modeChannels[`${delta.mode}:${name}`] = value;
+    }
+  }
   return {
     variables: artifact.variables as Record<string, string>,
+    modeChannels,
     anatomy: tenantThemeAnatomyAttributes(artifact),
     normalized: JSON.stringify(artifact.normalizedAppearance),
   };
 }
+
+/** Drops the `mode:` prefix a delta channel carries, leaving the channel name. */
+const channelName = (key: string): string => key.slice(key.indexOf(':') + 1);
 
 const compileStatic = (theme: BrandTheme): Record<string, string> =>
   compileBrandTheme({ brandTheme: theme, tenantSlug: 'propagation-probe' })
@@ -386,7 +450,10 @@ describe('DB path — an authored change reaches the artifact', () => {
       if (!mutate) continue;
       const mutated = compileDb(mutate(clone(BASE_DOC)));
 
-      const channels = changedKeys(baseline.variables, mutated.variables);
+      const channels = [
+        ...changedKeys(baseline.variables, mutated.variables),
+        ...changedKeys(baseline.modeChannels, mutated.modeChannels),
+      ];
       const attributes = changedKeys(baseline.anatomy, mutated.anatomy);
       const normalizedMoved = baseline.normalized !== mutated.normalized;
 
@@ -459,6 +526,9 @@ describe('consumer reachability — the moved channel is read by production', ()
       if (mutators.db) {
         const mutated = compileDb(mutators.db(clone(BASE_DOC)));
         changedKeys(baseline.variables, mutated.variables).forEach((k) => moved.add(k));
+        changedKeys(baseline.modeChannels, mutated.modeChannels).forEach((k) =>
+          moved.add(channelName(k))
+        );
       }
       if (mutators.static) {
         const mutated = compileStatic(
@@ -492,6 +562,9 @@ describe('positive controls — the chain is not vacuous', () => {
     const typographyMoved = compileDb(MUTATORS['typography.families']!.db!(clone(BASE_DOC)));
     const paletteMoved = compileDb(MUTATORS['palette.seeds']!.db!(clone(BASE_DOC)));
 
+    // Root block only, deliberately: this control is about two CLEAR-scheme
+    // dials owning disjoint territory, and folding the dark deltas in would
+    // compare a light channel against a dark one of the same name.
     const byTypography = new Set(changedKeys(baseline.variables, typographyMoved.variables));
     const byPalette = new Set(changedKeys(baseline.variables, paletteMoved.variables));
 

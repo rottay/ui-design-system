@@ -804,6 +804,37 @@ test('G6 registry proof is a strict authored-initializer projection', () => {
 });
 
 test('G7 data-part evidence accepts only canonical static sinks', () => {
+  // B-1 deleted the hardcoded Box/Stack/Text module-suffix whitelist: a
+  // canonical forwarder is now accepted only when the proof reads the target
+  // module and shows a caller-supplied `data-part` reaching a rendered element.
+  // This fixture therefore has to SUPPLY its own module tree instead of relying
+  // on a name match. Every module below genuinely forwards, so the assertions
+  // are unchanged in value but are now proven rather than whitelisted.
+  const forwardingModule = (name) =>
+    `export function ${name}(props: { 'data-part'?: string }) { return <div {...props} />; }`;
+  const fixtureModules = new Map([
+    ['/repo/src/ui/primitives', {
+      path: '/repo/src/ui/primitives/index.tsx',
+      text: `export * from './layout/Box';\nexport * from './layout/Stack';\nexport * from './display/Typography';`,
+    }],
+    ['/repo/src/ui/primitives/layout/Box', {
+      path: '/repo/src/ui/primitives/layout/Box/index.tsx',
+      text: forwardingModule('Box'),
+    }],
+    ['/repo/src/ui/primitives/layout/Stack', {
+      path: '/repo/src/ui/primitives/layout/Stack/index.tsx',
+      text: forwardingModule('Stack'),
+    }],
+    ['/repo/src/ui/primitives/display/Typography', {
+      path: '/repo/src/ui/primitives/display/Typography/index.tsx',
+      text: forwardingModule('Text'),
+    }],
+    ['/repo/src/infrastructure/runtime/dom/foundation/data-part', {
+      path: '/repo/src/infrastructure/runtime/dom/foundation/data-part/index.ts',
+      text: `export function stampDataPart(node: Element, part: string): void { node.setAttribute('data-part', part); }`,
+    }],
+  ]);
+  const moduleReader = (base) => fixtureModules.get(base) ?? null;
   const result = collectDataPartStampsFromText(`
     import { Box, Stack, Text } from '../primitives';
     import { Box as AliasBox } from '@/ui/primitives/layout/Box';
@@ -853,7 +884,7 @@ test('G7 data-part evidence accepts only canonical static sinks', () => {
         <div {...unknown} />
       </>;
     }
-  `, '/repo/src/ui/structures/demo.tsx');
+  `, '/repo/src/ui/structures/demo.tsx', { moduleReader });
   assert.deepEqual([...new Set(result.stamps.map(({ part }) => part))].sort(), [
     'alias-box', 'alias-stack', 'alias-text', 'box', 'helper', 'one', 'root', 'stack', 'text', 'two',
   ]);
@@ -883,6 +914,203 @@ test('G7 data-part evidence accepts only canonical static sinks', () => {
   `, '/repo/src/ui/structures/unrelated.tsx');
   assert.deepEqual(unrelatedSpread.unresolved, []);
   assert.equal(evaluateDataPartUnresolved(unrelatedSpread.unresolved).ok, true);
+});
+
+test('G7/B-1 forwarder terminals: drop, override order, imperative stamps and module misses', () => {
+  // F1/F2/f3/f4. B-1 accepts a custom tag only by READING its module, so every
+  // shape below has to be supplied as a real module tree. These are the four
+  // ways the proof can be wrong: it can believe a component that accepts the
+  // caller's part and drops it (C4), believe an override that JSX itself
+  // discards (C1), miss an imperative re-stamp (C2), or silently pass a module
+  // it could not read (fail-closed).
+  const OWNER = '/repo/src/infrastructure/runtime/dom/foundation/data-part';
+  const owned = new Map([[OWNER, {
+    path: `${OWNER}/index.ts`,
+    text: `export function stampDataPart(node: Element, part: string): void { node.setAttribute('data-part', part); }`,
+  }]]);
+  const family = (name, text) => [`/repo/src/ui/primitives/layout/${name}`, {
+    path: `/repo/src/ui/primitives/layout/${name}/index.tsx`,
+    text,
+  }];
+  const probe = (name, moduleText, extra = []) => {
+    const modules = new Map([...owned, ...(moduleText ? [family(name, moduleText)] : []), ...extra]);
+    return collectDataPartStampsFromText(
+      `import { ${name} } from '@/ui/primitives/layout/${name}';\n` +
+      `export const Probe = () => <${name} data-part="caller" />;`,
+      '/repo/src/ui/structures/probe.tsx',
+      { moduleReader: (base) => modules.get(base) ?? null },
+    );
+  };
+  const provenBy = (result) => {
+    assert.equal(result.unresolved.length, 0, JSON.stringify(result.unresolved));
+    assert.deepEqual(result.stamps.map(({ part, sinkKind }) => [part, sinkKind]), [['caller', 'canonical-forwarder']]);
+    return result.stamps[0].provenance.forwardingProof;
+  };
+  const rejectedFor = (result) => {
+    assert.deepEqual(result.stamps, []);
+    assert.equal(result.unresolved.length, 1, JSON.stringify(result.unresolved));
+    assert.equal(result.unresolved[0].syntax, 'jsx-custom-unproven-forwarder');
+    assert.equal(evaluateDataPartUnresolved(result.unresolved).ok, false);
+    return result.unresolved[0].provenance.reason;
+  };
+
+  // F1. Accept-and-drop: the rest bag no longer holds the part it was asked to
+  // forward. Spreading it is honest about everything EXCEPT the anatomy part.
+  assert.match(
+    rejectedFor(probe('Dropper', `
+      export function Dropper({ 'data-part': _part, ...rest }: { 'data-part'?: string }) {
+        return <div {...rest} />;
+      }
+    `)),
+    /part-stripped-carrier-spread/,
+  );
+  // The strip cannot be laundered by copying the stripped bag into an alias,
+  // and it cannot be laundered through `React.createElement` either.
+  assert.match(
+    rejectedFor(probe('Launder', `
+      export function Launder({ 'data-part': _part, ...rest }: { 'data-part'?: string }) {
+        const merged = { ...rest };
+        return <div {...merged} />;
+      }
+    `)),
+    /part-stripped-carrier-spread/,
+  );
+  assert.match(
+    rejectedFor(probe('Created', `
+      import React from 'react';
+      export function Created({ 'data-part': _part, ...rest }: { 'data-part'?: string }) {
+        return React.createElement('div', { ...rest });
+      }
+    `)),
+    /part-stripped-carrier-props/,
+  );
+  // Re-attaching the part from its own carrier makes the same shape honest.
+  assert.equal(provenBy(probe('Readd', `
+    export function Readd({ 'data-part': dataPart, ...rest }: { 'data-part'?: string }) {
+      const merged = { ...rest, 'data-part': dataPart ?? 'root' };
+      return <div {...merged} />;
+    }
+  `)), 'rest-spread-intrinsic:div');
+
+  // F2. Order decides an override: JSX keeps the LAST duplicate prop, so a
+  // literal written after the carrier spread wins and a literal written before
+  // it is overwritten by the caller. Tag modern/rustic are the living
+  // counterexample of the second shape and must stay proven.
+  assert.match(
+    rejectedFor(probe('After', `
+      export function After(props: { 'data-part'?: string }) {
+        return <div {...props} data-part="root" />;
+      }
+    `)),
+    /spread-overridden-by-literal:attribute/,
+  );
+  assert.equal(provenBy(probe('Before', `
+    export function Before(props: { 'data-part'?: string }) {
+      return <div data-part="root" {...props} />;
+    }
+  `)), 'rest-spread-intrinsic:div');
+
+  // F2 imperative half. A pinned helper called for effect writes straight to the
+  // node, so a literal part defeats the whole component no matter what its JSX
+  // says, while the same call carrying the caller's part IS the forwarding
+  // mechanism and is recorded under its own weaker name.
+  assert.match(
+    rejectedFor(probe('Stamper', `
+      import { stampDataPart } from '../../../../infrastructure/runtime/dom/foundation/data-part';
+      export function Stamper(props: { 'data-part'?: string }) {
+        const ref = (node: HTMLElement | null) => { if (node) stampDataPart(node, 'trigger'); };
+        return <div ref={ref} {...props} />;
+      }
+    `)),
+    /imperative-literal-stamp:stampDataPart/,
+  );
+  assert.equal(provenBy(probe('Rooted', `
+    import { stampDataPart } from '../../../../infrastructure/runtime/dom/foundation/data-part';
+    export function Rooted({ 'data-part': dataPart, ...rest }: { 'data-part'?: string }) {
+      const ref = (node: HTMLElement | null) => { if (node) stampDataPart(node, dataPart ?? 'trigger'); };
+      return <div ref={ref} {...rest} />;
+    }
+  `)), 'imperative-part-forward:stampDataPart');
+  // When both mechanisms are present the attribute terminal is the stronger
+  // one and must be the terminal that gets reported.
+  assert.equal(provenBy(probe('Both', `
+    import { stampDataPart } from '../../../../infrastructure/runtime/dom/foundation/data-part';
+    export function Both({ 'data-part': dataPart, ...rest }: { 'data-part'?: string }) {
+      const ref = (node: HTMLElement | null) => { if (node) stampDataPart(node, dataPart ?? 'trigger'); };
+      return <div ref={ref} {...rest} data-part={dataPart ?? 'trigger'} />;
+    }
+  `)), 'explicit-part-forward:div');
+
+  // F2 dominance half. C1 defeats the COMPONENT, not one branch: a render root
+  // that receives the carrier and then overrides the caller's part is a lost
+  // anatomy stamp even when a sibling root forwards honestly. Without this the
+  // proof is existential and `<Text as="span">` can silently drop what
+  // `<Text as="p">` keeps — the classic-Typography shape.
+  assert.match(
+    rejectedFor(probe('Split', `
+      export function Split(props: { 'data-part'?: string; as?: string }) {
+        if (props.as === 'p') return <p {...props} />;
+        return <span {...props} data-part="root" />;
+      }
+    `)),
+    /root-drops-part:spread-overridden-by-literal:attribute/,
+  );
+  // A STRIPPED carrier is a weaker defeat than an override: the caller's part is
+  // restored when the same element also spreads a bag that carries it, because
+  // spreading a bag WITHOUT the key cannot delete a key another spread set. This
+  // is the modern-Button shape, where the part lives in a hoisted `anatomyProps`.
+  const ANATOMY = '/repo/src/foundation/behavior/kernel/anatomy';
+  const anatomy = [ANATOMY, {
+    path: `${ANATOMY}/index.ts`,
+    text: `export function partAttributes(part: string): Record<string, string> { return { 'data-part': part }; }`,
+  }];
+  assert.equal(provenBy(probe('Curable', `
+    import { partAttributes } from '../../../../foundation/behavior/kernel/anatomy';
+    export function Curable({ 'data-part': dataPart, ...rest }: { 'data-part'?: string }) {
+      const anatomyProps = { ...partAttributes(dataPart ?? 'root') };
+      return <div {...rest} {...anatomyProps} />;
+    }
+  `, [anatomy])), 'pinned-stamp-helper:partAttributes');
+  // The cure is element-scoped. Restoring the part on an INNER element leaves the
+  // root itself stripped, so the component stays unproven.
+  assert.match(
+    rejectedFor(probe('Uncured', `
+      import { partAttributes } from '../../../../foundation/behavior/kernel/anatomy';
+      export function Uncured({ 'data-part': dataPart, ...rest }: { 'data-part'?: string }) {
+        return <div {...rest}><span {...partAttributes(dataPart ?? 'root')} /></div>;
+      }
+    `, [anatomy])),
+    /root-drops-part:part-stripped-carrier-spread/,
+  );
+
+  // f3. An unreadable module is never a pass: the proof fails closed and says so.
+  assert.match(rejectedFor(probe('Missing', null)), /module-unreadable/);
+
+  // f4. The stamping helper is pinned to its OWNER module, resolved through
+  // re-export barrels and local aliases — never matched by name.
+  const helperModules = new Map([...owned, ['/repo/src/infrastructure/runtime/dom/barrel', {
+    path: '/repo/src/infrastructure/runtime/dom/barrel/index.ts',
+    text: `export { stampDataPart } from '../foundation/data-part';`,
+  }], ['/repo/src/ui/primitives/layout/impostor', {
+    path: '/repo/src/ui/primitives/layout/impostor/index.ts',
+    text: `export function stampDataPart(node: Element, part: string): void { node.setAttribute('data-part', part); }`,
+  }]]);
+  const helpers = collectDataPartStampsFromText(`
+    import { stampDataPart } from '../../infrastructure/runtime/dom/foundation/data-part';
+    import { stampDataPart as stamp } from '../../infrastructure/runtime/dom/barrel';
+    import { stampDataPart as impostor } from '../primitives/layout/impostor';
+    export function Probe(a: Element, b: Element, c: Element) {
+      stampDataPart(a, 'direct');
+      stamp(b, 'aliased');
+      impostor(c, 'impostor');
+    }
+  `, '/repo/src/ui/structures/helpers.tsx', { moduleReader: (base) => helperModules.get(base) ?? null });
+  assert.deepEqual(helpers.stamps.map(({ part, sinkKind }) => [part, sinkKind]), [
+    ['direct', 'canonical-helper'],
+    ['aliased', 'canonical-helper'],
+  ]);
+  assert.deepEqual([...new Set(helpers.stamps.map(({ provenance }) => provenance.ownerModule))], [OWNER]);
+  assert.deepEqual(helpers.unresolved, []);
 });
 
 test('G5 stale high-risk vocabulary is always red, including negations and double negatives', () => {

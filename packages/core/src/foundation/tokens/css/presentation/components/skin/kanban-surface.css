@@ -43,7 +43,7 @@
   min-inline-size: 0;
 }
 
-/* ---- mobile lane paging group: rhythm only (was inline style riding the
+/* ---- mobile lane paging group: rhythm only (was a `style`-prop declaration riding the
         dead `--ds-space-sm` channel — inert since birth, now real tokens). ---- */
 .ds-surface.ds-kanban [data-part='mobile-lane-navigation'] {
   gap: var(--ds-spacing-2, 8px);

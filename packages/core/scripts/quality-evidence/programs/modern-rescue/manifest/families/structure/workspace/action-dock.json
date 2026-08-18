@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "85ab41bd406b784b628af825099d2339ced95b4e76639e881427f18da1fc460e"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2866 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/structures/workspace/action-dock",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+    ],
+    "stableParts": [
+      "root"
+    ],
     "states": [],
+    "variantAxes": [
+      "data-mode",
+      "data-placement",
+      "data-priority",
+      "data-density"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:278, packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:279]",
+      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:141, packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:152]",
+      "the family stamps role='toolbar' [at packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:275]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-a.json": "SOURCE_BOUND",
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 1,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:277"
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "action",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:221",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:235",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:239"
+          ]
+        },
+        {
+          "part": "actions",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:284",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:221",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:228",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257"
+          ]
+        },
+        {
+          "part": "overflow",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:244",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:248"
+          ]
+        },
+        {
+          "part": "overflow-trigger",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:259",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257"
+          ]
+        }
+      ],
+      "partCensus": {
+        "partsSeenInSkinCssOnly": [
+          "actions",
+          "overflow-trigger"
+        ]
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "mode",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:121",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:122",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123"
+          ]
+        },
+        {
+          "token": "mode=fixed",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:141",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:142",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186"
+          ]
+        },
+        {
+          "token": "mode=sticky",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:152",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:194"
+          ]
+        },
+        {
+          "token": "placement",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:121",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:122",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123"
+          ]
+        },
+        {
+          "token": "placement=bottom",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:165",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167"
+          ]
+        },
+        {
+          "token": "placement=top",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:199",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:205"
+          ]
+        },
+        {
+          "token": "priority=danger",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:239"
+          ]
+        },
+        {
+          "token": "priority=primary",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:235"
+          ]
+        },
+        {
+          "token": "data-density",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:280"
+          ]
+        },
+        {
+          "token": "data-mode",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:279"
+          ]
+        },
+        {
+          "token": "data-placement",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:278"
+          ]
+        },
+        {
+          "token": "data-priority",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:222"
+          ]
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@media(pointer: coarse)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257"
+            ]
+          },
+          {
+            "token": "@media(prefers-reduced-motion: reduce)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:278",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:279"
+            ]
+          },
+          {
+            "token": "keyboard-open=true",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:190"
+            ]
+          },
+          {
+            "token": "data-keyboard-open",
+            "axis": "stamped-data-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:281"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "accessibilityAttributes": {
+        "entries": [
+          {
+            "token": "aria-label",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:230",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:263",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:276"
+            ]
+          }
+        ],
+        "reason": "ARIA semantics. An accessibility contract of the family, not a customization axis and not an interaction state; a tenant control must never be allowed to change it."
+      },
+      "instanceIdentifierAttributes": {
+        "entries": [
+          {
+            "token": "data-action-key",
+            "axis": "stamped-data-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:223",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:260"
+            ]
+          },
+          {
+            "token": "data-testid",
+            "axis": "stamped-data-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:231",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:264",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:274"
+            ]
+          }
+        ],
+        "reason": "Per-instance generated identifier. RULING R-8: not a part anchor and not a variant axis."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": true,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css": {
+            "rows": 38,
+            "layer": "engine-agnostic skin"
+          },
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css": {
+            "rows": 2,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ],
+        "note": "Reads a doubly producerless chain at skin/action-dock.css:162 - var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))) - where neither --ds-action-dock-safe-area-bottom nor --ds-safe-area-bottom is declared anywhere; only the platform env() terminal saves it. Also the cohort's single UNREAD_EMISSION: --ds-action-dock-reserved-block-start, declared skin/action-dock.css:199, read nowhere in the package."
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupEvidence": {
+          "border": {
+            "declarationCount": 3,
+            "properties": [
+              "border-block-end",
+              "border-block-start",
+              "box-sizing"
+            ]
+          },
+          "color": {
+            "declarationCount": 4,
+            "properties": [
+              "backdrop-filter",
+              "background",
+              "opacity"
+            ]
+          },
+          "elevation": {
+            "declarationCount": 4,
+            "properties": [
+              "box-shadow",
+              "z-index"
+            ]
+          },
+          "internal-channel": {
+            "declarationCount": 4,
+            "properties": []
+          },
+          "layout": {
+            "declarationCount": 4,
+            "properties": [
+              "flex",
+              "position"
+            ]
+          },
+          "motion": {
+            "declarationCount": 6,
+            "properties": [
+              "animation",
+              "transform",
+              "transition"
+            ]
+          },
+          "size": {
+            "declarationCount": 4,
+            "properties": [
+              "min-block-size",
+              "min-inline-size",
+              "width"
+            ]
+          },
+          "spacing": {
+            "declarationCount": 12,
+            "properties": [
+              "gap",
+              "inset-block-end",
+              "inset-block-start",
+              "inset-inline",
+              "margin-inline-end",
+              "padding-block-end",
+              "padding-block-start",
+              "padding-inline"
+            ]
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--ds-action-dock-padding-inline",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "padding-inline",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-spacing-4, 1rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "padding-inline",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-action-dock-z-index",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-z-index-fixed, 1200)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-z-index-fixed",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1200",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:934"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-action-dock-bg",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
+              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-action-dock-backdrop-filter",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "backdrop-filter",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "blur(var(--ds-glass-blur, 8px))",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-glass-blur",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "backdrop-filter",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "8px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:295",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:97",
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:237"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-action-dock-backdrop-filter",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "-webkit-backdrop-filter",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "blur(var(--ds-glass-blur, 8px))",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-glass-blur",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "-webkit-backdrop-filter",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "8px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:295",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:97",
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:237"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "120ms",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "120ms",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "120ms",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "transition",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:135",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "200ms",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:95",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:399",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:135",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
+            "states": [
+              "placement",
+              "mode"
+            ],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-action-dock-sticky-z-index",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode='sticky']",
+            "states": [
+              "mode=sticky",
+              "placement"
+            ],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-z-index-sticky, 1100)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-z-index-sticky",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode='sticky']",
+            "states": [
+              "mode=sticky",
+              "placement"
+            ],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1100",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:933"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-action-dock-safe-area-bottom",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:161",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "--ds-action-dock-reserved-block-end",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": null,
+            "propertyGroupSource": "UNRESOLVED",
+            "fallback": "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-safe-area-bottom",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:161",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "--ds-action-dock-reserved-block-end",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": null,
+            "propertyGroupSource": "UNRESOLVED",
+            "fallback": "env(safe-area-inset-bottom, 0px)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-action-dock-padding-block",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "padding-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "padding-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-action-dock-padding-block",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "padding-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "padding-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-action-dock-safe-area-bottom",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "padding-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-safe-area-bottom",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "padding-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "env(safe-area-inset-bottom, 0px)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-action-dock-edge-color",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "border-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-border-primary, transparent)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "border-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "transparent",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:230",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2135",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:29"
+            ],
+            "declarationSiteCount": 5
+          },
+          {
+            "variable": "--ds-action-dock-edge-highlight",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-action-dock-shadow-bottom",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent), 0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent)",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-shadow",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:240"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-color-shadow",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
+            "states": [
+              "placement=bottom"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:240"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-shell-bottom-inset",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed']",
+            "states": [
+              "placement=bottom",
+              "mode=fixed"
+            ],
+            "landsOn": "inset-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/ui/structures/shell/app-shell/index.tsx:299"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-virtual-keyboard-inset",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed']",
+            "states": [
+              "placement=bottom",
+              "mode=fixed"
+            ],
+            "landsOn": "inset-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:119",
+              "packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx:358"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-virtual-keyboard-inset",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:190",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true']",
+            "states": [
+              "placement=bottom",
+              "mode=fixed",
+              "keyboard-open=true"
+            ],
+            "landsOn": "inset-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24",
+              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:119",
+              "packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx:358"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-action-dock-safe-area-top",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:199",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "--ds-action-dock-reserved-block-start",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": null,
+            "propertyGroupSource": "UNRESOLVED",
+            "fallback": "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-safe-area-top",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:199",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "--ds-action-dock-reserved-block-start",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": null,
+            "propertyGroupSource": "UNRESOLVED",
+            "fallback": "env(safe-area-inset-top, 0px)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-action-dock-padding-block",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "padding-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "padding-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-action-dock-safe-area-top",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "padding-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-safe-area-top",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "padding-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "env(safe-area-inset-top, 0px)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-action-dock-padding-block",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "padding-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "padding-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-action-dock-edge-color",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "border-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-color-border-primary, transparent)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "border-block-end",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "transparent",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:230",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2135",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:29"
+            ],
+            "declarationSiteCount": 5
+          },
+          {
+            "variable": "--ds-action-dock-edge-highlight",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-action-dock-shadow-top",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-shadow-navbar)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-shadow-navbar",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
+            "states": [
+              "placement=top"
+            ],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/shadows.css:109"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-action-dock-gap",
+            "part": "actions",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "selector": ".rottay-action-dock__actions",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "actions",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "selector": ".rottay-action-dock__actions",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-size-touch-target",
+            "part": "actions",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257",
+            "selector": "@media (pointer: coarse) >> .rottay-action-dock__actions > :where(button, a), .rottay-action-dock__overflow-trigger",
+            "states": [
+              "@media(pointer: coarse)"
+            ],
+            "landsOn": "min-block-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "44px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "(family root)",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:980",
+            "selector": ".ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode=\"sticky\"]",
+            "states": [
+              "mode=sticky"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
+              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "part": "(family root)",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:981",
+            "selector": ".ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode=\"sticky\"]",
+            "states": [
+              "mode=sticky"
+            ],
+            "landsOn": "border-top",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:30"
+            ],
+            "declarationSiteCount": 7
+          }
+        ],
+        "readCensus": {
+          "distinctVariables": 32,
+          "totalReadSites": 56,
+          "variables": [
+            {
+              "variable": "--ds-action-dock-padding-inline",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+                  "part": "root",
+                  "landsOn": "padding-inline",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-4, 1rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-spacing-4",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+                  "part": "root",
+                  "landsOn": "padding-inline",
+                  "fallbackPresent": true,
+                  "fallback": "1rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            },
+            {
+              "variable": "--ds-action-dock-z-index",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+                  "part": "root",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-z-index-fixed, 1200)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-z-index-fixed",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+                  "part": "root",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "1200",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:934"
+            },
+            {
+              "variable": "--ds-action-dock-bg",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+                  "part": "root",
+                  "landsOn": "background",
+                  "fallbackPresent": true,
+                  "fallback": "color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-color-bg-primary",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:127",
+                  "part": "root",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:137"
+            },
+            {
+              "variable": "--ds-action-dock-backdrop-filter",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+                  "part": "root",
+                  "landsOn": "backdrop-filter",
+                  "fallbackPresent": true,
+                  "fallback": "blur(var(--ds-glass-blur, 8px))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+                  "part": "root",
+                  "landsOn": "-webkit-backdrop-filter",
+                  "fallbackPresent": true,
+                  "fallback": "blur(var(--ds-glass-blur, 8px))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-glass-blur",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+                  "part": "root",
+                  "landsOn": "backdrop-filter",
+                  "fallbackPresent": true,
+                  "fallback": "8px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+                  "part": "root",
+                  "landsOn": "-webkit-backdrop-filter",
+                  "fallbackPresent": true,
+                  "fallback": "8px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37"
+            },
+            {
+              "variable": "--ds-motion-fast",
+              "totalReadSites": 3,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+                  "part": "root",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "120ms",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+                  "part": "root",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "120ms",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+                  "part": "root",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "120ms",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "totalReadSites": 4,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+                  "part": "root",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "ease-out",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+                  "part": "root",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "ease-out",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+                  "part": "root",
+                  "landsOn": "transition",
+                  "fallbackPresent": true,
+                  "fallback": "ease-out",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:137",
+                  "part": "root",
+                  "landsOn": "animation",
+                  "fallbackPresent": true,
+                  "fallback": "ease-out",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:136",
+                  "part": "root",
+                  "landsOn": "animation",
+                  "fallbackPresent": true,
+                  "fallback": "200ms",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+            },
+            {
+              "variable": "--ds-action-dock-sticky-z-index",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+                  "part": "root",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-z-index-sticky, 1100)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-z-index-sticky",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+                  "part": "root",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "1100",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:933"
+            },
+            {
+              "variable": "--ds-action-dock-safe-area-bottom",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+                  "part": "root",
+                  "landsOn": "--ds-action-dock-reserved-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:170",
+                  "part": "root",
+                  "landsOn": "padding-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-safe-area-bottom",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+                  "part": "root",
+                  "landsOn": "--ds-action-dock-reserved-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "env(safe-area-inset-bottom, 0px)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:170",
+                  "part": "root",
+                  "landsOn": "padding-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "env(safe-area-inset-bottom, 0px)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-action-dock-padding-block",
+              "totalReadSites": 4,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+                  "part": "root",
+                  "landsOn": "padding-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-3, 0.75rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:169",
+                  "part": "root",
+                  "landsOn": "padding-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-3, 0.75rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:207",
+                  "part": "root",
+                  "landsOn": "padding-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-3, 0.75rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+                  "part": "root",
+                  "landsOn": "padding-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-3, 0.75rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-spacing-3",
+              "totalReadSites": 5,
+              "parts": [
+                "actions",
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+                  "part": "root",
+                  "landsOn": "padding-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:169",
+                  "part": "root",
+                  "landsOn": "padding-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:207",
+                  "part": "root",
+                  "landsOn": "padding-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+                  "part": "root",
+                  "landsOn": "padding-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+                  "part": "actions",
+                  "landsOn": "gap",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            },
+            {
+              "variable": "--ds-action-dock-edge-color",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+                  "part": "root",
+                  "landsOn": "border-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-border-primary, transparent)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+                  "part": "root",
+                  "landsOn": "border-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-color-border-primary, transparent)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-color-border-primary",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+                  "part": "root",
+                  "landsOn": "border-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "transparent",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+                  "part": "root",
+                  "landsOn": "border-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "transparent",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63"
+            },
+            {
+              "variable": "--ds-action-dock-edge-highlight",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:174",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": true,
+                  "fallback": "color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:213",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": true,
+                  "fallback": "color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-color-bg-elevated",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:176",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:215",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+            },
+            {
+              "variable": "--ds-action-dock-shadow-bottom",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:178",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": true,
+                  "fallback": "0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent),\n      0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-color-shadow",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:180",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:181",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:240"
+            },
+            {
+              "variable": "--ds-shell-bottom-inset",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+                  "part": "root",
+                  "landsOn": "inset-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "0px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/structures/shell/app-shell/index.tsx:299"
+            },
+            {
+              "variable": "--ds-virtual-keyboard-inset",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+                  "part": "root",
+                  "landsOn": "inset-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "0px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:190",
+                  "part": "root",
+                  "landsOn": "inset-block-end",
+                  "fallbackPresent": true,
+                  "fallback": "0px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24"
+            },
+            {
+              "variable": "--ds-action-dock-safe-area-top",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+                  "part": "root",
+                  "landsOn": "--ds-action-dock-reserved-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:208",
+                  "part": "root",
+                  "landsOn": "padding-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-safe-area-top",
+              "totalReadSites": 2,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+                  "part": "root",
+                  "landsOn": "--ds-action-dock-reserved-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "env(safe-area-inset-top, 0px)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:208",
+                  "part": "root",
+                  "landsOn": "padding-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "env(safe-area-inset-top, 0px)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-action-dock-shadow-top",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:217",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-shadow-navbar)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-shadow-navbar",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:217",
+                  "part": "root",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/shadows.css:109"
+            },
+            {
+              "variable": "--ds-action-dock-gap",
+              "totalReadSites": 1,
+              "parts": [
+                "actions"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+                  "part": "actions",
+                  "landsOn": "gap",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-spacing-3, 0.75rem)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-size-touch-target",
+              "totalReadSites": 1,
+              "parts": [
+                "overflow-trigger"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257",
+                  "part": "overflow-trigger",
+                  "landsOn": "min-block-size",
+                  "fallbackPresent": true,
+                  "fallback": "44px",
+                  "atRule": "@media (pointer: coarse)",
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--_ds-action-dock-enter-offset",
+              "totalReadSites": 1,
+              "parts": [
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:266",
+                  "part": "root",
+                  "landsOn": "transform",
+                  "fallbackPresent": true,
+                  "fallback": "6px",
+                  "atRule": "@keyframes ds-action-dock-enter",
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-action-dock-padding-inline",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-spacing-4, 1rem)",
+            "landsOn": "padding-inline"
+          },
+          {
+            "variable": "--ds-action-dock-z-index",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-z-index-fixed, 1200)",
+            "landsOn": "z-index"
+          },
+          {
+            "variable": "--ds-action-dock-bg",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+            "fallbackPresent": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)",
+            "landsOn": "background"
+          },
+          {
+            "variable": "--ds-action-dock-backdrop-filter",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "fallbackPresent": true,
+            "fallback": "blur(var(--ds-glass-blur, 8px))",
+            "landsOn": "backdrop-filter"
+          },
+          {
+            "variable": "--ds-action-dock-sticky-z-index",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-z-index-sticky, 1100)",
+            "landsOn": "z-index"
+          },
+          {
+            "variable": "--ds-action-dock-safe-area-bottom",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
+            "landsOn": "--ds-action-dock-reserved-block-end"
+          },
+          {
+            "variable": "--ds-safe-area-bottom",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+            "fallbackPresent": true,
+            "fallback": "env(safe-area-inset-bottom, 0px)",
+            "landsOn": "--ds-action-dock-reserved-block-end"
+          },
+          {
+            "variable": "--ds-action-dock-padding-block",
+            "reads": 4,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "landsOn": "padding-block-start"
+          },
+          {
+            "variable": "--ds-action-dock-edge-color",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-color-border-primary, transparent)",
+            "landsOn": "border-block-start"
+          },
+          {
+            "variable": "--ds-action-dock-edge-highlight",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:174",
+            "fallbackPresent": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
+            "landsOn": "box-shadow"
+          },
+          {
+            "variable": "--ds-action-dock-shadow-bottom",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:178",
+            "fallbackPresent": true,
+            "fallback": "0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent),\n      0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent)",
+            "landsOn": "box-shadow"
+          },
+          {
+            "variable": "--ds-action-dock-safe-area-top",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+            "landsOn": "--ds-action-dock-reserved-block-start"
+          },
+          {
+            "variable": "--ds-safe-area-top",
+            "reads": 2,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+            "fallbackPresent": true,
+            "fallback": "env(safe-area-inset-top, 0px)",
+            "landsOn": "--ds-action-dock-reserved-block-start"
+          },
+          {
+            "variable": "--ds-action-dock-shadow-top",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:217",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-shadow-navbar)",
+            "landsOn": "box-shadow"
+          },
+          {
+            "variable": "--ds-action-dock-gap",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-spacing-3, 0.75rem)",
+            "landsOn": "gap"
+          },
+          {
+            "variable": "--ds-size-touch-target",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257",
+            "fallbackPresent": true,
+            "fallback": "44px",
+            "landsOn": "min-block-size"
+          }
+        ],
+        "inertFallbackChainSample": [
+          {
+            "name": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "fallback": "1rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+          },
+          {
+            "name": "--ds-z-index-fixed",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "fallback": "1200",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:934"
+          },
+          {
+            "name": "--ds-glass-blur",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "fallback": "8px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37"
+          },
+          {
+            "name": "--ds-glass-blur",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+            "fallback": "8px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+            "fallback": "120ms",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+            "fallback": "ease-out",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+            "fallback": "120ms",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+            "fallback": "ease-out",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+            "fallback": "120ms",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+            "fallback": "ease-out",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+          },
+          {
+            "name": "--ds-motion-normal",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:136",
+            "fallback": "200ms",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:137",
+            "fallback": "ease-out",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+          }
+        ],
+        "inertFallbackChainSites": 20,
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 161,
+            "property": "--ds-action-dock-reserved-block-end",
+            "literal": "60px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 165,
+            "property": "--_ds-action-dock-enter-offset",
+            "literal": "8px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 172,
+            "property": "border-block-start",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 173,
+            "property": "box-shadow",
+            "literal": "1px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 199,
+            "property": "--ds-action-dock-reserved-block-start",
+            "literal": "60px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 211,
+            "property": "border-block-end",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "line": 257,
+            "property": "min-block-size",
+            "literal": "44px",
+            "classification": "ACCESSIBILITY_TOUCH_FLOOR_NOT_A_DEFECT",
+            "atRule": "@media (pointer: coarse)"
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css": {
+              "rows": 38,
+              "layer": "engine-agnostic skin"
+            },
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css": {
+              "rows": 2,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 40,
+            "viaUniqueDataPartInSharedClassScope": 0,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [
+            "rottay-action-dock",
+            "rottay-action-dock__action",
+            "rottay-action-dock__actions",
+            "rottay-action-dock__overflow",
+            "rottay-action-dock__overflow-trigger"
+          ],
+          "sharedClassTokens": [],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {
+            "rottay-action-dock__actions": {
+              "foreignOwnerDirectories": [
+                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/"
+              ],
+              "sampleForeignStampSites": [
+                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:39"
+              ]
+            },
+            "rottay-action-dock": {
+              "foreignOwnerDirectories": [
+                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/"
+              ],
+              "sampleForeignStampSites": [
+                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:29"
+              ]
+            }
+          },
+          "bareDsLiteralsPromotedToClass": [
+            "rottay-action-dock"
+          ],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 40
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 5,
+            "dataPart": 1,
+            "styleAttribute": 1
+          },
+          "perFile": {
+            "packages/core/src/ui/structures/workspace/action-dock/contracts/index.ts": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 154
+            },
+            "packages/core/src/ui/structures/workspace/action-dock/engines/classic/index.tsx": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 10
+            },
+            "packages/core/src/ui/structures/workspace/action-dock/engines/modern/index.tsx": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 10
+            },
+            "packages/core/src/ui/structures/workspace/action-dock/engines/rustic/index.tsx": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 10
+            },
+            "packages/core/src/ui/structures/workspace/action-dock/index.ts": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 37
+            },
+            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx": {
+              "classNameOccurrences": 5,
+              "dataPartOccurrences": 1,
+              "styleAttributeOccurrences": 1,
+              "lines": 299
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 40,
+          "customPropertyReadsAttributed": 57,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS",
+    "sourceBindingsNote": "TAREA sourceBindings-incompletos: agregado tras verificacion POR SELECTOR - action-dock.css scopeado a .rottay-action-dock (16 reglas) + collection-workspace.css (dock sticky); los canales nuevos sin socket quedan SIN adjudicar en esta tarea por orden del DT"
   },
   "themeControls": [
     {
@@ -41,7 +2894,89 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-accent-color",
+            "prop": "acentos de toolbar y filtros activos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-action-dock-accent-color",
+              "--_ds-action-dock-edge-color",
+              "--_ds-action-dock-reserved-block-end"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "VERIFICACION": [
+            "VERIFICADO SIN PINTURA PROPIA (FAM-15): el tsx no pinta clase alguna; compone primitivas; action-dock.css del segundo arbol pertenece al area del step-wizard que lo declara"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-primary",
+            "--ds-color-border-primary",
+            "--ds-color-border-secondary",
+            "--ds-color-border-subtle",
+            "--ds-color-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-elevation-3",
+            "--ds-motion-fast",
+            "--ds-motion-normal",
+            "--ds-motion-slow",
+            "--ds-spacing-1",
+            "--ds-spacing-11",
+            "--ds-spacing-12",
+            "--ds-spacing-2",
+            "--ds-spacing-20",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5",
+            "--ds-spacing-6",
+            "--ds-spacing-7",
+            "--ds-spacing-8",
+            "--ds-spacing-9",
+            "--ds-spacing-md"
+          ],
+          "SHARED-CHANNEL: ownedBy structure/workspace/selection-preview-rail (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-list-preview-panel-border"
+          ],
+          "SHARED-CHANNEL: ownedBy primitive/overlay/popover (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-popover-bg",
+            "--ds-popover-border",
+            "--ds-popover-content-color"
+          ],
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-safe-area-bottom",
+            "--ds-safe-area-top",
+            "--ds-size-touch-target",
+            "--ds-surface-card",
+            "--ds-surface-card-bg",
+            "--ds-z-dropdown",
+            "--ds-z-index-dropdown",
+            "--ds-z-index-fixed",
+            "--ds-z-index-sticky"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2984,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-font-weight-bold",
+            "--ds-font-weight-extrabold",
+            "--ds-font-weight-semibold"
+          ],
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-letter-spacing-widest"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3019,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3043,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3073,39 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-panel-radius",
+            "prop": "paneles, rails, metric cards",
+            "tier": "standard",
+            "examples": [
+              "--_ds-record-facts-radius",
+              "--_ds-stats-card-radius"
+            ],
+            "sockets": [
+              "--_ds-action-dock-panel-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "SHARED-CHANNEL: ownedBy primitive/overlay/popover (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-popover-radius"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm",
+            "--ds-radius-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3113,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "botones de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-action-dock-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3137,42 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "padding de toolbar y field-grid",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-action-dock-density-factor",
+              "--_ds-action-dock-gap",
+              "--_ds-action-dock-padding-block",
+              "--_ds-action-dock-padding-inline"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "SHARED-CHANNEL: ownedBy surface/workspace/collection-workspace (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-collection-filter-dropdown-width"
+          ],
+          "SHARED-CHANNEL: ownedBy structure/workspace/selection-preview-rail (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-list-preview-rail-gap"
+          ],
+          "SHARED-CHANNEL: ownedBy primitive/overlay/popover (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-popover-padding"
+          ],
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-shell-bottom-inset",
+            "--ds-virtual-keyboard-inset"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3180,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-grid-gap",
+            "prop": "gap de grillas de widgets y de zonas de trabajo",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-action-dock-grid-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3204,36 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-panel-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-action-dock-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "SHARED-CHANNEL: ownedBy structure/workspace/selection-preview-rail (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-list-preview-motion-duration",
+            "--ds-list-preview-motion-ease"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3241,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "plano de trabajo plano; lo flotante usa sockets overlay",
+        "source": "huecos-kimi",
+        "reasons": [],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-color-shadow",
+            "--ds-shadow-navbar"
+          ],
+          "SHARED-CHANNEL: ownedBy structure/workspace/selection-preview-rail (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-list-preview-panel-shadow"
+          ],
+          "SHARED-CHANNEL: ownedBy primitive/overlay/popover (ley FAM-08R2, pinta el elemento mas externo); esta familia consume": [
+            "--ds-popover-shadow"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3268,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "El lienzo de trabajo no compite con el contenido: acabado cero en el plano de trabajo. CANDIDATOS FAM-20b: --ds-action-dock-backdrop-filter"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-glass-blur"
+          ]
+        }
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3291,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3304,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de structures)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3321,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "los paneles del lienzo pintan su encabezado por familia",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "chrome.families",
+            "socketPattern": "--_ds-action-dock-panel-header-bg",
+            "prop": "background-color del encabezado de panel",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3342,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-rule-style",
+            "prop": "reglas de field-grid y bordes de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-action-dock-rule-style"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-divider-style",
+            "--ds-divider-width"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3378,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3396,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de structures)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3413,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3452,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-action-dock-icon-stroke-width",
+            "prop": "stroke-width de los iconos de toolbar de panel",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3473,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

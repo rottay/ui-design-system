@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "f295294d530c4dbb16f35a45862fe023185955eaf2b4066ecf7c856bb964369a"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,727 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/customization/token-inspector/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css"
+    ],
+    "stableParts": [
+      "element-info",
+      "empty",
+      "footer",
+      "header",
+      "panel",
+      "pinned-badge",
+      "title",
+      "token-name",
+      "token-row",
+      "token-swatch",
+      "token-value"
+    ],
     "states": [],
+    "variantAxes": [
+      "data-pinned",
+      "data-value-kind"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 11,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "element-info",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:90",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:180"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:100"
+          ]
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:164",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:182"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:46",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:59",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:75"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:178"
+          ]
+        },
+        {
+          "part": "pinned-badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:67",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:76",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:84"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:60"
+          ]
+        },
+        {
+          "part": "token-name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:119"
+          ]
+        },
+        {
+          "part": "token-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:108",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:118",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:125",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:136"
+          ]
+        },
+        {
+          "part": "token-swatch",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:186"
+          ]
+        },
+        {
+          "part": "token-value",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:137",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:144",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:153"
+          ]
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "pinned=false",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:76"
+          ]
+        },
+        {
+          "token": "pinned=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:84"
+          ]
+        },
+        {
+          "token": "value-kind=color",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:137"
+          ]
+        },
+        {
+          "token": "value-kind=text",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css:144"
+          ]
+        }
+      ],
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-z-tooltip",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 30,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 35,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "panel",
+            "selector": ".ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "panel",
+            "selector": ".ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 42,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 50,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 54,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-start-start-radius",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-start-end-radius",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 61,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": "> [data-part='title'][data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 70,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "pinned-badge",
+            "selector": "> [data-part='pinned-badge'][data-part='pinned-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 71,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "pinned-badge",
+            "selector": "> [data-part='pinned-badge'][data-part='pinned-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 91,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "element-info",
+            "selector": ".ds-pattern-token-inspector > [data-part='element-info'][data-part='element-info'][data-part='element-info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 92,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "element-info",
+            "selector": ".ds-pattern-token-inspector > [data-part='element-info'][data-part='element-info'][data-part='element-info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "element-info",
+            "selector": ".ds-pattern-token-inspector > [data-part='element-info'][data-part='element-info'][data-part='element-info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 101,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-token-inspector > [data-part='empty'][data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 102,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-token-inspector > [data-part='empty'][data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "token-row",
+            "selector": ".ds-pattern-token-inspector > [data-part='token-row'][data-part='token-row'][data-part='token-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "token-row",
+            "selector": ".ds-pattern-token-inspector > [data-part='token-row'][data-part='token-row'][data-part='token-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 113,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "token-row",
+            "selector": ".ds-pattern-token-inspector > [data-part='token-row'][data-part='token-row'][data-part='token-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 156,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "token-swatch",
+            "selector": "> [data-part='token-swatch'][data-part='token-swatch']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "token-swatch",
+            "selector": "> [data-part='token-swatch'][data-part='token-swatch']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 158,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-inline-end",
+            "propertyGroup": "geometry",
+            "part": "token-swatch",
+            "selector": "> [data-part='token-swatch'][data-part='token-swatch']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-token-inspector-swatch",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 159,
+            "fallback": true,
+            "fallbackValue": "transparent",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "token-swatch",
+            "selector": "> [data-part='token-swatch'][data-part='token-swatch']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-radius-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 161,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "token-swatch",
+            "selector": "> [data-part='token-swatch'][data-part='token-swatch']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 165,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "footer",
+            "selector": ".ds-pattern-token-inspector > [data-part='footer'][data-part='footer'][data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 166,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "footer",
+            "selector": ".ds-pattern-token-inspector > [data-part='footer'][data-part='footer'][data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "footer",
+            "selector": ".ds-pattern-token-inspector > [data-part='footer'][data-part='footer'][data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 31,
+            "literal": "22.5rem",
+            "text": "inline-size: 22.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 32,
+            "literal": "25rem",
+            "text": "max-block-size: 25rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 39,
+            "literal": "#1a1a1e",
+            "text": "background: #1a1a1e;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 40,
+            "literal": "#e4e4e8",
+            "text": "color: #e4e4e8;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 41,
+            "literal": "1px",
+            "text": "border: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 41,
+            "literal": "#2a2a2f",
+            "text": "border: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 43,
+            "literal": "16px",
+            "text": "box-shadow: 0 16px 48px rgba(0,0,0,0.5);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 43,
+            "literal": "48px",
+            "text": "box-shadow: 0 16px 48px rgba(0,0,0,0.5);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 43,
+            "literal": "rgba(0,0,0,0.5)",
+            "text": "box-shadow: 0 16px 48px rgba(0,0,0,0.5);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 52,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 52,
+            "literal": "#2a2a2f",
+            "text": "border-bottom: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 53,
+            "literal": "#131316",
+            "text": "background: #131316;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 62,
+            "literal": "#a0a0a5",
+            "text": "color: #a0a0a5;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 68,
+            "literal": "1px",
+            "text": "padding-block: 1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 69,
+            "literal": "6px",
+            "text": "padding-inline: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 77,
+            "literal": "#2a2a2f",
+            "text": "background: #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 79,
+            "literal": "#9d9da6",
+            "text": "color: #9d9da6;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 86,
+            "literal": "#2563eb",
+            "text": "background: #2563eb;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 87,
+            "literal": "#fff",
+            "text": "color: #fff;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 95,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid #222226;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 95,
+            "literal": "#222226",
+            "text": "border-bottom: 1px solid #222226;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 97,
+            "literal": "#9d9da6",
+            "text": "color: #9d9da6;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 105,
+            "literal": "#8a8a94",
+            "text": "color: #8a8a94;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 114,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid #1e1e22;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 114,
+            "literal": "#1e1e22",
+            "text": "border-bottom: 1px solid #1e1e22;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 121,
+            "literal": "#a0a0a5",
+            "text": "color: #a0a0a5;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 139,
+            "literal": "#60a5fa",
+            "text": "color: #60a5fa;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 145,
+            "literal": "#e4e4e8",
+            "text": "color: #e4e4e8;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 160,
+            "literal": "1px",
+            "text": "border: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 160,
+            "literal": "#2a2a2f",
+            "text": "border: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 169,
+            "literal": "1px",
+            "text": "border-top: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 169,
+            "literal": "#2a2a2f",
+            "text": "border-top: 1px solid #2a2a2f;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/token-inspector.css",
+            "line": 171,
+            "literal": "#8a8a94",
+            "text": "color: #8a8a94;"
+          }
+        ],
+        "censusRowCount": 27
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +755,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "background del swatch del token",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-token-inspector-swatch"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +790,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +815,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +840,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +865,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-md",
+            "--ds-radius-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +891,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +911,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de densidad: lo gobiernan los canales compartidos --ds-spacing-* (nivel 2), sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +931,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +959,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +979,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +999,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1019,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "estos patterns no son chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1039,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1059,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack (canales --ds-z-* compartidos)"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-z-tooltip"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1084,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de token-inspector no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1104,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1122,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1142,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1181,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1201,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

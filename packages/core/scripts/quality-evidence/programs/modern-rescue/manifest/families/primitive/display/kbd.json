@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "949be83a585d79b5c0a2b86262efe69f5a6e4959116297760545f2db04001469"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1096 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/Kbd/index.tsx",
+      "packages/core/src/ui/primitives/display/Kbd/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+    ],
+    "stableParts": [
+      "root"
+    ],
     "states": [],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The root is a semantic <kbd> element, so assistive technology keeps the keyboard-input meaning. [at packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx:39]",
+      "The key-cap frame is re-asserted under forced-colors, where the token-driven border and shadow would otherwise vanish. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:20, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:120]",
+      "The press displacement is clamped under prefers-reduced-motion. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:113]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-a",
+        "scoutArtifact": "mr-anatomy-display-a.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 1,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute on a <kbd> element + data-size axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx:39",
+            "packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx:40",
+            "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx:49"
+          ],
+          "note": "Kbd has no stable addressable part beyond its root; neither engine emits any child data-part"
+        }
+      ],
+      "partCensus": {},
+      "stateCensus": "Kbd itself is not focusable and implements no hover, focus, disabled, selected or loading distinction",
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "prefers-reduced-motion: reduce",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:113"
+            ]
+          },
+          {
+            "token": "forced-colors: active",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:120"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "unclassifiedAnchors": {
+        "entries": [
+          {
+            "token": "ancestor pressed",
+            "note": ":where(a, button, [role='button'], summary, [data-part='trigger']):active - the key cap reacts to its interactive ANCESTOR being pressed, not to a press on itself",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:103"
+            ]
+          }
+        ],
+        "status": "MEASURED, UNPLACED. Not confidently an interaction state, a variant axis, a host condition or a structural position under RULING R-5. Recorded rather than guessed; needs an owner reading."
+      },
+      "engineDivergence": {
+        "classic": {
+          "dataPartEmissions": 0,
+          "note": "engines/classic/index.tsx emits no data-part"
+        },
+        "modern": {
+          "dataPartEmissions": 1
+        },
+        "rustic": {
+          "dataPartEmissions": 1,
+          "note": "same single root part; inline literal styles instead of token reads",
+          "anchors": [
+            "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx:49"
+          ]
+        }
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "cssCustomPropertyReads": [
+          {
+            "variable": "--ds-font-family-mono",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:52",
+            "landsOn": "font-family",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "\"SF Mono\", \"Cascadia Code\", \"Fira Code\", monospace",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-100",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:58",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#f5f5f5",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:59",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#d9d9d9",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-400",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:60",
+            "landsOn": "border-bottom",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#bfbfbf",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:62",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#262626",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-family-mono",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx:55",
+            "landsOn": "font-family",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "\"SF Mono\", \"Cascadia Code\", \"Fira Code\", monospace",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-font-family",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:42",
+            "landsOn": "font-family",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-font-family-mono)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-family-mono",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:42",
+            "landsOn": "font-family",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-kbd-font-weight",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:43",
+            "landsOn": "font-weight",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "500",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-vertical-align",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:46",
+            "landsOn": "vertical-align",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "middle",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-frame",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:47",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-border)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:47",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-kbd-depth-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:48",
+            "landsOn": "border-block-end-width",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "2px",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-frame",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:51",
+            "landsOn": "border-block-end-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-border)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:51",
+            "landsOn": "border-block-end-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:51",
+            "landsOn": "border-block-end-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:53",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-radius-sm)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:53",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-kbd-surface",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:54",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-surface-inset, var(--ds-color-neutral-100))",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:54",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-neutral-100)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-neutral-100",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:54",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-kbd-ink",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:55",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-primary)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:55",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--_ds-kbd-specular",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:62",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-elevated)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:62",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-neutral-900",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:63",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:66",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:66",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:67",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:67",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:68",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:68",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-sm-min-height",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:72",
+            "landsOn": "min-block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1.25rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-sm-min-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:73",
+            "landsOn": "min-inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1.25rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-sm-padding-block",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:74",
+            "landsOn": "padding-block",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1px",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-sm-padding-inline",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:75",
+            "landsOn": "padding-inline",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.25rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:75",
+            "landsOn": "padding-inline",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-sm-font-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:76",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "clamp(0.625rem, 0.8em, 0.875rem)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-md-min-height",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:80",
+            "landsOn": "min-block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1.5rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-md-min-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:81",
+            "landsOn": "min-inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1.5rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-md-padding-block",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:82",
+            "landsOn": "padding-block",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "2px",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-md-padding-inline",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:83",
+            "landsOn": "padding-inline",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.375rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:83",
+            "landsOn": "padding-inline",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-md-font-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:84",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "clamp(0.6875rem, 0.85em, 1rem)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-lg-min-height",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:88",
+            "landsOn": "min-block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1.75rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-lg-min-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:89",
+            "landsOn": "min-inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "1.75rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-lg-padding-block",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:90",
+            "landsOn": "padding-block",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "3px",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-lg-padding-inline",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:91",
+            "landsOn": "padding-inline",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.5rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:91",
+            "landsOn": "padding-inline",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-kbd-lg-font-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:92",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "clamp(0.75rem, 0.9em, 1.125rem)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--_ds-kbd-specular",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:109",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-elevated)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:109",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--modern[data-part='root'][data-size]",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-neutral-50",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:23",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#fafafa",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--rustic[data-part='root'][data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:24",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#d1d5db",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--rustic[data-part='root'][data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-400",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:25",
+            "landsOn": "border-bottom",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#9ca3af",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--rustic[data-part='root'][data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:27",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#1f2937",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-kbd.rottay-kbd--rustic[data-part='root'][data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          }
+        ],
+        "cssCustomPropertyReadCount": 56,
+        "undeclaredReadsInThisFamily": [
+          "--_ds-kbd-specular",
+          "--ds-kbd-depth-width",
+          "--ds-kbd-font-family",
+          "--ds-kbd-font-weight",
+          "--ds-kbd-frame",
+          "--ds-kbd-ink",
+          "--ds-kbd-lg-font-size",
+          "--ds-kbd-lg-min-height",
+          "--ds-kbd-lg-min-width",
+          "--ds-kbd-lg-padding-block",
+          "--ds-kbd-lg-padding-inline",
+          "--ds-kbd-md-font-size",
+          "--ds-kbd-md-min-height",
+          "--ds-kbd-md-min-width",
+          "--ds-kbd-md-padding-block",
+          "--ds-kbd-md-padding-inline",
+          "--ds-kbd-radius",
+          "--ds-kbd-sm-font-size",
+          "--ds-kbd-sm-min-height",
+          "--ds-kbd-sm-min-width",
+          "--ds-kbd-sm-padding-block",
+          "--ds-kbd-sm-padding-inline",
+          "--ds-kbd-surface",
+          "--ds-kbd-vertical-align"
+        ],
+        "templatedReads": [],
+        "channelRedeclarations": [],
+        "cssCustomPropertyReadsRemovedAsCommentText": 0,
+        "blockedControlEdgeSitesInThisFamily": 1
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1124,45 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-kbd-ink",
+              "--_ds-kbd-surface"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-border",
+            "--ds-color-neutral-100",
+            "--ds-color-neutral-900",
+            "--ds-color-text-primary",
+            "--ds-surface-inset"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1170,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia. Canales leidos y NO cubiertos: --ds-kbd-font-weight"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1188,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en type.families/packs, no en sockets de familia. Canales leidos y NO cubiertos: --ds-kbd-font-family"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-mono"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1211,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-kbd-lg-font-size",
+              "--_ds-kbd-md-font-size",
+              "--_ds-kbd-sm-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1242,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-kbd-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1272,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1290,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-kbd-lg-min-height",
+              "--_ds-kbd-lg-min-width",
+              "--_ds-kbd-lg-padding-block",
+              "--_ds-kbd-lg-padding-inline",
+              "--_ds-kbd-md-min-height",
+              "--_ds-kbd-md-min-width",
+              "--_ds-kbd-md-padding-block",
+              "--_ds-kbd-md-padding-inline",
+              "--_ds-kbd-sm-min-height",
+              "--_ds-kbd-sm-min-width",
+              "--_ds-kbd-sm-padding-block",
+              "--_ds-kbd-sm-padding-inline"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1329,13 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1343,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1367,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de kbd no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1385,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de kbd no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1405,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "display no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de display"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1425,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1443,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1461,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-kbd-depth-width",
+              "--_ds-kbd-frame"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Correctitud estructural, no punto de customizacion": [
+            "--ds-kbd-vertical-align"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1495,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1513,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1531,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1570,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia de kbd no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1588,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

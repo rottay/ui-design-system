@@ -32,7 +32,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "44ea1d200003147937736f64b746e499e15098777e7e71131d8162f101046651"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -40,13 +40,992 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/communication/assistant/index.tsx",
+      "packages/core/src/ui/patterns/communication/assistant/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css"
+    ],
+    "stableParts": [
+      "author",
+      "caret",
+      "diff-arrow",
+      "diff-cell-wrap",
+      "diff-head-cell",
+      "diff-label",
+      "diff-spacer",
+      "divider",
+      "dot",
+      "dots",
+      "preview-cell",
+      "root",
+      "timestamp",
+      "tool-card",
+      "typing-dot"
+    ],
+    "states": [
+      "acting",
+      "error",
+      "idle",
+      "status",
+      "streaming",
+      "thinking"
+    ],
+    "variantAxes": [
+      "data-align",
+      "data-change",
+      "data-color",
+      "data-diff-side",
+      "data-motion",
+      "data-tone"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 15,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "author",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:729",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:355"
+          ]
+        },
+        {
+          "part": "caret",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:291",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:109",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:114"
+          ]
+        },
+        {
+          "part": "diff-arrow",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:503",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:533",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:260"
+          ]
+        },
+        {
+          "part": "diff-cell-wrap",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:521",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:536",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:275"
+          ]
+        },
+        {
+          "part": "diff-head-cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:500",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:504",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:256",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:282"
+          ]
+        },
+        {
+          "part": "diff-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:518",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:268"
+          ]
+        },
+        {
+          "part": "diff-spacer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:499",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:252"
+          ]
+        },
+        {
+          "part": "divider",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:513",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:286",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:381"
+          ]
+        },
+        {
+          "part": "dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:458",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:208",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:213"
+          ]
+        },
+        {
+          "part": "dots",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:331",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:140"
+          ]
+        },
+        {
+          "part": "preview-cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:524",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:539",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:281",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:292"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:230",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:275",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:322",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:370",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:453",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:490"
+          ]
+        },
+        {
+          "part": "timestamp",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:759",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:363"
+          ]
+        },
+        {
+          "part": "tool-card",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:393",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:171",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:174"
+          ]
+        },
+        {
+          "part": "typing-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:333",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:144",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:152",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:155"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "status=acting",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:234"
+          ],
+          "state": "acting"
+        },
+        {
+          "token": "status=error",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:237"
+          ],
+          "state": "error"
+        },
+        {
+          "token": "status=idle",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:217"
+          ],
+          "state": "idle"
+        },
+        {
+          "token": "status=status",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:459"
+          ],
+          "state": "status"
+        },
+        {
+          "token": "status=streaming",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:227"
+          ],
+          "state": "streaming"
+        },
+        {
+          "token": "status=thinking",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:220"
+          ],
+          "state": "thinking"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "align=alignEnd ? 'end' : 'start'",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:713"
+          ]
+        },
+        {
+          "token": "align=end",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:338"
+          ]
+        },
+        {
+          "token": "change=added",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:306"
+          ]
+        },
+        {
+          "token": "change=change",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:526",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:541"
+          ]
+        },
+        {
+          "token": "change=removed",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:298",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:302",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:312"
+          ]
+        },
+        {
+          "token": "change=updated",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:299",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:309"
+          ]
+        },
+        {
+          "token": "color=default",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:35"
+          ]
+        },
+        {
+          "token": "diff-side=after",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:504",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:536",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:540",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:306",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:309",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:312"
+          ]
+        },
+        {
+          "token": "diff-side=before",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:500",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:521",
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:525",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:292",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:298",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:299"
+          ]
+        },
+        {
+          "token": "motion=animate ? 'live' : 'static'",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:460"
+          ]
+        },
+        {
+          "token": "motion=live",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:114",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:119",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:208",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:213"
+          ]
+        },
+        {
+          "token": "motion=reduceMotion ? 'static' : 'live'",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:292"
+          ]
+        },
+        {
+          "token": "tone=danger",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:180"
+          ]
+        },
+        {
+          "token": "tone=info",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:183"
+          ]
+        },
+        {
+          "token": "tone=success",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:174"
+          ]
+        },
+        {
+          "token": "tone=tone",
+          "at": [
+            "packages/core/src/ui/patterns/communication/assistant/index.tsx:393"
+          ]
+        },
+        {
+          "token": "tone=warning",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:177"
+          ]
+        }
+      ],
+      "scoutGaps": {
+        "gaps": [
+          "1 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-inline-start",
+            "propertyGroup": "geometry",
+            "part": "caret",
+            "selector": ".ds-assistant-streaming-text [data-part='caret'][data-part='caret'][data-part='caret'][data-part='caret']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "caret",
+            "selector": ".ds-assistant-streaming-text [data-part='caret'][data-part='caret'][data-part='caret'][data-part='caret']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-assistant-caret-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 115,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial) * 2)",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "caret",
+            "selector": ".ds-assistant-streaming-text [data-part='caret'][data-motion='live']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 115,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "caret",
+            "selector": ".ds-assistant-streaming-text [data-part='caret'][data-motion='live']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 138,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-assistant-typing-indicator[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 142,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "dots",
+            "selector": ".ds-assistant-typing-indicator [data-part='dots']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 148,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-assistant-dot-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 149,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 149,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 150,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-assistant-dot-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 153,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
+            "cssProperty": "animation-delay",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2)",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation-delay",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-assistant-dot-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
+            "cssProperty": "animation-delay",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3)",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 156,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation-delay",
+            "propertyGroup": "motion",
+            "part": "typing-dot",
+            "selector": ".ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 172,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tool-card",
+            "selector": ".ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 175,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tool-card",
+            "selector": ".ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='success']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 178,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tool-card",
+            "selector": ".ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='warning']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 181,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tool-card",
+            "selector": ".ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='danger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 184,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "tool-card",
+            "selector": ".ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='info']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 201,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-assistant-status-indicator[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 204,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-part='dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 205,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-part='dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-assistant-dot-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 209,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 209,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 210,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 218,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-status='idle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 221,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-status='thinking']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shadow-glow-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 224,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-status='thinking']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 228,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": "--ds-assistant-active-signal-shadow, .ds-assistant-status-indicator [data-part='dot'][data-status='streaming']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shadow-glow-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 231,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "dot",
+            "selector": "--ds-assistant-active-signal-shadow, .ds-assistant-status-indicator [data-part='dot'][data-status='streaming']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 235,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": "--ds-assistant-active-signal-shadow, .ds-assistant-status-indicator [data-part='dot'][data-status='acting']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 238,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-assistant-status-indicator [data-part='dot'][data-status='error']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 266,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff-arrow",
+            "selector": ".ds-assistant-preview-diff-card [data-part='diff-arrow'][data-part='diff-arrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 288,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block-start",
+            "propertyGroup": "geometry",
+            "part": "divider",
+            "selector": ".ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 289,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": "divider",
+            "selector": ".ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 293,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-cell",
+            "selector": ".ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 303,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-cell",
+            "selector": ".ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 307,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-cell",
+            "selector": ".ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='added']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 310,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-cell",
+            "selector": ".ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='updated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 313,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-cell",
+            "selector": ".ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='removed']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-assistant-bubble-measure",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 342,
+            "fallback": true,
+            "fallbackValue": "80%",
+            "cssProperty": "max-inline-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-assistant-message-bubble .ds-assistant-message-bubble-card[data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 364,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "timestamp",
+            "selector": ".ds-assistant-message-bubble [data-part='timestamp'][data-part='timestamp'][data-part='timestamp'][data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/ui/patterns/communication/assistant/index.tsx",
+            "line": 268,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 88,
+            "literal": "2px",
+            "text": "transform: translateY(-2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 261,
+            "literal": "1rem",
+            "text": "inline-size: 1rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 289,
+            "literal": "1px",
+            "text": "border-top: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "line": 346,
+            "literal": "30rem",
+            "text": "@container ds-assistant-bubble (inline-size < 30rem) {"
+          }
+        ],
+        "censusRowCount": 45
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -55,7 +1034,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de assistant no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-primary-500",
+            "--ds-color-success",
+            "--ds-color-text-muted",
+            "--ds-color-warning"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -63,7 +1063,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -71,7 +1082,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -79,7 +1101,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-assistant-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -87,7 +1126,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (primitive/feedback/message). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/feedback/message",
+            "channels": [
+              "--ds-message-bubble-radius",
+              "--ds-message-density-factor"
+            ]
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -95,7 +1157,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -103,7 +1177,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la anatomia de assistant no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -111,7 +1197,36 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (primitive/feedback/notification). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/feedback/notification",
+            "channels": [
+              "--ds-notification-item-gap",
+              "--ds-notification-rule-style"
+            ]
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -119,7 +1234,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-presence-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-assistant-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-in-out",
+            "--ds-motion-glacial"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -127,7 +1267,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de assistant no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-shadow-glow-primary"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -135,7 +1292,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "legibilidad del mensaje: mate; la tinta manda",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de assistant no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -143,7 +1312,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de conversacion, no chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "communication/feedback no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -151,7 +1332,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -159,7 +1352,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack; los flotantes internos usan los canales --ds-z-* compartidos"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -167,7 +1372,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de assistant no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -175,7 +1392,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -183,7 +1410,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -191,7 +1430,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -199,7 +1469,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los ticks de estado del mensaje son iconos de la libreria",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -207,7 +1489,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

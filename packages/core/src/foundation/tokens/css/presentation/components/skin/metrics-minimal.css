@@ -137,8 +137,8 @@
 }
 
 /* row icon box — static bg/border, 3-tone icon colour, hover scale. The 48px
-   well and the transform cadence are drained from the engine's inline styles
-   (hover law: hover-capable-only, reduced-motion quiet). ---------- */
+   well and the transform cadence are drained from the engine's inline styles;
+   hover law: hover-capable-only, reduced-motion quiet. ---------- */
 
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
   inline-size: 48px;

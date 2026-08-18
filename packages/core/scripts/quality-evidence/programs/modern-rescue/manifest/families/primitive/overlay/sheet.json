@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "d4070bc2d871f29a737f9293c143c1180495312ecd18ae037c01181ac4d6bcbe"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2807 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/overlay/Sheet/contracts/index.ts",
+      "packages/core/src/ui/primitives/overlay/Sheet/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
+      "packages/core/src/ui/primitives/overlay/Sheet/index.tsx",
+      "packages/core/src/ui/primitives/overlay/Sheet/runtime/overlay-stack/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css"
+    ],
+    "stableParts": [
+      "root",
+      "backdrop",
+      "surface",
+      "handle-area",
+      "handle",
+      "header",
+      "title",
+      "body",
+      "footer",
+      "close-button"
+    ],
+    "states": [
+      "hover",
+      "focus-visible"
+    ],
+    "variantAxes": [
+      "data-placement"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "aria-modal [at src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:234, src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:182]",
+      "role-attribute [at src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:233, src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:181]",
+      "aria-label-or-labelledby [at src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:67, src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:183]",
+      "aria-describedby [at src/ui/primitives/overlay/Sheet/contracts/index.ts:69, src/ui/primitives/overlay/Sheet/engines/classic/index.tsx:70, src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:120]",
+      "focus-trap [at src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:27, src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:25]",
+      "escape-key-dismiss [at src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:154, src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:86]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:335, src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:345]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:387]",
+      "focus-visible-outline [at src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:324]",
+      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:165, src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:295, src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:332]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "feedback-overlay",
+        "scoutArtifact": "mr-anatomy-feedback-overlay.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 10,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:201",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:158",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:90",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:91",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:92",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:93"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "backdrop",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:217",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:166",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:118",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:119",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:131",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:132"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "surface",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:239",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:187",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:146",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:147",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:148",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:149"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "handle-area",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:256",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:218",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:219",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:220",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:221",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:222"
+          ]
+        },
+        {
+          "part": "handle",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:257",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:220",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:225",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:226",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:227",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:228"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:268",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:230",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:235",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:236",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:237",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:238"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:272",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:238",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:244",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:245",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:246",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:247"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "body",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:284",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:257",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:274",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:275",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:276",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:277"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:293",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:272",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:289",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:290",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:291",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:292"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "close-button",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:65",
+            "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:241",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:305",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:306",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:307",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:308"
+          ],
+          "atSiteCount": 8
+        }
+      ],
+      "partCensus": {
+        "measuredAbsence": [
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:55, src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:56, src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:59]"
+        ]
+      },
+      "stateAnchors": [
+        {
+          "token": ":hover",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:321",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:322"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": ":focus-visible",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:326",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:327"
+          ],
+          "state": "focus-visible"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-placement=bottom",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:165",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:166",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:167",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:168"
+          ]
+        },
+        {
+          "token": "data-placement=left",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:177",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:178",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:180"
+          ]
+        },
+        {
+          "token": "data-placement=right",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:177",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:178",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:180"
+          ]
+        },
+        {
+          "token": "data-placement",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:395"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "enginesPresent": [
+          "classic",
+          "modern",
+          "rustic"
+        ],
+        "classic": {
+          "emitsDataParts": [],
+          "dataPartCount": 0,
+          "dsVariableReads": 4,
+          "importsAntd": true
+        },
+        "modern": {
+          "emitsDataParts": [
+            "backdrop",
+            "body",
+            "close-button",
+            "footer",
+            "handle",
+            "handle-area",
+            "header",
+            "root",
+            "surface",
+            "title"
+          ],
+          "dataPartCount": 10,
+          "dsVariableReads": 7,
+          "importsAntd": false
+        },
+        "rustic": {
+          "emitsDataParts": [
+            "backdrop",
+            "body",
+            "close-button",
+            "footer",
+            "handle",
+            "header",
+            "root",
+            "surface",
+            "title"
+          ],
+          "dataPartCount": 9,
+          "dsVariableReads": 15,
+          "importsAntd": false
+        },
+        "summary": "DIVERGENT: the modern engine emits 10 data-part anchors and the classic engine emits none while importing antd. The modern skin CSS addresses parts exclusively through [data-part], so the anatomy bound here is NOT addressable in the classic engine."
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "22 TSX read(s) could not be attributed to an observable CSS property because the read is not a style-object value (assignment, prop default or template fragment)."
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "(scope)": [
+            "opacity",
+            "transform"
+          ],
+          "root": [
+            "display",
+            "flex",
+            "flex-direction",
+            "height",
+            "inset",
+            "min-block-size",
+            "overflow",
+            "position"
+          ],
+          "backdrop": [
+            "-webkit-backdrop-filter",
+            "backdrop-filter",
+            "background-color",
+            "background-image",
+            "inset",
+            "position"
+          ],
+          "surface": [
+            "animation",
+            "background",
+            "border",
+            "border-bottom",
+            "border-left",
+            "border-radius",
+            "border-right",
+            "box-shadow",
+            "display",
+            "flex-direction",
+            "inline-size",
+            "inset-block",
+            "inset-block-end",
+            "inset-inline",
+            "isolation",
+            "left",
+            "max-block-size",
+            "max-inline-size",
+            "min-block-size",
+            "overflow",
+            "padding-block-end",
+            "padding-block-start",
+            "padding-bottom",
+            "padding-left",
+            "padding-right",
+            "position",
+            "right",
+            "transition"
+          ],
+          "handle-area": [
+            "display",
+            "flex-shrink",
+            "justify-content",
+            "padding-block-end",
+            "padding-block-start"
+          ],
+          "handle": [
+            "background",
+            "block-size",
+            "border-radius",
+            "inline-size"
+          ],
+          "header": [
+            "align-items",
+            "border-bottom",
+            "display",
+            "flex-shrink",
+            "gap",
+            "justify-content",
+            "padding"
+          ],
+          "title": [
+            "color",
+            "flex",
+            "font-family",
+            "font-size",
+            "font-weight",
+            "letter-spacing",
+            "line-height",
+            "min-inline-size",
+            "overflow",
+            "text-overflow",
+            "white-space"
+          ],
+          "body": [
+            "-webkit-overflow-scrolling",
+            "flex",
+            "min-block-size",
+            "overflow-block",
+            "overscroll-behavior",
+            "padding",
+            "scrollbar-width"
+          ],
+          "footer": [
+            "align-items",
+            "background",
+            "background-color",
+            "border-color",
+            "border-top",
+            "display",
+            "flex-shrink",
+            "gap",
+            "justify-content",
+            "padding-block",
+            "padding-inline"
+          ],
+          "close-button": [
+            "align-items",
+            "background-color",
+            "block-size",
+            "border",
+            "border-radius",
+            "color",
+            "cursor",
+            "display",
+            "flex-shrink",
+            "inline-size",
+            "justify-content",
+            "margin-inline-start",
+            "min-block-size",
+            "min-inline-size",
+            "outline",
+            "outline-offset",
+            "transition"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelCensus": [
+          {
+            "variable": "--ds-sheet-overlay-bg",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:120",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": "var(       --ds-modal-overlay-bg,       color-mix(         in srgb,         var(--_ds-modal-scrim-tint, var(--ds-color-black))           var(--_ds-modal-scrim-strength, 80%),         transparent       )     )",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:371",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": "var(--ds-modal-overlay-bg, var(--ds-color-bg-primary))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-modal-overlay-bg",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:374",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:833",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:662"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/modal.css:44"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:122",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": "color-mix(         in srgb,         var(--_ds-modal-scrim-tint, var(--ds-color-black))           var(--_ds-modal-scrim-strength, 80%),         transparent       )",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:371",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": "var(--ds-color-bg-primary)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--_ds-modal-scrim-tint",
+            "namespace": "private",
+            "readCount": 1,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:126",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": "var(--ds-color-black)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-black",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:124",
+              "src/infrastructure/compilers/composition/tenant-theme/index.ts:1454"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:124"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:126",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--_ds-modal-scrim-strength",
+            "namespace": "private",
+            "readCount": 1,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:127",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": "80%",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-glass-scrim-tint",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "background-image"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/animations/premium.css:53"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:132",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-image",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:132",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-image",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-glass-backdrop-filter",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "backdrop"
+            ],
+            "landsOn": [
+              "-webkit-backdrop-filter",
+              "backdrop-filter"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/animations/premium.css:52",
+              "src/foundation/tokens/css/foundation/animations/premium.css:101"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:133",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "backdrop-filter",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:134",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "-webkit-backdrop-filter",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-surface-4",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:825"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:825"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:152",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:152",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "backdrop",
+              "surface"
+            ],
+            "landsOn": [
+              "background",
+              "background-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:49",
+              "src/ui/patterns/customization/brand-studio/index.tsx:137",
+              "src/ui/patterns/customization/brand-studio/index.tsx:155"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:198",
+              "src/foundation/tokens/css/foundation/themes/default.css:2120"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:155",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:157",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:371",
+                "readIn": "modern-skin-css",
+                "part": "backdrop",
+                "landsOn": "background-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-primary",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "close-button",
+              "surface"
+            ],
+            "landsOn": [
+              "background",
+              "outline"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:156"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:155",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:326",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "outline",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-surface-card",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:265"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:156",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/brand-studio/index.tsx:140",
+              "src/ui/patterns/customization/brand-studio/index.tsx:158",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:188"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:209",
+              "src/foundation/tokens/css/foundation/themes/default.css:2123"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:160",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-effect-intensity",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:160",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": "1",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-4",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1083",
+              "src/foundation/tokens/css/foundation/themes/default.css:803"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:803"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:161",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": "var(--ds-elevation-3)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-3",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1082",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:351",
+              "src/foundation/tokens/css/foundation/themes/default.css:802"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:802"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:161",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "namespace": "public",
+            "readCount": 6,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/fixtures/tenants/default.css:44",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:771"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:162",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:162",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:189",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:189",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:195",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:195",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-max-height",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "(unresolved)",
+              "max-block-size",
+              "max-height"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:167",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "max-block-size",
+                "fallback": "var(--ds-sheet-viewport-max-height)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/classic/index.tsx:137",
+                "readIn": "classic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-sheet-viewport-max-height, 85vh)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:130",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "max-height",
+                "fallback": "var(--ds-sheet-viewport-max-height, 85vh)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-viewport-max-height",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "(unresolved)",
+              "max-block-size",
+              "max-height"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/engines/classic/theme.css:930",
+              "src/foundation/tokens/css/runtime/engines/classic/theme.css:935",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:90"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:167",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "max-block-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/classic/index.tsx:137",
+                "readIn": "classic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "85vh",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:130",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "max-height",
+                "fallback": "85vh",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-min-height",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "min-block-size",
+              "min-height"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:168",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "min-block-size",
+                "fallback": "30vh",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:131",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "min-height",
+                "fallback": "30vh",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-safe-area-bottom",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "padding-block-end",
+              "padding-bottom"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:169",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding-bottom",
+                "fallback": "env(safe-area-inset-bottom, 0px)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:180",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding-block-end",
+                "fallback": "env(safe-area-inset-bottom, 0px)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/classic/index.tsx:153",
+                "readIn": "classic",
+                "part": null,
+                "landsOn": "padding-bottom",
+                "fallback": "env(safe-area-inset-bottom, 0px)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-side-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "inline-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:177",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "inline-size",
+                "fallback": "380px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-safe-area-top",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "padding-block-start"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:179",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding-block-start",
+                "fallback": "env(safe-area-inset-top, 0px)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-border",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:291"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:201",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": "var(--ds-color-border-subtle)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "footer",
+              "header",
+              "surface"
+            ],
+            "landsOn": [
+              "border",
+              "border-bottom",
+              "border-top"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:710",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:973",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1161"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:232",
+              "src/foundation/tokens/css/foundation/themes/default.css:2112"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:201",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:241",
+                "readIn": "modern-skin-css",
+                "part": "header",
+                "landsOn": "border-bottom",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:296",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "border-top",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-handle-area-padding-block-start",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "handle-area"
+            ],
+            "landsOn": [
+              "padding-block-start"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:221",
+                "readIn": "modern-skin-css",
+                "part": "handle-area",
+                "landsOn": "padding-block-start",
+                "fallback": "12px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-handle-area-padding-block-end",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "handle-area"
+            ],
+            "landsOn": [
+              "padding-block-end"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:222",
+                "readIn": "modern-skin-css",
+                "part": "handle-area",
+                "landsOn": "padding-block-end",
+                "fallback": "4px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-handle-inline-size",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "handle"
+            ],
+            "landsOn": [
+              "inline-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:225",
+                "readIn": "modern-skin-css",
+                "part": "handle",
+                "landsOn": "inline-size",
+                "fallback": "40px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-handle-block-size",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "handle"
+            ],
+            "landsOn": [
+              "block-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:226",
+                "readIn": "modern-skin-css",
+                "part": "handle",
+                "landsOn": "block-size",
+                "fallback": "4px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "handle"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/brand-studio/index.tsx:148",
+              "src/ui/patterns/customization/brand-studio/index.tsx:166",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:231",
+              "src/foundation/tokens/css/foundation/themes/default.css:2136"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:227",
+                "readIn": "modern-skin-css",
+                "part": "handle",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "footer",
+              "header"
+            ],
+            "landsOn": [
+              "gap",
+              "padding-block"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:686",
+              "src/foundation/tokens/css/foundation/base/density.css:80"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:239",
+                "readIn": "modern-skin-css",
+                "part": "header",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:294",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "padding-block",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-header-padding",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "header"
+            ],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:240",
+                "readIn": "modern-skin-css",
+                "part": "header",
+                "landsOn": "padding",
+                "fallback": "12px 16px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "close-button",
+              "title"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/ui/patterns/customization/brand-studio/index.tsx:143"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:217",
+              "src/foundation/tokens/css/foundation/themes/default.css:2128"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:249",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:322",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-family-heading",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
+              "src/ui/primitives/display/Typography/Typography.stories.tsx:458",
+              "src/ui/primitives/display/Typography/Typography.stories.tsx:464"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:507"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:250",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-family",
+                "fallback": "var(--ds-font-family-base)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-family-base",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:506"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:250",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-family",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:112",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-family",
+                "fallback": "inherit",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-title-size",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:251",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-size",
+                "fallback": "var(--ds-font-size-lg)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-size-lg",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/fixtures/tenants/default.css:32",
+              "src/foundation/tokens/css/foundation/themes/default.css:611",
+              "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:121"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:611"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:251",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-size",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "font-weight"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:624"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:624"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:252",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-weight",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-letter-spacing-heading",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "letter-spacing"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:356",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:528",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1310"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:253",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "letter-spacing",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-line-height-tight",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "line-height"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:362",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:534",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:208"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:631"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:254",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "line-height",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-body-padding",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "body"
+            ],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:277",
+                "readIn": "modern-skin-css",
+                "part": "body",
+                "landsOn": "padding",
+                "fallback": "16px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-body-scrollbar-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "body"
+            ],
+            "landsOn": [
+              "scrollbar-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:279",
+                "readIn": "modern-skin-css",
+                "part": "body",
+                "landsOn": "scrollbar-width",
+                "fallback": "thin",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "footer"
+            ],
+            "landsOn": [
+              "gap"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:685",
+              "src/foundation/tokens/css/foundation/base/density.css:79"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:685"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:293",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "footer"
+            ],
+            "landsOn": [
+              "padding",
+              "padding-inline"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:687",
+              "src/foundation/tokens/css/foundation/base/density.css:81"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:687"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:295",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "padding-inline",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:260",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "padding",
+                "fallback": "16px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "footer"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/brand-studio/index.tsx:138",
+              "src/ui/patterns/customization/brand-studio/index.tsx:156",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:190"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:199",
+              "src/foundation/tokens/css/foundation/themes/default.css:2121"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:297",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "background-color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:377",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "background-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-sheet-close-size",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "block-size",
+              "inline-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:308",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "inline-size",
+                "fallback": "2rem",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:309",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "block-size",
+                "fallback": "2rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-radius-md",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:123",
+              "src/tooling/testing/fixtures/tenants/default.css:43",
+              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:350"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:770"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:313",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/ui/patterns/customization/brand-studio/index.tsx:144",
+              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:218",
+              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:315",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality.css:925",
+              "src/foundation/tokens/css/foundation/animations/transitions.css:94",
+              "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:317",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:318",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "(const-indirection:MOTION_EASING)",
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:317",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:318",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:40",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(const-indirection:MOTION_EASING)",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:283"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:283"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:321",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "background-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "outline"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:872"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:872"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:325",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "outline",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "outline"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1102",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2115",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1543"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:879",
+              "src/foundation/tokens/css/foundation/themes/default.css:2140"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:326",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "outline",
+                "fallback": "var(--ds-color-primary)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "outline-offset"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:873"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:873"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:327",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "outline-offset",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-size-touch-target",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "min-block-size",
+              "min-inline-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:357",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "min-inline-size",
+                "fallback": "44px",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:358",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "min-block-size",
+                "fallback": "44px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "close-button"
+            ],
+            "landsOn": [
+              "min-block-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/quality/touch-target/tests/touch-target-census.test.ts:161",
+              "src/foundation/tokens/css/foundation/themes/default.css:921",
+              "src/foundation/tokens/css/foundation/base/tests/a11y-floors-contract.test.ts:23"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:921"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css:415",
+                "readIn": "modern-skin-css",
+                "part": "close-button",
+                "landsOn": "min-block-size",
+                "fallback": "44px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "background-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:731",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:923",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1182"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:56",
+              "src/foundation/tokens/css/foundation/themes/default.css:2146"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/classic/index.tsx:174",
+                "readIn": "classic",
+                "part": null,
+                "landsOn": "background-color",
+                "fallback": "#d1d5db",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "(const-indirection:MOTION_DURATION)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:39",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(const-indirection:MOTION_DURATION)",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-z-drawer",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "z-index"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:957"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:957"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:187",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:111",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": "1400",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-recipe-enter",
+            "namespace": "public",
+            "readCount": 5,
+            "partsRead": [],
+            "landsOn": [
+              "(unresolved)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts:44",
+              "src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts:77"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:191",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_DURATION}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:223",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_DURATION}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-modal-animation-duration, 200ms)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-modal-animation-duration, 200ms)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:173",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-modal-animation-duration, 200ms)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-recipe-curve",
+            "namespace": "public",
+            "readCount": 7,
+            "partsRead": [],
+            "landsOn": [
+              "(unresolved)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts:51",
+              "src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts:84"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:191",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_EASING}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:192",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_EASING}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:223",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_EASING}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:224",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_EASING}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:173",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-recipe-exit",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "(unresolved)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts:45",
+              "src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts:78"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:192",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_DURATION}",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:224",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "${MOTION_DURATION}",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-z-overlay",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "z-index"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default.css:956"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:956"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx:209",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:170",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": "1300",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-modal-animation-duration",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [],
+            "landsOn": [
+              "(unresolved)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality.css:173",
+              "src/foundation/tokens/css/foundation/themes/default.css:1120",
+              "src/foundation/tokens/ts/runtime/personality/index.ts:332"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:1120",
+              "src/foundation/tokens/css/runtime/personality.css:176"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "200ms",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "200ms",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:173",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "200ms",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-modal-animation-timing",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [],
+            "landsOn": [
+              "(unresolved)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality.css:177",
+              "src/foundation/tokens/css/foundation/themes/default.css:1121",
+              "src/foundation/tokens/ts/runtime/personality/index.ts:334"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:1121",
+              "src/foundation/tokens/css/runtime/personality.css:180"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "cubic-bezier(0.32, 0.72, 0, 1)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:119",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "cubic-bezier(0.32, 0.72, 0, 1)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:173",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(unresolved)",
+                "fallback": "cubic-bezier(0.32, 0.72, 0, 1)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-modal-title-font-size",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/modal.css:115"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/modal.css:115"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:238",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-size",
+                "fallback": "18px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-modal-title-font-weight",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "font-weight"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/modal.css:116"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/modal.css:116"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:238",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-weight",
+                "fallback": "600",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-personality-animation-entrance-duration",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/ts/runtime/personality/index.ts:200"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FOUNDATION_SHARED",
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:249",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "180ms",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:249",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "180ms",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-input-transition-timing",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:333",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:503",
+              "src/foundation/tokens/css/presentation/components/input.css:263"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/input.css:263"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:249",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "ease",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx:249",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "ease",
+                "hasFallback": true
+              }
+            ]
+          }
+        ],
+        "channelCensusCounts": {
+          "distinctVariables": 68,
+          "totalReads": 119,
+          "publicDs": 66,
+          "privateDs": 2,
+          "privateSocketsDeclaredInSkin": [
+            "--ds-sheet-viewport-max-height"
+          ]
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2835,77 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.seeds",
+            "prop": "tintas y fondos",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-sheet-overlay-bg"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation/familia-ajena compartidos": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-primary",
+            "--ds-color-bg-secondary",
+            "--ds-color-black",
+            "--ds-color-border-secondary",
+            "--ds-color-border-subtle",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-effect-intensity",
+            "--ds-elevation-3",
+            "--ds-elevation-4",
+            "--ds-elevation-surface-4",
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width",
+            "--ds-font-family-base",
+            "--ds-font-family-heading",
+            "--ds-font-size-lg",
+            "--ds-font-weight-semibold",
+            "--ds-glass-backdrop-filter",
+            "--ds-glass-scrim-tint",
+            "--ds-letter-spacing-heading",
+            "--ds-line-height-tight",
+            "--ds-material-overlay-border",
+            "--ds-modal-overlay-bg",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-size-touch-target",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-surface-card",
+            "--ds-surface-highlight",
+            "--ds-touch-target-min"
+          ],
+          "Estructural/runtime (safe-area, correctitud)": [
+            "--ds-sheet-safe-area-bottom",
+            "--ds-sheet-safe-area-top"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2913,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de modal/drawer sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2937,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de modal/drawer sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2961,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-sheet-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2989,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de modal/popover/sheet/tooltip",
+            "tier": "standard",
+            "examples": [
+              "--_ds-modal-radius",
+              "--_ds-popover-radius"
+            ],
+            "sockets": [
+              "--_ds-sheet-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3016,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3033,49 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "el overlay es marco y velo; lo que densifica es su CONTENIDO (tablas/listas/forms) por sus propios sockets",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "RESUELTO por fallo de grupo 2026-08-18. FALLO DE GRUPO 2026-08-18 (escalacion FAM-06): el ritmo INTERIOR del panel si densifica. Un dropdown cuyos items compactan dentro de un marco que no compacta se lee roto: el usuario percibe density como una sola sensacion, no como dos capas. Reach: padding y gap entre partes del panel. NO reach: geometria de anclaje (arrow/offset), sobre de colision (viewport-gap), topes de tamano (max/min-width, max-height) que son legibilidad y no confort, los topes de variante nombrada (minimal/rich/compact) que pertenecen al vocabulario de variantes, el area tactil del handle (minimo de accesibilidad, no confort) y el ancho de scrollbar (plataforma)."
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-{padding|gap}",
+            "prop": "ritmo interior del panel: padding del marco y gap entre sus partes",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-sheet-body-padding",
+              "--_ds-sheet-header-padding"
+            ],
+            "socketsResolved": true,
+            "adjudicatedBy": "fallo-grupo-overlay-2026-08-18"
+          }
+        ],
+        "groupRuling": "FALLO DE GRUPO 2026-08-18 (escalacion FAM-06): el ritmo INTERIOR del panel si densifica. Un dropdown cuyos items compactan dentro de un marco que no compacta se lee roto: el usuario percibe density como una sola sensacion, no como dos capas. Reach: padding y gap entre partes del panel. NO reach: geometria de anclaje (arrow/offset), sobre de colision (viewport-gap), topes de tamano (max/min-width, max-height) que son legibilidad y no confort, los topes de variante nombrada (minimal/rich/compact) que pertenecen al vocabulario de variantes, el area tactil del handle (minimo de accesibilidad, no confort) y el ancho de scrollbar (plataforma).",
+        "uncoveredByDesign": {
+          "Geometria de overlay NO cubierta por density (fallo de grupo 2026-08-18: anclaje, colision, topes de tamano, variantes nombradas, area tactil, plataforma)": [
+            "--ds-sheet-body-scrollbar-width",
+            "--ds-sheet-close-size",
+            "--ds-sheet-handle-area-padding-block-end",
+            "--ds-sheet-handle-area-padding-block-start",
+            "--ds-sheet-handle-block-size",
+            "--ds-sheet-handle-inline-size",
+            "--ds-sheet-max-height",
+            "--ds-sheet-min-height",
+            "--ds-sheet-side-width",
+            "--ds-sheet-title-size",
+            "--ds-sheet-viewport-max-height"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3083,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3096,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-popover-transition-duration",
+              "--_ds-modal-transition-duration",
+              "--_ds-tooltip-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-sheet-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3124,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-modal-elevation",
+              "--_ds-popover-elevation",
+              "--_ds-tooltip-elevation",
+              "--_ds-menu-elevation"
+            ],
+            "sockets": [
+              "--_ds-sheet-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3153,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-<comp>-backdrop-filter",
+            "prop": "backdrop-filter",
+            "tier": "premium",
+            "examples": [
+              "--_ds-modal-backdrop-filter",
+              "--_ds-drawer-backdrop-filter"
+            ],
+            "sockets": [
+              "--_ds-sheet-backdrop-filter"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3180,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3193,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3210,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "layer.stack",
+            "socketPattern": "--_ds-<comp>-z-index",
+            "prop": "z-index",
+            "tier": "standard",
+            "examples": [
+              "--_ds-modal-z-index",
+              "--_ds-popover-z-index",
+              "--_ds-tooltip-z-index",
+              "--_ds-menu-z-index"
+            ],
+            "sockets": [
+              "--_ds-sheet-z-index"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3239,36 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "borde de modal/drawer/popover",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-sheet-border-style"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-menu-item-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-sheet-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3276,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3294,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3311,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3350,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3363,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

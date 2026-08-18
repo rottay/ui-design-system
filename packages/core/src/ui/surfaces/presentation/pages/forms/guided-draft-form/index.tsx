@@ -17,7 +17,7 @@
  *   BEFORE the engine skins (`rottay-engines`): declarations painted over a
  *   composed primitive would lose by layer, while channel overrides resolve
  *   per-element and hold honestly.
- * - The only inline styles left are `fontWeight` values resolved at runtime
+ * - The inline styles left here are `fontWeight` values resolved at runtime
  *   from the tenant personality (heading weight bias) — instance values, not
  *   reusable paint.
  */

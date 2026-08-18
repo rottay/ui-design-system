@@ -24,6 +24,7 @@ import {
   validateTenantThemeConfig,
   validateTenantThemeDocument,
 } from "..";
+import { migrateV1 } from "../migrate-v1";
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_01",
@@ -44,7 +45,15 @@ const SIMPLE_DOCUMENT: TenantThemeDocument = {
   schemaVersion: 1,
   mode: "simple",
   appearance: {
-    palette: { primary: "#0F766E", secondary: "#8C6D46", accent: "#E2725B" },
+    palette: {
+      primary: "#0F766E",
+      secondary: "#8C6D46",
+      accent: "#E2725B",
+      foreground: {
+        muted: "#6B6154",
+        disabled: "#80766A",
+      },
+    },
     typography: {
       fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
       fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
@@ -90,7 +99,23 @@ const ADVANCED_DOCUMENT: TenantThemeDocument = {
           collapsedWidth: "72px",
           headerHeight: "68px",
           iconSize: "18px",
-          itemBgActive: "var(--ds-tint-8)",
+          // The active row is a governed APCA pair
+          // (`--ds-sidebar-item-color-active` over
+          // `--ds-sidebar-item-bg-active`), so this document authors BOTH
+          // halves as hex. It used to author only the ground, as
+          // `var(--ds-tint-8)`, and only got away with it because the ground
+          // happened to be byte-identical to the vertical's own base value and
+          // therefore never counted as changed. A tenant leaf now holds its
+          // rank inside every mode it did not qualify, so that half-statement
+          // reached the dark block and paired a reference ground with a dark
+          // ink the tenant never wrote -- non-hex-ground, correctly rejected at
+          // intake. Authoring a verifiable pair is the honest fixture: warm
+          // paper wash under the document's own sidebar ink.
+          itemBgActive: "#F3EEE5",
+          itemColorActive: "#2E261C",
+          // Governed reference tokens stay covered, on a channel that is not
+          // half of a contrast pair -- a hover wash carries no text.
+          itemBgHover: "var(--ds-tint-8)",
         },
         layout: {
           headerHeight: "64px",
@@ -176,14 +201,33 @@ const hydrate = (
 ) => hydrateTenantThemeConfig(document, identity);
 
 /**
+ * Every terminal keypath of a ThemePatch. Used to count what survives the v1
+ * migration: an authored dial that collides with another one, or that the
+ * migration silently drops, changes this cardinality even though the document
+ * itself still validates.
+ */
+const leafKeypaths = (value: unknown, prefix = ""): string[] => {
+  if (value === null || typeof value !== "object") return [prefix];
+  if (Array.isArray(value))
+    return value.flatMap((entry, index) =>
+      leafKeypaths(entry, `${prefix}[${index}]`)
+    );
+  return Object.entries(value as Record<string, unknown>).flatMap(
+    ([key, entry]) => leafKeypaths(entry, prefix ? `${prefix}.${key}` : key)
+  );
+};
+
+/**
  * How an authored radius literal reaches the artifact once the shared radius
  * dial folds it: a tenant corner stays reachable by `shape.radius-scale`
  * instead of outranking it from the unlayered tenant block. Spelled out here
  * rather than imported so the expectation is not the emitter's own arithmetic.
- * These documents author no radius scale, so there is no divisor.
+ * The BitHire envelope contributes the governed 1.25 radius scale before the
+ * shared dial is applied, so authored layout radii are normalized back to the
+ * canonical scale instead of being magnified a second time.
  */
 const dialedRadius = (authored: string) =>
-  `calc(${authored} * var(--ds-radius-scale, 1))`;
+  `calc(${authored} / 1.25 * var(--ds-radius-scale, 1))`;
 
 describe("DS-S001 DB recipe-profile channel", () => {
   it("persists a valid selection through normalized Appearance and CSS", () => {
@@ -191,8 +235,7 @@ describe("DS-S001 DB recipe-profile channel", () => {
     if (document.mode !== "advanced") {
       throw new Error("Expected the advanced fixture");
     }
-    document.visualFoundation.recipeProfile =
-      "rottay/editorial-round@1";
+    document.visualFoundation.recipeProfile = "rottay/editorial-round@1";
 
     expect(validateTenantThemeDocument(document).success).toBe(true);
     const artifact = compileTenantThemeConfig(hydrate(document), {
@@ -216,7 +259,7 @@ describe("DS-S001 DB recipe-profile channel", () => {
 
     const validation = validateTenantThemeDocument(document);
     expect(validation.success).toBe(false);
-    if (validation.success) throw new Error('expected a rejected document');
+    if (validation.success) throw new Error("expected a rejected document");
     expect(validation.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -310,11 +353,77 @@ describe("TenantThemeConfig v1 server contract", () => {
     // reason (the shared interaction floor). No fixture or first-party
     // document authors a `--ds-color-dark-*` override, so nothing else
     // re-anchored. No sentinel was widened and no assertion relaxed.
+    //
+    // ROTTAY-T1 re-anchor: both digests moved once more because the document
+    // schema gained the DB mirror for the chrome channels the rottay extension
+    // drain moved into the governed contract. This is a WIDENING, the ordinary
+    // direction, and it is strictly additive: measured against the pre-tranche
+    // schema the surface gains 117 leaf paths and removes ZERO -- 57 new
+    // fields (each publishing a `type` and a `format`) plus three new
+    // container objects (`controls.form`, `controls.textarea` and
+    // `search.commandPalette`, which publish a `type` of their own).
+    //
+    // The 57 fields land in eight chrome sections: badge (2), controls.form
+    // (8), controls.textarea (13), layout (1), popover (5),
+    // search.commandPalette (7), sidebar (9) and tooltip (12). Each one exists
+    // because a channel the extension used to hard-code now has to be
+    // reachable from BOTH transports -- a static Theme field with no DB mirror
+    // would make the drain a downgrade for DB tenants, which is the exact
+    // asymmetry Theme-ISO forbids.
+    //
+    // Nothing was withdrawn, no existing field changed type or format, and no
+    // artifact digest below moved: no fixture or first-party document authors
+    // any of the 57, so absent still resolves to the same compiled output as
+    // before the widening (verified by probe against a HEAD-materialized copy
+    // of this schema before re-anchoring). The sidebar nine are the same nine
+    // the G4 ruling migrated on the static side, so both transports gained the
+    // family in the same tranche rather than drifting apart.
+    //
+    // ROTTAY-T2 MASS re-anchor: both digests moved once more, for the same
+    // reason and in the same direction as ROTTAY-T1 -- the document schema
+    // gained the DB mirror for the control chrome the second rottay extension
+    // tranche moved into the governed contract. 302 physical declarations
+    // (151 unique channels) left `artifacts/rottay/_source/extension.css`; 261
+    // of them became typed leaves on both transports and 41 were proven to be
+    // derivations of a floor that already paints them.
+    //
+    // The widening is STRICTLY ADDITIVE and was measured, not asserted: against
+    // a reconstruction of the pre-tranche schema (this file's own predecessor
+    // digest reproduced byte-exactly by removing the ROTTAY-T2 block and
+    // nothing else) the surface gains 678 leaf paths and removes ZERO. That
+    // total is 13 new container objects and 163 new fields, each field
+    // publishing a `type` and a `format`, counted across the two projections
+    // the schema publishes the advanced document through (`documents.advanced`
+    // and `modes.advanced`): (163 * 2 + 13) * 2 = 678.
+    //
+    // The 13 containers are `controls.select` plus the twelve families
+    // `autocomplete`, `checkbox`, `datePicker`, `inputNumber`, `radio`, `rate`,
+    // `slider`, `switch`, `timePicker`, `toggle`, `transfer` and `upload`. The
+    // measured per-container field counts are autocomplete 10, checkbox 13,
+    // datePicker 12, inputNumber 13, radio 14, rate 1, select 33, slider 9,
+    // switch 8, timePicker 11, toggle 12, transfer 5, upload 22 -- 130 across
+    // the twelve, plus the select 33 (the 15 channels the C3 vocabulary
+    // already governed on the static side plus the 18 this tranche added).
+    // `select` is a container here for the first time: the DB transport had no
+    // select mirror at all before this tranche, which is precisely the
+    // asymmetry Theme-ISO forbids and the reason it is admitted now.
+    //
+    // Nothing was withdrawn, no existing field changed type or format, and
+    // every leaf is a closed VISUAL field -- no open map, no legacy alias, no
+    // slug or product branch. No fixture or first-party document authors any
+    // of the 163, so absent still resolves to the same compiled output and no
+    // PINNED artifact digest below moved.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
+      "sha256-713ccbafb369557d4e9c57686400e9eef2a02dd0dc478ab3fa0862ca9eb1d5d6"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
+      "sha256-d8871d06009115f98da1afef5c32ce961b387d7078d6092f331d090e35355a7f"
+    );
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-4beabac2c0147b671abf92236230584950c5ba900d4f8750e3d036e84e088ce2"
+      "sha256-f3f55fa2ae71d264f9211d713eed00265578273a6ea11d4f74a63606f2e6e202"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-2c4c6e60732ca8fee64938eb1e4959508408b22391f60c9d373f1c138bd10c53"
+      "sha256-73eef2348a5fa534c6ed4f2b58e3be4fb7dfd0527d57f82f6de8b3d0b8e3f9cb"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
@@ -368,6 +477,37 @@ describe("TenantThemeConfig v1 server contract", () => {
           "tooltip",
           "popover",
           "tabs",
+          // ROTTAY-T3 CHROME ROSTER WIDENING (2026-08-15): the roster went
+          // 22 -> 48 top-level families. The list is published inside every
+          // vertical envelope, so the envelope digest moves, and both schema
+          // sentinels above move exactly once for these 26 names and nothing
+          // else.
+          "alert",
+          "anchor",
+          "avatar",
+          "backTop",
+          "calendar",
+          "collapse",
+          "descriptions",
+          "drawer",
+          "dropdown",
+          "empty",
+          "floatButton",
+          "liveFeed",
+          "menu",
+          "message",
+          "notification",
+          "pagination",
+          "progress",
+          "result",
+          "skeleton",
+          "spinner",
+          "statistic",
+          "statsGrid",
+          "steps",
+          "tag",
+          "timeline",
+          "tree",
         ],
         allowTokenOverrides: true,
         allowAnatomyVariants: true,
@@ -479,8 +619,11 @@ describe("TenantThemeConfig v1 server contract", () => {
     vi.stubGlobal("window", undefined);
     vi.stubGlobal("document", undefined);
     vi.stubGlobal("localStorage", undefined);
-    expect(() => compileTenantThemeConfig(hydrate())).not.toThrow();
-    vi.unstubAllGlobals();
+    try {
+      expect(() => compileTenantThemeConfig(hydrate())).not.toThrow();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
 
@@ -506,6 +649,10 @@ describe("deterministic artifact compilation and isolation", () => {
           accent: "#E2725B",
           secondary: "#8C6D46",
           primary: "#0F766E",
+          foreground: {
+            disabled: "#80766A",
+            muted: "#6B6154",
+          },
         },
       },
       mode: "simple",
@@ -516,8 +663,77 @@ describe("deterministic artifact compilation and isolation", () => {
     expect(canonicalizeTenantThemeValue(ordered)).toBe(
       canonicalizeTenantThemeValue(reversed)
     );
+    // `toEqual` is order-INSENSITIVE: on its own it proves the two compiles
+    // carry the same channels and the same values, and says nothing about the
+    // order they are emitted in. The artifact is served as text, so emission
+    // order is part of the contract — assert it positionally, and assert the
+    // text and the cache digest that are derived from it.
     expect(right).toEqual(left);
+    expect(Object.keys(right.variables)).toEqual(Object.keys(left.variables));
+    expect(right.css).toBe(left.css);
+    expect(right.digest).toBe(left.digest);
   });
+
+  /**
+   * M4 — the DB transport must be order-blind.
+   *
+   * A tenant theme arrives as a JSON document out of Postgres. Neither the
+   * driver, the column serialization, nor an admin edit that rewrites one
+   * nested object guarantees a stable key order, so authoring order in the
+   * document must not reach the artifact. This is the DB-side counterpart of
+   * the authored-order law on the static BrandTheme transport: there, leg B is
+   * byte-invariant under a source permutation by design; here, the ONLY
+   * transport is the document, so it must be invariant unconditionally.
+   *
+   * The permutation reverses every object's own keys at every depth — a
+   * strictly stronger input than a hand-written reordering of one level, and
+   * it changes no key and no value. Both fixtures are exercised because the
+   * advanced mode compiles a different and much larger surface (token
+   * overrides, chrome sections, mode deltas) than the simple one.
+   */
+  const deepReverseKeys = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(deepReverseKeys);
+    if (value && typeof value === "object") {
+      const reversed: Record<string, unknown> = {};
+      for (const key of Object.keys(value as Record<string, unknown>).reverse()) {
+        reversed[key] = deepReverseKeys((value as Record<string, unknown>)[key]);
+      }
+      return reversed;
+    }
+    return value;
+  };
+
+  for (const [label, document, options] of [
+    ["simple", SIMPLE_DOCUMENT, undefined],
+    // The advanced surface only compiles under a code-owned vertical policy
+    // envelope; the envelope is not tenant data and is held constant here.
+    ["advanced", ADVANCED_DOCUMENT, { verticalEnvelope: BITHIRE_TEST_ENVELOPE }],
+  ] as const) {
+    it(`${label}: a deep key permutation of the DB document compiles byte-identically`, () => {
+      const permuted = deepReverseKeys(
+        structuredClone(document)
+      ) as TenantThemeDocument;
+
+      // The permutation is real: at least one object was reordered, and no key
+      // and no value moved. A no-op permutation would make this law vacuous.
+      expect(Object.keys(permuted)).not.toEqual(Object.keys(document));
+      expect(permuted).toEqual(document);
+
+      const baseline = compileTenantThemeConfig(hydrate(document), options);
+      const shuffled = compileTenantThemeConfig(hydrate(permuted), options);
+
+      expect(Object.keys(shuffled.variables)).toEqual(
+        Object.keys(baseline.variables)
+      );
+      expect(shuffled.variables).toEqual(baseline.variables);
+      expect(shuffled.css).toBe(baseline.css);
+      expect(shuffled.digest).toBe(baseline.digest);
+      expect(shuffled.modeDeltas ?? null).toEqual(baseline.modeDeltas ?? null);
+      expect(canonicalizeTenantThemeValue(hydrate(permuted))).toBe(
+        canonicalizeTenantThemeValue(hydrate(document))
+      );
+    });
+  }
 
   it("includes row/compiler identity in the cache digest", () => {
     const current = compileTenantThemeConfig(hydrate());
@@ -538,7 +754,7 @@ describe("deterministic artifact compilation and isolation", () => {
       })
     );
     expect(artifact.variables["--ds-radius-button"]).toBe(
-      "calc(9999px * var(--ds-radius-scale, 1))"
+      "calc(9999px / 1.25 * var(--ds-radius-scale, 1))"
     );
   });
 
@@ -758,9 +974,9 @@ describe("deterministic artifact compilation and isolation", () => {
       "--ds-badge-font-weight": "650",
       // Authored 3/4/6px, emitted through the shared radius dial so
       // `shape.radius-scale` reaches a corner the tenant authored.
-      "--ds-badge-radius": "calc(3px * var(--ds-radius-scale, 1))",
-      "--ds-badge-chip-radius": "calc(4px * var(--ds-radius-scale, 1))",
-      "--ds-badge-pill-radius": "calc(6px * var(--ds-radius-scale, 1))",
+      "--ds-badge-radius": "calc(3px / 1.25 * var(--ds-radius-scale, 1))",
+      "--ds-badge-chip-radius": "calc(4px / 1.25 * var(--ds-radius-scale, 1))",
+      "--ds-badge-pill-radius": "calc(6px / 1.25 * var(--ds-radius-scale, 1))",
       "--ds-badge-surface": "#FFFEFB",
       "--ds-badge-frame-hover": "#0F766E",
       "--ds-badge-remove-opacity": "0.82",
@@ -769,7 +985,6 @@ describe("deterministic artifact compilation and isolation", () => {
       "--ds-metric-card-min-height": "156px",
       "--ds-metric-card-hover-transform": "translateY(-1px)",
       "--ds-metric-card-icon-bg": "#F3EEE5",
-      "--ds-signal-card-top-line-display": "none",
       "--ds-listing-grid-columns": "repeat(3, minmax(0, 1fr))",
       "--ds-effect-intensity": "0.45",
     });
@@ -969,7 +1184,7 @@ describe("closed schema and hostile input rejection", () => {
   });
 
   it.each(["rgb(15 118 110)", "hsl(176 77% 26%)", "oklch(0.52 0.09 190)"])(
-    "preserves valid v1 functional color seed %s and derives a safe ramp",
+    "accepts v1 functional color syntax %s but fails closed when APCA cannot verify it",
     (primary) => {
       const document = {
         schemaVersion: 1 as const,
@@ -977,10 +1192,8 @@ describe("closed schema and hostile input rejection", () => {
         appearance: { palette: { primary } },
       };
       expect(validateTenantThemeDocument(document).success).toBe(true);
-      const artifact = compileTenantThemeConfig(hydrate(document));
-      expect(artifact.variables["--ds-color-primary"]).toBe(primary);
-      expect(artifact.variables["--ds-color-primary-50"]).toContain(
-        "color-mix(in oklch"
+      expect(() => compileTenantThemeConfig(hydrate(document))).toThrow(
+        /cannot be APCA-verified.*non-hex-ground/i
       );
     }
   );
@@ -1137,7 +1350,9 @@ describe("closed schema and hostile input rejection", () => {
       {
         code: "invalid_value",
         path: "$.visualFoundation.advanced.tokenOverrides",
-        message: `Maximum tokenOverrides entries is ${cap}; received ${cap + 1}`,
+        message: `Maximum tokenOverrides entries is ${cap}; received ${
+          cap + 1
+        }`,
       },
     ]);
 
@@ -1159,7 +1374,7 @@ describe("closed schema and hostile input rejection", () => {
     }
   });
 
-  it("accepts exactly the tokenOverrides budget (boundary) and emits every entry", () => {
+  it("accepts exactly the tokenOverrides budget at the document boundary without truncation", () => {
     const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
     const budgetTokens = TENANT_THEME_CONFIG_SCHEMA.overrideTokens
       .filter(
@@ -1179,11 +1394,126 @@ describe("closed schema and hostile input rejection", () => {
       },
     };
     expect(validateTenantThemeDocument(boundary).success).toBe(true);
-    const artifact = compileTenantThemeConfig(hydrate(boundary), {
-      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    expect(
+      Object.keys(boundary.visualFoundation.advanced.tokenOverrides)
+    ).toHaveLength(cap);
+
+    // Accepting the document is only half the boundary. All 200 must also
+    // survive the ISO lowering: the v1 migration maps each authored token to
+    // its own typed keypath, so a truncation or a collision anywhere in that
+    // map would still leave the document "valid".
+    const patch = migrateV1(boundary as unknown as TenantThemeDocument, "light")
+      .patch;
+    expect(leafKeypaths(patch)).toHaveLength(cap);
+    expect(budgetTokens).toHaveLength(cap);
+
+    // And the row must COMPILE through the real boundary with every authored
+    // value reaching the artifact. The roster here is the value-compatible
+    // slice of the same budget: `--ds-material-*-foreground|background` are
+    // APCA-verified colors, and a geometry literal is correctly rejected for
+    // them, which is a different law than truncation. Everything else that a
+    // tenant may legally set at the cap is asserted byte-for-byte.
+    const compilable = budgetTokens.filter(
+      (token) => !/foreground|background/.test(token)
+    );
+    expect(compilable.length).toBeGreaterThan(100);
+    const artifact = compileTenantThemeConfig(
+      {
+        ...boundary,
+        visualFoundation: {
+          advanced: {
+            tokenOverrides: Object.fromEntries(
+              compilable.map((token) => [token, "1px"])
+            ),
+          },
+        },
+        ...IDENTITY,
+      },
+      { verticalEnvelope: BITHIRE_TEST_ENVELOPE }
+    );
+    expect(
+      compilable.filter((token) => artifact.variables[token] !== "1px")
+    ).toEqual([]);
+
+    // The authored value is mode-agnostic, so it owns the default-mode scope
+    // above. Where the code-owned vertical baseline re-authors the same facet
+    // per mode, that overlay stays visible as a `dark` delta — it is the
+    // baseline's own value, never the tenant literal leaking into a mode it
+    // did not author. Asserted rather than assumed so a future baseline that
+    // starts (or stops) overlaying a facet has to be adjudicated here.
+    const darkDelta = (artifact.modeDeltas ?? []).find(
+      (block) => block.mode === "dark"
+    );
+    const overlaid = compilable.filter(
+      (token) => darkDelta?.variables[token] !== undefined
+    );
+    expect(overlaid.length).toBeGreaterThan(0);
+    expect(
+      overlaid.filter((token) => darkDelta?.variables[token] === "1px")
+    ).toEqual([]);
+  });
+
+  it("never lets an untyped ISO lowering failure escape the compiler", async () => {
+    // `resolveTheme` is fail-closed and throws a PLAIN Error when a patch key
+    // is absent from the total Theme shape. Callers of this compiler contract
+    // on ONE typed rejection, so that leg must be renamed into a document
+    // issue instead of surfacing as a raw 500. Proven by forcing the throw in
+    // an isolated module graph rather than by trusting the shape to be total.
+    const rogue = {
+      schemaVersion: 1 as const,
+      mode: "advanced" as const,
+      visualFoundation: {
+        advanced: { chrome: { sidebar: { width: "260px" } } },
+      },
+    } as unknown as TenantThemeDocument;
+
+    // Baseline: with the real lowering the same row compiles, so the canary
+    // below measures the boundary, not a broken document.
+    expect(() =>
+      compileTenantThemeConfig(hydrate(rogue), {
+        verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+      })
+    ).not.toThrow();
+
+    const isoPath =
+      "@/foundation/contracts/composition/tenants/themes/iso" as const;
+    vi.resetModules();
+    vi.doMock(isoPath, async () => {
+      const actual = await vi.importActual<Record<string, unknown>>(isoPath);
+      return {
+        ...actual,
+        resolveTheme: () => {
+          throw new Error(
+            'resolveTheme: unknown key "width" at $.chrome.sidebar; ThemePatch is ingestion-only'
+          );
+        },
+      };
     });
-    for (const token of budgetTokens) {
-      expect(artifact.variables[token]).toBe("1px");
+    try {
+      const isolated = await import(
+        "@/infrastructure/compilers/composition/tenant-theme"
+      );
+      const config = isolated.hydrateTenantThemeConfig(rogue, IDENTITY);
+      let thrown: unknown;
+      try {
+        isolated.compileTenantThemeConfig(config, {
+          verticalEnvelope: isolated.getTenantThemeVerticalEnvelope("bithire")!,
+        });
+      } catch (error) {
+        thrown = error;
+      }
+      expect(thrown).toBeInstanceOf(isolated.TenantThemeValidationError);
+      const issues = (thrown as InstanceType<
+        typeof isolated.TenantThemeValidationError
+      >).issues;
+      expect(issues).toHaveLength(1);
+      expect(issues[0].code).toBe("invalid_value");
+      expect(issues[0].path).toBe("$.visualFoundation");
+      expect(issues[0].message).toContain("ISO Theme lowering");
+      expect(issues[0].message).toContain('unknown key "width"');
+    } finally {
+      vi.doUnmock(isoPath);
+      vi.resetModules();
     }
   });
 
@@ -1215,7 +1545,7 @@ describe("closed schema and hostile input rejection", () => {
     ).toThrow(/unique non-empty/i);
   });
 
-  it("admits bounded neutral overrides and autocorrects unsafe text on the tenant ground", () => {
+  it("rejects bounded neutral overrides that miss the governed APCA floor", () => {
     const neutralOverrides = {
       "--ds-color-text-primary": "#E8E6E1",
       "--ds-color-text-secondary": "#A39F98",
@@ -1228,54 +1558,18 @@ describe("closed schema and hostile input rejection", () => {
       mode: "advanced" as const,
       visualFoundation: {
         // The tenant owns the dark canvas, but the compiler still checks every
-        // authored text role against that real ground and corrects any role
-        // that misses its governed APCA threshold.
+        // authored text role against the complete light/dark Theme. It rejects
+        // an unsafe pair instead of repainting the user's values silently.
         general: { palette: { backgroundMode: "dark" as const } },
         advanced: { tokenOverrides: neutralOverrides },
       },
     };
     expect(validateTenantThemeDocument(document).success).toBe(true);
-    const artifact = compileTenantThemeConfig(hydrate(document), {
-      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
-    });
-    expect(artifact.adjustments?.map(({ token }) => token)).toEqual([
-      "--ds-color-text-secondary",
-      "--ds-color-text-muted",
-    ]);
-    expect(artifact.adjustments).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          token: "--ds-color-text-secondary",
-          pairedWith: "default:#0C0C0E",
-          from: neutralOverrides["--ds-color-text-secondary"],
-          to: "#B6B2AB",
-        }),
-        expect.objectContaining({
-          token: "--ds-color-text-muted",
-          pairedWith: "default:#0C0C0E",
-          from: neutralOverrides["--ds-color-text-muted"],
-          to: "#B7B2AB",
-        }),
-      ])
-    );
-
-    expect(artifact.variables["--ds-color-text-primary"]).toBe(
-      neutralOverrides["--ds-color-text-primary"]
-    );
-    expect(artifact.variables["--ds-color-text-secondary"]).toBe("#B6B2AB");
-    expect(artifact.variables["--ds-color-text-muted"]).toBe("#B7B2AB");
-    expect(artifact.variables["--ds-color-border-primary"]).toBe(
-      neutralOverrides["--ds-color-border-primary"]
-    );
-    expect(artifact.variables["--ds-color-border-secondary"]).toBe(
-      neutralOverrides["--ds-color-border-secondary"]
-    );
-
-    for (const [token, value] of Object.entries(artifact.variables)) {
-      if (token in neutralOverrides) {
-        expect(artifact.css).toContain(`${token}: ${value};`);
-      }
-    }
+    expect(() =>
+      compileTenantThemeConfig(hydrate(document), {
+        verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+      })
+    ).toThrow(/authored tenant colors must meet the governed floor/i);
   });
 
   it.each([

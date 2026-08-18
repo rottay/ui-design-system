@@ -2,8 +2,8 @@
  * Generated-artifact guard for every first-party vertical artifact (WO-TOK-01).
  *
  * Each committed `artifacts/<slug>/index.css` must be byte-identical to what the
- * generator produces from its authored sources (compiled BrandTheme + declared
- * extension). This is the regenerate-and-diff rule that fails on ANY manual edit
+ * generator produces from its ONE authored source (the compiled BrandTheme).
+ * This is the regenerate-and-diff rule that fails on ANY manual edit
  * to the artifact: hand-edit an artifact and this test goes red; regenerate
  * (`pnpm build:vertical-css`) and it goes green. It also proves regeneration is
  * deterministic (a second render equals the first). Parameterized over
@@ -47,7 +47,6 @@ function generate(slug: string): string {
   return renderFirstPartyArtifact({
     spec,
     brandTheme,
-    extensionCss: readFileSync(resolve(ARTIFACTS_DIR, `${slug}/_source/extension.css`), 'utf8'),
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
 }
@@ -87,15 +86,11 @@ describe('first-party generated artifact scope ownership', () => {
     (spec) => {
       const generated = generate(spec.slug);
       const ownRoot = `[data-ds-root][data-vertical='${spec.verticalKey}']`;
-      const extension = readFileSync(
-        resolve(ARTIFACTS_DIR, `${spec.slug}/_source/extension.css`),
-        'utf8',
-      );
-      // The authored owner arms are the base block's selector, one block per
-      // mode the BrandTheme authors, and the extension's own rules. A mode
-      // block is authored too — in `BrandTheme.modes` rather than the
-      // extension — so it counts here or the projection would look like it
-      // invented an owner.
+      // The authored owner arms are the base block's selector plus one block
+      // per mode the BrandTheme authors. A mode block is authored too — in
+      // `BrandTheme.modes` — so it counts here or the projection would look
+      // like it invented an owner. There is no third source of owner arms:
+      // that was the declared extension, and it is gone.
       const modeSelectors = (BRAND_THEMES[spec.slug]?.modes
         ? Object.keys(BRAND_THEMES[spec.slug].modes!)
         : []
@@ -103,7 +98,6 @@ describe('first-party generated artifact scope ownership', () => {
       const authoredSelectors = [
         `${spec.selector} {}`,
         ...modeSelectors.map((selector) => `${selector} {}`),
-        extension,
       ].join('\n');
       const legacyOwners = [
         `html[data-tenant='${spec.slug}']`,

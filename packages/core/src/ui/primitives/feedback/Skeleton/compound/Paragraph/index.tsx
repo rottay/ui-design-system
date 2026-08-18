@@ -153,7 +153,7 @@ export const SkeletonParagraph = forwardRef<HTMLDivElement, SkeletonParagraphPro
     // -------------------------------------------------------------------------
 
     // The column stack, the line gap and the uniform line height paint from
-    // the unlayered skeleton-compounds skin; inline style carries only the
+    // the unlayered skeleton-compounds skin; inline style carries the
     // caller's `style` on the root and, on the trailing line, the instance
     // `lastLineWidth` prop (contract geometry) plus the canon animation.
     const containerStyle: React.CSSProperties = { ...style };

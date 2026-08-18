@@ -5,6 +5,15 @@
  * watches, the prepared claim API, and the diagnostics helpers. It imports from
  * admission only: the proof is one-way, retention -> admission, and admission
  * remains usable without loading any watcher code.
+ *
+ * That one-way proof is now the physical shape as well. The two owners used to
+ * sit side by side directly under `visual-authority`, which made a real
+ * hierarchy read as two peers with an edge between them -- structurally
+ * indistinguishable from the accidental sibling coupling the tree forbids.
+ * Admission is the floor (schema, census, verification, receipt minting) and
+ * retention is the live behaviour standing on it, so they are filed as this
+ * owner's `foundation` and `runtime` layers. Nothing about the dependency
+ * changed; only the tree now says which way it runs.
  */
 
 import type { TenantThemeArtifact } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
@@ -15,7 +24,7 @@ import {
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
   verifyMountedTenantThemeArtifact,
-} from "../admission";
+} from "../../foundation/admission";
 
 /**
  * Name the disqualifying change a single record carries, if it carries one.

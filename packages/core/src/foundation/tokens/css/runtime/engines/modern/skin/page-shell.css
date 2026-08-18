@@ -39,7 +39,7 @@
  * (skin-owned geometry, cockpit-header idiom) and, where it deviates from the
  * default, its radius on the sanctioned inline
  * `--ds-page-shell-skeleton-radius` custom-property data channel (uncounted).
- * The only remaining inline styles in the engine are the caller's own `style`
+ * The remaining inline styles in the engine are the caller's own `style`
  * prop and the `--ds-page-shell-max-width` channel on the root.
  *
  * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3

@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "ed24c6dfe0dd9666a545b579590c69f6cd0091ce485dbb3f199d3c238f299b73"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3756 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+      "packages/core/src/ui/patterns/data/file-manager",
+      "packages/core/src/ui/patterns/data/file-manager/contracts/index.ts",
+      "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+      "packages/core/src/ui/patterns/data/file-manager/index.ts"
+    ],
+    "stableParts": [
+      "body",
+      "breadcrumb",
+      "breadcrumb-current",
+      "breadcrumb-link",
+      "checkbox",
+      "column-header",
+      "column-select",
+      "column-size",
+      "content",
+      "date-cell",
+      "empty",
+      "file-icon",
+      "file-input",
+      "file-name",
+      "file-size",
+      "folder-icon",
+      "folder-link",
+      "grid",
+      "grid-card",
+      "grid-card-body",
+      "item-action",
+      "item-actions",
+      "item-name",
+      "list-scroll",
+      "list-table",
+      "loading-label",
+      "modified-at",
+      "name-cell",
+      "root",
+      "row",
+      "size-cell",
+      "spinner",
+      "toolbar",
+      "toolbar-action",
+      "toolbar-actions",
+      "view-toggle"
+    ],
+    "states": [
+      "active",
+      "drag-over",
+      "loading",
+      "selected",
+      "focus",
+      "focus-visible",
+      "hover"
+    ],
+    "variantAxes": [
+      "data-action",
+      "data-file-kind"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "a tenant control must not remove or override the button role contract on these nodes (aria-role: button) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:488]",
+      "a tenant control must not remove or override the group role contract on these nodes (aria-role: group) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479]",
+      "aria-current is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-current) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:264]",
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:349, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:358, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:388, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479]",
+      "aria-labelledby is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-labelledby) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:445, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:461]",
+      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:490]",
+      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:493]",
+      "<table> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: table) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:347]",
+      "<tbody> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: tbody) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:366]",
+      "<td> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: td) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:377, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:392, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:434, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:435]",
+      "<th> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: th) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:355, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:362]",
+      "<thead> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: thead) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:351]",
+      "<tr> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: tr) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:352, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:371]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:343, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:357, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:358, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:362 and more]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (64 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:241, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:246, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:254, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:259]",
+      "The family assigns explicit ARIA roles in source (2 sites; roles observed: `group`, `button`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:488]",
+      "The family sets ARIA state/label attributes in source (8 sites; observed: `aria-label`, `aria-labelledby`, `aria-current`, `aria-pressed`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:264, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:349, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:358, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:388]",
+      "The family renders semantic HTML elements directly (17 sites; observed: `td`, `button`, `th`, `thead`, `tr`); the element semantics are structural and are not a themeable choice. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:351, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:352, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361]",
+      "Table header cells carry an explicit `scope` attribute (5 sites); header/data association must survive any restyle. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:357, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:362]",
+      "The family implements keyboard interaction handlers (1 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:493]",
+      "The family manages `tabIndex` explicitly (1 sites); focus order is owned by the component, not by theming. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:489]",
+      "The family generates stable ids with React `useId` (1 sites) to bind labels and controls; those bindings must not be broken by a recipe. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:144]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-data-merged",
+        "scoutArtifact": [
+          "mr-anatomy-pattern-data-b.json",
+          "mr-anatomy-pattern-forms.json",
+          "mr-anatomy-pattern-data-forms.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-pattern-data-b.json": "PARTIAL",
+          "mr-anatomy-pattern-data-forms.json": "PARTIAL"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 36,
+        "dynamicPartExpressionsInSource": 2,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "body",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:259"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:25"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "breadcrumb",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:262",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:195"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:44"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "breadcrumb-current",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:203"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:45"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "breadcrumb-link",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:196",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:201"
+          ]
+        },
+        {
+          "part": "checkbox",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:382",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:276"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:233"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "column-header",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:259"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:62"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "column-select",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:355"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:230"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "column-size",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:212"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:334",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:245"
+          ],
+          "atSiteCount": 8,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:167"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "date-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:435"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:208"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:342",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:252"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:175"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "file-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:501"
+          ],
+          "atSiteCount": 8,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:133",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:135"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "file-input",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:299",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:216"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:49"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "file-name",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:430",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:294"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:66"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "file-size",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:297"
+          ]
+        },
+        {
+          "part": "folder-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:497"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:143"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "folder-link",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:415",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:292"
+          ],
+          "atSiteCount": 8,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:71",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:72",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:74"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "grid",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:238",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:240",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:244",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:249"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "grid-card",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:336"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:261",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:263",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:267",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:270"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "grid-card-body",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:495"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:300",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:303",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:304"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "item-action",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:439",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:455",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:305",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:319"
+          ],
+          "atSiteCount": 10,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:123",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:126"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "item-actions",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:437"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:61"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "item-name",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:507",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:352"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:314",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:317"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "list-scroll",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:346"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:182"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "list-table",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:347"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:185",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:190",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:191"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "loading-label",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:146"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:33"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "modified-at",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:300"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:41"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "name-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:393"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:54",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:57"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:239",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:252",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:139",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:5",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:10"
+          ],
+          "atSiteCount": 10
+        },
+        {
+          "part": "row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:371",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:267"
+          ],
+          "atSiteCount": 8,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:218",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:226"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "size-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:434"
+          ]
+        },
+        {
+          "part": "spinner",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:246"
+          ]
+        },
+        {
+          "part": "toolbar",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:261",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:194"
+          ],
+          "atSiteCount": 8,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:30",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:31",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:33"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "toolbar-action",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:287",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:307",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:210",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:22",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:23"
+          ],
+          "atSiteCount": 9
+        },
+        {
+          "part": "toolbar-actions",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:285"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:37",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:39"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "view-toggle",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:230"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:15",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:16",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:17",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:18"
+          ],
+          "anchorStatus": "verified"
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "item",
+          "scoutAnchorClaim": "data-part attribute in source JSX",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:284",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:345"
+          ]
+        },
+        {
+          "part": "label",
+          "scoutAnchorClaim": "data-part selector in family paint sheet only",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:116",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:118"
+          ]
+        },
+        {
+          "part": "label",
+          "scoutAnchorClaim": "data-part",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:169"
+          ]
+        }
+      ],
+      "partCensus": {
+        "dynamicPartExpressions": [
+          {
+            "site": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:285",
+            "expression": "item.type === 'folder' ? 'folder-icon' : 'file-icon'"
+          },
+          {
+            "site": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:346",
+            "expression": "item.type === 'folder' ? 'folder-icon' : 'file-icon'"
+          }
+        ]
+      },
+      "stateAnchors": [
+        {
+          "token": "active",
+          "at": [],
+          "state": "active",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:289"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "data-drag-over=true",
+          "at": [],
+          "state": "drag-over",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:362",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:363",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:364"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "data-loading=false",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:10",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:11",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:12"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "data-loading=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:17",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:18",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:19",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:20"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "data-selected=false",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:274",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:282",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:347"
+          ],
+          "state": "selected",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:277",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:289"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "token": "data-selected=true",
+          "at": [],
+          "state": "selected",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:297"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "focus",
+          "at": [],
+          "state": "focus",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:98"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "focus-visible",
+          "at": [],
+          "state": "focus-visible",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:271",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:357"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "hover",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:285"
+          ],
+          "state": "hover",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:282"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "token": "data-selected='true'",
+          "occurrences": 14,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:281",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:374",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:485",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:259"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "pseudo:focus-visible",
+          "occurrences": 10,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:149"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "data-selected='false'",
+          "occurrences": 8,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:337",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:374",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:485",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:259"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "data-drag-over='true'",
+          "occurrences": 5,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:221",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:336"
+          ],
+          "state": "drag-over"
+        },
+        {
+          "token": "pseudo:hover",
+          "occurrences": 5,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:139"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "data-loading='true'",
+          "occurrences": 4,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:49",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:242",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:255",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:142"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "data-loading='false'",
+          "occurrences": 3,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:42",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:242",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:255",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:142"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "[data-loading]",
+          "occurrences": 2,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:419",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:242",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:255",
+            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:142"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "pseudo:active",
+          "occurrences": 1,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:353"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "pseudo:focus",
+          "occurrences": 1,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:145"
+          ],
+          "state": "focus"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-action=delete",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:57"
+          ]
+        },
+        {
+          "token": "data-action=delete-selected",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:29"
+          ]
+        },
+        {
+          "token": "data-action=rename",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:123"
+          ]
+        },
+        {
+          "token": "data-action=upload",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:22",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:24"
+          ]
+        },
+        {
+          "token": "data-file-kind=folder",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:143"
+          ]
+        },
+        {
+          "token": "data-file-kind=image",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:146"
+          ]
+        },
+        {
+          "token": "data-file-kind=other",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:155"
+          ]
+        },
+        {
+          "token": "data-file-kind=pdf",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:149"
+          ]
+        },
+        {
+          "token": "data-file-kind=text",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:152"
+          ]
+        },
+        {
+          "token": "data-action='upload'",
+          "occurrences": 3,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:29",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+          ]
+        },
+        {
+          "token": "data-action='delete'",
+          "occurrences": 2,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:179",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+          ]
+        },
+        {
+          "token": "data-action='delete-selected'",
+          "occurrences": 2,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:35",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+          ]
+        },
+        {
+          "token": "data-action='rename'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:176",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+          ]
+        },
+        {
+          "token": "data-file-kind='folder'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:196",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+          ]
+        },
+        {
+          "token": "data-file-kind='image'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:199",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+          ]
+        },
+        {
+          "token": "data-file-kind='other'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:208",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+          ]
+        },
+        {
+          "token": "data-file-kind='pdf'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:202",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+          ]
+        },
+        {
+          "token": "data-file-kind='text'",
+          "occurrences": 1,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:205",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineDivergence": {
+          "engineSiblingDirectory": "packages/core/src/ui/patterns/data/file-manager/engines",
+          "engines": {
+            "classic": {
+              "path": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+              "lines": 344,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": false,
+              "addsScopeClass": []
+            },
+            "modern": {
+              "path": "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx",
+              "lines": 518,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": false,
+              "addsScopeClass": []
+            },
+            "rustic": {
+              "path": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+              "lines": 363,
+              "reExportsSibling": null,
+              "delegatesToSharedImplementation": false,
+              "addsScopeClass": []
+            }
+          },
+          "paintByEngine": {
+            "modern": [
+              {
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+                "paintKind": "own"
+              }
+            ],
+            "rustic": [
+              {
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+                "paintKind": "own"
+              }
+            ]
+          },
+          "summary": "engine siblings exist and each delegates to a shared implementation; the observed divergence is a scope class plus separate modern/rustic paint sheets",
+          "engineSiblingsInSource": {
+            "classic": {
+              "lines": 344,
+              "files": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx"
+              ],
+              "fileCount": 1
+            },
+            "modern": {
+              "lines": 518,
+              "files": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx"
+              ],
+              "fileCount": 1
+            },
+            "rustic": {
+              "lines": 363,
+              "files": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx"
+              ],
+              "fileCount": 1
+            }
+          },
+          "enginesWithOwnSkinCss": [
+            "modern",
+            "rustic"
+          ],
+          "perLayerBreakdown": {
+            "modern": {
+              "partsStyled": 27,
+              "variablesRead": 0
+            },
+            "rustic": {
+              "partsStyled": 11,
+              "variablesRead": 0
+            },
+            "css:rustic": {
+              "partsStyled": 0,
+              "variablesRead": 18
+            },
+            "css:modern": {
+              "partsStyled": 0,
+              "variablesRead": 37
+            },
+            "tsx:classic": {
+              "partsStyled": 0,
+              "variablesRead": 7
+            },
+            "tsx:rustic": {
+              "partsStyled": 0,
+              "variablesRead": 2
+            }
+          },
+          "antdImportSites": [
+            "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:21"
+          ],
+          "inlineStyleAttributeSites": 51,
+          "templateConstructedVariableNames": [],
+          "paintDeliveryPerEngine": {
+            "classic": {
+              "paintDelivery": "INLINE_STYLE_OBJECTS_IN_ENGINE_TSX",
+              "hasOwnSkinCss": false,
+              "inlineStyleAttrs": 16,
+              "rootClassMentions": 1,
+              "dsVarReads": 9,
+              "files": 1
+            },
+            "modern": {
+              "paintDelivery": "SKIN_CSS_FILE_SELECTS_THIS_FAMILY_ROOT",
+              "hasOwnSkinCss": true,
+              "inlineStyleAttrs": 2,
+              "rootClassMentions": 2,
+              "dsVarReads": 0,
+              "files": 1
+            },
+            "rustic": {
+              "paintDelivery": "SKIN_CSS_FILE_SELECTS_THIS_FAMILY_ROOT",
+              "hasOwnSkinCss": true,
+              "inlineStyleAttrs": 33,
+              "rootClassMentions": 2,
+              "dsVarReads": 8,
+              "files": 1
+            }
+          }
+        },
+        "engines": {
+          "classic": {
+            "path": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "lines": 344,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": false,
+            "addsScopeClass": []
+          },
+          "modern": {
+            "path": "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx",
+            "lines": 518,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": false,
+            "addsScopeClass": []
+          },
+          "rustic": {
+            "path": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "lines": 363,
+            "reExportsSibling": null,
+            "delegatesToSharedImplementation": false,
+            "addsScopeClass": []
+          }
+        }
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "2 data-part attributes are runtime expressions"
+        ],
+        "gapsToSourceBound": [
+          {
+            "gap": "CLASSIC_ENGINE_PAINT_NOT_ENUMERABLE",
+            "detail": "The classic engine renders Ant Design components whose paint is Ant CSS-in-JS tokens, not --ds-* custom properties, so no --ds-* census can describe it from this repository.",
+            "evidence": [
+              "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:21"
+            ]
+          },
+          {
+            "gap": "TSX_INLINE_READS_NOT_PART_ATTRIBUTABLE",
+            "detail": "8 variables are read from inline style objects that are not inside a JSX opening tag carrying data-part, so the reading part could not be determined without executing the component.",
+            "variables": [
+              "--ds-color-error-600",
+              "--ds-color-primary-50",
+              "--ds-color-primary-500",
+              "--ds-color-success-600",
+              "--ds-color-text-secondary",
+              "--ds-color-text-tertiary",
+              "--ds-color-warning-500",
+              "--ds-font-size-sm"
+            ]
+          }
+        ],
+        "failureClasses": {
+          "unreadEmission": [],
+          "undeclaredRead": [
+            {
+              "variable": "--ds-color-bg-muted",
+              "readSiteCount": 2,
+              "readWithoutFallbackCount": 2,
+              "noFallbackReadSites": [
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:74",
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:87"
+              ],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:74",
+              "landsOnProperties": [
+                "background"
+              ],
+              "partsThatRead": [
+                "grid-card",
+                "row"
+              ],
+              "firstFallback": null
+            },
+            {
+              "variable": "--ds-file-manager-content-min-height",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:215",
+              "landsOnProperties": [
+                "min-block-size"
+              ],
+              "partsThatRead": [
+                "content"
+              ],
+              "firstFallback": "12.5rem"
+            },
+            {
+              "variable": "--ds-file-manager-link-color",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:129",
+              "landsOnProperties": [
+                "color"
+              ],
+              "partsThatRead": [
+                "folder-link"
+              ],
+              "firstFallback": "var(--ds-color-link, var(--ds-color-primary))"
+            },
+            {
+              "variable": "--ds-file-manager-link-hover-color",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:140",
+              "landsOnProperties": [
+                "color"
+              ],
+              "partsThatRead": [
+                "folder-link"
+              ],
+              "firstFallback": "var(--ds-color-link-hover, var(--ds-color-primary-hover))"
+            },
+            {
+              "variable": "--ds-file-manager-touch-target",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:394",
+              "landsOnProperties": [
+                "min-block-size"
+              ],
+              "partsThatRead": [
+                "item-action"
+              ],
+              "firstFallback": "2.75rem"
+            },
+            {
+              "variable": "--ds-link-underline-offset",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:132",
+              "landsOnProperties": [
+                "text-underline-offset"
+              ],
+              "partsThatRead": [
+                "folder-link"
+              ],
+              "firstFallback": "2px"
+            },
+            {
+              "variable": "--ds-link-underline-thickness",
+              "readSiteCount": 1,
+              "readWithoutFallbackCount": 0,
+              "noFallbackReadSites": [],
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:131",
+              "landsOnProperties": [
+                "text-decoration-thickness"
+              ],
+              "partsThatRead": [
+                "folder-link"
+              ],
+              "firstFallback": "1px"
+            }
+          ],
+          "hardcodedValue": [
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:49",
+              "literal": "#1677ff",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "return <FileImageOutlined style={{ fontSize: 24, color: 'var(--ds-color-primary-500, #1677ff)' }} />;",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:52",
+              "literal": "#dc2626",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "return <FilePdfOutlined style={{ fontSize: 24, color: 'var(--ds-color-error-600, #dc2626)' }} />;",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:55",
+              "literal": "#16a34a",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "return <FileTextOutlined style={{ fontSize: 24, color: 'var(--ds-color-success-600, #16a34a)' }} />;",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:58",
+              "literal": "#8c8c8c",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "return <FileOutlined style={{ fontSize: 24, color: 'var(--ds-color-text-tertiary, #8c8c8c)' }} />;",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:180",
+              "literal": "#faad14",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "? <FolderOutlined style={{ fontSize: 18, color: 'var(--ds-color-warning-500, #faad14)' }} />",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:255",
+              "literal": "#1677ff",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "? '2px solid var(--ds-color-primary-500, #1677ff)'",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:258",
+              "literal": "#e6f7ff",
+              "property": "background",
+              "selector": "TSX",
+              "context": "background: selectedItems.includes(item.id) ? 'var(--ds-color-primary-50, #e6f7ff)' : undefined,",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:263",
+              "literal": "#faad14",
+              "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
+              "selector": "TSX",
+              "context": "? <FolderOutlined style={{ color: 'var(--ds-color-warning-500, #faad14)' }} />",
+              "position": "VAR_FALLBACK"
+            },
+            {
+              "kind": "LITERAL_COLOR",
+              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:322",
+              "literal": "rgba(0,0,0,0.45)",
+              "property": "color",
+              "selector": "TSX",
+              "context": "color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',",
+              "position": "VAR_FALLBACK"
+            }
+          ],
+          "familyNamespacePrefixesSearched": [
+            "--ds-file-manager-",
+            "--ds-filemanager-",
+            "--ds-pattern-file-manager-",
+            "--ds-pattern-filemanager-"
+          ],
+          "familyPrefixedDeclarationCount": 0
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupIndependenceTest": {
+          "test": "a propertyGroup name is defective when it is only a coarser label for a set of stableParts, because stableParts and propertyGroups are two INDEPENDENT axes and a cell declares both",
+          "result": "PASS",
+          "reason": "every group above names a CSS landing-property axis (colour, typography, spacing, radius, elevation, motion, border, size, layout, opacity, layer), not a region of the component; each group is exposed by many parts and each part exposes many groups, so the two axes do not collapse"
+        },
+        "propertyGroupMembership": {
+          "border": {
+            "partsExposingIt": [
+              "column-header",
+              "grid-card",
+              "list-table",
+              "root",
+              "toolbar",
+              "view-toggle"
+            ],
+            "readSites": 13
+          },
+          "color": {
+            "partsExposingIt": [
+              "breadcrumb-current",
+              "content",
+              "date-cell",
+              "file-icon",
+              "folder-icon",
+              "folder-link",
+              "grid-card",
+              "item-action",
+              "list-table",
+              "loading-label",
+              "modified-at",
+              "root",
+              "row",
+              "toolbar-action",
+              "view-toggle"
+            ],
+            "readSites": 49
+          },
+          "elevation": {
+            "partsExposingIt": [
+              "content",
+              "folder-link",
+              "grid-card",
+              "root",
+              "row"
+            ],
+            "readSites": 6
+          },
+          "motion": {
+            "partsExposingIt": [
+              "content",
+              "folder-link",
+              "grid-card",
+              "row"
+            ],
+            "readSites": 16
+          },
+          "other": {
+            "partsExposingIt": [
+              "content",
+              "folder-link",
+              "item-action",
+              "list-scroll"
+            ],
+            "readSites": 5
+          },
+          "radius": {
+            "partsExposingIt": [
+              "content",
+              "grid-card",
+              "root",
+              "view-toggle"
+            ],
+            "readSites": 6
+          },
+          "spacing": {
+            "partsExposingIt": [
+              "body",
+              "empty",
+              "grid",
+              "grid-card",
+              "grid-card-body",
+              "item-actions",
+              "list-table",
+              "name-cell",
+              "root",
+              "toolbar",
+              "toolbar-actions"
+            ],
+            "readSites": 16
+          },
+          "typography": {
+            "partsExposingIt": [
+              "folder-link",
+              "item-name",
+              "list-table"
+            ],
+            "readSites": 5
+          }
+        },
+        "propertyGroupsObservedCssPropertyFamilies": [
+          "background",
+          "border",
+          "border-radius",
+          "box-shadow",
+          "color",
+          "filter",
+          "font",
+          "gap",
+          "interaction",
+          "layout",
+          "margin",
+          "motion",
+          "other:block-size",
+          "other:inline-size",
+          "outline",
+          "padding",
+          "size",
+          "text"
+        ],
+        "landingPropertyBuckets": [
+          "border",
+          "color",
+          "elevation",
+          "motion",
+          "other",
+          "radius",
+          "spacing",
+          "typography"
+        ],
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 10,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='false']"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 11,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='false']"
+          },
+          {
+            "variable": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 12,
+            "part": "root",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-elevation-1"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='false']"
+          },
+          {
+            "variable": "--ds-spacing-12",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 20,
+            "part": "root",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-12"
+            ],
+            "fallback": "3rem",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true']"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 25,
+            "part": "body",
+            "landsOn": "padding",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='body']"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 33,
+            "part": "toolbar",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='toolbar']"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 34,
+            "part": "toolbar",
+            "landsOn": "margin-block-end",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='toolbar']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 39,
+            "part": "toolbar-actions",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-actions']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 56,
+            "part": "name-cell",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='name-cell']"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 61,
+            "part": "item-actions",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-1"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='item-actions']"
+          },
+          {
+            "variable": "--ds-file-manager-link-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 81,
+            "part": "folder-link",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-file-manager-link-color",
+              "--ds-color-link",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-color-link",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 81,
+            "part": "folder-link",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-link",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 81,
+            "part": "folder-link",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-link-underline-thickness",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 83,
+            "part": "folder-link",
+            "landsOn": "text-decoration-thickness",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-link-underline-thickness"
+            ],
+            "fallback": "1px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-link-underline-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 84,
+            "part": "folder-link",
+            "landsOn": "text-underline-offset",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-link-underline-offset"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 85,
+            "part": "folder-link",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 85,
+            "part": "folder-link",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']"
+          },
+          {
+            "variable": "--ds-file-manager-link-hover-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 92,
+            "part": "folder-link",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-file-manager-link-hover-color",
+              "--ds-color-link-hover",
+              "--ds-color-primary-hover"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern\n    .ds-file-manager__folder-link[data-part='folder-link']:hover"
+          },
+          {
+            "variable": "--ds-color-link-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 92,
+            "part": "folder-link",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-link-hover",
+              "--ds-color-primary-hover"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern\n    .ds-file-manager__folder-link[data-part='folder-link']:hover"
+          },
+          {
+            "variable": "--ds-color-primary-hover",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 92,
+            "part": "folder-link",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary-hover"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern\n    .ds-file-manager__folder-link[data-part='folder-link']:hover"
+          },
+          {
+            "variable": "--ds-shadow-focus-ring",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 103,
+            "part": "folder-link",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-shadow-focus-ring"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 110,
+            "part": "folder-link",
+            "landsOn": "min-block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-touch-target-min"
+            ],
+            "fallback": "44px",
+            "hasFallback": true,
+            "atRule": [
+              "@media (hover: none), (pointer: coarse)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],\n  .ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 123,
+            "part": "item-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='rename']"
+          },
+          {
+            "variable": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 126,
+            "part": "item-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-error"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='delete']"
+          },
+          {
+            "variable": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 143,
+            "part": "folder-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-warning"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-icon[data-part='folder-icon'][data-file-kind='folder']"
+          },
+          {
+            "variable": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 146,
+            "part": "file-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-info"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='image']"
+          },
+          {
+            "variable": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 149,
+            "part": "file-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-error"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='pdf']"
+          },
+          {
+            "variable": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 152,
+            "part": "file-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-success"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='text']"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 155,
+            "part": "file-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='other']"
+          },
+          {
+            "variable": "--ds-file-manager-content-min-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 160,
+            "part": "content",
+            "landsOn": "min-block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-file-manager-content-min-height"
+            ],
+            "fallback": "12.5rem",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content']"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 161,
+            "part": "content",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 164,
+            "part": "content",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 164,
+            "part": "content",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 164,
+            "part": "content",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 164,
+            "part": "content",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 167,
+            "part": "content",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content'][data-drag-over='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 168,
+            "part": "content",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='content'][data-drag-over='true']"
+          },
+          {
+            "variable": "--ds-spacing-12",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 175,
+            "part": "empty",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-12"
+            ],
+            "fallback": "3rem",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='empty']"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 182,
+            "part": "list-scroll",
+            "landsOn": "scrollbar-color",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-color-border-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-scroll']"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 187,
+            "part": "list-table",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 190,
+            "part": "list-table",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 191,
+            "part": "list-table",
+            "landsOn": "padding-inline",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th"
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 192,
+            "part": "list-table",
+            "landsOn": "border-block-end",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-subtle"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 193,
+            "part": "list-table",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 194,
+            "part": "list-table",
+            "landsOn": "font-weight",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-weight-semibold"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 198,
+            "part": "list-table",
+            "landsOn": "padding-block",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] td"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 199,
+            "part": "list-table",
+            "landsOn": "padding-inline",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] td"
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 201,
+            "part": "list-table",
+            "landsOn": "border-block-end",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-subtle"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] td"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 206,
+            "part": "date-cell",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='size-cell'],\n.ds-pattern-file-manager.ds-engine-modern [data-part='date-cell']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 218,
+            "part": "row",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 218,
+            "part": "row",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 218,
+            "part": "row",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 218,
+            "part": "row",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 221,
+            "part": "row",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 222,
+            "part": "row",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 226,
+            "part": "row",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='row']:not([data-selected='true']):hover"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 240,
+            "part": "grid",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='grid']"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 261,
+            "part": "grid-card",
+            "landsOn": "padding",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 263,
+            "part": "grid-card",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 267,
+            "part": "grid-card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 267,
+            "part": "grid-card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 267,
+            "part": "grid-card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 267,
+            "part": "grid-card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 267,
+            "part": "grid-card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 267,
+            "part": "grid-card",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-shadow-focus-ring",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 271,
+            "part": "grid-card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-shadow-focus-ring"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:focus-visible"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 274,
+            "part": "grid-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-card"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']"
+          },
+          {
+            "variable": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 277,
+            "part": "grid-card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 282,
+            "part": "grid-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:hover"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 285,
+            "part": "grid-card",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']:hover"
+          },
+          {
+            "variable": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 285,
+            "part": "grid-card",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']:hover"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 289,
+            "part": "grid-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-inset"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:active"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 292,
+            "part": "grid-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 296,
+            "part": "grid-card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 297,
+            "part": "grid-card",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 303,
+            "part": "grid-card-body",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body']"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 305,
+            "part": "grid-card-body",
+            "landsOn": "padding",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body']"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 318,
+            "part": "item-name",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='item-name']"
+          },
+          {
+            "variable": "--ds-file-manager-touch-target",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 326,
+            "part": "item-action",
+            "landsOn": "min-block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-file-manager-touch-target"
+            ],
+            "fallback": "2.75rem",
+            "hasFallback": true,
+            "atRule": [
+              "@media (pointer: coarse)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],\n  .ds-pattern-file-manager.ds-engine-modern [data-part='view-toggle'],\n  .ds-pattern-file-manager.ds-engine-modern [data-part='i"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "line": 386,
+            "part": "item-action",
+            "landsOn": "min-block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-touch-target-min"
+            ],
+            "fallback": "44px",
+            "hasFallback": true,
+            "atRule": [
+              "@media (hover: none), (pointer: coarse)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],\n  .ds-pattern-file-manager.ds-engine-modern [data-part='item-action']"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 4,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic[data-part='root'][data-part='root']"
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 4,
+            "part": "root",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic[data-part='root'][data-part='root']"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 5,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic[data-part='root'][data-part='root']"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 6,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated",
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic[data-part='root'][data-part='root']"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 6,
+            "part": "root",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic[data-part='root'][data-part='root']"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 10,
+            "part": "toolbar",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar[data-part='toolbar'][data-part='toolbar']"
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 10,
+            "part": "toolbar",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-neutral-200"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar[data-part='toolbar'][data-part='toolbar']"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 15,
+            "part": "view-toggle",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 16,
+            "part": "view-toggle",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-secondary",
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 16,
+            "part": "view-toggle",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 17,
+            "part": "view-toggle",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-elevated",
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 17,
+            "part": "view-toggle",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 18,
+            "part": "view-toggle",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary",
+              "--ds-color-text"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 18,
+            "part": "view-toggle",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-tog"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 22,
+            "part": "toolbar-action",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload']"
+          },
+          {
+            "variable": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 23,
+            "part": "toolbar-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-on-primary",
+              "--ds-color-text-inverse"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload']"
+          },
+          {
+            "variable": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 23,
+            "part": "toolbar-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-inverse"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 24,
+            "part": "toolbar-action",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload']"
+          },
+          {
+            "variable": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 28,
+            "part": "toolbar-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-error"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='delete-selected']"
+          },
+          {
+            "variable": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 29,
+            "part": "toolbar-action",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-error"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='delete-selected']"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 33,
+            "part": "loading-label",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-tertiary",
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__loading-label[data-part='loading-label']"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 33,
+            "part": "loading-label",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__loading-label[data-part='loading-label']"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 41,
+            "part": "modified-at",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-tertiary",
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb[data-part='breadcrumb'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__empty[data-part='empty'],\n.ds-pattern-file-m"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 41,
+            "part": "modified-at",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb[data-part='breadcrumb'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__empty[data-part='empty'],\n.ds-pattern-file-m"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 45,
+            "part": "breadcrumb-current",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary",
+              "--ds-color-text"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb-current[data-part='breadcrumb-current']"
+          },
+          {
+            "variable": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 45,
+            "part": "breadcrumb-current",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb-current[data-part='breadcrumb-current']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 51,
+            "part": "item-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb-link[data-part='breadcrumb-link'][data-part='breadcrumb-link'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__folde"
+          },
+          {
+            "variable": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 57,
+            "part": "item-action",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-error"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__item-action[data-part='item-action'][data-action='delete']"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 62,
+            "part": "column-header",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-border-secondary",
+              "--ds-color-neutral-100"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__row[data-part='row'][data-part='row'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__column-header[data-part='column-header']["
+          },
+          {
+            "variable": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 62,
+            "part": "column-header",
+            "landsOn": "border-bottom",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-neutral-100"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__row[data-part='row'][data-part='row'],\n.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__column-header[data-part='column-header']["
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 66,
+            "part": "row",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary-50",
+              "--ds-color-bg-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__row[data-part='row'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-bg-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 66,
+            "part": "row",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__row[data-part='row'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 70,
+            "part": "grid-card",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 78,
+            "part": "grid-card",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 79,
+            "part": "grid-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary-50",
+              "--ds-color-bg-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-bg-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "line": 79,
+            "part": "grid-card",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-bg-muted"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true']"
+          }
+        ],
+        "variableCensusTsx": [
+          {
+            "variable": "--ds-color-primary-500",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 49,
+            "chain": [
+              "--ds-color-primary-500"
+            ],
+            "fallback": "#1677ff",
+            "hasFallback": true,
+            "context": "return <FileImageOutlined style={{ fontSize: 24, color: 'var(--ds-color-primary-500, #1677ff)' }} />;"
+          },
+          {
+            "variable": "--ds-color-error-600",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 52,
+            "chain": [
+              "--ds-color-error-600"
+            ],
+            "fallback": "#dc2626",
+            "hasFallback": true,
+            "context": "return <FilePdfOutlined style={{ fontSize: 24, color: 'var(--ds-color-error-600, #dc2626)' }} />;"
+          },
+          {
+            "variable": "--ds-color-success-600",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 55,
+            "chain": [
+              "--ds-color-success-600"
+            ],
+            "fallback": "#16a34a",
+            "hasFallback": true,
+            "context": "return <FileTextOutlined style={{ fontSize: 24, color: 'var(--ds-color-success-600, #16a34a)' }} />;"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 58,
+            "chain": [
+              "--ds-color-text-tertiary"
+            ],
+            "fallback": "#8c8c8c",
+            "hasFallback": true,
+            "context": "return <FileOutlined style={{ fontSize: 24, color: 'var(--ds-color-text-tertiary, #8c8c8c)' }} />;"
+          },
+          {
+            "variable": "--ds-color-warning-500",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 180,
+            "chain": [
+              "--ds-color-warning-500"
+            ],
+            "fallback": "#faad14",
+            "hasFallback": true,
+            "context": "? <FolderOutlined style={{ fontSize: 18, color: 'var(--ds-color-warning-500, #faad14)' }} />"
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 255,
+            "chain": [
+              "--ds-color-primary-500"
+            ],
+            "fallback": "#1677ff",
+            "hasFallback": true,
+            "context": "? '2px solid var(--ds-color-primary-500, #1677ff)'"
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 258,
+            "chain": [
+              "--ds-color-primary-50"
+            ],
+            "fallback": "#e6f7ff",
+            "hasFallback": true,
+            "context": "background: selectedItems.includes(item.id) ? 'var(--ds-color-primary-50, #e6f7ff)' : undefined,"
+          },
+          {
+            "variable": "--ds-color-warning-500",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 263,
+            "chain": [
+              "--ds-color-warning-500"
+            ],
+            "fallback": "#faad14",
+            "hasFallback": true,
+            "context": "? <FolderOutlined style={{ color: 'var(--ds-color-warning-500, #faad14)' }} />"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "line": 322,
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": "rgba(0,0,0,0.45)",
+            "hasFallback": true,
+            "context": "color: 'var(--ds-color-text-secondary, rgba(0,0,0,0.45))',"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 55,
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "context": "fontSize: 'var(--ds-font-size-sm, 14px)',"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 157,
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "context": "fontSize: 'var(--ds-font-size-sm, 14px)',"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 259,
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "context": "<div className=\"ds-file-manager__column-header\" data-part=\"column-header\" data-selected={false} style={{ ...rowStyle(false), fontWeight: 600, fontSize: 'var(--d"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 297,
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "context": "<div className=\"ds-file-manager__file-size\" data-part=\"file-size\" style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 14px)' }}>"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 300,
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "context": "<div className=\"ds-file-manager__modified-at\" data-part=\"modified-at\" style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 14px)' }}>"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 309,
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "context": "style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)' }}"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 323,
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "context": "style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)' }}"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "line": 352,
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "context": "<div data-part=\"item-name\" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>"
+          }
+        ],
+        "distinctVariablesRead": 53,
+        "readSiteCount": 133,
+        "emittedVariables": {},
+        "emittedVariablesTsx": {},
+        "paintOwnership": {
+          "ownCssFiles": [
+            {
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+              "engine": "modern",
+              "lines": 468,
+              "role": "skin-css",
+              "matchedRootClasses": [
+                "ds-pattern-file-manager"
+              ]
+            },
+            {
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+              "engine": "rustic",
+              "lines": 89,
+              "role": "skin-css",
+              "matchedRootClasses": [
+                "ds-pattern-file-manager"
+              ]
+            }
+          ],
+          "composedComponents": [
+            {
+              "component": "ModernBreadcrumb",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/navigation/Breadcrumb/engines/modern",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:46"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "modern"
+              ]
+            },
+            {
+              "component": "ModernButton",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/inputs/Button/engines/modern",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:42"
+              ],
+              "renderSiteCount": 6,
+              "engines": [
+                "modern"
+              ]
+            },
+            {
+              "component": "ModernCheckbox",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/inputs/Checkbox/engines/modern",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:43"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "modern"
+              ]
+            },
+            {
+              "component": "ModernEmpty",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/display/Empty/engines/modern",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:45"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "modern"
+              ]
+            },
+            {
+              "component": "ModernSpinner",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/feedback/Spinner/engines/modern",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:44"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "modern"
+              ]
+            }
+          ],
+          "sharedStyleHelpers": [],
+          "note": "Variables listed in variableCensus are read by THIS family's own CSS or its own TSX only. Paint contributed by a composed component is attributed to that component here and is NOT counted in this family's census."
+        },
+        "paintByEngine": {
+          "modern": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+              "paintKind": "own"
+            }
+          ],
+          "rustic": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "variableNamespaceSummary": {
+          "SHARED_OR_GLOBAL_NAMESPACE": 47,
+          "decl:UNDECLARED": 7,
+          "OWN_FAMILY_NAMESPACE": 4,
+          "OTHER_FAMILY_NAMESPACE": 2,
+          "decl:generated-bundle-css": 46
+        },
+        "unattributedRuleCount": 0,
+        "ruleCount": 179
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 212,
+        "sitesVerified": 105,
+        "sitesWithdrawn": 107,
+        "sitesNotProbed": 49,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3784,84 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
+            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-selection-bg",
+              "--_ds-list-item-selected-bg"
+            ],
+            "sockets": [
+              "--_ds-file-manager-selection-bg",
+              "--_ds-file-manager-selection-border",
+              "--_ds-file-manager-link-color",
+              "--_ds-file-manager-link-hover-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-cell-<status>-color",
+            "prop": "celdas y filas con estado",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-file-manager-cell-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
+            "--ds-file-manager-touch-target"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-color-border",
+            "--ds-color-border-secondary",
+            "--ds-color-border-subtle",
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-link",
+            "--ds-color-link-hover",
+            "--ds-color-primary",
+            "--ds-color-primary-hover",
+            "--ds-color-success",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning",
+            "--ds-elevation-1",
+            "--ds-link-underline-thickness",
+            "--ds-motion-fast",
+            "--ds-spacing-1",
+            "--ds-spacing-12",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-surface-card"
+          ],
+          "Piso de accesibilidad (clase propia)": [
+            "--ds-file-manager-touch-target",
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3869,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-file-manager-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3902,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-file-manager-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3929,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-cell-font-size",
+            "prop": "tamano de celda y header de tabla",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-file-manager-cell-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3960,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-container-radius",
+            "prop": "marco del pattern (tabla, kanban, galeria)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-file-manager-container-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3991,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +4004,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila, padding de celda, gap de toolbar",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-density-factor",
+              "--_ds-kanban-card-density-factor"
+            ],
+            "sockets": [
+              "--_ds-file-manager-density-factor",
+              "--_ds-file-manager-content-min-height"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-link-underline-offset",
+            "--ds-surface-inset"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +4039,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +4052,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Las celdas no se animan al ordenar/filtrar en la variante estandar: el re-flow de dato es instantaneo; solo la entrada de overlays de la tabla (menus) usa el socket overlay."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-motion-ease-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +4075,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-widget-card-elevation",
+              "--_ds-column-menu-elevation"
+            ],
+            "sockets": [
+              "--_ds-file-manager-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +4102,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Filas y celdas no llevan tinte ni glass: el scrim sobre dato es dano visual; la tabla es superficie de trabajo, no de marca."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +4125,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "El contenido de datos lo gobierna surface.*: si el tono de navegacion tine la tabla, la cascada se cruzo de eje."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +4142,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +4159,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "Celdas sticky usan el canal derivado sticky, no un z libre por componente."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +4176,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
+            "prop": "marco del pattern y separadores internos de fila",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-file-manager-frame-style"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
+            "--ds-shadow-focus-ring"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +4206,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +4224,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +4241,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +4280,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "Los indicadores dentro de celdas son marcas de estado (siguen color semantico), no iconos de la libreria de postura."
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +4297,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

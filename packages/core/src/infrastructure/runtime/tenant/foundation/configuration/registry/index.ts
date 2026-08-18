@@ -98,7 +98,11 @@ function createKnownTenant(
   const config = deepFreeze({
     slug: entry.slug,
     name: entry.name,
-    engine: entry.engine,
+    // No `engine` key. A first-party tenant does not carry an engine of its
+    // own: `resolveEngine` returns `verticalEngine` before it ever reads
+    // `tenantEngine`, and every first-party vertical preset declares `modern`,
+    // so the tenant branch was unreachable. Stating it here made the vertical
+    // preset look like one of two authorities over the same decision.
     vertical: entry.verticalKey,
     theme: 'base',
     plan: 'enterprise',

@@ -1,8 +1,23 @@
 {
   "schemaVersion": 2,
   "principle": "Parallelize independent ownership, not the number twenty.",
+  "doubleAccept": {
+    "law": "A Fable 5 plus Kimi K3 ACCEPT on a bounded packet is the sighted quality signal required before Codex may request an explicit owner order. It is not itself a commit authorization, it does not substitute for Codex sighted acceptance where the contract requires it, and it does not bypass the no-stage/no-commit/no-push fence.",
+    "requiredFor": "requesting an explicit owner order for the sighted packet",
+    "notAuthorizationFor": [
+      "local commit",
+      "push",
+      "release",
+      "R7 execution",
+      "owner decision"
+    ],
+    "actors": ["Fable 5", "Kimi K3"],
+    "coordinator": "Codex",
+    "implementationActor": "Cloud Opus implementer pool"
+  },
   "coordinator": {
-    "model": "Opus or the strongest coordinator-capable Claude available",
+    "model": "Codex",
+    "role": "DT and programme coordinator",
     "responsibilities": [
       "read selected round and current worktree",
       "construct conflict graph",
@@ -11,22 +26,24 @@
       "inspect every diff",
       "reject shallow or undeclared changes",
       "coordinate one architecture and one quality integration pass",
-      "emit one consolidated report"
+      "emit one consolidated report",
+      "authorize any local commit or release window explicitly"
     ]
   },
   "modelRouting": {
-    "law": "Route by cognitive need, actual availability and measured output quality. Model names are preferred roles, not a reason to wait, duplicate work or force a weak topology.",
+    "law": "Roles are fixed for the Modern Rescue programme. Model names are not a reason to wait, duplicate work, substitute actors or weaken a fence.",
     "programCoordinatorAndArchitectureControl": {
-      "preferred": "Opus or the strongest coordinator-capable Claude available",
+      "actor": "Codex",
       "work": [
         "round control and conflict graph",
         "architecture and single-authority decisions",
         "cross-family composition review",
-        "proposal adjudication and final diff rejection"
+        "proposal adjudication and final diff rejection",
+        "explicit commit/release authorization"
       ]
     },
     "advisoryReadOnly": {
-      "preferred": "Fable or the strongest independent review model available",
+      "actors": ["Fable 5", "Kimi K3"],
       "work": [
         "read-only architecture challenge",
         "behavioral and accessibility parity review",
@@ -34,27 +51,24 @@
         "vacuous-evidence and canon-gap detection"
       ]
     },
-    "creativePremiumFamilyWork": {
-      "preferred": "Opus or the strongest product-design and design-engineering model available",
+    "implementer": {
+      "actor": "Cloud Opus implementer pool",
       "work": [
-        "dominant visual and UX defect diagnosis",
-        "reference-grade family composition",
-        "responsive and mobile posture",
-        "tenant art-direction expression",
-        "interaction, motion and material craft"
-      ]
+        "source implementation in delegated packets",
+        "contract, manifest, compiler and test edits within bounded ownership",
+        "structured evidence assembly",
+        "i18n parity and barrel synchronization"
+      ],
+      "succession": {
+        "predecessor": "Kimi 2.7",
+        "successor": "Cloud Opus implementer pool",
+        "ownerOrderDate": "2026-08-17",
+        "proof": "The explicit owner order of 2026-08-17 retires Kimi 2.7 from the live implementer seat and vests delegated source implementation in the Cloud Opus implementer pool. The seat is transferred, not removed: exactly one implementer authority exists before and after this succession.",
+        "retainedAuditCapacity": ["Fable 5", "Kimi K3"],
+        "capacityLaw": "This succession removes no audit capacity. Kimi K3 keeps its full read-only audit seat in advisoryReadOnly and doubleAccept, so the kimi-capacity-removal-lacks-successor-or-death-proof stop condition is discharged by a named successor rather than suppressed."
+      }
     },
-    "mechanicalDeterministicWork": {
-      "preferred": "Sonnet or the most efficient reliable implementation model available",
-      "work": [
-        "censuses and ownership manifests",
-        "exact wiring and repetitive migrations",
-        "i18n parity and barrel synchronization",
-        "focused contract updates",
-        "structured evidence assembly"
-      ]
-    },
-    "promotionLaw": "Escalate a mechanical lane to the creative model when product judgment appears; escalate any authority conflict to the coordinator. Do not let a cheaper lane invent architecture or let the coordinator spend context on deterministic repetition.",
+    "promotionLaw": "Escalate any authority conflict to Codex. No other model may invent architecture, authorize commits, or override the programme contracts.",
     "reportingLaw": "Record the chosen route and reason once per cohort in structured fields; do not narrate model deliberation per family."
   },
   "graph": {
@@ -239,11 +253,12 @@
     "replace a failed agent with the same ownership instead of abandoning the round"
   ],
   "r7Execution": {
-    "main": "one Opus coordinator owning conflict graph architecture canon and integration",
-    "advisor": "at most one Fable read-only lane for architecture behavioral parity and visual coherence",
+    "enabled": false,
+    "main": "Codex coordinator owning conflict graph architecture canon and integration",
+    "advisor": "Fable 5 and Kimi K3 read-only lanes for architecture behavioral parity and visual coherence",
     "mechanicalWriters": {
-      "maximum": 2,
-      "model": "Sonnet",
+      "maximum": 1,
+      "actor": "Cloud Opus implementer pool",
       "allowedWork": [
         "disjoint family anatomy mappings",
         "control and recipe ledgers",

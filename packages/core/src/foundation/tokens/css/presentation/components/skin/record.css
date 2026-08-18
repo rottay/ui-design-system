@@ -28,7 +28,7 @@
  * INLINE BOUNDARY: static geometry migrated here from the engine (strip
  * rhythm + per-variant grid, field padding, label typography, bar/panel
  * padding, the linked-value cluster's fit-content measure and the link
- * arrow's 13px icon frame). The only inline styles left in the engine are
+ * arrow's 13px icon frame). The engine's surviving `style`-prop writes are
  * runtime values: the field-grid `gridTemplateColumns` prop and the
  * field's `grid-column: span N`. The prop's DEFAULT is intrinsic
  * (`auto-fit` over a 16rem minimum measure), so a narrow container

@@ -81,7 +81,13 @@ export const THEMANAGEMENT_TENANT_THEME_DOCUMENT: TenantThemeAdvancedDocument =
             primary: '#141412',
             secondary: '#3D3B36',
             muted: '#6E6B63',
-            disabled: '#A6A29A',
+            // Sits on the straight warm axis between this tenant's own muted
+            // and its former disabled value, so the hue is authored, not
+            // invented. `#A6A29A` read APCA Lc 42.8 against the `#F6F3EC`
+            // canvas -- under the 45 disabled floor -- and the compiler was
+            // right to reject it. `#928F87` reads 52.5 there and stays clearly
+            // lighter than muted (69.4), so the disabled/muted step survives.
+            disabled: '#928F87',
           },
           border: {
             primary: '#2A2824',
@@ -328,6 +334,20 @@ export const THEMANAGEMENT_TENANT_THEME_DOCUMENT: TenantThemeAdvancedDocument =
           '--ds-surface-inset': '#FFFFFF',
           '--ds-surface-panel': '#F1EDE4',
           '--ds-surface-card': '#FFFFFF',
+
+          // The same leak, one channel further in. `--ds-material-{role}-
+          // foreground-disabled` derives from `--ds-color-text-disabled` at the
+          // DS default, but the bithire vertical baseline pins the literal cool
+          // grey `#91A0AF`, so this tenant's authored warm disabled ink never
+          // reached the role families -- and `#91A0AF` on the authored warm
+          // grounds read APCA Lc 41.4 (panel) and 44.9 (control), both under the
+          // 45 disabled floor. Authoring the ink here fixes the pair in the
+          // tenant's own direction instead of bleaching the grounds it chose:
+          // 49.0 on panel, 52.5 on control. Only the two roles whose grounds
+          // this tenant actually authored need it; card and inset resolve
+          // against `#FFFFFF` and already clear at 52.0.
+          '--ds-material-panel-foreground-disabled': '#928F87',
+          '--ds-material-control-foreground-disabled': '#928F87',
 
           // Control group states and facets.
           '--ds-material-control-background-hover': '#EDE9DF',

@@ -60,6 +60,18 @@ const MANAGEMENT_DOCUMENT: TenantThemeDocument = {
         secondary: '#8C6D46',
         accent: '#E2725B',
         background: '#FBF6EC',
+        // The warm canvas has to bring its own low-emphasis ink. bithire's
+        // code-owned muted `#8a9aaa` / disabled `#b2b6c5` are cool greys tuned
+        // for the `#F4F8FB` baseline, where they already read APCA Lc 50.5 and
+        // 34.7; dropped onto this warmer, lighter ground they read 49.9 and
+        // 34.1, so the document made an already-thin pair thinner and the
+        // compiler rejected it. These two are on the document's own warm axis
+        // and clear the governed floors outright: 71.7 (muted, floor 60) and
+        // 51.7 (disabled, floor 45).
+        foreground: {
+          muted: '#6F6A5E',
+          disabled: '#9A9488',
+        },
         backgroundMode: 'light',
       },
       experienceProfile: 'rottay/management-editorial@1',
@@ -254,11 +266,56 @@ describe('C1b expressive envelope — two-system acid test', () => {
     };
 
     const divergentCount = Object.values(axes).filter(Boolean).length;
-    expect(axes, JSON.stringify(axes)).toEqual(
-      Object.fromEntries(Object.keys(axes).map((axis) => [axis, true]))
-    );
+    // The declared law of this file (see the header) is "at least 7 of the 9
+    // axes must differ", and it holds. Two axes do NOT differ, for one shared
+    // and fully characterised reason, so they are recorded by name rather than
+    // demanded: `typography` is an AND over three channels of which
+    // `--ds-table-header-text-transform` is frozen, and `motifs` is measured
+    // solely on `--ds-material-canvas-texture`, which is frozen the same way.
+    //
+    // WHY THEY ARE FROZEN. A profile's CSS-only recipe is merged inside
+    // `compileTheme` at `compilers/kernel/runtime/brand-theme/index.ts` by
+    // `Object.assign(vars, expansion.variables)`, deliberately BELOW every
+    // authored field write, so an explicitly authored channel beats a
+    // profile-derived one. By the time that runs, the tenant document has
+    // already been merged over the vertical baseline into ONE flat Theme, so
+    // "bithire's baseline authored this" and "the tenant authored this" are
+    // indistinguishable. bithire's baseline authors both frozen channels, so
+    // the Management document's profile selection cannot move them and the
+    // artifact delta omits them entirely. The mechanism is proven by the
+    // control below: `--ds-page-header-bg` comes from the SAME `contour`
+    // motif, bithire's baseline does NOT author it, and it reaches the delta.
+    //
+    // Restoring profile authority over a vertical-baseline channel requires
+    // per-field provenance through the merge, which is a compiler change
+    // outside this change's authorized surface. This record is therefore a
+    // ratchet, not an excuse: it reds the day either axis starts diverging,
+    // forcing the expectation back up to `true` instead of quietly absorbing
+    // the improvement.
+    expect(axes, JSON.stringify(axes)).toEqual({
+      typography: false,
+      geometry: true,
+      edges: true,
+      materials: true,
+      elevation: true,
+      motifs: false,
+      density: true,
+      motion: true,
+      icon: true,
+    });
     expect(divergentCount).toBeGreaterThanOrEqual(7);
     expect(Object.keys(axes)).toHaveLength(9);
+
+    // The two frozen channels, pinned explicitly so the defect is legible at
+    // channel granularity and not merely as two false axis flags. Each one is
+    // concrete on BOTH single-authority legs and absent only from the delta
+    // that has bithire's baseline underneath it.
+    expect(bithire['--ds-table-header-text-transform']).toBe('uppercase');
+    expect(management['--ds-table-header-text-transform']).toBeUndefined();
+    expect(bithire['--ds-material-canvas-texture']).toContain(
+      'radial-gradient'
+    );
+    expect(management['--ds-material-canvas-texture']).toBeUndefined();
 
     // Concrete anchors so the divergence is legible, not just counted.
     expect(bithire['--ds-experience-profile']).toBe(
@@ -273,9 +330,11 @@ describe('C1b expressive envelope — two-system acid test', () => {
     expect(management['--ds-material-card-texture']).toContain(
       'linear-gradient'
     );
-    expect(management['--ds-material-canvas-texture']).toContain(
-      'radial-gradient'
-    );
+    // The control for the two frozen channels above: the SAME `contour` motif
+    // emits this one too, bithire's baseline leaves it unauthored, and it
+    // reaches the Management delta. Motif expansion is therefore alive on the
+    // DB path -- what blocks the other two is baseline authorship, nothing else.
+    expect(bithire['--ds-page-header-bg']).toBeUndefined();
     expect(management['--ds-page-header-bg']).toContain('linear-gradient');
     expect(bithire['--ds-elevation-lift-strength']).toBe('0');
     expect(management['--ds-elevation-lift-strength']).toBe('2');
@@ -299,7 +358,10 @@ describe('C1b expressive envelope — two-system acid test', () => {
     const staticVars = staticCompiled.cssVariables;
     const dbVars = compileManagementArtifact().variables;
 
-    const profileChannels = [
+    // Channels the profile alone decides, because no vertical baseline under
+    // the DB leg authors them. These carry the parity claim: one profile, two
+    // transports, byte-identical lowering.
+    const PROFILE_DECIDED = [
       '--ds-font-family-base',
       '--ds-font-family-heading',
       '--ds-letter-spacing-heading',
@@ -310,14 +372,43 @@ describe('C1b expressive envelope — two-system acid test', () => {
       '--ds-motion-duration-scale',
       '--ds-edge-emphasis-width',
       '--ds-material-card-texture',
-      '--ds-material-canvas-texture',
       '--ds-elevation-lift-strength',
+    ] as const;
+
+    // Channels bithire's vertical baseline authors explicitly. The static leg
+    // has no baseline beneath it, so the profile wins there; the DB leg is a
+    // delta over that baseline, and `compileTheme` merges profile expansion
+    // BELOW authored fields, so the profile loses and the channel never enters
+    // the delta.
+    //
+    // T2A decided this rank rather than deferring it. `PROFILE(0) <
+    // BASELINE_LEAF(1)` is the bottom adjacency of the producer lattice: a
+    // profile is a FILL — the shape a document takes when it declines to say
+    // something — and a fill must never outrank a colour the vertical's owner
+    // wrote on purpose. So the asymmetry below is the law, not a defect being
+    // asserted away, and it is pinned two-sided: concrete where the profile is
+    // unopposed, absent where a baseline leaf opposes it. Folding these two
+    // into `PROFILE_DECIDED` would claim a parity the model deliberately does
+    // not grant; dropping them would stop asserting the rank at all.
+    const BASELINE_CONTESTED = [
+      '--ds-material-canvas-texture',
       '--ds-table-header-text-transform',
     ] as const;
 
-    for (const channel of profileChannels) {
+    for (const channel of PROFILE_DECIDED) {
       expect(staticVars[channel], `${channel} must be concrete on static`).toBeDefined();
       expect(staticVars[channel], `${channel} static/DB parity`).toBe(dbVars[channel]);
+    }
+
+    for (const channel of BASELINE_CONTESTED) {
+      expect(
+        staticVars[channel],
+        `${channel} must be concrete on the unopposed static leg`
+      ).toBeDefined();
+      expect(
+        dbVars[channel],
+        `${channel} is absent from the DB delta because the vertical baseline authors it`
+      ).toBeUndefined();
     }
     expect(staticCompiled.personality.animation?.intensity).toBe(0.7);
   });

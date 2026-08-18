@@ -118,10 +118,10 @@ describe("divergence fixtures (W4 section 9)", () => {
     // Both buttonStyle presets reach the artifact folded through the radius
     // dial; the divergence is in the operand, which is what the fixtures pin.
     expect(sober["--ds-radius-button"]).toBe(
-      "calc(2px * var(--ds-radius-scale, 1))"
+      "calc(2px / 1.25 * var(--ds-radius-scale, 1))"
     );
     expect(editorial["--ds-radius-button"]).toBe(
-      "calc(9999px * var(--ds-radius-scale, 1))"
+      "calc(9999px / 1.25 * var(--ds-radius-scale, 1))"
     );
     expect(sober["--ds-type-scale"]).toBe("0.96");
     expect(editorial["--ds-type-scale"]).toBe("1.06");
@@ -141,17 +141,25 @@ describe("divergence fixtures (W4 section 9)", () => {
     }
   });
 
-  it("editorial is dual-scheme (light-dark) and sober is single-scheme", () => {
-    const sober = compileSober().variables;
-    const editorial = compileEditorial().variables;
-
-    expect(editorial["--ds-color-scheme"]).toBe("light dark");
-    expect(editorial["--ds-color-primary"]).toBe(
-      "light-dark(#A23B72, #D06A9F)"
+  it("editorial carries its typed dark intent while sober keeps the code-owned mode", () => {
+    const sober = compileSober();
+    const editorial = compileEditorial();
+    const soberDark = sober.modeDeltas?.find((delta) => delta.mode === "dark");
+    const editorialDark = editorial.modeDeltas?.find(
+      (delta) => delta.mode === "dark"
     );
-    expect(sober["--ds-color-scheme"]).toBeUndefined();
+
+    expect(editorial.variables["--ds-color-primary"]).toBe("#A23B72");
+    expect(editorialDark?.variables["--ds-color-primary"]).toBe("#D06A9F");
+    expect(editorial.css).toContain("@media (prefers-color-scheme: dark)");
+    expect(soberDark?.variables["--ds-color-primary"]).toBe("#1e84e6");
+    expect(soberDark?.variables["--ds-color-primary"]).not.toBe(
+      editorialDark?.variables["--ds-color-primary"]
+    );
     expect(
-      Object.values(sober).some((value) => value.includes("light-dark(")),
+      Object.values(sober.variables).some((value) =>
+        value.includes("light-dark(")
+      ),
       "sober must stay a deterministic single-value artifact"
     ).toBe(false);
   });

@@ -135,6 +135,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       translate,
       title,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -219,7 +220,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
             title={title}
             {...props}
             {...(responsive ? responsive.attrs : {})}
-            data-part="root"
+            data-part={dataPart ?? "root"}
             data-color={color}
             {...typographyDataAttributes(craftProps)}
             style={resolvedStyle}
@@ -247,7 +248,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           title={title}
           {...props}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={resolvedStyle}
@@ -304,6 +305,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       translate,
       title,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -394,7 +396,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
             title={title}
             {...props}
             {...(responsive ? responsive.attrs : {})}
-            data-part="root"
+            data-part={dataPart ?? "root"}
             data-color={color}
             {...typographyDataAttributes(craftProps)}
             className={resolvedClassName}
@@ -427,7 +429,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
           title={title}
           {...props}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={resolvedStyle}
@@ -478,6 +480,7 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
       translate,
       title,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -535,7 +538,7 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
           title={title}
           {...props}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{
@@ -603,6 +606,7 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
       title,
       onClick,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -664,7 +668,7 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
           title={title}
           {...props}
           {...(responsive ? responsive.attrs : {})}
-          data-part="root"
+          data-part={dataPart ?? "root"}
           data-color={color}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}

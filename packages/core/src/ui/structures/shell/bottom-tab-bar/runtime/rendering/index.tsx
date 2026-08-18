@@ -20,7 +20,7 @@
  * Ownership: the engine stamps anatomy (`data-part`) and state
  * (`data-selected`, `data-wide`); the skin
  * (`presentation/components/skin/bottom-tab-bar.css`) owns 100% of layout and
- * paint — typography included. The only inline style left is the caller's own
+ * paint — typography included. The inline style left here is the caller's own
  * `style` prop merged onto the root.
  *
  * Engine-agnostic: composes DS primitives (Box, Flex, Text) which resolve

@@ -1,8 +1,33 @@
 /**
  * @fileoverview Integration tests verifying personality tokens propagate to
  * runtime CSS variables and inline styles for Button, Card, Badge, Tag,
- * Skeleton, Divider, Statistic, and Typography across all engines. Also
- * validates that switching product profiles and tenants updates resolved tokens.
+ * Skeleton, Divider, Statistic, and Typography across all engines, and that
+ * switching product profile and tenant moves the resolved personality.
+ *
+ * WHY THE TENANT FIXTURES CARRY NO COLORS. They used to, and the four tests
+ * here went red as a result -- not because personality broke, but because a
+ * tenant config carrying `primaryColor` is now a REFUSED config. Visual
+ * authority admission (`theming/foundation/visual-authority/foundation/
+ * admission`) treats runtime visual branding with no verified mounted artifact
+ * as fail-closed: it blocks, announces `carries runtime visual payload but no
+ * verified mounted artifact`, and the subtree renders NOTHING. The old fixture
+ * was asking the provider to paint `--ds-color-primary: #c2410c` onto
+ * `<html>`, which is exactly the second paint authority the compiled-artifact
+ * model exists to remove.
+ *
+ * So the tenants below carry identity only. The refusal is not skirted, it is
+ * pinned: the last describe hands the provider the old illegal payload and
+ * proves both halves of the outcome -- no paint AND no tree. Losing the tree is
+ * the part worth stating out loud, because a tenant whose colors cannot be
+ * trusted renders as nothing rather than as something subtly wrong.
+ *
+ * WHAT THE PROFILE SWITCH NOW PROVES. The old switch test moved tenant AND
+ * profile at once and then checked a branding color, so a personality
+ * regression could hide behind the color assertion. With colors gone the two
+ * fixtures differ only in identity, which means every difference below is
+ * attributable to the product profile alone -- and it is checked across five
+ * channels (elevation, label case, hover motion, entrance, skeleton timing)
+ * rather than one.
  */
 
 import React, { Suspense } from 'react';
@@ -44,6 +69,12 @@ class IntersectionObserverMock {
   takeRecords = vi.fn(() => []);
 }
 
+/**
+ * Identity only, no visual payload. `companyName` is the whole of what a tenant
+ * may carry through the runtime config without a verified mounted artifact
+ * standing behind it; a color here would make the config refusable and this
+ * whole file would measure a blocked provider instead of a personality bridge.
+ */
 const EVNTO_TENANT: TenantConfig = {
   slug: 'evnto-test',
   name: 'Evnto Test',
@@ -55,12 +86,6 @@ const EVNTO_TENANT: TenantConfig = {
   features: ['events'],
   branding: {
     companyName: 'Evnto Test',
-    primaryColor: '#c2410c',
-    darkPrimaryColor: '#fb923c',
-    secondaryColor: '#0f766e',
-    darkSecondaryColor: '#5eead4',
-    accentColor: '#8b5cf6',
-    darkAccentColor: '#c4b5fd',
   },
 };
 
@@ -75,12 +100,19 @@ const BITHIRE_TENANT: TenantConfig = {
   features: ['recruiting'],
   branding: {
     companyName: 'BitHire Test',
-    primaryColor: '#0a66c2',
-    darkPrimaryColor: '#60a5fa',
-    secondaryColor: '#057642',
-    darkSecondaryColor: '#86efac',
-    accentColor: '#5a2dbd',
-    darkAccentColor: '#c4b5fd',
+  },
+};
+
+/**
+ * The fixture as it used to be written, kept as the operand of the refusal
+ * drill at the bottom of this file rather than deleted. A single color is
+ * enough: admission asks whether visual payload is present, not how much.
+ */
+const EVNTO_TENANT_WITH_UNCOMPILED_COLORS: TenantConfig = {
+  ...EVNTO_TENANT,
+  branding: {
+    companyName: 'Evnto Test',
+    primaryColor: '#c2410c',
   },
 };
 
@@ -120,7 +152,17 @@ function personalityToken(name: string): string {
   return rule?.style.getPropertyValue(projectedName) ?? '';
 }
 
-/** Tenant branding stays inline on `<html>`; only personality moved. */
+/**
+ * Reads an inline custom property off `<html>`.
+ *
+ * Used only for NEGATIVES now. Nothing is entitled to write here: an inline
+ * declaration carries the highest specificity CSS offers, so a value on the
+ * root element outranks the tenant artifact, the personality layer and every
+ * engine sheet at once. Personality is deliberately published into a stylesheet
+ * instead, and tenant paint arrives as a compiled artifact rather than from the
+ * provider -- which is why the branding assertions this helper used to serve
+ * are gone rather than relocated.
+ */
 function inlineToken(name: string): string {
   return document.documentElement.style.getPropertyValue(name);
 }
@@ -164,7 +206,7 @@ describe('primitive personality integration', () => {
   });
 
   it.each(['classic', 'modern', 'rustic'] as const)(
-    'bridges personality and tenant branding into runtime styles for %s',
+    'bridges personality into runtime styles for %s, and paints nothing inline',
     async (engine) => {
       const buttonView = renderWithProfile(
         <Button>Primary action</Button>,
@@ -175,7 +217,6 @@ describe('primitive personality integration', () => {
 
       const button = await screen.findByRole('button', { name: /primary action/i }, { timeout: 15000 });
 
-      expect(inlineToken('--ds-color-primary')).toBe('#c2410c');
       expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
       expect(personalityToken('--ds-badge-radius')).toBe('var(--ds-radius-full)');
       expect(personalityToken('--ds-typography-label-transform')).toBe('capitalize');
@@ -185,6 +226,10 @@ describe('primitive personality integration', () => {
       // style attribute would outrank every tenant-scoped rule in the cascade.
       expect(inlineToken('--ds-card-shadow')).toBe('');
       expect(inlineToken('--ds-badge-radius')).toBe('');
+      // And the provider paints no tenant channel there either, which is the
+      // other half of the same rule. This tenant authors no color at all, so a
+      // value appearing here could only have been invented by the runtime.
+      expect(inlineToken('--ds-color-primary')).toBe('');
 
       expect(button.getAttribute('style') ?? '').toContain('--ds-button-hover-transform');
 
@@ -278,7 +323,7 @@ describe('primitive personality integration', () => {
     }
   );
 
-  it('changes the resolved personality and branding when switching product profile and tenant', () => {
+  it('changes the resolved personality when switching product profile and tenant', () => {
     const { rerender } = renderWithProfile(
       <div>
         <Button>Primary action</Button>
@@ -292,9 +337,15 @@ describe('primitive personality integration', () => {
       'events.organizer'
     );
 
+    // Five channels, spanning elevation, label case, hover motion, entrance and
+    // skeleton timing. One channel would let a profile that had stopped
+    // resolving anything at all pass on a coincidence; a profile that moves
+    // must move a spread of them.
     expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
     expect(personalityToken('--ds-typography-label-transform')).toBe('capitalize');
-    expect(inlineToken('--ds-color-primary')).toBe('#c2410c');
+    expect(personalityToken('--ds-button-hover-transform')).toBe('translateY(-4px) scale(1.03)');
+    expect(personalityToken('--ds-personality-animation-entrance')).toBe('slideUp');
+    expect(personalityToken('--ds-skeleton-animation-duration')).toBe('1.1s');
 
     rerender(
       <DesignSystemProvider
@@ -315,6 +366,54 @@ describe('primitive personality integration', () => {
 
     expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-sm)');
     expect(personalityToken('--ds-typography-label-transform')).toBe('none');
-    expect(inlineToken('--ds-color-primary')).toBe('#0a66c2');
+    expect(personalityToken('--ds-button-hover-transform')).toBe('translateY(0) scale(1)');
+    expect(personalityToken('--ds-personality-animation-entrance')).toBe('fade');
+    expect(personalityToken('--ds-skeleton-animation-duration')).toBe('1.9s');
+
+    // Still nothing inline. A profile switch is a personality event, and it
+    // must not become a paint event on the way through.
+    expect(inlineToken('--ds-card-shadow')).toBe('');
+    expect(inlineToken('--ds-color-primary')).toBe('');
+  });
+
+  it('refuses a tenant whose colors have no compiled artifact behind them', async () => {
+    // The fixture every test above used to run on. It is not merely ignored --
+    // the whole subtree is withheld, which is the outcome worth pinning: a
+    // tenant whose visual payload cannot be trusted renders as nothing, rather
+    // than as a page painted from an unverified source.
+    const announcements: string[] = [];
+    const originalError = console.error;
+    console.error = (...args: unknown[]) => {
+      announcements.push(args.map(String).join(' '));
+    };
+
+    try {
+      const view = renderWithProfile(
+        <Button>Primary action</Button>,
+        'rustic',
+        EVNTO_TENANT_WITH_UNCOMPILED_COLORS,
+        'events.organizer'
+      );
+
+      await waitFor(() => {
+        expect(
+          announcements.some((message) =>
+            /carries runtime visual payload but no verified mounted artifact/.test(message)
+          )
+        ).toBe(true);
+      });
+
+      // No tree.
+      expect(view.container.querySelector('button')).toBeNull();
+      expect(view.container.innerHTML).toBe('');
+      // No paint, by either route: nothing inline on the root, and the
+      // personality channel is never even claimed for a blocked tenant.
+      expect(inlineToken('--ds-color-primary')).toBe('');
+      expect(document.getElementById('ds-personality-tokens')).toBeNull();
+
+      view.unmount();
+    } finally {
+      console.error = originalError;
+    }
   });
 });

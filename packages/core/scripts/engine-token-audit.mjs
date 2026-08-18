@@ -2440,39 +2440,6 @@ function countCompositorOnlyViolations(fileList) {
   return count;
 }
 
-/**
- * WO-TOK-02 (perceptual color ramp derivation): counts per-step
- * `--ds-color-{role}-{50..900}` ramp hex hand-authored in any first-party
- * artifact's `_source/extension.css`, beyond the sanctioned seeds
- * (BrandTheme `.ts` palette fields) and `dark*` overrides. `compileBrandTheme`
- * (deriveTenantColorRamps) now derives this ramp mechanically per tenant
- * surface, so a hand-authored ramp step here is drift, not intent: it either
- * duplicates (redundant, will silently rot out of sync) or -- because the
- * extension's selector always has equal-or-higher specificity than the
- * compiled block's -- shadows the derivation outright. Decrease-only,
- * target 0. rottay's dark-default block is the one accepted, documented
- * exception (WO-TOK-01/WO-ENG-22: its compiled block is scoped to the
- * explicit light toggle, not its default surface, so the derivation cannot
- * yet reach rottay's shipped default rendering -- see roadmap/tokens.md
- * WO-TOK-02 for the full rationale); bithire's and evnto's default (light)
- * blocks were drained in this WO and must stay at 0.
- */
-function countHandAuthoredRampHex() {
-  const slugs = ['bithire', 'evnto', 'rottay'];
-  const rampDecl =
-    /--ds-color-(?:primary|secondary|accent|success|warning|error|info)-(?:50|100|200|300|400|500|600|700|800|900):\s*#[0-9a-fA-F]{3,8}\s*;/g;
-
-  let count = 0;
-  for (const slug of slugs) {
-    const extensionPath = join(artifactsDir, slug, '_source/extension.css');
-    if (!existsSync(extensionPath)) continue;
-    const text = readFileSync(extensionPath, 'utf8');
-    const matches = text.match(rampDecl);
-    count += matches ? matches.length : 0;
-  }
-  return count;
-}
-
 const counters = {
   'motion.cubicBezierLiterals': motion.cubicBezier,
   'motion.rawDurationLiterals': motion.rawDuration,
@@ -2512,7 +2479,6 @@ const counters = {
   'daisy.classConsumers': countDaisyClassConsumers(files),
   'color.modernHexLiterals': color.hex,
   'color.modernRgbaLiterals': color.rgba,
-  'color.handAuthoredRampSteps': countHandAuthoredRampHex(),
   'themeCss.unreferencedSelectors': themeCssAudit.unreferencedSelectors,
   'themeCss.lineCount': themeCssAudit.lineCount,
   // WO-GAT-02: classic/rustic dead-selector counters, generalized from WO-ENG-08's modern scan

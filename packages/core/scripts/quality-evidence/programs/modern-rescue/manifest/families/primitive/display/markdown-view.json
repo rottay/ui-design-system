@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "0588133e554a3ea7df50083a37df1271d62ef615685dbd891848046b80541b02"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1400 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/MarkdownView/MarkdownView.stories.tsx",
+      "packages/core/src/ui/primitives/display/MarkdownView/index.tsx",
+      "packages/core/src/ui/primitives/display/MarkdownView/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/MarkdownView/runtime/parser/index.ts",
+      "packages/core/src/ui/primitives/display/MarkdownView/runtime/parser/tests/parser.test.ts",
+      "packages/core/src/ui/primitives/display/MarkdownView/runtime/link-safety/index.ts",
+      "packages/core/src/ui/primitives/display/MarkdownView/runtime/link-safety/tests/link-safety.test.ts",
+      "packages/core/src/ui/primitives/display/MarkdownView/tests/MarkdownView.pass1-premium.test.tsx",
+      "packages/core/src/ui/primitives/display/MarkdownView/tests/MarkdownView.test.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+    ],
+    "stableParts": [
+      "emphasis",
+      "strong",
+      "inline-code",
+      "link",
+      "paragraph",
+      "code-block",
+      "code-block-pre",
+      "blockquote",
+      "list-item",
+      "task-checkbox",
+      "list-item-content",
+      "list",
+      "table-wrapper",
+      "table",
+      "table-head",
+      "table-header-cell",
+      "table-body",
+      "table-cell",
+      "thematic-break",
+      "root"
+    ],
+    "states": [
+      "hover",
+      "active",
+      "focus-visible",
+      "checked",
+      "disabled"
+    ],
+    "variantAxes": [
+      "data-language"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "A scrollable code block is a keyboard-reachable labelled region: role=\"region\" + tabIndex={0} + aria-label at packages/core/src/ui/primitives/display/MarkdownView/index.tsx:296-298; the same treatment is applied to the table wrapper at :427-429.",
+      "The task checkbox is an announced but deliberately non-interactive control: role=\"checkbox\" with aria-checked and a hard aria-disabled=\"true\" at packages/core/src/ui/primitives/display/MarkdownView/index.tsx:370-373.",
+      "Tables render real table semantics with a header scope, not a div grid: <table>/<thead>/<th> at packages/core/src/ui/primitives/display/MarkdownView/index.tsx:438-442 and scope= at :448.",
+      "Link rendering passes through the family's own safety module, packages/core/src/ui/primitives/display/MarkdownView/runtime/link-safety/index.ts (referenced at :27 and :88); a tenant control may not bypass it.",
+      "Bidirectional text keeps a logical-direction path: the :lang(ar,fa,ur,...) rule at packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:146."
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-b",
+        "scoutArtifact": "mr-anatomy-display-b.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 21,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "emphasis",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:142"
+          ]
+        },
+        {
+          "part": "strong",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:148"
+          ]
+        },
+        {
+          "part": "inline-code",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:154"
+          ]
+        },
+        {
+          "part": "link",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:202"
+          ]
+        },
+        {
+          "part": "paragraph",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:278"
+          ]
+        },
+        {
+          "part": "code-block",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:284"
+          ]
+        },
+        {
+          "part": "code-block-pre",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:289"
+          ]
+        },
+        {
+          "part": "blockquote",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:335"
+          ]
+        },
+        {
+          "part": "list-item",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:360"
+          ]
+        },
+        {
+          "part": "task-checkbox",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:374"
+          ]
+        },
+        {
+          "part": "list-item-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:397"
+          ]
+        },
+        {
+          "part": "list",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:406",
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:413"
+          ]
+        },
+        {
+          "part": "table-wrapper",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:426"
+          ]
+        },
+        {
+          "part": "table",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:438"
+          ]
+        },
+        {
+          "part": "table-head",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:439"
+          ]
+        },
+        {
+          "part": "table-header-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:444"
+          ]
+        },
+        {
+          "part": "table-body",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:468"
+          ]
+        },
+        {
+          "part": "table-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:474"
+          ]
+        },
+        {
+          "part": "thematic-break",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:494"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:542"
+          ]
+        }
+      ],
+      "partsStampedInSourceNotClaimedByScout": {
+        "parts": [
+          "heading"
+        ],
+        "status": "MEASURED, NOT ADMITTED. The DS stamps these data-part names inside this family owner tree but no scout claimed them. Admission waits on the part-ownership ruling (open method axis 4), because a stamp inside the owner tree may belong to a nested family."
+      },
+      "stateAnchors": [
+        {
+          "token": "hover",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:43",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:46",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:47",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:48"
+          ],
+          "atSiteCount": 7,
+          "state": "hover"
+        },
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:53",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:54",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:55",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:56",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:57"
+          ],
+          "atSiteCount": 7,
+          "state": "active"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:60",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:61",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:62",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:63",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:64",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:65"
+          ],
+          "atSiteCount": 10,
+          "state": "focus-visible"
+        },
+        {
+          "token": "checked",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:205",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:207",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:208",
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:371"
+          ],
+          "state": "checked"
+        },
+        {
+          "token": "disabled",
+          "at": [
+            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:372"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "data-checked",
+          "state": "checked"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-language"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "forced-colors",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:176",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:177",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:178",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:179",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:180",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:181"
+            ],
+            "atSiteCount": 10
+          },
+          {
+            "token": "prefers-reduced-motion",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:213",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:214",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:215",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:216",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:217",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:218"
+            ],
+            "atSiteCount": 7
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": "No engine siblings. One implementation at packages/core/src/ui/primitives/display/MarkdownView/index.tsx serves every engine, so there is no engine divergence to report.",
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "UNATTRIBUTED": {
+            "layout": 8,
+            "spacing": 8,
+            "unattributed": 5,
+            "border": 5,
+            "color": 4,
+            "typography": 4,
+            "radius": 3
+          },
+          "blockquote": {
+            "spacing": 3,
+            "color": 2,
+            "radius": 2,
+            "border": 1
+          },
+          "code-block-pre": {
+            "elevation": 1
+          },
+          "heading": {
+            "typography": 18
+          },
+          "link": {
+            "color": 5,
+            "motion": 4,
+            "typography": 2,
+            "radius": 1,
+            "elevation": 1
+          },
+          "list": {
+            "color": 2
+          },
+          "root": {
+            "size": 1
+          },
+          "table-wrapper": {
+            "border": 2,
+            "radius": 2
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-font-family-mono",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:89",
+            "fallback": null,
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "MONO_FONT"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:92",
+            "fallback": null,
+            "landsOnProperty": "compact",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "compact"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:93",
+            "fallback": null,
+            "landsOnProperty": "comfortable",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "comfortable"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:99",
+            "fallback": null,
+            "landsOnProperty": "compact",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "compact"
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:100",
+            "fallback": null,
+            "landsOnProperty": "comfortable",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "comfortable"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:107",
+            "fallback": null,
+            "landsOnProperty": "compact",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "compact"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:108",
+            "fallback": null,
+            "landsOnProperty": "comfortable",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "comfortable"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:115",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "borderRadius"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:116",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "background"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:117",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "color"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:301",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:305",
+            "fallback": null,
+            "landsOnProperty": "scrollbar-color",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "scrollbarColor"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:306",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "borderRadius"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:307",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "background"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:308",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "border"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:314",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-line-height-body",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:315",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "lineHeight"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:318",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "color"
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:351",
+            "fallback": null,
+            "landsOnProperty": "padding-inline-start",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "paddingInlineStart"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:362",
+            "fallback": null,
+            "landsOnProperty": "margin-top",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "marginTop"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:365",
+            "fallback": null,
+            "landsOnProperty": "gap",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "gap"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:381",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "borderRadius"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:382",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "border"
+          },
+          {
+            "variable": "--_ds-markdown-task-fill",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:389",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "background"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:389",
+            "fallback": null,
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "background"
+          },
+          {
+            "variable": "--_ds-markdown-task-fill-ring",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:392",
+            "fallback": "var(--ds-surface-canvas)",
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "boxShadow"
+          },
+          {
+            "variable": "--ds-surface-canvas",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:392",
+            "fallback": null,
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "boxShadow"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:435",
+            "fallback": null,
+            "landsOnProperty": "scrollbar-color",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "scrollbarColor"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:454",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:454",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:455",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "borderBottom"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:457",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:477",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:477",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:478",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "borderBottom"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:499",
+            "fallback": null,
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "borderTop"
+          },
+          {
+            "variable": "--ds-line-height-body",
+            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:547",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "lineHeight"
+          },
+          {
+            "variable": "--ds-color-link",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:32",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-instant",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:38",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-ease-standard",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:38",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-instant",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:39",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-ease-standard",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:39",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-link",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:46",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:46",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-markdown-link-decoration-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:48",
+            "fallback": "0.09em",
+            "landsOnProperty": "text-decoration-thickness",
+            "propertyGroup": "typography",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-link",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:55",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:55",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-markdown-link-decoration-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:57",
+            "fallback": "0.09em",
+            "landsOnProperty": "text-decoration-thickness",
+            "propertyGroup": "typography",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:62",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:65",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "link",
+            "selector": ".ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-markdown-marker-ink",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:74",
+            "fallback": "var(--ds-color-text-secondary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "list",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='list'] ::marker",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:74",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "list",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='list'] ::marker",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:85",
+            "fallback": null,
+            "landsOnProperty": "padding-block",
+            "propertyGroup": "spacing",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:86",
+            "fallback": null,
+            "landsOnProperty": "padding-inline-start",
+            "propertyGroup": "spacing",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:87",
+            "fallback": null,
+            "landsOnProperty": "padding-inline-end",
+            "propertyGroup": "spacing",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:88",
+            "fallback": null,
+            "landsOnProperty": "border-inline-start",
+            "propertyGroup": "border",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:89",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:90",
+            "fallback": null,
+            "landsOnProperty": "border-start-end-radius",
+            "propertyGroup": "radius",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:91",
+            "fallback": null,
+            "landsOnProperty": "border-end-end-radius",
+            "propertyGroup": "radius",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:92",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "blockquote",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='blockquote']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-3xl",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:103",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h1[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-display",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:104",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h1[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-line-height-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:105",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h1[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-2xl",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:110",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h2[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:111",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h2[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-line-height-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:112",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h2[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xl",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:117",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h3[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:118",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h3[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-line-height-tight",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:119",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h3[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-lg",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:124",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h4[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:125",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h4[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-line-height-snug",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:126",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h4[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-base",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:130",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h5[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:131",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h5[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-line-height-snug",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:132",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h5[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:136",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h6[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-heading",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:137",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h6[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-line-height-snug",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:138",
+            "fallback": null,
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "heading",
+            "selector": ".ds-markdown-view[data-part='root'] h6[data-part='heading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:159",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "code-block-pre",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='code-block-pre']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-markdown-view-measure",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:169",
+            "fallback": "none",
+            "landsOnProperty": "max-inline-size",
+            "propertyGroup": "size",
+            "part": "root",
+            "selector": ".ds-markdown-view[data-part='root']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-markdown-table-frame",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:172",
+            "fallback": "1px solid var(--ds-color-border)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table-wrapper",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='table-wrapper']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:172",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table-wrapper",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='table-wrapper']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-markdown-table-frame-radius",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:173",
+            "fallback": "var(--ds-radius-md)",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "table-wrapper",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='table-wrapper']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:173",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "table-wrapper",
+            "selector": ".ds-markdown-view[data-part='root'] [data-part='table-wrapper']",
+            "atRuleScope": null,
+            "readKind": "css"
+          }
+        ],
+        "variableCensusDistinctCount": 37,
+        "variableCensusReadSiteCount": 84,
+        "hardcodedValues": [
+          {
+            "kind": "spacing",
+            "literal": "0.1em",
+            "at": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:114",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "0.35em",
+            "at": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:114",
+            "declaration": "padding"
+          },
+          {
+            "kind": "shadow",
+            "literal": "item.checked",
+            "at": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:391",
+            "declaration": "boxShadow"
+          },
+          {
+            "kind": "shadow",
+            "literal": "none",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:182",
+            "declaration": "box-shadow"
+          },
+          {
+            "kind": "shadow",
+            "literal": "none",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:187",
+            "declaration": "box-shadow"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.01ms",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:215",
+            "declaration": "transition-duration"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.01ms",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:216",
+            "declaration": "animation-duration"
+          }
+        ],
+        "hardcodedValueCount": 7
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1428,46 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "prop": "tintas y fondos de marca de la familia",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-markdown-view-code-bg",
+              "--_ds-markdown-view-code-color",
+              "--_ds-markdown-view-link-color",
+              "--_ds-markdown-view-blockquote-border-color",
+              "--_ds-markdown-view-heading-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [],
+            "socketsResolved": false,
+            "noSocketReason": "sin estados semanticos; es prosa renderizada."
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1475,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "la prosa hereda el pairing global; sin sesgo propio."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1503,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [
+              "--_ds-markdown-view-code-font-family"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1532,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-markdown-view-font-size",
+              "--_ds-markdown-view-code-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1562,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de contenedores",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-radius",
+              "--_ds-table-radius",
+              "--_ds-image-radius"
+            ],
+            "sockets": [
+              "--_ds-markdown-view-code-radius",
+              "--_ds-markdown-view-code-block-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1592,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1609,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-markdown-view-content-gap",
+              "--_ds-markdown-view-code-block-padding",
+              "--_ds-markdown-view-table-cell-padding"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1639,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1652,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1669,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-elevation"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "sin sombras; es contenido."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1695,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-markdown-view-glass-bg",
+            "prop": "background-color de la placa de vidrio del icono",
+            "tier": "premium"
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1716,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1729,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1746,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1763,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-markdown-view-blockquote-border-width",
+              "--_ds-markdown-view-rule-style",
+              "--_ds-markdown-view-table-border-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1793,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1811,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1828,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1867,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": null,
+            "prop": "stroke-width / fill",
+            "tier": "standard",
+            "examples": [
+              "Icon"
+            ],
+            "socketsResolved": true,
+            "carrier": "attribute+shared-socket",
+            "sockets": [],
+            "noSocketReason": "el task-checkbox hereda de la familia checkbox."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1894,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "8dd4496223ecffecd148da0f8ce01e0f170df679f00328a190f3a5351a8725a3"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3265 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/workflow/approval-workflow/index.ts",
+      "packages/core/src/ui/patterns/workflow/approval-workflow/contracts/index.ts",
+      "packages/core/src/ui/patterns/workflow/approval-workflow/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css"
+    ],
+    "stableParts": [
+      "body",
+      "empty",
+      "entity-badge",
+      "footer",
+      "header",
+      "root",
+      "skeleton",
+      "skeleton-dot",
+      "skeleton-line",
+      "skeleton-row",
+      "skeleton-row-lines",
+      "skeleton-steps",
+      "step",
+      "step-action-button",
+      "step-actions",
+      "step-approver",
+      "step-approver-row",
+      "step-avatar",
+      "step-comment",
+      "step-connector",
+      "step-content",
+      "step-dot",
+      "step-metadata",
+      "step-metadata-key",
+      "step-status-badge",
+      "step-timestamp",
+      "step-track",
+      "timeline",
+      "title"
+    ],
+    "states": [
+      "current",
+      "loading",
+      "approved",
+      "escalated",
+      "pending",
+      "rejected",
+      "skipped",
+      "step.status"
+    ],
+    "variantAxes": [
+      "data-action",
+      "data-tenant",
+      "data-theme",
+      "data-width"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 29,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:280",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:37"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:302"
+          ]
+        },
+        {
+          "part": "entity-badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:290",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:268",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:370",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:32"
+          ]
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:325",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:256",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:371",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:177"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:282",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:315"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:248",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:276",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:159",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:27",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:32"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:255",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:389",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:439"
+          ]
+        },
+        {
+          "part": "skeleton-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:260",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:404",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:170"
+          ]
+        },
+        {
+          "part": "skeleton-line",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:256",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:262",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:263",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:163",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:169",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:170"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:259",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:399"
+          ]
+        },
+        {
+          "part": "skeleton-row-lines",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:261",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:411"
+          ]
+        },
+        {
+          "part": "skeleton-steps",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:257",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:394"
+          ]
+        },
+        {
+          "part": "step",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:97",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:201"
+          ]
+        },
+        {
+          "part": "step-action-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:157",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:173",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:189",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:234",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:239",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:244"
+          ]
+        },
+        {
+          "part": "step-actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:151",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:308"
+          ]
+        },
+        {
+          "part": "step-approver",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:114",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:212",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:259"
+          ]
+        },
+        {
+          "part": "step-approver-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:112",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:210",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:248"
+          ]
+        },
+        {
+          "part": "step-avatar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:113",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:255"
+          ]
+        },
+        {
+          "part": "step-comment",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:134",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:134"
+          ]
+        },
+        {
+          "part": "step-connector",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:107",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:78",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:235",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:76",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:80"
+          ]
+        },
+        {
+          "part": "step-content",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:111",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:209",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:242"
+          ]
+        },
+        {
+          "part": "step-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:102",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:202",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:68"
+          ]
+        },
+        {
+          "part": "step-metadata",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:139",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:223",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:125",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:299",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:130"
+          ]
+        },
+        {
+          "part": "step-metadata-key",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:141",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:304"
+          ]
+        },
+        {
+          "part": "step-status-badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:121",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:86",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:98",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:103"
+          ]
+        },
+        {
+          "part": "step-timestamp",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:128",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:129"
+          ]
+        },
+        {
+          "part": "step-track",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:100",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:206"
+          ]
+        },
+        {
+          "part": "timeline",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:306",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:191",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:195"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:283",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:322"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "current=isCurrent",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:97",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:104",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:197",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:204"
+          ],
+          "state": "current"
+        },
+        {
+          "token": "current=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:376",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:440",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:69"
+          ],
+          "state": "current"
+        },
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:369"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:277",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:183"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:249",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:160"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "status=approved",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:80",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:107"
+          ],
+          "state": "approved"
+        },
+        {
+          "token": "status=escalated",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:72",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:61",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:88",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:117"
+          ],
+          "state": "escalated"
+        },
+        {
+          "token": "status=pending",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:86",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:376",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:440",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:43",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:49"
+          ],
+          "state": "pending"
+        },
+        {
+          "token": "status=rejected",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:98",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:57",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:84",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:112"
+          ],
+          "state": "rejected"
+        },
+        {
+          "token": "status=skipped",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:281",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:122"
+          ],
+          "state": "skipped"
+        },
+        {
+          "token": "status=step.status",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:97",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:103",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:107",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:122",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:197",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:203"
+          ],
+          "state": "step.status"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "action=approve",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:158",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:148",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:342",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:353",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:149"
+          ]
+        },
+        {
+          "token": "action=escalate",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:190",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:244",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:162",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:348",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:359",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:372"
+          ]
+        },
+        {
+          "token": "action=reject",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:174",
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:345",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:356",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:155"
+          ]
+        },
+        {
+          "token": "tenant",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:11"
+          ]
+        },
+        {
+          "token": "theme",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css:11"
+          ]
+        },
+        {
+          "token": "width=half",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:263",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:433"
+          ]
+        },
+        {
+          "token": "width=quarter",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:429"
+          ]
+        },
+        {
+          "token": "width=third",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx:256",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:423"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/classic/index.tsx",
+            "lines": 173
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/modern/index.tsx",
+            "lines": 330
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "lines": 259
+          }
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 28,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 29,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 30,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "skeleton",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='body'], .ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 61,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 69,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 73,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 79,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-alpha-black-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 89,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 89,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 90,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 94,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 100,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 104,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 105,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-alpha-black-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_ONLY_IN_GENERATED_ARTIFACT"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 118,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-timestamp",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 126,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-metadata",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-action-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 135,
+            "fallback": true,
+            "fallbackValue": "32px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-action-padding-inline",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 137,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 138,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-action-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 139,
+            "fallback": true,
+            "fallbackValue": "13px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 142,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 142,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 143,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 143,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 144,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 144,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 149,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": "background var(--ds-motion-fast) var(--ds-motion-ease-out), color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-m",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 150,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-action-button",
+            "selector": "background var(--ds-motion-fast) var(--ds-motion-ease-out), color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-m",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 155,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 156,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 164,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 165,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 172,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'], .ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-footer-margin-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 181,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "footer",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-footer-padding-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 182,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-block-start",
+            "propertyGroup": "geometry",
+            "part": "footer",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 183,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-start",
+            "propertyGroup": "frame",
+            "part": "footer",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-step-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 203,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "step",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-dot-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 213,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-dot-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 214,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-dot-margin-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 216,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 217,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-pulse-duration",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 222,
+            "fallback": true,
+            "fallbackValue": "var(--ds-motion-deliberate, 720ms)",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-deliberate",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 222,
+            "fallback": true,
+            "fallbackValue": "720ms",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 223,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-connector-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 236,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-connector-min-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 238,
+            "fallback": true,
+            "fallbackValue": "2rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-step-padding-block-end",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 245,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "padding-block-end",
+            "propertyGroup": "geometry",
+            "part": "step-content",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-content']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-approver-row-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 252,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "step-approver-row",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-approver-row']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-approver-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 260,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "step-approver",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-approver']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-approver-font-weight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 261,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-weight-medium, 500)",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "step-approver",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-approver']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 261,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "step-approver",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-approver']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 274,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'], .ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-badge-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 275,
+            "fallback": true,
+            "fallbackValue": "11px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'], .ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-badge-font-weight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 276,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-weight-medium, 500)",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'], .ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 276,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'], .ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-skipped-opacity",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 282,
+            "fallback": true,
+            "fallbackValue": "0.5",
+            "cssProperty": "opacity",
+            "propertyGroup": "state-affordance",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-timestamp-margin-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 286,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "step-timestamp",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-timestamp-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 287,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "step-timestamp",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-timestamp-numeric",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 289,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "step-timestamp",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-comment-margin-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 293,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-comment-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 294,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 295,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-comment-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 296,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-metadata-margin-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 300,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "step-metadata",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-metadata-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 301,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "step-metadata",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 305,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "step-metadata-key",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata-key']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-actions-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 310,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "step-actions",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-actions-margin-block-start",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 311,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "step-actions",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-header-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 318,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='header']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-header-margin-block-end",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 319,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='header']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-title-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 324,
+            "fallback": true,
+            "fallbackValue": "18px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-title-font-weight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 325,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-weight-semibold, 600)",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 325,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 330,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 330,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 330,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 331,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-disabled-opacity",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 335,
+            "fallback": true,
+            "fallbackValue": "0.6",
+            "cssProperty": "opacity",
+            "propertyGroup": "state-affordance",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:disabled",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-success-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 343,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:active:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 346,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:active:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 349,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:active:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 354,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 357,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 360,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 384,
+            "fallback": true,
+            "fallbackValue": "var(--ds-touch-target-min, 44px)",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 384,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-pulse-duration",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 390,
+            "fallback": true,
+            "fallbackValue": "var(--ds-motion-deliberate, 720ms)",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-deliberate",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 390,
+            "fallback": true,
+            "fallbackValue": "720ms",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 391,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-skeleton-steps-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 396,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-steps",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-steps']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-step-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 401,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-dot-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 405,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-dot-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 406,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 408,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-skeleton-line-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 414,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row-lines",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-row-lines']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-approval-skeleton-line-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 419,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-line",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 420,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-line",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-approval-skeleton-title-margin-block-end",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 426,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "skeleton-line",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'][data-width='third']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-neutral-900",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 24,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-0",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 25,
+            "fallback": true,
+            "fallbackValue": "#fff",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 26,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 27,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 33,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='entity-badge'][data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 34,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='entity-badge'][data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 35,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='entity-badge'][data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "entity-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='entity-badge'][data-part='entity-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-400",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 50,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "#22c55e",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 58,
+            "fallback": true,
+            "fallbackValue": "#ef4444",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "#f59e0b",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 70,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='pending'][data-current='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-400",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 77,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 81,
+            "fallback": true,
+            "fallbackValue": "#22c55e",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "#ef4444",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 89,
+            "fallback": true,
+            "fallbackValue": "#f59e0b",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-connector",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 103,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 104,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='pending']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 108,
+            "fallback": true,
+            "fallbackValue": "#ecfdf5",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 109,
+            "fallback": true,
+            "fallbackValue": "#15803d",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='approved']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 113,
+            "fallback": true,
+            "fallbackValue": "#fef2f2",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 114,
+            "fallback": true,
+            "fallbackValue": "#b91c1c",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='rejected']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "#fffbeb",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 119,
+            "fallback": true,
+            "fallbackValue": "#a16207",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='escalated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 124,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-status-badge",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='skipped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-500",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 131,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-metadata",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-timestamp'], .ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-metadata']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 135,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-comment'][data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 136,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-comment'][data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 137,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "step-comment",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-comment'][data-part='step-comment']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 150,
+            "fallback": true,
+            "fallbackValue": "#16a34a",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='approve']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 151,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='approve']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 152,
+            "fallback": true,
+            "fallbackValue": "#16a34a",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='approve']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "#dc2626",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "#dc2626",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-700",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "#a16207",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='escalate']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-400",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 164,
+            "fallback": true,
+            "fallbackValue": "#fbbf24",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "step-action-button",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='escalate']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 171,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-line'], .ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 172,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-dot",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-line'], .ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 178,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": "footer",
+            "selector": ".ds-pattern-approval-workflow.ds-engine-rustic [data-part='footer'][data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/classic/index.tsx",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-base",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 38,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-lg",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 48,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 90,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 105,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 120,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/workflow/approval-workflow/engines/rustic/index.tsx",
+            "line": 223,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 33,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 39,
+            "literal": "20px",
+            "text": "padding: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 45,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 135,
+            "literal": "32px",
+            "text": "block-size: var(--ds-approval-action-height, 32px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 137,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-approval-action-padding-inline, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 139,
+            "literal": "13px",
+            "text": "font-size: var(--ds-approval-action-font-size, 13px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 165,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-warning);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 181,
+            "literal": "16px",
+            "text": "margin-block-start: var(--ds-approval-footer-margin-block-start, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 182,
+            "literal": "16px",
+            "text": "padding-block-start: var(--ds-approval-footer-padding-block-start, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 183,
+            "literal": "1px",
+            "text": "border-block-start: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 203,
+            "literal": "12px",
+            "text": "gap: var(--ds-approval-step-gap, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 213,
+            "literal": "12px",
+            "text": "inline-size: var(--ds-approval-dot-size, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 214,
+            "literal": "12px",
+            "text": "block-size: var(--ds-approval-dot-size, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 216,
+            "literal": "6px",
+            "text": "margin-block-start: var(--ds-approval-dot-margin-block-start, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 217,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 222,
+            "literal": "720ms",
+            "text": "animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 236,
+            "literal": "2px",
+            "text": "inline-size: var(--ds-approval-connector-width, 2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 238,
+            "literal": "2rem",
+            "text": "min-block-size: var(--ds-approval-connector-min-height, 2rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 245,
+            "literal": "24px",
+            "text": "padding-block-end: var(--ds-approval-step-padding-block-end, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 252,
+            "literal": "8px",
+            "text": "gap: var(--ds-approval-approver-row-gap, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 260,
+            "literal": "14px",
+            "text": "font-size: var(--ds-approval-approver-font-size, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 272,
+            "literal": "1px",
+            "text": "padding-block: 1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 273,
+            "literal": "6px",
+            "text": "padding-inline: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 274,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 275,
+            "literal": "11px",
+            "text": "font-size: var(--ds-approval-badge-font-size, 11px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 277,
+            "literal": "16px",
+            "text": "line-height: 16px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 286,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-approval-timestamp-margin-block-start, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 287,
+            "literal": "12px",
+            "text": "font-size: var(--ds-approval-timestamp-font-size, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 293,
+            "literal": "8px",
+            "text": "margin-block-start: var(--ds-approval-comment-margin-block-start, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 294,
+            "literal": "8px",
+            "text": "padding: var(--ds-approval-comment-padding, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 296,
+            "literal": "14px",
+            "text": "font-size: var(--ds-approval-comment-font-size, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 300,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-approval-metadata-margin-block-start, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 301,
+            "literal": "12px",
+            "text": "font-size: var(--ds-approval-metadata-font-size, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 310,
+            "literal": "8px",
+            "text": "gap: var(--ds-approval-actions-gap, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 311,
+            "literal": "12px",
+            "text": "margin-block-start: var(--ds-approval-actions-margin-block-start, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 318,
+            "literal": "8px",
+            "text": "gap: var(--ds-approval-header-gap, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 319,
+            "literal": "16px",
+            "text": "margin-block-end: var(--ds-approval-header-margin-block-end, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 324,
+            "literal": "18px",
+            "text": "font-size: var(--ds-approval-title-font-size, 18px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 330,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 331,
+            "literal": "2px",
+            "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 377,
+            "literal": "2px",
+            "text": "outline: 2px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 378,
+            "literal": "1px",
+            "text": "outline-offset: 1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 384,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-approval-touch-target-min, var(--ds-touch-target-min, 44px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 390,
+            "literal": "720ms",
+            "text": "animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 396,
+            "literal": "16px",
+            "text": "gap: var(--ds-approval-skeleton-steps-gap, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 401,
+            "literal": "12px",
+            "text": "gap: var(--ds-approval-step-gap, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 405,
+            "literal": "12px",
+            "text": "inline-size: var(--ds-approval-dot-size, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 406,
+            "literal": "12px",
+            "text": "block-size: var(--ds-approval-dot-size, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 407,
+            "literal": "4px",
+            "text": "margin-block-start: 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 408,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 414,
+            "literal": "8px",
+            "text": "gap: var(--ds-approval-skeleton-line-gap, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 419,
+            "literal": "16px",
+            "text": "block-size: var(--ds-approval-skeleton-line-height, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 425,
+            "literal": "20px",
+            "text": "block-size: 20px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 426,
+            "literal": "16px",
+            "text": "margin-block-end: var(--ds-approval-skeleton-title-margin-block-end, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+            "line": 435,
+            "literal": "12px",
+            "text": "block-size: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 25,
+            "literal": "#fff",
+            "text": "background: var(--ds-color-neutral-0, #fff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 26,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 33,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 36,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 54,
+            "literal": "#22c55e",
+            "text": "background: var(--ds-color-success-500, #22c55e);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 58,
+            "literal": "#ef4444",
+            "text": "background: var(--ds-color-error-500, #ef4444);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 62,
+            "literal": "#f59e0b",
+            "text": "background: var(--ds-color-warning-500, #f59e0b);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 81,
+            "literal": "#22c55e",
+            "text": "background: var(--ds-color-success-500, #22c55e);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 85,
+            "literal": "#ef4444",
+            "text": "background: var(--ds-color-error-500, #ef4444);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 89,
+            "literal": "#f59e0b",
+            "text": "background: var(--ds-color-warning-500, #f59e0b);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 99,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 108,
+            "literal": "#ecfdf5",
+            "text": "background: var(--ds-color-success-50, #ecfdf5);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 109,
+            "literal": "#15803d",
+            "text": "color: var(--ds-color-success-700, #15803d);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 113,
+            "literal": "#fef2f2",
+            "text": "background: var(--ds-color-error-50, #fef2f2);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 114,
+            "literal": "#b91c1c",
+            "text": "color: var(--ds-color-error-700, #b91c1c);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 118,
+            "literal": "#fffbeb",
+            "text": "background: var(--ds-color-warning-50, #fffbeb);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 119,
+            "literal": "#a16207",
+            "text": "color: var(--ds-color-warning-700, #a16207);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 137,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-200);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 150,
+            "literal": "#16a34a",
+            "text": "background: var(--ds-color-success-600, #16a34a);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 152,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-success-600, #16a34a);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 152,
+            "literal": "#16a34a",
+            "text": "border: 1px solid var(--ds-color-success-600, #16a34a);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 156,
+            "literal": "#dc2626",
+            "text": "background: var(--ds-color-error-600, #dc2626);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 158,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-error-600, #dc2626);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 158,
+            "literal": "#dc2626",
+            "text": "border: 1px solid var(--ds-color-error-600, #dc2626);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 163,
+            "literal": "#a16207",
+            "text": "color: var(--ds-color-warning-700, #a16207);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 164,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-warning-400, #fbbf24);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 164,
+            "literal": "#fbbf24",
+            "text": "border: 1px solid var(--ds-color-warning-400, #fbbf24);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow.css",
+            "line": 178,
+            "literal": "1px",
+            "text": "border-top: 1px solid var(--ds-color-neutral-200);"
+          }
+        ],
+        "censusRowCount": 168
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3293,55 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-step-<status>-color",
+            "prop": "estados de paso (done/error/current)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-approval-workflow-step-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-alpha-black-100",
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-error",
+            "--ds-color-error-600",
+            "--ds-color-primary",
+            "--ds-color-success",
+            "--ds-color-success-600",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning",
+            "--ds-surface-card",
+            "--ds-surface-panel"
+          ],
+          "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
+            "--ds-approval-touch-target-min"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3349,36 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Peso -> tabla de pairing": [
+            "--ds-approval-approver-font-weight",
+            "--ds-approval-badge-font-weight",
+            "--ds-approval-timestamp-numeric",
+            "--ds-approval-title-font-weight"
+          ],
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3386,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3410,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-approval-workflow-font-size",
+              "--_ds-approval-action-font-size",
+              "--_ds-approval-approver-font-size",
+              "--_ds-approval-badge-font-size",
+              "--_ds-approval-comment-font-size",
+              "--_ds-approval-metadata-font-size",
+              "--_ds-approval-skeleton-line-height",
+              "--_ds-approval-timestamp-font-size",
+              "--_ds-approval-title-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3443,37 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/steps (pinta rottay-steps--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/steps",
+            "channels": [
+              "--ds-steps-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3481,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de avance del wizard son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3494,61 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-timeline-item-density-factor",
+            "prop": "alto de item de timeline/inbox/steps (slug vivo: timeline)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-approval-action-height",
+              "--_ds-approval-action-padding-inline",
+              "--_ds-approval-actions-gap",
+              "--_ds-approval-approver-row-gap",
+              "--_ds-approval-comment-padding",
+              "--_ds-approval-connector-min-height",
+              "--_ds-approval-connector-width",
+              "--_ds-approval-dot-size",
+              "--_ds-approval-footer-padding-block-start",
+              "--_ds-approval-header-gap",
+              "--_ds-approval-skeleton-line-gap",
+              "--_ds-approval-skeleton-steps-gap",
+              "--_ds-approval-step-gap",
+              "--_ds-approval-step-padding-block-end"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/display/timeline (pinta rottay-timeline--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/display/timeline",
+            "channels": [
+              "--ds-timeline-item-density-factor"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-approval-touch-target-min",
+            "--ds-spacing-5",
+            "--ds-surface-inset",
+            "--ds-touch-target-min"
+          ]
+        },
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3556,39 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-item-gap",
+            "prop": "gap vertical de timeline/activity/steps",
+            "tier": "standard",
+            "examples": [
+              "--_ds-timeline-item-gap",
+              "--_ds-activity-log-item-gap"
+            ],
+            "sockets": [
+              "--_ds-approval-workflow-item-gap"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Margen interno -> composicion": [
+            "--ds-approval-actions-margin-block-start",
+            "--ds-approval-comment-margin-block-start",
+            "--ds-approval-dot-margin-block-start",
+            "--ds-approval-footer-margin-block-start",
+            "--ds-approval-header-margin-block-end",
+            "--ds-approval-metadata-margin-block-start",
+            "--ds-approval-skeleton-title-margin-block-end",
+            "--ds-approval-timestamp-margin-block-start"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3596,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "el stepper obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-steps-transition-duration",
+            "prop": "transition-duration del avance de paso y cambio de estado",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-approval-pulse-duration"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-deliberate",
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3629,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "pasos en flujo, no flotan",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3648,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Opacidad/textura -> effect-intensity": [
+            "--ds-approval-disabled-opacity",
+            "--ds-approval-skipped-opacity"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3668,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de flujo, no chrome",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3681,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3694,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "steppers en flujo, sin region pintada propia: usan los canales semanticos directos",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3707,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-stepper-step-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-approval-workflow-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3741,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3759,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3772,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3811,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria en el stepper",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-steps-icon-stroke-width",
+            "prop": "stroke-width de checks e iconos de paso",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3832,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

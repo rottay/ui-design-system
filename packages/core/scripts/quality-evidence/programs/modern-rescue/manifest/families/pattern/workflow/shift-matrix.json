@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "c63dce2a43443743ffbaace90743733fbbfafc16c94f59c3a3660d48adab227f"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2340 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/workflow/shift-matrix/index.ts",
+      "packages/core/src/ui/patterns/workflow/shift-matrix/contracts/index.ts",
+      "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+    ],
+    "stableParts": [
+      "cell",
+      "cell-button",
+      "cell-empty",
+      "cell-ratio",
+      "cell-staff",
+      "cell-static",
+      "corner-cell",
+      "empty",
+      "legend",
+      "legend-item",
+      "role-header",
+      "role-row",
+      "root",
+      "skeleton",
+      "skeleton-header",
+      "skeleton-row",
+      "slot-header",
+      "table",
+      "table-body",
+      "table-head",
+      "table-region"
+    ],
+    "states": [
+      "loading",
+      "focus-visible",
+      "hovered",
+      "pressed"
+    ],
+    "variantAxes": [
+      "data-assignable",
+      "data-coverage"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 21,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:135",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:215"
+          ]
+        },
+        {
+          "part": "cell-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:147",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:191"
+          ]
+        },
+        {
+          "part": "cell-empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:262"
+          ]
+        },
+        {
+          "part": "cell-ratio",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:242"
+          ]
+        },
+        {
+          "part": "cell-staff",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:253"
+          ]
+        },
+        {
+          "part": "cell-static",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:146"
+          ]
+        },
+        {
+          "part": "corner-cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:142",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:58",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:66",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:107"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:300"
+          ]
+        },
+        {
+          "part": "legend",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:251",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:268",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:346"
+          ]
+        },
+        {
+          "part": "legend-item",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:291",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:295"
+          ]
+        },
+        {
+          "part": "role-header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:67",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:77",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:349"
+          ]
+        },
+        {
+          "part": "role-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:349",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:351"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:101",
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:120",
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:107"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:306",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:370"
+          ]
+        },
+        {
+          "part": "skeleton-header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:321",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:347"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:325"
+          ]
+        },
+        {
+          "part": "slot-header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:95",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:345"
+          ]
+        },
+        {
+          "part": "table",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:47"
+          ]
+        },
+        {
+          "part": "table-body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:152"
+          ]
+        },
+        {
+          "part": "table-head",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:140"
+          ]
+        },
+        {
+          "part": "table-region",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:42"
+          ]
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "content",
+          "scoutAnchorClaim": null,
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:191"
+          ]
+        },
+        {
+          "part": "label",
+          "scoutAnchorClaim": null,
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:192"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:343"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:120",
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:129"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:102"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "state=focus-visible",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:199"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "state=hovered",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:182"
+          ],
+          "state": "hovered"
+        },
+        {
+          "token": "state=pressed",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:183"
+          ],
+          "state": "pressed"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "assignable=assignable || undefined",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:199"
+          ]
+        },
+        {
+          "token": "coverage=critical",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:224",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:295"
+          ]
+        },
+        {
+          "token": "coverage=full",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:287"
+          ]
+        },
+        {
+          "token": "coverage=gap",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:291"
+          ]
+        },
+        {
+          "token": "coverage=status",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:198",
+            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:253"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "lines": 308
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx",
+            "lines": 261
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "11 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 29,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 30,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 31,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'][data-loading]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-shift-matrix-region-max-block",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 44,
+            "fallback": true,
+            "fallbackValue": "none",
+            "cssProperty": "max-block-size",
+            "propertyGroup": "geometry",
+            "part": "table-region",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='table-region']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-type-body-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-sm, 13px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "13px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-shift-matrix-header-z",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "2",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'], .ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 63,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'], .ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 70,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'], .ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-shift-matrix-corner-z",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 74,
+            "fallback": true,
+            "fallbackValue": "3",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "corner-cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--_ds-shift-matrix-role-z",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 83,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "corner-cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 84,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "corner-cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 85,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "corner-cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 86,
+            "fallback": true,
+            "fallbackValue": "11px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "corner-cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 87,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "corner-cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 98,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 100,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='corner-cell'], .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='s",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 113,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-inline-start",
+            "propertyGroup": "frame",
+            "part": "slot-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 119,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 120,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-body-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 121,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-sm, 13px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 121,
+            "fallback": true,
+            "fallbackValue": "13px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 122,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "role-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 131,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "cell",
+            "selector": "[data-part='role-row']:not(:last-child) [data-part='role-header'], [data-part='role-row']:not(:last-child) [data-part='cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 136,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-inline-start",
+            "propertyGroup": "frame",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 152,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-static'], .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='c",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 155,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-static'], .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='c",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-static'], .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='c",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 176,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 176,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 177,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 177,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 200,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:focus-visible, .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'][data-stat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 200,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:focus-visible, .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'][data-stat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 200,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:focus-visible, .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'][data-stat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 201,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:focus-visible, .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'][data-stat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 207,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='full']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 208,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='full']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-ink",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 212,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='full'] [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 216,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='gap']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 217,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='gap']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-ink",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 221,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='gap'] [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 225,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='critical']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 226,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "cell",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='critical']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-ink",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 230,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='critical'] [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-focus",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 237,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 237,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 245,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 246,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 247,
+            "fallback": true,
+            "fallbackValue": "700",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-numeric-tabular",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 249,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "cell-ratio",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-ratio']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 254,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-staff",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-staff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 255,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-staff",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-staff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 263,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-empty",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 264,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-empty",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 264,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-empty",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 272,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "legend",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 273,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "legend",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 274,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "legend",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 275,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-start",
+            "propertyGroup": "frame",
+            "part": "legend",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 276,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "legend",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 282,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "legend-item",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 283,
+            "fallback": true,
+            "fallbackValue": "11px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "legend-item",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 284,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "legend-item",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-ink",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 288,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "legend-item",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'][data-coverage='full']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning-ink",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 292,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "legend-item",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'][data-coverage='gap']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-ink",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 296,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "legend-item",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'][data-coverage='critical']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-10",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 301,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 302,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-deliberate",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 307,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 308,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-11",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 317,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 318,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 322,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "skeleton-header",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='skeleton-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 327,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 328,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "margin-inline",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 329,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 330,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 337,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "cell-button",
+            "selector": ".ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 34,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 35,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 42,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 43,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 44,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 50,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 84,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 84,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 110,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 122,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 129,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 138,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 151,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 153,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
+            "cssProperty": "border-left",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-left",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 160,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 178,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 178,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 190,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 197,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 247,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 264,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 282,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 282,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 283,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 287,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 288,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 289,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "line": 300,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 36,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 51,
+            "literal": "13px",
+            "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 83,
+            "literal": "12px",
+            "text": "padding-block: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 84,
+            "literal": "16px",
+            "text": "padding-inline: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 86,
+            "literal": "11px",
+            "text": "font-size: var(--ds-type-caption-font-size, 11px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 88,
+            "literal": "0.04em",
+            "text": "letter-spacing: 0.04em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 92,
+            "literal": "160px",
+            "text": "min-inline-size: 160px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 96,
+            "literal": "12px",
+            "text": "padding-block: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 97,
+            "literal": "16px",
+            "text": "padding-inline: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 99,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 104,
+            "literal": "120px",
+            "text": "min-inline-size: 120px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 109,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 113,
+            "literal": "1px",
+            "text": "border-inline-start: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 118,
+            "literal": "14px",
+            "text": "padding-block: var(--ds-spacing-3, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 119,
+            "literal": "16px",
+            "text": "padding-inline: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 121,
+            "literal": "13px",
+            "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 131,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 136,
+            "literal": "1px",
+            "text": "border-inline-start: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 152,
+            "literal": "4px",
+            "text": "gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 154,
+            "literal": "56px",
+            "text": "min-block-size: 56px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 155,
+            "literal": "10px",
+            "text": "padding-block: var(--ds-spacing-2, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 156,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 200,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 201,
+            "literal": "2px",
+            "text": "outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 208,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 0 0 1px var(--ds-color-success-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 217,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 0 0 1px var(--ds-color-warning-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 226,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 0 0 1px var(--ds-color-error-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 237,
+            "literal": "2px",
+            "text": "box-shadow: inset 0 0 0 2px var(--ds-color-border-focus, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 245,
+            "literal": "4px",
+            "text": "gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 246,
+            "literal": "16px",
+            "text": "font-size: var(--ds-font-size-base, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 254,
+            "literal": "10px",
+            "text": "font-size: var(--ds-type-caption-font-size, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 264,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 272,
+            "literal": "16px",
+            "text": "gap: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 273,
+            "literal": "10px",
+            "text": "padding-block: var(--ds-spacing-2, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 274,
+            "literal": "16px",
+            "text": "padding-inline: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 275,
+            "literal": "1px",
+            "text": "border-block-start: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 282,
+            "literal": "6px",
+            "text": "gap: var(--ds-spacing-1, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 283,
+            "literal": "11px",
+            "text": "font-size: var(--ds-type-caption-font-size, 11px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 301,
+            "literal": "40px",
+            "text": "padding-block: var(--ds-spacing-10, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 302,
+            "literal": "24px",
+            "text": "padding-inline: var(--ds-spacing-6, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 317,
+            "literal": "44px",
+            "text": "block-size: var(--ds-spacing-11, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 322,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 326,
+            "literal": "56px",
+            "text": "block-size: 56px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 327,
+            "literal": "4px",
+            "text": "margin-block: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 328,
+            "literal": "12px",
+            "text": "margin-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 337,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 358,
+            "literal": "1px",
+            "text": "outline: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 359,
+            "literal": "1px",
+            "text": "outline-offset: -1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 363,
+            "literal": "2px",
+            "text": "outline: 2px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "line": 364,
+            "literal": "2px",
+            "text": "outline-offset: -2px;"
+          }
+        ],
+        "censusRowCount": 126
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2368,54 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-step-<status>-color",
+            "prop": "estados de paso (done/error/current)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-shift-matrix-step-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-error-bg",
+            "--ds-color-error-border",
+            "--ds-color-error-ink",
+            "--ds-color-primary",
+            "--ds-color-success-bg",
+            "--ds-color-success-border",
+            "--ds-color-success-ink",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-warning-bg",
+            "--ds-color-warning-border",
+            "--ds-color-warning-ink",
+            "--ds-surface-card",
+            "--ds-surface-panel"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2423,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-bold",
+            "--ds-font-weight-semibold",
+            "--ds-numeric-tabular"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2455,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2479,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-shift-matrix-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-base",
+            "--ds-font-size-sm",
+            "--ds-font-size-xs",
+            "--ds-type-body-font-size",
+            "--ds-type-caption-font-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2513,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/steps (pinta rottay-steps--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/steps",
+            "channels": [
+              "--ds-steps-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2549,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de avance del wizard son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2562,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-10",
+            "--ds-spacing-11",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-6",
+            "--ds-touch-target-min"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/display/timeline (pinta rottay-timeline--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/display/timeline",
+            "channels": [
+              "--ds-timeline-item-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2604,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-item-gap",
+            "prop": "gap vertical de timeline/activity/steps",
+            "tier": "standard",
+            "examples": [
+              "--_ds-timeline-item-gap",
+              "--_ds-activity-log-item-gap"
+            ],
+            "sockets": [
+              "--_ds-shift-matrix-item-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2631,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "el stepper obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-steps-transition-duration",
+            "prop": "transition-duration del avance de paso y cambio de estado",
+            "tier": "standard"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-deliberate",
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2661,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "pasos en flujo, no flotan",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2680,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2693,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de flujo, no chrome",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2706,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2719,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "steppers en flujo, sin region pintada propia: usan los canales semanticos directos",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2732,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-stepper-step-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-shift-matrix-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-border-focus",
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2766,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2784,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2797,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2836,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria en el stepper",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-steps-icon-stroke-width",
+            "prop": "stroke-width de checks e iconos de paso",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2857,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

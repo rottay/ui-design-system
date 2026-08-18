@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "78ef01ce8a886843b92d19657fdcefcee99538f629dcab8b3317c78ecfcd2682"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1626 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/feedback/empty-state/index.ts",
+      "packages/core/src/ui/patterns/feedback/empty-state/contracts/index.ts",
+      "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css"
+    ],
+    "stableParts": [
+      "action",
+      "actions",
+      "content",
+      "copy",
+      "description",
+      "icon",
+      "image",
+      "loading-label",
+      "root",
+      "secondary-action",
+      "spinner",
+      "title",
+      "visual"
+    ],
+    "states": [
+      "loading"
+    ],
+    "variantAxes": [
+      "data-chrome",
+      "data-has-action",
+      "data-has-description",
+      "data-size",
+      "data-variant",
+      "data-visual"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 13,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "action",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:147",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:124",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:17",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:29"
+          ]
+        },
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:165"
+          ]
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:114",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:69"
+          ]
+        },
+        {
+          "part": "copy",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:122"
+          ]
+        },
+        {
+          "part": "description",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:133",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:153",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:39"
+          ]
+        },
+        {
+          "part": "icon",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:119",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:123",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:115"
+          ]
+        },
+        {
+          "part": "image",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:117",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:106",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:109"
+          ]
+        },
+        {
+          "part": "loading-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:13"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:81",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:104",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:69",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:100",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css:41"
+          ]
+        },
+        {
+          "part": "secondary-action",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:160",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:18",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:24"
+          ]
+        },
+        {
+          "part": "spinner",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:177",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:219"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:132",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:149",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:35"
+          ]
+        },
+        {
+          "part": "visual",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:96",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:115"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:105",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:101"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:82",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:70",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:64"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "chrome=embedded",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css:40"
+          ]
+        },
+        {
+          "token": "has-action=Boolean(action || secondaryAction)",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:88",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:109"
+          ]
+        },
+        {
+          "token": "has-description=Boolean(description)",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:87",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:108"
+          ]
+        },
+        {
+          "token": "size=lg",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:149"
+          ]
+        },
+        {
+          "token": "size=size",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:83",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:106"
+          ]
+        },
+        {
+          "token": "size=sm",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:96",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:145"
+          ]
+        },
+        {
+          "token": "variant=action.variant ?? 'default'",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:124"
+          ]
+        },
+        {
+          "token": "variant=action.variant ?? 'primary'",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:148"
+          ]
+        },
+        {
+          "token": "variant=default",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:161",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:24"
+          ]
+        },
+        {
+          "token": "variant=primary",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css:29"
+          ]
+        },
+        {
+          "token": "visual=visual",
+          "at": [
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:86",
+            "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx:107"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "lines": 114
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx",
+            "lines": 172
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx",
+            "lines": 137
+          }
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css",
+            "line": 56,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "content",
+            "selector": ".ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "content",
+            "selector": ".ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-relaxed",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/empty-state-surface.css",
+            "line": 58,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "content",
+            "selector": ".ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-min-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 35,
+            "fallback": true,
+            "fallbackValue": "14rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "clamp(var(--ds-spacing-xl), 5vw, var(--ds-spacing-3xl))",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-border-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "var(--ds-edge-standard-width, 1px)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "1px",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-edge-standard-style",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "solid",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-border-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 43,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 44,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-xl)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 44,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-material-panel-texture",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 48,
+            "fallback": true,
+            "fallbackValue": "none",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-surface",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 49,
+            "fallback": true,
+            "fallbackValue": "var(--ds-surface-card, var(--ds-color-bg-elevated))",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 49,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-elevated)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 49,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-shadow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 50,
+            "fallback": true,
+            "fallbackValue": "none",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-sm-min-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "10rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "background: var(--ds-material-panel-texture, none), .ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-sm-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 57,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-lg)",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "background: var(--ds-material-panel-texture, none), .ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "background: var(--ds-material-panel-texture, none), .ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-lg-min-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "18rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='lg'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-loading-height",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 65,
+            "fallback": true,
+            "fallbackValue": "8rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-loading='true'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-content-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 71,
+            "fallback": true,
+            "fallbackValue": "38rem",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "content",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] > .ds-empty-state__content[data-part='content']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 74,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "content",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] > .ds-empty-state__content[data-part='content']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-visual-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 81,
+            "fallback": true,
+            "fallbackValue": "5rem",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-visual-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 82,
+            "fallback": true,
+            "fallbackValue": "5rem",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-edge-hairline-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 89,
+            "fallback": true,
+            "fallbackValue": "1px",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-visual-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 89,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 89,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 89,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-visual-radius",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 90,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-xl)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 90,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-visual-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 91,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card, var(--ds-color-bg-elevated)))",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 91,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 91,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-elevated)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 91,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 92,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-effect-intensity",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 92,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-sm-visual-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "3.75rem",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-sm-visual-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 98,
+            "fallback": true,
+            "fallbackValue": "3.75rem",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-lg-visual-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 103,
+            "fallback": true,
+            "fallbackValue": "6.25rem",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='lg'][data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-empty-state-lg-visual-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 104,
+            "fallback": true,
+            "fallbackValue": "6.25rem",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "visual",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='lg'][data-part='root'] .ds-empty-state__visual[data-part='visual']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 124,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "copy",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__copy[data-part='copy']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 131,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 132,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-family-base)",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 132,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-title-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 133,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xl)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-size-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 133,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-bold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 134,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-heading",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 140,
+            "fallback": true,
+            "fallbackValue": "var(--ds-letter-spacing-tight)",
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-tight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 140,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-tight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-sm-title-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 146,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-base)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-size-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-lg-title-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 150,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-2xl)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='lg'][data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-size-2xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 150,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-size='lg'][data-part='root'] [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 156,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "description",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "description",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-description-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-sm)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "description",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='description']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 158,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "description",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-relaxed",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "description",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-actions-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 170,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-sm)",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__actions[data-part='actions']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 170,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__actions[data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 171,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__actions[data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 181,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "spinner",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__spinner[data-part='spinner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 182,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-start-color",
+            "propertyGroup": "frame",
+            "part": "spinner",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__spinner[data-part='spinner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-empty-state-spinner-duration",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 185,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial) * var(--ds-motion-duration-scale, 1))",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "spinner",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__spinner[data-part='spinner']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 185,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "spinner",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__spinner[data-part='spinner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-duration-scale",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 185,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "spinner",
+            "selector": ".ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__spinner[data-part='spinner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 14,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "loading-label",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__loading-label[data-part='loading-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 19,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "secondary-action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-part='action'], .ds-pattern-empty-state.ds-engine-rustic .ds-empty-sta",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 20,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "secondary-action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-part='action'], .ds-pattern-empty-state.ds-engine-rustic .ds-empty-sta",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-background",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 25,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "secondary-action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='default'], .ds-pattern-empty-state.ds-engine-rustic .ds-empty",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 26,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "secondary-action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='default'], .ds-pattern-empty-state.ds-engine-rustic .ds-empty",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 30,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-foreground",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 31,
+            "fallback": true,
+            "fallbackValue": "#fff",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 32,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__title[data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 40,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "description",
+            "selector": ".ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__description[data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "line": 60,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "line": 60,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "line": 78,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/classic/index.tsx",
+            "line": 85,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/feedback/empty-state/engines/rustic/index.tsx",
+            "line": 81,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 35,
+            "literal": "14rem",
+            "text": "min-block-size: var(--ds-empty-state-min-height, 14rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 43,
+            "literal": "1px",
+            "text": "border: var(--ds-empty-state-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-empty-state-border-color, var(--ds-"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 56,
+            "literal": "10rem",
+            "text": "min-block-size: var(--ds-empty-state-sm-min-height, 10rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 61,
+            "literal": "18rem",
+            "text": "min-block-size: var(--ds-empty-state-lg-min-height, 18rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 65,
+            "literal": "8rem",
+            "text": "min-block-size: var(--ds-empty-state-loading-height, 8rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 71,
+            "literal": "38rem",
+            "text": "inline-size: min(100%, var(--ds-empty-state-content-width, 38rem));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 81,
+            "literal": "5rem",
+            "text": "inline-size: var(--ds-empty-state-visual-size, 5rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 82,
+            "literal": "5rem",
+            "text": "block-size: var(--ds-empty-state-visual-size, 5rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 89,
+            "literal": "1px",
+            "text": "border: var(--ds-edge-hairline-width, 1px) solid var(--ds-empty-state-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 92,
+            "literal": "1px",
+            "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 97,
+            "literal": "3.75rem",
+            "text": "inline-size: var(--ds-empty-state-sm-visual-size, 3.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 98,
+            "literal": "3.75rem",
+            "text": "block-size: var(--ds-empty-state-sm-visual-size, 3.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 103,
+            "literal": "6.25rem",
+            "text": "inline-size: var(--ds-empty-state-lg-visual-size, 6.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 104,
+            "literal": "6.25rem",
+            "text": "block-size: var(--ds-empty-state-lg-visual-size, 6.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 179,
+            "literal": "1.75rem",
+            "text": "inline-size: 1.75rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 180,
+            "literal": "1.75rem",
+            "text": "block-size: 1.75rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
+            "line": 181,
+            "literal": "3px",
+            "text": "border: 3px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 19,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-300);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 20,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty-state.css",
+            "line": 31,
+            "literal": "#fff",
+            "text": "color: var(--ds-color-primary-foreground, #fff);"
+          }
+        ],
+        "censusRowCount": 91
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1654,50 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-border-color",
+              "--_ds-empty-state-surface",
+              "--_ds-empty-state-visual-bg",
+              "--_ds-empty-state-visual-border"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-surface-card"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1705,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-bold"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-letter-spacing-heading",
+            "--ds-letter-spacing-tight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1733,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-base",
+            "--ds-font-family-heading"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1758,55 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (pattern/feedback/terminal-block). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/feedback/terminal-block",
+            "channels": [
+              "--ds-terminal-block-font-size"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-description-size",
+              "--_ds-empty-state-lg-title-size",
+              "--_ds-empty-state-sm-title-size",
+              "--_ds-empty-state-title-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "remediatedFrom": "fam11-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xl",
+            "--ds-font-size-base",
+            "--ds-font-size-sm",
+            "--ds-font-size-xl"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-line-height-relaxed",
+            "--ds-line-height-tight"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1814,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-empty-state-radius",
+            "prop": "radio del panel (empty-state, terminal-block, adaptive-overlay)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-empty-state-radius",
+              "--_ds-empty-state-visual-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-xl"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1847,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el CTA del empty-state es un Button primitivo: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1867,42 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-actions-gap",
+              "--_ds-empty-state-content-width",
+              "--_ds-empty-state-lg-min-height",
+              "--_ds-empty-state-lg-visual-size",
+              "--_ds-empty-state-loading-height",
+              "--_ds-empty-state-min-height",
+              "--_ds-empty-state-padding",
+              "--_ds-empty-state-sm-min-height",
+              "--_ds-empty-state-sm-padding",
+              "--_ds-empty-state-sm-visual-size",
+              "--_ds-empty-state-visual-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-edge-hairline-width",
+            "--ds-edge-standard-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1910,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de empty-state no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-3xl",
+            "--ds-spacing-lg",
+            "--ds-spacing-md",
+            "--ds-spacing-sm",
+            "--ds-spacing-xl",
+            "--ds-spacing-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1940,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-terminal-block-char-cadence: la coreografia obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-empty-char-cadence",
+            "prop": "animation-duration del tipeo de terminal-block y entrada de empty-state",
+            "tier": "standard"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-spinner-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-duration-scale",
+            "--ds-motion-glacial"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1979,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "adaptive-overlay flota; empty-state y terminal-block componen en flujo, sin plano propio",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-empty-shadow",
+            "prop": "box-shadow de adaptive-overlay",
+            "tier": "standard"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-shadow"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2012,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "backdrop de overlay: de los pocos lugares sancionados para glass",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-empty-scrim-backdrop-filter",
+            "prop": "backdrop-filter del backdrop de adaptive-overlay",
+            "tier": "premium"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-effect-intensity",
+            "--ds-material-panel-texture"
+          ]
+        }
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2040,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "feedback no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "communication/feedback no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2060,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2080,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "regiones pintadas por familia; precedente vivo --_ds-terminal-block-body-*",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack; los flotantes internos usan los canales --ds-z-* compartidos"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2100,45 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (pattern/feedback/terminal-block). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/feedback/terminal-block",
+            "channels": [
+              "--ds-terminal-block-border-style"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-border-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "remediatedFrom": "fam11-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-edge-standard-style"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2146,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2164,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2184,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2223,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "empty-state sigue la postura; terminal-block son caracteres y queda fuera",
+        "source": "huecos-kimi",
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "stroke-width del icono/ilustracion del estado vacio (postura de iconos)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-empty-state-icon-stroke-width"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2250,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

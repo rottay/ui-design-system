@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "typescriptRoots": [
     {
       "path": "packages/core/src",
@@ -17,8 +17,5 @@
   "cssRoots": [
     "packages/core/src/foundation/tokens/css/presentation/components",
     "packages/core/src/foundation/tokens/css/runtime/engines"
-  ],
-  "authoredExtensionRoots": [
-    "packages/core/src/foundation/tokens/css/facade/artifacts"
   ]
 }

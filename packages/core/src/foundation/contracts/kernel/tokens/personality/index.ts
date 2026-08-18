@@ -37,7 +37,7 @@ export interface AnimationPersonalityTokens {
   /** Maximum stagger for lists (ms) */
   staggerMax: number;
   /** Entrance animation style */
-  entrance: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
+  entrance: "none" | "fade" | "slideUp" | "spring" | "bounce";
   /** Entrance animation duration (ms) */
   entranceDuration: number;
   /** Hover lift in px (0 = no lift) */
@@ -51,9 +51,9 @@ export interface AnimationPersonalityTokens {
   /** Spring friction for react-spring */
   springFriction: number;
   /** Pulse speed for live indicators */
-  pulseSpeed: 'none' | 'slow' | 'normal' | 'fast';
+  pulseSpeed: "none" | "slow" | "normal" | "fast";
   /** Skeleton loading style */
-  skeletonStyle: 'pulse' | 'shimmer' | 'wave';
+  skeletonStyle: "pulse" | "shimmer" | "wave";
   /** KPI count-up animation enabled */
   countUpEnabled: boolean;
 }
@@ -65,55 +65,57 @@ export interface ChartPersonalityTokens {
   /** Mount animation duration (ms) */
   mountDuration: number;
   /** Line style */
-  lineStyle: 'sharp' | 'smooth' | 'step';
+  lineStyle: "sharp" | "smooth" | "step";
   /** Show dots on data points */
   showDots: boolean;
   /** Use gradient fills in areas */
   useGradientFill: boolean;
   /** Tooltip style */
-  tooltipStyle: 'minimal' | 'detailed' | 'glass';
+  tooltipStyle: "minimal" | "detailed" | "glass";
   /** Color scheme for chart palettes */
-  colorScheme?: 'default' | 'pastel' | 'vibrant' | 'monochrome' | 'accessible';
+  colorScheme?: "default" | "pastel" | "vibrant" | "monochrome" | "accessible";
+  /** Optional tenant-authored categorical palette, ordered 1..10. */
+  categoryColors?: readonly string[];
 }
 
 /** Typography personality tokens */
 export interface TypographyPersonalityTokens {
   /** Heading weight bias (-100/0/+100) */
-  headingWeightBias: 'lighter' | 'normal' | 'heavier';
+  headingWeightBias: "lighter" | "normal" | "heavier";
   /** Heading letter spacing */
   headingLetterSpacing: string;
   /** Label style (UPPERCASE vs sentence case) */
-  labelStyle: 'uppercase' | 'sentence' | 'capitalize';
+  labelStyle: "uppercase" | "sentence" | "capitalize";
 }
 
 /** Accent/decoration personality tokens */
 export interface AccentPersonalityTokens {
   /** Accent bar position on cards */
-  barPosition: 'top' | 'left' | 'none';
+  barPosition: "top" | "left" | "none";
   /** Accent bar thickness (px) */
   barThickness: number;
   /** Accent bar style */
-  barStyle: 'solid' | 'gradient' | 'animated';
+  barStyle: "solid" | "gradient" | "animated";
   /** Icon container shape */
-  iconContainerShape: 'square' | 'rounded' | 'circle' | 'none';
+  iconContainerShape: "square" | "rounded" | "circle" | "none";
   /** Badge shape */
-  badgeShape: 'rounded' | 'pill' | 'square';
+  badgeShape: "rounded" | "pill" | "square";
   /** Divider style */
-  dividerStyle: 'solid' | 'dashed' | 'dotted' | 'none';
+  dividerStyle: "solid" | "dashed" | "dotted" | "none";
 }
 
 /** Card personality tokens */
 export interface CardPersonalityTokens {
   /** Default elevation */
-  defaultElevation: 'sm' | 'md' | 'lg';
+  defaultElevation: "sm" | "md" | "lg";
   /** Hover elevation change */
-  hoverElevation: 'none' | 'lift-one' | 'lift-two';
+  hoverElevation: "none" | "lift-one" | "lift-two";
   /** Show border at rest */
   showBorder: boolean;
   /** Color tint on hover */
   hoverTint: boolean;
   /** Padding density */
-  paddingDensity: 'compact' | 'normal' | 'spacious';
+  paddingDensity: "compact" | "normal" | "spacious";
 }
 
 // Each sub-object is independently spreadable in the merge chain

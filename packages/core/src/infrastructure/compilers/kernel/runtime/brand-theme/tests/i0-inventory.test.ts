@@ -1289,19 +1289,14 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
     );
   });
 
-  it("roster channels are absent from the authored extensions (no PostCSS needed)", () => {
-    for (const tenant of ["rottay", "bithire", "evnto"]) {
-      const ext = readFileSync(
-        resolve(CSS_SRC, `facade/artifacts/${tenant}/_source/extension.css`),
-        "utf-8"
-      );
-      for (const channel of ROSTER) {
-        expect(ext, `${tenant} extension still declares ${channel}`).not.toMatch(
-          new RegExp(`^\\s*${channel.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}\\s*:`, "m")
-        );
-      }
-    }
-  });
+  // EXCISED (SEV-2): `roster channels are absent from the authored extensions
+  // (no PostCSS needed)`. It read all three `_source/extension.css` files,
+  // which were deleted in this tranche, and asserted none of the 9 CONFLICT9
+  // roster channels was re-declared there. There is no authored extension left
+  // to declare them; law G2 of `scripts/first-party-single-author-gate.mjs`
+  // fails on any resurrected extension source or `_source/` directory, which
+  // is strictly stronger than a per-channel absence scan. The compiled-surface
+  // assertions for the same 9 channels are directly below and untouched.
 
   describe("rottay base error/info at ramp 400", () => {
     const compiled = compileBrandTheme({
@@ -1426,23 +1421,17 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
       expect(computed).toEqual(ledger.finalStateVocabulary?.distribution);
     });
 
-    it("baseline.json accepted values are decrease-only ceilings (exactness delegated to gate)", () => {
-      const baseline = JSON.parse(
-        readFileSync(resolve(process.cwd(), "scripts/artifact-provenance-gate.baseline.json"), "utf-8")
-      );
-      expect(baseline.capabilityGaps).toEqual({ bithire: 0, evnto: 0, rottay: 0 });
-
-      expect(baseline.metrics.rottay.bytes).toBeLessThanOrEqual(66191);
-      expect(baseline.metrics.rottay.declarations).toBeLessThanOrEqual(1094);
-      expect(baseline.metrics.rottay.literals).toBeLessThanOrEqual(1248);
-
-      expect(baseline.metrics.bithire.bytes).toBeLessThanOrEqual(23339);
-      expect(baseline.metrics.bithire.declarations).toBeLessThanOrEqual(209);
-      expect(baseline.metrics.bithire.literals).toBeLessThanOrEqual(123);
-
-      expect(baseline.grandfather.rottay.capabilityGapChannels).toEqual([]);
-      expect(baseline.grandfather.bithire.capabilityGapChannels).toEqual([]);
-    });
+    // EXCISED (SEV-2): `baseline.json accepted values are decrease-only
+    // ceilings (exactness delegated to gate)`. It read
+    // `scripts/artifact-provenance-gate.baseline.json`, deleted in this tranche
+    // together with the gate whose volume it capped. Every ceiling it asserted
+    // bounded the SIZE of a second authored source per slug (rottay <= 66191
+    // bytes / 1094 declarations / 1248 literals; bithire <= 23339 / 209 / 123;
+    // zero capability gaps and zero grandfathered capability-gap channels for
+    // all three). With the source gone those bounds are satisfied by zero, so
+    // the test would have stayed green while measuring nothing. The successor
+    // does not bound the second author, it forbids it:
+    // `scripts/first-party-single-author-gate.mjs`.
   });
 
   describe("mutants", () => {
@@ -1475,14 +1464,16 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
     });
 
     it("rejects changed light error/info seeds in the mode block", () => {
+      const lightMode = rottayBrandTheme.modes?.light;
+      if (!lightMode?.palette) throw new Error("Missing rottay light palette");
       const mutant = {
         ...rottayBrandTheme,
         modes: {
           ...rottayBrandTheme.modes,
           light: {
-            ...rottayBrandTheme.modes!.light,
+            ...lightMode,
             palette: {
-              ...rottayBrandTheme.modes!.light.palette,
+              ...lightMode.palette,
               errorColor: "#B91C1C",
               infoColor: "#1E40AF",
             },

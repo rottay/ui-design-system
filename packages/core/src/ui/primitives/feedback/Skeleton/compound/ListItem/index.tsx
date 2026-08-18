@@ -153,7 +153,7 @@ export const SkeletonListItem = forwardRef<HTMLDivElement, SkeletonListItemProps
     // The whole static layout — the row's flex alignment and rhythm, the 40px
     // avatar block with its squish guard, the content column and the varied
     // line geometry (first 40% at title height, last 60%, middle 80%) — paints
-    // from the unlayered skeleton-compounds skin. Inline style keeps only the
+    // from the unlayered skeleton-compounds skin. Inline style keeps the
     // caller's `style` plus the shared canon animation reference per block.
     const containerStyle: React.CSSProperties = { ...style };
 

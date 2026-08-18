@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "802e91735253996fa50cd9bcbbec48dd18a5f3e9ac16ba53495896502c774e1f"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2308 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/visualization/map-view/contracts/index.ts",
+      "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx",
+      "packages/core/src/ui/patterns/visualization/map-view/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
+    ],
+    "stableParts": [
+      "content",
+      "coordinates",
+      "empty",
+      "loading",
+      "map-placeholder",
+      "marker-color",
+      "marker-label",
+      "marker-list",
+      "marker-row",
+      "marker-row-main",
+      "marker-text",
+      "placeholder-content",
+      "placeholder-label",
+      "popup",
+      "root",
+      "sidebar",
+      "spinner"
+    ],
+    "states": [
+      "loading",
+      "selected"
+    ],
+    "variantAxes": [
+      "data-detail"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "zero colour literals; 3 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:71, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:130, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:142]",
+      "classic paints entirely from inline style objects; no classic paint file exists [at packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:52]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-visualization",
+        "scoutArtifact": "mr-anatomy-pattern-visualization.json",
+        "scoutSelfGradedConfidence": "HIGH",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 17,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:115",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:61",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:15",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:23"
+          ],
+          "atSiteCount": 12
+        },
+        {
+          "part": "coordinates",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:195",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:69"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:155",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:101",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9"
+          ]
+        },
+        {
+          "part": "loading",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:118",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9"
+          ]
+        },
+        {
+          "part": "map-placeholder",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:131",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:74",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:15"
+          ]
+        },
+        {
+          "part": "marker-color",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:187",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:53"
+          ]
+        },
+        {
+          "part": "marker-label",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:192",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:147",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:61"
+          ]
+        },
+        {
+          "part": "marker-list",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:159",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:107",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:31"
+          ],
+          "atSiteCount": 11
+        },
+        {
+          "part": "marker-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:170",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:114",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:133"
+          ],
+          "atSiteCount": 16
+        },
+        {
+          "part": "marker-row-main",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:145"
+          ]
+        },
+        {
+          "part": "marker-text",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:191",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:156"
+          ]
+        },
+        {
+          "part": "placeholder-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:136",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9"
+          ]
+        },
+        {
+          "part": "placeholder-label",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:137",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:140",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:144",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:84",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:87",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:93"
+          ],
+          "atSiteCount": 10
+        },
+        {
+          "part": "popup",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:208",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:173"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:102",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:108"
+          ],
+          "atSiteCount": 16
+        },
+        {
+          "part": "sidebar",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:111",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:46"
+          ]
+        },
+        {
+          "part": "spinner",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:121"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:103",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:53"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "selected",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:171",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:118"
+          ],
+          "state": "selected"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "detail",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:137",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:140",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:144",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:84",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:87",
+            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:93"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "empty",
+            "at": [
+              "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:104",
+              "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:54"
+            ]
+          },
+          {
+            "token": "last",
+            "at": [
+              "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:172",
+              "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:119"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineDivergence": {
+          "enginesPresent": [
+            "classic",
+            "modern",
+            "rustic"
+          ],
+          "engineSwitched": true,
+          "rootAnchor": {
+            "modern": {
+              "class": "ds-pattern-map-view ds-engine-modern",
+              "at": "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:52"
+            },
+            "rustic": {
+              "class": "ds-pattern-map-view ds-engine-rustic",
+              "at": "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:21"
+            },
+            "classic": {
+              "class": null,
+              "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:52",
+              "note": "<div className={className} style={{display:'flex',gap:16,...style}}> - inline layout literals, no DS anchor"
+            }
+          },
+          "divergence": "modern 17 parts, rustic 14, classic 0. Modern-only: marker-row-main marker-text spinner.",
+          "classicDisposition": "NOT_APPLICABLE_WITH_REASON",
+          "classicReason": "TWO DISTINCT REASONS, as calendar-view. (i) AntD-vocabulary-only: Card/List/Tag/Empty/Spin at map-view/engines/classic/index.tsx:60,62,88,90,98,119 (imported :19). (ii) NOT ADDRESSABLE AT ALL: the root at :52 is <div className={className} style={{display:'flex',gap:16,...style}}> - caller className only, inline layout, no DS anchor of either kind. Zero quoted DS class literals and zero data-part attributes exist in this file.",
+          "r2AsNarrowedApplies": "partial",
+          "r2Version": "narrowed: applies ONLY where a classic sub-region is addressable exclusively through third-party AntD vocabulary. Where classic stamps its own DS-owned anchor of either R-8 kind, the region IS addressable and R-2 does not apply."
+        },
+        "engines": [
+          "classic",
+          "modern",
+          "rustic"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupMembership": {
+          "frame": [
+            "border",
+            "border-block-end",
+            "border-bottom",
+            "box-shadow"
+          ],
+          "geometry": [
+            "border-radius",
+            "gap",
+            "height",
+            "margin-block-end",
+            "margin-block-start",
+            "max-block-size",
+            "min-block-size",
+            "padding",
+            "padding-block",
+            "padding-inline-start"
+          ],
+          "ink": [
+            "color"
+          ],
+          "motion": [
+            "transition"
+          ],
+          "state-affordance": [
+            "cursor"
+          ],
+          "surface": [
+            "background"
+          ],
+          "typography": [
+            "font-size",
+            "font-weight"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "variable": "--ds-color-info-bg",
+            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:64",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-info-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "height",
+            "propertyGroupPrior": "geometry",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-color-info-bg",
+            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:102",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-info-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "cursor",
+            "propertyGroupPrior": "state-affordance",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:42",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root']",
+            "atRules": [],
+            "landsOn": "gap",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "terminalLiteral": "16px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:68",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "margin-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "terminalLiteral": "16px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:69",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:70",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-info",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:71",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-info"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:77",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:78",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "terminalLiteral": "14px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:82",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location'], .ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='count']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:85",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location']",
+            "atRules": [],
+            "landsOn": "margin-block-start",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-1"
+            ],
+            "fallback": "4px",
+            "hasFallback": true,
+            "terminalLiteral": "4px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-8",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:93",
+            "part": "empty",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='empty']",
+            "atRules": [],
+            "landsOn": "padding-block",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-8"
+            ],
+            "fallback": "32px",
+            "hasFallback": true,
+            "terminalLiteral": "32px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:99",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:100",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--_ds-map-view-list-max-height",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:105",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "max-block-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--_ds-map-view-list-max-height"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "terminalLiteral": "none",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-border",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:109",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true'])",
+            "atRules": [],
+            "landsOn": "border-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:117",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "padding",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:120",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "terminalLiteral": "ease-out",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-shadow-focus-ring",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:128",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:focus-visible",
+            "atRules": [],
+            "landsOn": "box-shadow",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-shadow-focus-ring"
+            ],
+            "fallback": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
+            "hasFallback": true,
+            "terminalLiteral": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:134",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:active",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:138",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:hover:not([data-selected='true'])",
+            "atRules": [
+              "@media (hover: hover)"
+            ],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:142",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:148",
+            "part": "marker-row-main",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row-main']",
+            "atRules": [],
+            "landsOn": "gap",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-radius-full",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:154",
+            "part": "marker-color",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-color']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-full"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:161",
+            "part": "marker-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-label']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "terminalLiteral": "14px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:164",
+            "part": "marker-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] [data-part='marker-label']",
+            "atRules": [],
+            "landsOn": "font-weight",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-weight-semibold"
+            ],
+            "fallback": "600",
+            "hasFallback": true,
+            "terminalLiteral": "600",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:167",
+            "part": "coordinates",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:168",
+            "part": "coordinates",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:175",
+            "part": "popup",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
+            "atRules": [],
+            "landsOn": "margin-block-start",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-5",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:176",
+            "part": "popup",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
+            "atRules": [],
+            "landsOn": "padding-inline-start",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-5"
+            ],
+            "fallback": "20px",
+            "hasFallback": true,
+            "terminalLiteral": "20px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-map-view-touch-target-min",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:192",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [
+              "@media (hover: none) and (pointer: coarse)"
+            ],
+            "landsOn": "min-block-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-map-view-touch-target-min",
+              "--ds-touch-target-min"
+            ],
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "hasFallback": true,
+            "terminalLiteral": "44px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:10",
+            "part": "empty",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='loading'], .ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder']   > [data-part='placeholder-content']   > [data-part='placeholder-label'], .ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='empty']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-tertiary",
+              "--ds-color-text-muted"
+            ],
+            "fallback": "var(--ds-color-text-muted)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:16",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-bg-info",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:17",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-bg-info",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": "var(--ds-color-bg-secondary)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:18",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-border"
+            ],
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:24",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-border"
+            ],
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:25",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:32",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='false']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-bg-elevated",
+              "--ds-color-bg-primary"
+            ],
+            "fallback": "var(--ds-color-bg-primary)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:39",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-primary-50",
+              "--ds-color-bg-muted"
+            ],
+            "fallback": "var(--ds-color-bg-muted)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:46",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-last='false']",
+            "atRules": [],
+            "landsOn": "border-bottom",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-border"
+            ],
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:62",
+            "part": "marker-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='marker-label']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-primary",
+              "--ds-color-text"
+            ],
+            "fallback": "var(--ds-color-text)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:70",
+            "part": "coordinates",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='coordinates']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-tertiary",
+              "--ds-color-text-muted"
+            ],
+            "fallback": "var(--ds-color-text-muted)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          }
+        ],
+        "censusTotals": {
+          "readSites": 44,
+          "distinctVariables": 29,
+          "byPropertyGroup": {
+            "surface": 9,
+            "geometry": 15,
+            "frame": 7,
+            "ink": 6,
+            "typography": 5,
+            "motion": 2
+          },
+          "readSitesWithFallback": 28,
+          "readSitesWithoutFallback": 16,
+          "undeclaredDistinct": 2,
+          "undeclaredNames": [
+            "--_ds-map-view-list-max-height",
+            "--ds-map-view-touch-target-min"
+          ],
+          "generatedArtifactOnlyReads": 0,
+          "chains": 28,
+          "whollyInert": 26,
+          "partiallyInert": 1,
+          "live": 1,
+          "multiRungChains": 10,
+          "readSitesWithNoPartBinding": 2,
+          "distinctLandingProperties": 18
+        },
+        "variableCensus": [
+          {
+            "variable": "--ds-color-info-bg",
+            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:64",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-info-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "height",
+            "propertyGroupPrior": "geometry",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-color-info-bg",
+            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:102",
+            "part": null,
+            "partResolution": "NONE",
+            "selector": null,
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT-NEAREST-KEY",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-info-bg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": false,
+            "inertVerdict": "NOT_A_CHAIN",
+            "landsOnPrior": "cursor",
+            "propertyGroupPrior": "state-affordance",
+            "correction": "landing property re-derived: the prior value was the FIRST property key on a multi-property inline-style line, not the key containing this var(). Corrected to the nearest preceding key."
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:42",
+            "part": "root",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root']",
+            "atRules": [],
+            "landsOn": "gap",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "terminalLiteral": "16px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:68",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "margin-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-4"
+            ],
+            "fallback": "16px",
+            "hasFallback": true,
+            "terminalLiteral": "16px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:69",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:70",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-info",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:71",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-info"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:77",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:78",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "terminalLiteral": "14px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:82",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location'], .ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='count']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:85",
+            "part": "placeholder-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location']",
+            "atRules": [],
+            "landsOn": "margin-block-start",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-1"
+            ],
+            "fallback": "4px",
+            "hasFallback": true,
+            "terminalLiteral": "4px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-8",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:93",
+            "part": "empty",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='empty']",
+            "atRules": [],
+            "landsOn": "padding-block",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-8"
+            ],
+            "fallback": "32px",
+            "hasFallback": true,
+            "terminalLiteral": "32px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:99",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:100",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-lg"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--_ds-map-view-list-max-height",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:105",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "max-block-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--_ds-map-view-list-max-height"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "terminalLiteral": "none",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "LIVE"
+          },
+          {
+            "variable": "--ds-color-border",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:109",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true'])",
+            "atRules": [],
+            "landsOn": "border-block-end",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:117",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "padding",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-3"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:120",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [],
+            "landsOn": "transition",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "terminalLiteral": "ease-out",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-shadow-focus-ring",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:128",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:focus-visible",
+            "atRules": [],
+            "landsOn": "box-shadow",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-shadow-focus-ring"
+            ],
+            "fallback": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
+            "hasFallback": true,
+            "terminalLiteral": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:134",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:active",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:138",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:hover:not([data-selected='true'])",
+            "atRules": [
+              "@media (hover: hover)"
+            ],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:142",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:148",
+            "part": "marker-row-main",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row-main']",
+            "atRules": [],
+            "landsOn": "gap",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-radius-full",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:154",
+            "part": "marker-color",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-color']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-full"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:161",
+            "part": "marker-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-label']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-sm"
+            ],
+            "fallback": "14px",
+            "hasFallback": true,
+            "terminalLiteral": "14px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:164",
+            "part": "marker-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] [data-part='marker-label']",
+            "atRules": [],
+            "landsOn": "font-weight",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-weight-semibold"
+            ],
+            "fallback": "600",
+            "hasFallback": true,
+            "terminalLiteral": "600",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:167",
+            "part": "coordinates",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "NOT_A_CHAIN"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:168",
+            "part": "coordinates",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
+            "atRules": [],
+            "landsOn": "font-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": "12px",
+            "hasFallback": true,
+            "terminalLiteral": "12px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:175",
+            "part": "popup",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
+            "atRules": [],
+            "landsOn": "margin-block-start",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-spacing-5",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:176",
+            "part": "popup",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
+            "atRules": [],
+            "landsOn": "padding-inline-start",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-spacing-5"
+            ],
+            "fallback": "20px",
+            "hasFallback": true,
+            "terminalLiteral": "20px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-map-view-touch-target-min",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:192",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
+            "atRules": [
+              "@media (hover: none) and (pointer: coarse)"
+            ],
+            "landsOn": "min-block-size",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-map-view-touch-target-min",
+              "--ds-touch-target-min"
+            ],
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "hasFallback": true,
+            "terminalLiteral": "44px",
+            "declaredAuthored": false,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "PARTIALLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:10",
+            "part": "empty",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='loading'], .ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder']   > [data-part='placeholder-content']   > [data-part='placeholder-label'], .ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='empty']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-tertiary",
+              "--ds-color-text-muted"
+            ],
+            "fallback": "var(--ds-color-text-muted)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:16",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-bg-info",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:17",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-bg-info",
+              "--ds-color-bg-secondary"
+            ],
+            "fallback": "var(--ds-color-bg-secondary)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:18",
+            "part": "map-placeholder",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-border"
+            ],
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:24",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-border"
+            ],
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:25",
+            "part": "marker-list",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
+            "atRules": [],
+            "landsOn": "border-radius",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "geometry",
+            "chain": [
+              "--ds-radius-md"
+            ],
+            "fallback": "8px",
+            "hasFallback": true,
+            "terminalLiteral": "8px",
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:32",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='false']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-bg-elevated",
+              "--ds-color-bg-primary"
+            ],
+            "fallback": "var(--ds-color-bg-primary)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-primary-50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:39",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='true']",
+            "atRules": [],
+            "landsOn": "background",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "surface",
+            "chain": [
+              "--ds-color-primary-50",
+              "--ds-color-bg-muted"
+            ],
+            "fallback": "var(--ds-color-bg-muted)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:46",
+            "part": "marker-row",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-last='false']",
+            "atRules": [],
+            "landsOn": "border-bottom",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "frame",
+            "chain": [
+              "--ds-color-border-primary",
+              "--ds-color-border"
+            ],
+            "fallback": "var(--ds-color-border)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:62",
+            "part": "marker-label",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='marker-label']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-primary",
+              "--ds-color-text"
+            ],
+            "fallback": "var(--ds-color-text)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:70",
+            "part": "coordinates",
+            "partResolution": "SELECTOR",
+            "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='coordinates']",
+            "atRules": [],
+            "landsOn": "color",
+            "landingResolution": "DIRECT",
+            "propertyGroup": "ink",
+            "chain": [
+              "--ds-color-text-tertiary",
+              "--ds-color-text-muted"
+            ],
+            "fallback": "var(--ds-color-text-muted)",
+            "hasFallback": true,
+            "terminalLiteral": null,
+            "declaredAuthored": true,
+            "artifactOnly": false,
+            "inCss": true,
+            "inertVerdict": "WHOLLY_INERT"
+          }
+        ]
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2336,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-info",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2369,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-column-title-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2404,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-column-title-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2434,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<familia>-label-size",
+            "prop": "labels de la vista. EXCEPCION: ascii-diagram tiene par grid-size/line-cadence propio con piso 9px; su tamano es del contenido",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-pattern-map-view-label-size"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2466,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-card-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2502,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (pattern/visualization/pattern-calendar-view).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-calendar-view",
+            "channels": [
+              "--ds-calendar-view-nav-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2532,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-kanban-board",
+            "channels": [
+              "--ds-kanban-card-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Pisos de accesibilidad (touch-target-min): clase de exclusion propia - el piso no se negocia por tema": [
+            "--ds-map-view-touch-target-min",
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2568,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de pattern-map-view no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5",
+            "--ds-spacing-8"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2598,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-ascii-diagram-line-cadence",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de pattern-map-view no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2624,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de pattern-map-view no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2644,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de lectura/trabajo como charts: acabado cero",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de pattern-map-view no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2669,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "estos patterns no son chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2689,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2709,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "regiones pintadas por familia dentro del plano de visualizacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack (canales --ds-z-* compartidos)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2729,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (pattern/visualization/pattern-calendar-view).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/visualization/pattern-calendar-view",
+            "channels": [
+              "--ds-calendar-view-frame-style"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2759,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2777,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2797,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2836,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2856,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

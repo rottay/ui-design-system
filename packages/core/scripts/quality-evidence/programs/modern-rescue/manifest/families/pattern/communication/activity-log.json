@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "9cc8a9b66a66a2941ce34d71f413c8c6eb3792278224f79b0b478f6f09169e55"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2347 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/communication/activity-log/index.ts",
+      "packages/core/src/ui/patterns/communication/activity-log/contracts/index.ts",
+      "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css"
+    ],
+    "stableParts": [
+      "activity-dot",
+      "avatar",
+      "badge",
+      "diff",
+      "diff-cell",
+      "diff-row",
+      "dot",
+      "empty",
+      "entity",
+      "filter",
+      "filters",
+      "item-body",
+      "item-header",
+      "line",
+      "loading",
+      "root",
+      "skeleton",
+      "skeleton-list",
+      "timestamp",
+      "user"
+    ],
+    "states": [
+      "diff-overflow",
+      "loading"
+    ],
+    "variantAxes": [
+      "data-action-category",
+      "data-diff-depth",
+      "data-diff-role",
+      "data-interactive"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 20,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "activity-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:442",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:96",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:105",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:110",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:120"
+          ]
+        },
+        {
+          "part": "avatar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:477",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:81"
+          ]
+        },
+        {
+          "part": "badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:484",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:96",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:99"
+          ]
+        },
+        {
+          "part": "diff",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:223",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:120"
+          ]
+        },
+        {
+          "part": "diff-cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:195",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:200",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:204",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:207",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:250",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:179"
+          ]
+        },
+        {
+          "part": "diff-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:194",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:173"
+          ]
+        },
+        {
+          "part": "dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:62",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:68"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:430",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:214",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:50"
+          ]
+        },
+        {
+          "part": "entity",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:490",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:210",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:147",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:110"
+          ]
+        },
+        {
+          "part": "filter",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:141",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:42"
+          ]
+        },
+        {
+          "part": "filters",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:365",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:43",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:54"
+          ]
+        },
+        {
+          "part": "item-body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:453",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:69",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:76"
+          ]
+        },
+        {
+          "part": "item-header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:476",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:82"
+          ]
+        },
+        {
+          "part": "line",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:76"
+          ]
+        },
+        {
+          "part": "loading",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:91",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:37"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:406",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:420",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:90",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:135",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:34",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:235"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:272"
+          ]
+        },
+        {
+          "part": "skeleton-list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:268",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:206"
+          ]
+        },
+        {
+          "part": "timestamp",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:505",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:115"
+          ]
+        },
+        {
+          "part": "user",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:481",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:137"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "diff-overflow=true",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:249"
+          ],
+          "state": "diff-overflow"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:422"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:408"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "action-category=category",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:442",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:484"
+          ]
+        },
+        {
+          "token": "action-category=color",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:182",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx:208"
+          ]
+        },
+        {
+          "token": "action-category=create",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:105"
+          ]
+        },
+        {
+          "token": "action-category=delete",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:115"
+          ]
+        },
+        {
+          "token": "action-category=system",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:125"
+          ]
+        },
+        {
+          "token": "action-category=update",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:110"
+          ]
+        },
+        {
+          "token": "action-category=var(--ds-color-error)",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:99"
+          ]
+        },
+        {
+          "token": "action-category=var(--ds-color-primary)",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:62",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:96"
+          ]
+        },
+        {
+          "token": "action-category=var(--ds-color-secondary)",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:102"
+          ]
+        },
+        {
+          "token": "action-category=var(--ds-color-success)",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:19",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:93"
+          ]
+        },
+        {
+          "token": "action-category=var(--ds-color-text-secondary, var(--ds-color-text-muted))",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:71",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css:105"
+          ]
+        },
+        {
+          "token": "action-category=view",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:120"
+          ]
+        },
+        {
+          "token": "diff-depth=depth",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:194"
+          ]
+        },
+        {
+          "token": "diff-role=arrow",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:195"
+          ]
+        },
+        {
+          "token": "diff-role=from",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:191"
+          ]
+        },
+        {
+          "token": "diff-role=label",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:195",
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:250",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:179"
+          ]
+        },
+        {
+          "token": "diff-role=to",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:200"
+          ]
+        },
+        {
+          "token": "interactive=onActivityClick ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx:454"
+          ]
+        },
+        {
+          "token": "interactive=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:69",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:76",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css:249"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "lines": 237
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/modern/index.tsx",
+            "lines": 523
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "lines": 240
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "25 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 35,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 37,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-activity-log-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 38,
+            "fallback": true,
+            "fallbackValue": "20px 24px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "filters",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='filters']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 47,
+            "fallback": true,
+            "fallbackValue": "1.25rem",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "filters",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='filters']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 62,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 63,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 63,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 70,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 74,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 77,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 77,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "item-body",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 86,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "item-header",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='item-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 106,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-activity-log-dot-fill",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 106,
+            "fallback": true,
+            "fallbackValue": "15%",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='create']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 107,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 108,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='create']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='update']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-activity-log-dot-fill",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "15%",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='update']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='update']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 113,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='update']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 116,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='delete']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-activity-log-dot-fill",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 116,
+            "fallback": true,
+            "fallbackValue": "15%",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='delete']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 117,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='delete']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 118,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='delete']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 121,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='view']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-activity-log-dot-fill",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 121,
+            "fallback": true,
+            "fallbackValue": "15%",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='view']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='view']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='view']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 126,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='system']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-activity-log-dot-fill",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 126,
+            "fallback": true,
+            "fallbackValue": "15%",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='system']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 127,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='system']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 128,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "activity-dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='system']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 143,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "user",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='user']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 144,
+            "fallback": true,
+            "fallbackValue": "0.875rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "user",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='user']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 145,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "user",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='user']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 152,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "entity",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='entity']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 153,
+            "fallback": true,
+            "fallbackValue": "0.75rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "entity",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='entity']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "0.25rem",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "timestamp",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "timestamp",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "0.75rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "timestamp",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 166,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 168,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 170,
+            "fallback": true,
+            "fallbackValue": "0.75rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 176,
+            "fallback": true,
+            "fallbackValue": "0.375rem",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "diff-row",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 177,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff-row",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 181,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff-cell",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 182,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "diff-cell",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 192,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff-cell",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 198,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff-cell",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='arrow']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 201,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff-cell",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 202,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "diff-cell",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 209,
+            "fallback": true,
+            "fallbackValue": "1.25rem",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-list",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='skeleton-list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 210,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "skeleton-list",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='skeleton-list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-12",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 217,
+            "fallback": true,
+            "fallbackValue": "3rem",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 218,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "empty",
+            "selector": ".ds-pattern-activity-log.ds-engine-modern [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 31,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 31,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 32,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-surface",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 33,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-background)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-background",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 38,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "loading",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='loading']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "filter",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 44,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "filter",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 44,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "filter",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-surface",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 45,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-background)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "filter",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-background",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "filter",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "filter",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "empty",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 59,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 60,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category=\"var(--ds-color-success)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 62,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 63,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category=\"var(--ds-color-primary)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category=\"var(--ds-color-error)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 68,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 69,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category=\"var(--ds-color-secondary)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 71,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 71,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 72,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category=\"var(--ds-color-text-secondary, var(--ds-color-text-muted))\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 72,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category=\"var(--ds-color-text-secondary, var(--ds-color-text-muted))\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 77,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "line",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 77,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "line",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-surface-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 83,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 83,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 84,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "avatar",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 90,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 91,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 94,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category=\"var(--ds-color-success)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 97,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category=\"var(--ds-color-primary)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 100,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category=\"var(--ds-color-error)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 102,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 103,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category=\"var(--ds-color-secondary)\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 105,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 105,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": "",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 106,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category=\"var(--ds-color-text-secondary, var(--ds-color-text-muted))\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 106,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category=\"var(--ds-color-text-secondary, var(--ds-color-text-muted))\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "entity",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='entity']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 116,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "timestamp",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 121,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "diff",
+            "selector": ".ds-pattern-activity-log.ds-engine-rustic [data-part='diff']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 34,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 35,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 37,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 38,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 107,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 107,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 209,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 209,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 220,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/classic/index.tsx",
+            "line": 220,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 28,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 29,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 30,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 31,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 32,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 32,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 130,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 205,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 210,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 216,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/activity-log/engines/rustic/index.tsx",
+            "line": 220,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 38,
+            "literal": "20px",
+            "text": "padding: var(--ds-activity-log-padding, 20px 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 38,
+            "literal": "24px",
+            "text": "padding: var(--ds-activity-log-padding, 20px 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 47,
+            "literal": "1.25rem",
+            "text": "margin-block-end: var(--ds-spacing-5, 1.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 53,
+            "literal": "22rem",
+            "text": "@container ds-activity-log (inline-size < 22rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 77,
+            "literal": "2px",
+            "text": "outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 78,
+            "literal": "2px",
+            "text": "outline-offset: 2px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 101,
+            "literal": "1.5rem",
+            "text": "inline-size: 1.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 102,
+            "literal": "1.5rem",
+            "text": "block-size: 1.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 107,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-success);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 112,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-info);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 117,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-error);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 122,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-text-muted);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 127,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-warning);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 144,
+            "literal": "0.875rem",
+            "text": "font-size: var(--ds-font-size-sm, 0.875rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 153,
+            "literal": "0.75rem",
+            "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 156,
+            "literal": "0.25rem",
+            "text": "margin-block-start: var(--ds-spacing-1, 0.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 158,
+            "literal": "0.75rem",
+            "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 170,
+            "literal": "0.75rem",
+            "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 176,
+            "literal": "0.375rem",
+            "text": "gap: var(--ds-spacing-1, 0.375rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 180,
+            "literal": "60px",
+            "text": "min-inline-size: 60px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 209,
+            "literal": "1.25rem",
+            "text": "gap: var(--ds-spacing-5, 1.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 217,
+            "literal": "3rem",
+            "text": "padding-block: var(--ds-spacing-12, 3rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 236,
+            "literal": "1px",
+            "text": "border: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
+            "line": 246,
+            "literal": "1px",
+            "text": "border: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 31,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 32,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 43,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 44,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
+            "line": 90,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          }
+        ],
+        "censusRowCount": 132
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2375,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de activity-log no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-primary",
+            "--ds-color-success",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-surface-card",
+            "--ds-surface-inset"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2409,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2434,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2453,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-activity-log-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2484,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de activity-log no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2510,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2530,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (primitive/feedback/message). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/feedback/message",
+            "channels": [
+              "--ds-message-bubble-radius",
+              "--ds-message-density-factor"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-activity-log-padding"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "remediatedFrom": "fam11-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2572,40 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-12",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (primitive/feedback/notification). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/feedback/notification",
+            "channels": [
+              "--ds-notification-item-gap",
+              "--ds-notification-rule-style"
+            ]
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2613,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-presence-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-activity-log-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2646,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de activity-log no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2671,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "legibilidad del mensaje: mate; la tinta manda",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de activity-log no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2696,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de conversacion, no chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "communication/feedback no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2716,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2736,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack; los flotantes internos usan los canales --ds-z-* compartidos"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2756,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de activity-log no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2781,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2799,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2819,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2858,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los ticks de estado del mensaje son iconos de la libreria",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2878,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

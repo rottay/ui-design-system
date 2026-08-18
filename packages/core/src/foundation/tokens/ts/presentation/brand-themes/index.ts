@@ -23,6 +23,10 @@
  */
 
 import type { FirstPartyBrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import {
+  brandThemeToTheme,
+  type Theme,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import type { ProductProfileKey } from "@/foundation/contracts/kernel/product-profile-identity";
 import type { FontPackId } from "@/foundation/tokens/css/foundation/typography/font-packs/manifest";
@@ -406,3 +410,21 @@ export function getFirstPartyVertical(
     ? FIRST_PARTY_VERTICALS[slug]
     : undefined;
 }
+
+/**
+ * The canonical first-party ISO Themes, derived from the BrandTheme sources
+ * this barrel already owns.
+ *
+ * This lived in a `first-party-themes.ts` leaf beside the three vertical
+ * folders, re-exported from here. The leaf's whole content was the three-line
+ * record below, over the same three imports this file already had -- so the
+ * indirection bought nothing and cost the tree its ownership shape: the
+ * brand-themes root is supposed to hold the barrel and the three vertical
+ * folders, and nothing else. Folded in, with no compatibility re-export left
+ * behind.
+ */
+export const FIRST_PARTY_THEMES: Record<FirstPartyVerticalId, Theme> = {
+  rottay: brandThemeToTheme(rottayBrandTheme),
+  bithire: brandThemeToTheme(bithireBrandTheme),
+  evnto: brandThemeToTheme(evntoBrandTheme),
+};

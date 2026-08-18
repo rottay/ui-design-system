@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "47f82c402117ac5baeed009ea7f1d3ea14eb7ed36a04994326abd953c9c45577"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,384 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+      "packages/core/src/ui/patterns/data/virtual-list",
+      "packages/core/src/ui/patterns/data/virtual-list/contracts/index.ts",
+      "packages/core/src/ui/patterns/data/virtual-list/index.ts",
+      "packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx"
+    ],
+    "stableParts": [
+      "empty",
+      "item",
+      "root",
+      "sentinel",
+      "spacer"
+    ],
+    "states": [
+      "focus-visible"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "a tenant control must not remove or override the list role contract on these nodes (aria-role: list) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:101]",
+      "a tenant control must not remove or override the listitem role contract on these nodes (aria-role: listitem) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:126]",
+      "a tenant control must not remove or override the none role contract on these nodes (aria-role: none) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:118]",
+      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:141]",
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:90, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:102]",
+      "aria-posinset is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-posinset) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:128]",
+      "aria-setsize is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-setsize) [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:127]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:27]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (5 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:85, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:105, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:118, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:129]",
+      "The family assigns explicit ARIA roles in source (3 sites; roles observed: `list`, `none`, `listitem`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:101, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:118, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:126]",
+      "The family sets ARIA state/label attributes in source (5 sites; observed: `aria-label`, `aria-setsize`, `aria-posinset`, `aria-hidden`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:90, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:102, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:127, packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:128]",
+      "The family manages `tabIndex` explicitly (1 sites); focus order is owned by the component, not by theming. [at packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:110]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-data-merged",
+        "scoutArtifact": [
+          "mr-anatomy-pattern-data-b.json",
+          "mr-anatomy-pattern-forms.json",
+          "mr-anatomy-pattern-data-forms.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-pattern-data-b.json": "PARTIAL",
+          "mr-anatomy-pattern-data-forms.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 5,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:84"
+          ],
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:12",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:13",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:14"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:123"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:98",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:4",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:5",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:7",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:20",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:21"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "sentinel",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:138"
+          ]
+        },
+        {
+          "part": "spacer",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/virtual-list/presentation/list/index.tsx:118"
+          ]
+        }
+      ],
+      "partCensus": {
+        "ambiguousClassToPart": {
+          "ds-pattern-virtual-list": [
+            "empty",
+            "root"
+          ]
+        }
+      },
+      "stateAnchors": [
+        {
+          "token": "focus-visible",
+          "at": [],
+          "state": "focus-visible",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:20",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:21",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:22",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:27"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "pseudo:focus-visible",
+          "occurrences": 4,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css:38"
+          ],
+          "state": "focus-visible"
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblingDirectory": null,
+        "engines": {},
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "summary": "no engines/ sibling directory exists for this family; it renders one implementation for every engine",
+        "engineSiblingsInSource": {},
+        "enginesWithOwnSkinCss": [
+          "engine-agnostic"
+        ],
+        "perLayerBreakdown": {
+          "engine-agnostic": {
+            "partsStyled": 2,
+            "variablesRead": 0
+          },
+          "css:engine-agnostic": {
+            "partsStyled": 0,
+            "variablesRead": 6
+          }
+        },
+        "antdImportSites": [],
+        "inlineStyleAttributeSites": 5,
+        "templateConstructedVariableNames": [],
+        "paintDeliveryPerEngine": {}
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "1 stable classes map to more than one part"
+        ],
+        "failureClasses": {
+          "unreadEmission": [],
+          "undeclaredRead": [],
+          "hardcodedValue": [],
+          "familyNamespacePrefixesSearched": [
+            "--ds-pattern-virtual-list-",
+            "--ds-pattern-virtuallist-",
+            "--ds-virtual-list-",
+            "--ds-virtuallist-"
+          ],
+          "familyPrefixedDeclarationCount": 0
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupIndependenceTest": {
+          "test": "a propertyGroup name is defective when it is only a coarser label for a set of stableParts, because stableParts and propertyGroups are two INDEPENDENT axes and a cell declares both",
+          "result": "PASS",
+          "reason": "every group above names a CSS landing-property axis (colour, typography, spacing, radius, elevation, motion, border, size, layout, opacity, layer), not a region of the component; each group is exposed by many parts and each part exposes many groups, so the two axes do not collapse"
+        },
+        "propertyGroupMembership": {
+          "border": {
+            "partsExposingIt": [
+              "root"
+            ],
+            "readSites": 4
+          },
+          "other": {
+            "partsExposingIt": [
+              "root"
+            ],
+            "readSites": 1
+          },
+          "radius": {
+            "partsExposingIt": [
+              "root"
+            ],
+            "readSites": 1
+          }
+        },
+        "propertyGroupsObservedCssPropertyFamilies": [
+          "border-radius",
+          "layout",
+          "outline",
+          "size"
+        ],
+        "landingPropertyBuckets": [
+          "border",
+          "other",
+          "radius"
+        ],
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+            "line": 5,
+            "part": "root",
+            "landsOn": "scrollbar-color",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-color-border-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-virtual-list[data-part='root']"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+            "line": 20,
+            "part": "root",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-width"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-virtual-list[data-part='root']:focus-visible"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+            "line": 20,
+            "part": "root",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-virtual-list[data-part='root']:focus-visible"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+            "line": 20,
+            "part": "root",
+            "landsOn": "outline",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-virtual-list[data-part='root']:focus-visible"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+            "line": 21,
+            "part": "root",
+            "landsOn": "outline-offset",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-focus-ring-offset"
+            ],
+            "fallback": "2px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-virtual-list[data-part='root']:focus-visible"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+            "line": 22,
+            "part": "root",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-sm"
+            ],
+            "fallback": "6px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-virtual-list[data-part='root']:focus-visible"
+          }
+        ],
+        "variableCensusTsx": [],
+        "distinctVariablesRead": 6,
+        "readSiteCount": 6,
+        "emittedVariables": {},
+        "emittedVariablesTsx": {},
+        "paintOwnership": {
+          "ownCssFiles": [
+            {
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+              "engine": "engine-agnostic",
+              "lines": 50,
+              "role": "skin-css",
+              "matchedRootClasses": [
+                "ds-pattern-virtual-list"
+              ]
+            }
+          ],
+          "composedComponents": [],
+          "sharedStyleHelpers": [],
+          "note": "Variables listed in variableCensus are read by THIS family's own CSS or its own TSX only. Paint contributed by a composed component is attributed to that component here and is NOT counted in this family's census."
+        },
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "variableNamespaceSummary": {
+          "SHARED_OR_GLOBAL_NAMESPACE": 6,
+          "decl:generated-bundle-css": 6
+        },
+        "unattributedRuleCount": 0,
+        "ruleCount": 10
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 18,
+        "sitesVerified": 11,
+        "sitesWithdrawn": 7,
+        "sitesNotProbed": 0,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +412,58 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
+            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-selection-bg",
+              "--_ds-list-item-selected-bg"
+            ],
+            "sockets": [
+              "--_ds-virtual-list-selection-bg",
+              "--_ds-virtual-list-selection-border"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-cell-<status>-color",
+            "prop": "celdas y filas con estado",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-virtual-list-cell-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO (a-vs-b)": [
+            "virtual-list: 0 propios socketeables, 0 consumo, resto foundation/multi-lector"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-border-secondary",
+            "--ds-color-primary"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +471,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-virtual-list-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +498,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-virtual-list-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +525,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-cell-font-size",
+            "prop": "tamano de celda y header de tabla",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-virtual-list-cell-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +549,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-container-radius",
+            "prop": "marco del pattern (tabla, kanban, galeria)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-virtual-list-container-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +579,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +592,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila, padding de celda, gap de toolbar",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-density-factor",
+              "--_ds-kanban-card-density-factor"
+            ],
+            "sockets": [
+              "--_ds-virtual-list-density-factor"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +619,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +632,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Las celdas no se animan al ordenar/filtrar en la variante estandar: el re-flow de dato es instantaneo; solo la entrada de overlays de la tabla (menus) usa el socket overlay."
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +649,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-widget-card-elevation",
+              "--_ds-column-menu-elevation"
+            ],
+            "sockets": [
+              "--_ds-virtual-list-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +676,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Filas y celdas no llevan tinte ni glass: el scrim sobre dato es dano visual; la tabla es superficie de trabajo, no de marca."
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +693,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "El contenido de datos lo gobierna surface.*: si el tono de navegacion tine la tabla, la cascada se cruzo de eje."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +710,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +727,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "Celdas sticky usan el canal derivado sticky, no un z libre por componente."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +744,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
+            "prop": "marco del pattern y separadores internos de fila",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-virtual-list-frame-style"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +776,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +794,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +811,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +850,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "Los indicadores dentro de celdas son marcas de estado (siguen color semantico), no iconos de la libreria de postura."
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +867,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -111,13 +111,44 @@ export const CI_GATES = Object.freeze([
   { id: 'first-party-roster-source-drill', run: ['node', '--test', 'scripts/lib/first-party-roster-source.test.mjs'], blocking: true },
   { id: 'first-party-artifacts-source-staleness', run: ['pnpm', 'exec', 'vitest', 'run', 'src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts'], blocking: true },
   { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/vertical-css-staleness.gate.mjs'], blocking: true },
-  // Reads the compiled block out of the artifact above, so it runs after the
-  // freshness check: on a stale artifact its channel set would be last build's.
-  { id: 'artifact-provenance-drill', run: ['node', '--test', 'scripts/artifact-provenance-gate.test.mjs'], blocking: true },
-  { id: 'artifact-provenance', run: ['node', 'scripts/artifact-provenance-gate.mjs', '--check'], blocking: true },
+  // Single-author law, replacing the retired artifact-provenance trio. That
+  // gate BOUNDED a second author (the hand-written `_source/extension.css`)
+  // by reading the compiled block back out of the committed artifact; the
+  // second author is now gone, so the stronger law is enforced instead of the
+  // weaker bound. The split below is deliberate:
+  //   * the source-plane gate reads only authored files, so it is valid on a
+  //     clean clone and cannot be fooled by a stale local dist/;
+  //   * the render laws run under vitest against the TypeScript renderer,
+  //     because fresh-render ink causality cannot be asserted by a node gate
+  //     without importing dist/.
+  // Committed-byte closure is by composition: the render laws pin the fresh
+  // output, and `first-party-artifacts-source-staleness` above byte-compares
+  // that same fresh output against the committed artifact.
+  { id: 'first-party-single-author-drill', run: ['node', '--test', 'scripts/first-party-single-author-gate.test.mjs'], blocking: true },
+  { id: 'first-party-single-author', run: ['node', 'scripts/first-party-single-author-gate.mjs', '--check'], blocking: true },
+  { id: 'first-party-single-author-render-laws', run: ['pnpm', 'exec', 'vitest', 'run', 'src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/tests/single-author.test.ts'], blocking: true },
+  // The three staleness surfaces immediately above are RED on purpose while the
+  // generated artifacts are unregenerated, and a knowingly-red gate is exactly
+  // how an inventory turns into a habit: the count drifts, a row is quietly
+  // dropped, a class is softened, and nobody can tell an accepted red from a new
+  // one. This gate pins that inventory as a reviewed pair -- a sealed
+  // constitution in the gate SOURCE against the human-readable ledger -- so any
+  // add, removal, rename, class flip, surface move, shape drift or identity
+  // re-point is red until both sides are edited together. It deliberately does
+  // NOT execute the censuses (that is `--reconcile <observation.json>`), so it
+  // stays cheap enough to run before the expensive gates below.
+  { id: 'red-inventory', run: ['node', 'scripts/red-inventory-gate.mjs', '--check', '--quiet'], blocking: true },
 
   // --- structural / ownership ---
   { id: 'engine-token-audit', run: ['node', 'scripts/engine-token-audit.mjs', '--check'], blocking: true },
+  // The exact proof runs the audit above a second time inside two deterministic
+  // passes and adds the planes no other gate covers: the claim/contract census in
+  // the documentation, the code-derived vertical rows, the data-part corpus, and
+  // the whole-file SHA-256 documentation seal. It was reachable only through
+  // `pnpm run gat07:check`, so a doc could contradict source with the whole
+  // dashboard green. It sits AFTER the audit deliberately: when the audit is red
+  // this gate is red for the same reason but far more slowly.
+  { id: 'gat-07-exact-proof', run: ['node', 'scripts/gat-07-exact-proof.mjs', '--check'], blocking: true },
   { id: 'anatomy-variant-gate', run: ['node', 'scripts/anatomy-variant-gate.mjs', '--check'], blocking: true },
   { id: 'size-axis-law-gate', run: ['node', 'scripts/size-axis-law-gate.mjs', '--check'], blocking: true },
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/application-boundary-gate.test.mjs'], blocking: true },

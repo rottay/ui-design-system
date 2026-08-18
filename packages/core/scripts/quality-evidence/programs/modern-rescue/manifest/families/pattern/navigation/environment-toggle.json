@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "299e792297dbf7a6b621945af1dc5a3bad7f2a88e23c909dba8eaba3e6b19cc1"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2197 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/navigation/environment-toggle/index.ts",
+      "packages/core/src/ui/patterns/navigation/environment-toggle/contracts/index.ts",
+      "packages/core/src/ui/patterns/navigation/environment-toggle/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css"
+    ],
+    "stableParts": [
+      "badge",
+      "banner",
+      "banner-dot",
+      "check",
+      "confirm-cancel",
+      "confirm-dialog",
+      "confirm-message",
+      "confirm-overlay",
+      "confirm-submit",
+      "dot",
+      "option",
+      "option-content",
+      "option-name",
+      "panel",
+      "root",
+      "toggle",
+      "toggle-row",
+      "trigger"
+    ],
+    "states": [
+      "active",
+      "loading"
+    ],
+    "variantAxes": [
+      "data-variant"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 18,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:267",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:303",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:346",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:385",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:182",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:216"
+          ]
+        },
+        {
+          "part": "banner",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:409",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:320",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:263",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:267"
+          ]
+        },
+        {
+          "part": "banner-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:419",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:328",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:38"
+          ]
+        },
+        {
+          "part": "check",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:306",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:123",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:86"
+          ]
+        },
+        {
+          "part": "confirm-cancel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:355",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:166"
+          ]
+        },
+        {
+          "part": "confirm-dialog",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:342",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:150"
+          ]
+        },
+        {
+          "part": "confirm-message",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:156"
+          ]
+        },
+        {
+          "part": "confirm-overlay",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:340",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:146"
+          ]
+        },
+        {
+          "part": "confirm-submit",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:366",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:170"
+          ]
+        },
+        {
+          "part": "dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:261",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:300",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:213",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:54",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:248"
+          ]
+        },
+        {
+          "part": "option",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:289",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:333",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:370",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:233",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:279",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:300"
+          ]
+        },
+        {
+          "part": "option-content",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:381",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:142"
+          ]
+        },
+        {
+          "part": "option-name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:113"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:148",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:278",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:258"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:398",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:195"
+          ]
+        },
+        {
+          "part": "toggle",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:246",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:321",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:358",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:199",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:275",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:296"
+          ]
+        },
+        {
+          "part": "toggle-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:427",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:36"
+          ]
+        },
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:126",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:250",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:70"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:9"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=env.id === activeEnvironment",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:290",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:334",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:371",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:234",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:280",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:301"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:237"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "loading=loading ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:399"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "variant",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:30"
+          ]
+        },
+        {
+          "token": "variant=dropdown",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:246",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:113",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:118"
+          ]
+        },
+        {
+          "token": "variant=pills",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:322",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:275",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:222"
+          ]
+        },
+        {
+          "token": "variant=toggle",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:359",
+            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:48",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:158"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "position=first",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:161"
+            ]
+          },
+          {
+            "token": "position=idx === 0 ? 'first' : idx === environments.length - 1 ? 'last' : 'middle'",
+            "at": [
+              "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:372"
+            ]
+          },
+          {
+            "token": "position=last",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:167"
+            ]
+          },
+          {
+            "token": "position=middle",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:173"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/classic/index.tsx",
+            "lines": 216
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+            "lines": 453
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "lines": 389
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "3 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 46,
+            "fallback": true,
+            "fallbackValue": "0.25rem",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "toggle",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='toggle'][data-variant='pills']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 59,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dot",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 73,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 74,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 75,
+            "fallback": true,
+            "fallbackValue": "0.6875rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 76,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "0.25rem",
+            "cssProperty": "inset-block-start",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-z-dropdown",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-environment-toggle-panel-min-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 88,
+            "fallback": true,
+            "fallbackValue": "11.25rem",
+            "cssProperty": "min-inline-size",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 91,
+            "fallback": true,
+            "fallbackValue": "1rem",
+            "cssProperty": "max-inline-size",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 95,
+            "fallback": true,
+            "fallbackValue": "0.25rem",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-color",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-surface-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 97,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-image",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-surface-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 97,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-image",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 98,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 99,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 100,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-enter",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 100,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 103,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 119,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 120,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 127,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "check",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='check']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 133,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 134,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 137,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-variant='pills'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 152,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 155,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 156,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-variant='toggle'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 162,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-start-start-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='first']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 163,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-end-start-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='first']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 170,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-start-end-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='last']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 171,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-end-end-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='last']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 186,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 187,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 188,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 189,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 190,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 191,
+            "fallback": true,
+            "fallbackValue": "0.75rem",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 192,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 193,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-enter",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 193,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 196,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 203,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "banner-dot",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-motion-attention",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 207,
+            "fallback": true,
+            "fallbackValue": "2s",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "banner-dot",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-environment-toggle-touch-target",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 215,
+            "fallback": true,
+            "fallbackValue": "2.75rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-modern [data-part='trigger'], .ds-pattern-environment-toggle.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "banner-dot",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='dot'], .ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 46,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "toggle",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='toggle'][data-variant='toggle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "toggle",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='toggle'][data-variant='toggle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 47,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "toggle",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='toggle'][data-variant='toggle']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 53,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-primary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shadow-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 59,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 59,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "trigger",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "trigger",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 67,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 71,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger'][data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 71,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger'][data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 78,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 83,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-100)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 83,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "check",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='check']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 94,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 94,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 95,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 100,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 101,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 101,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 109,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 114,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 115,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 115,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-alpha-white-20",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='badge'], .ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggl",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 123,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='badge'], .ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggl",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='badge'], .ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggl",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 124,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='badge'], .ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggl",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 128,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 129,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 129,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "badge",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-envtoggle-accent-soft",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 136,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 137,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-envtoggle-accent",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "banner",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner'][data-part='banner']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-color-alpha-black-40",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 147,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "confirm-overlay",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-overlay']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 151,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-primary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "confirm-dialog",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 151,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "confirm-dialog",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 152,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "confirm-dialog",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shadow-2xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "confirm-dialog",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 157,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "confirm-message",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-message']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 157,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "confirm-message",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-message']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 162,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "confirm-cancel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 162,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "confirm-cancel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "confirm-cancel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 167,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "confirm-cancel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel'][data-part='confirm-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "confirm-cancel",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel'][data-part='confirm-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 171,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "confirm-submit",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-submit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 172,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "confirm-submit",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-submit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 172,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "confirm-submit",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-submit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 174,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "confirm-submit",
+            "selector": ".ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-submit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-400",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+            "line": 262,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 29,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 90,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 103,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 208,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 213,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 213,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 242,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-lg",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 343,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 347,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 359,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "line": 370,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 46,
+            "literal": "0.25rem",
+            "text": "gap: var(--ds-spacing-1, 0.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 56,
+            "literal": "0.5rem",
+            "text": "inline-size: 0.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 57,
+            "literal": "0.5rem",
+            "text": "block-size: 0.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 71,
+            "literal": "1px",
+            "text": "padding: 1px 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 71,
+            "literal": "6px",
+            "text": "padding: 1px 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 72,
+            "literal": "9999px",
+            "text": "border-radius: 9999px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 75,
+            "literal": "0.6875rem",
+            "text": "font-size: var(--ds-font-size-2xs, 0.6875rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 85,
+            "literal": "0.25rem",
+            "text": "inset-block-start: calc(100% + var(--ds-spacing-1, 0.25rem));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 88,
+            "literal": "11.25rem",
+            "text": "min-inline-size: var(--ds-environment-toggle-panel-min-width, 11.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 91,
+            "literal": "1rem",
+            "text": "max-inline-size: calc(100vw - var(--ds-spacing-4, 1rem));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 95,
+            "literal": "0.25rem",
+            "text": "padding: var(--ds-spacing-1, 0.25rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 103,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 124,
+            "literal": "1rem",
+            "text": "inline-size: 1rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 125,
+            "literal": "1rem",
+            "text": "block-size: 1rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 137,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-envtoggle-accent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 145,
+            "literal": "0.375rem",
+            "text": "gap: 0.375rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 152,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 159,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-envtoggle-accent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 191,
+            "literal": "0.75rem",
+            "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 196,
+            "literal": "2px",
+            "text": "border-block-end: 2px solid var(--ds-envtoggle-accent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 200,
+            "literal": "0.5rem",
+            "text": "inline-size: 0.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 201,
+            "literal": "0.5rem",
+            "text": "block-size: 0.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 207,
+            "literal": "2s",
+            "text": "animation: ds-foundation-pulse var(--ds-motion-attention, 2s) ease-in-out infinite;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 215,
+            "literal": "2.75rem",
+            "text": "min-block-size: var(--ds-environment-toggle-touch-target, 2.75rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 244,
+            "literal": "1px",
+            "text": "outline: 1px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 245,
+            "literal": "1px",
+            "text": "outline-offset: -1px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 254,
+            "literal": "1px",
+            "text": "outline: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 281,
+            "literal": "0.01ms",
+            "text": "transition-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "line": 282,
+            "literal": "0.01ms",
+            "text": "animation-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 46,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 47,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 54,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 59,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 67,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 71,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 95,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 96,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 124,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 130,
+            "literal": "3px",
+            "text": "border-radius: 3px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 141,
+            "literal": "2px",
+            "text": "border-bottom: 2px solid var(--ds-envtoggle-accent);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 152,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 163,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 167,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "line": 174,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          }
+        ],
+        "censusRowCount": 117
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2225,45 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.seeds",
+            "prop": "remediacion propiedad",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-envtoggle-accent"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-primary",
+            "--ds-color-text-on-primary",
+            "--ds-envtoggle-accent",
+            "--ds-surface-card"
+          ],
+          "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
+            "--ds-environment-toggle-touch-target"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2271,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2302,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2326,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "tamanos de label sobre la rampa multiplicada compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xs",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2357,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<familia>-panel-radius",
+            "prop": "radio de paneles propios (panel del locale-switcher y equivalentes)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-environment-toggle-control-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2389,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "controles del locale-switcher y equivalentes",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-environment-toggle-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2413,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<familia>-item-density-factor",
+            "prop": "padding de items de los switchers/menus del grupo",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-environment-toggle-control-item-density-factor",
+              "--_ds-environment-toggle-panel-min-width"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-environment-toggle-touch-target",
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-4",
+            "--ds-surface-inset"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2449,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2462,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-environment-toggle-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-attention",
+            "--ds-motion-ease-enter",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2496,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-3",
+            "--ds-elevation-surface-3"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2516,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2529,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-<leaf>",
+            "prop": "background-color / color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-section-label-color"
+            ],
+            "sockets": [
+              "--_ds-environment-toggle-sidebar-<leaf>"
+            ],
+            "socketsResolved": false
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2555,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2568,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-z-dropdown"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2587,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-item-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-environment-toggle-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2613,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2631,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2644,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2683,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-environment-toggle-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2709,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

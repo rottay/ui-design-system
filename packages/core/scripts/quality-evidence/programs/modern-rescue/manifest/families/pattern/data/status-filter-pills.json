@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "c8e5ce07c58086f94064411cbb82d9f4a9a9c10b73da0e58fe303a90437dc5c8"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1568 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+      "packages/core/src/ui/patterns/data/status-filter-pills",
+      "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx"
+    ],
+    "stableParts": [
+      "count-badge",
+      "count-badge-text",
+      "pill",
+      "pill-icon",
+      "pill-label",
+      "root"
+    ],
+    "states": [
+      "active",
+      "selected",
+      "focus-visible",
+      "hover"
+    ],
+    "variantAxes": [
+      "data-size"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:82]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:216, packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:217]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (6 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:61, packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:76, packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:87, packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:93]",
+      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-pressed`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:82]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-data-merged",
+        "scoutArtifact": [
+          "mr-anatomy-pattern-data-b.json",
+          "mr-anatomy-pattern-forms.json",
+          "mr-anatomy-pattern-data-forms.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-pattern-data-b.json": "SOURCE_BOUND",
+          "mr-anatomy-pattern-data-forms.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 6,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "count-badge",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:101"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:49",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:50",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:51",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:53"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "count-badge-text",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:106"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:64",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:65",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:145",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:150"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "pill",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:10",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:11",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:12"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:13",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:18"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "pill-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:86"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:110"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "pill-label",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:92"
+          ],
+          "atSiteCount": 7,
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:32",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:120",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:125"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute in source JSX",
+          "at": [
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:60",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:5"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:101"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "data-selected=true",
+          "at": [],
+          "state": "selected",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:85",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:87",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:93"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "focus-visible",
+          "at": [],
+          "state": "focus-visible",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:106",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:216",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:217",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:218"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "hover",
+          "at": [],
+          "state": "hover",
+          "citationsUnverified": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:94"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "data-selected='true'",
+          "occurrences": 24,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:47",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:78",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:89",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:95"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "pseudo:focus-visible",
+          "occurrences": 4,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:120"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "pseudo:hover",
+          "occurrences": 2,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:107"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "pseudo:active",
+          "occurrences": 1,
+          "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:115"
+          ],
+          "state": "active"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-size=md",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:27"
+          ]
+        },
+        {
+          "token": "data-size=sm",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:22",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:23",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:58",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:59"
+          ]
+        },
+        {
+          "token": "data-size='sm'",
+          "occurrences": 6,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:33",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:63",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:79"
+          ]
+        },
+        {
+          "token": "data-size='md'",
+          "occurrences": 2,
+          "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:37",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:63",
+            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:79"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblingDirectory": null,
+        "engines": {},
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "summary": "no engines/ sibling directory exists for this family; it renders one implementation for every engine",
+        "engineSiblingsInSource": {},
+        "enginesWithOwnSkinCss": [
+          "engine-agnostic"
+        ],
+        "perLayerBreakdown": {
+          "engine-agnostic": {
+            "partsStyled": 6,
+            "variablesRead": 0
+          },
+          "css:engine-agnostic": {
+            "partsStyled": 0,
+            "variablesRead": 32
+          }
+        },
+        "antdImportSites": [],
+        "inlineStyleAttributeSites": 0,
+        "templateConstructedVariableNames": [],
+        "paintDeliveryPerEngine": {}
+      },
+      "scoutGaps": {
+        "failureClasses": {
+          "unreadEmission": [],
+          "undeclaredRead": [],
+          "hardcodedValue": [],
+          "familyNamespacePrefixesSearched": [
+            "--ds-pattern-status-filter-pills-",
+            "--ds-pattern-statusfilterpills-",
+            "--ds-status-filter-pills-",
+            "--ds-statusfilterpills-"
+          ],
+          "familyPrefixedDeclarationCount": 0
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupIndependenceTest": {
+          "test": "a propertyGroup name is defective when it is only a coarser label for a set of stableParts, because stableParts and propertyGroups are two INDEPENDENT axes and a cell declares both",
+          "result": "PASS",
+          "reason": "every group above names a CSS landing-property axis (colour, typography, spacing, radius, elevation, motion, border, size, layout, opacity, layer), not a region of the component; each group is exposed by many parts and each part exposes many groups, so the two axes do not collapse"
+        },
+        "propertyGroupMembership": {
+          "border": {
+            "partsExposingIt": [
+              "count-badge",
+              "pill"
+            ],
+            "readSites": 5
+          },
+          "color": {
+            "partsExposingIt": [
+              "count-badge",
+              "count-badge-text",
+              "pill",
+              "pill-icon",
+              "pill-label"
+            ],
+            "readSites": 33
+          },
+          "elevation": {
+            "partsExposingIt": [
+              "count-badge",
+              "pill"
+            ],
+            "readSites": 8
+          },
+          "motion": {
+            "partsExposingIt": [
+              "pill"
+            ],
+            "readSites": 8
+          },
+          "other": {
+            "partsExposingIt": [
+              "pill"
+            ],
+            "readSites": 2
+          },
+          "radius": {
+            "partsExposingIt": [
+              "count-badge",
+              "pill"
+            ],
+            "readSites": 2
+          },
+          "spacing": {
+            "partsExposingIt": [
+              "count-badge",
+              "pill"
+            ],
+            "readSites": 2
+          },
+          "typography": {
+            "partsExposingIt": [
+              "count-badge-text",
+              "pill"
+            ],
+            "readSites": 4
+          }
+        },
+        "propertyGroupsObservedCssPropertyFamilies": [
+          "background",
+          "border",
+          "border-radius",
+          "box-shadow",
+          "color",
+          "filter",
+          "font",
+          "gap",
+          "interaction",
+          "layout",
+          "motion",
+          "other:-webkit-backdrop-filter",
+          "other:block-size",
+          "other:inline-size",
+          "outline",
+          "padding",
+          "size"
+        ],
+        "landingPropertyBuckets": [
+          "border",
+          "color",
+          "elevation",
+          "motion",
+          "other",
+          "radius",
+          "spacing",
+          "typography"
+        ],
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 12,
+            "part": "pill",
+            "landsOn": "gap",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "6px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-fast"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 18,
+            "part": "pill",
+            "landsOn": "transition",
+            "propertyGroupByLandingProperty": "motion",
+            "chain": [
+              "--ds-motion-ease-out"
+            ],
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 23,
+            "part": "pill",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'][data-size='sm']"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 27,
+            "part": "pill",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-size-xs"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'][data-size='md']"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 55,
+            "part": "count-badge",
+            "landsOn": "padding-inline",
+            "propertyGroupByLandingProperty": "spacing",
+            "chain": [
+              "--ds-spacing-2"
+            ],
+            "fallback": "6px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge']"
+          },
+          {
+            "variable": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 64,
+            "part": "count-badge-text",
+            "landsOn": "font-family",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-font-family-mono"
+            ],
+            "fallback": "monospace",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge-text[data-part='count-badge-text']"
+          },
+          {
+            "variable": "--ds-edge-hairline-width",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 65,
+            "part": "count-badge-text",
+            "landsOn": "font-size",
+            "propertyGroupByLandingProperty": "typography",
+            "chain": [
+              "--ds-edge-hairline-width"
+            ],
+            "fallback": "1px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge-text[data-part='count-badge-text']"
+          },
+          {
+            "variable": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 71,
+            "part": "pill",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-full"
+            ],
+            "fallback": "9999px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-filter-pill-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 72,
+            "part": "pill",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-filter-pill-border"
+            ],
+            "fallback": "transparent",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-filter-pill-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 73,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-bg"
+            ],
+            "fallback": "transparent",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-filter-pill-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 74,
+            "part": "pill",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-color",
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 74,
+            "part": "pill",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-filter-pill-shadow",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 76,
+            "part": "pill",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-filter-pill-shadow"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-glass-backdrop-filter",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 78,
+            "part": "pill",
+            "landsOn": "backdrop-filter",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-glass-backdrop-filter"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-glass-backdrop-filter",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 79,
+            "part": "pill",
+            "landsOn": "-webkit-backdrop-filter",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-glass-backdrop-filter"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 84,
+            "part": "pill",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-filter-pill-active-border",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 84,
+            "part": "pill",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 85,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-active-bg"
+            ],
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 85,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 86,
+            "part": "pill",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-active-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 86,
+            "part": "pill",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-shadow",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 87,
+            "part": "pill",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-filter-pill-active-shadow",
+              "--ds-filter-pill-shadow"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-shadow",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 87,
+            "part": "pill",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-filter-pill-shadow"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-hover-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 93,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-hover-bg",
+              "--ds-surface-highlight"
+            ],
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
+            "hasFallback": true,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 93,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
+            "hasFallback": true,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 93,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-filter-pill-hover-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 94,
+            "part": "pill",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-hover-border",
+              "--ds-toolbar-control-border",
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-toolbar-control-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 94,
+            "part": "pill",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-toolbar-control-border",
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 94,
+            "part": "pill",
+            "landsOn": "border-color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-border"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [
+              "@media (hover: hover)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-filter-pill-hover-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 101,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-hover-bg",
+              "--ds-surface-highlight"
+            ],
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:active:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 101,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-surface-highlight"
+            ],
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:active:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 101,
+            "part": "pill",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:active:not([data-selected='true'])"
+          },
+          {
+            "variable": "--ds-filter-pill-focus-ring",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 106,
+            "part": "pill",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-filter-pill-focus-ring"
+            ],
+            "fallback": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus-visible"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 106,
+            "part": "pill",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus-visible"
+          },
+          {
+            "variable": "--ds-filter-pill-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 110,
+            "part": "pill-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-color",
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon']"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 110,
+            "part": "pill-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 115,
+            "part": "pill-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-active-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 115,
+            "part": "pill-icon",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 120,
+            "part": "pill-label",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-color",
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label']"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 120,
+            "part": "pill-label",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 125,
+            "part": "pill-label",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-active-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 125,
+            "part": "pill-label",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 130,
+            "part": "count-badge",
+            "landsOn": "border-radius",
+            "propertyGroupByLandingProperty": "radius",
+            "chain": [
+              "--ds-radius-full"
+            ],
+            "fallback": "9999px",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge']"
+          },
+          {
+            "variable": "--ds-filter-pill-count-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 131,
+            "part": "count-badge",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-count-bg"
+            ],
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge']"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 131,
+            "part": "count-badge",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge']"
+          },
+          {
+            "variable": "--ds-filter-pill-count-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 132,
+            "part": "count-badge",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-filter-pill-count-border"
+            ],
+            "fallback": "transparent",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge']"
+          },
+          {
+            "variable": "--ds-filter-pill-count-ring",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 133,
+            "part": "count-badge",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-filter-pill-count-ring"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge']"
+          },
+          {
+            "variable": "--ds-filter-pill-count-active-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 138,
+            "part": "count-badge",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-count-active-bg",
+              "--ds-filter-pill-active-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 138,
+            "part": "count-badge",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-active-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 138,
+            "part": "count-badge",
+            "landsOn": "background",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-count-active-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 139,
+            "part": "count-badge",
+            "landsOn": "border",
+            "propertyGroupByLandingProperty": "border",
+            "chain": [
+              "--ds-filter-pill-count-active-border"
+            ],
+            "fallback": "transparent",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-count-active-ring",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 140,
+            "part": "count-badge",
+            "landsOn": "box-shadow",
+            "propertyGroupByLandingProperty": "elevation",
+            "chain": [
+              "--ds-filter-pill-count-active-ring"
+            ],
+            "fallback": "none",
+            "hasFallback": true,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true']"
+          },
+          {
+            "variable": "--ds-filter-pill-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 145,
+            "part": "count-badge-text",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-color",
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text']"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 145,
+            "part": "count-badge-text",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-text-secondary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text']"
+          },
+          {
+            "variable": "--ds-filter-pill-active-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 150,
+            "part": "count-badge-text",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-filter-pill-active-color",
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 150,
+            "part": "count-badge-text",
+            "landsOn": "color",
+            "propertyGroupByLandingProperty": "color",
+            "chain": [
+              "--ds-color-primary"
+            ],
+            "fallback": null,
+            "hasFallback": false,
+            "atRule": [],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills\n  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "line": 163,
+            "part": "pill",
+            "landsOn": "min-block-size",
+            "propertyGroupByLandingProperty": "other",
+            "chain": [
+              "--ds-touch-target-min"
+            ],
+            "fallback": "44px",
+            "hasFallback": true,
+            "atRule": [
+              "@media (hover: none), (pointer: coarse)"
+            ],
+            "paintKind": "own",
+            "selector": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill']"
+          }
+        ],
+        "variableCensusTsx": [],
+        "distinctVariablesRead": 32,
+        "readSiteCount": 64,
+        "emittedVariables": {},
+        "emittedVariablesTsx": {},
+        "paintOwnership": {
+          "ownCssFiles": [
+            {
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+              "engine": "engine-agnostic",
+              "lines": 240,
+              "role": "skin-css",
+              "matchedRootClasses": [
+                "ds-pattern-status-filter-pills"
+              ]
+            }
+          ],
+          "composedComponents": [
+            {
+              "component": "Box",
+              "tier": "primitive",
+              "importedFrom": "../../../primitives/layout/Box",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:18"
+              ],
+              "renderSiteCount": 2,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Flex",
+              "tier": "primitive",
+              "importedFrom": "../../../primitives/layout/Flex",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:19"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Text",
+              "tier": "primitive",
+              "importedFrom": "../../../primitives/display/Typography/compound/Text",
+              "importSites": [
+                "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:20"
+              ],
+              "renderSiteCount": 2,
+              "engines": [
+                "shared"
+              ]
+            }
+          ],
+          "sharedStyleHelpers": [],
+          "note": "Variables listed in variableCensus are read by THIS family's own CSS or its own TSX only. Paint contributed by a composed component is attributed to that component here and is NOT counted in this family's census."
+        },
+        "paintByEngine": {
+          "engine-agnostic-presentation": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+              "paintKind": "own"
+            }
+          ]
+        },
+        "variableNamespaceSummary": {
+          "SHARED_OR_GLOBAL_NAMESPACE": 32,
+          "decl:generated-bundle-css": 22,
+          "decl:generated-bundle-css+generated-tenant-artifact-css": 10
+        },
+        "unattributedRuleCount": 0,
+        "ruleCount": 78
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 52,
+        "sitesVerified": 18,
+        "sitesWithdrawn": 34,
+        "sitesNotProbed": 14,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1596,80 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
+            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-selection-bg",
+              "--_ds-list-item-selected-bg"
+            ],
+            "sockets": [
+              "--_ds-status-filter-pills-selection-bg",
+              "--_ds-status-filter-pills-selection-border",
+              "--_ds-filter-pill-hover-bg",
+              "--_ds-filter-pill-hover-border"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-cell-<status>-color",
+            "prop": "celdas y filas con estado",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-status-filter-pills-cell-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "HALLAZGO (a-vs-b)": [
+            "status-filter-pills: 3 propios socketeables, 0 consumo, resto foundation/multi-lector"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-filter-pill-active-bg",
+            "--ds-filter-pill-active-border",
+            "--ds-filter-pill-active-color",
+            "--ds-filter-pill-bg",
+            "--ds-filter-pill-border",
+            "--ds-filter-pill-color",
+            "--ds-filter-pill-count-active-bg",
+            "--ds-filter-pill-count-active-border",
+            "--ds-filter-pill-count-active-ring",
+            "--ds-filter-pill-count-bg",
+            "--ds-filter-pill-count-border",
+            "--ds-filter-pill-count-ring",
+            "--ds-motion-fast",
+            "--ds-spacing-2",
+            "--ds-toolbar-control-border"
+          ],
+          "Piso de accesibilidad (clase propia)": [
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1677,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-status-filter-pills-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1704,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-numeric-family",
+            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-numeric-family",
+              "--_ds-operational-ledger-family"
+            ],
+            "sockets": [
+              "--_ds-status-filter-pills-numeric-family"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1737,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-cell-font-size",
+            "prop": "tamano de celda y header de tabla",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-status-filter-pills-cell-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1767,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-container-radius",
+            "prop": "marco del pattern (tabla, kanban, galeria)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-status-filter-pills-container-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-radius-full"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1797,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1810,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila, padding de celda, gap de toolbar",
+            "tier": "standard",
+            "examples": [
+              "--_ds-data-table-density-factor",
+              "--_ds-kanban-card-density-factor"
+            ],
+            "sockets": [
+              "--_ds-status-filter-pills-density-factor"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1837,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1850,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Las celdas no se animan al ordenar/filtrar en la variante estandar: el re-flow de dato es instantaneo; solo la entrada de overlays de la tabla (menus) usa el socket overlay."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-motion-ease-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1873,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-widget-card-elevation",
+              "--_ds-column-menu-elevation"
+            ],
+            "sockets": [
+              "--_ds-status-filter-pills-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-filter-pill-active-shadow",
+            "--ds-filter-pill-shadow"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1907,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Filas y celdas no llevan tinte ni glass: el scrim sobre dato es dano visual; la tabla es superficie de trabajo, no de marca."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-glass-backdrop-filter",
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1931,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "El contenido de datos lo gobierna surface.*: si el tono de navegacion tine la tabla, la cascada se cruzo de eje."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1948,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1965,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "Celdas sticky usan el canal derivado sticky, no un z libre por componente."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1982,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
+            "prop": "marco del pattern y separadores internos de fila",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-status-filter-pills-frame-style"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "focus.ring",
+            "prop": "propiedad lector-unico",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-filter-pill-focus-ring"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-edge-hairline-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2021,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2039,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de patterns)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2056,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2095,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "Los indicadores dentro de celdas son marcas de estado (siguen color semantico), no iconos de la libreria de postura."
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2112,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

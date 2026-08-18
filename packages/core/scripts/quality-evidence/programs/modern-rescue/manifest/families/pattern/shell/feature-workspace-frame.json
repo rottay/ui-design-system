@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "87b60b1e9a1a124ecd52b0cb915639abe993d82adab3d8640b732981e6cbe300"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,805 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/shell/feature-workspace-frame/index.ts",
+      "packages/core/src/ui/patterns/shell/feature-workspace-frame/contracts/index.ts",
+      "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx",
+      "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css"
+    ],
+    "stableParts": [
+      "content",
+      "frame",
+      "loading-skeleton",
+      "navigation",
+      "navigation-viewport",
+      "root"
+    ],
+    "states": [
+      "loading"
+    ],
+    "variantAxes": [
+      "data-has-navigation",
+      "data-sticky",
+      "data-width"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 6,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:51"
+          ]
+        },
+        {
+          "part": "frame",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:33"
+          ]
+        },
+        {
+          "part": "loading-skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:56"
+          ]
+        },
+        {
+          "part": "navigation",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:37"
+          ]
+        },
+        {
+          "part": "navigation-viewport",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:42"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:25"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading=loading ? \"true\" : \"false\"",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:28"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "has-navigation=navigation ? \"true\" : \"false\"",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:27"
+          ]
+        },
+        {
+          "token": "sticky=stickyNavigation ? \"true\" : \"false\"",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:38"
+          ]
+        },
+        {
+          "token": "sticky=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css:106",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css:240"
+          ]
+        },
+        {
+          "token": "width=content",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css:77"
+          ]
+        },
+        {
+          "token": "width=wide",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css:70"
+          ]
+        },
+        {
+          "token": "width=width",
+          "at": [
+            "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/foundation/index.tsx:26"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/classic/index.tsx",
+            "lines": 11
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/modern/index.tsx",
+            "lines": 11
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/rustic/index.tsx",
+            "lines": 11
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "6 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": "root",
+            "selector": ".ds-pattern-feature-workspace-frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": "root",
+            "selector": ".ds-pattern-feature-workspace-frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-section-gap",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 87,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3)",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-feature-workspace-max-width",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 89,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "max-inline-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-feature-workspace-gutter-block-start",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 93,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3)",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-gutter-block-end",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 94,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-6)",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 94,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-feature-workspace-gutter",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": "--ds-feature-workspace-max-width-content, .ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE",
+            "declarationSiteIsFamilyOwnFile": true
+          },
+          {
+            "name": "--ds-feature-workspace-navigation-z-index",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 100,
+            "fallback": true,
+            "fallbackValue": "2",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__navigation",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-feature-workspace-sticky-offset",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 108,
+            "fallback": true,
+            "fallbackValue": "0px",
+            "cssProperty": "top",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__navigation[data-sticky=\"true\"]",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__navigation[data-sticky=\"true\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 111,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__navigation[data-sticky=\"true\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__navigation[data-sticky=\"true\"]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 125,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "scroll-padding-inline",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__navigation-viewport",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-skeleton-min-height",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 155,
+            "fallback": true,
+            "fallbackValue": "24rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-feature-workspace-skeleton-card-height",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 160,
+            "fallback": true,
+            "fallbackValue": "9rem",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-surface-card-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 162,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-secondary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 162,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card-radius",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "var(--ds-radius-xl)",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 163,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 166,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 166,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 169,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-elevated)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 170,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 173,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 173,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-skeleton-duration",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 177,
+            "fallback": true,
+            "fallbackValue": "calc(var(--ds-motion-glacial, 500ms) * 2.4)",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-motion-glacial",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 177,
+            "fallback": true,
+            "fallbackValue": "500ms",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__skeleton > span",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-section-gap-compact",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 189,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-2)",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 189,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-gutter-inline-compact",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 193,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 193,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 208,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding-block-start",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-feature-workspace-gutter-inline-mobile",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 211,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-2)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 211,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": "root",
+            "selector": ".ds-feature-workspace-frame__frame",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 57,
+            "literal": "0px",
+            "text": "env(safe-area-inset-left, 0px),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 58,
+            "literal": "0px",
+            "text": "env(safe-area-inset-right, 0px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 73,
+            "literal": "100rem",
+            "text": "100rem"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 80,
+            "literal": "80rem",
+            "text": "80rem"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 108,
+            "literal": "0px",
+            "text": "top: var(--ds-feature-workspace-sticky-offset, 0px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 112,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 121,
+            "literal": "2px",
+            "text": "padding-block: 2px 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 121,
+            "literal": "4px",
+            "text": "padding-block: 2px 4px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 155,
+            "literal": "24rem",
+            "text": "min-block-size: var(--ds-feature-workspace-skeleton-min-height, 24rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 160,
+            "literal": "9rem",
+            "text": "min-block-size: var(--ds-feature-workspace-skeleton-card-height, 9rem);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 161,
+            "literal": "1px",
+            "text": "border: 1px solid"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 177,
+            "literal": "500ms",
+            "text": "var(--ds-feature-workspace-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 2.4))"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 187,
+            "literal": "50rem",
+            "text": "@container ds-feature-workspace (max-width: 50rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 194,
+            "literal": "0px",
+            "text": "env(safe-area-inset-left, 0px),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 195,
+            "literal": "0px",
+            "text": "env(safe-area-inset-right, 0px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 204,
+            "literal": "32rem",
+            "text": "@container ds-feature-workspace (max-width: 32rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 212,
+            "literal": "0px",
+            "text": "env(safe-area-inset-left, 0px),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 213,
+            "literal": "0px",
+            "text": "env(safe-area-inset-right, 0px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 241,
+            "literal": "1px",
+            "text": "outline: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/feature-workspace-frame.css",
+            "line": 242,
+            "literal": "1px",
+            "text": "outline-offset: -1px;"
+          }
+        ],
+        "censusRowCount": 39
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +833,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-secondary",
+            "--ds-color-border-secondary",
+            "--ds-color-primary",
+            "--ds-surface-card-bg",
+            "--ds-surface-card-border",
+            "--ds-surface-panel",
+            "--ds-surface-panel-bg"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +869,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulares del shell sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +893,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulares del shell sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +917,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "escala sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +941,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-page-panel-radius",
+            "prop": "radio de paneles del shell (slug vivo: page)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-xl",
+            "--ds-surface-card-radius"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +974,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los controles del shell (header actions) son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +987,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el shell es chrome de composicion, no superficie de filas; lo que densifica es su contenido (tablas/listas) por sus propios sockets",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "CANDIDATOS (canales reales bajo regla de grupo MUST_NOT): --ds-feature-workspace-section-gap, --ds-feature-workspace-section-gap-compact, --ds-feature-workspace-skeleton-card-height, --ds-feature-workspace-skeleton-min-height, --ds-feature-workspace-sticky-offset"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-6"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1014,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-section-gap",
+            "prop": "ritmo interno de page-shell/cockpit",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-feature-workspace-frame-section-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1038,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "la paleta obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-page-transition-duration",
+            "prop": "transition-duration de entrada/salida de la command palette",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-feature-workspace-skeleton-duration"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-glacial"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1068,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-elevation"
+            ],
+            "sockets": [
+              "--_ds-feature-workspace-frame-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1094,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de shell mate; el glass vive en los scrims de overlay, no en la paleta",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1107,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-bg",
+            "prop": "background-color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-app-shell-sidebar-bg"
+            ],
+            "sockets": [
+              "--_ds-feature-workspace-frame-sidebar-bg"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1133,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1146,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "layer.stack",
+            "socketPattern": "--_ds-<comp>-z-index",
+            "prop": "z-index",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-z-index"
+            ],
+            "sockets": [
+              "--_ds-feature-workspace-frame-z-index"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales z NO cubiertos por adjudicacion --ds-z-* (correccion, no gusto)": [
+            "--ds-feature-workspace-navigation-z-index"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1178,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-page-rule-style",
+            "prop": "reglas de seccion y bordes de panel del shell",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1203,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1221,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1234,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1273,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria dentro de la paleta",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-page-icon-stroke-width",
+            "prop": "stroke-width de los iconos de comandos y resultados",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1294,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

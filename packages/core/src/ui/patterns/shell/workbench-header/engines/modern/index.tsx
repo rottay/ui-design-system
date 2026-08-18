@@ -118,7 +118,7 @@ function SavedViewTab({
 
 /**
  * One skeleton block. `size` is the skin-owned geometry hook (`data-size`);
- * the optional inline style carries only the sanctioned radius
+ * the optional inline style carries the sanctioned radius
  * custom-property data channel.
  */
 function SkeletonBlock(props: { size: string; style?: React.CSSProperties }) {

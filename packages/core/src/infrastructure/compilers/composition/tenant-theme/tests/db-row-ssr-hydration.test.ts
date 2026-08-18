@@ -25,6 +25,11 @@ import {
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row';
 import { TENANT_THEME_V1_COVERAGE } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { resolveDocumentRootAttributes } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
+import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
+import {
+  getKnownTenantConfig,
+  getKnownTenantSlugs,
+} from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   resolveVisualAuthority,
@@ -151,6 +156,57 @@ describe('DB row -> SSR embed', () => {
     expect(rootAttributes.lang).toBe('en');
     expect(rootAttributes.dir).toBe('ltr');
     expect(rootAttributes['data-theme']).toBe('light');
+  });
+
+  /**
+   * WHY that stamp reads `modern`, and why nothing else proves it.
+   *
+   * The block above asserts the value. This one asserts the AUTHORITY behind
+   * the value: the vertical preset is the sole author of the engine, and a
+   * first-party tenant carries no engine of its own.
+   *
+   * `resolveEngine` consults `verticalEngine` before `tenantEngine` and returns
+   * unconditionally when it is truthy. Every first-party vertical preset
+   * declares `modern`, so the tenant branch is unreachable for these slugs.
+   * That is exactly what makes the absence unguardable by behaviour: putting
+   * `engine: entry.engine` back on the `createKnownTenant` literal feeds a
+   * branch nothing can reach, so it changes no output anywhere. Measured, not
+   * assumed -- with the key replanted, 286 tests across the tenant, engine and
+   * system suites stayed green and `tsc` stayed at zero errors.
+   *
+   * So the fence has to be stated as a fact about the registry rather than
+   * inferred from a rendered result. An own-property check rather than a
+   * truthiness check: an explicit `engine: undefined` would be the same defect
+   * wearing a disguise -- a second authority declared over a decision the
+   * vertical already owns. `Object.prototype.hasOwnProperty.call` rather than
+   * `Object.hasOwn`, which is ES2022; this package targets ES2020 and the test
+   * project's lib is ES2021, and a test is not a reason to move either.
+   */
+  it('proves the engine stamp has one author: no first-party tenant carries an engine', () => {
+    const slugs = getKnownTenantSlugs();
+    expect(slugs.length).toBeGreaterThan(0);
+
+    for (const slug of slugs) {
+      const config = getKnownTenantConfig(slug);
+      // Explicit failure rather than `?.` or `!`: a slug the registry lists but
+      // cannot resolve is itself the bug, and must not be skipped silently.
+      if (!config) {
+        throw new Error(`getKnownTenantSlugs() listed "${slug}" but getKnownTenantConfig() returned undefined`);
+      }
+
+      expect(Object.prototype.hasOwnProperty.call(config, 'engine'), slug).toBe(false);
+
+      // The other half of the same fact: even when the tenant's own engine is
+      // handed to the resolver alongside the vertical's, the vertical decides.
+      expect(
+        resolveEngine({
+          verticalEngine: 'modern',
+          tenantEngine: config.engine,
+          tenantSlug: config.slug,
+        }),
+        slug,
+      ).toBe('modern');
+    }
   });
 });
 

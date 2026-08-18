@@ -211,21 +211,16 @@ test("obsolete paint bridges cannot re-enter either entrypoint", () => {
   }
 });
 
-test("universal tenant border floors are absent from authored extensions", () => {
-  const artifactRoot = join(cssRoot, "facade/artifacts");
-  for (const slug of ["rottay", "bithire", "evnto"]) {
-    const extension = readFileSync(
-      join(artifactRoot, slug, "_source/extension.css"),
-      "utf8"
-    );
-    assert.doesNotMatch(
-      extension,
-      /\*\s*,\s*::after\s*,\s*::before\s*,\s*::backdrop\s*,\s*::file-selector-button\s*\{[\s\S]*?border-color/,
-      `${slug}: universal border floor must not return`
-    );
-  }
-});
-
+// EXCISED (SEV-2): "universal tenant border floors are absent from authored
+// extensions". Its whole corpus was the three `facade/artifacts/<slug>/_source/
+// extension.css` files, which are deleted in this tranche, so it threw at
+// collection with ENOENT rather than proving anything. The claim it carried —
+// no second authored source reinstates a fleet-wide `*, ::after, ::before,
+// ::backdrop, ::file-selector-button { border-color }` floor — is now
+// unconditional under law G2 of `scripts/first-party-single-author-gate.mjs`:
+// there is no authored extension left to declare a floor in. The three
+// matching `UNREACHABLE_BY_DESIGN` rows were dropped from the gate in the same
+// edit, because a stale entry there is itself a gate failure.
 test("reduced-motion authority exists in both OS and runtime policy seams", () => {
   const transitions = readFileSync(
     join(cssRoot, "foundation/animations/transitions.css"),

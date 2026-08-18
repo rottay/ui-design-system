@@ -456,6 +456,12 @@ export interface BrandPalette {
   infoBgColor?: string;
   /** Separator of an informational surface. */
   infoBorderColor?: string;
+  /**
+   * Ink written ON an informational surface. Defaults to `infoColor` in the
+   * base layer; a dark mode that keeps the accent readable against a tinted
+   * ground overrides it independently.
+   */
+  infoInkColor?: string;
   /** Link ink at rest. */
   linkColor?: string;
   /** Link ink on hover. */
@@ -470,9 +476,87 @@ export interface BrandPalette {
   interactiveBgActiveColor?: string;
   /** The quietest interactive ground: selected-but-inactive rows and chips. */
   interactiveBgMutedColor?: string;
+  /**
+   * Translucent wash steps. These are the tint/scrim layers a skin paints ON
+   * a ground rather than a ground themselves, so they carry an alpha channel
+   * by construction and cannot be derived from an opaque seed without knowing
+   * what sits underneath.
+   */
+  alphaBlack50?: string;
+  alphaBlack100?: string;
+  alphaWhite50?: string;
+  alphaPrimary10?: string;
+  alphaPrimary20?: string;
+  alphaSecondary10?: string;
+  alphaSecondary20?: string;
+  alphaSuccess10?: string;
+  alphaSuccess20?: string;
+  alphaWarning10?: string;
+  alphaWarning20?: string;
+  alphaError10?: string;
+  alphaError20?: string;
+  alphaInfo10?: string;
+  /** Ground a neutral region takes on hover. */
+  bgHoverColor?: string;
+  /** Ground of an informational region, on the `--ds-color-bg-*` spelling. */
+  bgInfoColor?: string;
+  /** The quietest ground step off the page. */
+  bgSubtleColor?: string;
+  /**
+   * Step 0 of the neutral ramp. A dark-first theme inverts this end of the
+   * ramp, so it is authored rather than derived from the light-mode white.
+   */
+  neutralZeroColor?: string;
+  /** The primary seed at wash strength, used for selected/active grounds. */
+  primarySubtleColor?: string;
+  /** The tint every elevation shadow is mixed from. */
+  shadowColor?: string;
+  /** Ground of a bounded content surface, on the `--ds-color-surface` name. */
+  surfaceColor?: string;
+  /** Quieted content surface. */
+  surfaceMutedColor?: string;
+  /** Second content surface step. */
+  surfaceSecondaryColor?: string;
+  /** Reading ink on the `--ds-color-text` name. */
+  textColor?: string;
+  /** Ink that stays legible on an inverted ground. */
+  textInverseColor?: string;
+  /**
+   * Component-facing alias channels. These are separate CSS names from the
+   * semantic palette above (`--ds-text-primary` is not `--ds-color-text-primary`),
+   * and a theme that moves one without the other is making two decisions, so
+   * they get their own typed leaves instead of being folded into the semantic
+   * field they usually track.
+   */
+  aliases?: BrandPaletteAliases;
+}
+
+/**
+ * The unprefixed `--ds-text-*` / `--ds-border-color*` alias namespace.
+ *
+ * Every one of these has a `:root` floor in the DS theme that forwards to the
+ * semantic palette. A tenant that authors here overrides the forward, which is
+ * exactly what a skin whose ink ladder differs from its semantic ladder needs.
+ */
+export interface BrandPaletteAliases {
+  textPrimary?: string;
+  textSecondary?: string;
+  textTertiary?: string;
+  textDisabled?: string;
+  textInverse?: string;
+  borderColor?: string;
+  borderColorDefault?: string;
+  borderColorMuted?: string;
+  borderColorStrong?: string;
+  borderColorHover?: string;
+  borderColorFocus?: string;
 }
 
 export interface BrandTypography {
+  /** Governed family preset shared by static and DB Theme transports. */
+  typePairing?: "sober" | "editorial" | "geometric" | "technical";
+  /** Bounded multiplier for the canonical type ramp. */
+  scale?: number;
   fontFamilyBase?: string;
   fontFamilyHeading?: string;
   fontFamilyMono?: string;
@@ -500,6 +584,12 @@ export interface BrandTypography {
 }
 
 export interface BrandSurfaces {
+  /** Governed button silhouette shared by static and DB Theme transports. */
+  buttonStyle?: "sharp" | "soft" | "pill";
+  /** Bounded multiplier for the canonical radius ramp. */
+  radiusScale?: number;
+  /** Governed elevation posture; values lower through the shared posture table. */
+  elevation?: "flat" | "soft" | "elevated";
   surface?: Partial<SurfaceTokens>;
   /** Coordinated semantic surface roles shared by every component family. */
   surfaceRoles?: SemanticSurfaceRoleMap;
@@ -510,7 +600,35 @@ export interface BrandSurfaces {
   materials?: SemanticSurfaceRoleMap;
   /** `full` is the pill/circle radius, not a fifth step of the scale. */
   borderRadius?: Partial<Record<"sm" | "md" | "lg" | "xl" | "full", string>>;
-  shadows?: Partial<Record<"sm" | "md" | "lg" | "xl", string>>;
+  shadows?: Partial<
+    Record<
+      | "xs"
+      | "sm"
+      | "md"
+      | "lg"
+      | "xl"
+      | "xxl"
+      | "inner"
+      | "focusRing"
+      | "focusRingError",
+      string
+    >
+  >;
+  /**
+   * The closed `--ds-elevation-0..5` ladder.
+   *
+   * Distinct from `elevation`, which selects a governed posture preset: this
+   * is the ladder itself. A dark-first skin cannot reach its shadow stack
+   * through the posture table, because a shadow that reads on a light ground
+   * is not the same expression tinted differently — it carries an inset top
+   * light the light-mode ladder has no term for.
+   */
+  elevations?: Partial<
+    Record<
+      "level0" | "level1" | "level2" | "level3" | "level4" | "level5",
+      string
+    >
+  >;
   glass?: TenantGlassTokens;
   gradients?: TenantGradientTokens;
   overlays?: TenantOverlayTokens;
@@ -566,6 +684,10 @@ export interface BrandSurfaces {
  */
 export interface BrandMotion {
   intensity?: number;
+  /** Bounded duration multiplier shared with the tenant motion dial. */
+  durationScale?: number;
+  /** Behavioral motion policy; intentionally emits no CSS custom property. */
+  ambient?: TenantMotionDial["ambient"];
   entrance?: "none" | "fade" | "slideUp" | "spring" | "bounce";
   entranceDuration?: number;
   hoverLift?: number;
@@ -583,6 +705,8 @@ export interface BrandMotion {
 export interface BrandChrome {
   /** Card elevation, hover, border, padding personality */
   card?: Partial<CardPersonalityTokens>;
+  /** Shared semantic surface paint consumed across component families */
+  surface?: BrandSurfaceChrome;
   /** Accent bars, icon containers, badge shapes, dividers */
   accent?: Partial<AccentPersonalityTokens>;
   /** Sidebar navigation chrome (bg, text, item sizing, group headers) */
@@ -607,6 +731,12 @@ export interface BrandChrome {
   table?: BrandTableChrome;
   /** Card component chrome (bg, border, shadow, header/body/footer) */
   cardComponent?: BrandCardChrome;
+  /**
+   * Base premium-card paint. The named card families below are specialisations
+   * of the same anatomy; this slot paints the unspecialised `--ds-premium-card-*`
+   * namespace they all fall back through.
+   */
+  premiumCard?: BrandPremiumCardChrome;
   /** Metric/stat cards used in dashboards and command headers */
   metricCard?: BrandMetricCardChrome;
   /** Signal/status cards used for operational insights */
@@ -633,9 +763,114 @@ export interface BrandChrome {
   popover?: BrandPopoverChrome;
   /** Tabs chrome */
   tabs?: BrandTabsChrome;
+  /** Alert banner chrome: per-intent surface, border, text and icon paint */
+  alert?: BrandAlertChrome;
+  /** Anchor navigation chrome: ink rail and link states */
+  anchor?: BrandAnchorChrome;
+  /** Avatar chrome: default/semantic fills, ring, group overflow paint */
+  avatar?: BrandAvatarChrome;
+  /** Back-to-top affordance chrome */
+  backTop?: BrandBackTopChrome;
+  /** Calendar chrome: surface, border, header and out-of-month days */
+  calendar?: BrandCalendarChrome;
+  /** Collapse/accordion chrome: panel, header and content paint */
+  collapse?: BrandCollapseChrome;
+  /** Descriptions list chrome: surface, border, label and content */
+  descriptions?: BrandDescriptionsChrome;
+  /** Drawer chrome: surface, header/footer rules, title and elevation */
+  drawer?: BrandDrawerChrome;
+  /** Dropdown menu chrome: surface, elevation and item states */
+  dropdown?: BrandDropdownChrome;
+  /** Empty-state chrome: illustration and description paint */
+  empty?: BrandEmptyChrome;
+  /** Float button chrome: default/primary fills and badge paint */
+  floatButton?: BrandFloatButtonChrome;
+  /** Live feed chrome: surface, new-item highlight and loading paint */
+  liveFeed?: BrandLiveFeedChrome;
+  /** Menu chrome: surface, item states, dividers and the inverse variant */
+  menu?: BrandMenuChrome;
+  /** Transient message chrome: surface, elevation and close affordance */
+  message?: BrandMessageChrome;
+  /** Notification chrome: surface, elevation and title paint */
+  notification?: BrandNotificationChrome;
+  /** Pagination chrome: item states and the active page treatment */
+  pagination?: BrandPaginationChrome;
+  /** Progress chrome: track and per-intent fill paint */
+  progress?: BrandProgressChrome;
+  /** Result page chrome: icon, title and subtitle paint */
+  result?: BrandResultChrome;
+  /** Skeleton chrome: base fill, highlight and wave gradient */
+  skeleton?: BrandSkeletonChrome;
+  /** Spinner chrome: indicator and track paint */
+  spinner?: BrandSpinnerChrome;
+  /** Statistic chrome: title, value and affix paint */
+  statistic?: BrandStatisticChrome;
+  /** Stats grid chrome: card variants, trend paint and skeletons */
+  statsGrid?: BrandStatsGridChrome;
+  /** Steps chrome: connector, and the wait/process/finish item states */
+  steps?: BrandStepsChrome;
+  /** Tag chrome: default and per-intent surface, border and text paint */
+  tag?: BrandTagChrome;
+  /** Timeline chrome: rail, dot and content paint */
+  timeline?: BrandTimelineChrome;
+  /** Tree chrome: node states for hover and selection */
+  tree?: BrandTreeChrome;
+}
+
+/**
+ * Semantic surface paint shared by every component family that draws a raised
+ * sheet: the generic `--ds-surface-*` channels, the card grid overlay, and the
+ * floating-panel elevation.
+ *
+ * Distinct from top-level `BrandSurfaces`, which owns the STRUCTURAL posture
+ * (radius scale, elevation posture, density, rhythm). This owns the painted
+ * result those postures are expressed through.
+ */
+export interface BrandSurfaceChrome {
+  /** Corner radius of the shared medium surface step. */
+  radiusMd?: string;
+  /** Resting and hovered elevation of a generic raised surface. */
+  shadow?: string;
+  shadowHover?: string;
+  /** Icon tile hosted on a surface. */
+  iconBg?: string;
+  iconBorder?: string;
+  /** Inline chip/metadata pill hosted on a surface. */
+  chipBg?: string;
+  /** Soft wash of the card's leading side accent. */
+  cardSideAccentSoft?: string;
+  /**
+   * Card grid overlay. `cardGridBg` composes the two hairline gradients built
+   * from `cardGridLine` at `cardGridSize` spacing.
+   */
+  cardGridSize?: string;
+  cardGridLine?: string;
+  cardGridBg?: string;
+  /**
+   * Elevation shared by every floating panel. Lowered to the shadow-scale name
+   * and to the date/time picker panels, which are the same decision under
+   * component-shaped spellings.
+   */
+  popoverShadow?: string;
+  /** Scrim gradient drawn over a card's cover image so its caption stays legible. */
+  cardCoverOverlayBg?: string;
+  /** The full-bleed environment gradient a dark-first page ground is painted with. */
+  gradientDark?: string;
+  /** Scrim over a standalone image (lightbox, preview, media tile). */
+  imageOverlayBg?: string;
+  /** Scrim drawn over the page behind a modal, drawer or command surface. */
+  overlayBg?: string;
+  /** Ink of a page-shell watermark: present, never competing with content. */
+  watermarkColor?: string;
+  /** Supporting ink under a page-shell title. */
+  pageShellSubtitleColor?: string;
 }
 
 export interface BrandSidebarChrome {
+  /** Bounded data-only anatomy selection; never emitted as CSS. */
+  anatomy?: "default" | "rail" | "panel";
+  /** Semantic sidebar posture. Explicit chrome fields below override its defaults. */
+  tone?: "subtle" | "strong" | "inverse";
   bg?: string;
   border?: string;
   text?: string;
@@ -665,9 +900,27 @@ export interface BrandSidebarChrome {
   itemIndent?: string;
   iconSize?: string;
   footerBg?: string;
+  /**
+   * Optical geometry of the navigation column itself.
+   *
+   * `itemPadding` above is the shorthand every anatomy shares; these are the
+   * axis-specific channels the rail and panel anatomies size independently,
+   * which is why a single shorthand cannot express them.
+   */
+  shellPaddingInline?: string;
+  shellPaddingCollapsed?: string;
+  itemHeight?: string;
+  itemChildHeight?: string;
+  itemFontSizeChild?: string;
+  itemPaddingInline?: string;
+  iconColumnSize?: string;
+  itemGap?: string;
+  childPaddingInline?: string;
 }
 
 export interface BrandLayoutChrome {
+  /** Bounded data-only anatomy selection; never emitted as CSS. */
+  anatomy?: "default" | "flat" | "floating";
   bg?: string;
   headerBg?: string;
   headerHeight?: string;
@@ -692,6 +945,8 @@ export interface BrandLayoutChrome {
   aspectRatioMotionEasing?: string;
   /** Divider rhythm, line and localized label craft. */
   dividerColor?: string;
+  /** Ink of a divider's inline label. Separate decision from the line itself. */
+  dividerTextColor?: string;
   dividerThicknessThin?: string;
   dividerThicknessMedium?: string;
   dividerThicknessThick?: string;
@@ -817,6 +1072,36 @@ export interface BrandBadgeChrome {
   lineHeight?: string;
   letterSpacing?: string;
   gap?: string;
+  /** Overall pill geometry, independent of the tone/variant paint below. */
+  height?: string;
+  paddingX?: string;
+  /**
+   * Semantic tone paint. This is the status vocabulary (`default`/`primary`/
+   * `secondary`/`success`/`warning`/`error`/`info`) and is orthogonal to the
+   * `solid`/`soft`/`ghost`/`outline` EMPHASIS vocabulary further down: a badge
+   * picks one tone and one emphasis.
+   */
+  defaultBg?: string;
+  defaultColor?: string;
+  primaryBg?: string;
+  primaryColor?: string;
+  secondaryBg?: string;
+  secondaryColor?: string;
+  successBg?: string;
+  successColor?: string;
+  warningBg?: string;
+  warningColor?: string;
+  errorBg?: string;
+  errorColor?: string;
+  infoBg?: string;
+  infoColor?: string;
+  /**
+   * Tone-independent frame and ink. A skin that draws every badge on one
+   * hairline and one reading ink sets these once instead of restating the
+   * same pair across all seven tones.
+   */
+  borderColor?: string;
+  textColor?: string;
   maxInlineSize?: string;
   chipMaxInlineSize?: string;
   pillMaxInlineSize?: string;
@@ -956,6 +1241,23 @@ export interface BrandSearchChrome {
   resultMetaColor?: string;
   categoryColor?: string;
   emptyBg?: string;
+  /**
+   * The modal spelling of the same capability. A command palette is search
+   * lifted off the page onto its own scrim, so it belongs to this family and
+   * not to a parallel top-level owner.
+   */
+  commandPalette?: BrandCommandPaletteChrome;
+}
+
+/** Command-palette chrome: the scrim, the floating panel, and its row states. */
+export interface BrandCommandPaletteChrome {
+  backdrop?: string;
+  bg?: string;
+  border?: string;
+  emptyColor?: string;
+  groupColor?: string;
+  itemHoverBg?: string;
+  shortcutBorder?: string;
 }
 
 export interface BrandButtonVariantChrome {
@@ -1103,7 +1405,36 @@ export interface BrandSegmentedChrome {
   lg?: BrandControlSizeChrome;
 }
 
+/**
+ * Canonical semantic algebra shared by every control family.
+ *
+ * These are public `--ds-*` channels, not product aliases. Static first-party
+ * themes and DB Theme patches author the same keypaths and the common chrome
+ * lowering emits the same CSS variables for both transports.
+ */
+export interface BrandSemanticControlChrome {
+  ink?: string;
+  inkMuted?: string;
+  onBrand?: string;
+  surface?: string;
+  surfaceRaised?: string;
+  brandTint?: string;
+  brandTintHover?: string;
+  brandBorder?: string;
+  iconTileBorder?: string;
+}
+
 export interface BrandControlsChrome {
+  /** Shared semantic paint consumed by buttons, pills and dense controls. */
+  semantic?: BrandSemanticControlChrome;
+  /**
+   * Multi-line field chrome. A textarea is not a tall Input: it carries its
+   * own resting/filled grounds and a character-count ink that the single-line
+   * field has no term for, so it does not inherit `input` here.
+   */
+  textarea?: BrandTextareaChrome;
+  /** Field-label, help, and validation-message ink shared by every form row. */
+  form?: BrandFormChrome;
   /** Button optical geometry. Paint stays in the variant blocks below. */
   buttonGeometry?: BrandButtonGeometryChrome;
   /** Input/select optical geometry shared by field-like controls. */
@@ -1144,8 +1475,491 @@ export interface BrandControlsChrome {
   };
   /** Focus ring */
   focusRing?: string;
+  /**
+   * Focus ring COLOR, independent of the composed `focusRing` shadow above.
+   * Components that build their own ring geometry read the colour alone.
+   */
+  focusRingColor?: string;
   /** Input field chrome */
   input?: BrandInputChrome;
+  /** Select/combobox chrome (trigger, dropdown panel, options) */
+  select?: BrandSelectChrome;
+  /**
+   * ROTTAY-T2 MASS. Twelve control families that had no typed owner and were
+   * therefore authored as raw `--ds-*` rows inside the rottay artifact
+   * extension. Each is a CLOSED interface over the channels its family
+   * actually paints -- not an open map, and not a per-brand dialect: the
+   * common `chromeToVariables` lowering emits the same names for the static
+   * `BrandTheme` transport and the DB `TenantThemeDocument` transport.
+   *
+   * The field name is the camelCase of the channel suffix; the lowering keeps
+   * each family's HISTORICAL channel spelling, which is why `datePicker`
+   * lowers to `--ds-datepicker-*`, `inputNumber` to `--ds-inputnumber-*` and
+   * `timePicker` to `--ds-timepicker-*`. The contract reads in the repo's
+   * casing; the stylesheet keeps the name its readers already consume.
+   */
+  autocomplete?: BrandAutocompleteChrome;
+  checkbox?: BrandCheckboxChrome;
+  datePicker?: BrandDatePickerChrome;
+  inputNumber?: BrandInputNumberChrome;
+  radio?: BrandRadioChrome;
+  rate?: BrandRateChrome;
+  slider?: BrandSliderChrome;
+  switch?: BrandSwitchChrome;
+  timePicker?: BrandTimePickerChrome;
+  toggle?: BrandToggleChrome;
+  transfer?: BrandTransferChrome;
+  upload?: BrandUploadChrome;
+}
+
+/**
+ * Select/combobox chrome. Distinct from `BrandInputChrome` because a select
+ * owns a floating dropdown panel and an option list that a text field has no
+ * equivalent of; folding them together would give inputs dead keypaths.
+ */
+/** Multi-line text field chrome. */
+export interface BrandTextareaChrome {
+  bg?: string;
+  bgDisabled?: string;
+  filledBg?: string;
+  border?: string;
+  borderHover?: string;
+  borderFocus?: string;
+  shadowFocus?: string;
+  successBorder?: string;
+  warningBorder?: string;
+  errorBorder?: string;
+  color?: string;
+  colorPlaceholder?: string;
+  /** Ink of the character counter under a length-bounded textarea. */
+  countColor?: string;
+}
+
+/** Form row chrome: the ink around a field, not the field itself. */
+export interface BrandFormChrome {
+  labelColor?: string;
+  labelFontWeight?: string | number;
+  helpColor?: string;
+  /** Ink of the secondary note a field may carry alongside its help text. */
+  extraColor?: string;
+  requiredColor?: string;
+  successColor?: string;
+  warningColor?: string;
+  errorColor?: string;
+}
+
+export interface BrandSelectChrome {
+  /** Trigger */
+  bg?: string;
+  bgHover?: string;
+  bgFocus?: string;
+  color?: string;
+  colorPlaceholder?: string;
+  borderColor?: string;
+  borderColorHover?: string;
+  borderColorFocus?: string;
+  /** Dropdown panel */
+  dropdownBg?: string;
+  dropdownBorderColor?: string;
+  dropdownShadow?: string;
+  /** Options */
+  optionBgHover?: string;
+  optionBgSelected?: string;
+  optionColor?: string;
+  optionColorSelected?: string;
+  /**
+   * ROTTAY-T2 MASS. The eighteen select channels the rottay extension still
+   * declared after the T1 P0 repair, now typed.
+   *
+   * `border` is NOT `borderColor`. The two are different channels with
+   * different readers: `--ds-select-border-color` is the colour channel the
+   * C3 keyset already owned, and `--ds-select-border` is the shorthand the
+   * rustic-shaped select stylesheet resolves from it. Folding them together
+   * would silently drop one of the two readers, so both stay.
+   */
+  arrowColor?: string;
+  bgDisabled?: string;
+  border?: string;
+  borderFocus?: string;
+  borderHover?: string;
+  checkColor?: string;
+  clearColor?: string;
+  clearColorHover?: string;
+  colorDisabled?: string;
+  /** Panel border shorthand, distinct from `dropdownBorderColor` above. */
+  dropdownBorder?: string;
+  errorBorder?: string;
+  filledBg?: string;
+  optionColorDisabled?: string;
+  shadowFocus?: string;
+  successBorder?: string;
+  tagBg?: string;
+  tagColor?: string;
+  warningBorder?: string;
+}
+
+/**
+ * ROTTAY-T2 MASS -- twelve control families given a typed owner.
+ *
+ * Every field below is a public `--ds-*` channel that the rottay artifact
+ * extension declared by hand until this tranche. The interfaces are closed:
+ * a channel with no field cannot be authored, and a field with no channel
+ * cannot exist, because the lowering in
+ * `compilers/kernel/foundation/css/chrome-variables` is the single producer
+ * for BOTH the static `BrandTheme` and the DB `TenantThemeDocument`
+ * transports.
+ */
+/**
+ * Type-ahead field. A combobox that files its own dropdown, empty-state ink
+ * and clear affordance; it does not inherit `select` because the two families
+ * paint different panels and the extension declared both separately.
+ */
+export interface BrandAutocompleteChrome {
+  /** `--ds-autocomplete-bg` */
+  bg?: string;
+  /** `--ds-autocomplete-border` */
+  border?: string;
+  /** `--ds-autocomplete-border-focus` */
+  borderFocus?: string;
+  /** `--ds-autocomplete-clear-color` */
+  clearColor?: string;
+  /** `--ds-autocomplete-dropdown-bg` */
+  dropdownBg?: string;
+  /** `--ds-autocomplete-dropdown-shadow` */
+  dropdownShadow?: string;
+  /** `--ds-autocomplete-empty-color` */
+  emptyColor?: string;
+  /** `--ds-autocomplete-error-border` */
+  errorBorder?: string;
+  /** `--ds-autocomplete-option-bg-hover` */
+  optionBgHover?: string;
+  /** `--ds-autocomplete-warning-border` */
+  warningBorder?: string;
+}
+
+/**
+ * Binary tick. Owns its box, its checked ground, its focus ring COLOR as a
+ * channel independent of the composed ring, and the label ink beside it.
+ */
+export interface BrandCheckboxChrome {
+  /** `--ds-checkbox-bg` */
+  bg?: string;
+  /** `--ds-checkbox-bg-disabled` */
+  bgDisabled?: string;
+  /** `--ds-checkbox-border` */
+  border?: string;
+  /** `--ds-checkbox-border-hover` */
+  borderHover?: string;
+  /** `--ds-checkbox-checked-bg` */
+  checkedBg?: string;
+  /** `--ds-checkbox-checked-border` */
+  checkedBorder?: string;
+  /** `--ds-checkbox-checked-color` */
+  checkedColor?: string;
+  /** `--ds-checkbox-error-border` */
+  errorBorder?: string;
+  /** `--ds-checkbox-error-color` */
+  errorColor?: string;
+  /** `--ds-checkbox-focus-ring` */
+  focusRing?: string;
+  /** `--ds-checkbox-focus-ring-color` */
+  focusRingColor?: string;
+  /** `--ds-checkbox-label-color` */
+  labelColor?: string;
+  /** `--ds-checkbox-label-color-disabled` */
+  labelColorDisabled?: string;
+}
+
+/**
+ * Date field. A field-shaped control with an icon, a range separator and a
+ * clear affordance the plain input has no term for. Lowers to the historical
+ * `--ds-datepicker-*` spelling.
+ */
+export interface BrandDatePickerChrome {
+  /** `--ds-datepicker-bg` */
+  bg?: string;
+  /** `--ds-datepicker-bg-disabled` */
+  bgDisabled?: string;
+  /** `--ds-datepicker-border` */
+  border?: string;
+  /** `--ds-datepicker-border-focus` */
+  borderFocus?: string;
+  /** `--ds-datepicker-border-hover` */
+  borderHover?: string;
+  /** `--ds-datepicker-clear-color` */
+  clearColor?: string;
+  /** `--ds-datepicker-color` */
+  color?: string;
+  /** `--ds-datepicker-error-border` */
+  errorBorder?: string;
+  /** `--ds-datepicker-icon-color` */
+  iconColor?: string;
+  /** `--ds-datepicker-separator-color` */
+  separatorColor?: string;
+  /** `--ds-datepicker-shadow-focus` */
+  shadowFocus?: string;
+  /** `--ds-datepicker-warning-border` */
+  warningBorder?: string;
+}
+
+/**
+ * Numeric stepper. Shares the field grammar with `input` but owns addon,
+ * affix and stepper-control ink of its own. Lowers to `--ds-inputnumber-*`.
+ *
+ * There is no `controlBg` field: the extension declared
+ * `--ds-inputnumber-control-bg: transparent` in both modes, which is exactly
+ * what the cascade already resolves. Typing a field for it would create an
+ * authority for a value nobody is authoring.
+ */
+export interface BrandInputNumberChrome {
+  /** `--ds-inputnumber-addon-bg` */
+  addonBg?: string;
+  /** `--ds-inputnumber-addon-border` */
+  addonBorder?: string;
+  /** `--ds-inputnumber-addon-color` */
+  addonColor?: string;
+  /** `--ds-inputnumber-affix-color` */
+  affixColor?: string;
+  /** `--ds-inputnumber-bg` */
+  bg?: string;
+  /** `--ds-inputnumber-bg-disabled` */
+  bgDisabled?: string;
+  /** `--ds-inputnumber-border` */
+  border?: string;
+  /** `--ds-inputnumber-border-focus` */
+  borderFocus?: string;
+  /** `--ds-inputnumber-color` */
+  color?: string;
+  /** `--ds-inputnumber-control-color` */
+  controlColor?: string;
+  /** `--ds-inputnumber-error-border` */
+  errorBorder?: string;
+  /** `--ds-inputnumber-shadow-focus` */
+  shadowFocus?: string;
+  /** `--ds-inputnumber-warning-border` */
+  warningBorder?: string;
+}
+
+/**
+ * Single choice. Distinct from `checkbox`: the checked mark is a dot with its
+ * own channel, and a radio row carries a description ink a checkbox has no
+ * slot for.
+ */
+export interface BrandRadioChrome {
+  /** `--ds-radio-bg` */
+  bg?: string;
+  /** `--ds-radio-bg-disabled` */
+  bgDisabled?: string;
+  /** `--ds-radio-border` */
+  border?: string;
+  /** `--ds-radio-border-hover` */
+  borderHover?: string;
+  /** `--ds-radio-checked-bg` */
+  checkedBg?: string;
+  /** `--ds-radio-checked-border` */
+  checkedBorder?: string;
+  /** `--ds-radio-checked-dot` */
+  checkedDot?: string;
+  /** `--ds-radio-description-color` */
+  descriptionColor?: string;
+  /** `--ds-radio-error-border` */
+  errorBorder?: string;
+  /** `--ds-radio-error-color` */
+  errorColor?: string;
+  /** `--ds-radio-focus-ring` */
+  focusRing?: string;
+  /** `--ds-radio-focus-ring-color` */
+  focusRingColor?: string;
+  /** `--ds-radio-label-color` */
+  labelColor?: string;
+  /** `--ds-radio-label-color-disabled` */
+  labelColorDisabled?: string;
+}
+
+/**
+ * Star rating. ONE field. `--ds-rate-color-active` and
+ * `--ds-rate-color-hover` are not here because both modes declared the same
+ * literal the cascade already produces; only the resting ink diverges.
+ */
+export interface BrandRateChrome {
+  /** `--ds-rate-color` */
+  color?: string;
+}
+
+/**
+ * Range control: rail, filled track, handle, and the tick-mark ink.
+ */
+export interface BrandSliderChrome {
+  /** `--ds-slider-focus-ring` */
+  focusRing?: string;
+  /** `--ds-slider-handle-bg` */
+  handleBg?: string;
+  /** `--ds-slider-handle-bg-disabled` */
+  handleBgDisabled?: string;
+  /** `--ds-slider-handle-border` */
+  handleBorder?: string;
+  /** `--ds-slider-handle-shadow` */
+  handleShadow?: string;
+  /** `--ds-slider-mark-color` */
+  markColor?: string;
+  /** `--ds-slider-rail-color` */
+  railColor?: string;
+  /** `--ds-slider-track-color` */
+  trackColor?: string;
+  /** `--ds-slider-track-color-disabled` */
+  trackColorDisabled?: string;
+}
+
+/**
+ * iOS-style switch. Separate family from `toggle`: this one paints a track and
+ * a thumb, `toggle` paints a track and a dot plus semantic status grounds.
+ */
+export interface BrandSwitchChrome {
+  /** `--ds-switch-bg` */
+  bg?: string;
+  /** `--ds-switch-bg-hover` */
+  bgHover?: string;
+  /** `--ds-switch-checked-bg` */
+  checkedBg?: string;
+  /** `--ds-switch-checked-bg-hover` */
+  checkedBgHover?: string;
+  /** `--ds-switch-focus-ring` */
+  focusRing?: string;
+  /** `--ds-switch-label-color` */
+  labelColor?: string;
+  /** `--ds-switch-thumb-bg` */
+  thumbBg?: string;
+  /** `--ds-switch-thumb-shadow` */
+  thumbShadow?: string;
+}
+
+/**
+ * Time field. Same shape as `datePicker`, different family, own channels.
+ * Lowers to the historical `--ds-timepicker-*` spelling.
+ */
+export interface BrandTimePickerChrome {
+  /** `--ds-timepicker-bg` */
+  bg?: string;
+  /** `--ds-timepicker-bg-disabled` */
+  bgDisabled?: string;
+  /** `--ds-timepicker-border` */
+  border?: string;
+  /** `--ds-timepicker-border-focus` */
+  borderFocus?: string;
+  /** `--ds-timepicker-clear-color` */
+  clearColor?: string;
+  /** `--ds-timepicker-color` */
+  color?: string;
+  /** `--ds-timepicker-error-border` */
+  errorBorder?: string;
+  /** `--ds-timepicker-icon-color` */
+  iconColor?: string;
+  /** `--ds-timepicker-separator-color` */
+  separatorColor?: string;
+  /** `--ds-timepicker-shadow-focus` */
+  shadowFocus?: string;
+  /** `--ds-timepicker-warning-border` */
+  warningBorder?: string;
+}
+
+/**
+ * Labelled toggle row. Owns semantic status grounds (`successBg`,
+ * `warningBg`, `errorBg`) and the inner label ink that rides on the track --
+ * neither of which the plain `switch` has a term for.
+ */
+export interface BrandToggleChrome {
+  /** `--ds-toggle-description-color` */
+  descriptionColor?: string;
+  /** `--ds-toggle-dot-bg` */
+  dotBg?: string;
+  /** `--ds-toggle-dot-shadow` */
+  dotShadow?: string;
+  /** `--ds-toggle-error-bg` */
+  errorBg?: string;
+  /** `--ds-toggle-error-color` */
+  errorColor?: string;
+  /** `--ds-toggle-focus-ring` */
+  focusRing?: string;
+  /** `--ds-toggle-inner-label-color` */
+  innerLabelColor?: string;
+  /** `--ds-toggle-label-color` */
+  labelColor?: string;
+  /** `--ds-toggle-success-bg` */
+  successBg?: string;
+  /** `--ds-toggle-track-bg` */
+  trackBg?: string;
+  /** `--ds-toggle-track-bg-checked` */
+  trackBgChecked?: string;
+  /** `--ds-toggle-warning-bg` */
+  warningBg?: string;
+}
+
+/**
+ * Dual-list transfer. Two panels with a header each; five channels total.
+ */
+export interface BrandTransferChrome {
+  /** `--ds-transfer-bg` */
+  bg?: string;
+  /** `--ds-transfer-border` */
+  border?: string;
+  /** `--ds-transfer-header-bg` */
+  headerBg?: string;
+  /** `--ds-transfer-header-border` */
+  headerBorder?: string;
+  /** `--ds-transfer-item-bg-hover` */
+  itemBgHover?: string;
+}
+
+/**
+ * File upload. The widest family in this tranche: a dropzone (dragger), a
+ * trigger button, a file list, card previews, a progress meter and a preview
+ * overlay, each with its own channels.
+ */
+export interface BrandUploadChrome {
+  /** `--ds-upload-bg` */
+  bg?: string;
+  /** `--ds-upload-border` */
+  border?: string;
+  /** `--ds-upload-border-hover` */
+  borderHover?: string;
+  /** `--ds-upload-button-bg` */
+  buttonBg?: string;
+  /** `--ds-upload-button-border` */
+  buttonBorder?: string;
+  /** `--ds-upload-button-color` */
+  buttonColor?: string;
+  /** `--ds-upload-card-bg` */
+  cardBg?: string;
+  /** `--ds-upload-card-border` */
+  cardBorder?: string;
+  /** `--ds-upload-dragger-bg` */
+  draggerBg?: string;
+  /** `--ds-upload-dragger-bg-hover` */
+  draggerBgHover?: string;
+  /** `--ds-upload-dragger-border` */
+  draggerBorder?: string;
+  /** `--ds-upload-dragger-border-active` */
+  draggerBorderActive?: string;
+  /** `--ds-upload-dragger-icon-color` */
+  draggerIconColor?: string;
+  /** `--ds-upload-dragger-text-color` */
+  draggerTextColor?: string;
+  /** `--ds-upload-error-border` */
+  errorBorder?: string;
+  /** `--ds-upload-file-bg` */
+  fileBg?: string;
+  /** `--ds-upload-file-color` */
+  fileColor?: string;
+  /** `--ds-upload-file-remove-color` */
+  fileRemoveColor?: string;
+  /** `--ds-upload-preview-backdrop` */
+  previewBackdrop?: string;
+  /** `--ds-upload-preview-overlay` */
+  previewOverlay?: string;
+  /** `--ds-upload-progress-bar` */
+  progressBar?: string;
+  /** `--ds-upload-progress-track` */
+  progressTrack?: string;
 }
 
 export interface BrandInputChrome {
@@ -1160,6 +1974,16 @@ export interface BrandInputChrome {
   borderHover?: string;
   borderFocus?: string;
   borderDisabled?: string;
+  /**
+   * Border COLOR channel, upstream of the shorthand `border*` fields above.
+   * `input.css` resolves `--ds-input-border` from `--ds-input-border-color`, so
+   * a brand that only paints the colour authors these and leaves the shorthand
+   * to the base layer. `borderColorDisabled` already flows from
+   * `controls.disabled.borderColor` and is not restated here.
+   */
+  borderColor?: string;
+  borderColorHover?: string;
+  borderColorFocus?: string;
   disabledOpacity?: number;
   shadowRest?: string;
   shadowHover?: string;
@@ -1225,6 +2049,7 @@ export interface BrandInputChrome {
 }
 
 export interface BrandTableChrome {
+  anatomy?: "default" | "ruled" | "zebra" | "open";
   bg?: string;
   border?: string;
   radius?: string;
@@ -1247,6 +2072,8 @@ export interface BrandTableChrome {
   rowBgExpanded?: string;
   rowBorder?: string;
   rowHoverShadow?: string;
+  /** Keyboard-focus treatment for a row, independent of hover. */
+  rowFocusShadow?: string;
   /** Cells */
   cellPadding?: string;
   /** Density-specific cell padding. These win over the legacy global value. */
@@ -1271,6 +2098,7 @@ export interface BrandTableChrome {
 }
 
 export interface BrandCardChrome {
+  anatomy?: "default" | "framed" | "underline" | "ghost";
   padding?: string;
   paddingSm?: string;
   paddingMd?: string;
@@ -1468,6 +2296,13 @@ export interface BrandPremiumCardChrome {
   meterFill?: string;
   numberMinWidth?: string;
   numberFontVariant?: string;
+  /**
+   * Banded interior: the header strip and the alternating body sections a rich
+   * card uses to separate its regions without drawing nested card frames.
+   */
+  headerBg?: string;
+  sectionBg?: string;
+  sectionAltBg?: string;
 }
 
 export interface BrandMetricCardChrome extends BrandPremiumCardChrome {
@@ -1529,6 +2364,26 @@ export interface BrandListChrome {
   previewMotionEase?: string;
   /** List shell */
   shellSectionGap?: string;
+  /**
+   * Row and container paint.
+   *
+   * `bg`/`backgroundColor` and `itemBgHover`/`itemHoverBackgroundColor` are
+   * two spellings of one decision that both ship as separate CSS names today.
+   * They are declared as separate leaves because a theme that set only one of
+   * them would silently leave the other on its DS floor; collapsing them is a
+   * name-retirement ruling, not a contract shape.
+   */
+  bg?: string;
+  backgroundColor?: string;
+  borderColor?: string;
+  itemBackgroundColor?: string;
+  itemBgHover?: string;
+  itemHoverBackgroundColor?: string;
+  metaDescriptionColor?: string;
+  secondaryTextColor?: string;
+  skeletonBg?: string;
+  splitColor?: string;
+  textColor?: string;
 }
 
 /**
@@ -1544,10 +2399,22 @@ export interface BrandDetailChrome {
   heroBg?: string;
   heroBorder?: string;
   heroShadow?: string;
+  /** Accent spine drawn along the hero's leading edge. */
+  heroSpine?: string;
   /** Section panels (tab panel + sidebar) */
   sectionBg?: string;
   sectionBorder?: string;
   sectionShadow?: string;
+  /** Inline controls hosted by the detail hero and section headers. */
+  controlBg?: string;
+  controlBorder?: string;
+  controlBorderHover?: string;
+  /**
+   * Continuous-record treatment: the hairline and surface used when hero and
+   * sections read as one uninterrupted sheet rather than stacked cards.
+   */
+  continuousBoundary?: string;
+  continuousSurface?: string;
   /** Rail */
   railWidth?: string;
 }
@@ -1581,6 +2448,32 @@ export interface BrandModalChrome {
  * density, geometry and motion channels only.
  */
 export interface BrandTooltipChrome {
+  /**
+   * Tone paint, orthogonal to the recipe blocks below. A recipe
+   * (`bordered`/`minimal`/`inverse`/`rich`) chooses the tooltip's material;
+   * a tone chooses what it is saying. `bg`/`color` are the unqualified pair a
+   * tooltip falls back to when neither axis is set.
+   */
+  bg?: string;
+  color?: string;
+  defaultBg?: string;
+  defaultColor?: string;
+  primaryBg?: string;
+  primaryColor?: string;
+  secondaryBg?: string;
+  secondaryColor?: string;
+  successBg?: string;
+  warningBg?: string;
+  errorBg?: string;
+  /** Elevation shared by every tone, before a recipe overrides it. */
+  shadow?: string;
+  /**
+   * Stacking order for the tooltip layer. Lowered to both the scale-shaped
+   * name (`--ds-z-index-tooltip`) and the component-shaped one
+   * (`--ds-tooltip-z-index`); they are two spellings of one decision, so the
+   * contract carries a single field.
+   */
+  zIndex?: string | number;
   borderedBackground?: string;
   borderedForeground?: string;
   borderedBorder?: string;
@@ -1671,6 +2564,17 @@ export interface BrandTooltipChrome {
  * is a change to the keyline, not a new channel.
  */
 export interface BrandPopoverChrome {
+  /**
+   * Unqualified panel paint, before a recipe block below overrides it. A skin
+   * that ships one popover material sets these four and stops; the recipe
+   * vocabulary stays available for skins that ship several.
+   */
+  bg?: string;
+  border?: string;
+  contentColor?: string;
+  shadow?: string;
+  /** Separator under the title region. Pairs with the existing `titleColor`. */
+  titleBorder?: string;
   borderedBackground?: string;
   borderedForeground?: string;
   borderedMutedForeground?: string;
@@ -1877,6 +2781,301 @@ export interface BrandTabsChrome {
   lgIconSize?: string;
 }
 
+/** Alert banner chrome: per-intent surface, border, text and icon paint. */
+export interface BrandAlertChrome {
+  errorBg?: string;
+  errorBorder?: string;
+  errorColor?: string;
+  errorIcon?: string;
+  infoBg?: string;
+  infoBorder?: string;
+  infoColor?: string;
+  infoIcon?: string;
+  successBg?: string;
+  successBorder?: string;
+  successColor?: string;
+  successIcon?: string;
+  warningBg?: string;
+  warningBorder?: string;
+  warningColor?: string;
+  warningIcon?: string;
+}
+
+/** Anchor navigation chrome: ink rail and link states. */
+export interface BrandAnchorChrome {
+  inkColor?: string;
+  linkColor?: string;
+  linkColorActive?: string;
+}
+
+/** Avatar chrome: default/semantic fills, ring, group overflow paint. */
+export interface BrandAvatarChrome {
+  borderColor?: string;
+  defaultBg?: string;
+  defaultColor?: string;
+  errorBg?: string;
+  errorColor?: string;
+  gradientBg?: string;
+  gradientColor?: string;
+  groupBorder?: string;
+  groupOverflowBg?: string;
+  groupOverflowColor?: string;
+  primaryBg?: string;
+  primaryColor?: string;
+  ringColor?: string;
+  secondaryBg?: string;
+  secondaryColor?: string;
+  statusBorder?: string;
+  successBg?: string;
+  successColor?: string;
+  warningBg?: string;
+  warningColor?: string;
+}
+
+/** Back-to-top affordance chrome. */
+export interface BrandBackTopChrome {
+  bg?: string;
+  color?: string;
+  shadow?: string;
+}
+
+/** Calendar chrome: surface, border, header and out-of-month days. */
+export interface BrandCalendarChrome {
+  bg?: string;
+  border?: string;
+  dayColorOther?: string;
+  headerColor?: string;
+}
+
+/** Collapse/accordion chrome: panel, header and content paint. */
+export interface BrandCollapseChrome {
+  bg?: string;
+  border?: string;
+  contentBg?: string;
+  headerBg?: string;
+  headerBgHover?: string;
+  headerColor?: string;
+}
+
+/** Descriptions list chrome: surface, border, label and content. */
+export interface BrandDescriptionsChrome {
+  bg?: string;
+  border?: string;
+  contentColor?: string;
+  labelColor?: string;
+}
+
+/** Drawer chrome: surface, header/footer rules, title and elevation. */
+export interface BrandDrawerChrome {
+  bg?: string;
+  bodyColor?: string;
+  footerBorder?: string;
+  headerBorder?: string;
+  shadow?: string;
+  titleColor?: string;
+}
+
+/** Dropdown menu chrome: surface, elevation and item states. */
+export interface BrandDropdownChrome {
+  bg?: string;
+  itemBgActive?: string;
+  itemBgHover?: string;
+  itemColor?: string;
+  itemColorActive?: string;
+  itemColorHover?: string;
+  shadow?: string;
+}
+
+/** Empty-state chrome: illustration and description paint. */
+export interface BrandEmptyChrome {
+  descriptionColor?: string;
+  iconColor?: string;
+}
+
+/** Float button chrome: default/primary fills and badge paint. */
+export interface BrandFloatButtonChrome {
+  badgeBg?: string;
+  badgeColor?: string;
+  defaultBg?: string;
+  defaultColor?: string;
+  descriptionColor?: string;
+  primaryBg?: string;
+  primaryColor?: string;
+}
+
+/** Live feed chrome: surface, new-item highlight and loading paint. */
+export interface BrandLiveFeedChrome {
+  badgeBg?: string;
+  badgeColor?: string;
+  bg?: string;
+  border?: string;
+  emptyColor?: string;
+  loadMoreColor?: string;
+  newBg?: string;
+  newBorder?: string;
+  newColor?: string;
+  refreshColor?: string;
+  skeletonBg?: string;
+}
+
+/** Menu chrome: surface, item states, dividers and the inverse variant. */
+export interface BrandMenuChrome {
+  bg?: string;
+  /** The INVERSE menu variant (`--ds-menu-dark-*`), not the dark mode. Both modes author it. */
+  darkBg?: string;
+  darkItemColor?: string;
+  dividerColor?: string;
+  focusRingColor?: string;
+  groupTitleColor?: string;
+  itemBgActive?: string;
+  itemBgHover?: string;
+  itemColor?: string;
+  itemColorActive?: string;
+  itemColorHover?: string;
+  itemDangerColor?: string;
+  itemHoverBg?: string;
+  itemSelectedBg?: string;
+  itemSelectedColor?: string;
+  submenuBg?: string;
+}
+
+/** Transient message chrome: surface, elevation and close affordance. */
+export interface BrandMessageChrome {
+  bg?: string;
+  closeColor?: string;
+  closeColorHover?: string;
+  shadow?: string;
+}
+
+/** Notification chrome: surface, elevation and title paint. */
+export interface BrandNotificationChrome {
+  bg?: string;
+  shadow?: string;
+  titleColor?: string;
+}
+
+/** Pagination chrome: item states and the active page treatment. */
+export interface BrandPaginationChrome {
+  activeBg?: string;
+  activeColor?: string;
+  itemBg?: string;
+  itemBgActive?: string;
+  itemBgHover?: string;
+  itemBorder?: string;
+  itemColor?: string;
+  itemColorActive?: string;
+  itemColorHover?: string;
+}
+
+/** Progress chrome: track and per-intent fill paint. */
+export interface BrandProgressChrome {
+  bg?: string;
+  fillError?: string;
+  fillPrimary?: string;
+  fillSuccess?: string;
+  fillWarning?: string;
+}
+
+/** Result page chrome: icon, title and subtitle paint. */
+export interface BrandResultChrome {
+  iconColor?: string;
+  subtitleColor?: string;
+  titleColor?: string;
+}
+
+/** Skeleton chrome: base fill, highlight and wave gradient. */
+export interface BrandSkeletonChrome {
+  bg?: string;
+  highlight?: string;
+  waveGradient?: string;
+}
+
+/** Spinner chrome: indicator and track paint. */
+export interface BrandSpinnerChrome {
+  color?: string;
+  track?: string;
+}
+
+/** Statistic chrome: title, value and affix paint. */
+export interface BrandStatisticChrome {
+  prefixColor?: string;
+  suffixColor?: string;
+  titleColor?: string;
+  valueColor?: string;
+}
+
+/** Stats grid chrome: card variants, trend paint and skeletons. */
+export interface BrandStatsGridChrome {
+  cardBg?: string;
+  cardBorder?: string;
+  cardFilledBg?: string;
+  cardGlassBg?: string;
+  cardGlassBorder?: string;
+  descriptionColor?: string;
+  labelColor?: string;
+  skeletonBg?: string;
+  skeletonWaveGradient?: string;
+  trendNegative?: string;
+  trendNeutral?: string;
+  trendPositive?: string;
+  valueColor?: string;
+}
+
+/** Steps chrome: connector, and the wait/process/finish item states. */
+export interface BrandStepsChrome {
+  connectorColor?: string;
+  connectorColorActive?: string;
+  finishBg?: string;
+  finishBorder?: string;
+  itemBg?: string;
+  itemBgActive?: string;
+  itemColor?: string;
+  itemColorActive?: string;
+  processBg?: string;
+  processBorder?: string;
+  waitBg?: string;
+  waitBorder?: string;
+}
+
+/** Tag chrome: default and per-intent surface, border and text paint. */
+export interface BrandTagChrome {
+  border?: string;
+  defaultBg?: string;
+  defaultBorder?: string;
+  defaultColor?: string;
+  errorBg?: string;
+  errorBorder?: string;
+  errorColor?: string;
+  primaryBg?: string;
+  primaryBorder?: string;
+  primaryColor?: string;
+  secondaryBg?: string;
+  secondaryBorder?: string;
+  secondaryColor?: string;
+  successBg?: string;
+  successBorder?: string;
+  successColor?: string;
+  warningBg?: string;
+  warningBorder?: string;
+  warningColor?: string;
+}
+
+/** Timeline chrome: rail, dot and content paint. */
+export interface BrandTimelineChrome {
+  contentColor?: string;
+  dotBg?: string;
+  dotBorder?: string;
+  lineColor?: string;
+}
+
+/** Tree chrome: node states for hover and selection. */
+export interface BrandTreeChrome {
+  nodeBgHover?: string;
+  nodeBgSelected?: string;
+  nodeColor?: string;
+  nodeColorSelected?: string;
+}
+
 // ── Vertical Theme ──────────────────────────────────────
 // Code-owned premium identity for a vertical. Same shape as BrandTheme
 // because verticals carry the deepest premium decisions. The distinction
@@ -2066,6 +3265,58 @@ export interface TenantAppearanceAdvanced {
     popover?: Partial<BrandPopoverChrome>;
     /** Tabs chrome (border, color states) */
     tabs?: Partial<BrandTabsChrome>;
+    /** Alert banner chrome: per-intent surface, border, text and icon paint */
+    alert?: Partial<BrandAlertChrome>;
+    /** Anchor navigation chrome: ink rail and link states */
+    anchor?: Partial<BrandAnchorChrome>;
+    /** Avatar chrome: default/semantic fills, ring, group overflow paint */
+    avatar?: Partial<BrandAvatarChrome>;
+    /** Back-to-top affordance chrome */
+    backTop?: Partial<BrandBackTopChrome>;
+    /** Calendar chrome: surface, border, header and out-of-month days */
+    calendar?: Partial<BrandCalendarChrome>;
+    /** Collapse/accordion chrome: panel, header and content paint */
+    collapse?: Partial<BrandCollapseChrome>;
+    /** Descriptions list chrome: surface, border, label and content */
+    descriptions?: Partial<BrandDescriptionsChrome>;
+    /** Drawer chrome: surface, header/footer rules, title and elevation */
+    drawer?: Partial<BrandDrawerChrome>;
+    /** Dropdown menu chrome: surface, elevation and item states */
+    dropdown?: Partial<BrandDropdownChrome>;
+    /** Empty-state chrome: illustration and description paint */
+    empty?: Partial<BrandEmptyChrome>;
+    /** Float button chrome: default/primary fills and badge paint */
+    floatButton?: Partial<BrandFloatButtonChrome>;
+    /** Live feed chrome: surface, new-item highlight and loading paint */
+    liveFeed?: Partial<BrandLiveFeedChrome>;
+    /** Menu chrome: surface, item states, dividers and the inverse variant */
+    menu?: Partial<BrandMenuChrome>;
+    /** Transient message chrome: surface, elevation and close affordance */
+    message?: Partial<BrandMessageChrome>;
+    /** Notification chrome: surface, elevation and title paint */
+    notification?: Partial<BrandNotificationChrome>;
+    /** Pagination chrome: item states and the active page treatment */
+    pagination?: Partial<BrandPaginationChrome>;
+    /** Progress chrome: track and per-intent fill paint */
+    progress?: Partial<BrandProgressChrome>;
+    /** Result page chrome: icon, title and subtitle paint */
+    result?: Partial<BrandResultChrome>;
+    /** Skeleton chrome: base fill, highlight and wave gradient */
+    skeleton?: Partial<BrandSkeletonChrome>;
+    /** Spinner chrome: indicator and track paint */
+    spinner?: Partial<BrandSpinnerChrome>;
+    /** Statistic chrome: title, value and affix paint */
+    statistic?: Partial<BrandStatisticChrome>;
+    /** Stats grid chrome: card variants, trend paint and skeletons */
+    statsGrid?: Partial<BrandStatsGridChrome>;
+    /** Steps chrome: connector, and the wait/process/finish item states */
+    steps?: Partial<BrandStepsChrome>;
+    /** Tag chrome: default and per-intent surface, border and text paint */
+    tag?: Partial<BrandTagChrome>;
+    /** Timeline chrome: rail, dot and content paint */
+    timeline?: Partial<BrandTimelineChrome>;
+    /** Tree chrome: node states for hover and selection */
+    tree?: Partial<BrandTreeChrome>;
   };
   /** Allowlisted raw token overrides. Keys must start with `--ds-`. Max 200. */
   tokenOverrides?: Record<`--ds-${string}`, string | number>;

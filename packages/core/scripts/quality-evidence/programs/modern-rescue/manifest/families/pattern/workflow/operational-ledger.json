@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "7d28e9b6ead56eb5c8dfe2457ff1419895ac415f14fb80d53a85d886e7048571"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1801 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/workflow/operational-ledger/index.ts",
+      "packages/core/src/ui/patterns/workflow/operational-ledger/contracts/index.ts",
+      "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css"
+    ],
+    "stableParts": [
+      "cell",
+      "cell-actor",
+      "cell-description",
+      "cell-quantity",
+      "cell-reason",
+      "cell-reference",
+      "cell-timestamp",
+      "detail-item",
+      "detail-label",
+      "empty",
+      "entry",
+      "entry-detail",
+      "filter-bar",
+      "filter-count",
+      "header-cell",
+      "root",
+      "skeleton",
+      "skeleton-header",
+      "skeleton-row",
+      "table",
+      "table-body",
+      "table-head",
+      "table-region"
+    ],
+    "states": [
+      "loading"
+    ],
+    "variantAxes": [
+      "data-type"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 23,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:184",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:187",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:214",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:222",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:225",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:228"
+          ]
+        },
+        {
+          "part": "cell-actor",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:194",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:223",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:150"
+          ]
+        },
+        {
+          "part": "cell-description",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:124"
+          ]
+        },
+        {
+          "part": "cell-quantity",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:142",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:146"
+          ]
+        },
+        {
+          "part": "cell-reason",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:201",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:156"
+          ]
+        },
+        {
+          "part": "cell-reference",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:209",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:161"
+          ]
+        },
+        {
+          "part": "cell-timestamp",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:185",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:117"
+          ]
+        },
+        {
+          "part": "detail-item",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:190",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:197",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:179"
+          ]
+        },
+        {
+          "part": "detail-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:191",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:198",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:185"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:214"
+          ]
+        },
+        {
+          "part": "entry",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:105",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:260"
+          ]
+        },
+        {
+          "part": "entry-detail",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:189",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:172",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:208"
+          ]
+        },
+        {
+          "part": "filter-bar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:250"
+          ]
+        },
+        {
+          "part": "filter-count",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:48"
+          ]
+        },
+        {
+          "part": "header-cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:69",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:131",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:200"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:105",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:123",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:25",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:33",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:87"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:267"
+          ]
+        },
+        {
+          "part": "skeleton-header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:113",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:230",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:235",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:254"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:239"
+          ]
+        },
+        {
+          "part": "table",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:62"
+          ]
+        },
+        {
+          "part": "table-body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:105",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:260"
+          ]
+        },
+        {
+          "part": "table-head",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:167"
+          ]
+        },
+        {
+          "part": "table-region",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:57"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:33",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:249"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:123"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:106"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "type=credit",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:142"
+          ]
+        },
+        {
+          "token": "type=debit",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:146"
+          ]
+        },
+        {
+          "token": "type=entry.type",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:183",
+            "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:215"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "column=actor",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:190",
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:222",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:199",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:202"
+            ]
+          },
+          {
+            "token": "column=col.key",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:174"
+            ]
+          },
+          {
+            "token": "column=description",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:187"
+            ]
+          },
+          {
+            "token": "column=quantity",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:214",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:131",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:132"
+            ]
+          },
+          {
+            "token": "column=reason",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:197",
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:225",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:200",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:203"
+            ]
+          },
+          {
+            "token": "column=reference",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:205",
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:228",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:201",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css:204"
+            ]
+          },
+          {
+            "token": "column=timestamp",
+            "at": [
+              "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx:184"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "lines": 240
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/modern/index.tsx",
+            "lines": 239
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "5 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 27,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 28,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 29,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 34,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'][data-loading]",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 42,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "filter-bar",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='filter-bar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "filter-bar",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='filter-bar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 44,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "filter-bar",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='filter-bar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "filter-bar",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='filter-bar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 49,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "filter-count",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='filter-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 49,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "filter-count",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='filter-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 50,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "filter-count",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='filter-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-numeric-tabular",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "filter-count",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='filter-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-operational-ledger-region-max-block",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 59,
+            "fallback": true,
+            "fallbackValue": "none",
+            "cssProperty": "max-block-size",
+            "propertyGroup": "geometry",
+            "part": "table-region",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-type-body-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 65,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-sm, 13px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 65,
+            "fallback": true,
+            "fallbackValue": "13px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-z-index-relative-above",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 74,
+            "fallback": true,
+            "fallbackValue": "1",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 75,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 76,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 77,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 78,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 79,
+            "fallback": true,
+            "fallbackValue": "11px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 80,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 88,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "header-cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='header-cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 93,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 94,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "cell",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 100,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "cell",
+            "selector": "[data-part='table-body'] [data-part='entry']:not(:last-child) [data-part='cell']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 106,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "entry",
+            "selector": "[data-part='table-body'] [data-part='entry']:nth-child(even)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 112,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "entry",
+            "selector": "[data-part='table-body'] [data-part='entry']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-timestamp",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-timestamp",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 119,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-timestamp",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-numeric-tabular",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 120,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "cell-timestamp",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 125,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "cell-description",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 126,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-description",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 137,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "cell-quantity",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-numeric-tabular",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 138,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "cell-quantity",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 143,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-quantity",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity'][data-type='credit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 147,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-quantity",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity'][data-type='debit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 151,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-actor",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-actor']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 151,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-actor",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-actor']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 152,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-actor",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-actor']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 157,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-reason",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reason']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 157,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-reason",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reason']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 158,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-reason",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reason']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 162,
+            "fallback": true,
+            "fallbackValue": "monospace",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "cell-reference",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reference']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-reference",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reference']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "cell-reference",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reference']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 164,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "cell-reference",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reference']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 175,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "entry-detail",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='entry-detail']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 176,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "entry-detail",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='entry-detail']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 182,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "detail-item",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-16",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 187,
+            "fallback": true,
+            "fallbackValue": "64px",
+            "cssProperty": "min-inline-size",
+            "propertyGroup": "geometry",
+            "part": "detail-label",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 188,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "detail-label",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 189,
+            "fallback": true,
+            "fallbackValue": "11px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "detail-label",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 190,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "detail-label",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-10",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 215,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 216,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-deliberate",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 221,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 222,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-9",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 231,
+            "fallback": true,
+            "fallbackValue": "36px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-header",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 232,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-header",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 236,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-block-end",
+            "propertyGroup": "frame",
+            "part": "skeleton-header",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='skeleton-header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-10",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 240,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 241,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 242,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "margin-inline",
+            "propertyGroup": "geometry",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 243,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 244,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-row",
+            "selector": ".ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 57,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 68,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 84,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 84,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 121,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 121,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 133,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 159,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 164,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 172,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 183,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 198,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 199,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 209,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 219,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/operational-ledger/engines/classic/index.tsx",
+            "line": 229,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 34,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 42,
+            "literal": "12px",
+            "text": "gap: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 43,
+            "literal": "12px",
+            "text": "padding-block: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 44,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 45,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 49,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 65,
+            "literal": "13px",
+            "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 75,
+            "literal": "10px",
+            "text": "padding-block: var(--ds-spacing-2, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 76,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 79,
+            "literal": "11px",
+            "text": "font-size: var(--ds-type-caption-font-size, 11px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 81,
+            "literal": "0.04em",
+            "text": "letter-spacing: 0.04em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 88,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 93,
+            "literal": "10px",
+            "text": "padding-block: var(--ds-spacing-2, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 94,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 100,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 118,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 151,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 157,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 163,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 175,
+            "literal": "4px",
+            "text": "gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 176,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 182,
+            "literal": "10px",
+            "text": "gap: var(--ds-spacing-2, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 187,
+            "literal": "64px",
+            "text": "min-inline-size: var(--ds-spacing-16, 64px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 189,
+            "literal": "11px",
+            "text": "font-size: var(--ds-type-caption-font-size, 11px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 191,
+            "literal": "0.04em",
+            "text": "letter-spacing: 0.04em;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 198,
+            "literal": "40rem",
+            "text": "@container ds-operational-ledger (max-width: 40rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 215,
+            "literal": "40px",
+            "text": "padding-block: var(--ds-spacing-10, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 216,
+            "literal": "24px",
+            "text": "padding-inline: var(--ds-spacing-6, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 231,
+            "literal": "36px",
+            "text": "block-size: var(--ds-spacing-9, 36px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 236,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 240,
+            "literal": "40px",
+            "text": "block-size: var(--ds-spacing-10, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 241,
+            "literal": "4px",
+            "text": "margin-block: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 242,
+            "literal": "12px",
+            "text": "margin-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger.css",
+            "line": 261,
+            "literal": "1px",
+            "text": "border-block-end: 1px solid ButtonText;"
+          }
+        ],
+        "censusRowCount": 91
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1829,47 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-step-<status>-color",
+            "prop": "estados de paso (done/error/current)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-operational-ledger-step-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-error",
+            "--ds-color-success",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-surface-card",
+            "--ds-surface-panel"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1877,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold",
+            "--ds-numeric-tabular"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1909,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1939,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-operational-ledger-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs",
+            "--ds-type-body-font-size",
+            "--ds-type-caption-font-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1972,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/steps (pinta rottay-steps--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/steps",
+            "channels": [
+              "--ds-steps-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2008,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de avance del wizard son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2021,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-10",
+            "--ds-spacing-16",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-5",
+            "--ds-spacing-6",
+            "--ds-spacing-9"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/display/timeline (pinta rottay-timeline--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/display/timeline",
+            "channels": [
+              "--ds-timeline-item-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2063,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-item-gap",
+            "prop": "gap vertical de timeline/activity/steps",
+            "tier": "standard",
+            "examples": [
+              "--_ds-timeline-item-gap",
+              "--_ds-activity-log-item-gap"
+            ],
+            "sockets": [
+              "--_ds-operational-ledger-item-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2090,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "el stepper obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-steps-transition-duration",
+            "prop": "transition-duration del avance de paso y cambio de estado",
+            "tier": "standard"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-deliberate",
+            "--ds-motion-ease-in-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2118,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "pasos en flujo, no flotan",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2137,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2156,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de flujo, no chrome",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2169,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2182,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "steppers en flujo, sin region pintada propia: usan los canales semanticos directos",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-z-index-relative-above"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2201,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-stepper-step-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-operational-ledger-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2227,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2245,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2258,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2297,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria en el stepper",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-steps-icon-stroke-width",
+            "prop": "stroke-width de checks e iconos de paso",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2318,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

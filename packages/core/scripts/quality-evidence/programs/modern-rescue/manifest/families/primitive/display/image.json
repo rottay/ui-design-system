@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "2887d2f1e19d1289364b9a312cadee902b6d229d83ec9f1c78ad2d2fd646e54e"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1829 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/Image/index.tsx",
+      "packages/core/src/ui/primitives/display/Image/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/Image/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx",
+      "packages/core/src/ui/primitives/display/Image/compound/Fallback/index.tsx",
+      "packages/core/src/ui/primitives/display/Image/compound/Skeleton/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+    ],
+    "stableParts": [
+      "root",
+      "placeholder",
+      "fallback",
+      "img",
+      "hover-overlay",
+      "zoom-indicator",
+      "skeleton",
+      "zoom-dialog",
+      "zoom-img",
+      "zoom-close"
+    ],
+    "states": [
+      "hover",
+      "focus-visible",
+      "loaded"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "Whatever hover reveals, focus-visible reveals too; the overlay and zoom affordance are never mouse-only. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:170, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:171, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:172, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:173]",
+      "The fallback node carries role='img' with an accessible label, so a failed image is still named. [at packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:232]",
+      "An interactive image root is a real button role and keeps a focus-visible ring that survives forced-colors. [at packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:205, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:65, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:215]",
+      "The placeholder is faded, not unmounted, when data-status flips to loaded, so the panel does not collapse mid-transition. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:119, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:129]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-a",
+        "scoutArtifact": "mr-anatomy-display-a.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 9,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "ds-class-pair",
+          "anchor": "family identity pair rottay-image + rottay-image--{engine}; the root is addressed by the component-identity class itself",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:204",
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:184",
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:65"
+          ]
+        },
+        {
+          "part": "placeholder",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:215",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:129"
+          ]
+        },
+        {
+          "part": "fallback",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='img' + aria-label",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:232",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:233",
+            "packages/core/src/ui/primitives/display/Image/compound/Fallback/index.tsx:61"
+          ]
+        },
+        {
+          "part": "img",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:246",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:80"
+          ]
+        },
+        {
+          "part": "hover-overlay",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:261",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:252",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:170"
+          ]
+        },
+        {
+          "part": "zoom-indicator",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/modern/index.tsx:272",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:258",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:172"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute (Image.Skeleton compound)",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/compound/Skeleton/index.tsx:63"
+          ]
+        },
+        {
+          "part": "zoom-dialog",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute (rustic engine only)",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:277"
+          ]
+        },
+        {
+          "part": "zoom-img",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute (rustic engine only)",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:285"
+          ]
+        },
+        {
+          "part": "zoom-close",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute (rustic engine only)",
+          "at": [
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:291"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "hovered",
+          "note": "data-state~='hovered' reveals hover-overlay and zoom-indicator",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:172"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "focus-visible",
+          "note": "focus-visible reveals the same two parts as hover, so the affordance is not mouse-only",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:215"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "data-status='loaded'",
+          "note": "lifecycle axis; the placeholder is faded out rather than unmounted",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:80",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:135"
+          ],
+          "state": "loaded"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "prefers-reduced-motion: reduce",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:225"
+            ]
+          },
+          {
+            "token": "forced-colors: active",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:195"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": {
+        "classic": {
+          "dataPartEmissions": 0,
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1958-2000"
+        },
+        "modern": {
+          "dataPartEmissions": 6,
+          "note": "no zoom dialog parts; zoom is signalled by the zoom-indicator only"
+        },
+        "rustic": {
+          "dataPartEmissions": 9,
+          "note": "adds zoom-dialog, zoom-img and zoom-close, three parts with no modern counterpart",
+          "anchors": [
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:277",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:285",
+            "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:291"
+          ]
+        }
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "cssCustomPropertyReads": [
+          {
+            "variable": "--ds-radius-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/contracts/index.ts:426",
+            "landsOn": "sm",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.375rem",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/contracts/index.ts:428",
+            "landsOn": "md",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.5rem",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/contracts/index.ts:430",
+            "landsOn": "lg",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.75rem",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-full",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/contracts/index.ts:432",
+            "landsOn": "full",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "9999px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/engines/classic/index.tsx:78",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(0, 0, 0, 0.1)",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-shadow-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/engines/classic/index.tsx:79",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/engines/classic/index.tsx:99",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#e5e5e5",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-400",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/engines/classic/index.tsx:105",
+            "landsOn": "justify-content",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#a3a3a3",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-transition",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:111",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "all 0.2s ease-in-out",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:42",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root'][data-radius='sm']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:45",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root'][data-radius='md']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:48",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root'][data-radius='lg']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-full",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:51",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root'][data-radius='full']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:55",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root'][data-bordered='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-elevation-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:58",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root'][data-shadow='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-focus-ring",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:67",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-focus-ring)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root']:focus-visible",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-focus-ring",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:67",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern[data-part='root']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:77",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-normal)",
+            "part": "img",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern [data-part='img']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:77",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "img",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern [data-part='img']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-timing",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:78",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-ease-out)",
+            "part": "img",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern [data-part='img']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:78",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "img",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern [data-part='img']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:118",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-reveal-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:126",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-normal)",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:126",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-timing",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:126",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-ease-out)",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:126",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:127",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-normal)",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:127",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-timing",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:127",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-ease-out)",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:127",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:141",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-pulse-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:142",
+            "landsOn": "animation",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-attention)",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-attention",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:142",
+            "landsOn": "animation",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:148",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='fallback']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:149",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='fallback']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-fallback-icon-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:152",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "3rem",
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='fallback'] svg",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-fallback-icon-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:153",
+            "landsOn": "block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "3rem",
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='fallback'] svg",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-reveal-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:167",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-normal)",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:167",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-timing",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:167",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-ease-out)",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:167",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:168",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-normal)",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:168",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-reveal-timing",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:168",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-ease-out)",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:168",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay'], .rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-alpha-black-40",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:178",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "hover-overlay",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='hover-overlay']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-zoom-indicator-padding",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:182",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.375rem",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-full",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:183",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-alpha-black-50",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:184",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-white",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/image.css:185",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--modern > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-resolved-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:39",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic[data-part='root'][data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-border-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:44",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(0, 0, 0, 0.1)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic[data-part='root'][data-part='root'][data-bordered='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-shadow",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:47",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic[data-part='root'][data-part='root'][data-shadow='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-resolved-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:52",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "img",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='img']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-placeholder-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:58",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#f5f5f5",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-resolved-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:59",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='placeholder']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-loading-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:62",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#e5e5e5",
+            "part": "placeholder",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='placeholder'] > .rottay-image__pulse",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-fallback-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:67",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#f5f5f5",
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='fallback']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-fallback-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:68",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "#737373",
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='fallback']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-resolved-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:69",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='fallback']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-overlay-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:74",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(0, 0, 0, 0.4)",
+            "part": "hover-overlay",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='hover-overlay']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-resolved-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:75",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "hover-overlay",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='hover-overlay']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-zoom-indicator-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:78",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(0, 0, 0, 0.5)",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-zoom-indicator-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:80",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "white",
+            "part": "zoom-indicator",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image.rottay-image--rustic > [data-part='zoom-indicator']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-zoom-overlay-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:85",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(0, 0, 0, 0.9)",
+            "part": "zoom-dialog",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-zoom.rottay-image-zoom--rustic[data-part='zoom-dialog']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-zoom-close-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:88",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "rgba(255, 255, 255, 0.1)",
+            "part": "zoom-close",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-zoom.rottay-image-zoom--rustic > [data-part='zoom-close']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-zoom-close-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:91",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "white",
+            "part": "zoom-close",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-zoom.rottay-image-zoom--rustic > [data-part='zoom-close']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-100",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:28",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-fallback[data-part='fallback'][data-part='fallback']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-500",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:29",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-fallback[data-part='fallback'][data-part='fallback']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:33",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "fallback",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-fallback[data-part='fallback'][data-part='fallback']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-neutral-200",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:37",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "skeleton",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-skeleton[data-part='skeleton'][data-part='skeleton']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-resolved-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:38",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "skeleton",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-skeleton[data-part='skeleton'][data-part='skeleton']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-pulse-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:47",
+            "landsOn": "animation",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-attention)",
+            "part": "skeleton",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'][data-animate='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-attention",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/image-compounds.css:47",
+            "landsOn": "animation",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "skeleton",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'][data-animate='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-image-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1958",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1962",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-placeholder-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1966",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-placeholder-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1967",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-mask-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1971",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-mask-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1972",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1973",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1977",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1981",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1982",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1983",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1987",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1992",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1993",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-icon-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1994",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-icon-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1995",
+            "landsOn": "height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-toolbar-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1999",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-image-preview-close-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2000",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          }
+        ],
+        "cssCustomPropertyReadCount": 92,
+        "undeclaredReadsInThisFamily": [
+          "--ds-image-border-color",
+          "--ds-image-fallback-bg",
+          "--ds-image-fallback-color",
+          "--ds-image-fallback-icon-size",
+          "--ds-image-focus-ring",
+          "--ds-image-loading-bg",
+          "--ds-image-mask-bg",
+          "--ds-image-mask-color",
+          "--ds-image-placeholder-bg",
+          "--ds-image-placeholder-color",
+          "--ds-image-preview-bg",
+          "--ds-image-preview-close-size",
+          "--ds-image-preview-icon-size",
+          "--ds-image-preview-toolbar-bg",
+          "--ds-image-preview-toolbar-color",
+          "--ds-image-preview-toolbar-radius",
+          "--ds-image-pulse-duration",
+          "--ds-image-reveal-duration",
+          "--ds-image-reveal-timing",
+          "--ds-image-shadow",
+          "--ds-image-transition",
+          "--ds-image-zoom-close-bg",
+          "--ds-image-zoom-close-color",
+          "--ds-image-zoom-indicator-bg",
+          "--ds-image-zoom-indicator-color",
+          "--ds-image-zoom-indicator-padding",
+          "--ds-image-zoom-overlay-bg"
+        ],
+        "templatedReads": [],
+        "channelRedeclarations": [],
+        "cssCustomPropertyReadsRemovedAsCommentText": 4,
+        "blockedControlEdgeSitesInThisFamily": 0
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1857,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-alpha-black-40",
+            "--ds-color-alpha-black-50",
+            "--ds-color-border",
+            "--ds-color-neutral-100",
+            "--ds-color-neutral-200",
+            "--ds-color-neutral-500",
+            "--ds-color-text-secondary",
+            "--ds-color-white",
+            "--ds-surface-inset",
+            "--ds-surface-panel"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1889,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1907,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1925,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1948,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1974,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1992,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-image-zoom-indicator-padding"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2020,13 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2034,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-image-pulse-duration",
+              "--_ds-image-reveal-duration",
+              "--_ds-image-reveal-timing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-attention",
+            "--ds-motion-ease-out",
+            "--ds-motion-normal"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2068,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-2"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2091,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de image no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2111,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "display no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de display"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2131,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2149,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2167,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-image-focus-ring"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2200,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2218,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2236,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2275,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": null,
+            "prop": "stroke-width / fill",
+            "tier": "standard",
+            "examples": [
+              "Icon"
+            ],
+            "noSocketReason": "data-icon-posture heredado + --_ds-icon-stroke-width",
+            "socketsResolved": true,
+            "carrier": "attribute+shared-socket",
+            "sockets": [
+              "--_ds-image-fallback-icon-size"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2304,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

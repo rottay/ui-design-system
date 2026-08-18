@@ -1,20 +1,19 @@
 /**
  * Same-reachable-state analysis for a rendered first-party artifact.
  *
- * Shared by the two tests that need it: EXTENSION-CANNOT-BEAT-TENANT asserts
- * no extension re-declares a compiled channel in a state both reach, and
- * TENANT-COLOR-PROPAGATION uses the same detector to prove that a channel
- * frozen by an extension is a detected override rather than a silent one. One
- * implementation, so the two can never disagree about what "competing" means.
+ * The artifact has exactly ONE authored source. These helpers answer the only
+ * question the single-author laws still need answered mechanically: which
+ * document states a given rule authors the tenant ROOT in. That is how
+ * `single-author.test.ts` tells the base block apart from a mode block without
+ * matching on comment banners, so the laws survive a change of section prose.
+ *
+ * The conflict detector that used to live here existed to referee a second
+ * author. There is no second author, so there is nothing to referee.
  *
  * Not a test file: `tests/**` is collected by pattern `*.test.ts`, and this
  * module deliberately does not match it.
  */
 import postcss, { type Container, type Document, type Rule } from 'postcss';
-
-/** Separates the compiled authorship from the declared extension. */
-export const EXTENSION_MARKER =
-  '/* === Declared artifact extension (authored source, mechanically scoped) === */';
 
 /**
  * The document states a selector can match: `default` is the state with no
@@ -59,10 +58,9 @@ export function armIsDescendant(arm: string): boolean {
  * The states an arm can match.
  *
  * A positive `[data-theme='dark']` or `.dark` pins the arm to dark. A
- * `:not([data-theme='dark']):not(.dark)` excludes dark and keeps the rest —
- * which is how the bithire extension is written, and why its rules do not
- * compete with the compiled dark mode block even though they name the same
- * channels.
+ * `:not([data-theme='dark']):not(.dark)` excludes dark and keeps the rest, so
+ * an arm that merely avoids dark still reaches the default state — which is
+ * why state membership, not selector text, decides what a rule authors.
  */
 export function armStates(arm: string): ReachableState[] {
   const negated: string[] = [];
@@ -120,35 +118,44 @@ export function channelStates(css: string): Map<string, Set<ReachableState>> {
   return byChannel;
 }
 
-/** Split a rendered artifact into its compiled authorship and its extension. */
-export function splitArtifact(artifactCss: string): {
-  compiled: string;
-  extension: string;
-} {
-  const markerIndex = artifactCss.indexOf(EXTENSION_MARKER);
-  if (markerIndex === -1) throw new Error('the artifact has no extension section');
-  return {
-    compiled: artifactCss.slice(0, markerIndex),
-    extension: artifactCss.slice(markerIndex + EXTENSION_MARKER.length),
-  };
+/** One root-level declaration of a normal (non-custom) property. */
+export interface RootPropertyDeclaration {
+  /** Declared value, trimmed. */
+  value: string;
+  /** Document states the declaring rule authors the root in. */
+  states: Set<ReachableState>;
+  /** Selector of the declaring rule, for failure messages that name the block. */
+  selector: string;
 }
 
 /**
- * Channels the extension re-declares in a state the compiled side also
- * authors. Same channel in disjoint states is not a conflict — that is the
- * entire purpose of a mode block.
+ * Every root-level declaration of `prop` in the artifact, in source order.
+ *
+ * Deliberately keyed on the CASCADE, not on section banners: the single-author
+ * laws must keep holding if the generated comment text is reworded, and must
+ * not be satisfiable by a declaration hidden inside an at-rule or aimed at a
+ * descendant. Custom properties are excluded by construction — this is the
+ * counterpart of {@link channelStates}, which sees only `--*`.
  */
-export function tenantOverrideConflicts(artifactCss: string): string[] {
-  const { compiled: compiledCss, extension: extensionCss } = splitArtifact(artifactCss);
-  const compiled = channelStates(compiledCss);
-  const extension = channelStates(extensionCss);
-  if (compiled.size === 0) throw new Error('the compiled block emits nothing');
-
-  const found: string[] = [];
-  for (const [channel, extensionStates] of extension) {
-    const compiledStates = compiled.get(channel);
-    if (!compiledStates) continue;
-    if ([...extensionStates].some((state) => compiledStates.has(state))) found.push(channel);
-  }
-  return found.sort();
+export function rootPropertyDeclarations(
+  css: string,
+  prop: string,
+): RootPropertyDeclaration[] {
+  const found: RootPropertyDeclaration[] = [];
+  postcss.parse(css).walkRules((rule) => {
+    for (
+      let parent: Container | Document | undefined = rule.parent;
+      parent;
+      parent = parent.parent
+    ) {
+      if (parent.type === 'atrule') return;
+    }
+    const states = ruleRootStates(rule);
+    if (states.size === 0) return;
+    rule.walkDecls((decl) => {
+      if (decl.prop !== prop) return;
+      found.push({ value: decl.value.trim(), states, selector: rule.selector });
+    });
+  });
+  return found;
 }

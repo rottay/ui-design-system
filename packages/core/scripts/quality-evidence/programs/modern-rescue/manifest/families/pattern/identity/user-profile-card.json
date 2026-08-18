@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "8c450b39538b96c0873cb2755966b8008e891a58e40ce0e14f2f7c99cf873617"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2788 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/identity/profile/user-profile-card/index.ts",
+      "packages/core/src/ui/patterns/identity/profile/user-profile-card/contracts/index.ts",
+      "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css"
+    ],
+    "stableParts": [
+      "action-button",
+      "action-icon",
+      "actions",
+      "avatar",
+      "avatar-container",
+      "avatar-fallback",
+      "avatar-initial",
+      "body",
+      "department-badge",
+      "email",
+      "header-extra",
+      "identity",
+      "loading-body",
+      "loading-label",
+      "name",
+      "presence-dot",
+      "role",
+      "root",
+      "spinner",
+      "status-badge"
+    ],
+    "states": [
+      "disabled",
+      "loading",
+      "online",
+      "active",
+      "away",
+      "busy",
+      "offline",
+      "user.status"
+    ],
+    "variantAxes": [
+      "data-interactive",
+      "data-size",
+      "data-variant"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 20,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "action-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:236",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:209",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:297",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:312",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:317",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:322"
+          ]
+        },
+        {
+          "part": "action-icon",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:242",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:333"
+          ]
+        },
+        {
+          "part": "actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:291"
+          ]
+        },
+        {
+          "part": "avatar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:114",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:110",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:120",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:124",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:128"
+          ]
+        },
+        {
+          "part": "avatar-container",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:113",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:105"
+          ]
+        },
+        {
+          "part": "avatar-fallback",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:120",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:134"
+          ]
+        },
+        {
+          "part": "avatar-initial",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:143",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:148",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:154"
+          ]
+        },
+        {
+          "part": "body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:83"
+          ]
+        },
+        {
+          "part": "department-badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:212",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:172",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:251",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:404",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:48"
+          ]
+        },
+        {
+          "part": "email",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:216",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:422",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:54"
+          ]
+        },
+        {
+          "part": "header-extra",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:182",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:281"
+          ]
+        },
+        {
+          "part": "identity",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:176",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:199"
+          ]
+        },
+        {
+          "part": "loading-body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:20",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:153",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:93"
+          ]
+        },
+        {
+          "part": "loading-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:17"
+          ]
+        },
+        {
+          "part": "name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:179",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:207",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:136",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:213"
+          ]
+        },
+        {
+          "part": "presence-dot",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:125",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:177"
+          ]
+        },
+        {
+          "part": "role",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:180",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:208",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:139",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:219",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:227"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:143",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:164",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:190",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:84",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:121",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:151"
+          ]
+        },
+        {
+          "part": "spinner",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:154"
+          ]
+        },
+        {
+          "part": "status-badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:220",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:190",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:256",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:265"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "disabled=!!action.disabled",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:238",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:211"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "disabled=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:329",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:354",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:357",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:360",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:416"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:165",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:191",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:122",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:11"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:144",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:85",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:31",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:10"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "online=false",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:177",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:399",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:36"
+          ],
+          "state": "online"
+        },
+        {
+          "token": "online=isOnline",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:125",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:111"
+          ],
+          "state": "online"
+        },
+        {
+          "token": "online=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:392",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:395",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:431",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:32"
+          ],
+          "state": "online"
+        },
+        {
+          "token": "status=active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:63"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "status=away",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:265",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:67"
+          ],
+          "state": "away"
+        },
+        {
+          "token": "status=busy",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:71"
+          ],
+          "state": "busy"
+        },
+        {
+          "token": "status=offline",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:275",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:75"
+          ],
+          "state": "offline"
+        },
+        {
+          "token": "status=user.status",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:220",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:190"
+          ],
+          "state": "user.status"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "interactive=false",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:150"
+          ]
+        },
+        {
+          "token": "interactive=onClick ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:168",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:194"
+          ]
+        },
+        {
+          "token": "interactive=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:42",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:45",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:49",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:62"
+          ]
+        },
+        {
+          "token": "size",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:286"
+          ]
+        },
+        {
+          "token": "size=lg",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:124",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:230",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:317"
+          ]
+        },
+        {
+          "token": "size=size",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:149",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:167",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:193"
+          ]
+        },
+        {
+          "token": "size=sm",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:120",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:312"
+          ]
+        },
+        {
+          "token": "variant=action.variant ?? 'default'",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:237",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:210"
+          ]
+        },
+        {
+          "token": "variant=compact",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:45",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:62",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:74",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:148",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:40"
+          ]
+        },
+        {
+          "token": "variant=danger",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:343",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:357",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:92"
+          ]
+        },
+        {
+          "token": "variant=default",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:348",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:360"
+          ]
+        },
+        {
+          "token": "variant=full",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:42",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:196"
+          ]
+        },
+        {
+          "token": "variant=primary",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:338",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css:354",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css:86"
+          ]
+        },
+        {
+          "token": "variant=variant",
+          "at": [
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:148",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:166",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx:192",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:86",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:123",
+            "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx:153"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "lines": 195
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx",
+            "lines": 251
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",
+            "lines": 228
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "4 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-loading='true'], .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-loa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 38,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 38,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 43,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 60,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": "--ds-shadow-focus-ring, .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 63,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 63,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 68,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 77,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 79,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 87,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "body",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "loading-body",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='loading-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 118,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 140,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar-fallback",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__avatar-fallback[data-part='avatar-fallback']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "avatar-fallback",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__avatar-fallback[data-part='avatar-fallback']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 144,
+            "fallback": true,
+            "fallbackValue": "18px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "avatar-initial",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar-initial']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 145,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "avatar-initial",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar-initial']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 149,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "avatar-initial",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'] [data-part='avatar-initial']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 152,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "avatar-initial",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='avatar-initial']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 155,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "avatar-initial",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'][data-variant='full'] [data-part='avatar-initial']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 168,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 175,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 178,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 185,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-attention",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 186,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 197,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "identity",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'] [data-part='identity']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 206,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "name",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 207,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "name",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 208,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "name",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-tight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 209,
+            "fallback": true,
+            "fallbackValue": "1.25",
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "name",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 214,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "name",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 217,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "name",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'][data-variant='full'] [data-part='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 222,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 223,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 228,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 231,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'][data-variant='full'] [data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 235,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "email",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 236,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-secondary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "email",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 236,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "email",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 237,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "email",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 247,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge'], .ds-pattern-user-profile-card.ds-engine-mo",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-wide",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 248,
+            "fallback": true,
+            "fallbackValue": "0.025em",
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge'], .ds-pattern-user-profile-card.ds-engine-mo",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 252,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "department-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-info",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 253,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "department-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 261,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='active']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 262,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='active']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 266,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='away']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 267,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='away']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 271,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='busy']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 272,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='busy']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 276,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='offline']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 277,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='offline']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 282,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "header-extra",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='header-extra']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 293,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 294,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "actions",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern [data-part='actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 300,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 303,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 304,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 306,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 308,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 308,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 309,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 309,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 310,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 310,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 314,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "action-button",
+            "selector": "transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), .ds-pat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 315,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "action-button",
+            "selector": "transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), .ds-pat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 319,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 320,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 326,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 339,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 340,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 344,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 345,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 350,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 355,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true'",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 355,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true'",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 358,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 358,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 361,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']:not([data-disabled='true'",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 368,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 12,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 12,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 13,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 14,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-primary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 14,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 18,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "loading-label",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__loading-label[data-part='loading-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 18,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "loading-label",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__loading-label[data-part='loading-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 23,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-200)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__avatar[data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 23,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__avatar[data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 24,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "avatar",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__avatar[data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 29,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 29,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 37,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-400)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-400",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 37,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "presence-dot",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 41,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-variant='compact'] .ds-user-profile-card__role[data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 41,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-variant='compact'] .ds-user-profile-card__role[data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "role",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic[data-variant='full'] .ds-user-profile-card__role[data-part='role']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 49,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "department-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__department-badge[data-part='department-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 50,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-muted)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "department-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__department-badge[data-part='department-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 50,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "department-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__department-badge[data-part='department-badge']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "department-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__department-badge[data-part='department-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 55,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "email",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__email[data-part='email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "email",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__email[data-part='email']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 59,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 60,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 60,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 64,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='active']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 68,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='away']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 72,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='busy']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 76,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-400)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='offline']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-400",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 76,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "status-badge",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='offline']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 80,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 81,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border-primary)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 81,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 82,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-primary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 83,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 83,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 88,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-inverse)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 88,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 89,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 94,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "action-button",
+            "selector": ".ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 25,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 26,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 27,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 28,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-base",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 108,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 115,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-base",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 151,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",
+            "line": 52,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",
+            "line": 175,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",
+            "line": 184,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",
+            "line": 193,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 53,
+            "literal": "3px",
+            "text": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 68,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 77,
+            "literal": "12px",
+            "text": "gap: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 78,
+            "literal": "12px",
+            "text": "padding: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 87,
+            "literal": "24px",
+            "text": "padding: var(--ds-spacing-6, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 97,
+            "literal": "20px",
+            "text": "padding: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 116,
+            "literal": "3.5rem",
+            "text": "inline-size: 3.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 117,
+            "literal": "3.5rem",
+            "text": "block-size: 3.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 121,
+            "literal": "2.5rem",
+            "text": "inline-size: 2.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 122,
+            "literal": "2.5rem",
+            "text": "block-size: 2.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 125,
+            "literal": "5rem",
+            "text": "inline-size: 5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 126,
+            "literal": "5rem",
+            "text": "block-size: 5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 144,
+            "literal": "18px",
+            "text": "font-size: var(--ds-font-size-lg, 18px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 149,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 152,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 155,
+            "literal": "24px",
+            "text": "font-size: var(--ds-font-size-2xl, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 165,
+            "literal": "10px",
+            "text": "inline-size: 10px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 166,
+            "literal": "10px",
+            "text": "block-size: 10px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 168,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-surface-card);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 171,
+            "literal": "12px",
+            "text": "inline-size: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 172,
+            "literal": "12px",
+            "text": "block-size: 12px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 183,
+            "literal": "2px",
+            "text": "inset: -2px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 185,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-success);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 197,
+            "literal": "8px",
+            "text": "margin-block-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 207,
+            "literal": "16px",
+            "text": "font-size: var(--ds-font-size-base, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 214,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 217,
+            "literal": "20px",
+            "text": "font-size: var(--ds-font-size-xl, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 223,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 228,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 231,
+            "literal": "16px",
+            "text": "font-size: var(--ds-font-size-base, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 235,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 237,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 247,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 248,
+            "literal": "0.025em",
+            "text": "letter-spacing: var(--ds-letter-spacing-wide, 0.025em);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 282,
+            "literal": "8px",
+            "text": "margin-block-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 293,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 294,
+            "literal": "12px",
+            "text": "margin-block-start: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 300,
+            "literal": "4px",
+            "text": "gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 301,
+            "literal": "32px",
+            "text": "block-size: 32px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 303,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 313,
+            "literal": "24px",
+            "text": "block-size: 24px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 314,
+            "literal": "8px",
+            "text": "padding-inline: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 315,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 318,
+            "literal": "36px",
+            "text": "block-size: 36px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 319,
+            "literal": "16px",
+            "text": "padding-inline: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 320,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 326,
+            "literal": "3px",
+            "text": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 368,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 378,
+            "literal": "1px",
+            "text": "border: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 385,
+            "literal": "2px",
+            "text": "outline: 2px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 386,
+            "literal": "2px",
+            "text": "outline-offset: 2px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 408,
+            "literal": "1px",
+            "text": "outline: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 414,
+            "literal": "1px",
+            "text": "outline: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 433,
+            "literal": "0.01ms",
+            "text": "transition-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "line": 434,
+            "literal": "0.01ms",
+            "text": "animation-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 12,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 13,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 29,
+            "literal": "2px",
+            "text": "border: 2px solid var(--ds-color-bg-elevated, var(--ds-color-bg-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 49,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 59,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 80,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
+            "line": 81,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));"
+          }
+        ],
+        "censusRowCount": 144
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2816,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-primary",
+            "--ds-color-success",
+            "--ds-color-text-muted",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-surface-card",
+            "--ds-surface-inset",
+            "--ds-surface-panel"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2858,37 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-name-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-letter-spacing-wide"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2896,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-name-family"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2926,42 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-name-size"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xl",
+            "--ds-font-size-base",
+            "--ds-font-size-lg",
+            "--ds-font-size-sm",
+            "--ds-font-size-xl",
+            "--ds-font-size-xs"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-line-height-tight"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2969,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-card-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +3005,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "las acciones del perfil son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +3025,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-row-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Pisos de accesibilidad (touch-target-min): clase de exclusion propia - el piso no se negocia por tema": [
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +3060,39 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-section-gap"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5",
+            "--ds-spacing-6"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +3100,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ficha estatica; sus interactivos heredan sockets de inputs",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de user-profile-card no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-attention",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3127,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "compone cards: una segunda sombra anidada duplica el plano",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de user-profile-card no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1",
+            "--ds-elevation-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3153,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ficha de contenido, no vidriera de marca",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de user-profile-card no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3173,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido; aunque se hospede en la sidebar, la ficha lee los canales de superficie",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "estos patterns no son chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3193,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3213,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la cabecera del perfil es chrome pintado por familia",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack (canales --ds-z-* compartidos)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3233,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido previo a escritura): la skin de esta familia no lee el canal; el namespace tiene duena (surface/admin/profile).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "surface/admin/profile",
+            "channels": [
+              "--ds-profile-divider-style"
+            ]
+          }
+        ],
+        "remediatedFrom": "fam13-dup-sweep",
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3263,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3281,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3301,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3340,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el avatar es imagen, no icono; los iconos de la ficha siguen la postura",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3360,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

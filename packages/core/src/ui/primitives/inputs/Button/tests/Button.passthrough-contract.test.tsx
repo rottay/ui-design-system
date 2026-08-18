@@ -3,9 +3,10 @@
  * win on `id`, `aria-*`, and every other `data-*` attribute INCLUDING an
  * explicit `data-part` — a composing component owns the parts it names. The
  * engine stamps its own default root part only when the caller passed none.
- * Rustic keeps the historical engine-wins behavior until the Classic/Rustic
- * parity tranche (engine policy 2026-07-25: read-only in this wave). The law
- * is documented on `BaseComponentProps` in `foundation/contracts/kernel/common`.
+ * All three engines obey it: classic resolves the part at its imperative stamp
+ * and rustic at its `partAttributes` call, so the engine-agnostic skins that
+ * select a caller part are true everywhere. The law is documented on
+ * `BaseComponentProps` in `foundation/contracts/kernel/common`.
  */
 import React from 'react';
 import { describe, expect, it } from 'vitest';
@@ -43,7 +44,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-part', 'trigger');
   });
 
-  it('rustic button path: forwards id/aria-label/data-* and keeps data-part="trigger"', () => {
+  it('rustic button path: forwards id/aria-label/data-* and the caller data-part wins', () => {
     const { container } = render(<RusticButton {...passthrough}>Go</RusticButton>);
 
     const button = container.querySelector('button.rottay-button--rustic') as HTMLButtonElement;
@@ -51,7 +52,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('id', 'caller-button-id');
     expect(button).toHaveAttribute('aria-label', 'Caller label');
     expect(button).toHaveAttribute('data-custom', 'caller-data');
-    expect(button).toHaveAttribute('data-part', 'trigger');
+    expect(button).toHaveAttribute('data-part', 'caller-part-attempt');
   });
 
   it('rustic anchor path: obeys the same law on the rendered <a>', () => {
@@ -67,10 +68,10 @@ describe('Button pass-through honesty law', () => {
     expect(anchor).toHaveAttribute('id', 'caller-button-id');
     expect(anchor).toHaveAttribute('aria-label', 'Caller label');
     expect(anchor).toHaveAttribute('data-custom', 'caller-data');
-    expect(anchor).toHaveAttribute('data-part', 'trigger');
+    expect(anchor).toHaveAttribute('data-part', 'caller-part-attempt');
   });
 
-  it('classic: forwards id/aria-label/data-* through AntD and stamps data-part="trigger"', () => {
+  it('classic: forwards id/aria-label/data-* through AntD and the caller data-part wins', () => {
     const { container } = render(<ClassicButton {...passthrough}>Go</ClassicButton>);
 
     const button = container.querySelector('.rottay-button--classic') as HTMLElement;
@@ -78,6 +79,6 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('id', 'caller-button-id');
     expect(button).toHaveAttribute('aria-label', 'Caller label');
     expect(button).toHaveAttribute('data-custom', 'caller-data');
-    expect(button).toHaveAttribute('data-part', 'trigger');
+    expect(button).toHaveAttribute('data-part', 'caller-part-attempt');
   });
 });

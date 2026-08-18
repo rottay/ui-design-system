@@ -154,8 +154,8 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
     // height, the body column (padding rides the bare --ds-card-body-padding
     // channel so the placeholder mirrors the real Card's density), the title
     // geometry and the 80% natural-ending last line — paints from the
-    // unlayered skeleton-compounds skin. Inline style carries only the
-    // caller's `style` plus the shared canon animation reference per block.
+    // unlayered skeleton-compounds skin. Inline style carries the caller's
+    // `style` plus the shared canon animation reference per block.
     const containerStyle: React.CSSProperties = { ...style };
 
     // -------------------------------------------------------------------------

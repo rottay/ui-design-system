@@ -47,18 +47,18 @@
  * ships `--ds-sidebar-width` / `--ds-shell-sidebar-width` in its static
  * artifact today.
  */
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
-import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
+import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
-} from '../index';
+} from "../index";
 
 /**
  * A maximal customer document: every chrome family the bithire envelope
@@ -68,37 +68,47 @@ import {
  */
 const CUSTOMER_DOCUMENT: TenantThemeDocument = {
   schemaVersion: 1,
-  mode: 'advanced',
+  mode: "advanced",
   visualFoundation: {
     general: {
-      palette: { primary: '#0F766E', secondary: '#8C6D46', accent: '#E2725B' },
+      palette: {
+        primary: "#0F766E",
+        secondary: "#8C6D46",
+        accent: "#E2725B",
+        foreground: { muted: "#6B6154", disabled: "#80766A" },
+      },
       typography: {
         fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
         fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
       },
-      density: 'normal',
-      motion: { intensity: 0.62, durationScale: 1.15, ambient: 'subtle' },
-      shape: { buttonStyle: 'soft' },
-      surfaces: { elevation: 'elevated' },
-      navigation: { sidebarTone: 'subtle' },
+      density: "normal",
+      motion: { intensity: 0.62, durationScale: 1.15, ambient: "subtle" },
+      shape: { buttonStyle: "soft" },
+      surfaces: { elevation: "elevated" },
+      navigation: { sidebarTone: "subtle" },
     },
     advanced: {
       tokenOverrides: {
-        '--ds-color-bg-primary': '#FBF6EC',
-        '--ds-color-success': '#5B8A3A',
-        '--ds-color-warning': '#C39E22',
-        '--ds-color-error': '#C0392B',
-        '--ds-color-info': '#5B6FA8',
-        '--ds-radius-md': '6px',
-        '--ds-effect-intensity': 0.45,
+        "--ds-color-bg-primary": "#FBF6EC",
+        "--ds-color-success": "#5B8A3A",
+        "--ds-color-warning": "#C39E22",
+        "--ds-color-error": "#C0392B",
+        "--ds-color-info": "#5B6FA8",
+        "--ds-radius-md": "6px",
+        "--ds-effect-intensity": 0.45,
       },
       chrome: {
-        sidebar: { bg: '#FFFEFB', border: '#E2D9CC', text: '#2E261C', width: '284px' },
-        layout: { headerHeight: '64px' },
-        table: { bg: '#FFFEFB', headerBg: '#FFFFFF', rowBgHover: '#FBF3E7' },
-        cardComponent: { bg: '#FFFEFB', border: 'transparent', radius: '8px' },
-        badge: { surface: '#FFFEFB', ink: '#2E261C', frame: '#9B8A73' },
-        metricCard: { bg: '#FFFEFB', iconBg: '#F3EEE5', valueColor: '#2E261C' },
+        sidebar: {
+          bg: "#FFFEFB",
+          border: "#E2D9CC",
+          text: "#2E261C",
+          width: "284px",
+        },
+        layout: { headerHeight: "64px" },
+        table: { bg: "#FFFEFB", headerBg: "#FFFFFF", rowBgHover: "#FBF3E7" },
+        cardComponent: { bg: "#FFFEFB", border: "transparent", radius: "8px" },
+        badge: { surface: "#FFFEFB", ink: "#2E261C", frame: "#9B8A73" },
+        metricCard: { bg: "#FFFEFB", iconBg: "#F3EEE5", valueColor: "#2E261C" },
       },
     },
   },
@@ -108,11 +118,11 @@ const compileCustomerDocument = (tenantId: string) =>
   compileTenantThemeConfig(
     hydrateTenantThemeConfig(CUSTOMER_DOCUMENT, {
       tenantId,
-      slug: 'themanagementmiami',
-      verticalKey: 'bithire',
+      slug: "themanagementmiami",
+      verticalKey: "bithire",
       rowVersion: 1,
     }),
-    { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire')! }
+    { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire")! }
   );
 
 /**
@@ -131,12 +141,13 @@ const allChannels = (compiled: {
 }): Set<string> => {
   const channels = new Set(Object.keys(compiled.cssVariables));
   for (const block of compiled.modeBlocks ?? []) {
-    for (const channel of Object.keys(block.cssVariables)) channels.add(channel);
+    for (const channel of Object.keys(block.cssVariables))
+      channels.add(channel);
   }
   return channels;
 };
 
-const dbCompiled = compileCustomerDocument('tenant_vocabulary');
+const dbCompiled = compileCustomerDocument("tenant_vocabulary");
 const dbChannels = new Set(Object.keys(dbCompiled.variables));
 
 /**
@@ -172,38 +183,43 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
   };
 
   return {
-    id: 'static-mirror',
-    name: 'Static Mirror',
+    id: "static-mirror",
+    name: "Static Mirror",
     palette: {
-      primaryColor: seed(seeds.primary, 'primary'),
-      secondaryColor: seed(seeds.secondary, 'secondary'),
-      accentColor: seed(seeds.accent, 'accent'),
-      onPrimaryColor: variable('--ds-color-text-on-primary'),
-      backgroundColor: variable('--ds-color-bg-primary'),
-      successColor: variable('--ds-color-success'),
-      warningColor: variable('--ds-color-warning'),
-      errorColor: variable('--ds-color-error'),
-      infoColor: variable('--ds-color-info'),
+      primaryColor: seed(seeds.primary, "primary"),
+      secondaryColor: seed(seeds.secondary, "secondary"),
+      accentColor: seed(seeds.accent, "accent"),
+      onPrimaryColor: variable("--ds-color-text-on-primary"),
+      backgroundColor: variable("--ds-color-bg-primary"),
+      textMutedColor: variable("--ds-color-text-muted"),
+      textDisabledColor: variable("--ds-color-text-disabled"),
+      successColor: variable("--ds-color-success"),
+      warningColor: variable("--ds-color-warning"),
+      errorColor: variable("--ds-color-error"),
+      infoColor: variable("--ds-color-info"),
     },
     chrome: {
       ...chrome,
       sidebar: {
         ...chrome.sidebar,
-        textMuted: variable('--ds-sidebar-text-muted'),
-        itemBgActive: variable('--ds-sidebar-item-bg-active'),
-        itemBgHover: variable('--ds-sidebar-item-bg-hover'),
-        itemColorActive: variable('--ds-sidebar-item-color-active'),
+        textMuted: variable("--ds-sidebar-text-muted"),
+        itemBgActive: variable("--ds-sidebar-item-bg-active"),
+        itemBgHover: variable("--ds-sidebar-item-bg-hover"),
+        itemColorActive: variable("--ds-sidebar-item-color-active"),
       },
     },
   };
 };
 
 const staticMirrorChannels = allChannels(
-  compileBrandTheme({ brandTheme: buildStaticMirror(dbCompiled), tenantSlug: 'static-mirror' })
+  compileBrandTheme({
+    brandTheme: buildStaticMirror(dbCompiled),
+    tenantSlug: "static-mirror",
+  })
 );
 
 const bithireChannels = allChannels(
-  compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' })
+  compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" })
 );
 
 /**
@@ -214,17 +230,17 @@ const bithireChannels = allChannels(
  * those family names rather than guessed from a prefix.
  */
 const CHROME_FAMILIES = [
-  'badge',
-  'button',
-  'card',
-  'input',
-  'layout',
-  'metric-card',
-  'modal',
-  'sidebar',
-  'shell',
-  'table',
-  'tabs',
+  "badge",
+  "button",
+  "card",
+  "input",
+  "layout",
+  "metric-card",
+  "modal",
+  "sidebar",
+  "shell",
+  "table",
+  "tabs",
 ] as const;
 
 /**
@@ -238,11 +254,12 @@ const CHROME_FAMILIES = [
  * borders instead of about a naming accident.
  */
 const CORE_FAMILIES: Record<string, (channel: string) => boolean> = {
-  color: (channel) => channel.startsWith('--ds-color-'),
+  color: (channel) => channel.startsWith("--ds-color-"),
   surface: (channel) =>
-    channel.startsWith('--ds-surface-') || channel.includes('-surface'),
-  text: (channel) => channel.includes('-text') || channel.includes('-ink'),
-  border: (channel) => channel.includes('-border') || channel.includes('-frame'),
+    channel.startsWith("--ds-surface-") || channel.includes("-surface"),
+  text: (channel) => channel.includes("-text") || channel.includes("-ink"),
+  border: (channel) =>
+    channel.includes("-border") || channel.includes("-frame"),
   chrome: (channel) =>
     CHROME_FAMILIES.some((family) => channel.startsWith(`--ds-${family}-`)),
 };
@@ -261,40 +278,23 @@ const dbOnlyAgainst = (staticSide: ReadonlySet<string>) =>
 
 /**
  * Core-family channels the SHIPPED bithire identity does not author through
- * the typed contract. Decrease-only; an empty list is the target state.
+ * the typed contract. Decrease-only; an empty list is the target state, and
+ * MASS C3-BITHIRE-ALL reached it.
  *
- * This is NOT a contract gap — the describe above proves every one of these is
- * expressible statically, and `chromeToVariables` emits them from the same
- * function on both paths. It is one product identity declining to use two
- * typed fields, and saying the same thing outside the compiler instead:
+ * The four channels that used to sit here — `--ds-shell-sidebar-width`,
+ * `--ds-sidebar-width`, `--ds-shell-header-block-size` and
+ * `--ds-layout-header-height` — were hand-written in
+ * `artifacts/bithire/_source/extension.css` instead of being authored through
+ * `chrome.sidebar.width` / `chrome.layout.headerHeight`. That extension is now
+ * fully drained: bithire authors both fields, and `chromeToVariables` spells
+ * each single owner into the modern AND classic vocabularies from one typed
+ * value, exactly as it already did for rottay.
  *
- *   --ds-shell-sidebar-width  ── bithire hand-writes `--ds-shell-sidebar-width:
- *   --ds-sidebar-width            256px` in `artifacts/bithire/_source/
- *                                 extension.css` rather than authoring
- *                                 `chrome.sidebar.width`. rottay DOES author
- *                                 that field ('296px') and ships both names.
- *
- *   --ds-shell-header-block-size ─ bithire authors `--ds-shell-topbar-height:
- *   --ds-layout-header-height      56px` in the same extension, which is the
- *                                  documented fallback AppShell reads through
- *                                  (`var(--ds-shell-header-block-size,
- *                                  var(--ds-shell-topbar-height, …))`), rather
- *                                  than authoring `chrome.layout.headerHeight`.
- *
- * Closing them is a theme-data + artifact change, not a compiler change, and
- * it is not free: `--ds-sidebar-width` and `--ds-layout-header-height` are the
- * CLASSIC engine's vocabulary and are unset for bithire today, so emitting
- * them would move `.ant-layout-sider` off its `200px` var() fallback and give
- * `.ant-layout-header` a height it currently does not resolve. That belongs to
- * the extension-retirement wave, which regenerates the artifacts and grades
- * the effective delta.
+ * Do not re-add an entry here to make a failure go away. A channel appearing
+ * in this list again means an identity started saying something outside the
+ * compiler, which is the finding.
  */
-const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [
-  '--ds-layout-header-height',
-  '--ds-shell-header-block-size',
-  '--ds-shell-sidebar-width',
-  '--ds-sidebar-width',
-];
+const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [];
 
 /**
  * Core families the customer path exercises today, and how thinly.
@@ -315,19 +315,19 @@ const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [
  * going silent on the customer side is a red test and not a quiet green.
  */
 const DB_EXERCISED_CORE_FAMILIES = [
-  'border',
-  'chrome',
-  'color',
-  'surface',
-  'text',
+  "border",
+  "chrome",
+  "color",
+  "surface",
+  "text",
 ] as const;
 
-describe('STATIC/DB VOCABULARY · both paths emit a real, non-trivial channel set', () => {
-  it('the static path emits a full product identity', () => {
+describe("STATIC/DB VOCABULARY · both paths emit a real, non-trivial channel set", () => {
+  it("the static path emits a full product identity", () => {
     expect(bithireChannels.size).toBeGreaterThan(200);
   });
 
-  it('the customer path emits a bounded but substantial set', () => {
+  it("the customer path emits a bounded but substantial set", () => {
     expect(dbChannels.size).toBeGreaterThan(50);
     // Bounded: the customer document is a subset of a product identity, not a
     // second one. If this ever inverts, the "bounded" claim is fiction.
@@ -335,8 +335,8 @@ describe('STATIC/DB VOCABULARY · both paths emit a real, non-trivial channel se
   });
 });
 
-describe('STATIC/DB VOCABULARY · the static contract expresses every customer channel', () => {
-  it('no core-family channel is reachable from the DB path alone', () => {
+describe("STATIC/DB VOCABULARY · the static contract expresses every customer channel", () => {
+  it("no core-family channel is reachable from the DB path alone", () => {
     const dbOnly = dbOnlyAgainst(staticMirrorChannels);
     if (process.env.PIN_REPORT) {
       // eslint-disable-next-line no-console
@@ -373,7 +373,7 @@ describe('STATIC/DB VOCABULARY · the static contract expresses every customer c
     expect(dbOnly).toEqual([]);
   });
 
-  it('the static path exercises every shared family', () => {
+  it("the static path exercises every shared family", () => {
     for (const [family, matches] of Object.entries(CORE_FAMILIES)) {
       expect({ family, emitted: [...bithireChannels].some(matches) }).toEqual({
         family,
@@ -382,7 +382,7 @@ describe('STATIC/DB VOCABULARY · the static contract expresses every customer c
     }
   });
 
-  it('the customer path exercises exactly the pinned families', () => {
+  it("the customer path exercises exactly the pinned families", () => {
     // Without this the subset assertion above could go green because a family
     // emptied out on the DB side — a vacuous pass that reads as agreement.
     const exercised = sorted(
@@ -393,7 +393,7 @@ describe('STATIC/DB VOCABULARY · the static contract expresses every customer c
     expect(exercised).toEqual([...DB_EXERCISED_CORE_FAMILIES]);
   });
 
-  it('the customer path is a strict subset of the static vocabulary in those families', () => {
+  it("the customer path is a strict subset of the static vocabulary in those families", () => {
     // The counts that make the relation concrete rather than asserted.
     const dbCore = [...dbChannels].filter(inCoreFamilies);
     const staticOnlyCore = [...bithireChannels].filter(
@@ -407,19 +407,22 @@ describe('STATIC/DB VOCABULARY · the static contract expresses every customer c
   });
 });
 
-describe('STATIC/DB VOCABULARY · the shipped identity authors what it can express', () => {
-  it('bithire leaves exactly the pinned channels to its artifact extension', () => {
+describe("STATIC/DB VOCABULARY · the shipped identity authors what it can express", () => {
+  it("bithire leaves exactly the pinned channels to its artifact extension", () => {
     expect(dbOnlyAgainst(bithireChannels)).toEqual([
       ...KNOWN_UNAUTHORED_BY_BITHIRE,
     ]);
   });
 
-  it('every channel bithire leaves unauthored is still expressible statically', () => {
+  it("every channel bithire leaves unauthored is still expressible statically", () => {
     // The distinction the two describes exist to keep apart. If one of these
     // ever stops being reachable from a BrandTheme field, it is no longer an
     // authoring gap — it is the contract drift, and it fails above too.
     for (const channel of KNOWN_UNAUTHORED_BY_BITHIRE) {
-      expect({ channel, expressible: staticMirrorChannels.has(channel) }).toEqual({
+      expect({
+        channel,
+        expressible: staticMirrorChannels.has(channel),
+      }).toEqual({
         channel,
         expressible: true,
       });
@@ -427,9 +430,9 @@ describe('STATIC/DB VOCABULARY · the shipped identity authors what it can expre
   });
 });
 
-describe('STATIC/DB VOCABULARY · drill', () => {
-  it('renaming one emitted channel in a compiled result is detected', () => {
-    const compiled = compileCustomerDocument('tenant_vocabulary_drill');
+describe("STATIC/DB VOCABULARY · drill", () => {
+  it("renaming one emitted channel in a compiled result is detected", () => {
+    const compiled = compileCustomerDocument("tenant_vocabulary_drill");
 
     const victim = Object.keys(compiled.variables).find(
       (channel) => inCoreFamilies(channel) && staticMirrorChannels.has(channel)
@@ -446,7 +449,8 @@ describe('STATIC/DB VOCABULARY · drill', () => {
     );
     const dbOnly = sorted(
       [...drifted].filter(
-        (channel) => inCoreFamilies(channel) && !staticMirrorChannels.has(channel)
+        (channel) =>
+          inCoreFamilies(channel) && !staticMirrorChannels.has(channel)
       )
     );
     // The baseline is zero, so the plant is the ENTIRE difference — the drill

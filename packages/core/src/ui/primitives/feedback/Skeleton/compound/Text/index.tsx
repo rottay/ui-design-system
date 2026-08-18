@@ -148,7 +148,7 @@ export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
 
     // The column stack, the line gap, the line height and the 60%
     // natural-ending last line all paint from the unlayered skeleton-compounds
-    // skin (density-retunable); inline style carries only the caller's `style`
+    // skin (density-retunable); inline style carries the caller's `style`
     // on the root and, per line, the instance `width` prop plus the shared
     // canon animation reference (pinned inline by Skeleton.integration.test).
     const containerStyle: React.CSSProperties = { ...style };

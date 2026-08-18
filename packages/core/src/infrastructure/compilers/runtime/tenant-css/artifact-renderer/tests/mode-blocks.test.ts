@@ -18,8 +18,6 @@ import {
   renderFirstPartyArtifact,
 } from '../index';
 
-const EXTENSION = "html[data-tenant='bithire'] {\n  --ds-fixture-only: 1px;\n}\n";
-
 const bithireSpec = () => {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire');
   if (!spec) throw new Error('no artifact spec for bithire');
@@ -27,7 +25,7 @@ const bithireSpec = () => {
 };
 
 const render = (brandTheme: BrandTheme) =>
-  renderFirstPartyArtifact({ spec: bithireSpec(), brandTheme, extensionCss: EXTENSION }).css;
+  renderFirstPartyArtifact({ spec: bithireSpec(), brandTheme }).css;
 
 describe('mode blocks in the rendered artifact', () => {
   it('renders one block per authored mode, scoped above the base block', () => {
@@ -76,7 +74,7 @@ describe('mode blocks in the rendered artifact', () => {
     expect(css).not.toContain("[data-theme='dark']");
   });
 
-  it('keeps the artifact a pure function of its two authored sources', () => {
+  it('keeps the artifact a pure function of its one authored source', () => {
     // Same inputs, same bytes: the renderer must not depend on anything else.
     expect(render(bithireBrandTheme)).toBe(render(bithireBrandTheme));
   });

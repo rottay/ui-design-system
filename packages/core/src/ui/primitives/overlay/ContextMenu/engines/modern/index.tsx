@@ -271,9 +271,9 @@ const MenuItem: React.FC<{
  *
  * The panel opens at the right-click point via the shared overlay positioning
  * runtime (zero-size pointer anchor) and dismisses on outside mousedown. It
- * renders no DaisyUI component classes and no utility-framework classes --
- * its `<ul>` carries only the consumer's `overlayClassName` -- so the modern
- * skin owns every rule through the trigger scope class, including row
+ * renders no DaisyUI component classes and no utility-framework classes; its
+ * `<ul>` carries only the consumer's `overlayClassName`. The modern skin
+ * therefore owns every rule through the trigger scope class, including row
  * geometry drained from inline styles/utility classes in K4-A.
  *
  * @param props - {@link ContextMenuProps} shared across all engines.

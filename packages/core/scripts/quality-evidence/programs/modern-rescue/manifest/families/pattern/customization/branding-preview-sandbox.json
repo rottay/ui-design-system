@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "24755635e75bf594477fddeac2f72f57ad3fbf8ad14a2073e14b8496689e3587"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1153 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css"
+    ],
+    "stableParts": [
+      "header",
+      "input",
+      "preview-card-body",
+      "preview-card-title",
+      "preview-table-cell",
+      "root",
+      "subtitle",
+      "surface",
+      "table",
+      "table-head",
+      "title"
+    ],
+    "states": [
+      "badges",
+      "buttons",
+      "cards",
+      "compact",
+      "state",
+      "default",
+      "elevated",
+      "inputs",
+      "striped",
+      "table",
+      "typography"
+    ],
+    "variantAxes": [
+      "data-align",
+      "data-size",
+      "data-span",
+      "data-variant"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 11,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:122",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:135",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:155",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:193",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:210",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:258"
+          ]
+        },
+        {
+          "part": "input",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:141",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:146"
+          ]
+        },
+        {
+          "part": "preview-card-body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:172",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:183",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:78"
+          ]
+        },
+        {
+          "part": "preview-card-title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:169",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:180",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:73"
+          ]
+        },
+        {
+          "part": "preview-table-cell",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:216",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:219",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:222",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:239",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:242",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:245"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:117",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:30",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:181"
+          ]
+        },
+        {
+          "part": "subtitle",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:266",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:272",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:280",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:156",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:162",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:171"
+          ]
+        },
+        {
+          "part": "surface",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:126",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:139",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:159",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:197",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:238",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:262"
+          ]
+        },
+        {
+          "part": "table",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:214",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:102",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:112"
+          ]
+        },
+        {
+          "part": "table-head",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:215",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:91",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:183"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:263",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:152"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "state=badges",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:193",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:53"
+          ],
+          "state": "badges"
+        },
+        {
+          "token": "state=buttons",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:122",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:50"
+          ],
+          "state": "buttons"
+        },
+        {
+          "token": "state=cards",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:155",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:159",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:52"
+          ],
+          "state": "cards"
+        },
+        {
+          "token": "state=compact",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:70"
+          ],
+          "state": "compact"
+        },
+        {
+          "token": "state=compact ? 'compact' : 'full'",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:118"
+          ],
+          "state": "state"
+        },
+        {
+          "token": "state=default",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:119"
+          ],
+          "state": "default"
+        },
+        {
+          "token": "state=elevated",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:178"
+          ],
+          "state": "elevated"
+        },
+        {
+          "token": "state=i % 2 === 1 ? 'striped' : 'default'",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:238"
+          ],
+          "state": "state"
+        },
+        {
+          "token": "state=inputs",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:135",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:51"
+          ],
+          "state": "inputs"
+        },
+        {
+          "token": "state=striped",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:125"
+          ],
+          "state": "striped"
+        },
+        {
+          "token": "state=table",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:210"
+          ],
+          "state": "table"
+        },
+        {
+          "token": "state=typography",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:258",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:60"
+          ],
+          "state": "typography"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "align=end",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:222",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:136"
+          ]
+        },
+        {
+          "token": "size=compact ? 'compact' : 'full'",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:165"
+          ]
+        },
+        {
+          "token": "span=wide",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:216",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:133"
+          ]
+        },
+        {
+          "token": "variant=body",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:266",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:156"
+          ]
+        },
+        {
+          "token": "variant=code",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:272",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:162"
+          ]
+        },
+        {
+          "token": "variant=date",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:145"
+          ]
+        },
+        {
+          "token": "variant=head",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:216",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:219",
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:222"
+          ]
+        },
+        {
+          "token": "variant=name",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:140"
+          ]
+        },
+        {
+          "token": "variant=status",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:242"
+          ]
+        },
+        {
+          "token": "variant=variable-count",
+          "at": [
+            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:280",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:171"
+          ]
+        }
+      ],
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 31,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-base",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 32,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 33,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "root",
+            "selector": ".ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 34,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "root",
+            "selector": ".ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 35,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 36,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "root",
+            "selector": ".ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 41,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 42,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 43,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "header",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-widest",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 44,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "header",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "header",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "surface",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='buttons'], .ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='inputs'",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 58,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "surface",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='buttons'], .ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='inputs'",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 61,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "surface",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='typography']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 75,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "preview-card-title",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-card-title-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 76,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-card-title",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 76,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-card-title",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-card-body-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 80,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-card-body",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='preview-card-body'][data-part='preview-card-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 80,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-card-body",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='preview-card-body'][data-part='preview-card-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 86,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "table",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "table",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 88,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "table",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 88,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "table",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-cell-padding",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 93,
+            "fallback": true,
+            "fallbackValue": "10px 16px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-header-font-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 94,
+            "fallback": true,
+            "fallbackValue": "13px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-header-font-weight",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 95,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-header-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-header-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-muted)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 97,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 98,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 98,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "table-head",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-cell-padding",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 106,
+            "fallback": true,
+            "fallbackValue": "10px 16px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-part='surface']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-cell-font-size",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 107,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-part='surface']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-cell-color",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 108,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-text-primary)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-part='surface']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 108,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-part='surface']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-row-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 109,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-part='surface']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-part='surface']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-row-bg",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 120,
+            "fallback": true,
+            "fallbackValue": "transparent",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-state='default']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-table-row-bg-striped",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 126,
+            "fallback": true,
+            "fallbackValue": "transparent",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "surface",
+            "selector": "> [data-part='surface'][data-state='striped']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 141,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "preview-table-cell",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-variant='name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "preview-table-cell",
+            "selector": "[data-part='preview-table-cell'][data-variant='date']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 147,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "preview-table-cell",
+            "selector": "[data-part='preview-table-cell'][data-variant='date']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 148,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "preview-table-cell",
+            "selector": "[data-part='preview-table-cell'][data-variant='date']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 153,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "title",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='title'][data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 154,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='title'][data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 158,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-body",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 160,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 164,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 165,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 166,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 172,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-2xs",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 173,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-disabled",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 175,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "subtitle",
+            "selector": ".ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 36,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 66,
+            "literal": "16.25rem",
+            "text": "inline-size: 16.25rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 71,
+            "literal": "12.5rem",
+            "text": "inline-size: 12.5rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 88,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-table-border, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 93,
+            "literal": "10px",
+            "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 93,
+            "literal": "16px",
+            "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 94,
+            "literal": "13px",
+            "text": "font-size: var(--ds-table-header-font-size, 13px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 98,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 106,
+            "literal": "10px",
+            "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 106,
+            "literal": "16px",
+            "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 107,
+            "literal": "14px",
+            "text": "font-size: var(--ds-table-cell-font-size, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "line": 109,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border));"
+          }
+        ],
+        "censusRowCount": 56
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1181,45 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-card-body-color",
+            "--ds-card-title-color",
+            "--ds-table-border",
+            "--ds-table-cell-color",
+            "--ds-table-header-bg",
+            "--ds-table-header-color",
+            "--ds-table-row-bg",
+            "--ds-table-row-bg-striped",
+            "--ds-table-row-border"
+          ],
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-bg-primary",
+            "--ds-color-bg-secondary",
+            "--ds-color-border",
+            "--ds-color-text-disabled",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1227,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-letter-spacing-widest",
+            "--ds-table-header-font-weight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1257,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-base",
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1283,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-2xs",
+            "--ds-font-size-xs"
+          ],
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-line-height-body",
+            "--ds-table-cell-font-size",
+            "--ds-table-header-font-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1314,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1340,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1360,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
+            "--ds-table-cell-padding"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1385,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-4",
+            "--ds-spacing-6"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1413,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1433,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1453,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1473,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "estos patterns no son chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1493,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1513,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack (canales --ds-z-* compartidos)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1533,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de branding-preview-sandbox no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1553,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1571,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1591,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1630,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1650,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -192,11 +192,31 @@ function expectedArtifactCss(artifact: TenantThemeArtifact): string {
   const declarations = Object.entries(artifact.variables)
     .map(([key, value]) => `  ${key}: ${value};`)
     .join("\n");
+  const backgroundMode =
+    artifact.normalizedAppearance.general?.palette?.backgroundMode ?? "light";
+  const modeRules = (artifact.modeDeltas ?? []).map((block) => {
+    const modeDeclarations = Object.entries(block.variables)
+      .map(([key, value]) => `  ${key}: ${value};`)
+      .join("\n");
+    const explicitSelector =
+      `${artifact.scopes.combinedSelector}[data-theme='${block.mode}'], ` +
+      `${artifact.scopes.combinedSelector}.${block.mode}`;
+    const explicitRule = `${explicitSelector} {\n${modeDeclarations}\n}`;
+    if (backgroundMode !== "auto" || block.mode !== "dark") {
+      return explicitRule;
+    }
+    const automaticRule =
+      `@media (prefers-color-scheme: dark) {\n` +
+      `${artifact.scopes.combinedSelector}:not([data-theme='light']) {\n` +
+      `${modeDeclarations}\n}\n}`;
+    return `${explicitRule}\n${automaticRule}`;
+  });
   return [
     `/* TenantThemeArtifact v1 | ${TENANT_THEME_COMPILER_VERSION} | ${artifact.digest} */`,
     `${artifact.scopes.combinedSelector} {`,
     declarations,
     "}",
+    ...modeRules,
     "",
   ].join("\n");
 }
@@ -258,6 +278,7 @@ export function verifyTenantThemeArtifactV1(
       !/^sha256-[0-9a-f]{64}$/.test(artifact.verticalEnvelopeDigest)) ||
     !isRecord(artifact.normalizedAppearance) ||
     !isRecord(artifact.variables) ||
+    (artifact.modeDeltas !== undefined && !Array.isArray(artifact.modeDeltas)) ||
     !isRecord(artifact.scopes) ||
     typeof artifact.css !== "string" ||
     !Array.isArray(artifact.coverage) ||
@@ -290,6 +311,26 @@ export function verifyTenantThemeArtifactV1(
   ) {
     return { ok: false, error: "variables are not an ordered --ds-* string map" };
   }
+  if (artifact.modeDeltas !== undefined) {
+    const seenModes = new Set<string>();
+    for (const block of artifact.modeDeltas) {
+      if (
+        !isRecord(block) ||
+        (block.mode !== "light" && block.mode !== "dark") ||
+        seenModes.has(block.mode) ||
+        !isRecord(block.variables) ||
+        Object.keys(block.variables).length === 0 ||
+        Object.entries(block.variables).some(
+          ([name, value]) => !name.startsWith("--ds-") || typeof value !== "string",
+        ) ||
+        Object.keys(block.variables).join("\0") !==
+          Object.keys(block.variables).sort().join("\0")
+      ) {
+        return { ok: false, error: "modeDeltas are not unique ordered --ds-* maps" };
+      }
+      seenModes.add(block.mode);
+    }
+  }
 
   try {
     const scopes = expectedScopes(artifact.slug, artifact.verticalKey);
@@ -307,6 +348,9 @@ export function verifyTenantThemeArtifactV1(
       rowVersion: artifact.rowVersion,
       normalizedAppearance: artifact.normalizedAppearance,
       variables: artifact.variables,
+      ...(artifact.modeDeltas && artifact.modeDeltas.length > 0
+        ? { modeDeltas: artifact.modeDeltas }
+        : {}),
       scopes,
       ...(artifact.adjustments && artifact.adjustments.length > 0
         ? { adjustments: artifact.adjustments }

@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "d33a142dfe12b6563205a211218c0c7d58cb058364a53d51d520e6183819fc66"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1353 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/CodeBlock/index.tsx",
+      "packages/core/src/ui/primitives/display/CodeBlock/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/CodeBlock/runtime/highlighter/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+    ],
+    "stableParts": [
+      "root",
+      "header",
+      "title",
+      "copy-button",
+      "copy-tick",
+      "copy-status",
+      "scroll",
+      "pre",
+      "code",
+      "line",
+      "line-number",
+      "line-content",
+      "token"
+    ],
+    "states": [
+      "hover",
+      "active-pressed",
+      "focus-visible",
+      "copied",
+      "highlighted"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The scroll region is itself focusable and keeps a focus-visible ring, so keyboard users can scroll long listings. [at packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:167]",
+      "The copy result is announced through a dedicated copy-status part rather than by colour alone. [at packages/core/src/ui/primitives/display/CodeBlock/index.tsx:277]",
+      "Copy-button hover paint and focus ring both re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:181, packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:185]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-a",
+        "scoutArtifact": "mr-anatomy-display-a.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 13,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-language axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:211",
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:212",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:127"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:221"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-language-badge axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:238",
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:239"
+          ]
+        },
+        {
+          "part": "copy-button",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-copied axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:256",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:127"
+          ]
+        },
+        {
+          "part": "copy-tick",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-copied axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:261"
+          ]
+        },
+        {
+          "part": "copy-status",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:277"
+          ]
+        },
+        {
+          "part": "scroll",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:282",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:167"
+          ]
+        },
+        {
+          "part": "pre",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:307"
+          ]
+        },
+        {
+          "part": "code",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:322"
+          ]
+        },
+        {
+          "part": "line",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-highlighted axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:329",
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:203"
+          ]
+        },
+        {
+          "part": "line-number",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:355"
+          ]
+        },
+        {
+          "part": "line-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:382"
+          ]
+        },
+        {
+          "part": "token",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:192"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "hovered",
+          "note": "copy-button only, hover-capable-gated and :not(:disabled)",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:127"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "pressed",
+          "note": "copy-button only",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:133"
+          ],
+          "state": "active-pressed"
+        },
+        {
+          "token": "focus-visible",
+          "note": "copy-button and the scroll region",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:166",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:167"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "copied",
+          "note": "data-copied='true'",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:145",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:146",
+            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:261"
+          ],
+          "state": "copied"
+        },
+        {
+          "token": "highlighted line",
+          "note": "data-highlighted='true' on the line part",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:203"
+          ],
+          "state": "highlighted"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "forced-colors: active",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:175"
+            ]
+          },
+          {
+            "token": "prefers-reduced-motion: reduce",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:220"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "engineDivergence": {
+        "engineSiblings": "none",
+        "note": "CodeBlock has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/ui/primitives/display/CodeBlock/index.tsx and its only paint layer is packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css. Engine divergence is therefore not applicable to this family."
+      },
+      "scoutGaps": {
+        "notes": [
+          "The private socket is spelled --_ds-codeblock-* (no hyphen between code and block), which does not match the family slug code-block. Recorded, not corrected."
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "cssCustomPropertyReads": [
+          {
+            "variable": "--ds-font-family-mono",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:47",
+            "landsOn": "?",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:214",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:215",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:216",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:226",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:227",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:227",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:228",
+            "landsOn": "border-bottom",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-code-block-header-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:234",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:234",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:241",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:242",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-letter-spacing-wider",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:249",
+            "landsOn": "letter-spacing",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:297",
+            "landsOn": "scrollbar-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:310",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:312",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-line-height-body",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:313",
+            "landsOn": "line-height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:318",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-code-block-line-highlight-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:334",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-warning) 14%, transparent)",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-warning",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:334",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-border-width-medium",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:343",
+            "landsOn": "border-inline-start",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "2px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-warning",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:345",
+            "landsOn": "border-inline-start",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:359",
+            "landsOn": "margin-inline-end",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-code-block-gutter-ink",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:375",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary))",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-tertiary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:375",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:375",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:40",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:41",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:41",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:42",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:43",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:45",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:47",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-code-block-motion-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:51",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-fast)",
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:51",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-code-block-motion-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:52",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-fast)",
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:52",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-code-block-motion-duration",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:53",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-motion-fast)",
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:53",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:73",
+            "landsOn": "min-block-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:74",
+            "landsOn": "min-inline-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:94",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "title",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:95",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "title",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:96",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "title",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:99",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "title",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-line-height-snug",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:101",
+            "landsOn": "line-height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "title",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:106",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='scroll']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:107",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='scroll']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--_ds-codeblock-scroll-shadow",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:110",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)",
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='scroll']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:110",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='scroll']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--_ds-codeblock-scroll-shadow",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:115",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)",
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='scroll']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:115",
+            "landsOn": "background-image",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='scroll']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-code-block-copy-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:128",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-button-ghost-bg-hover, var(--ds-surface-inset))",
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-button-ghost-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:128",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-surface-inset)",
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:128",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-code-block-copy-ink-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:129",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-primary)",
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:129",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:136",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:active:not(:disabled)",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-success",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:149",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true'], .ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:149",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true'], .ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-success",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:153",
+            "landsOn": "border-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "copy-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true'], .ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true']:not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:162",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] ::selection",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:171",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible, .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-code-block-line-highlight-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:202",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "scroll",
+            "partAttribution": "selector-data-part",
+            "selector": ".ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible, .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          }
+        ],
+        "cssCustomPropertyReadCount": 64,
+        "undeclaredReadsInThisFamily": [
+          "--_ds-codeblock-scroll-shadow",
+          "--ds-code-block-copy-bg-hover",
+          "--ds-code-block-copy-ink-hover",
+          "--ds-code-block-gutter-ink",
+          "--ds-code-block-header-bg",
+          "--ds-code-block-motion-duration",
+          "--ds-code-token-keyword"
+        ],
+        "templatedReads": [],
+        "channelRedeclarations": [],
+        "cssCustomPropertyReadsRemovedAsCommentText": 1,
+        "blockedControlEdgeSitesInThisFamily": 1
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1381,57 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-code-block-bg",
+              "--_ds-code-block-code-color",
+              "--_ds-code-block-copy-bg-hover",
+              "--_ds-code-block-copy-button-color",
+              "--_ds-code-block-copy-button-color-hover",
+              "--_ds-code-block-copy-ink-hover",
+              "--_ds-code-block-copy-status-color",
+              "--_ds-code-block-header-bg",
+              "--_ds-code-block-line-highlight-bg",
+              "--_ds-code-block-line-number-color",
+              "--_ds-code-block-title-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-success",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-surface-inset"
+          ],
+          "Canales de otra familia leidos por composicion (sus sockets viven en su propia familia)": [
+            "--ds-button-ghost-bg-hover"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1439,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el par tipografico del codigo lo fija el registro mono gobernado (typography.families), no una tabla de pairing por familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1457,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [
+              "--_ds-code-block-code-font-family"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1486,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-code-block-font-size",
+              "--_ds-code-block-line-height"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-xs",
+            "--ds-line-height-snug"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1522,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de contenedores",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-radius",
+              "--_ds-table-radius",
+              "--_ds-image-radius"
+            ],
+            "sockets": [
+              "--_ds-code-block-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1556,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "display no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1574,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-code-block-header-padding",
+              "--_ds-code-block-line-min-height",
+              "--_ds-code-block-padding",
+              "--_ds-code-block-scroll-max-block-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1610,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "el bloque de codigo no apila: su ritmo interno es line-height (typography.scale) y padding (density.mode)"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1636,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy (sin skin modern declarado)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-code-block-copy-transition-duration",
+              "--_ds-code-block-motion-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1667,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "superficie de lectura plana: la jerarquia la da el borde y el fondo inset, no la sombra"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1685,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "mate por legibilidad del codigo: glass o glow sobre tokens de sintaxis es dano visual"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1705,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "display no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1725,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1743,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "sin canales z propios; el orden de capas lo gobierna layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1761,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-code-block-border-width",
+              "--_ds-code-block-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1790,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1808,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1826,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1865,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": null,
+            "prop": "stroke-width / fill",
+            "tier": "standard",
+            "examples": [
+              "Icon"
+            ],
+            "noSocketReason": "data-icon-posture heredado + --_ds-icon-stroke-width",
+            "socketsResolved": true,
+            "carrier": "attribute+shared-socket",
+            "sockets": [
+              "--_ds-code-block-copy-tick-size"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1894,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

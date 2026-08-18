@@ -298,7 +298,7 @@
 }
 
 /* hidden accessibility input (visually clipped): the canonical sr-only idiom,
-   owned here with every other visual decision (was an inline style object).
+   owned here with every other visual decision (was a `style` object).
    Logical geometry, matching the radio/switch/toggle skins (RTL law). */
 .ds-checkbox.ds-checkbox--modern input {
   position: absolute;

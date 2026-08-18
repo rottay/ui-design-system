@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "18a2c95c1e5e975e66db022bf0e7695961a163ba0ce37315cb4c338ab9d3f8ce"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2545 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/visualization/charts/families/pie-chart",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-pie.css"
+    ],
+    "stableParts": [
+      "legend",
+      "legend-item",
+      "legend-swatch",
+      "legend-label",
+      "data-fallback"
+    ],
+    "states": [
+      "state"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "chart",
+        "scoutArtifact": "mr-anatomy-chart.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 5,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "legend",
+          "anchorKind": "data-part",
+          "anchor": "div",
+          "svgElement": "dom/div",
+          "at": [
+            "families/pie-chart/index.tsx:158"
+          ]
+        },
+        {
+          "part": "legend-item",
+          "anchorKind": "data-part",
+          "anchor": "div",
+          "svgElement": "dom/div",
+          "at": [
+            "families/pie-chart/index.tsx:160"
+          ]
+        },
+        {
+          "part": "legend-swatch",
+          "anchorKind": "data-part",
+          "anchor": "span",
+          "svgElement": "dom/span",
+          "at": [
+            "families/pie-chart/index.tsx:161"
+          ]
+        },
+        {
+          "part": "legend-label",
+          "anchorKind": "data-part",
+          "anchor": "span",
+          "svgElement": "dom/span",
+          "at": [
+            "families/pie-chart/index.tsx:162"
+          ]
+        },
+        {
+          "part": "data-fallback",
+          "anchorKind": "data-part",
+          "anchor": "ChartScaffold",
+          "svgElement": "dom/ChartScaffold",
+          "at": [
+            "families/pie-chart/index.tsx:206"
+          ]
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "pie-plot",
+          "scoutAnchorClaim": "g",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/g",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:174"
+          ]
+        },
+        {
+          "part": "pie-slice-mark",
+          "scoutAnchorClaim": "g",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/g",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:201"
+          ]
+        },
+        {
+          "part": "interaction-target",
+          "scoutAnchorClaim": "path",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/path",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:227"
+          ]
+        },
+        {
+          "part": "interaction-halo",
+          "scoutAnchorClaim": "path",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/path",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:234"
+          ]
+        },
+        {
+          "part": "pie-slice",
+          "scoutAnchorClaim": "path",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/path",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:241"
+          ]
+        },
+        {
+          "part": "value-label",
+          "scoutAnchorClaim": "text",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/text",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:247"
+          ]
+        },
+        {
+          "part": "forced-color-value-label",
+          "scoutAnchorClaim": "text",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/text",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:258"
+          ]
+        },
+        {
+          "part": "pie-center-label",
+          "scoutAnchorClaim": "text",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "svgElement": "svg/text",
+          "at": [
+            "runtime/chart-engine/presentation/react/renderers/pie/index.tsx:274"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/charts/presentation/scaffold/index.tsx:287"
+          ],
+          "state": "state"
+        },
+        {
+          "token": "empty",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/charts/presentation/scaffold/index.tsx:341"
+          ],
+          "state": "state"
+        },
+        {
+          "token": "error",
+          "note": "resolveChartScaffoldState at :118-128 is the producer; error and empty share the branch site",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/charts/presentation/scaffold/index.tsx:341"
+          ],
+          "state": "state"
+        },
+        {
+          "token": "ready",
+          "at": [
+            "packages/core/src/ui/patterns/visualization/charts/presentation/scaffold/index.tsx:400"
+          ],
+          "state": "state"
+        }
+      ],
+      "engineDivergence": {
+        "engineSwitch": "NONE - the chart cohort has no engines/{classic,modern,rustic} sibling",
+        "renderPath": "shared React SVG renderer under runtime/chart-engine/presentation/react/renderers/"
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableReadCensus": {
+          "distinctNamesInRenderPath": 179,
+          "byDeclarationClass": {
+            "authoredCss": 148,
+            "tsx": 2,
+            "undeclared": 29
+          },
+          "undeclaredNames": [
+            "--_ds-chart-legend-text-transform",
+            "--_ds-chart-legend-tracking",
+            "--_ds-pie-marker-radius",
+            "--ds-chart-",
+            "--ds-chart-category-",
+            "--ds-chart-category-1",
+            "--ds-chart-category-10",
+            "--ds-chart-category-2",
+            "--ds-chart-category-3",
+            "--ds-chart-category-4",
+            "--ds-chart-category-5",
+            "--ds-chart-category-6",
+            "--ds-chart-category-7",
+            "--ds-chart-category-8",
+            "--ds-chart-category-9",
+            "--ds-chart-insight-color",
+            "--ds-chart-label-color",
+            "--ds-chart-series-",
+            "--ds-chart-series-1",
+            "--ds-chart-series-10",
+            "--ds-chart-series-2",
+            "--ds-chart-series-3",
+            "--ds-chart-series-4",
+            "--ds-chart-series-5",
+            "--ds-chart-series-6",
+            "--ds-chart-series-7",
+            "--ds-chart-series-8",
+            "--ds-chart-series-9",
+            "--ds-color-focus"
+          ],
+          "generatedArtifactOnlyReads": [],
+          "inertFallbackChainCount": 83,
+          "liveFallbackChainCount": 50,
+          "inertFallbackChains": [
+            {
+              "variable": "--ds-chart-accent",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:619",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:243",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='glass']\n  [dat"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-1",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:638",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:642",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-10",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:647",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:651",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-2",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:639",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:643",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-3",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:640",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:644",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-4",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:641",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:645",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-5",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:642",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:646",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-6",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:643",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:647",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-7",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:644",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:648",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-8",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:645",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:649",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-accessible-9",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:646",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:650",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-axis-color",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:627",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:735",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='baseline']"
+                },
+                {
+                  "at": "chart-foundation.css:1429",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > ["
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-chart-default-1",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:648",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:628",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-10",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:657",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:637",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-2",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:649",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:629",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-3",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:650",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:630",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-4",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:651",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:631",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-5",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:652",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:632",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-6",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:653",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:633",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-7",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:654",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:634",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-8",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:655",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:635",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-default-9",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:656",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:636",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-grid-color",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:626",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:729",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='grid-line']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-1",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:658",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:656",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-10",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:667",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:665",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-2",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:659",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:657",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-3",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:660",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:658",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-4",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:661",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:659",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-5",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:662",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:660",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-6",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:663",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:661",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-7",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:664",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:662",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-8",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:665",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:663",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-monochrome-9",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:666",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:664",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-1",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:668",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:670",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-10",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:677",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:679",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-2",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:669",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:671",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-3",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:670",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:672",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-4",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:671",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:673",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-5",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:672",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:674",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-6",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:673",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:675",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-7",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:674",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:676",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-8",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:675",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:677",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-pastel-9",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:676",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:678",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-plot-bg",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:618",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:818",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-s"
+                },
+                {
+                  "at": "chart-foundation.css:725",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='plot-surface'"
+                },
+                {
+                  "at": "chart-foundation.css:1189",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-ancho"
+                },
+                {
+                  "at": "chart-foundation.css:1196",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-label"
+                }
+              ],
+              "readSiteCount": 4
+            },
+            {
+              "variable": "--ds-chart-tooltip-bg",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:628",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:975",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  > [data-part='interacti"
+                },
+                {
+                  "at": "chart-foundation.css:1022",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-tooltip-style="
+                },
+                {
+                  "at": "chart-foundation.css:1033",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-tooltip-style="
+                }
+              ],
+              "readSiteCount": 3
+            },
+            {
+              "variable": "--ds-chart-tooltip-border",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:633",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:218",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='detailed']\n  ["
+                },
+                {
+                  "at": "chart-foundation.css:233",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='glass'] [data-"
+                },
+                {
+                  "at": "chart-foundation.css:973",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  > [data-part='interacti"
+                },
+                {
+                  "at": "chart-foundation.css:1011",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-tooltip-style="
+                }
+              ],
+              "readSiteCount": 6
+            },
+            {
+              "variable": "--ds-chart-vibrant-1",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:678",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:684",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-10",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:687",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:693",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-2",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:679",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:685",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-3",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:680",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:686",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-4",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:681",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:687",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-5",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:682",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:688",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-6",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:683",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:689",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-7",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:684",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:690",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-8",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:685",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:691",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-vibrant-9",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:686",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:692",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-color-border-subtle",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:232",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:330",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='insight']"
+                },
+                {
+                  "at": "chart-foundation.css:342",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='state']"
+                },
+                {
+                  "at": "chart-foundation.css:368",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='metadata']"
+                },
+                {
+                  "at": "chart-foundation.css:1390",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state']"
+                }
+              ],
+              "readSiteCount": 4
+            },
+            {
+              "variable": "--ds-color-error",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:177",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:1397",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state'][dat"
+                },
+                {
+                  "at": "chart-foundation.css:1412",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-state='error'] > [da"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-font-family-heading",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:507",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:24",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                },
+                {
+                  "at": "chart-foundation.css:286",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='title']"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-font-family-mono",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:508",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:1076",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-con"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-font-size-lg",
+              "outerRungRootDeclaration": "tooling/testing/fixtures/tenants/default.css:32",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:25",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-font-size-sm",
+              "outerRungRootDeclaration": "tooling/testing/fixtures/tenants/default.css:30",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:33",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                },
+                {
+                  "at": "chart-foundation.css:1407",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state'] > ["
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-font-weight-heading",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/base/typography.css:97",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:26",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                },
+                {
+                  "at": "chart-foundation.css:287",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='title']"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-font-weight-medium",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:623",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:906",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                },
+                {
+                  "at": "chart-foundation.css:754",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-label']"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-font-weight-semibold",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:624",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:898",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-glass-backdrop-filter",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/premium.css:52",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:130",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='glass']"
+                },
+                {
+                  "at": "chart-foundation.css:131",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='glass']"
+                },
+                {
+                  "at": "chart-foundation.css:1023",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-tooltip-style="
+                },
+                {
+                  "at": "chart-foundation.css:1024",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-tooltip-style="
+                }
+              ],
+              "readSiteCount": 4
+            },
+            {
+              "variable": "--ds-line-height-body",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/base/typography.css:106",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:34",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                },
+                {
+                  "at": "chart-foundation.css:1408",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state'] > ["
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-line-height-heading",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/base/typography.css:107",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:28",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-motion-attention",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/transitions.css:120",
+              "readSites": [
+                {
+                  "at": "visualization.css:65",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-motion-ease-enter",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/transitions.css:125",
+              "readSites": [
+                {
+                  "at": "chart-pie.css:45",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-pie [data-part='chart-svg']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-motion-ease-in-out",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/transitions.css:124",
+              "readSites": [
+                {
+                  "at": "visualization.css:67",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-motion-ease-move",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/transitions.css:127",
+              "readSites": [
+                {
+                  "at": "chart-pie.css:80",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-pie [data-part='skeleton']::before"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-motion-glacial",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/transitions.css:97",
+              "readSites": [
+                {
+                  "at": "chart-pie.css:79",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-pie [data-part='skeleton']::before"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-motion-reveal",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/animations/transitions.css:108",
+              "readSites": [
+                {
+                  "at": "chart-pie.css:44",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-pie [data-part='chart-svg']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-radius-md",
+              "outerRungRootDeclaration": "tooling/testing/fixtures/tenants/default.css:43",
+              "readSites": [
+                {
+                  "at": "visualization.css:56",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-skeleton-animation-duration",
+              "outerRungRootDeclaration": "foundation/tokens/css/runtime/personality.css:94",
+              "readSites": [
+                {
+                  "at": "visualization.css:63",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-skeleton-bg",
+              "outerRungRootDeclaration": "foundation/tokens/css/presentation/components/patterns.css:694",
+              "readSites": [
+                {
+                  "at": "visualization.css:58",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-skeleton-radius",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:1762",
+              "readSites": [
+                {
+                  "at": "visualization.css:54",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-spacing-1",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:684",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:19",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading']"
+                },
+                {
+                  "at": "chart-foundation.css:148",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip-series.ds-chart-tooltip-series[data-part='tooltip-series']"
+                },
+                {
+                  "at": "chart-foundation.css:201",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='minimal'] [dat"
+                },
+                {
+                  "at": "chart-foundation.css:216",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='detailed']\n  ["
+                }
+              ],
+              "readSiteCount": 7
+            },
+            {
+              "variable": "--ds-spacing-2",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:685",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:227",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='glass'] [data-"
+                },
+                {
+                  "at": "chart-foundation.css:1387",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state']"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-spacing-3",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:686",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:169",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-tooltip-value.ds-chart-tooltip-value[data-part='tooltip-value'] > [data-part='va"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-spacing-6",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:689",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:1389",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-surface-panel",
+              "outerRungRootDeclaration": "foundation/tokens/css/foundation/themes/default.css:264",
+              "readSites": [
+                {
+                  "at": "visualization.css:60",
+                  "scope": "shared-css",
+                  "selector": ".ds-surface.ds-visualization [data-part='visualization-skeleton-block']"
+                }
+              ],
+              "readSiteCount": 1
+            }
+          ],
+          "liveFallbackChains": [
+            {
+              "variable": "--_ds-chart-legend-text-transform",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:61",
+                  "scope": "shared-css",
+                  "selector": ":where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--_ds-chart-legend-tracking",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:60",
+                  "scope": "shared-css",
+                  "selector": ":where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--_ds-chart-reveal-rise",
+              "readSites": [
+                {
+                  "at": "chart-bar.css:32",
+                  "scope": "shared-css",
+                  "selector": "from"
+                },
+                {
+                  "at": "chart-c.css:67",
+                  "scope": "shared-css",
+                  "selector": "from"
+                },
+                {
+                  "at": "chart-line.css:77",
+                  "scope": "shared-css",
+                  "selector": "from"
+                }
+              ],
+              "readSiteCount": 3
+            },
+            {
+              "variable": "--_ds-pie-marker-radius",
+              "readSites": [
+                {
+                  "at": "chart-pie.css:14",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-pie [data-part='legend-swatch']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-",
+              "readSites": [
+                {
+                  "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:50",
+                  "scope": "tsx"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-category-",
+              "readSites": [
+                {
+                  "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:50",
+                  "scope": "tsx"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-category-1",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:628",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:642",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:656",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:670",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-10",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:637",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:651",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:665",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:679",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-2",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:629",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:643",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:657",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:671",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-3",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:630",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:644",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:658",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:672",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-4",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:631",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:645",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:659",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:673",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-5",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:632",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:646",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:660",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:674",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-6",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:633",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:647",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:661",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:675",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-7",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:634",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:648",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:662",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:676",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-8",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:635",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:649",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:663",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:677",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-category-9",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:636",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:650",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:664",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:678",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-insight-color",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:1174",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-rule'"
+                },
+                {
+                  "at": "chart-foundation.css:1181",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'"
+                },
+                {
+                  "at": "chart-foundation.css:1182",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'"
+                },
+                {
+                  "at": "chart-foundation.css:1188",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-ancho"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-label-color",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:741",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-tick-lab"
+                },
+                {
+                  "at": "chart-foundation.css:751",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-label']"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-chart-legend-font-size",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:56",
+                  "scope": "shared-css",
+                  "selector": ":where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-legend-gap",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:48",
+                  "scope": "shared-css",
+                  "selector": ":where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-legend-item-gap",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:55",
+                  "scope": "shared-css",
+                  "selector": ":where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-legend-margin-top",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:49",
+                  "scope": "shared-css",
+                  "selector": ":where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend']"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-mark-color",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:817",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-s"
+                },
+                {
+                  "at": "chart-pie.css:76",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-pie [data-part='skeleton']::before"
+                }
+              ],
+              "readSiteCount": 2
+            },
+            {
+              "variable": "--ds-chart-paint-1",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:827",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-10",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:890",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-2",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:834",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-3",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:841",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-4",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:848",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-5",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:855",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-6",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:862",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-7",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:869",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-8",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:876",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-paint-9",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:883",
+                  "scope": "own-css",
+                  "selector": ".ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']\n  [data-part='pie"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-series-",
+              "readSites": [
+                {
+                  "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:50",
+                  "scope": "tsx"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-series-1",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:628",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:642",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:656",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:670",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-10",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:637",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:651",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:665",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:679",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-2",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:629",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:643",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:657",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:671",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-3",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:630",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:644",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:658",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:672",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-4",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:631",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:645",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:659",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:673",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-5",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:632",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:646",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:660",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:674",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-6",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:633",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:647",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:661",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:675",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-7",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:634",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:648",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:662",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:676",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-8",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:635",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:649",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:663",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:677",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-series-9",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:636",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default']"
+                },
+                {
+                  "at": "chart-foundation.css:650",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessibl"
+                },
+                {
+                  "at": "chart-foundation.css:664",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrom"
+                },
+                {
+                  "at": "chart-foundation.css:678",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],"
+                }
+              ],
+              "readSiteCount": 5
+            },
+            {
+              "variable": "--ds-chart-tooltip-shift-x",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:982",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  > [data-part='interacti"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-tooltip-shift-y",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:983",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  > [data-part='interacti"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-tooltip-x",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:969",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  > [data-part='interacti"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-chart-tooltip-y",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:968",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  > [data-part='interacti"
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-color-focus",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:960",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']\n  [data-chart-datum-key]["
+                }
+              ],
+              "readSiteCount": 1
+            },
+            {
+              "variable": "--ds-letter-spacing-heading",
+              "readSites": [
+                {
+                  "at": "chart-foundation.css:27",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] >"
+                },
+                {
+                  "at": "chart-foundation.css:288",
+                  "scope": "shared-css",
+                  "selector": ".ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='title']"
+                }
+              ],
+              "readSiteCount": 2
+            }
+          ],
+          "tsxDeclarationsInOwnClosure": [
+            {
+              "name": "--ds-chart-tooltip-x",
+              "at": "runtime/chart-engine/presentation/react/renderers/index.tsx:20"
+            },
+            {
+              "name": "--ds-chart-tooltip-y",
+              "at": "runtime/chart-engine/presentation/react/renderers/index.tsx:21"
+            },
+            {
+              "name": "--ds-chart-tooltip-x",
+              "at": "runtime/chart-engine/presentation/react/renderers/index.tsx:93"
+            },
+            {
+              "name": "--ds-chart-tooltip-y",
+              "at": "runtime/chart-engine/presentation/react/renderers/index.tsx:94"
+            }
+          ],
+          "hexLiteralsInOwnClosure": [
+            {
+              "value": "#2F6B9A",
+              "at": "foundation/palettes/index.ts:10"
+            },
+            {
+              "value": "#A23B72",
+              "at": "foundation/palettes/index.ts:11"
+            },
+            {
+              "value": "#1F7A55",
+              "at": "foundation/palettes/index.ts:12"
+            },
+            {
+              "value": "#9A5700",
+              "at": "foundation/palettes/index.ts:13"
+            },
+            {
+              "value": "#355CB5",
+              "at": "foundation/palettes/index.ts:14"
+            },
+            {
+              "value": "#7A4595",
+              "at": "foundation/palettes/index.ts:15"
+            },
+            {
+              "value": "#5F6368",
+              "at": "foundation/palettes/index.ts:16"
+            },
+            {
+              "value": "#006D77",
+              "at": "foundation/palettes/index.ts:17"
+            },
+            {
+              "value": "#9B4A5A",
+              "at": "foundation/palettes/index.ts:18"
+            },
+            {
+              "value": "#4D6A00",
+              "at": "foundation/palettes/index.ts:19"
+            },
+            {
+              "value": "#2f6b9a",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:7"
+            },
+            {
+              "value": "#a23b72",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:7"
+            },
+            {
+              "value": "#1f7a55",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:7"
+            },
+            {
+              "value": "#9a5700",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:7"
+            },
+            {
+              "value": "#355cb5",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:7"
+            },
+            {
+              "value": "#7a4595",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:8"
+            },
+            {
+              "value": "#5f6368",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:8"
+            },
+            {
+              "value": "#006d77",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:8"
+            },
+            {
+              "value": "#9b4a5a",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:8"
+            },
+            {
+              "value": "#4d6a00",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:8"
+            },
+            {
+              "value": "#0f766e",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:11"
+            },
+            {
+              "value": "#8c6d46",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:11"
+            },
+            {
+              "value": "#b24d3a",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:11"
+            },
+            {
+              "value": "#296f68",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:11"
+            },
+            {
+              "value": "#735838",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:11"
+            },
+            {
+              "value": "#963f31",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:12"
+            },
+            {
+              "value": "#3d756f",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:12"
+            },
+            {
+              "value": "#7d6140",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:12"
+            },
+            {
+              "value": "#a04435",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:12"
+            },
+            {
+              "value": "#5e5a52",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:12"
+            },
+            {
+              "value": "#2c5587",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:15"
+            },
+            {
+              "value": "#3a6fb0",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:15"
+            },
+            {
+              "value": "#21528b",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:15"
+            },
+            {
+              "value": "#4b78ad",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:15"
+            },
+            {
+              "value": "#315f97",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:15"
+            },
+            {
+              "value": "#103968",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:16"
+            },
+            {
+              "value": "#526f91",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:16"
+            },
+            {
+              "value": "#37699f",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:16"
+            },
+            {
+              "value": "#274b77",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:16"
+            },
+            {
+              "value": "#5a789a",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:16"
+            },
+            {
+              "value": "#527aa3",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:19"
+            },
+            {
+              "value": "#9b557a",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:19"
+            },
+            {
+              "value": "#3d8065",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:19"
+            },
+            {
+              "value": "#9a652b",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:19"
+            },
+            {
+              "value": "#5c6fb0",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:19"
+            },
+            {
+              "value": "#80628f",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:20"
+            },
+            {
+              "value": "#686868",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:20"
+            },
+            {
+              "value": "#3b777c",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:20"
+            },
+            {
+              "value": "#95606a",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:20"
+            },
+            {
+              "value": "#62752e",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:20"
+            },
+            {
+              "value": "#006b63",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:23"
+            },
+            {
+              "value": "#a12b68",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:23"
+            },
+            {
+              "value": "#007a4d",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:23"
+            },
+            {
+              "value": "#a65000",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:23"
+            },
+            {
+              "value": "#244fc0",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:23"
+            },
+            {
+              "value": "#702a91",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:24"
+            },
+            {
+              "value": "#4e545b",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:24"
+            },
+            {
+              "value": "#00727b",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:24"
+            },
+            {
+              "value": "#a3364f",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:24"
+            },
+            {
+              "value": "#486900",
+              "at": "runtime/chart-engine/foundation/grammar/palette/index.ts:24"
+            }
+          ],
+          "hookMediatedReads": {
+            "hook": "useChartPersonality",
+            "hookModule": "packages/core/src/ui/patterns/visualization/charts/runtime/theming/composition/react/personality/index.ts",
+            "consumesCategoricalColors": true,
+            "consumerSite": "families/pie-chart/index.tsx:108",
+            "noCategoricalEvidence": null,
+            "namesEnteringPaintPathWithoutAnyStylesheetVarRead": {
+              "whenSchemeIsDefaultOrAccessible": {
+                "value": "LEGACY_SERIES_PAINT",
+                "at": "packages/core/src/ui/patterns/visualization/charts/runtime/theming/composition/react/personality/index.ts:29",
+                "expandsTo": "resolveChartSeriesPaint('accessible') -> 10 four-rung var() chains",
+                "chainProducer": "packages/core/src/ui/patterns/visualization/charts/runtime/chart-engine/foundation/grammar/palette/index.ts:50",
+                "namesProduced": [
+                  "--ds-chart-category-1..10",
+                  "--ds-chart-series-1..10",
+                  "--ds-chart-accessible-1..10",
+                  "<audited light hex literal>"
+                ]
+              },
+              "whenSchemeIsPastelVibrantOrMonochrome": {
+                "value": "COLOR_SCHEME_MAP[scheme]",
+                "at": "packages/core/src/ui/patterns/visualization/charts/runtime/theming/composition/react/personality/index.ts:100",
+                "arrays": "packages/core/src/ui/patterns/visualization/charts/foundation/palettes/index.ts:30-69",
+                "namesProduced": [
+                  "--ds-color-<ramp>-<n> (bare, NO fallback, NO category/series rung)"
+                ]
+              },
+              "branchSite": "packages/core/src/ui/patterns/visualization/charts/runtime/theming/composition/react/personality/index.ts:98-101"
+            }
+          }
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2573,55 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-chart-series-<n>",
+            "prop": "fill/stroke de series categoricas",
+            "tier": "standard",
+            "examples": [
+              "--_ds-chart-series-1 -> var(--ds-chart-series-1, <literal>)"
+            ],
+            "sockets": [
+              "--_ds-chart-series-<n>"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "fill/stroke SVG via var(--ds-color-*)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; useChartTheme re-resuelve los hex contra el modo activo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO FAM-20 (determinado con evidencia, no por analogia)": [
+            "Chart pie-chart: 0 canales de namespace propio en CSS - pinta el SVG con var(--ds-color-*) en directo y consume el chrome compartido; el afinado por-familia vive en el plano de datos (useChartTheme/useChartPersonality/BrandTheme.charts), no en sockets CSS. Ningun valor propio distinto del de chart-foundation detectado: no hay socket faltante de fase 3 que anotar."
+          ],
+          "CONSUMO, no propio: chart-foundation.css (137 canales SIN DUENO DELIBERADO, compartido por las 18 familias chart - adjudicado, no se revierte; socketearlo por familia = 2466 duplicados)": [
+            "--ds-chart-mark-color",
+            "--ds-color-bg-secondary",
+            "--ds-color-primary",
+            "--ds-color-text-secondary",
+            "--ds-font-size-sm"
+          ],
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-motion-calm",
+            "--ds-motion-ease-enter",
+            "--ds-motion-ease-move",
+            "--ds-motion-glacial",
+            "--ds-motion-reveal"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2629,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-chart-label-family",
+            "prop": "font-family de ejes, leyendas y tooltips",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-chart-label-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2653,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-chart-label-family",
+            "prop": "font-family de ejes, leyendas y tooltips",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-chart-label-family"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2677,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-chart-label-size",
+            "prop": "tamano de labels/ejes/leyendas",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-chart-label-size"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2701,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.corner",
+            "why": "el radio de barras/puntos es gramatica del chart: redondear extremos de barras distorsiona el valor percibido en los bordes del dominio."
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2718,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "no hay controles de marca dentro del area de datos."
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2735,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la densidad del chart la gobierna useChartCompact en el plano de datos; un socket CSS competiria con el hook y darian ordenes contradictorias al mismo layout."
+          }
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2752,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "space.rhythm",
+            "why": "los margenes internos del chart son layout de datos (useChartDimensions); moverlos por tema desalinea ejes y labels."
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2769,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-chart-<fam>-enter-duration",
+            "prop": "animation-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-chart-line-enter-duration"
+            ],
+            "sockets": [
+              "--_ds-chart-<fam>-enter-duration"
+            ],
+            "socketsResolved": false
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2795,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "El area de trazado no se eleva; los tooltips de chart heredan el socket overlay, no un socket chart propio."
+          }
+        ]
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2812,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Glow o gradiente sobre marcas de dato destruye legibilidad: el dato nunca lleva acabado."
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2829,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "El chart nunca hereda el tono de la sidebar; sus fondos son surface + tokens de chart."
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2846,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2863,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El trazado SVG apila por orden de documento; solo el tooltip (socket overlay) entra en la escala z."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2880,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-chart-focus-ring-color",
+            "prop": "outline-color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-chart-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-chart-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2906,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2924,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2941,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2980,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "Las marcas del chart son dato, no iconos; los glifos de leyenda siguen tokens del chart, no la postura de iconos."
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2997,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

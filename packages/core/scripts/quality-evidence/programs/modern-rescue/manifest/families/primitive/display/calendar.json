@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "93bf6242fbfc0d2363c73f4c0df9a4eff6de97b5c4456b3a787428cb2284fdb4"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2709 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/Calendar/index.tsx",
+      "packages/core/src/ui/primitives/display/Calendar/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/Calendar/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+    ],
+    "stableParts": [
+      "root",
+      "header",
+      "nav-button",
+      "mode-toggle",
+      "double-nav-icon",
+      "weekday-row",
+      "weekday-header",
+      "grid",
+      "cell",
+      "cell-content",
+      "cell-spacer"
+    ],
+    "states": [
+      "hover",
+      "active-pressed",
+      "focus-visible",
+      "disabled",
+      "selected",
+      "today"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The grid keeps ARIA grid semantics: role='grid' on the grid part, role='gridcell' on cells, role='columnheader' on weekday headers, role='row' on the weekday row. [at packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:490, packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:515, packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:481, packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:479]",
+      "Exactly one cell is in the roving tab order; keyboard focus is moved by querying [data-part='cell'][tabindex='0']. [at packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:350]",
+      "Selected, today and disabled cells re-assert distinguishable paint under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:382, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:387, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:390]",
+      "Hover and press paint never apply to a disabled or selected cell. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:428, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:439]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-a",
+        "scoutArtifact": "mr-anatomy-display-a.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 11,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:432",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:197"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:439",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:248"
+          ]
+        },
+        {
+          "part": "nav-button",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-direction axis",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:441",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:442",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:467",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:468",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:251"
+          ]
+        },
+        {
+          "part": "mode-toggle",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-active axis + aria-pressed",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:447",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:457",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:258"
+          ]
+        },
+        {
+          "part": "double-nav-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute (aria-hidden glyph)",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:62",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:68"
+          ]
+        },
+        {
+          "part": "weekday-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='row'",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:479"
+          ]
+        },
+        {
+          "part": "weekday-header",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='columnheader'",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:481",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:322"
+          ]
+        },
+        {
+          "part": "grid",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='grid'",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:490",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:551",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:329"
+          ]
+        },
+        {
+          "part": "cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + role='gridcell'",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:515",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:565",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:197"
+          ]
+        },
+        {
+          "part": "cell-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:529",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:575",
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:362"
+          ]
+        },
+        {
+          "part": "cell-spacer",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute + data-outside-month + aria-hidden",
+          "at": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:497",
+            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:541"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "hovered",
+          "note": "CSS :hover, hover-capable-gated, and explicitly excluded on selected/disabled cells",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:303",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:428"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "pressed",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:323",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:324",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:439"
+          ],
+          "state": "active-pressed"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:312",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:313",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:314"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "disabled",
+          "note": "data-disabled on the cell; nav/mode controls use the native :disabled pseudo-class",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:197"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "selected",
+          "note": "data-selected='true' on the cell",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:362"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "today",
+          "note": "data-today='true', painted only when not also selected",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:408"
+          ],
+          "state": "today"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "prefers-reduced-motion: reduce",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:448"
+            ]
+          },
+          {
+            "token": "forced-colors: active",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:381"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "unclassifiedAnchors": {
+        "entries": [
+          {
+            "token": "mode-toggle active",
+            "note": "data-active='true'",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:258"
+            ]
+          }
+        ],
+        "status": "MEASURED, UNPLACED. Not confidently an interaction state, a variant axis, a host condition or a structural position under RULING R-5. Recorded rather than guessed; needs an owner reading."
+      },
+      "engineDivergence": {
+        "classic": {
+          "dataPartEmissions": 0,
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1848-1907"
+        },
+        "modern": {
+          "dataPartEmissions": 11
+        },
+        "rustic": {
+          "dataPartEmissions": 9,
+          "note": "no weekday-row and no double-nav-icon parts; root carries role='application' rather than the modern header/grid split",
+          "anchors": [
+            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:246"
+          ]
+        }
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "cssCustomPropertyReads": [
+          {
+            "variable": "--ds-calendar-padding",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:41",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "16px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-compact-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:47",
+            "landsOn": "width",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "320px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-margin",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:53",
+            "landsOn": "margin-bottom",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "16px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-font-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:78",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "12px",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-transition",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:95",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "background-color 0.2s",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-disabled-opacity",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:98",
+            "landsOn": "opacity",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.3",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-transition",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:110",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "background-color 0.2s",
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:99",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-border-subtle)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:99",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:100",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-radius-lg)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:100",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-padding",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:106",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "calc(1rem * var(--ds-density-effective-scale))",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:106",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-compact-width",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:112",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "20rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-compact-width-coarse",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:116",
+            "landsOn": "inline-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "22.75rem",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-margin-block-end",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:127",
+            "landsOn": "margin-block-end",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "calc(1rem * var(--ds-density-effective-scale))",
+            "part": "header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:127",
+            "landsOn": "margin-block-end",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:132",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:137",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-row",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='weekday-row']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:138",
+            "landsOn": "margin-block-end",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-row",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='weekday-row']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:143",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "grid",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:148",
+            "landsOn": "gap",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "grid",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-day-color-other",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:166",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-disabled)",
+            "part": "cell-spacer",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'][data-outside-month='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-disabled",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:166",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell-spacer",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'][data-outside-month='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:167",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell-spacer",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'][data-outside-month='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:172",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell-spacer",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] [data-part='cell-spacer'][data-outside-month='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:183",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:186",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-year-cell-padding",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:190",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "calc(1rem * var(--ds-density-effective-scale))",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:190",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:195",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-disabled-opacity",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:198",
+            "landsOn": "opacity",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "0.3",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled]",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:212",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell-content",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:215",
+            "landsOn": "margin-block-start",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell-content",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:216",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell-content",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:224",
+            "landsOn": "border-block-end",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-border-subtle)",
+            "part": "header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:224",
+            "landsOn": "border-block-end",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:237",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:241",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:242",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:255",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-mode='month']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:256",
+            "landsOn": "font-weight",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-mode='month']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:259",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-active-ink",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:266",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-white)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-white",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:266",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-nav-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:304",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-button-ghost-bg-hover, var(--ds-surface-inset))",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-button-ghost-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:304",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-surface-inset)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:304",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-focus-ring",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:315",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-focus-ring)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:focus-visible, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:focus-visible",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-focus-ring",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:315",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:focus-visible, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:focus-visible",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-nav-bg-active",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:325",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover))",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):active, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):active",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-interactive-bg-active",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:325",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-button-ghost-bg-hover)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):active, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-button-ghost-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:325",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):active, .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):active",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:333",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-weight-medium",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:334",
+            "landsOn": "font-weight",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:338",
+            "landsOn": "padding-block",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:339",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:351",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-radius-md)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-radius-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:351",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "landsOn": "transition",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:363",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-selected-ink",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:371",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-white)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-white",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:371",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:374",
+            "landsOn": "font-weight",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:409",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true'])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:413",
+            "landsOn": "font-weight",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true'])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-interactive-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:431",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:431",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-color-interactive-bg-active",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:442",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 14%, transparent)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:active:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:442",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:active:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:462",
+            "landsOn": "min-block-size",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "44px",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'], .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:37",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-elevated)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:37",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:38",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "8px",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-shadow",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:39",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-shadow-md)",
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-shadow-md",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:39",
+            "landsOn": "box-shadow",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "root",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-nav-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:46",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "4px",
+            "part": "nav-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-nav-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:47",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-secondary)",
+            "part": "nav-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:47",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "nav-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-hover-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-muted, var(--ds-color-neutral-100))",
+            "part": "nav-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:hover",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-bg-muted",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-neutral-100)",
+            "part": "nav-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:hover",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-neutral-100",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "nav-button",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:hover",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:53",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-border)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-border",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:53",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:54",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-elevated)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:54",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-nav-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:55",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "4px",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:58",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-primary-500)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:58",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-primary-text",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-inverse, var(--ds-color-bg-base))",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-inverse",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-base)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-bg-base",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:60",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-primary-500)",
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:60",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "mode-toggle",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-header-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:65",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-secondary)",
+            "part": "weekday-header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > div > [data-part='weekday-header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:65",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "weekday-header",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > div > [data-part='weekday-header']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-cell-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:71",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "8px",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:76",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-primary-500)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:76",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-primary-text",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:77",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-text-inverse, var(--ds-color-bg-base))",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-text-inverse",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:77",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-base)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": true,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-bg-base",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:77",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true']",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": true,
+            "nonCausalInnerRung": true,
+            "nonCausalReason": "the outer rung of this var() chain has an unconditional :root default; see failureClasses.BLOCKED_CONTROL_EDGE"
+          },
+          {
+            "variable": "--ds-calendar-primary",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:80",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-primary-500)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true'])",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:80",
+            "landsOn": "border",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true'])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-hover-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:83",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-bg-muted, var(--ds-color-neutral-100))",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-color-bg-muted",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:83",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": true,
+            "fallback": "var(--ds-color-neutral-100)",
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "FALLBACK_GOVERNED_PRIVATE_SOCKET",
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-color-neutral-100",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:83",
+            "landsOn": "background-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": "cell",
+            "partAttribution": "selector-data-part",
+            "selector": ".rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled])",
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": true
+          },
+          {
+            "variable": "--ds-calendar-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1848",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1849",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-bg",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1853",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-padding",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1854",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1859",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": true,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": false,
+            "undeclaredClass": null,
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-padding",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1863",
+            "landsOn": "padding",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-weekday-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1867",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-weekday-font-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1868",
+            "landsOn": "font-size",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-header-font-weight",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1869",
+            "landsOn": "font-weight",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-color",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1873",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-bg-hover",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1877",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-bg-today",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1881",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-color-today",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1882",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-color-today",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1886",
+            "landsOn": "border-color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-bg-selected",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1890",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-color-selected",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1891",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1892",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-color-disabled",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1896",
+            "landsOn": "color",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-bg-today",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1900",
+            "landsOn": "background",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1904",
+            "landsOn": "min-width",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1905",
+            "landsOn": "height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-size",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1906",
+            "landsOn": "line-height",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          },
+          {
+            "variable": "--ds-calendar-cell-radius",
+            "templatedNameFragment": false,
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1907",
+            "landsOn": "border-radius",
+            "landingKind": "css-property",
+            "hasFallback": false,
+            "fallback": null,
+            "part": null,
+            "partAttribution": "unattributed",
+            "selector": null,
+            "staticallyDeclaredInPackage": false,
+            "registeredInCompilerChannelMap": false,
+            "undeclaredInPackage": true,
+            "undeclaredClass": "BARE_UNRESOLVED_READ",
+            "readOnlyInsideAnotherFallback": false
+          }
+        ],
+        "cssCustomPropertyReadCount": 139,
+        "undeclaredReadsInThisFamily": [
+          "--ds-calendar-active-ink",
+          "--ds-calendar-cell-bg-hover",
+          "--ds-calendar-cell-bg-selected",
+          "--ds-calendar-cell-bg-today",
+          "--ds-calendar-cell-color",
+          "--ds-calendar-cell-color-disabled",
+          "--ds-calendar-cell-color-selected",
+          "--ds-calendar-cell-color-today",
+          "--ds-calendar-cell-disabled-opacity",
+          "--ds-calendar-cell-radius",
+          "--ds-calendar-cell-size",
+          "--ds-calendar-compact-width",
+          "--ds-calendar-compact-width-coarse",
+          "--ds-calendar-disabled-opacity",
+          "--ds-calendar-focus-ring",
+          "--ds-calendar-header-bg",
+          "--ds-calendar-header-border",
+          "--ds-calendar-header-font-size",
+          "--ds-calendar-header-font-weight",
+          "--ds-calendar-header-margin",
+          "--ds-calendar-header-margin-block-end",
+          "--ds-calendar-hover-bg",
+          "--ds-calendar-nav-bg-active",
+          "--ds-calendar-nav-bg-hover",
+          "--ds-calendar-nav-color",
+          "--ds-calendar-nav-radius",
+          "--ds-calendar-padding",
+          "--ds-calendar-primary",
+          "--ds-calendar-primary-text",
+          "--ds-calendar-radius",
+          "--ds-calendar-selected-ink",
+          "--ds-calendar-shadow",
+          "--ds-calendar-transition",
+          "--ds-calendar-weekday-color",
+          "--ds-calendar-weekday-font-size",
+          "--ds-calendar-year-cell-padding",
+          "--ds-color-bg-base",
+          "--ds-color-bg-muted"
+        ],
+        "templatedReads": [],
+        "channelRedeclarations": [],
+        "cssCustomPropertyReadsRemovedAsCommentText": 2,
+        "blockedControlEdgeSitesInThisFamily": 12
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2737,56 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-calendar-active-ink",
+              "--_ds-calendar-border",
+              "--_ds-calendar-day-color-other",
+              "--_ds-calendar-header-border",
+              "--_ds-calendar-nav-bg-active",
+              "--_ds-calendar-nav-bg-hover",
+              "--_ds-calendar-selected-ink"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border-subtle",
+            "--ds-color-interactive-bg-active",
+            "--ds-color-interactive-bg-hover",
+            "--ds-color-primary",
+            "--ds-color-text-disabled",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-white",
+            "--ds-surface-inset"
+          ],
+          "Canales de otra familia leidos por composicion (sus sockets viven en su propia familia)": [
+            "--ds-button-ghost-bg-hover"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2794,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "la anatomia de calendar no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2818,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la anatomia de calendar no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2836,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de calendar no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2860,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de contenedores",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-radius",
+              "--_ds-table-radius",
+              "--_ds-image-radius"
+            ],
+            "sockets": [
+              "--_ds-calendar-cell-radius",
+              "--_ds-calendar-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2896,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2914,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-calendar-compact-width",
+              "--_ds-calendar-compact-width-coarse",
+              "--_ds-calendar-padding",
+              "--_ds-calendar-year-cell-padding"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2950,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-calendar-header-margin-block-end"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2983,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +3007,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de calendar no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +3025,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de calendar no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Opacidades/filtros leidos y NO cubiertos (state-affordance o efecto gobernado por effect-intensity)": [
+            "--ds-calendar-cell-disabled-opacity"
+          ]
+        }
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +3050,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "display no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de display"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +3070,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +3088,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +3106,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-calendar-focus-ring"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +3139,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +3157,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +3175,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +3214,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia de calendar no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +3232,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

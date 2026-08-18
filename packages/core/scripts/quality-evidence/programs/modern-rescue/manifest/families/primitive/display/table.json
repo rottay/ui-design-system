@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "9d063a8fac5a674607e6dc110e578739769e88721e2b235d29981f444ab8171d"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,3794 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/Table/Table.stories.tsx",
+      "packages/core/src/ui/primitives/display/Table/index.tsx",
+      "packages/core/src/ui/primitives/display/Table/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/Table/runtime/table-features/index.ts",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.engine-branches.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.header-hairline.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.integration.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.modern-paint-ownership.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.real-engines.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.rendering-advanced.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.runtime-advanced.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/Table.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/tests/useTableFeatures.test.tsx",
+      "packages/core/src/ui/primitives/display/Table/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css"
+    ],
+    "stableParts": [
+      "selection-control",
+      "field",
+      "header-cell",
+      "header-content",
+      "header-title",
+      "sort-indicator",
+      "resize-handle",
+      "filter-row",
+      "filter-spacer",
+      "filter-cell",
+      "skeleton-row",
+      "skeleton-cell",
+      "skeleton-bar",
+      "empty-cell",
+      "row",
+      "expand-cell",
+      "expand-button",
+      "expand-indicator",
+      "selection-cell",
+      "selection-hit",
+      "cell",
+      "expanded-row",
+      "table",
+      "title",
+      "loading-overlay",
+      "spinner",
+      "scroll-container",
+      "footer",
+      "pagination",
+      "pagination-range",
+      "pagination-controls",
+      "pagination-button",
+      "summary-row"
+    ],
+    "states": [
+      "focus-visible",
+      "hover",
+      "active",
+      "disabled",
+      "selected",
+      "expanded",
+      "loading",
+      "hidden",
+      "indeterminate",
+      "resizing",
+      "current"
+    ],
+    "variantAxes": [
+      "data-hairline",
+      "data-bordered",
+      "data-sticky",
+      "data-fixed",
+      "data-sortable",
+      "data-align",
+      "data-kind",
+      "data-hoverable",
+      "data-editable",
+      "data-cell-kind",
+      "data-field-type",
+      "data-size"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The table exposes real grid semantics: <th> header cells (packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:328, :416-435) with aria-sort at :365 and aria-rowindex at :415 and :523.",
+      "Sorting is keyboard reachable: tabIndex on the sortable header at packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:354 with an explicit role at :366.",
+      "Row expansion state is exposed, not implied: aria-expanded at packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:529 and packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:631.",
+      "Selection uses a real checkbox input with an accessible name, including the tri-state header box: type=\"checkbox\" at packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:234 with aria-label at :243, and indeterminate handling at :729.",
+      "Decorative sort/expand glyphs stay out of the accessibility tree: aria-hidden at packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:374 and :472.",
+      "Reduced-motion and forced-colors floors exist in the modern skin: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:722 and :6, :372."
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-b",
+        "scoutArtifact": "mr-anatomy-display-b.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 33,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "selection-control",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:235",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:572",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:727",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:405",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:673",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:816"
+          ]
+        },
+        {
+          "part": "field",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:252",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:277",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:293",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:446",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:423",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:449"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "header-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:333",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:704",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:716",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:514",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:793",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:808"
+          ]
+        },
+        {
+          "part": "header-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:368"
+          ]
+        },
+        {
+          "part": "header-title",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:369"
+          ]
+        },
+        {
+          "part": "sort-indicator",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:372",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:527"
+          ]
+        },
+        {
+          "part": "resize-handle",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:389",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:541"
+          ]
+        },
+        {
+          "part": "filter-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:415",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:568"
+          ]
+        },
+        {
+          "part": "filter-spacer",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:416",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:417"
+          ]
+        },
+        {
+          "part": "filter-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:428",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:437"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:472"
+          ]
+        },
+        {
+          "part": "skeleton-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:474",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:479",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:486"
+          ]
+        },
+        {
+          "part": "skeleton-bar",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:475",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:480",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:488"
+          ]
+        },
+        {
+          "part": "empty-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:494",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:602"
+          ]
+        },
+        {
+          "part": "row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:524",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:628"
+          ]
+        },
+        {
+          "part": "expand-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:534"
+          ]
+        },
+        {
+          "part": "expand-button",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:547",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:651"
+          ]
+        },
+        {
+          "part": "expand-indicator",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:552"
+          ]
+        },
+        {
+          "part": "selection-cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:563"
+          ]
+        },
+        {
+          "part": "selection-hit",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:569",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:724"
+          ]
+        },
+        {
+          "part": "cell",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:622",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:569",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:570",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:574",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:577",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:638"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "expanded-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:653",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:745"
+          ]
+        },
+        {
+          "part": "table",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:673",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:765"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:793",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:874"
+          ]
+        },
+        {
+          "part": "loading-overlay",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:800",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:879"
+          ]
+        },
+        {
+          "part": "spinner",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:802",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:880"
+          ]
+        },
+        {
+          "part": "scroll-container",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:812"
+          ]
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:825",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:900"
+          ]
+        },
+        {
+          "part": "pagination",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:834"
+          ]
+        },
+        {
+          "part": "pagination-range",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:835",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:906"
+          ]
+        },
+        {
+          "part": "pagination-controls",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:836"
+          ]
+        },
+        {
+          "part": "pagination-button",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:839",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:853",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:863",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:914",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:927"
+          ]
+        },
+        {
+          "part": "summary-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:861"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "focus-visible",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:297"
+          ],
+          "atSiteCount": 10,
+          "state": "focus-visible"
+        },
+        {
+          "token": "hover",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:183"
+          ],
+          "atSiteCount": 10,
+          "state": "hover"
+        },
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:189",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:190",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:191",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:194"
+          ],
+          "atSiteCount": 10,
+          "state": "active"
+        },
+        {
+          "token": "disabled",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:317",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:318",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:659",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:660"
+          ],
+          "atSiteCount": 10,
+          "state": "disabled"
+        },
+        {
+          "token": "selected",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:367",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:368",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:369",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:373",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:374",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:375"
+          ],
+          "atSiteCount": 10,
+          "state": "selected"
+        },
+        {
+          "token": "expanded",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:511",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:512",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:513",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:519",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:520",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:521"
+          ],
+          "atSiteCount": 10,
+          "state": "expanded"
+        },
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:620",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:621",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:622",
+            "packages/core/src/ui/primitives/display/Table/contracts/index.ts:389",
+            "packages/core/src/ui/primitives/display/Table/engines/classic/index.tsx:43",
+            "packages/core/src/ui/primitives/display/Table/engines/classic/index.tsx:87"
+          ],
+          "atSiteCount": 10,
+          "state": "loading"
+        },
+        {
+          "token": "hidden",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:374",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:472",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:552",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:754",
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:769",
+            "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:837"
+          ],
+          "atSiteCount": 7,
+          "state": "hidden"
+        },
+        {
+          "token": "indeterminate",
+          "at": [
+            "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:732"
+          ],
+          "state": "indeterminate"
+        },
+        {
+          "token": "data-resizing",
+          "state": "resizing"
+        },
+        {
+          "token": "data-selected",
+          "state": "selected"
+        },
+        {
+          "token": "data-expanded",
+          "state": "expanded"
+        },
+        {
+          "token": "data-loading",
+          "state": "loading"
+        },
+        {
+          "token": "data-current",
+          "state": "current"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-hairline"
+        },
+        {
+          "token": "data-bordered"
+        },
+        {
+          "token": "data-sticky"
+        },
+        {
+          "token": "data-fixed"
+        },
+        {
+          "token": "data-sortable"
+        },
+        {
+          "token": "data-align"
+        },
+        {
+          "token": "data-kind"
+        },
+        {
+          "token": "data-hoverable"
+        },
+        {
+          "token": "data-editable"
+        },
+        {
+          "token": "data-cell-kind"
+        },
+        {
+          "token": "data-field-type"
+        },
+        {
+          "token": "data-size"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "rtl",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:519",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:520",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:521"
+            ]
+          },
+          {
+            "token": "prefers-reduced-motion",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:722",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:723",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:724",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:725",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:726",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:727"
+            ],
+            "atSiteCount": 10
+          },
+          {
+            "token": "forced-colors",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:749",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:750",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:751",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:752",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:753",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:758"
+            ],
+            "atSiteCount": 10
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "first-child",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:82",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:83",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:84",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:85"
+            ]
+          },
+          {
+            "token": "data-order"
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "instanceIdentifierAttributes": {
+        "entries": [
+          {
+            "token": "data-field"
+          }
+        ],
+        "reason": "Per-instance generated identifier. RULING R-8: not a part anchor and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineDivergence": "Engine siblings exist for classic, modern and rustic. The classic engine emits no data-part and reads no --ds-* channel, so none of the 32 modern parts are addressable under engine=classic. Modern and rustic implement the same semantic contract but rustic writes literal durations inline instead of reading a motion channel.",
+        "engineCensus": {
+          "classic": {
+            "productionLines": 119,
+            "dataPartSites": 0,
+            "variableReadSites": 0
+          },
+          "modern": {
+            "productionLines": 879,
+            "dataPartSites": 48,
+            "variableReadSites": 1
+          },
+          "rustic": {
+            "productionLines": 942,
+            "dataPartSites": 33,
+            "variableReadSites": 10
+          }
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "UNATTRIBUTED": {
+            "typography": 7,
+            "spacing": 2,
+            "unattributed": 1,
+            "motion": 1
+          },
+          "cell": {
+            "color": 8,
+            "border": 7,
+            "motion": 4,
+            "typography": 1
+          },
+          "expand-button": {
+            "motion": 4,
+            "color": 4,
+            "border": 4,
+            "size": 4,
+            "typography": 1,
+            "radius": 1
+          },
+          "expand-cell": {
+            "size": 2
+          },
+          "expand-indicator": {
+            "motion": 1
+          },
+          "expanded-row": {
+            "color": 5,
+            "motion": 1
+          },
+          "field": {
+            "border": 7,
+            "color": 7,
+            "radius": 3,
+            "elevation": 3,
+            "typography": 1,
+            "motion": 1
+          },
+          "filter-cell": {
+            "color": 4,
+            "elevation": 4,
+            "motion": 1
+          },
+          "filter-row": {
+            "color": 4,
+            "motion": 1
+          },
+          "filter-spacer": {
+            "size": 2,
+            "border": 2
+          },
+          "footer": {
+            "spacing": 1,
+            "typography": 1,
+            "color": 1
+          },
+          "header-cell": {
+            "color": 19,
+            "border": 11,
+            "elevation": 11,
+            "typography": 6,
+            "size": 2,
+            "motion": 2
+          },
+          "loading-overlay": {
+            "color": 4
+          },
+          "pagination": {
+            "spacing": 1
+          },
+          "pagination-button": {
+            "color": 7,
+            "typography": 4,
+            "motion": 4,
+            "radius": 2,
+            "border": 2,
+            "elevation": 2
+          },
+          "pagination-range": {
+            "color": 3,
+            "typography": 2
+          },
+          "resize-handle": {
+            "color": 3
+          },
+          "row": {
+            "color": 7,
+            "motion": 1,
+            "elevation": 1
+          },
+          "scroll-container": {
+            "color": 8
+          },
+          "selection-cell": {
+            "size": 2
+          },
+          "selection-control": {
+            "border": 3,
+            "size": 2,
+            "color": 1
+          },
+          "skeleton-bar": {
+            "color": 3,
+            "radius": 1,
+            "motion": 1
+          },
+          "sort-indicator": {
+            "motion": 2,
+            "typography": 1,
+            "color": 1
+          },
+          "spinner": {
+            "motion": 1,
+            "border": 1,
+            "color": 1
+          },
+          "summary-row": {
+            "color": 2
+          },
+          "table": {
+            "border": 7,
+            "typography": 3
+          },
+          "title": {
+            "typography": 2,
+            "spacing": 1,
+            "color": 1
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-table-cell-ellipsis-max-width",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/modern/index.tsx:634",
+            "fallback": "320px",
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "ellipsisTitle"
+          },
+          {
+            "variable": "--ds-table-cell-font-size",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:60",
+            "fallback": "14px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:63",
+            "fallback": "12px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-font-size-lg",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:66",
+            "fallback": "16px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-table-cell-padding",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:69",
+            "fallback": "12px 16px",
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-table-header-font-weight",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:71",
+            "fallback": "500",
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontWeight"
+          },
+          {
+            "variable": "--ds-table-cell-padding",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:88",
+            "fallback": "12px 16px",
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "padding"
+          },
+          {
+            "variable": "--ds-table-cell-font-size",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:123",
+            "fallback": "14px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:164",
+            "fallback": "12px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-personality-animation-entrance-duration",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:178",
+            "fallback": "0.2s",
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "animation"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:199",
+            "fallback": "14px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-table-title-margin-block-end",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:63",
+            "fallback": "8px",
+            "landsOnProperty": "margin-block-end",
+            "propertyGroup": "spacing",
+            "part": "title",
+            "selector": ".ds-table.ds-table--modern [data-part='title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-title-font-weight",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:64",
+            "fallback": "var(--ds-font-weight-semibold)",
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-table.ds-table--modern [data-part='title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:64",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-table.ds-table--modern [data-part='title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:72",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-size='sm']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:75",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-size='md']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-base",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:78",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-size='lg']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:118",
+            "fallback": "var(--ds-edge-standard-width, 1px)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:118",
+            "fallback": "1px",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-edge-standard-style",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:118",
+            "fallback": "solid",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:118",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:118",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--modern [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:128",
+            "fallback": "var(--ds-color-text-secondary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:128",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-font-weight",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:129",
+            "fallback": "var(--ds-font-weight-semibold)",
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:129",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:130",
+            "fallback": "var(--ds-font-size-xs)",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:130",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-letter-spacing",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:131",
+            "fallback": null,
+            "landsOnProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-text-transform",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:132",
+            "fallback": null,
+            "landsOnProperty": "text-transform",
+            "propertyGroup": "typography",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:139",
+            "fallback": "var(--ds-surface-inset)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:139",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-rule-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:144",
+            "fallback": "var(--ds-edge-emphasis-width, 1px)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-edge-emphasis-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:144",
+            "fallback": "1px",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-edge-standard-style",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:144",
+            "fallback": "solid",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:144",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:144",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-shadow",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:153",
+            "fallback": "inset 0 -1px 0 var(--ds-table-border, var(--ds-color-border))",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:153",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:153",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-table-utility-column-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:159",
+            "fallback": "48px",
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='selection']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:159",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='selection']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:170",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:171",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:174",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:174",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:174",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:175",
+            "fallback": null,
+            "landsOnProperty": "outline-offset",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:181",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:181",
+            "fallback": "var(--ds-surface-inset)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:181",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:183",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:192",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:192",
+            "fallback": "var(--ds-surface-inset)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:192",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:216",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "sort-indicator",
+            "selector": ".ds-table.ds-table--modern [data-part='sort-indicator']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:220",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "sort-indicator",
+            "selector": ".ds-table.ds-table--modern [data-part='sort-indicator']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:221",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "sort-indicator",
+            "selector": ".ds-table.ds-table--modern [data-part='sort-indicator']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:227",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "sort-indicator",
+            "selector": ".ds-table.ds-table--modern [data-part='sort-indicator'][data-order='descend']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:244",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "resize-handle",
+            "selector": ".ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:248",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "resize-handle",
+            "selector": ".ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:254",
+            "fallback": "var(--ds-surface-inset)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "filter-row",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:254",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "filter-row",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:255",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "filter-row",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-table-utility-column-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:258",
+            "fallback": "48px",
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "filter-spacer",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-spacer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:258",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "filter-spacer",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-spacer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:268",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "filter-spacer",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-spacer'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:268",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "filter-spacer",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-spacer'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:280",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:281",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:282",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:283",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:284",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:291",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field='filter']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:297",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field]:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:297",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field]:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:297",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--modern [data-part='field'][data-field]:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:307",
+            "fallback": null,
+            "landsOnProperty": "accent-color",
+            "propertyGroup": "color",
+            "part": "selection-control",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-control']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:310",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "selection-control",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-control']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:310",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "selection-control",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-control']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:310",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "selection-control",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-control']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:341",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "pagination-range",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-range']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-footer-margin-block-start",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:344",
+            "fallback": "8px",
+            "landsOnProperty": "margin-block-start",
+            "propertyGroup": "spacing",
+            "part": "footer",
+            "selector": ".ds-table.ds-table--modern [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:345",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "footer",
+            "selector": ".ds-table.ds-table--modern [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:348",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "pagination-range",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-range']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-pagination-numeric",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:351",
+            "fallback": "tabular-nums",
+            "landsOnProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "pagination-range",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-range']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-cell-numeric",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:358",
+            "fallback": "tabular-nums",
+            "landsOnProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-field-type='date']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:365",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-hoverable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:368",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:374",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-selected='true'] > td",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-row-bg-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:378",
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 5%, transparent)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:378",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:389",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:389",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:394",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-editable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:394",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-editable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:395",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-editable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:395",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-editable='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:399",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:401",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:417",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:417",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:420",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:427",
+            "fallback": "var(--ds-surface-inset)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:427",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:451",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:451",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:456",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='right']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:456",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "filter-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='right']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:462",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:462",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:463",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:463",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:467",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='right']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:467",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='right']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:468",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='right']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:468",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='right']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:477",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover > [data-part='cell'][data-fixed]",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:477",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover > [data-part='cell'][data-fixed]",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:477",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover > [data-part='cell'][data-fixed]",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:482",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-selected='true'] > [data-part='cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:482",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-selected='true'] > [data-part='cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:482",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--modern [data-part='row'][data-selected='true'] > [data-part='cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-table-utility-column-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:487",
+            "fallback": "48px",
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "expand-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:487",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "expand-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-table-utility-column-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:491",
+            "fallback": "48px",
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "selection-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:491",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "selection-cell",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:496",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:499",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:499",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:500",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:500",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:502",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:504",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:508",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "expand-indicator",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-indicator']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:526",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:527",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:531",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-row-bg-striped",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:536",
+            "fallback": "var(--ds-surface-inset)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "expanded-row",
+            "selector": ".ds-table.ds-table--modern [data-part='expanded-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:536",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "expanded-row",
+            "selector": ".ds-table.ds-table--modern [data-part='expanded-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-slow",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:540",
+            "fallback": null,
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "expanded-row",
+            "selector": ".ds-table.ds-table--modern [data-part='expanded-row'] > td",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:553",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "skeleton-bar",
+            "selector": ".ds-table.ds-table--modern [data-part='skeleton-bar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:556",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-bar",
+            "selector": ".ds-table.ds-table--modern [data-part='skeleton-bar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:557",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-bar",
+            "selector": ".ds-table.ds-table--modern [data-part='skeleton-bar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:558",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-bar",
+            "selector": ".ds-table.ds-table--modern [data-part='skeleton-bar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-attention",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:561",
+            "fallback": null,
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton-bar",
+            "selector": ".ds-table.ds-table--modern [data-part='skeleton-bar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:585",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "loading-overlay",
+            "selector": ".ds-table.ds-table--modern [data-part='loading-overlay']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:585",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "loading-overlay",
+            "selector": ".ds-table.ds-table--modern [data-part='loading-overlay']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:591",
+            "fallback": null,
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "spinner",
+            "selector": ".ds-table.ds-table--modern [data-part='spinner'][data-part='spinner']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:592",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "spinner",
+            "selector": ".ds-table.ds-table--modern [data-part='spinner'][data-part='spinner']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:593",
+            "fallback": null,
+            "landsOnProperty": "border-top-color",
+            "propertyGroup": "color",
+            "part": "spinner",
+            "selector": ".ds-table.ds-table--modern [data-part='spinner'][data-part='spinner']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:609",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:609",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:611",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background-image",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:611",
+            "fallback": null,
+            "landsOnProperty": "background-image",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:612",
+            "fallback": "var(--ds-surface-card)",
+            "landsOnProperty": "background-image",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-card",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:612",
+            "fallback": null,
+            "landsOnProperty": "background-image",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:613",
+            "fallback": null,
+            "landsOnProperty": "background-image",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:614",
+            "fallback": null,
+            "landsOnProperty": "background-image",
+            "propertyGroup": "color",
+            "part": "scroll-container",
+            "selector": ".ds-table.ds-table--modern [data-part='scroll-container']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-pagination-margin-block-start",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:633",
+            "fallback": "16px",
+            "landsOnProperty": "margin-block-start",
+            "propertyGroup": "spacing",
+            "part": "pagination",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-pagination-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:641",
+            "fallback": "13px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-pagination-numeric",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:642",
+            "fallback": "tabular-nums",
+            "landsOnProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:645",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:645",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:646",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:646",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:648",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:650",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-pagination-current-font-weight",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:654",
+            "fallback": "var(--ds-font-weight-semibold)",
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button'][data-current='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-semibold",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:654",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button'][data-current='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:660",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):not(:disabled):hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:661",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):not(:disabled):hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:665",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):active",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:675",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:675",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:675",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:676",
+            "fallback": null,
+            "landsOnProperty": "outline-offset",
+            "propertyGroup": "border",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:686",
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "landsOnProperty": "min-block-size",
+            "propertyGroup": "size",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:686",
+            "fallback": "44px",
+            "landsOnProperty": "min-block-size",
+            "propertyGroup": "size",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:690",
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "landsOnProperty": "min-inline-size",
+            "propertyGroup": "size",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:690",
+            "fallback": "44px",
+            "landsOnProperty": "min-inline-size",
+            "propertyGroup": "size",
+            "part": "expand-button",
+            "selector": ".ds-table.ds-table--modern [data-part='expand-button']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-selection-control-coarse-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:694",
+            "fallback": "20px",
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "selection-control",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-control']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-selection-control-coarse-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:695",
+            "fallback": "20px",
+            "landsOnProperty": "height",
+            "propertyGroup": "size",
+            "part": "selection-control",
+            "selector": ".ds-table.ds-table--modern [data-part='selection-control']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:64",
+            "fallback": "var(--ds-color-border-primary)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--rustic [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:64",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "table",
+            "selector": ".ds-table.ds-table--rustic [data-part='table'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:69",
+            "fallback": "var(--ds-color-bg-secondary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:69",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:70",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:73",
+            "fallback": "var(--ds-color-border-primary)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:73",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-hairline='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:76",
+            "fallback": "var(--ds-color-bg-tertiary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-sortable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-tertiary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:76",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-sortable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:102",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "resize-handle",
+            "selector": ".ds-table.ds-table--rustic [data-part='resize-handle'][data-resizing='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-filter-row-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:107",
+            "fallback": "var(--ds-color-bg-secondary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "filter-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='filter-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:107",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "filter-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='filter-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:114",
+            "fallback": "var(--ds-color-neutral-300)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:114",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:115",
+            "fallback": "6px",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:116",
+            "fallback": "var(--ds-color-bg-primary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:116",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:120",
+            "fallback": null,
+            "landsOnProperty": "border-color",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']:focus",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-filter-focus-shadow",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:121",
+            "fallback": "0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']:focus",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary-100",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:121",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']:focus",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary-200",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:121",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='filter']:focus",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:126",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:127",
+            "fallback": "6px",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:128",
+            "fallback": "var(--ds-color-bg-primary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:128",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "field",
+            "selector": ".ds-table.ds-table--rustic [data-part='field'][data-field='edit']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:138",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "footer",
+            "selector": ".ds-table.ds-table--rustic [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:141",
+            "fallback": "var(--ds-color-text-muted)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "pagination-range",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-range']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:141",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "pagination-range",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-range']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:146",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "title",
+            "selector": ".ds-table.ds-table--rustic [data-part='title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-row-bg-selected",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:155",
+            "fallback": "var(--ds-color-primary-100)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--rustic [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary-100",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:155",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--rustic [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-row-bg-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:158",
+            "fallback": "var(--ds-color-bg-secondary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:158",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-row-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:164",
+            "fallback": "var(--ds-color-border-primary)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='cell'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:164",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='cell'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary-200",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:167",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='cell'][data-editable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:167",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='cell'][data-editable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-alpha-primary-5",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:169",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='cell'][data-editable='true']:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:176",
+            "fallback": "var(--ds-color-bg-elevated, var(--ds-color-bg-primary))",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:176",
+            "fallback": "var(--ds-color-bg-primary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:176",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "header-cell",
+            "selector": ".ds-table.ds-table--rustic [data-part='header-cell'][data-fixed]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-row-bg-expanded",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:190",
+            "fallback": "var(--ds-color-bg-secondary, var(--ds-color-bg-muted))",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "expanded-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='expanded-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:190",
+            "fallback": "var(--ds-color-bg-muted)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "expanded-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='expanded-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-muted",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:190",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "expanded-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='expanded-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-loading-overlay-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:197",
+            "fallback": "var(--ds-color-alpha-white-70)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "loading-overlay",
+            "selector": ".ds-table.ds-table--rustic [data-part='loading-overlay']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-alpha-white-70",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:197",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "loading-overlay",
+            "selector": ".ds-table.ds-table--rustic [data-part='loading-overlay']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-header-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:202",
+            "fallback": "var(--ds-color-bg-secondary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "summary-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='summary-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:202",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "summary-row",
+            "selector": ".ds-table.ds-table--rustic [data-part='summary-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:220",
+            "fallback": "var(--ds-color-neutral-300)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button'][data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-neutral-300",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:220",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button'][data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:221",
+            "fallback": "6px",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button'][data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:222",
+            "fallback": "var(--ds-color-bg-elevated)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button'][data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:222",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button'][data-part='pagination-button']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-table-page-button-hover-shadow",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:226",
+            "fallback": "var(--ds-shadow-sm)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button']:not(:disabled):hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-shadow-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:226",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button']:not(:disabled):hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:227",
+            "fallback": null,
+            "landsOnProperty": "border-color",
+            "propertyGroup": "color",
+            "part": "pagination-button",
+            "selector": ".ds-table.ds-table--rustic [data-part='pagination-button']:not(:disabled):hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          }
+        ],
+        "variableCensusDistinctCount": 78,
+        "variableCensusReadSiteCount": 239,
+        "hardcodedValues": [
+          {
+            "kind": "duration",
+            "literal": "0.2s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:78",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.2s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:78",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:91",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:91",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "16px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:94",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "20px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:94",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.25s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:99",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.25s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:99",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "48px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:103",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "32px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:103",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:121",
+            "declaration": "gap"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:126",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:126",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:129",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.2s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:129",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:129",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.3s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:145",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.2s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:145",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:163",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "6px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:163",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:165",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.2s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:165",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:168",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "6px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:168",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.3s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:174",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:174",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "16px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:177",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:206",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "6px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:206",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:212",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "6px",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:212",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:716",
+            "declaration": "transition"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/ui/primitives/display/Table/engines/rustic/index.tsx:716",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:89",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:89",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:96",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:96",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:103",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "16px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:103",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:200",
+            "declaration": "gap"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:261",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:279",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "6px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:279",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "32px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:336",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:495",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "16px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:539",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:632",
+            "declaration": "gap"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:640",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:702",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:702",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:706",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:706",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:710",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "16px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css:710",
+            "declaration": "padding"
+          },
+          {
+            "kind": "shadow",
+            "literal": "none",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:231",
+            "declaration": "box-shadow"
+          }
+        ],
+        "hardcodedValueCount": 55
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +3822,70 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "prop": "tintas y fondos de marca de la familia",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-table-bg",
+              "--_ds-table-border",
+              "--_ds-table-header-bg",
+              "--_ds-table-header-color",
+              "--_ds-table-row-bg-hover",
+              "--_ds-table-row-bg-striped",
+              "--_ds-table-row-bg-expanded",
+              "--_ds-table-row-border"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [],
+            "socketsResolved": false,
+            "noSocketReason": "los estados de fila semanticos viven en el pattern data-table, no en la primitiva."
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-color-border",
+          "--ds-color-primary",
+          "--ds-color-text-primary",
+          "--ds-color-text-secondary",
+          "--ds-surface-card",
+          "--ds-surface-inset",
+          "--ds-surface-panel"
+        ],
+        "uncoveredByDesign": {
+          "SHARED-CHANNEL (FAM-08R2): ownedBy = lector del elemento mas externo; esta primitiva consume": [
+            "--ds-table-cell-color",
+            "--ds-table-cell-font-size",
+            "--ds-table-cell-padding",
+            "--ds-table-header-border",
+            "--ds-table-row-bg"
+          ],
+          "FAM-08R2 regla corregida: el socket vive en quien LEE; 69 sockets mudados a pattern-data-table con namespaceDebt (prefijo table- mal puesto, renombre = fase 3)": [
+            "ver table-destinos.txt"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +3893,37 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [
+              "--_ds-table-header-font-weight",
+              "--_ds-table-title-font-weight",
+              "--_ds-table-pagination-current-font-weight",
+              "--_ds-table-header-letter-spacing",
+              "--_ds-table-header-text-transform",
+              "--_ds-table-cell-numeric",
+              "--_ds-table-pagination-numeric"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-font-weight-semibold"
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +3931,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "lee la familia base compartida."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +3959,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-table-header-font-size",
+              "--_ds-table-pagination-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-font-size-base",
+          "--ds-font-size-sm",
+          "--ds-font-size-xs"
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +3994,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de contenedores",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-radius",
+              "--_ds-table-radius",
+              "--_ds-image-radius"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "el marco redondea por el contenedor que la aloja; sin canal de radio propio."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +4022,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +4039,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-table-selection-control-coarse-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-touch-target-min",
+          "--ds-table-touch-target-min"
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +4071,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "",
+            "why": "Margenes internos NO cubiertos (composicion): --ds-table-footer-margin-block-start, --ds-table-pagination-margin-block-start, --ds-table-title-margin-block-end"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +4091,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Canales compartidos de motion leidos (attention/fast/glacial/normal/slow), sin canal propio; nada que cubrir. CANDIDATOS FAM-08R (namespace propio, lector=pattern): --ds-table-editorial-header-transform, --ds-table-mobile-card-hover-lift, --ds-table-row-transition"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +4109,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-elevation"
+            ],
+            "sockets": [
+              "--_ds-table-header-shadow",
+              "--_ds-table-page-button-hover-shadow"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +4137,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-table-glass-bg",
+            "prop": "background-color de la placa de vidrio del icono",
+            "tier": "premium",
+            "sockets": []
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +4160,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +4173,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +4190,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +4207,36 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-table-border-width",
+              "--_ds-table-header-rule-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-edge-emphasis-width",
+          "--ds-edge-standard-style",
+          "--ds-edge-standard-width",
+          "--ds-focus-ring-color",
+          "--ds-focus-ring-offset",
+          "--ds-focus-ring-width"
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +4244,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +4262,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +4279,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +4318,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": null,
+            "prop": "stroke-width / fill",
+            "tier": "standard",
+            "examples": [
+              "Icon"
+            ],
+            "socketsResolved": true,
+            "carrier": "attribute+shared-socket",
+            "sockets": [],
+            "noSocketReason": "sin iconos con canal propio."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +4345,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

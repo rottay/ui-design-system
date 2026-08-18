@@ -25,15 +25,13 @@ import {
   type FirstPartyArtifactSpec,
 } from '../index';
 
-const EXTENSION = "html[data-tenant='fixture'] {\n  --ds-fixture-only: 1px;\n}\n";
-
 function specFor(slug: string): FirstPartyArtifactSpec {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
   return spec;
 }
 
-function render(brandTheme: BrandTheme, spec: FirstPartyArtifactSpec, extensionCss = EXTENSION): string {
+function render(brandTheme: BrandTheme, spec: FirstPartyArtifactSpec): string {
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: spec.slug });
   return renderVerticalArtifact({
     tenantSlug: spec.slug,
@@ -43,7 +41,6 @@ function render(brandTheme: BrandTheme, spec: FirstPartyArtifactSpec, extensionC
     selector: spec.selector,
     compiledCssVariables: compiled.cssVariables,
     colorScheme: compiled.colorScheme,
-    extensionCss,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   });
 }
@@ -77,9 +74,11 @@ describe('T1 · BrandTheme values propagate into the rendered artifact', () => {
   });
 
   it('a channel adopted from the extension is served by the compiled block', () => {
-    // These were extension re-declarations before R1-P; the artifact must now
-    // carry them because the THEME says so, not because a later block did.
-    const compiledBlock = render(bithireBrandTheme, spec).split('/* === Declared artifact extension')[0];
+    // These were extension re-declarations before R1-P; the artifact carries
+    // them because the THEME says so, not because a later block did. The
+    // extension authority is gone, so the whole artifact IS the compiled block
+    // and there is no longer a section to slice off before asserting.
+    const compiledBlock = render(bithireBrandTheme, spec);
     expect(compiledBlock).toContain('--ds-badge-radius: var(--ds-radius-full);');
     expect(compiledBlock).toContain('--ds-color-text-muted: #8a9aaa;');
 
@@ -123,17 +122,6 @@ describe('T11 · a hand-edited artifact fails the freshness comparison', () => {
     // …and a copy that only differs by regeneration is equal again.
     expect(render(bithireBrandTheme, spec)).toBe(generated);
   });
-
-  it('a changed extension source makes the previous artifact stale', () => {
-    const generated = render(bithireBrandTheme, spec);
-    const withExtraExtension = render(
-      bithireBrandTheme,
-      spec,
-      `${EXTENSION}\nhtml[data-tenant='fixture'] {\n  --ds-fixture-late: 2px;\n}\n`
-    );
-    expect(withExtraExtension).not.toBe(generated);
-    expect(withExtraExtension).toContain('--ds-fixture-late: 2px;');
-  });
 });
 
 describe('T12 · rottay serves its BrandTheme in the base state', () => {
@@ -143,8 +131,7 @@ describe('T12 · rottay serves its BrandTheme in the base state', () => {
     expect(spec.selector).toBe("html[data-tenant='rottay']");
     expect(spec.selector).not.toContain('data-theme');
 
-    const artifact = render(rottayBrandTheme, spec);
-    const compiledBlock = artifact.split('/* === Declared artifact extension')[0];
+    const compiledBlock = render(rottayBrandTheme, spec);
     // Scope projection wraps the spec selector; what matters is that nothing in
     // the result narrows it to a mode.
     //
@@ -173,12 +160,11 @@ describe('T12 · rottay serves its BrandTheme in the base state', () => {
       selector: "html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light",
     };
     const artifact = render(rottayBrandTheme, regated);
-    const compiledBlock = artifact.split('/* === Declared artifact extension')[0];
 
     // This is the Round 3 defect verbatim: a dark palette emitted under a light
     // gate, so the base state (`data-theme="base"`) has no compiled author.
-    expect(compiledBlock).toContain("[data-theme='light']");
-    expect(compiledBlock).toContain('--ds-color-primary: #FFFFFF;');
+    expect(artifact).toContain("[data-theme='light']");
+    expect(artifact).toContain('--ds-color-primary: #FFFFFF;');
     expect(artifact).not.toBe(render(rottayBrandTheme, spec));
   });
 });

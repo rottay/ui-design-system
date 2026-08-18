@@ -1,5 +1,14 @@
 # Claude Code Rules - Design System
 
+## Bootstrap — read before acting
+
+1. If you are working on the Modern Rescue programme (WO-CRA-23), read
+   `AGENTS.md` first, then the canonical authorities it lists. No section in
+   this file overrides `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md`,
+   `program.json`, `customization-model.json` or `agent-orchestration.json`.
+2. General project rules below apply only where the programme contracts are
+   silent.
+
 ## Non-Negotiable: No Cross-Module Direct Queries
 
 Apps, verticals, and modules must never query tables owned by another module/schema directly. Cross-module communication must go through the owning module's exported use cases, actions, factories, or repository ports. If a needed capability does not exist, create and export it in the owning module first; do not import foreign Drizzle schemas, create local bridge queries, or duplicate tables across schemas. Infrastructure-only health checks such as `SELECT 1` may test connectivity, but they must not read or mutate module-owned tables.
@@ -251,45 +260,40 @@ their actual semantics and consumers.
 - Patterns knowing about page layout (patterns should not know what screen they're in)
 - Structures knowing about business domain (structures should only know about layout roles)
 
-## Premium white-label model (BrandTheme)
+## Premium white-label model (BrandTheme / Theme-ISO)
 
-The canonical premium visual source of truth for a code-owned vertical is
-**BrandTheme** under `foundation/contracts/composition/tenants/themes/`.
-First-party brand sources live in `foundation/tokens/ts/presentation/brand-themes/`.
+> **Authority remit:** the Modern Rescue programme owns the operational control
+> model, namespace lifecycle and acceptance law. For WO-CRA-23 read
+> `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md`,
+> `customization-model.json`, `program.json` and `agent-orchestration.json`.
+> This section only restates project-wide invariants.
 
-Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated artifacts`
+The canonical visual source of truth is the total nested **Theme** under
+`foundation/contracts/composition/tenants/themes/`. `BrandTheme` may survive
+only as a deprecated compatibility alias of the complete Theme, never as a
+patch or a second authority.
 
-### BrandTheme scope (~140 CSS variables)
-
-- `palette` -- primary, secondary, accent, semantic colors (light + dark variants)
-- `typography` -- 4 font families, weight bias, letter spacing per-context (display/heading/body/mono), line height per-context
-- `surfaces` -- density scale, border radius (sm/md/lg/xl), shadows, glass, gradients, overlays
-- `motion` -- entrance type, spring physics, hover lift/scale, skeleton style, stagger
-- `charts` -- animation, line style, dots, gradient fill, tooltip style
-- `chrome.controls` -- 10 button variants (primary/secondary/default/ghost/text/link/success/warning/error/info), each with bg/bgHover/bgActive/color/border/shadow + full input chrome (bg/border/focus/disabled/filled/addon/validation) + disabled state + focus ring
-- `chrome.table` -- bg, border, header (bg/color/fontWeight/fontSize), row (bg/hover/striped/selected/border), cell (padding/fontSize/color), loading overlay
-- `chrome.cardComponent` -- bg, border, shadow (rest/hover/elevated), header/body/footer sections
-- `chrome.modal` -- bg, overlay (bg/backdrop), header/body/footer, close button
-- `chrome.tabs` -- border, color states (default/hover/active), active indicator
-- `chrome.sidebar` -- 17 fields (bg, border, text, item sizing, group headers, footer)
-- `chrome.layout` -- header, sider bg/border/backdrop
+Visual merge chain: `DS base -> vertical baseline -> Theme -> compileTheme -> artifacts`
 
 ### Key rules
 
-- `TenantConfig.brandTheme` remains the code-owned/compat field. New customer
-  writes publish a bounded `TenantThemeDocument` to the canonical tenancy DB;
-  legacy `branding`, `personality`, `appearance`, and `tokenOverrides` fields
-  are compatibility inputs only.
-- Product profile is **not** part of the visual merge when brandTheme is present -- only `surfaceDefaults` survives.
-- First-party tenant CSS files (`foundation/tokens/css/facade/artifacts/`) are **generated snapshots**, not the source of truth. The `.ts` BrandTheme files are the source.
+- Both static `BrandTheme` and DB `TenantThemeDocument` transports resolve to
+  the same complete Theme and enter the single `compileTheme` lowering. No
+  second compiler, no subset parity fixture, no neutral default vertical.
+- `ThemePatch` exists only at ingestion; it never reaches the compiler.
+- First-party tenant CSS files (`foundation/tokens/css/facade/artifacts/`) are
+  **generated snapshots**, not source of truth. The `.ts` Theme/BrandTheme
+  sources are the source.
+- `_source/extension.css` is temporary drain debt, not an authority. Do not
+  regenerate, hand-edit or rely on it for new work.
 - Production customer styling is compiled on the server and embedded for SSR.
   The client hydrates the exact artifact with
   `visualAuthority="compiled-artifact"`; browser components do not query the
   DB and the provider must not emit a competing visual layer.
-- Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`) belong in consuming apps, not DS core.
+- Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`, `--rt-*`, or any
+  product/vertical-derived name) belong in consuming apps, not DS core.
 - The brand compiler (`packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/`)
-  converts BrandTheme to CSS vars and personality tokens.
-- First-party tenant artifacts (`foundation/tokens/css/facade/artifacts/{bithire,evnto,rottay}/index.css`) are build products assembled from the BrandTheme `.ts` file plus a declared `_source/extension.css`. Regenerate with `pnpm -C packages/core build:vertical-css`; hand-edits fail `lint:artifacts` (chained into `pretest` and `lint`).
+  is the single lowering from Theme to CSS variables and personality tokens.
 
 ## Icon system (semantic facade + compatibility catalog)
 

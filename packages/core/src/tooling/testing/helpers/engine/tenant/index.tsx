@@ -1,6 +1,28 @@
 /**
  * @fileoverview Tenant Test Utilities
- * @description Utilities for testing components across multiple tenants (rottay, bithire, default)
+ * @description Utilities for testing components across multiple tenants.
+ *
+ * WHY THE FIXTURE TENANTS ARE SYNTHETIC CUSTOMERS. This helper used to hand
+ * out `TenantConfig`s whose slug, name and `branding.companyName` were
+ * `rottay` / `Rottay` and `bithire` / `BitHire`. Those are not tenant
+ * identities: they are the code-owned first-party identities on the roster in
+ * `foundation/tokens/ts/presentation/brand-themes`, and `TenantProvider`
+ * refuses them through `assertTenantIdentityAllowed`, which throws
+ * `ReservedTenantIdentityError`. Every helper that actually mounted a provider
+ * therefore threw before it rendered anything -- the helper was asking the
+ * runtime to admit a tenant the runtime exists to reject.
+ *
+ * The fixtures are now customers (`acme`, `northwind`, `default`), which is
+ * what a test tenant has always been. This is not a cosmetic rename: it is the
+ * difference between a fixture the product admits and one it must refuse, and
+ * `tests/tenant-test-utils.test.tsx` fences both directions -- the roster is
+ * asserted to classify as `customer`, and mounting a first-party slug through
+ * `renderWithTenant` is asserted to throw.
+ *
+ * The `data-tenant` attribute values these helpers set are a separate concern:
+ * an attribute string is a CSS selector key, not a constructed tenant, so it
+ * carries no identity law. They simply track the fixture names so the CSS
+ * fixtures in `css/` keep matching.
  */
 
 import React, { ReactElement, Suspense } from 'react';
@@ -11,37 +33,41 @@ import type { EngineName, TenantConfig, TenantPlan } from '../../../../../founda
 import { STABLE_ENGINES, type StableEngineName } from '..';
 
 /**
- * Available tenants for testing
+ * Available tenants for testing.
+ *
+ * All three are synthetic customer identities. None may collide with a
+ * first-party slug or name on the roster in
+ * `foundation/tokens/ts/presentation/brand-themes` -- see the fileheader.
  */
-export const TEST_TENANTS = ['rottay', 'bithire', 'default'] as const;
+export const TEST_TENANTS = ['acme', 'northwind', 'default'] as const;
 export type TestTenantName = (typeof TEST_TENANTS)[number];
 
 /**
  * Default tenant configurations for testing
  */
 export const TENANT_CONFIGS: Record<TestTenantName, TenantConfig> = {
-  rottay: {
-    slug: 'rottay',
-    name: 'Rottay',
+  acme: {
+    slug: 'acme',
+    name: 'Acme Industries',
     engine: 'classic',
     theme: 'light',
     plan: 'enterprise' as TenantPlan,
     features: ['all'],
     branding: {
-      companyName: 'Rottay',
+      companyName: 'Acme Industries',
       primaryColor: '#0066CC',
       accentColor: '#00A3E0',
     },
   },
-  bithire: {
-    slug: 'bithire',
-    name: 'BitHire',
+  northwind: {
+    slug: 'northwind',
+    name: 'Northwind Trading',
     engine: 'classic',
     theme: 'light',
     plan: 'enterprise' as TenantPlan,
     features: ['all'],
     branding: {
-      companyName: 'BitHire',
+      companyName: 'Northwind Trading',
       primaryColor: '#6366F1',
       accentColor: '#8B5CF6',
     },
@@ -131,8 +157,8 @@ export function clearTenantAttribute(): void {
  * ```tsx
  * import { renderWithTenant } from '@/tooling/testing/helpers/engine/tenant';
  *
- * it('renders with rottay tenant', () => {
- *   const { getByRole } = renderWithTenant(<Button>Click</Button>, 'rottay');
+ * it('renders with the acme tenant', () => {
+ *   const { getByRole } = renderWithTenant(<Button>Click</Button>, 'acme');
  *   expect(getByRole('button')).toBeInTheDocument();
  * });
  * ```
@@ -170,8 +196,8 @@ export type MultiTenantRenderResult = Record<TestTenantName, RenderResult>;
  * it('all tenants render correctly', () => {
  *   const results = renderWithAllTenants(<Button>Click</Button>);
  *
- *   expect(results.rottay.getByRole('button')).toBeInTheDocument();
- *   expect(results.bithire.getByRole('button')).toBeInTheDocument();
+ *   expect(results.acme.getByRole('button')).toBeInTheDocument();
+ *   expect(results.northwind.getByRole('button')).toBeInTheDocument();
  *   expect(results.default.getByRole('button')).toBeInTheDocument();
  * });
  * ```
@@ -181,8 +207,8 @@ export function renderWithAllTenants(
   options: RenderWithTenantOptions = {}
 ): MultiTenantRenderResult {
   return {
-    rottay: renderWithTenant(ui, 'rottay', options),
-    bithire: renderWithTenant(ui, 'bithire', options),
+    acme: renderWithTenant(ui, 'acme', options),
+    northwind: renderWithTenant(ui, 'northwind', options),
     default: renderWithTenant(ui, 'default', options),
   };
 }

@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "92ccd50bdc7a7c8d85750e4f4c0872e231c3deb7c86f6ede7cd49a76b4c6d195"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1900 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/communication/comment-thread/index.ts",
+      "packages/core/src/ui/patterns/communication/comment-thread/contracts/index.ts",
+      "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css"
+    ],
+    "stableParts": [
+      "author",
+      "avatar",
+      "avatar-col",
+      "cancel",
+      "comment",
+      "comment-actions",
+      "comment-body",
+      "comment-head",
+      "comment-list",
+      "comment-main",
+      "comment-row",
+      "composer",
+      "composer-main",
+      "composer-row",
+      "delete",
+      "edit",
+      "edit-form",
+      "edit-textarea",
+      "edited-label",
+      "edited-mark",
+      "empty",
+      "form-actions",
+      "loading",
+      "nested-line",
+      "reaction",
+      "reactions",
+      "replies-truncated",
+      "reply",
+      "reply-cancel",
+      "reply-form",
+      "reply-submit",
+      "reply-textarea",
+      "root",
+      "save",
+      "skeleton",
+      "skeleton-list",
+      "submit",
+      "timestamp"
+    ],
+    "states": [
+      "active",
+      "loading"
+    ],
+    "variantAxes": [
+      "data-tenant",
+      "data-theme"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 38,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "author",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:89"
+          ]
+        },
+        {
+          "part": "avatar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:154",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:394",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:140",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:313",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:42"
+          ]
+        },
+        {
+          "part": "avatar-col",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:153",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:393",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:72"
+          ]
+        },
+        {
+          "part": "cancel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:185",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:63",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:69"
+          ]
+        },
+        {
+          "part": "comment",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:60"
+          ]
+        },
+        {
+          "part": "comment-actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:146"
+          ]
+        },
+        {
+          "part": "comment-body",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:117"
+          ]
+        },
+        {
+          "part": "comment-head",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:157",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:82"
+          ]
+        },
+        {
+          "part": "comment-list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:422"
+          ]
+        },
+        {
+          "part": "comment-main",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:75"
+          ]
+        },
+        {
+          "part": "comment-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:63"
+          ]
+        },
+        {
+          "part": "composer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:322",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:58"
+          ]
+        },
+        {
+          "part": "composer-main",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:397",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:76"
+          ]
+        },
+        {
+          "part": "composer-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:392",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:69"
+          ]
+        },
+        {
+          "part": "delete",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:248",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:99"
+          ]
+        },
+        {
+          "part": "edit",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:238",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:92"
+          ]
+        },
+        {
+          "part": "edit-form",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:127"
+          ]
+        },
+        {
+          "part": "edit-textarea",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:49",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:56"
+          ]
+        },
+        {
+          "part": "edited-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:129"
+          ]
+        },
+        {
+          "part": "edited-mark",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:110"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:418",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:343",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:127"
+          ]
+        },
+        {
+          "part": "form-actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:180",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:271",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:407",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:131"
+          ]
+        },
+        {
+          "part": "loading",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:126"
+          ]
+        },
+        {
+          "part": "nested-line",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:287",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:209"
+          ]
+        },
+        {
+          "part": "reaction",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:207",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:107",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:111"
+          ]
+        },
+        {
+          "part": "reactions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:139"
+          ]
+        },
+        {
+          "part": "replies-truncated",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:307",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:182"
+          ]
+        },
+        {
+          "part": "reply",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:226",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:91"
+          ]
+        },
+        {
+          "part": "reply-cancel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:275",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:235",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:70"
+          ]
+        },
+        {
+          "part": "reply-form",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:128"
+          ]
+        },
+        {
+          "part": "reply-submit",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:272",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:78",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:85"
+          ]
+        },
+        {
+          "part": "reply-textarea",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:219",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:57"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:361",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:388",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:301",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:308",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:37",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:50"
+          ]
+        },
+        {
+          "part": "save",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:181",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:77",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:84"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:376"
+          ]
+        },
+        {
+          "part": "skeleton-list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:368",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:53"
+          ]
+        },
+        {
+          "part": "submit",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:408",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:86"
+          ]
+        },
+        {
+          "part": "timestamp",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:163",
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:128"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "active=r.active",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:187"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=r.active ? \"true\" : \"false\"",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:208"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:114"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:361",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:50"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "tenant",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:12"
+          ]
+        },
+        {
+          "token": "theme",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:12"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "lines": 335
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx",
+            "lines": 440
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "lines": 365
+          }
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 42,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "root",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 51,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern[data-part='root'][data-loading='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-comment-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3, 12px)",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-list",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='skeleton-list']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-list",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='skeleton-list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-comment-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3, 12px)",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "comment",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "comment",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-row-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3, 12px)",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "composer-row",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-row'], .ds-pattern-comment-thread.ds-engine-modern [data-part='composer-row']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "composer-row",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-row'], .ds-pattern-comment-thread.ds-engine-modern [data-part='composer-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-composer-gap",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 70,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-6, 24px)",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "composer-row",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='composer-row']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 70,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "composer-row",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='composer-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 86,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "comment-head",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 87,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "comment-head",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-head']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 98,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "author",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='author']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 99,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "author",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='author']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-snug",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 100,
+            "fallback": true,
+            "fallbackValue": "1.375",
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "author",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='author']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 101,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "author",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='author']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 104,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "timestamp",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-snug",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 105,
+            "fallback": true,
+            "fallbackValue": "1.375",
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "timestamp",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 106,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "timestamp",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='timestamp']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "edited-mark",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='edited-mark']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 113,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "edited-mark",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='edited-mark']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin",
+            "propertyGroup": "geometry",
+            "part": "comment-body",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 119,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "comment-body",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-relaxed",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 120,
+            "fallback": true,
+            "fallbackValue": "1.625",
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "comment-body",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 121,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "comment-body",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-body']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 129,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "reply-form",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='edit-form'], .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-form']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 134,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "form-actions",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='form-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 135,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "form-actions",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='form-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 143,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "reactions",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='reactions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 144,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "reactions",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='reactions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 150,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "comment-actions",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='comment-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-rail-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-2, 8px)",
+            "cssProperty": "margin-inline-start",
+            "propertyGroup": "geometry",
+            "part": "nested-line",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 156,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-inline-start",
+            "propertyGroup": "geometry",
+            "part": "nested-line",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 157,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "nested-line",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-rail-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3, 12px)",
+            "cssProperty": "padding-inline-start",
+            "propertyGroup": "geometry",
+            "part": "nested-line",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 158,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline-start",
+            "propertyGroup": "geometry",
+            "part": "nested-line",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-rail-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 162,
+            "fallback": true,
+            "fallbackValue": "1px",
+            "cssProperty": "border-inline-start",
+            "propertyGroup": "frame",
+            "part": "nested-line",
+            "selector": "[data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-comment-thread-rail-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border-inline-start",
+            "propertyGroup": "frame",
+            "part": "nested-line",
+            "selector": "[data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 163,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-inline-start",
+            "propertyGroup": "frame",
+            "part": "nested-line",
+            "selector": "[data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-rail-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 169,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-2, 8px)",
+            "cssProperty": "margin-inline-start",
+            "propertyGroup": "geometry",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 169,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-inline-start",
+            "propertyGroup": "geometry",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 170,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-rail-padding",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 171,
+            "fallback": true,
+            "fallbackValue": "var(--ds-spacing-3, 12px)",
+            "cssProperty": "padding-inline-start",
+            "propertyGroup": "geometry",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 171,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline-start",
+            "propertyGroup": "geometry",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 172,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-line-height-snug",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 173,
+            "fallback": true,
+            "fallbackValue": "1.375",
+            "cssProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 174,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 184,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-inline-start",
+            "propertyGroup": "geometry",
+            "part": "replies-truncated",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'], .ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-comment-thread-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 201,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "submit",
+            "selector": ".ds-pattern-comment-thread.ds-engine-modern [data-part='reply'], .ds-pattern-comment-thread.ds-engine-modern [data-part='edit'], .ds-pattern-comment-thread.ds-e",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 44,
+            "fallback": true,
+            "fallbackValue": "#e5e7eb",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "avatar",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "avatar",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='avatar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 52,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "composer",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'], .ds-pattern-c",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-background",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 53,
+            "fallback": true,
+            "fallbackValue": "#fff",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "composer",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'], .ds-pattern-c",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 54,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "composer",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'], .ds-pattern-c",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 59,
+            "fallback": true,
+            "fallbackValue": "#d1d5db",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "composer",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'][data-part='edit-textarea'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='repl",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 65,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "reply-cancel",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-background",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "#fff",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "reply-cancel",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 67,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "reply-cancel",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 71,
+            "fallback": true,
+            "fallbackValue": "#d1d5db",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "reply-cancel",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'][data-part='cancel'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel'][dat",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 80,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "submit",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='save'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'], .ds-pattern-comment-thre",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 81,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "submit",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='save'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'], .ds-pattern-comment-thre",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-foreground",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 82,
+            "fallback": true,
+            "fallbackValue": "#fff",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "submit",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='save'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'], .ds-pattern-comment-thre",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 87,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "submit",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='save'][data-part='save'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'][data-pa",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 95,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "edit",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='reply'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='edit']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 102,
+            "fallback": true,
+            "fallbackValue": "#ef4444",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "delete",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='delete']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 108,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "reaction",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 109,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "reaction",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-300",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "#d1d5db",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "reaction",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-part='reaction']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 115,
+            "fallback": true,
+            "fallbackValue": "#eff6ff",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "reaction",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 116,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "reaction",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-200",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 121,
+            "fallback": true,
+            "fallbackValue": "#e5e7eb",
+            "cssProperty": "border-left",
+            "propertyGroup": "frame",
+            "part": "nested-line",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='nested-line'][data-part='nested-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 130,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "edited-label",
+            "selector": ".ds-pattern-comment-thread.ds-engine-rustic [data-part='loading'], .ds-pattern-comment-thread.ds-engine-rustic [data-part='empty'], .ds-pattern-comment-thread.d",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "line": 136,
+            "fallback": true,
+            "fallbackValue": "rgba(0,0,0,0.45)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-tertiary",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "line": 142,
+            "fallback": true,
+            "fallbackValue": "rgba(0,0,0,0.3)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "line": 194,
+            "fallback": true,
+            "fallbackValue": "rgba(0,0,0,0.45)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-secondary",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "line": 227,
+            "fallback": true,
+            "fallbackValue": "#f0f0f0",
+            "cssProperty": "border-left",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "line": 282,
+            "fallback": true,
+            "fallbackValue": "rgba(0,0,0,0.45)",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 62,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 70,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 149,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 150,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 154,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 175,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "line": 191,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 51,
+            "literal": "16px",
+            "text": "padding-block: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 56,
+            "literal": "12px",
+            "text": "gap: var(--ds-comment-thread-comment-gap, var(--ds-spacing-3, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 61,
+            "literal": "12px",
+            "text": "margin-block-end: var(--ds-comment-thread-comment-gap, var(--ds-spacing-3, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 66,
+            "literal": "12px",
+            "text": "gap: var(--ds-comment-thread-row-gap, var(--ds-spacing-3, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 70,
+            "literal": "24px",
+            "text": "margin-block-end: var(--ds-comment-thread-composer-gap, var(--ds-spacing-6, 24px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 86,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 87,
+            "literal": "4px",
+            "text": "margin-block-end: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 98,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 104,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 111,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 118,
+            "literal": "8px",
+            "text": "margin: 0 0 var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 119,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 129,
+            "literal": "8px",
+            "text": "margin-block-end: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 134,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 135,
+            "literal": "8px",
+            "text": "margin-block-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 143,
+            "literal": "4px",
+            "text": "gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 144,
+            "literal": "8px",
+            "text": "margin-block-end: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 150,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 156,
+            "literal": "8px",
+            "text": "margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 157,
+            "literal": "8px",
+            "text": "margin-block-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 158,
+            "literal": "12px",
+            "text": "padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 162,
+            "literal": "1px",
+            "text": "border-inline-start: var(--ds-comment-thread-rail-width, 1px) solid"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 169,
+            "literal": "8px",
+            "text": "margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 170,
+            "literal": "8px",
+            "text": "margin-block-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 171,
+            "literal": "12px",
+            "text": "padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 172,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 180,
+            "literal": "28rem",
+            "text": "@container ds-comment-thread (inline-size < 28rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 184,
+            "literal": "8px",
+            "text": "padding-inline-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "line": 201,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-comment-thread-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 44,
+            "literal": "#e5e7eb",
+            "text": "background: var(--ds-color-neutral-200, #e5e7eb);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 52,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 53,
+            "literal": "#fff",
+            "text": "background: var(--ds-color-background, #fff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 59,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 59,
+            "literal": "#d1d5db",
+            "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 65,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 66,
+            "literal": "#fff",
+            "text": "background: var(--ds-color-background, #fff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 71,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 71,
+            "literal": "#d1d5db",
+            "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 80,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 82,
+            "literal": "#fff",
+            "text": "color: var(--ds-color-primary-foreground, #fff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 87,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-primary);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 102,
+            "literal": "#ef4444",
+            "text": "color: var(--ds-color-error, #ef4444);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 108,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 112,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 112,
+            "literal": "#d1d5db",
+            "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 115,
+            "literal": "#eff6ff",
+            "text": "background: var(--ds-color-primary-50, #eff6ff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 121,
+            "literal": "2px",
+            "text": "border-left: 2px solid var(--ds-color-neutral-200, #e5e7eb);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "line": 121,
+            "literal": "#e5e7eb",
+            "text": "border-left: 2px solid var(--ds-color-neutral-200, #e5e7eb);"
+          }
+        ],
+        "censusRowCount": 85
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1928,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-comment-thread-rail-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1970,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1994,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2013,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-comment-thread-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-line-height-relaxed",
+            "--ds-line-height-snug"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2048,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de comment-thread no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2068,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "estos patterns no son controles de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2088,50 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (primitive/feedback/message). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/feedback/message",
+            "channels": [
+              "--ds-message-bubble-radius",
+              "--ds-message-density-factor"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-comment-thread-comment-gap",
+              "--_ds-comment-thread-composer-gap",
+              "--_ds-comment-thread-rail-padding",
+              "--_ds-comment-thread-rail-width",
+              "--_ds-comment-thread-row-gap"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "remediatedFrom": "fam11-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Pisos de accesibilidad (touch-target-min): clase de exclusion propia - el piso no se negocia por tema": [
+            "--ds-comment-thread-touch-target-min"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2139,50 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo de primitiva compuesta via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (barrido de duplicados previo a escritura): el pattern compone la primitiva y no la redeclara; el namespace tiene duena (primitive/feedback/notification). Mismo defecto remediado en inputs.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/feedback/notification",
+            "channels": [
+              "--ds-notification-item-gap",
+              "--ds-notification-rule-style"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-comment-thread-rail-offset"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "remediatedFrom": "fam11-dup-sweep",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-6"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2190,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-presence-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-comment-thread-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2217,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de comment-thread no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2237,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "legibilidad del mensaje: mate; la tinta manda",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de comment-thread no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2257,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de conversacion, no chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "communication/feedback no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2277,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2297,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "el orden z lo gobierna la escala derivada de layer.stack; los flotantes internos usan los canales --ds-z-* compartidos"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2317,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "remediatedFrom": "fam11-dup-sweep",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de comment-thread no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2337,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2355,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2375,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2414,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los ticks de estado del mensaje son iconos de la libreria",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria de postura"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2434,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

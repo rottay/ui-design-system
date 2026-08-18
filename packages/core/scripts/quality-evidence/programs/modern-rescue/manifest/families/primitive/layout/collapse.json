@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "17278080f217cc4c92b5aa3530c5854035c9f4e41cb5171d40f64b4694bde407"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,636 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Collapse/index.ts",
+      "packages/core/src/ui/primitives/layout/Collapse/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Collapse/runtime/tokens/index.ts",
+      "packages/core/src/ui/primitives/layout/Collapse/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/layout/Collapse/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Collapse/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/collapse.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+      "packages/core/src/foundation/tokens/css/runtime/bridges/collapse.css",
+      "packages/core/src/foundation/tokens/css/runtime/bridges/collapse-paint.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+    ],
+    "stableParts": [
+      "root",
+      "panel",
+      "header-row",
+      "header",
+      "label",
+      "extra",
+      "content",
+      "content-inner",
+      "arrow"
+    ],
+    "states": [
+      "idle",
+      "hover",
+      "active",
+      "active-pressed",
+      "focus-visible",
+      "disabled",
+      "expanded"
+    ],
+    "variantAxes": [
+      "data-variant",
+      "data-size",
+      "data-collapsible"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "Headers are real keyboard controls: role=button, tabIndex, Enter/Space toggle, aria-expanded + aria-disabled. [at Collapse/engines/modern/index.tsx:17-18]",
+      "A collapsed panel's content is aria-hidden AND inert; invisible content never keeps focus or a11y presence. [at Collapse/engines/modern/index.tsx:23]",
+      "collapsible='disabled' makes every header inert; collapsible='icon' moves the toggle role to the arrow and the header stops being a control. [at Collapse/engines/modern/index.tsx:15-16]",
+      "The arrow glyph is decorative: when it is not the toggle it is aria-hidden, and when it IS the toggle it is named by the header label via aria-labelledby, never by the glyph. [at Collapse/engines/modern/index.tsx:36]",
+      "The arrow rotation has exactly one RTL mirror owner (:dir(rtl) scaleX(-1)); a tenant cannot double-mirror it. [at modern/skin/collapse.css:83-98]",
+      "Under coarse pointers the header and arrow are floored at the touch-target minimum. [at modern/skin/collapse.css:103-115]",
+      "prefers-reduced-motion: reduce forces transitions to 0.01ms !important; a tenant motion dial cannot re-enable motion. [at modern/skin/collapse.css:372-378, Collapse/engines/modern/index.tsx:75]",
+      "forced-colors: active pins outline/color/border-color to system keywords (Highlight, GrayText, ButtonText). [at modern/skin/collapse.css:356-368]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "layout",
+        "scoutArtifact": "mr-anatomy-layout.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 9,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"root\" + class rottay-collapse (+ --ghost / --borderless)",
+          "at": [
+            "Collapse/engines/modern/index.tsx:372"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"panel\"",
+          "at": [
+            "Collapse/engines/modern/index.tsx:218"
+          ]
+        },
+        {
+          "part": "header-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"header-row\"",
+          "at": [
+            "Collapse/engines/modern/index.tsx:230"
+          ],
+          "note": "MODERN ONLY; the rustic engine has no header-row."
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"header\", role=button",
+          "at": [
+            "Collapse/engines/modern/index.tsx:252"
+          ]
+        },
+        {
+          "part": "label",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"label\", id={labelId}",
+          "at": [
+            "Collapse/engines/modern/index.tsx:258"
+          ]
+        },
+        {
+          "part": "extra",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"extra\"",
+          "at": [
+            "Collapse/engines/modern/index.tsx:261"
+          ],
+          "note": "MODERN ONLY."
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"content\" + class rottay-collapse-content",
+          "at": [
+            "Collapse/engines/modern/index.tsx:271"
+          ]
+        },
+        {
+          "part": "content-inner",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"content-inner\" + class rottay-collapse-content-inner",
+          "at": [
+            "Collapse/engines/modern/index.tsx:282"
+          ]
+        },
+        {
+          "part": "arrow",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"arrow\" + class rottay-collapse-arrow",
+          "at": [
+            "Collapse/engines/modern/index.tsx:195"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "idle",
+          "at": [
+            "modern/skin/collapse.css:166-171"
+          ],
+          "state": "idle"
+        },
+        {
+          "token": "hover",
+          "at": [
+            "modern/skin/collapse.css:311-322"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "active",
+          "at": [
+            "modern/skin/collapse.css:324-330"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "pressed",
+          "at": [
+            "modern/skin/collapse.css:326"
+          ],
+          "state": "active-pressed"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "modern/skin/collapse.css:331-335"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "disabled",
+          "at": [
+            "modern/skin/collapse.css:144-147",
+            "Collapse/engines/modern/index.tsx:149"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "expanded",
+          "at": [
+            "Collapse/engines/modern/index.tsx:196",
+            "modern/skin/collapse.css:191"
+          ],
+          "state": "expanded"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "variant",
+          "values": "default / bordered / ghost",
+          "at": [],
+          "citationsUnverified": [
+            "modern/skin/collapse.css:127-159",
+            "Collapse/engines/modern/index.tsx:371"
+          ],
+          "anchorStatus": "name-kept-anchor-dropped",
+          "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
+        },
+        {
+          "token": "size",
+          "values": "sm / md(default) / lg",
+          "at": [
+            "Collapse/engines/modern/index.tsx:12",
+            "modern/skin/collapse.css:245-292"
+          ]
+        },
+        {
+          "token": "collapsible",
+          "values": "header / icon / disabled",
+          "at": [
+            "Collapse/engines/modern/index.tsx:38"
+          ]
+        }
+      ],
+      "engineDivergence": "Three engine siblings, and they diverge more than any other family in this cohort. PARTS: modern has 9 (adds header-row and extra); rustic has 7 (no header-row, no extra); classic renders the AntD .ant-collapse tree and stamps no data-part. STATES: modern distinguishes idle/hover/active(pressed)/focus-visible/disabled/expanded; rustic distinguishes expanded and disabled only ([data-part='arrow'][data-expanded], rustic/index.tsx:168); classic exposes :hover and .ant-collapse-item-active only. READS: the three engines read three disjoint naming schemes (see namingSchemeConflict) -- modern reads the {slot}-{variant}-{state} matrix, rustic reads the short palette, classic reads a fourteen-name palette with zero fallbacks, and runtime/bridges/collapse.css reads a fourth bridge scheme that no engine declares.",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "var": "--ds-collapse-root-default-idle-border-radius",
+            "part": "panel",
+            "at": "modern/skin/collapse.css:128",
+            "fallback": "var(--ds-radius-md)",
+            "lands": "border-radius"
+          },
+          {
+            "var": "--ds-collapse-root-default-idle-bg",
+            "part": "panel",
+            "at": "modern/skin/collapse.css:129",
+            "fallback": "var(--ds-material-card-background, var(--ds-surface-card))",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-root-default-idle-shadow",
+            "part": "panel",
+            "at": "modern/skin/collapse.css:133",
+            "fallback": "none",
+            "lands": "box-shadow"
+          },
+          {
+            "var": "--ds-collapse-root-ghost-idle-border-radius",
+            "part": "panel[ghost]",
+            "at": "modern/skin/collapse.css:136",
+            "fallback": "0",
+            "lands": "border-radius"
+          },
+          {
+            "var": "--ds-collapse-root-ghost-idle-bg",
+            "part": "panel[ghost]",
+            "at": "modern/skin/collapse.css:137",
+            "fallback": "transparent",
+            "lands": "background",
+            "occurrences": 3
+          },
+          {
+            "var": "--ds-collapse-root-ghost-idle-shadow",
+            "part": "panel[ghost]",
+            "at": "modern/skin/collapse.css:138",
+            "fallback": "none",
+            "lands": "box-shadow"
+          },
+          {
+            "var": "--ds-collapse-root-default-idle-border-width",
+            "part": "panel[bordered]",
+            "at": "modern/skin/collapse.css:158",
+            "fallback": "1px",
+            "lands": "border-width"
+          },
+          {
+            "var": "--ds-collapse-root-default-idle-border-style",
+            "part": "panel[bordered]",
+            "at": "modern/skin/collapse.css:158",
+            "fallback": "solid",
+            "lands": "border-style"
+          },
+          {
+            "var": "--ds-collapse-root-default-idle-border-color",
+            "part": "panel[bordered]",
+            "at": "modern/skin/collapse.css:158",
+            "fallback": "var(--ds-color-border)",
+            "lands": "border-color"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-color",
+            "part": "header",
+            "at": "modern/skin/collapse.css:167",
+            "fallback": "inherit",
+            "lands": "color"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-font-size",
+            "part": "header",
+            "at": "modern/skin/collapse.css:168",
+            "fallback": "inherit",
+            "lands": "font-size"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-font-weight",
+            "part": "header",
+            "at": "modern/skin/collapse.css:169",
+            "fallback": "var(--ds-font-weight-medium)",
+            "lands": "font-weight"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-line-height",
+            "part": "header",
+            "at": "modern/skin/collapse.css:170",
+            "fallback": "normal",
+            "lands": "line-height"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-cursor",
+            "part": "header",
+            "at": "modern/skin/collapse.css:180",
+            "fallback": "pointer",
+            "lands": "cursor"
+          },
+          {
+            "var": "--ds-collapse-header-default-expanded-color",
+            "part": "header[expanded]",
+            "at": "modern/skin/collapse.css:191",
+            "fallback": "var(--ds-color-primary)",
+            "lands": "color"
+          },
+          {
+            "var": "--ds-collapse-header-default-disabled-color",
+            "part": "header[disabled]",
+            "at": "modern/skin/collapse.css:194",
+            "fallback": "var(--ds-color-text-disabled)",
+            "lands": "color"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-bg",
+            "part": "header",
+            "at": "modern/skin/collapse.css:202",
+            "fallback": "transparent",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-header-ghost-idle-bg",
+            "part": "header[ghost]",
+            "at": "modern/skin/collapse.css:205",
+            "fallback": "transparent",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-header-default-expanded-bg",
+            "part": "header[expanded]",
+            "at": "modern/skin/collapse.css:208",
+            "fallback": "transparent",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-header-default-disabled-bg",
+            "part": "header[disabled]",
+            "at": "modern/skin/collapse.css:211",
+            "fallback": "transparent",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-header-default-disabled-opacity",
+            "part": "header[disabled]",
+            "at": "modern/skin/collapse.css:145",
+            "fallback": "0.5",
+            "lands": "opacity"
+          },
+          {
+            "var": "--ds-collapse-header-default-disabled-cursor",
+            "part": "header[disabled]",
+            "at": "modern/skin/collapse.css:146",
+            "fallback": "not-allowed",
+            "lands": "cursor"
+          },
+          {
+            "var": "--ds-collapse-content-default-idle-color",
+            "part": "content-inner",
+            "at": "modern/skin/collapse.css:218",
+            "fallback": "inherit",
+            "lands": "color"
+          },
+          {
+            "var": "--ds-collapse-content-default-idle-bg",
+            "part": "content-inner",
+            "at": "modern/skin/collapse.css:219",
+            "fallback": "transparent",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-content-default-idle-font-size",
+            "part": "content-inner",
+            "at": "modern/skin/collapse.css:220",
+            "fallback": "inherit",
+            "lands": "font-size"
+          },
+          {
+            "var": "--ds-collapse-content-default-idle-line-height",
+            "part": "content-inner",
+            "at": "modern/skin/collapse.css:221",
+            "fallback": "normal",
+            "lands": "line-height"
+          },
+          {
+            "var": "--ds-collapse-content-ghost-idle-bg",
+            "part": "content-inner[ghost]",
+            "at": "modern/skin/collapse.css:224",
+            "fallback": "transparent",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-padding-y",
+            "part": "header-row",
+            "at": "modern/skin/collapse.css:246",
+            "fallback": "12px",
+            "lands": "padding-block",
+            "note": "multiplied by var(--ds-density-effective-scale)"
+          },
+          {
+            "var": "--ds-collapse-header-default-idle-padding-x",
+            "part": "header-row",
+            "at": "modern/skin/collapse.css:247",
+            "fallback": "16px",
+            "lands": "padding-inline"
+          },
+          {
+            "var": "--ds-collapse-header-sm-idle-padding-y / -x",
+            "part": "header-row[sm]",
+            "at": "modern/skin/collapse.css:250, 251",
+            "fallback": "8px / 12px",
+            "lands": "padding"
+          },
+          {
+            "var": "--ds-collapse-header-lg-idle-padding-y / -x",
+            "part": "header-row[lg]",
+            "at": "modern/skin/collapse.css:254, 255",
+            "fallback": "16px / 20px",
+            "lands": "padding"
+          },
+          {
+            "var": "--ds-collapse-header-ghost-idle-padding-y / -x",
+            "part": "header-row[ghost]",
+            "at": "modern/skin/collapse.css:258, 259",
+            "fallback": "8px / 12px",
+            "lands": "padding"
+          },
+          {
+            "var": "--ds-collapse-extra-margin-inline-start",
+            "part": "extra",
+            "at": "modern/skin/collapse.css:265",
+            "fallback": "var(--ds-spacing-2)",
+            "lands": "margin-inline-start"
+          },
+          {
+            "var": "--ds-collapse-content-default-idle-padding-x / -y",
+            "part": "content-inner",
+            "at": "modern/skin/collapse.css:270, 274",
+            "fallback": "16px / 16px",
+            "lands": "padding"
+          },
+          {
+            "var": "--ds-collapse-content-sm-idle-padding-x / -y",
+            "part": "content-inner[sm]",
+            "at": "modern/skin/collapse.css:278, 282",
+            "fallback": "12px",
+            "lands": "padding"
+          },
+          {
+            "var": "--ds-collapse-content-lg-idle-padding-x / -y",
+            "part": "content-inner[lg]",
+            "at": "modern/skin/collapse.css:286, 290",
+            "fallback": "20px",
+            "lands": "padding"
+          },
+          {
+            "var": "--ds-collapse-transition-duration",
+            "part": "header / content / content-inner / arrow",
+            "at": "Collapse/engines/modern/index.tsx:72, 73; modern/skin/collapse.css:304",
+            "fallback": "var(--ds-motion-normal) in the engine inline <style>; var(--ds-motion-fast) in the skin",
+            "lands": "transition-duration",
+            "occurrences": 8,
+            "note": "SAME channel, DIFFERENT fallback in the two owners. See failureClasses.observations."
+          },
+          {
+            "var": "--ds-collapse-transition-timing",
+            "part": "header / content / content-inner",
+            "at": "Collapse/engines/modern/index.tsx:72, 73; modern/skin/collapse.css:305",
+            "fallback": "var(--ds-motion-ease-out)",
+            "lands": "transition-timing-function",
+            "occurrences": 8
+          },
+          {
+            "var": "--ds-collapse-icon-default-idle-transition",
+            "part": "arrow",
+            "at": "Collapse/engines/modern/index.tsx:74",
+            "fallback": "transform var(--ds-motion-normal) var(--ds-motion-ease-out)",
+            "lands": "transition"
+          },
+          {
+            "var": "--ds-collapse-header-default-hover-bg",
+            "part": "header",
+            "at": "modern/skin/collapse.css:317",
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)))",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-collapse-header-default-pressed-bg",
+            "part": "header",
+            "at": "modern/skin/collapse.css:326",
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-focus-ring-width / --ds-focus-ring-color / --ds-focus-ring-offset",
+            "part": "header, arrow",
+            "at": "modern/skin/collapse.css:332, 333",
+            "fallback": "--ds-focus-ring-color falls back to var(--ds-color-primary)",
+            "lands": "outline, outline-offset"
+          },
+          {
+            "var": "--ds-collapse-header-focus-ring-radius",
+            "part": "header",
+            "at": "modern/skin/collapse.css:334",
+            "fallback": "var(--ds-radius-md)",
+            "lands": "border-radius"
+          },
+          {
+            "var": "--ds-collapse-arrow-hover-color",
+            "part": "arrow",
+            "at": "modern/skin/collapse.css:344",
+            "fallback": "var(--ds-color-primary)",
+            "lands": "color"
+          },
+          {
+            "var": "--ds-collapse-arrow-focus-ring-radius",
+            "part": "arrow",
+            "at": "modern/skin/collapse.css:353",
+            "fallback": "var(--ds-radius-sm)",
+            "lands": "border-radius"
+          },
+          {
+            "var": "--ds-collapse-touch-target-min",
+            "part": "header, arrow",
+            "at": "modern/skin/collapse.css:105",
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "lands": "min-block-size",
+            "note": "inside @media (hover: none), (pointer: coarse)"
+          },
+          {
+            "var": "--ds-collapse-header-gap",
+            "part": "header-row",
+            "at": "Collapse/engines/modern/index.tsx:239",
+            "fallback": "var(--ds-spacing-2)",
+            "lands": "gap"
+          },
+          {
+            "var": "--ds-collapse-border",
+            "part": "root",
+            "at": "runtime/engines/modern/theme.css:303",
+            "fallback": null,
+            "lands": "border-color"
+          },
+          {
+            "var": "--ds-collapse-radius",
+            "part": "root",
+            "at": "runtime/engines/modern/theme.css:304; rustic/skin/collapse.css:43",
+            "fallback": "none in modern theme.css; 12px in the rustic skin",
+            "lands": "border-radius",
+            "occurrences": 5
+          },
+          {
+            "var": "--ds-collapse-content-bg",
+            "part": "content (modern theme bridge) / content (rustic)",
+            "at": "runtime/engines/modern/theme.css:308; rustic/skin/collapse.css:69",
+            "fallback": "none / #fff",
+            "lands": "background-color"
+          },
+          {
+            "var": "--ds-collapse-panel-border",
+            "part": "panel (rustic)",
+            "at": "rustic/skin/collapse.css:51",
+            "fallback": "1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9))",
+            "lands": "border"
+          },
+          {
+            "var": "--ds-collapse-header-bg",
+            "part": "header (rustic)",
+            "at": "rustic/skin/collapse.css:57",
+            "fallback": "var(--ds-color-neutral-50, #fafafa)",
+            "lands": "background-color"
+          },
+          {
+            "var": "--ds-collapse-{bg,border-color,radius,header-padding,header-bg,header-color,header-font-weight,header-gap,header-bg-hover,content-bg,content-padding,icon-color,icon-size,icon-color-expanded}",
+            "part": "classic .ant-collapse tree",
+            "at": "runtime/engines/classic/theme.css:2390-2432",
+            "fallback": "NONE on any of the fourteen",
+            "lands": "background-color, border-color, border-radius, padding, color, font-weight, gap, font-size"
+          }
+        ],
+        "censusTotals": {
+          "distinctDsNames": 142,
+          "readOccurrences": 294
+        },
+        "namingSchemeConflict": "THREE competing --ds-collapse-* naming schemes coexist in live source and do NOT resolve to one another: (1) the matrix scheme --ds-collapse-{slot}-{variant}-{state}-{property} read by the modern skin and declared only by presentation/components/collapse.css (convention documented at that file:6); (2) a short palette --ds-collapse-{bg,border,header-bg,header-bg-hover,header-color,content-bg,content-color,radius,border-color,header-padding,content-padding,icon-size,icon-color,...} read by the rustic skin and by classic/theme.css:2390-2457 and emitted by the tenant artifacts; (3) a bridge scheme --ds-collapse-root-{bg,border-color,border-width,border-radius,shadow} / --ds-collapse-header-padding-{y,x} / --ds-collapse-content-padding-{y,x} / --ds-collapse-icon-size read only by runtime/bridges/collapse.css. A tenant setting one scheme does not move the other two.",
+        "fallbackIsTheContract": {
+          "at": "modern/skin/collapse.css:58-70",
+          "sourceClaim": "The docblock states the matrix channels are declared ONLY by presentation/components/collapse.css, which ships in styles.css but NOT in base.css, so 'the production modern bundles (dist/<vertical>.css) declare zero matrix channels (verified: dist/bithire.css) ... in the modern runtime they are UNDECLARED hooks whose fallback IS their contract.'",
+          "scoutPosition": "Reported as a source claim with its citation. NOT independently re-verified: verifying it requires reading dist/, and this scout ran no build and inspected no build output."
+        }
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 23,
+        "sitesVerified": 21,
+        "sitesWithdrawn": 2,
+        "sitesNotProbed": 0,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +664,57 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-collapse-arrow-hover-color",
+              "--_ds-collapse-content-default-idle-bg",
+              "--_ds-collapse-content-default-idle-color",
+              "--_ds-collapse-content-ghost-idle-bg",
+              "--_ds-collapse-header-default-disabled-bg",
+              "--_ds-collapse-header-default-disabled-color",
+              "--_ds-collapse-header-default-expanded-bg",
+              "--_ds-collapse-header-default-expanded-color",
+              "--_ds-collapse-header-default-idle-bg",
+              "--_ds-collapse-header-default-idle-color",
+              "--_ds-collapse-header-ghost-idle-bg",
+              "--_ds-collapse-root-default-idle-border-color",
+              "--_ds-collapse-root-ghost-idle-bg"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-card-bg",
+            "--ds-surface-card"
+          ],
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-text-disabled"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +722,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Vocabulario tipografico gobernado (tabla pairing/packs): no es brazo compartido, es exclusion del control que lo absorbe": [
+            "--ds-collapse-header-default-idle-font-weight"
+          ],
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia. Canales leidos y NO cubiertos: --ds-collapse-header-default-idle-font-weight"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +749,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +768,28 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-collapse-content-default-idle-font-size",
+              "--_ds-collapse-content-default-idle-line-height",
+              "--_ds-collapse-header-default-idle-font-size",
+              "--_ds-collapse-header-default-idle-line-height"
+            ],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +797,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de collapse/panels",
+            "tier": "standard",
+            "examples": [
+              "--_ds-collapse-radius"
+            ],
+            "sockets": [
+              "--_ds-collapse-root-default-idle-border-radius",
+              "--_ds-collapse-root-ghost-idle-border-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-md",
+            "--ds-radius-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +831,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "layout no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +849,47 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-collapse-density-factor",
+            "prop": "padding de header/body de Collapse (unica familia layout con filas); Box/Flex/Grid no densifican",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-collapse-content-default-idle-padding-x",
+              "--_ds-collapse-content-default-idle-padding-y",
+              "--_ds-collapse-content-lg-idle-padding-x",
+              "--_ds-collapse-content-lg-idle-padding-y",
+              "--_ds-collapse-content-sm-idle-padding-x",
+              "--_ds-collapse-content-sm-idle-padding-y",
+              "--_ds-collapse-header-default-idle-padding-x",
+              "--_ds-collapse-header-default-idle-padding-y",
+              "--_ds-collapse-header-ghost-idle-padding-x",
+              "--_ds-collapse-header-ghost-idle-padding-y",
+              "--_ds-collapse-header-lg-idle-padding-x",
+              "--_ds-collapse-header-lg-idle-padding-y",
+              "--_ds-collapse-header-sm-idle-padding-x",
+              "--_ds-collapse-header-sm-idle-padding-y"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Pisos de accesibilidad (touch-target-min): clase de exclusion propia, no brazo compartido - el piso no se negocia por tema": [
+            "--ds-collapse-touch-target-min",
+            "--ds-touch-target-min"
+          ],
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-width"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +897,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-collapse-extra-margin-inline-start"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-2"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +927,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-collapse-transition-duration",
+              "--_ds-collapse-transition-timing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +959,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-collapse-root-default-idle-shadow",
+              "--_ds-collapse-root-ghost-idle-shadow"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +985,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-collapse-header-default-disabled-opacity"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-material-card-background"
+          ]
+        }
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1017,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el layout no pinta chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "layout no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de layout"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1037,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1055,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "layout no crea capas propias: el orden z lo gobierna la escala derivada de layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1073,37 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-divider-style",
+            "prop": "estilo del Divider",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-collapse-arrow-focus-ring-radius",
+              "--_ds-collapse-header-focus-ring-radius",
+              "--_ds-collapse-root-default-idle-border-style",
+              "--_ds-collapse-root-default-idle-border-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Correctitud estructural, no punto de customizacion": [
+            "--ds-collapse-header-default-disabled-cursor",
+            "--ds-collapse-header-default-idle-cursor"
+          ],
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset"
+          ]
+        }
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1111,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1129,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1147,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1186,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria (flechas/grips son geometria propia, ver palette/chrome.anatomy)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1204,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

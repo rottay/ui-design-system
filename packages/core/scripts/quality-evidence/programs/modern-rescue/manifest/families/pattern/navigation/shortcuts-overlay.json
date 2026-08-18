@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "f8dce6c65f99c0a9257886dfc34196c7a56909d9a2cf08d8c8ad0ef4c65a2069"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1441 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/navigation/shortcuts-overlay/index.ts",
+      "packages/core/src/ui/patterns/navigation/shortcuts-overlay/contracts/index.ts",
+      "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css"
+    ],
+    "stableParts": [
+      "backdrop",
+      "category-label",
+      "category-row",
+      "chord",
+      "close",
+      "description",
+      "dialog",
+      "empty",
+      "footer",
+      "group",
+      "header",
+      "input",
+      "item",
+      "kbd",
+      "list",
+      "root",
+      "search",
+      "title"
+    ],
     "states": [],
+    "variantAxes": [],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 18,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "backdrop",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:189",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:190",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:47",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:19"
+          ]
+        },
+        {
+          "part": "category-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:228",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:116",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:55"
+          ]
+        },
+        {
+          "part": "category-row",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:112"
+          ]
+        },
+        {
+          "part": "chord",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:241",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:142"
+          ]
+        },
+        {
+          "part": "close",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:202",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:202",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:37"
+          ]
+        },
+        {
+          "part": "description",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:240",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:133",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:59"
+          ]
+        },
+        {
+          "part": "dialog",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:193",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:212"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:254",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:243",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:153",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:73"
+          ]
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:262",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:257",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:204"
+          ]
+        },
+        {
+          "part": "group",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:108"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:196",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:29"
+          ]
+        },
+        {
+          "part": "input",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:48"
+          ]
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:238",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:125"
+          ]
+        },
+        {
+          "part": "kbd",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:244",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:148",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:63",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:69"
+          ]
+        },
+        {
+          "part": "list",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:224",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:101"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:182",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:189",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:31",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:164"
+          ]
+        },
+        {
+          "part": "search",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:210",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:44"
+          ]
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx:197",
+            "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css:33"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/classic/index.tsx",
+            "lines": 166
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx",
+            "lines": 269
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx",
+            "lines": 269
+          }
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-z-modal",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 34,
+            "fallback": true,
+            "fallbackValue": "1500",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-overlay-scrim",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 50,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-overlay)",
+            "cssProperty": "background-color",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-overlay",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 50,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-color",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-glass-scrim-tint",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-image",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-glass-scrim-tint",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background-image",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-glass-backdrop-filter",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "backdrop-filter",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-glass-backdrop-filter",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "-webkit-backdrop-filter",
+            "propertyGroup": "geometry",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 67,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 68,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-normal",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 69,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-enter",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 69,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 77,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 78,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 79,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "header",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 80,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 84,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-base",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 85,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 86,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "title",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 91,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "search",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 92,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "search",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 93,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "search",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 102,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "list",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 104,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "column-gap",
+            "propertyGroup": "geometry",
+            "part": "list",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='list']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 109,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "group",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='group']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 113,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "category-row",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 114,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "category-row",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-row']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 117,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "category-label",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "category-label",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 119,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "category-label",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-wide",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 120,
+            "fallback": true,
+            "fallbackValue": "0.025em",
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "category-label",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 129,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "item",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 131,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "item",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='item']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 135,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "description",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 136,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "description",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 146,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "chord",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='chord']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-8",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 154,
+            "fallback": true,
+            "fallbackValue": "32px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 159,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 160,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 161,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 162,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 165,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-8",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 171,
+            "fallback": true,
+            "fallbackValue": "32px",
+            "cssProperty": "padding-block-start",
+            "propertyGroup": "geometry",
+            "part": "root",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shortcuts-overlay-backdrop",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 20,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-overlay)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-bg-overlay",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 20,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "backdrop",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='backdrop']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shortcuts-overlay-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 24,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-elevated)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-bg-elevated",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 24,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 25,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shortcuts-overlay-shadow",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 26,
+            "fallback": true,
+            "fallbackValue": "var(--ds-shadow-dialog)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-shadow-dialog",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 26,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "dialog",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 30,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "header",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='header'][data-part='header']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 34,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "title",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='title']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 39,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "close",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='close']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 41,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "close",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='close']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": "search",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='search'][data-part='search']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "input",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='input']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 56,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "category-label",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='category-label']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 60,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "description",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='description']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-shortcuts-overlay-kbd-bg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 64,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-bg-secondary)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "kbd",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd']",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 64,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "kbd",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "kbd",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "6px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "kbd",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 70,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "kbd",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd'][data-part='kbd']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 74,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "empty",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 78,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-top",
+            "propertyGroup": "frame",
+            "part": "footer",
+            "selector": ".ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='footer'][data-part='footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/classic/index.tsx",
+            "line": 96,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-bottom",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-mono",
+            "file": "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/classic/index.tsx",
+            "line": 140,
+            "fallback": true,
+            "fallbackValue": "monospace",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-mono",
+            "file": "packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx",
+            "line": 177,
+            "fallback": true,
+            "fallbackValue": "monospace",
+            "cssProperty": "font-family",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 39,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 63,
+            "literal": "40rem",
+            "text": "max-inline-size: 40rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 77,
+            "literal": "12px",
+            "text": "gap: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 78,
+            "literal": "12px",
+            "text": "padding-block: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 79,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 80,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 85,
+            "literal": "16px",
+            "text": "font-size: var(--ds-font-size-base, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 91,
+            "literal": "8px",
+            "text": "padding-block: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 92,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 93,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 102,
+            "literal": "8px",
+            "text": "padding-block: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 103,
+            "literal": "16rem",
+            "text": "column-width: 16rem;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 104,
+            "literal": "16px",
+            "text": "column-gap: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 109,
+            "literal": "4px",
+            "text": "padding-block: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 113,
+            "literal": "4px",
+            "text": "padding-block: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 114,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 118,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 120,
+            "literal": "0.025em",
+            "text": "letter-spacing: var(--ds-letter-spacing-wide, 0.025em);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 129,
+            "literal": "12px",
+            "text": "gap: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 130,
+            "literal": "6px",
+            "text": "padding-block: 6px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 131,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 136,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 146,
+            "literal": "4px",
+            "text": "gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 154,
+            "literal": "32px",
+            "text": "padding-block: var(--ds-spacing-8, 32px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 159,
+            "literal": "8px",
+            "text": "padding-block: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 160,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 162,
+            "literal": "12px",
+            "text": "font-size: var(--ds-font-size-xs, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 165,
+            "literal": "1px",
+            "text": "border-top: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 169,
+            "literal": "40rem",
+            "text": "@container (inline-size < 40rem) {"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 171,
+            "literal": "32px",
+            "text": "padding-block-start: var(--ds-spacing-8, 32px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 181,
+            "literal": "44px",
+            "text": "min-inline-size: 44px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 182,
+            "literal": "44px",
+            "text": "min-block-size: 44px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 193,
+            "literal": "1px",
+            "text": "border: 1px solid ButtonText;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 213,
+            "literal": "0.01ms",
+            "text": "transition-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
+            "line": 214,
+            "literal": "0.01ms",
+            "text": "animation-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 25,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 30,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 41,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 45,
+            "literal": "1px",
+            "text": "border-bottom: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 66,
+            "literal": "6px",
+            "text": "border-radius: var(--ds-radius-sm, 6px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 70,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css",
+            "line": 82,
+            "literal": "1px",
+            "text": "border-top: 1px solid var(--ds-color-border);"
+          }
+        ],
+        "censusRowCount": 71
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1469,42 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.seeds",
+            "prop": "remediacion propiedad",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-overlay-scrim"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-bg-overlay",
+            "--ds-color-border",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-overlay-scrim",
+            "--ds-surface-card"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1512,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold",
+            "--ds-letter-spacing-wide"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1543,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1567,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "tamanos de label sobre la rampa multiplicada compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-base",
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1599,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<familia>-panel-radius",
+            "prop": "radio de paneles propios (panel del locale-switcher y equivalentes)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-shortcuts-overlay-control-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-xl"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1630,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "controles del locale-switcher y equivalentes",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-shortcuts-overlay-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1654,35 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<familia>-item-density-factor",
+            "prop": "padding de items de los switchers/menus del grupo",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-shortcuts-overlay-control-item-density-factor"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5",
+            "--ds-spacing-8"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1690,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1703,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-shortcuts-overlay-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-enter",
+            "--ds-motion-normal"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1736,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-3"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1755,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-glass-backdrop-filter",
+            "--ds-glass-scrim-tint"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1775,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-<leaf>",
+            "prop": "background-color / color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-section-label-color"
+            ],
+            "sockets": [
+              "--_ds-shortcuts-overlay-sidebar-<leaf>"
+            ],
+            "socketsResolved": false
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1801,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1814,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-z-modal"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1833,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-item-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-shortcuts-overlay-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1859,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1877,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1890,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1929,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-shortcuts-overlay-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1955,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

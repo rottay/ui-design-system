@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "c20ce9f75bb41513ae70f1033cc6a79326ae77c108796ab3a5e00df9176c7926"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1398 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/navigation/locale-switcher/index.ts",
+      "packages/core/src/ui/patterns/navigation/locale-switcher/contracts/index.ts",
+      "packages/core/src/ui/patterns/navigation/locale-switcher/runtime/default-locales/index.ts",
+      "packages/core/src/ui/patterns/navigation/locale-switcher/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css"
+    ],
+    "stableParts": [
+      "check",
+      "flag",
+      "option",
+      "option-label",
+      "panel",
+      "root",
+      "trigger",
+      "trigger-code",
+      "trigger-label"
+    ],
+    "states": [
+      "active",
+      "focus",
+      "focused",
+      "loading"
+    ],
+    "variantAxes": [
+      "data-placement",
+      "data-size"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 9,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "check",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:335",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css:22"
+          ]
+        },
+        {
+          "part": "flag",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:270",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:329",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:122"
+          ]
+        },
+        {
+          "part": "option",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:319",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:209"
+          ]
+        },
+        {
+          "part": "option-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:333",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:178"
+          ]
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:297",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:254",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:231"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:240",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:130"
+          ]
+        },
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:251",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:212",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:48",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:76"
+          ]
+        },
+        {
+          "part": "trigger-code",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:109"
+          ]
+        },
+        {
+          "part": "trigger-label",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:278",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:102"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:29"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=isActive",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:320",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:271"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "active=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css:53"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "focused",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:28"
+          ],
+          "state": "focus"
+        },
+        {
+          "token": "focused=isFocused",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:321",
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:272"
+          ],
+          "state": "focused"
+        },
+        {
+          "token": "focused=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:209",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css:57"
+          ],
+          "state": "focused"
+        },
+        {
+          "token": "loading=loading ? 'true' : 'false'",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:241"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:40"
+          ],
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "placement=end",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:154"
+          ]
+        },
+        {
+          "token": "placement=placement",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:298"
+          ]
+        },
+        {
+          "token": "size=size",
+          "at": [
+            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:252"
+          ]
+        },
+        {
+          "token": "size=sm",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:122"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/classic/index.tsx",
+            "lines": 106
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx",
+            "lines": 346
+          },
+          {
+            "engine": "rustic",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "lines": 314
+          }
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 53,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "row-gap",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 55,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 56,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 59,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 61,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 65,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 65,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 66,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 69,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "trigger",
+            "selector": "transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 71,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "trigger",
+            "selector": "transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out), .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 74,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 74,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 80,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:focus-visible",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 84,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "trigger",
+            "selector": "--ds-shadow-focus-ring, .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:active",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-highlight",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 88,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 94,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 94,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 110,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "trigger-code",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-code']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-letter-spacing-wide",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "0.025em",
+            "cssProperty": "letter-spacing",
+            "propertyGroup": "typography",
+            "part": "trigger-code",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-code']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 118,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "flag",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='flag']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "flag",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size='sm'] [data-part='flag']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-z-index-dropdown",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 134,
+            "fallback": true,
+            "fallbackValue": "1000",
+            "cssProperty": "z-index",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 138,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "margin-block-start",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 139,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 142,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 143,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 144,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-enter",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 145,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 163,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 165,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 165,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 173,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 176,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 176,
+            "fallback": true,
+            "fallbackValue": "ease-out",
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 185,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 186,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 189,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-100)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 189,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 197,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "check",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='check']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 221,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'], .ds-pattern-locale-switcher.ds-engine-modern [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 23,
+            "fallback": true,
+            "fallbackValue": "#1677ff",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "check",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='check']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 28,
+            "fallback": true,
+            "fallbackValue": "#1a1a1a",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 29,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 33,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border, #d9d9d9)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger'][data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 33,
+            "fallback": true,
+            "fallbackValue": "#d9d9d9",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "trigger",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger'][data-part='trigger']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 37,
+            "fallback": true,
+            "fallbackValue": "#fff",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 38,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "0 4px 12px rgba(0, 0, 0, 0.12)",
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-border, #d9d9d9)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 43,
+            "fallback": true,
+            "fallbackValue": "#d9d9d9",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "panel",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel'][data-part='panel']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 48,
+            "fallback": true,
+            "fallbackValue": "#1a1a1a",
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 50,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='option']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-100, #f5f5f5)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 54,
+            "fallback": true,
+            "fallbackValue": "#f5f5f5",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-active='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-inset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 58,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-neutral-100, #f5f5f5)",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-neutral-100",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 58,
+            "fallback": true,
+            "fallbackValue": "#f5f5f5",
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "option",
+            "selector": ".ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-focused='true']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/classic/index.tsx",
+            "line": 55,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "14px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-md",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "line": 46,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-md",
+            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "line": 66,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 53,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 54,
+            "literal": "4px",
+            "text": "row-gap: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 55,
+            "literal": "4px",
+            "text": "padding-block: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 56,
+            "literal": "8px",
+            "text": "padding-inline: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 61,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 63,
+            "literal": "32px",
+            "text": "min-block-size: 32px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 69,
+            "literal": "8px",
+            "text": "padding-inline: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 70,
+            "literal": "28px",
+            "text": "min-block-size: 28px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 74,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 80,
+            "literal": "3px",
+            "text": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 111,
+            "literal": "0.025em",
+            "text": "letter-spacing: var(--ds-letter-spacing-wide, 0.025em);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 135,
+            "literal": "180px",
+            "text": "min-inline-size: 180px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 136,
+            "literal": "16rem",
+            "text": "max-inline-size: min(16rem, calc(100vw - 2rem));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 136,
+            "literal": "2rem",
+            "text": "max-inline-size: min(16rem, calc(100vw - 2rem));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 137,
+            "literal": "280px",
+            "text": "max-block-size: 280px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 138,
+            "literal": "4px",
+            "text": "margin-block-start: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 139,
+            "literal": "4px",
+            "text": "padding: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 141,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 163,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 165,
+            "literal": "8px",
+            "text": "padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 165,
+            "literal": "12px",
+            "text": "padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 173,
+            "literal": "14px",
+            "text": "font-size: var(--ds-font-size-sm, 14px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 210,
+            "literal": "2px",
+            "text": "outline: 2px solid Highlight;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 211,
+            "literal": "2px",
+            "text": "outline-offset: -2px;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 221,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 232,
+            "literal": "0.01ms",
+            "text": "transition-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "line": 233,
+            "literal": "0.01ms",
+            "text": "animation-duration: 0.01ms !important;"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 23,
+            "literal": "#1677ff",
+            "text": "color: var(--ds-color-primary, #1677ff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 28,
+            "literal": "#1a1a1a",
+            "text": "color: var(--ds-color-text-primary, #1a1a1a);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 29,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 33,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 33,
+            "literal": "#d9d9d9",
+            "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 37,
+            "literal": "#fff",
+            "text": "background: var(--ds-surface-card, #fff);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 38,
+            "literal": "12px",
+            "text": "border-radius: var(--ds-radius-lg, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 39,
+            "literal": "4px",
+            "text": "box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 39,
+            "literal": "12px",
+            "text": "box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 39,
+            "literal": "rgba(0, 0, 0, 0.12)",
+            "text": "box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 43,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 43,
+            "literal": "#d9d9d9",
+            "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 48,
+            "literal": "#1a1a1a",
+            "text": "color: var(--ds-color-text-primary, #1a1a1a);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 50,
+            "literal": "8px",
+            "text": "border-radius: var(--ds-radius-md, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 54,
+            "literal": "#f5f5f5",
+            "text": "background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "line": 58,
+            "literal": "#f5f5f5",
+            "text": "background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));"
+          }
+        ],
+        "censusRowCount": 67
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1426,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-neutral-100",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-surface-card"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1460,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-semibold",
+            "--ds-letter-spacing-wide"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1491,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels de navegacion en la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1515,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "tamanos de label sobre la rampa multiplicada compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-lg",
+            "--ds-font-size-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1546,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<familia>-panel-radius",
+            "prop": "radio de paneles propios (panel del locale-switcher y equivalentes)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-locale-switcher-control-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1578,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "controles del locale-switcher y equivalentes",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-locale-switcher-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1602,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<familia>-item-density-factor",
+            "prop": "padding de items de los switchers/menus del grupo",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-locale-switcher-control-item-density-factor"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-surface-inset",
+            "--ds-touch-target-min"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1637,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1650,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-locale-switcher-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-enter",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1684,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1703,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1722,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "navigation.tone",
+            "socketPattern": "--_ds-<comp>-sidebar-<leaf>",
+            "prop": "background-color / color",
+            "tier": "standard",
+            "examples": [
+              "--_ds-nav-section-label-color"
+            ],
+            "sockets": [
+              "--_ds-locale-switcher-sidebar-<leaf>"
+            ],
+            "socketsResolved": false
+          }
+        ]
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1748,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1761,18 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-z-index-dropdown"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1780,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-item-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-locale-switcher-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1806,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1824,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1837,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1876,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-fill-mode",
+            "prop": "fill",
+            "tier": "standard",
+            "examples": [
+              "--_ds-command-palette-icon-fill-mode"
+            ],
+            "sockets": [
+              "--_ds-locale-switcher-icon-fill-mode"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1902,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

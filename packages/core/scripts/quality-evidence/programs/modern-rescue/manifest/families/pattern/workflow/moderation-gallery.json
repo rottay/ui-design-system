@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "00fc746c593477afe11d1089f74ac9cbe0cb3e9da2f572942bb9255369211c85"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,2279 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/workflow/moderation-gallery/index.ts",
+      "packages/core/src/ui/patterns/workflow/moderation-gallery/contracts/index.ts",
+      "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+      "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css"
+    ],
+    "stableParts": [
+      "bulk-approve-button",
+      "bulk-clear-button",
+      "bulk-count",
+      "bulk-reject-button",
+      "bulk-toolbar",
+      "card",
+      "card-action-button",
+      "card-actions",
+      "card-avatar",
+      "card-engagement",
+      "card-footer",
+      "card-media",
+      "card-meta",
+      "card-select",
+      "card-status",
+      "card-status-badge",
+      "card-thumbnail",
+      "card-type",
+      "card-type-icon",
+      "card-uploaded-at",
+      "card-uploader",
+      "card-uploader-name",
+      "empty",
+      "grid",
+      "root",
+      "selection-announcer",
+      "skeleton-card",
+      "skeleton-footer",
+      "skeleton-grid",
+      "skeleton-line",
+      "skeleton-media"
+    ],
+    "states": [
+      "loading",
+      "selected",
+      "item.status"
+    ],
+    "variantAxes": [
+      "data-action",
+      "data-type",
+      "data-width"
+    ],
     "propertyGroups": [],
     "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "pattern-rest",
+        "scoutArtifact": "mr-anatomy-pattern-rest.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 31,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "bulk-approve-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:435",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:202",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:316"
+          ]
+        },
+        {
+          "part": "bulk-clear-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:457",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:318"
+          ]
+        },
+        {
+          "part": "bulk-count",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:427",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:259"
+          ]
+        },
+        {
+          "part": "bulk-reject-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:447",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:317"
+          ]
+        },
+        {
+          "part": "bulk-toolbar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:423",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:326"
+          ]
+        },
+        {
+          "part": "card",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:124",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:43",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:63",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:71",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:156"
+          ]
+        },
+        {
+          "part": "card-action-button",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:185",
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:172",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:184"
+          ]
+        },
+        {
+          "part": "card-actions",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:177",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:157",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:336"
+          ]
+        },
+        {
+          "part": "card-avatar",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:219"
+          ]
+        },
+        {
+          "part": "card-engagement",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:225"
+          ]
+        },
+        {
+          "part": "card-footer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:217",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:210"
+          ]
+        },
+        {
+          "part": "card-media",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:78"
+          ]
+        },
+        {
+          "part": "card-meta",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:235"
+          ]
+        },
+        {
+          "part": "card-select",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:116",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:344"
+          ]
+        },
+        {
+          "part": "card-status",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:109"
+          ]
+        },
+        {
+          "part": "card-status-badge",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:158"
+          ]
+        },
+        {
+          "part": "card-thumbnail",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:133",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:87"
+          ]
+        },
+        {
+          "part": "card-type",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:343"
+          ]
+        },
+        {
+          "part": "card-type-icon",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:146"
+          ]
+        },
+        {
+          "part": "card-uploaded-at",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:223"
+          ]
+        },
+        {
+          "part": "card-uploader",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:218",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:219"
+          ]
+        },
+        {
+          "part": "card-uploader-name",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:226"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:389",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:267",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:327"
+          ]
+        },
+        {
+          "part": "grid",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:466",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:35"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:358",
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:385",
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:403",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:43",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:56"
+          ]
+        },
+        {
+          "part": "selection-announcer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:410"
+          ]
+        },
+        {
+          "part": "skeleton-card",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:367",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:286",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:328"
+          ]
+        },
+        {
+          "part": "skeleton-footer",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:369",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:298"
+          ]
+        },
+        {
+          "part": "skeleton-grid",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:365",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:276",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:351"
+          ]
+        },
+        {
+          "part": "skeleton-line",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:370",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:303",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:309"
+          ]
+        },
+        {
+          "part": "skeleton-media",
+          "anchorKind": "data-part",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:368",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:293"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading=false",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:386",
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:404"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "loading=true",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:359"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "selected",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:332"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "selected=selected || undefined",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:126"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "status=item.status",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:125",
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:159"
+          ],
+          "state": "item.status"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "action=approve",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:172",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:193"
+          ]
+        },
+        {
+          "token": "action=reject",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:202",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:196"
+          ]
+        },
+        {
+          "token": "type=video",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:145"
+          ]
+        },
+        {
+          "token": "width=half",
+          "at": [
+            "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx:370",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css:309"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": [
+          {
+            "engine": "classic",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "lines": 386
+          },
+          {
+            "engine": "modern",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/modern/index.tsx",
+            "lines": 505
+          }
+        ]
+      },
+      "scoutGaps": {
+        "gaps": [
+          "7 census rows have an UNRESOLVED observable CSS property (multi-line or indirect declaration form); the read site file:line is still exact"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "name": "--ds-spacing-4",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 39,
+            "fallback": true,
+            "fallbackValue": "16px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "skeleton-grid",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='grid'], .ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 45,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 46,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 47,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 49,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 51,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 52,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 53,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 57,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-color",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": "box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), .ds-pattern-moderation-gallery.ds-engi",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 59,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": "box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), .ds-pattern-moderation-gallery.ds-engi",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 60,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": "box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), .ds-pattern-moderation-gallery.ds-engi",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 64,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": "0 0 0 1px var(--ds-color-primary), .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:focus-within",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-elevation-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 72,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "box-shadow",
+            "propertyGroup": "frame",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--_ds-moderation-gallery-card-lift",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 73,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "transform",
+            "propertyGroup": "geometry",
+            "part": "card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover",
+            "site": "skin-css",
+            "declaration": "UNDECLARED_ANYWHERE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 82,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-media",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-media']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 96,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "inset-block-end",
+            "propertyGroup": "geometry",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 97,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "inset-inline-end",
+            "propertyGroup": "geometry",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 101,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "inline-size",
+            "propertyGroup": "geometry",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 102,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-full",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 103,
+            "fallback": true,
+            "fallbackValue": "9999px",
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-alpha-black-50",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 104,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-inverse",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 105,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "card-type",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 111,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "inset-block-start",
+            "propertyGroup": "geometry",
+            "part": "card-status",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 112,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "inset-inline-start",
+            "propertyGroup": "geometry",
+            "part": "card-status",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-status']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 118,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "inset-block-start",
+            "propertyGroup": "geometry",
+            "part": "card-select",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 119,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "inset-inline-end",
+            "propertyGroup": "geometry",
+            "part": "card-select",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 121,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "padding",
+            "propertyGroup": "geometry",
+            "part": "card-select",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 122,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "card-select",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-alpha-black-40",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 123,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-select",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 136,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 137,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 138,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-alpha-black-70",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 141,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 145,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 146,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 153,
+            "fallback": true,
+            "fallbackValue": "4px",
+            "cssProperty": "transform",
+            "propertyGroup": "geometry",
+            "part": "card-actions",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-md",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 165,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 167,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 168,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 168,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-fast",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 169,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 173,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-action-button",
+            "selector": "background var(--ds-motion-fast) var(--ds-motion-ease-out), color var(--ds-motion-fast) var(--ds-motion-ease-out), .ds-pattern-moderation-gallery.ds-engine-mode",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 174,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "card-action-button",
+            "selector": "background var(--ds-motion-fast) var(--ds-motion-ease-out), color var(--ds-motion-fast) var(--ds-motion-ease-out), .ds-pattern-moderation-gallery.ds-engine-mode",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 179,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-on-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 180,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 185,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:active:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 189,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:active:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 194,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error-600",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 197,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "card-action-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:hover:not(:disabled)",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-width",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 205,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "bulk-clear-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:focus-visible, .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-color",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 205,
+            "fallback": true,
+            "fallbackValue": "var(--ds-color-primary)",
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "bulk-clear-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:focus-visible, .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 205,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "outline",
+            "propertyGroup": "frame",
+            "part": "bulk-clear-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:focus-visible, .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-focus-ring-offset",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 206,
+            "fallback": true,
+            "fallbackValue": "2px",
+            "cssProperty": "outline-offset",
+            "propertyGroup": "frame",
+            "part": "bulk-clear-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:focus-visible, .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 214,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "card-footer",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 215,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "card-footer",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 216,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "card-footer",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 222,
+            "fallback": true,
+            "fallbackValue": "8px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "card-uploader",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 227,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-xs, 12px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "card-uploader-name",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 227,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "card-uploader-name",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-medium",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 228,
+            "fallback": true,
+            "fallbackValue": "500",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "card-uploader-name",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 229,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "card-uploader-name",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader-name']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 238,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "card-meta",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-caption-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 239,
+            "fallback": true,
+            "fallbackValue": "11px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "card-meta",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 240,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "card-meta",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-numeric-tabular",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 241,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "card-meta",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-meta']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 250,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "gap",
+            "propertyGroup": "geometry",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 251,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "margin-block-end",
+            "propertyGroup": "geometry",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 252,
+            "fallback": true,
+            "fallbackValue": "10px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-5",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 253,
+            "fallback": true,
+            "fallbackValue": "20px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 254,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 255,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 256,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "bulk-toolbar",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-type-body-font-size",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 260,
+            "fallback": true,
+            "fallbackValue": "var(--ds-font-size-sm, 13px)",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "bulk-count",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 260,
+            "fallback": true,
+            "fallbackValue": "13px",
+            "cssProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "bulk-count",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-font-weight-semibold",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 261,
+            "fallback": true,
+            "fallbackValue": "600",
+            "cssProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "bulk-count",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 262,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": "bulk-count",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-numeric-tabular",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 263,
+            "fallback": true,
+            "fallbackValue": "tabular-nums",
+            "cssProperty": "font-variant-numeric",
+            "propertyGroup": "typography",
+            "part": "bulk-count",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-count']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-10",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 268,
+            "fallback": true,
+            "fallbackValue": "40px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-6",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 269,
+            "fallback": true,
+            "fallbackValue": "24px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "empty",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 270,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "empty",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 271,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "empty",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 272,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "empty",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-deliberate",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 277,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton-grid",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-motion-ease-in-out",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 278,
+            "fallback": true,
+            "fallbackValue": "ease-in-out",
+            "cssProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "skeleton-grid",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-card",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 287,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border-subtle",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 288,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": "skeleton-card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 289,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-card",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 295,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-media",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-media']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 299,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-block",
+            "propertyGroup": "geometry",
+            "part": "skeleton-footer",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 300,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "padding-inline",
+            "propertyGroup": "geometry",
+            "part": "skeleton-footer",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-footer']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 304,
+            "fallback": true,
+            "fallbackValue": "12px",
+            "cssProperty": "block-size",
+            "propertyGroup": "geometry",
+            "part": "skeleton-line",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-radius-sm",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 305,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border-radius",
+            "propertyGroup": "frame",
+            "part": "skeleton-line",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-surface-panel",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 306,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": "skeleton-line",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-line']",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-touch-target-min",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 319,
+            "fallback": true,
+            "fallbackValue": "44px",
+            "cssProperty": "min-block-size",
+            "propertyGroup": "geometry",
+            "part": "bulk-clear-button",
+            "selector": ".ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'], .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-butto",
+            "site": "skin-css",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-warning",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 18,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-success",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 19,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-error",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 20,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 117,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 132,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 134,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 134,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 139,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 159,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 161,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "border",
+            "propertyGroup": "frame",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 164,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 212,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-border",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 213,
+            "fallback": true,
+            "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 213,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 214,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 218,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "UNRESOLVED",
+            "propertyGroup": "UNRESOLVED",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-bg-secondary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 228,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "background",
+            "propertyGroup": "surface",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-primary",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 354,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 362,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          },
+          {
+            "name": "--ds-color-text-muted",
+            "file": "packages/core/src/ui/patterns/workflow/moderation-gallery/engines/classic/index.tsx",
+            "line": 372,
+            "fallback": false,
+            "fallbackValue": null,
+            "cssProperty": "color",
+            "propertyGroup": "ink",
+            "part": null,
+            "selector": null,
+            "site": "engine-inline",
+            "declaration": "DECLARED_IN_SOURCE"
+          }
+        ],
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 38,
+            "literal": "200px",
+            "text": "grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 39,
+            "literal": "16px",
+            "text": "gap: var(--ds-spacing-4, 16px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 46,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 59,
+            "literal": "1px",
+            "text": "0 0 0 1px var(--ds-color-primary),"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 73,
+            "literal": "2px",
+            "text": "transform: translateY(calc(-1 * var(--_ds-moderation-gallery-card-lift, 2px)));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 96,
+            "literal": "8px",
+            "text": "inset-block-end: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 97,
+            "literal": "8px",
+            "text": "inset-inline-end: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 101,
+            "literal": "24px",
+            "text": "inline-size: var(--ds-spacing-6, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 102,
+            "literal": "24px",
+            "text": "block-size: var(--ds-spacing-6, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 103,
+            "literal": "9999px",
+            "text": "border-radius: var(--ds-radius-full, 9999px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 111,
+            "literal": "8px",
+            "text": "inset-block-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 112,
+            "literal": "8px",
+            "text": "inset-inline-start: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 118,
+            "literal": "4px",
+            "text": "inset-block-start: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 119,
+            "literal": "4px",
+            "text": "inset-inline-end: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 121,
+            "literal": "4px",
+            "text": "padding: var(--ds-spacing-1, 4px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 136,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 137,
+            "literal": "12px",
+            "text": "padding-block: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 138,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 153,
+            "literal": "4px",
+            "text": "transform: translateY(var(--ds-spacing-1, 4px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 205,
+            "literal": "2px",
+            "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 206,
+            "literal": "2px",
+            "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 214,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 215,
+            "literal": "8px",
+            "text": "padding-block: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 216,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 222,
+            "literal": "8px",
+            "text": "gap: var(--ds-spacing-2, 8px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 227,
+            "literal": "12px",
+            "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 238,
+            "literal": "12px",
+            "text": "gap: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 239,
+            "literal": "11px",
+            "text": "font-size: var(--ds-type-caption-font-size, 11px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 250,
+            "literal": "12px",
+            "text": "gap: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 251,
+            "literal": "12px",
+            "text": "margin-block-end: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 252,
+            "literal": "10px",
+            "text": "padding-block: var(--ds-spacing-2, 10px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 253,
+            "literal": "20px",
+            "text": "padding-inline: var(--ds-spacing-5, 20px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 255,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-primary);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 260,
+            "literal": "13px",
+            "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 268,
+            "literal": "40px",
+            "text": "padding-block: var(--ds-spacing-10, 40px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 269,
+            "literal": "24px",
+            "text": "padding-inline: var(--ds-spacing-6, 24px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 271,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 288,
+            "literal": "1px",
+            "text": "border: 1px solid var(--ds-color-border-subtle);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 299,
+            "literal": "12px",
+            "text": "padding-block: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 300,
+            "literal": "12px",
+            "text": "padding-inline: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 304,
+            "literal": "12px",
+            "text": "block-size: var(--ds-spacing-3, 12px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 319,
+            "literal": "44px",
+            "text": "min-block-size: var(--ds-touch-target-min, 44px);"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery.css",
+            "line": 340,
+            "literal": "1px",
+            "text": "border-block-start: 1px solid ButtonText;"
+          }
+        ],
+        "censusRowCount": 121
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +2307,55 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-step-<status>-color",
+            "prop": "estados de paso (done/error/current)",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-moderation-gallery-step-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-color-alpha-black-40",
+            "--ds-color-alpha-black-50",
+            "--ds-color-alpha-black-70",
+            "--ds-color-border-primary",
+            "--ds-color-border-subtle",
+            "--ds-color-error",
+            "--ds-color-error-600",
+            "--ds-color-primary",
+            "--ds-color-primary-subtle",
+            "--ds-color-success",
+            "--ds-color-success-600",
+            "--ds-color-text-inverse",
+            "--ds-color-text-muted",
+            "--ds-color-text-on-primary",
+            "--ds-color-text-primary",
+            "--ds-surface-card",
+            "--ds-surface-panel"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +2363,31 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-weight-medium",
+            "--ds-font-weight-semibold",
+            "--ds-numeric-tabular"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2395,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de paso sobre los canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2419,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size",
+            "prop": "labels, mensajes, pasos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-moderation-gallery-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm",
+            "--ds-font-size-xs",
+            "--ds-type-body-font-size",
+            "--ds-type-caption-font-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2452,37 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-radius-full",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/navigation/steps (pinta rottay-steps--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/navigation/steps",
+            "channels": [
+              "--ds-steps-radius"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2490,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones de avance del wizard son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2503,41 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-10",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-spacing-5",
+            "--ds-spacing-6",
+            "--ds-touch-target-min"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/display/timeline (pinta rottay-timeline--modern) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "primitive/display/timeline",
+            "channels": [
+              "--ds-timeline-item-density-factor"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2545,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-item-gap",
+            "prop": "gap vertical de timeline/activity/steps",
+            "tier": "standard",
+            "examples": [
+              "--_ds-timeline-item-gap",
+              "--_ds-activity-log-item-gap"
+            ],
+            "sockets": [
+              "--_ds-moderation-gallery-item-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2572,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "el stepper obedece al dial",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-steps-transition-duration",
+            "prop": "transition-duration del avance de paso y cambio de estado",
+            "tier": "standard"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-motion-deliberate",
+            "--ds-motion-ease-in-out",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2602,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "pasos en flujo, no flotan",
+        "source": "huecos-kimi",
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-1",
+            "--ds-elevation-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2622,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2635,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de flujo, no chrome",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2648,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2661,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "steppers en flujo, sin region pintada propia: usan los canales semanticos directos",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2674,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "focus.ring",
+            "socketPattern": "--_ds-<comp>-focus-ring-color",
+            "prop": "outline-color / box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-stepper-step-focus-ring-color"
+            ],
+            "sockets": [
+              "--_ds-moderation-gallery-focus-ring-color"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2708,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2726,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2739,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2778,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria en el stepper",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-steps-icon-stroke-width",
+            "prop": "stroke-width de checks e iconos de paso",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2799,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -10,7 +10,7 @@
  *
  * OWNERSHIP (single owner PER PART): this skin owns ONLY
  *   (a) the copy-button part -- wholesale: geometry, static paint (evolved
- *       from the old inline styles) and its interaction states (hover,
+ *       from the retired `style`-prop objects) and its interaction states (hover,
  *       active, focus-visible and the transient copied confirmation);
  *   (b) the scroll region's focus ring (the region became keyboard-focusable
  *       in the K4-B R4 remediation; the ring is its contract);

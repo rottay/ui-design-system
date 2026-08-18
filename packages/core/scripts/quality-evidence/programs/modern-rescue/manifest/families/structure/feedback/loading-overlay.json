@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "583f05e155f22b5d481ab41c33550655bfc5ba0d11f374566687111633112ea0"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,675 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/structures/feedback/loading-overlay",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+    ],
+    "stableParts": [
+      "root",
+      "content",
+      "dot",
+      "logo",
+      "message",
+      "status"
+    ],
+    "states": [
+      "aria-busy"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:180]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:201, packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:202, packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:203]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:190]",
+      "the family stamps role='status' [at packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:68]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 6,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "root-class-stamp",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:66"
+          ]
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:137",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:138",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:190"
+          ]
+        },
+        {
+          "part": "dot",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:88",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:167"
+          ]
+        },
+        {
+          "part": "logo",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:74",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:180"
+          ]
+        },
+        {
+          "part": "message",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:80",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:167",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:173",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:174"
+          ]
+        },
+        {
+          "part": "status",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:78",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:142"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "aria-busy",
+          "axis": "aria-attribute",
+          "at": [
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:70"
+          ],
+          "state": "aria-busy"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@container ds-loading-overlay (max-height: 200px) >> .ds-loading-overlay[data-part='root'] [data-part='content']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:190"
+            ]
+          },
+          {
+            "token": "@media(forced-colors: active)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:201",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:202",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:203"
+            ]
+          },
+          {
+            "token": "@media(prefers-reduced-motion: reduce)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:180"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "accessibilityAttributes": {
+        "entries": [
+          {
+            "token": "aria-hidden",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:91"
+            ]
+          },
+          {
+            "token": "aria-live",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:69"
+            ]
+          }
+        ],
+        "reason": "ARIA semantics. An accessibility contract of the family, not a customization axis and not an interaction state; a tenant control must never be allowed to change it."
+      },
+      "pseudoElementDecorations": {
+        "entries": [
+          {
+            "token": "::before",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:124",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:125",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:126"
+            ]
+          }
+        ],
+        "reason": "A pseudo-ELEMENT is a rendered decoration of a part, not an interaction state and not a customization axis. Recorded so the measurement is not lost; it creates no `states` entry."
+      },
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "dot-index=1",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159"
+            ]
+          },
+          {
+            "token": "dot-index=2",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162"
+            ]
+          },
+          {
+            "token": "data-dot-index",
+            "axis": "stamped-data-attribute",
+            "at": [
+              "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:89"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css": {
+            "rows": 32,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--ds-spacing-3",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:104",
+            "selector": ".ds-loading-overlay[data-part='root']",
+            "states": [],
+            "landsOn": "--_ds-loading-overlay-stack-gap",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "12px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-loading-overlay-z",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:112",
+            "selector": ".ds-loading-overlay[data-part='root']",
+            "states": [],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-z-index-overlay, 1300)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-z-index-overlay",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:112",
+            "selector": ".ds-loading-overlay[data-part='root']",
+            "states": [],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1300",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:935"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-loading-overlay-scrim-opacity",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:128",
+            "selector": ".ds-loading-overlay[data-part='root']::before",
+            "states": [
+              "::before"
+            ],
+            "landsOn": "opacity",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "state-affordance",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.92",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:129",
+            "selector": ".ds-loading-overlay[data-part='root']::before",
+            "states": [
+              "::before"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "rgba(15,23,42,0.85)",
+            "hasFallback": true,
+            "fallbackKind": "literal-color",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
+              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--_ds-loading-overlay-stack-gap",
+            "part": "content",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:138",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='content']",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:104"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-loading-overlay-dot-gap",
+            "part": "status",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:142",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='status']",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:105"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-loading-overlay-pulse-duration",
+            "part": "logo",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='logo']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "calc(var(--ds-motion-glacial) * 3.6)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "part": "logo",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='logo']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-in-out",
+            "part": "logo",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='logo']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-in-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:124"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-loading-overlay-dots-duration",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "calc(var(--ds-motion-glacial) * 2.8)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-in-out",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-in-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:124"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-loading-overlay-dots-duration",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1']",
+            "states": [
+              "dot-index=1"
+            ],
+            "landsOn": "animation-delay",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "calc(var(--ds-motion-glacial) * 2.8)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1']",
+            "states": [
+              "dot-index=1"
+            ],
+            "landsOn": "animation-delay",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--_ds-loading-overlay-dots-duration",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2']",
+            "states": [
+              "dot-index=2"
+            ],
+            "landsOn": "animation-delay",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "calc(var(--ds-motion-glacial) * 2.8)",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "part": "dot",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2']",
+            "states": [
+              "dot-index=2"
+            ],
+            "landsOn": "animation-delay",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "part": "message",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:167",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='message'], .ds-loading-overlay[data-part='root'] [data-part='dot']",
+            "states": [],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-font-mono",
+            "part": "message",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:173",
+            "selector": ".ds-loading-overlay[data-part='root'] [data-part='message']",
+            "states": [],
+            "landsOn": "font-family",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "monospace",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:504"
+            ],
+            "declarationSiteCount": 1
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css": {
+              "rows": 32,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 32,
+            "viaUniqueDataPartInSharedClassScope": 0,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [
+            "ds-loading-overlay"
+          ],
+          "sharedClassTokens": [],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 32
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 1,
+            "dataPart": 8,
+            "styleAttribute": 0
+          },
+          "perFile": {
+            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx": {
+              "classNameOccurrences": 1,
+              "dataPartOccurrences": 8,
+              "styleAttributeOccurrences": 0,
+              "lines": 101
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 32,
+          "customPropertyReadsAttributed": 19,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +703,46 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-<comp>-<status>-color",
+            "prop": "estados de ciclo de vida de superficie (error/stale/offline)",
+            "tier": "standard",
+            "examples": [
+              "--_ds-surface-error-state-color",
+              "--_ds-surface-stale-banner-bg"
+            ],
+            "sockets": [
+              "--_ds-loading-overlay-<status>-color"
+            ],
+            "socketsResolved": false
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-color-bg-primary",
+            "--ds-color-text-muted",
+            "--ds-font-mono",
+            "--ds-motion-glacial",
+            "--ds-spacing-3"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +750,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de estado sobre canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +774,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de estado sobre canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +798,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +822,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-loading-overlay-radius",
+            "prop": "radio de paneles de estado (loading-overlay, error/empty states; slug vivo: loading-overlay)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-loading-overlay-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +847,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los CTA de retry/back son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +860,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
+        "source": "huecos-fable",
+        "uncoveredByDesign": {
+          "EXCEPCION - z adjudicado": [
+            "--ds-loading-overlay-z",
+            "--ds-z-index-overlay"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +880,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +893,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "sockets heredados --_ds-loading-overlay-dots-duration y -pulse-duration",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-loading-dots-duration",
+            "prop": "animation-duration de dots/pulse del loading-overlay",
+            "tier": "standard"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-motion-ease-in-out"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +920,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el estado lo senalan scrim y motion, no sombra: elevar el loading seria doble señal",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +933,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "backdrop de overlay: lugar sancionado para glass",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-loading-scrim-backdrop-filter",
+            "prop": "backdrop-filter del backdrop del loading-overlay",
+            "tier": "premium",
+            "sockets": [
+              "--_ds-loading-overlay-backdrop",
+              "--_ds-loading-overlay-scrim-opacity"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +959,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "feedback estructural, no chrome",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +972,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +985,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el scrim del loading-overlay es un canal semantico global, no chrome de familia: una fuente unica (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +998,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-loading-overlay-border-style",
+            "prop": "borde de los paneles de estado",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-loading-overlay-border-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1023,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1041,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1054,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1093,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el spinner es un grafico de motion, no un icono de la libreria de postura",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1106,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

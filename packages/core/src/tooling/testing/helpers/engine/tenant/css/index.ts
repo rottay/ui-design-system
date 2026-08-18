@@ -4,7 +4,7 @@
  */
 
 import type { EngineName } from '../../../../../../foundation/contracts';
-import type { TestTenantName } from '..';
+import { TEST_TENANTS, type TestTenantName } from '..';
 
 /**
  * Gets a CSS variable value from an element
@@ -129,14 +129,19 @@ export function clearInjectedStyles(): void {
 }
 
 /**
- * Expected CSS variable mappings for each tenant
+ * Expected CSS variable mappings for each tenant.
+ *
+ * These are fixture values for the synthetic customers in `TEST_TENANTS`, not
+ * a claim about any shipped artifact: `createTenantCSSFixture` below is what
+ * writes them into the document, so the map and the stylesheet under test are
+ * the same fact.
  */
 export const TENANT_CSS_EXPECTATIONS: Record<TestTenantName, Record<string, string>> = {
-  rottay: {
+  acme: {
     '--ds-color-primary-500': '#0066CC',
     '--ds-button-primary-bg': '#0066CC',
   },
-  bithire: {
+  northwind: {
     '--ds-color-primary-500': '#6366F1',
     '--ds-button-primary-bg': '#6366F1',
   },
@@ -273,8 +278,10 @@ export function loadTenantCSSFixtures(): () => void {
     )
   );
 
-  // Tenant-specific CSS
-  for (const tenant of ['rottay', 'bithire', 'default'] as TestTenantName[]) {
+  // Tenant-specific CSS. Derived from TEST_TENANTS rather than restated: a
+  // literal list here silently stopped covering a tenant the moment the roster
+  // changed, and the fixture loader is the one place that must cover all of it.
+  for (const tenant of TEST_TENANTS) {
     cleanups.push(injectCSS(createTenantCSSFixture(tenant), `test-tenant-${tenant}-css`));
   }
 

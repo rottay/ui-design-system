@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "51db0bf3605ed30a0f869c183412adae1744fe775817c1753b5541ad8da3d795"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1283 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/structures/workspace/export-button",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css"
+    ],
+    "stableParts": [
+      "root",
+      "trigger",
+      "toast",
+      "toast-label",
+      "panel",
+      "menu-item"
+    ],
+    "states": [
+      "expanded",
+      "open",
+      "copied",
+      "aria-expanded"
+    ],
+    "variantAxes": [],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:128, packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:131]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:142, packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:143, packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:144]",
+      "the family carries an explicit right-to-left branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:84]",
+      "the family stamps role='menu' [at packages/core/src/ui/structures/workspace/export-button/index.tsx:341]",
+      "the family stamps role='menuitem' [at packages/core/src/ui/structures/workspace/export-button/index.tsx:368]",
+      "the family stamps role='status' [at packages/core/src/ui/structures/workspace/export-button/index.tsx:313]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-a.json": "SOURCE_BOUND",
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 6,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/export-button/index.tsx:291"
+        },
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/export-button/index.tsx:296"
+        },
+        {
+          "part": "toast",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/export-button/index.tsx:311"
+        },
+        {
+          "part": "toast-label",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/export-button/index.tsx:317"
+        },
+        {
+          "part": "panel",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/export-button/index.tsx:336"
+        },
+        {
+          "part": "menu-item",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/ui/structures/workspace/export-button/index.tsx:367"
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "expanded",
+          "state": "expanded"
+        },
+        {
+          "token": "open=true",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:99",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:148",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:149"
+          ],
+          "state": "open"
+        },
+        {
+          "token": "data-copied",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/export-button/index.tsx:312"
+          ],
+          "state": "copied"
+        },
+        {
+          "token": "data-open",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/export-button/index.tsx:337"
+          ],
+          "state": "open"
+        },
+        {
+          "token": "aria-expanded",
+          "axis": "aria-attribute",
+          "at": [
+            "packages/core/src/ui/structures/workspace/export-button/index.tsx:302"
+          ],
+          "state": "aria-expanded"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "rtl"
+          },
+          {
+            "token": "@media(forced-colors: active)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:142",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:143",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:144"
+            ]
+          },
+          {
+            "token": "@media(prefers-reduced-motion: reduce)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:131"
+            ]
+          },
+          {
+            "token": "rtl",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:84"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "accessibilityAttributes": {
+        "entries": [
+          {
+            "token": "aria-controls",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/export-button/index.tsx:303"
+            ]
+          },
+          {
+            "token": "aria-haspopup",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/export-button/index.tsx:301"
+            ]
+          },
+          {
+            "token": "aria-label",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/workspace/export-button/index.tsx:304",
+              "packages/core/src/ui/structures/workspace/export-button/index.tsx:342"
+            ]
+          }
+        ],
+        "reason": "ARIA semantics. An accessibility contract of the family, not a customization axis and not an interaction state; a tenant control must never be allowed to change it."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css": {
+            "rows": 41,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupEvidence": {
+          "border": {
+            "declarationCount": 3,
+            "properties": [
+              "border"
+            ]
+          },
+          "color": {
+            "declarationCount": 13,
+            "properties": [
+              "background",
+              "color",
+              "opacity"
+            ]
+          },
+          "elevation": {
+            "declarationCount": 4,
+            "properties": [
+              "box-shadow",
+              "z-index"
+            ]
+          },
+          "layout": {
+            "declarationCount": 5,
+            "properties": [
+              "display",
+              "justify-content",
+              "pointer-events",
+              "position"
+            ]
+          },
+          "motion": {
+            "declarationCount": 13,
+            "properties": [
+              "animation",
+              "transform",
+              "translate"
+            ]
+          },
+          "radius": {
+            "declarationCount": 2,
+            "properties": [
+              "border-radius"
+            ]
+          },
+          "size": {
+            "declarationCount": 3,
+            "properties": [
+              "inline-size",
+              "max-inline-size",
+              "min-inline-size"
+            ]
+          },
+          "spacing": {
+            "declarationCount": 5,
+            "properties": [
+              "inset-block-start",
+              "inset-inline-start",
+              "padding",
+              "padding-block",
+              "padding-inline"
+            ]
+          },
+          "typography": {
+            "declarationCount": 5,
+            "properties": [
+              "font-size",
+              "font-weight",
+              "white-space"
+            ]
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--ds-export-button-toast-z",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:46",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-z-index-tooltip, 1700)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-z-index-tooltip",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:46",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1700",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:939"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:47",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "padding-block",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "4px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:78",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:48",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "padding-inline",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "8px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-radius-md",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:49",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "6px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:236",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json:150",
+              "packages/core/src/tooling/resolution-probe/public/drills/index.mjs:59"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-color-success-bg",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:50",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:245",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:103"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-success-ink",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:51",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:476"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:52",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "font-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-export-button-toast-duration",
+            "part": "toast",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:57",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1.8s",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "part": "toast-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:62",
+            "selector": ".ds-structure.ds-export-button[data-part='root'] [data-part='toast'] [data-part='toast-label']",
+            "states": [],
+            "landsOn": "font-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-export-button-panel-z",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:71",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-z-index-popover, 1600)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-z-index-popover",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:71",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "z-index",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1600",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:938"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-export-button-panel-min-width",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:72",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "min-inline-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "200px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:74",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "4px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:78",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:75",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "8px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
+              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+            ],
+            "declarationSiteCount": 5
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:76",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-elevation-2",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:77",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:801",
+              "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88",
+              "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:94"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:79",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "200ms",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:95",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:399",
+              "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:79",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel']",
+            "states": [],
+            "landsOn": "animation",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "motion",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "ease-out",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-color-border",
+            "part": "panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:99",
+            "selector": ".ds-structure.ds-export-button-panel[data-part='panel'][data-open='true']",
+            "states": [
+              "open=true"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+            ],
+            "declarationSiteCount": 8
+          }
+        ],
+        "readCensus": {
+          "distinctVariables": 18,
+          "totalReadSites": 20,
+          "variables": [
+            {
+              "variable": "--ds-export-button-toast-z",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:46",
+                  "part": "toast",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-z-index-tooltip, 1700)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-z-index-tooltip",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:46",
+                  "part": "toast",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "1700",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:939"
+            },
+            {
+              "variable": "--ds-spacing-1",
+              "totalReadSites": 2,
+              "parts": [
+                "panel",
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:47",
+                  "part": "toast",
+                  "landsOn": "padding-block",
+                  "fallbackPresent": true,
+                  "fallback": "4px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:74",
+                  "part": "panel",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "4px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+            },
+            {
+              "variable": "--ds-spacing-2",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:48",
+                  "part": "toast",
+                  "landsOn": "padding-inline",
+                  "fallbackPresent": true,
+                  "fallback": "8px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            },
+            {
+              "variable": "--ds-radius-md",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:49",
+                  "part": "toast",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "6px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770"
+            },
+            {
+              "variable": "--ds-color-success-bg",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:50",
+                  "part": "toast",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:103"
+            },
+            {
+              "variable": "--ds-color-success-ink",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:51",
+                  "part": "toast",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:476"
+            },
+            {
+              "variable": "--ds-font-size-xs",
+              "totalReadSites": 2,
+              "parts": [
+                "toast",
+                "toast-label"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:52",
+                  "part": "toast",
+                  "landsOn": "font-size",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:62",
+                  "part": "toast-label",
+                  "landsOn": "font-size",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+            },
+            {
+              "variable": "--ds-export-button-toast-duration",
+              "totalReadSites": 1,
+              "parts": [
+                "toast"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:57",
+                  "part": "toast",
+                  "landsOn": "animation",
+                  "fallbackPresent": true,
+                  "fallback": "1.8s",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-export-button-panel-z",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:71",
+                  "part": "panel",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-z-index-popover, 1600)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-z-index-popover",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:71",
+                  "part": "panel",
+                  "landsOn": "z-index",
+                  "fallbackPresent": true,
+                  "fallback": "1600",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:938"
+            },
+            {
+              "variable": "--ds-export-button-panel-min-width",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:72",
+                  "part": "panel",
+                  "landsOn": "min-inline-size",
+                  "fallbackPresent": true,
+                  "fallback": "200px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-radius-lg",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:75",
+                  "part": "panel",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "8px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771"
+            },
+            {
+              "variable": "--ds-color-bg-elevated",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:76",
+                  "part": "panel",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+            },
+            {
+              "variable": "--ds-elevation-2",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:77",
+                  "part": "panel",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:801"
+            },
+            {
+              "variable": "--ds-motion-normal",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:80",
+                  "part": "panel",
+                  "landsOn": "animation",
+                  "fallbackPresent": true,
+                  "fallback": "200ms",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+            },
+            {
+              "variable": "--ds-motion-ease-out",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:81",
+                  "part": "panel",
+                  "landsOn": "animation",
+                  "fallbackPresent": true,
+                  "fallback": "ease-out",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            },
+            {
+              "variable": "--ds-color-border",
+              "totalReadSites": 1,
+              "parts": [
+                "panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:99",
+                  "part": "panel",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:147"
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-export-button-toast-z",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:46",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-z-index-tooltip, 1700)",
+            "landsOn": "z-index"
+          },
+          {
+            "variable": "--ds-export-button-toast-duration",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:57",
+            "fallbackPresent": true,
+            "fallback": "1.8s",
+            "landsOn": "animation"
+          },
+          {
+            "variable": "--ds-export-button-panel-z",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:71",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-z-index-popover, 1600)",
+            "landsOn": "z-index"
+          },
+          {
+            "variable": "--ds-export-button-panel-min-width",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:72",
+            "fallbackPresent": true,
+            "fallback": "200px",
+            "landsOn": "min-inline-size"
+          }
+        ],
+        "inertFallbackChainSample": [
+          {
+            "name": "--ds-z-index-tooltip",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:46",
+            "fallback": "1700",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:939"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:47",
+            "fallback": "4px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+          },
+          {
+            "name": "--ds-spacing-2",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:48",
+            "fallback": "8px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+          },
+          {
+            "name": "--ds-radius-md",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:49",
+            "fallback": "6px",
+            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:43"
+          },
+          {
+            "name": "--ds-z-index-popover",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:71",
+            "fallback": "1600",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:938"
+          },
+          {
+            "name": "--ds-spacing-1",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:74",
+            "fallback": "4px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:75",
+            "fallback": "8px",
+            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:44"
+          },
+          {
+            "name": "--ds-motion-normal",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:80",
+            "fallback": "200ms",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+          },
+          {
+            "name": "--ds-motion-ease-out",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css:81",
+            "fallback": "ease-out",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+          }
+        ],
+        "inertFallbackChainSites": 9,
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css",
+            "line": 73,
+            "property": "max-inline-size",
+            "literal": "100vw",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css",
+            "line": 73,
+            "property": "max-inline-size",
+            "literal": "16px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css",
+            "line": 99,
+            "property": "border",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css",
+            "line": 118,
+            "property": "transform",
+            "literal": "4px",
+            "classification": "KEYFRAME_INTERPOLATION_LITERAL",
+            "atRule": "@keyframes ds-export-toast-fade"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css",
+            "line": 142,
+            "property": "border",
+            "literal": "1px",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT",
+            "atRule": "@media (forced-colors: active)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css",
+            "line": 148,
+            "property": "border",
+            "literal": "1px",
+            "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT",
+            "atRule": "@media (forced-colors: active)"
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css": {
+              "rows": 41,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 41,
+            "viaUniqueDataPartInSharedClassScope": 0,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [
+            "ds-export-button",
+            "ds-export-button-item",
+            "ds-export-button-panel"
+          ],
+          "sharedClassTokens": [
+            "ds-structure"
+          ],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 41
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 3,
+            "dataPart": 6,
+            "styleAttribute": 1
+          },
+          "perFile": {
+            "packages/core/src/ui/structures/workspace/export-button/index.tsx": {
+              "classNameOccurrences": 3,
+              "dataPartOccurrences": 6,
+              "styleAttributeOccurrences": 1,
+              "lines": 396
+            },
+            "packages/core/src/ui/structures/workspace/export-button/runtime/file-export/index.ts": {
+              "classNameOccurrences": 0,
+              "dataPartOccurrences": 0,
+              "styleAttributeOccurrences": 0,
+              "lines": 203
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 41,
+          "customPropertyReadsAttributed": 20,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1311,46 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-accent-color",
+            "prop": "acentos de toolbar y filtros activos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-export-button-accent-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-border",
+            "--ds-color-success-bg",
+            "--ds-color-success-ink",
+            "--ds-elevation-2",
+            "--ds-motion-normal",
+            "--ds-spacing-1",
+            "--ds-spacing-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1358,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1382,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ]
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1406,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-font-size-xs"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1436,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-panel-radius",
+            "prop": "paneles, rails, metric cards",
+            "tier": "standard",
+            "examples": [
+              "--_ds-record-facts-radius",
+              "--_ds-stats-card-radius"
+            ],
+            "sockets": [
+              "--_ds-export-button-panel-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1470,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-control-radius",
+            "prop": "botones de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-export-button-control-radius"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1494,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "padding de toolbar y field-grid",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-export-button-density-factor",
+              "--_ds-export-button-panel-min-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "z adjudicado": [
+            "--ds-export-button-panel-z",
+            "--ds-export-button-toast-z",
+            "--ds-z-index-popover",
+            "--ds-z-index-tooltip"
+          ]
+        }
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1528,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-grid-gap",
+            "prop": "gap de grillas de widgets y de zonas de trabajo",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-export-button-grid-gap"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1552,32 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-panel-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-export-button-transition-duration",
+              "--_ds-export-button-toast-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-motion-ease-out"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1585,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "plano de trabajo plano; lo flotante usa sockets overlay",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1598,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "El lienzo de trabajo no compite con el contenido: acabado cero en el plano de trabajo."
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1615,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1628,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de structures)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1645,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "los paneles del lienzo pintan su encabezado por familia",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "chrome.families",
+            "socketPattern": "--_ds-export-button-panel-header-bg",
+            "prop": "background-color del encabezado de panel",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1666,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-rule-style",
+            "prop": "reglas de field-grid y bordes de toolbar",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-export-button-rule-style"
+            ],
+            "socketsResolved": true
+          }
+        ]
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1690,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1708,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de structures)."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1725,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1764,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "iconos de la libreria",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-export-button-icon-stroke-width",
+            "prop": "stroke-width de los iconos de toolbar de panel",
+            "tier": "standard"
+          }
+        ]
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1785,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

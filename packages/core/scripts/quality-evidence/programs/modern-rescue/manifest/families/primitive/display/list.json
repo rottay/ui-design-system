@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "57ceaed11f019cfdda09337f6e8392bb50ded485e3204a2175774b262e96504b"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1905 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/display/List/List.stories.tsx",
+      "packages/core/src/ui/primitives/display/List/index.tsx",
+      "packages/core/src/ui/primitives/display/List/contracts/index.ts",
+      "packages/core/src/ui/primitives/display/List/tests/List.engine-advanced.test.tsx",
+      "packages/core/src/ui/primitives/display/List/tests/List.integration.test.tsx",
+      "packages/core/src/ui/primitives/display/List/tests/List.loading-shell-continuity.test.tsx",
+      "packages/core/src/ui/primitives/display/List/tests/List.modern-paint-ownership.test.tsx",
+      "packages/core/src/ui/primitives/display/List/tests/List.test.tsx",
+      "packages/core/src/ui/primitives/display/List/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css"
+    ],
+    "stableParts": [
+      "root",
+      "meta-avatar",
+      "meta-content",
+      "meta-title",
+      "meta-description",
+      "item-content",
+      "item-extra",
+      "item-actions",
+      "item-action",
+      "header",
+      "skeleton",
+      "skeleton-row",
+      "skeleton-row-inner",
+      "skeleton-avatar",
+      "skeleton-lines",
+      "skeleton-line",
+      "footer",
+      "empty",
+      "list",
+      "divider",
+      "meta",
+      "item"
+    ],
+    "states": [
+      "loading",
+      "hover",
+      "focus-within",
+      "disabled",
+      "hidden"
+    ],
+    "variantAxes": [
+      "data-bordered",
+      "data-size",
+      "data-item-layout"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "The root is a real list element: <ul> in modern (packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:302) and rustic (packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:174); the engine-routed container is documented as the outer <ul>/<ol> wrapper at packages/core/src/ui/primitives/display/List/index.tsx:37.",
+      "Every item is an <li>, not a styled div: packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:134 and :154; packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:58 and :64.",
+      "The loading root announces busy state: aria-busy at packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:239.",
+      "The divider is decorative and removed from the accessibility tree: aria-hidden on the <li> divider at packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:315.",
+      "Motion and high-contrast floors exist in the modern skin and must survive any control: prefers-reduced-motion at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:379 and forced-colors at :391."
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-b",
+        "scoutArtifact": "mr-anatomy-display-b.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 22,
+        "dynamicPartExpressionsInSource": 4,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:112",
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:158",
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:232",
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:280",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:130",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:157"
+          ]
+        },
+        {
+          "part": "meta-avatar",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:115",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:36"
+          ]
+        },
+        {
+          "part": "meta-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:116",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:37"
+          ]
+        },
+        {
+          "part": "meta-title",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:118",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:39"
+          ]
+        },
+        {
+          "part": "meta-description",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:123",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:45"
+          ]
+        },
+        {
+          "part": "item-content",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:161",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:76"
+          ]
+        },
+        {
+          "part": "item-extra",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:163",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:77"
+          ]
+        },
+        {
+          "part": "item-actions",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:168",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:79"
+          ]
+        },
+        {
+          "part": "item-action",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:170",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:81"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:243",
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:288",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:167"
+          ]
+        },
+        {
+          "part": "skeleton",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:250"
+          ]
+        },
+        {
+          "part": "skeleton-row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:255",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:132"
+          ]
+        },
+        {
+          "part": "skeleton-row-inner",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:256"
+          ]
+        },
+        {
+          "part": "skeleton-avatar",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:257",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:134"
+          ]
+        },
+        {
+          "part": "skeleton-lines",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:258"
+          ]
+        },
+        {
+          "part": "skeleton-line",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:259",
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:260",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:139",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:143"
+          ]
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:267",
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:322",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:198"
+          ]
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:298"
+          ]
+        },
+        {
+          "part": "list",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:304",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:175"
+          ]
+        },
+        {
+          "part": "divider",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:315",
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:191"
+          ]
+        },
+        {
+          "part": "meta",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:28"
+          ]
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:67"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:91",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:95"
+          ],
+          "atSiteCount": 10,
+          "state": "loading"
+        },
+        {
+          "token": "hover",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:264",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:265",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:266",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:288",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:289"
+          ],
+          "atSiteCount": 9,
+          "state": "hover"
+        },
+        {
+          "token": "focus-within",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:269",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:271"
+          ],
+          "state": "focus-within"
+        },
+        {
+          "token": "disabled",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:284",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:288",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:289"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "hidden",
+          "at": [
+            "packages/core/src/ui/primitives/display/List/engines/modern/index.tsx:315"
+          ],
+          "state": "hidden"
+        },
+        {
+          "token": "data-loading",
+          "state": "loading"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-bordered"
+        },
+        {
+          "token": "data-size"
+        },
+        {
+          "token": "data-item-layout"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "prefers-reduced-motion",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:379",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:380",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:381",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:382",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:383",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:384"
+            ],
+            "atSiteCount": 8
+          },
+          {
+            "token": "forced-colors",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:391",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:392",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:393",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:394",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:395",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:396"
+            ],
+            "atSiteCount": 10
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "first-child",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:126",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:127",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:128",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:129",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:130"
+            ]
+          },
+          {
+            "token": "last-child",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:131",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:132",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:133",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:134"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "partAddressingAttributes": [
+        {
+          "token": "data-grid"
+        }
+      ],
+      "engineDivergence": {
+        "engineDivergence": "Engine siblings exist for classic, modern and rustic. Only modern and rustic emit data-part anchors and read --ds-* channels; the classic engine is an Ant Design wrapper with zero data-part attributes and zero --ds-* reads, so the entire part anatomy below is unaddressable under engine=classic. Modern and rustic also differ in parts: rustic emits item, meta and root parts that modern does not name identically.",
+        "engineCensus": {
+          "classic": {
+            "productionLines": 109,
+            "dataPartSites": 0,
+            "variableReadSites": 0
+          },
+          "modern": {
+            "productionLines": 332,
+            "dataPartSites": 26,
+            "variableReadSites": 0
+          },
+          "rustic": {
+            "productionLines": 210,
+            "dataPartSites": 20,
+            "variableReadSites": 1
+          }
+        }
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "UNATTRIBUTED": {
+            "layout": 9,
+            "unattributed": 1
+          },
+          "divider": {
+            "border": 5,
+            "spacing": 1
+          },
+          "empty": {
+            "spacing": 1,
+            "layout": 1
+          },
+          "footer": {
+            "border": 5,
+            "spacing": 2,
+            "typography": 2,
+            "color": 1
+          },
+          "header": {
+            "border": 5,
+            "typography": 3,
+            "spacing": 2,
+            "color": 1
+          },
+          "item": {
+            "color": 11,
+            "spacing": 6,
+            "motion": 3,
+            "elevation": 1
+          },
+          "item-action": {
+            "color": 2
+          },
+          "item-actions": {
+            "spacing": 3,
+            "color": 2
+          },
+          "item-extra": {
+            "spacing": 1
+          },
+          "meta": {
+            "spacing": 1
+          },
+          "meta-description": {
+            "color": 5,
+            "typography": 1,
+            "spacing": 1
+          },
+          "meta-title": {
+            "typography": 2,
+            "color": 2
+          },
+          "root": {
+            "typography": 6,
+            "border": 5,
+            "color": 3,
+            "radius": 3,
+            "motion": 3
+          },
+          "skeleton": {
+            "size": 6
+          },
+          "skeleton-avatar": {
+            "size": 2,
+            "color": 2,
+            "radius": 1
+          },
+          "skeleton-line": {
+            "color": 4,
+            "radius": 2,
+            "size": 2,
+            "spacing": 1
+          },
+          "skeleton-row": {
+            "spacing": 1
+          },
+          "skeleton-row-inner": {
+            "spacing": 1
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-list-sm-padding-vertical",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:171",
+            "fallback": null,
+            "landsOnProperty": "small",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "small"
+          },
+          {
+            "variable": "--ds-list-sm-padding-horizontal",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:171",
+            "fallback": null,
+            "landsOnProperty": "small",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "small"
+          },
+          {
+            "variable": "--ds-list-sm-font-size",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:171",
+            "fallback": null,
+            "landsOnProperty": "small",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "small"
+          },
+          {
+            "variable": "--ds-list-default-padding-vertical",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:172",
+            "fallback": null,
+            "landsOnProperty": "default",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "default"
+          },
+          {
+            "variable": "--ds-list-default-padding-horizontal",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:172",
+            "fallback": null,
+            "landsOnProperty": "default",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "default"
+          },
+          {
+            "variable": "--ds-list-default-font-size",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:172",
+            "fallback": null,
+            "landsOnProperty": "default",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "default"
+          },
+          {
+            "variable": "--ds-list-lg-padding-vertical",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:173",
+            "fallback": null,
+            "landsOnProperty": "large",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "large"
+          },
+          {
+            "variable": "--ds-list-lg-padding-horizontal",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:173",
+            "fallback": null,
+            "landsOnProperty": "large",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "large"
+          },
+          {
+            "variable": "--ds-list-lg-font-size",
+            "readAt": "packages/core/src/ui/primitives/display/List/contracts/index.ts:173",
+            "fallback": null,
+            "landsOnProperty": "large",
+            "propertyGroup": "layout",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "large"
+          },
+          {
+            "variable": "--ds-list-meta-description-font-size",
+            "readAt": "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:46",
+            "fallback": "14px",
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "gap"
+          },
+          {
+            "variable": "--ds-list-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:52",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-text-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:53",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:58",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:58",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:58",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-radius",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:59",
+            "fallback": "var(--ds-radius-lg)",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:59",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-sm-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:64",
+            "fallback": "var(--ds-font-size-xs)",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='small']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:64",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='small']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-default-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:67",
+            "fallback": "var(--ds-font-size-sm)",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='default']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:67",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='default']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-lg-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:70",
+            "fallback": "var(--ds-font-size-base)",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='large']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-base",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:70",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='large']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-sm-padding-vertical",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:79",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "item",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='small'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-sm-padding-horizontal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:79",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "item",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='small'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-lg-padding-vertical",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:82",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "item",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='large'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-lg-padding-horizontal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:82",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "item",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-size='large'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-loading-opacity",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:91",
+            "fallback": null,
+            "landsOnProperty": "opacity",
+            "propertyGroup": "color",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-pulse-duration",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:92",
+            "fallback": "calc(var(--ds-motion-glacial) * 4)",
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:92",
+            "fallback": null,
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-in-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:92",
+            "fallback": null,
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-row-padding-block",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:95",
+            "fallback": "12px",
+            "landsOnProperty": "padding-block",
+            "propertyGroup": "spacing",
+            "part": "skeleton-row",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-row-gap",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:107",
+            "fallback": "12px",
+            "landsOnProperty": "gap",
+            "propertyGroup": "spacing",
+            "part": "skeleton-row-inner",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row-inner']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-avatar-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:118",
+            "fallback": "40px",
+            "landsOnProperty": "inline-size",
+            "propertyGroup": "size",
+            "part": "skeleton-avatar",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-avatar-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:119",
+            "fallback": "40px",
+            "landsOnProperty": "block-size",
+            "propertyGroup": "size",
+            "part": "skeleton-avatar",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-full",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:121",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "skeleton-avatar",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-line-radius",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:124",
+            "fallback": "var(--ds-radius-sm)",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:124",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-line-height",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:128",
+            "fallback": "16px",
+            "landsOnProperty": "block-size",
+            "propertyGroup": "size",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:first-child",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-line-gap",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:129",
+            "fallback": "8px",
+            "landsOnProperty": "margin-block-end",
+            "propertyGroup": "spacing",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:first-child",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-line-height-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:133",
+            "fallback": "12px",
+            "landsOnProperty": "block-size",
+            "propertyGroup": "size",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:last-child",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-item-hover-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:137",
+            "fallback": "var(--ds-surface-panel)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:137",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-header-padding-vertical",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:149",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-header-padding-horizontal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:149",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-header-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:150",
+            "fallback": "var(--ds-font-size-sm)",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:150",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-header-font-weight",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:151",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-header-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:152",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-footer-padding-vertical",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:155",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-footer-padding-horizontal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:155",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-footer-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:156",
+            "fallback": "var(--ds-font-size-sm)",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:156",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-footer-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:157",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:160",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:160",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:160",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:163",
+            "fallback": null,
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:163",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:163",
+            "fallback": null,
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:174",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "empty",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='empty']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-empty-simple-min-height",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:175",
+            "fallback": "8rem",
+            "landsOnProperty": "--ds-empty-min-height",
+            "propertyGroup": "layout",
+            "part": "empty",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='empty']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-list-grid-columns-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:204",
+            "fallback": "1",
+            "landsOnProperty": "grid-template-columns",
+            "propertyGroup": "size",
+            "part": "skeleton",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-list-grid-columns-sm",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:209",
+            "fallback": "1",
+            "landsOnProperty": "grid-template-columns",
+            "propertyGroup": "size",
+            "part": "skeleton",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive']",
+            "atRuleScope": "@container ds-list (min-width: 640px)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-list-grid-columns-md",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:215",
+            "fallback": "1",
+            "landsOnProperty": "grid-template-columns",
+            "propertyGroup": "size",
+            "part": "skeleton",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive']",
+            "atRuleScope": "@container ds-list (min-width: 768px)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-list-grid-columns-lg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:221",
+            "fallback": "1",
+            "landsOnProperty": "grid-template-columns",
+            "propertyGroup": "size",
+            "part": "skeleton",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive']",
+            "atRuleScope": "@container ds-list (min-width: 1024px)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-list-grid-columns-xl",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:227",
+            "fallback": "1",
+            "landsOnProperty": "grid-template-columns",
+            "propertyGroup": "size",
+            "part": "skeleton",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive']",
+            "atRuleScope": "@container ds-list (min-width: 1280px)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-list-grid-columns-xxl",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:233",
+            "fallback": "1",
+            "landsOnProperty": "grid-template-columns",
+            "propertyGroup": "size",
+            "part": "skeleton",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive']",
+            "atRuleScope": "@container ds-list (min-width: 1536px)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-split-inset-inline",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:242",
+            "fallback": "0",
+            "landsOnProperty": "margin-inline",
+            "propertyGroup": "spacing",
+            "part": "divider",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-split-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:243",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "divider",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-split-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:243",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "divider",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:243",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "divider",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-default-padding-vertical",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:252",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-default-padding-horizontal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:252",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-item-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:253",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-text-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:254",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-transition-duration",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:255",
+            "fallback": "var(--ds-motion-normal)",
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:255",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-transition-timing",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:255",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-item-hover-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:265",
+            "fallback": "var(--ds-surface-panel)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:265",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-item-hover-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:270",
+            "fallback": "var(--ds-surface-panel)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']:focus-within",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:270",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item']:focus-within",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:278",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'][aria-current]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-item-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:278",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'][aria-current]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:279",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'][aria-current]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:284",
+            "fallback": "var(--ds-color-text-secondary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'][aria-disabled='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:284",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'][aria-disabled='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-item-background-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:288",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "item",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'][aria-disabled='true']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-extra-margin-left",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:301",
+            "fallback": null,
+            "landsOnProperty": "margin-inline-start",
+            "propertyGroup": "spacing",
+            "part": "item-extra",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-extra']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-extra-margin-left",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:307",
+            "fallback": null,
+            "landsOnProperty": "margin-inline-start",
+            "propertyGroup": "spacing",
+            "part": "item-actions",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-actions-gap",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:308",
+            "fallback": null,
+            "landsOnProperty": "gap",
+            "propertyGroup": "spacing",
+            "part": "item-actions",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-actions-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:309",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item-actions",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:309",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item-actions",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-actions-hover-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:316",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item-action",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] > [data-part='item-action']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:316",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "item-action",
+            "selector": ".rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] > [data-part='item-action']:hover",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:331",
+            "fallback": null,
+            "landsOnProperty": "margin-block-start",
+            "propertyGroup": "spacing",
+            "part": "item-actions",
+            "selector": ".rottay-list.rottay-list--modern[data-part='root'][data-item-layout='vertical'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-avatar-margin-right",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:340",
+            "fallback": null,
+            "landsOnProperty": "gap",
+            "propertyGroup": "spacing",
+            "part": "meta",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-title-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:350",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "meta-title",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-title-font-weight",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:351",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "meta-title",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-title-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:352",
+            "fallback": "var(--ds-color-text-primary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-title",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:352",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-title",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-description-font-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:357",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-description-margin-top",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:358",
+            "fallback": null,
+            "landsOnProperty": "margin-top",
+            "propertyGroup": "spacing",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-description-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:371",
+            "fallback": "var(--ds-color-text-secondary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:371",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css:372",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:34",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:34",
+            "fallback": null,
+            "landsOnProperty": "border",
+            "propertyGroup": "border",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-radius",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:35",
+            "fallback": "8px",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "root",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:40",
+            "fallback": "var(--ds-color-bg-tertiary)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-avatar",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-avatar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-tertiary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:40",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-avatar",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-avatar']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-skeleton-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:44",
+            "fallback": "var(--ds-color-bg-tertiary)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-line']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-bg-tertiary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:44",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "skeleton-line",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-line']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:50",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:50",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "header",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='header']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-border-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:53",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:53",
+            "fallback": null,
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "footer",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='footer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-split-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:58",
+            "fallback": "var(--ds-color-border-subtle)",
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "divider",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'] > [data-part='list'] > [data-part='divider']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:58",
+            "fallback": null,
+            "landsOnProperty": "border-bottom",
+            "propertyGroup": "border",
+            "part": "divider",
+            "selector": ".rottay-list.rottay-list--rustic[data-part='root'] > [data-part='list'] > [data-part='divider']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-list-meta-description-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:64",
+            "fallback": "var(--ds-color-text-secondary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--rustic[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:64",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "meta-description",
+            "selector": ".rottay-list-item-meta.rottay-list-item-meta--rustic[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description']",
+            "atRuleScope": null,
+            "readKind": "css"
+          }
+        ],
+        "variableCensusDistinctCount": 77,
+        "variableCensusReadSiteCount": 122,
+        "hardcodedValues": [
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:32",
+            "declaration": "gap"
+          },
+          {
+            "kind": "spacing",
+            "literal": "12px",
+            "at": "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:72",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "16px",
+            "at": "packages/core/src/ui/primitives/display/List/engines/rustic/index.tsx:179",
+            "declaration": "padding"
+          },
+          {
+            "kind": "radius",
+            "literal": "4px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css:45",
+            "declaration": "border-radius"
+          }
+        ],
+        "hardcodedValueCount": 4
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1933,61 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "prop": "tintas y fondos de marca de la familia",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-list-background-color",
+              "--_ds-list-border-color",
+              "--_ds-list-item-background-color",
+              "--_ds-list-item-hover-background-color",
+              "--_ds-list-header-background-color",
+              "--_ds-list-footer-background-color",
+              "--_ds-list-text-color",
+              "--_ds-list-actions-color",
+              "--_ds-list-actions-hover-color",
+              "--_ds-list-meta-title-color",
+              "--_ds-list-meta-description-color",
+              "--_ds-list-split-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.status",
+            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
+            "prop": "fondos de badge/tag semanticos",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [],
+            "socketsResolved": false,
+            "noSocketReason": "sin estados semanticos propios; loading es opacidad (effect), no semaforo."
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-color-border",
+          "--ds-color-primary",
+          "--ds-color-text-muted",
+          "--ds-color-text-primary",
+          "--ds-color-text-secondary",
+          "--ds-surface-panel"
+        ]
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1995,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [
+              "--_ds-list-header-font-weight",
+              "--_ds-list-meta-title-font-weight"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +2025,27 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "lee la familia base compartida; sin canal de familia propio."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +2053,39 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [
+              "--_ds-list-default-font-size",
+              "--_ds-list-sm-font-size",
+              "--_ds-list-lg-font-size",
+              "--_ds-list-header-font-size",
+              "--_ds-list-footer-font-size",
+              "--_ds-list-meta-title-font-size",
+              "--_ds-list-meta-description-font-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-font-size-base",
+          "--ds-font-size-sm",
+          "--ds-font-size-xs"
+        ]
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +2093,34 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius de contenedores",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-radius",
+              "--_ds-table-radius",
+              "--_ds-image-radius"
+            ],
+            "sockets": [
+              "--_ds-list-border-radius",
+              "--_ds-list-skeleton-line-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-radius-full",
+          "--ds-radius-lg",
+          "--ds-radius-sm"
+        ]
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +2128,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +2145,49 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "density.mode",
+            "socketPattern": "--_ds-<comp>-density-factor",
+            "prop": "altura de fila y padding de item",
+            "tier": "standard",
+            "examples": [
+              "--_ds-table-row-density-factor",
+              "--_ds-menu-item-density-factor"
+            ],
+            "sockets": [
+              "--_ds-list-default-padding-horizontal",
+              "--_ds-list-default-padding-vertical",
+              "--_ds-list-sm-padding-horizontal",
+              "--_ds-list-sm-padding-vertical",
+              "--_ds-list-lg-padding-horizontal",
+              "--_ds-list-lg-padding-vertical",
+              "--_ds-list-header-padding-horizontal",
+              "--_ds-list-header-padding-vertical",
+              "--_ds-list-footer-padding-horizontal",
+              "--_ds-list-footer-padding-vertical",
+              "--_ds-list-actions-gap",
+              "--_ds-list-skeleton-avatar-size",
+              "--_ds-list-skeleton-line-gap",
+              "--_ds-list-skeleton-line-height",
+              "--_ds-list-skeleton-line-height-sm",
+              "--_ds-list-skeleton-row-gap",
+              "--_ds-list-skeleton-row-padding-block",
+              "--_ds-list-split-inset-inline"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": [
+          "--ds-spacing-2",
+          "--ds-spacing-3",
+          "--ds-empty-simple-min-height"
+        ]
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +2195,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "",
+            "why": "Margenes internos leidos y NO cubiertos (composicion del componente, no ritmo de pagina): --ds-list-extra-margin-left, --ds-list-meta-avatar-margin-right, --ds-list-meta-description-margin-top"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +2215,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Canales de motion leidos y NO cubiertos por regla de grupo (display motion MUST_NOT): --ds-list-transition-duration, --ds-list-transition-timing, --ds-list-skeleton-pulse-duration - anotados como candidatos si el grupo reabre la celda"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +2233,25 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-elevation"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "sin sombras propias en modern; separa por borde y fondo."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +2259,20 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
+        "source": "huecos-kimi",
+        "bindings": [
+          {
+            "root": "surface.finish",
+            "socketPattern": "--_ds-list-glass-bg",
+            "prop": "background-color de la placa de vidrio del icono",
+            "tier": "premium"
+          }
+        ]
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +2280,12 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "huecos-kimi"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +2293,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +2310,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ]
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +2327,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-<comp>-border-style",
+            "prop": "marco de card/tabla/descripciones",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-border-style",
+              "--_ds-table-frame-style"
+            ],
+            "sockets": [
+              "--_ds-list-border-width",
+              "--_ds-list-split-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sharedChannels": []
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +2357,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +2375,16 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ]
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +2392,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +2431,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": null,
+            "prop": "stroke-width / fill",
+            "tier": "standard",
+            "examples": [
+              "Icon"
+            ],
+            "socketsResolved": true,
+            "carrier": "attribute+shared-socket",
+            "sockets": [],
+            "noSocketReason": "sin iconos con canal propio; los glifos heredan el eje global."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +2458,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

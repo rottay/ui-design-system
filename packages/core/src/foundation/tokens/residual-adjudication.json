@@ -1252,13 +1252,13 @@
       "note": "The only members of the 188 with no consumer under the corrected read scope. Grouped by the artifact that declares them, because an emitter drain is decided per emitter, not per name.",
       "groups": {
         "all three vertical artifacts (18)": "--ds-color-accent-{50,100,200,300,400,700,800,900} plus --ds-motion-intensity and the --ds-text-{body,detail,display,emphasis,title}-{line-height,weight,letter-spacing} residue. The accent ramp is emitted at full length while only the mid stops are read; the text axes are emitted per vertical and read nowhere.",
-        "rottay artifact + its _source/extension.css (12)": "--ds-avatar-{bg,color}, --ds-collapse-content-color and the full --ds-color-alpha-{black,white}-{200,300,400,500} ladder. The 100 stop of each ladder IS read; stops 200-500 are not.",
-        "bithire artifact + its _source/extension.css (8)": "--ds-global-search-results-width, --ds-premium-card-header-top-line-display, --ds-shell-breadcrumb-{bg,height}, --ds-surface-chip-text, --ds-surface-radius-{lg,sm}, --ds-table-header-bubble-bg.",
-        "evnto artifact + its _source/extension.css (2)": "--ds-input-focus-border, --ds-input-text.",
+        "rottay artifact + its _source/extension.css (12)": "RETIRED source-only by SEV-DEAD-21 (12 names, 24 declarations across dark+light). --ds-avatar-{bg,color}, --ds-collapse-content-color and the full --ds-color-alpha-{black,white}-{200,300,400,500} ladder. The 100 stop of each ladder IS read; stops 200-500 were the unread rungs removed.",
+        "bithire artifact + its _source/extension.css (8)": "PARTIALLY RETIRED source-only by SEV-DEAD-21 (7 of 8 names, 8 declarations). Retired: --ds-premium-card-header-top-line-display, --ds-shell-breadcrumb-height, --ds-surface-chip-text, --ds-surface-radius-{lg,sm}, --ds-table-header-bubble-bg and --rt-premium-card-grid. NOT part of SEV-DEAD-21: --ds-global-search-results-width (stays listed, goes with THEME-ISO).",
+        "evnto artifact + its _source/extension.css (2)": "RETIRED source-only by SEV-DEAD-21 (2 names, 2 declarations): --ds-input-focus-border, --ds-input-text.",
         "single-artifact profile markers (2)": "--ds-experience-profile (bithire) and --ds-recipe-profile (bithire + rottay) — these are profile MARKERS, likely read by TS rather than CSS; confirm before draining.",
         "malformed prefixes (6)": "not tokens, see dataQuality."
       },
-      "disposition": "Listed, not proposed. Each group needs its emitter read before a RETIRE_EMITTER_PROPOSED can carry the required death-proof, and the alpha/accent ladders in particular look like deliberately complete ramps where partial consumption is the norm."
+      "disposition": "The rottay, bithire (except --ds-global-search-results-width), and evnto groups were RETIRED source-only by SEV-DEAD-21. --ds-global-search-results-width remains listed (THEME-ISO). The remaining groups (all-three-verticals 18, single-artifact profile markers 2, malformed prefixes 6) still need their emitters read before a RETIRE_EMITTER_PROPOSED can carry the required death-proof."
     },
     "disposition": "Reported, not executed. Closing the cross-vertical floor gap is a parity programme of its own and each floor carries a measurable per-vertical delta."
   },
@@ -15552,12 +15552,11 @@
       ],
       "shippedValue": "var(--ds-color-bg-primary)",
       "emittedBy": [
-        "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts (removed)",
-        "core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx (NOT removed -- out of fence)"
+        "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts (removed)"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/foundation/themes/default.css (removed, light + dark)",
-        "core/src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css (NOT removed -- brand-authored)"
+        "core/src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css (removed source-only by VERTICAL-DEAD-4, 2026-08-14)"
       ],
       "readers": {
         "coreSrc": 0,
@@ -15575,11 +15574,13 @@
           "foundation/themes/default.css dark block (both names; the --ds-text-* lines above them are LIVE and were left)",
           "compilers/runtime/tenant-css/visual-config/index.ts dark map (both emissions)"
         ],
-        "notRemovedAndWhy": {
-          "runtime/theming/.../react/provider/index.tsx:467-468": "Emits both into a live <style>. Outside the FASE-B compiler fence (infrastructure/runtime, not infrastructure/compilers). LEAD/OWNER.",
-          "facade/artifacts/rottay/_source/extension.css:152-153,1173-1174": "Brand-authored literals (#0C0C0E / #FAFAF9 and #131316 / #F4F4F3). Editing _source is forbidden. KEEP_BRAND_AUTHORED."
+        "notRemovedAndWhy": {},
+        "partialRetirement": "No source writers remain. The brand-authored extension residue was removed source-only by VERTICAL-DEAD-4 (2026-08-14). The only remaining shipper is the generated artifact, which is stale until regeneration (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "previousClaim": "One runtime writer remained in live provider/index.tsx (lines 467-468), so the names still shipped from the live provider.",
+          "correction": "The 300-line live provider reads --ds-color-bg-primary only; it does not write --ds-bg-primary. Zero source writers remain.",
+          "supersededOn": "2026-08-14"
         },
-        "partialRetirement": "Two writers remain, so the names still ship. The retirement is honest-partial and the row says exactly which writers survive.",
         "zeroDelta": "A declaration with zero consumers contributes to no resolved value. The theming.test.ts mention is the tautological string list, verified assertion-free in FASE B.",
         "positiveControl": "Same grep shape on --ds-text-primary returns live readers, so the zero is a real zero and not a broken pattern."
       }
@@ -15600,12 +15601,11 @@
       ],
       "shippedValue": "var(--ds-color-bg-secondary)",
       "emittedBy": [
-        "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts (removed)",
-        "core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx (NOT removed -- out of fence)"
+        "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts (removed)"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/foundation/themes/default.css (removed, light + dark)",
-        "core/src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css (NOT removed -- brand-authored)"
+        "core/src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css (removed source-only by VERTICAL-DEAD-4, 2026-08-14)"
       ],
       "readers": {
         "coreSrc": 0,
@@ -15623,11 +15623,13 @@
           "foundation/themes/default.css dark block (both names; the --ds-text-* lines above them are LIVE and were left)",
           "compilers/runtime/tenant-css/visual-config/index.ts dark map (both emissions)"
         ],
-        "notRemovedAndWhy": {
-          "runtime/theming/.../react/provider/index.tsx:467-468": "Emits both into a live <style>. Outside the FASE-B compiler fence (infrastructure/runtime, not infrastructure/compilers). LEAD/OWNER.",
-          "facade/artifacts/rottay/_source/extension.css:152-153,1173-1174": "Brand-authored literals (#0C0C0E / #FAFAF9 and #131316 / #F4F4F3). Editing _source is forbidden. KEEP_BRAND_AUTHORED."
+        "notRemovedAndWhy": {},
+        "partialRetirement": "No source writers remain. The brand-authored extension residue was removed source-only by VERTICAL-DEAD-4 (2026-08-14). The only remaining shipper is the generated artifact, which is stale until regeneration (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "previousClaim": "One runtime writer remained in live provider/index.tsx (lines 467-468), so the names still shipped from the live provider.",
+          "correction": "The 300-line live provider reads --ds-color-bg-primary only; it does not write --ds-bg-secondary. Zero source writers remain.",
+          "supersededOn": "2026-08-14"
         },
-        "partialRetirement": "Two writers remain, so the names still ship. The retirement is honest-partial and the row says exactly which writers survive.",
         "zeroDelta": "A declaration with zero consumers contributes to no resolved value. The theming.test.ts mention is the tautological string list, verified assertion-free in FASE B.",
         "positiveControl": "Same grep shape on --ds-text-primary returns live readers, so the zero is a real zero and not a broken pattern."
       }
@@ -15739,8 +15741,8 @@
     "legacyAliasBatch": {
       "population": "The 11 census rows carrying status 'legacy-alias' (customization-surface-report.json). None of them is an entry in this registry, so they are a separate batch.",
       "executed": {
-        "--ds-text-muted": "Removed from foundation/themes/default.css:950. Batch D1a. Zero reads in every scope; the successor --ds-color-text-muted is read 157x in DS source, 64x in the showroom and 974x across the three apps. Still ships from artifacts/rottay (extension.css + index.css) until that source is drained.",
-        "--ds-border-color-disabled": "Removed from foundation/themes/default.css:965. Batch D1b. Zero reads in every scope, and it was a byte-identical duplicate of --ds-border-color-muted (both `var(--ds-color-border-subtle)`) declared four lines above and READ. Successor --ds-color-border-subtle is read 87/22/152. Still ships from artifacts/rottay."
+        "--ds-text-muted": "Source residue closed by VERTICAL-DEAD-4 (2026-08-14). Removed from foundation/themes/default.css:950 and from artifacts/rottay/_source/extension.css (dark + light). Zero reads in every scope; the successor --ds-color-text-muted is read 157x in DS source, 64x in the showroom and 974x across the three apps. Generated artifacts still ship the value until regeneration (GENERATED-PENDING).",
+        "--ds-border-color-disabled": "Source residue closed by VERTICAL-DEAD-4 (2026-08-14). Removed from foundation/themes/default.css:965 and from artifacts/rottay/_source/extension.css (dark + light). Zero reads in every scope, and it was a byte-identical duplicate of --ds-border-color-muted (both `var(--ds-color-border-subtle)`) declared four lines above and READ. Successor --ds-color-border-subtle is read 87/22/152. Generated artifacts still ship the value until regeneration (GENERATED-PENDING)."
       },
       "notExecuted": {
         "--ds-text-eyebrow": "NOT DEAD. The census scores it reads {css:0, ts:0} because it counts DS-internal reads only. FASE B finds FOUR live app-bithire consumers: features/applications/surface/screens/workflows/pipeline/board/view/sections/client-view/command-panel/styles/index.css, ui/details/surface-shell/header/styles/index.css, ui/details/surface-shell/typography/styles/index.css and vertical/surface/shell/sidebar/styles/index.css (plus sidebar/index.tsx). It is emitted into all three artifacts by compilers/kernel/runtime/brand-theme/index.ts. Retiring it would break shipped app CSS. This is a KEEP, and it is the third time in this programme that a DS-internal zero turned out to be a live app contract.",
@@ -16476,6 +16478,256 @@
     },
     "generatedParity": "GENERATED-PENDING"
   },
+  "verticalDead4SourceDrain": {
+    "id": "VERTICAL-DEAD-4",
+    "checkpoint": "VERTICAL-PALETTE-90/89",
+    "date": "2026-08-14",
+    "mandate": "Kimi 2.7 implementation; Fable 5 + Kimi 3 audit; Codex DT.",
+    "scope": "source-only",
+    "roster": [
+      "--ds-bg-primary",
+      "--ds-bg-secondary",
+      "--ds-border-color-disabled",
+      "--ds-text-muted"
+    ],
+    "names": 4,
+    "verticalMemberships": 4,
+    "declarationsRemoved": 8,
+    "perVertical": {
+      "rottay": {
+        "names": 4,
+        "declarations": 8
+      },
+      "bithire": {
+        "names": 0,
+        "declarations": 0
+      },
+      "evnto": {
+        "names": 0,
+        "declarations": 0
+      }
+    },
+    "hashRecipe": {
+      "global": "sha256(sorted receipt.roster lines joined with LF plus trailing LF)",
+      "modeMembership": "sha256(sorted canonical lines '<slug>/<mode>/<channel>' for every slug in historicalValues, every mode in that slug, every channel in receipt.roster, joined with LF plus trailing LF)",
+      "value": "sha256(sorted canonical lines '<slug>/<mode>/<channel>=<value>' for every slug in historicalValues, every mode in that slug, every channel in receipt.roster with its historical value, joined with LF plus trailing LF)"
+    },
+    "canonicalLines": {
+      "modeMembership": [
+        "rottay/dark/--ds-bg-primary",
+        "rottay/dark/--ds-bg-secondary",
+        "rottay/dark/--ds-border-color-disabled",
+        "rottay/dark/--ds-text-muted",
+        "rottay/light/--ds-bg-primary",
+        "rottay/light/--ds-bg-secondary",
+        "rottay/light/--ds-border-color-disabled",
+        "rottay/light/--ds-text-muted"
+      ],
+      "value": [
+        "rottay/dark/--ds-bg-primary=#0C0C0E",
+        "rottay/dark/--ds-bg-secondary=#131316",
+        "rottay/dark/--ds-border-color-disabled=#222226",
+        "rottay/dark/--ds-text-muted=#6B6B72",
+        "rottay/light/--ds-bg-primary=#FAFAF9",
+        "rottay/light/--ds-bg-secondary=#F4F4F3",
+        "rottay/light/--ds-border-color-disabled=#EDEDEC",
+        "rottay/light/--ds-text-muted=#9C9C9C"
+      ]
+    },
+    "rosterSha256": {
+      "global": "6b3a72860e140376a58029e7824cfbc06e5b3810d8055c1a96f9fb9d515da06a",
+      "modeMembership": "1cfe1b350da8f79a2e1869f9a12ace776ec35c26d2238e9dd43cce3fe033ecb9",
+      "value": "e86e51390530f9df1e3a358cec14a2741265a4c582ce4cad88b6224f59291b05"
+    },
+    "historicalValues": {
+      "rottay": {
+        "dark": {
+          "--ds-bg-primary": "#0C0C0E",
+          "--ds-bg-secondary": "#131316",
+          "--ds-border-color-disabled": "#222226",
+          "--ds-text-muted": "#6B6B72"
+        },
+        "light": {
+          "--ds-bg-primary": "#FAFAF9",
+          "--ds-bg-secondary": "#F4F4F3",
+          "--ds-border-color-disabled": "#EDEDEC",
+          "--ds-text-muted": "#9C9C9C"
+        }
+      }
+    },
+    "generatedProjection": "GENERATED-PENDING"
+  },
+  "sevDead21SourceDrain": {
+    "id": "SEV-DEAD-21",
+    "checkpoint": "VERTICAL-PALETTE-90/89",
+    "date": "2026-08-14",
+    "mandate": "Kimi 2.7 implementation; Fable 5 + Kimi 3 audit; Codex DT.",
+    "scope": "source-only",
+    "roster": [
+      "--ds-avatar-bg",
+      "--ds-avatar-color",
+      "--ds-collapse-content-color",
+      "--ds-color-alpha-black-200",
+      "--ds-color-alpha-black-300",
+      "--ds-color-alpha-black-400",
+      "--ds-color-alpha-black-500",
+      "--ds-color-alpha-white-100",
+      "--ds-color-alpha-white-200",
+      "--ds-color-alpha-white-300",
+      "--ds-color-alpha-white-400",
+      "--ds-color-alpha-white-500",
+      "--ds-premium-card-header-top-line-display",
+      "--ds-shell-breadcrumb-height",
+      "--ds-surface-chip-text",
+      "--ds-surface-radius-lg",
+      "--ds-surface-radius-sm",
+      "--ds-table-header-bubble-bg",
+      "--rt-premium-card-grid",
+      "--ds-input-focus-border",
+      "--ds-input-text"
+    ],
+    "names": 21,
+    "declarationsRemoved": 34,
+    "perVertical": {
+      "rottay": {
+        "names": 12,
+        "declarations": 24
+      },
+      "bithire": {
+        "names": 7,
+        "declarations": 8
+      },
+      "evnto": {
+        "names": 2,
+        "declarations": 2
+      }
+    },
+    "hashRecipe": {
+      "global": "sha256(sorted receipt.roster lines joined with LF plus trailing LF)",
+      "modeMembership": "sha256(sorted canonical lines '<slug>/<mode>/<channel>' for every declaration in historicalValues, using modes dark/light/all, joined with LF plus trailing LF)",
+      "slugChannel": "sha256(sorted canonical lines '<slug>|<channel>' for every channel in receipt.roster per slug, joined with LF plus trailing LF)"
+    },
+    "canonicalLines": {
+      "modeMembership": [
+        "bithire/all/--ds-premium-card-header-top-line-display",
+        "bithire/all/--rt-premium-card-grid",
+        "bithire/light/--ds-premium-card-header-top-line-display",
+        "bithire/light/--ds-shell-breadcrumb-height",
+        "bithire/light/--ds-surface-chip-text",
+        "bithire/light/--ds-surface-radius-lg",
+        "bithire/light/--ds-surface-radius-sm",
+        "bithire/light/--ds-table-header-bubble-bg",
+        "evnto/dark/--ds-input-focus-border",
+        "evnto/dark/--ds-input-text",
+        "rottay/dark/--ds-avatar-bg",
+        "rottay/dark/--ds-avatar-color",
+        "rottay/dark/--ds-collapse-content-color",
+        "rottay/dark/--ds-color-alpha-black-200",
+        "rottay/dark/--ds-color-alpha-black-300",
+        "rottay/dark/--ds-color-alpha-black-400",
+        "rottay/dark/--ds-color-alpha-black-500",
+        "rottay/dark/--ds-color-alpha-white-100",
+        "rottay/dark/--ds-color-alpha-white-200",
+        "rottay/dark/--ds-color-alpha-white-300",
+        "rottay/dark/--ds-color-alpha-white-400",
+        "rottay/dark/--ds-color-alpha-white-500",
+        "rottay/light/--ds-avatar-bg",
+        "rottay/light/--ds-avatar-color",
+        "rottay/light/--ds-collapse-content-color",
+        "rottay/light/--ds-color-alpha-black-200",
+        "rottay/light/--ds-color-alpha-black-300",
+        "rottay/light/--ds-color-alpha-black-400",
+        "rottay/light/--ds-color-alpha-black-500",
+        "rottay/light/--ds-color-alpha-white-100",
+        "rottay/light/--ds-color-alpha-white-200",
+        "rottay/light/--ds-color-alpha-white-300",
+        "rottay/light/--ds-color-alpha-white-400",
+        "rottay/light/--ds-color-alpha-white-500"
+      ],
+      "slugChannel": [
+        "bithire|--ds-premium-card-header-top-line-display",
+        "bithire|--ds-shell-breadcrumb-height",
+        "bithire|--ds-surface-chip-text",
+        "bithire|--ds-surface-radius-lg",
+        "bithire|--ds-surface-radius-sm",
+        "bithire|--ds-table-header-bubble-bg",
+        "bithire|--rt-premium-card-grid",
+        "evnto|--ds-input-focus-border",
+        "evnto|--ds-input-text",
+        "rottay|--ds-avatar-bg",
+        "rottay|--ds-avatar-color",
+        "rottay|--ds-collapse-content-color",
+        "rottay|--ds-color-alpha-black-200",
+        "rottay|--ds-color-alpha-black-300",
+        "rottay|--ds-color-alpha-black-400",
+        "rottay|--ds-color-alpha-black-500",
+        "rottay|--ds-color-alpha-white-100",
+        "rottay|--ds-color-alpha-white-200",
+        "rottay|--ds-color-alpha-white-300",
+        "rottay|--ds-color-alpha-white-400",
+        "rottay|--ds-color-alpha-white-500"
+      ]
+    },
+    "rosterSha256": {
+      "global": "e2301dc78bcc2c159a5241bb5bd3b8d413a9b1c9f1d2bda538bee1aa1a0fddfe",
+      "modeMembership": "191837a2296706048f12274cdda65240daadd7f24fa16851e866185cea86b8f0",
+      "slugChannel": "57f8bdba52dbed3a3d63b52cb083bd5668f4465ae07821776925391b0fbff7a5"
+    },
+    "historicalValues": {
+      "rottay": {
+        "dark": {
+          "--ds-avatar-bg": "rgba(255, 255, 255, 0.08)",
+          "--ds-avatar-color": "#ECECEC",
+          "--ds-collapse-content-color": "#A0A0A5",
+          "--ds-color-alpha-black-200": "rgba(0, 0, 0, 0.30)",
+          "--ds-color-alpha-black-300": "rgba(0, 0, 0, 0.40)",
+          "--ds-color-alpha-black-400": "rgba(0, 0, 0, 0.50)",
+          "--ds-color-alpha-black-500": "rgba(0, 0, 0, 0.60)",
+          "--ds-color-alpha-white-100": "rgba(255, 255, 255, 0.08)",
+          "--ds-color-alpha-white-200": "rgba(255, 255, 255, 0.14)",
+          "--ds-color-alpha-white-300": "rgba(255, 255, 255, 0.20)",
+          "--ds-color-alpha-white-400": "rgba(255, 255, 255, 0.28)",
+          "--ds-color-alpha-white-500": "rgba(255, 255, 255, 0.40)"
+        },
+        "light": {
+          "--ds-avatar-bg": "rgba(0, 0, 0, 0.06)",
+          "--ds-avatar-color": "#1A1A1A",
+          "--ds-collapse-content-color": "#6B6B6B",
+          "--ds-color-alpha-black-200": "rgba(0, 0, 0, 0.10)",
+          "--ds-color-alpha-black-300": "rgba(0, 0, 0, 0.16)",
+          "--ds-color-alpha-black-400": "rgba(0, 0, 0, 0.24)",
+          "--ds-color-alpha-black-500": "rgba(0, 0, 0, 0.36)",
+          "--ds-color-alpha-white-100": "rgba(255, 255, 255, 0.60)",
+          "--ds-color-alpha-white-200": "rgba(255, 255, 255, 0.70)",
+          "--ds-color-alpha-white-300": "rgba(255, 255, 255, 0.80)",
+          "--ds-color-alpha-white-400": "rgba(255, 255, 255, 0.88)",
+          "--ds-color-alpha-white-500": "rgba(255, 255, 255, 0.94)"
+        }
+      },
+      "bithire": {
+        "all": {
+          "--ds-premium-card-header-top-line-display": "none",
+          "--rt-premium-card-grid": "linear-gradient(\n      var(--ds-surface-card-grid-line) 1px,\n      transparent 1px\n    ),\n    linear-gradient(\n      90deg,\n      var(--ds-surface-card-grid-line) 1px,\n      transparent 1px\n    )"
+        },
+        "light": {
+          "--ds-premium-card-header-top-line-display": "none",
+          "--ds-shell-breadcrumb-height": "28px",
+          "--ds-surface-chip-text": "var(--ds-color-primary)",
+          "--ds-surface-radius-lg": "var(--ds-radius-md)",
+          "--ds-surface-radius-sm": "var(--ds-radius-sm)",
+          "--ds-table-header-bubble-bg": "transparent"
+        }
+      },
+      "evnto": {
+        "dark": {
+          "--ds-input-focus-border": "#A89880",
+          "--ds-input-text": "#E8E8E0"
+        }
+      }
+    },
+    "source": "EXECUTED",
+    "generatedProjection": "PENDING"
+  },
   "verticalConflict9Execution": {
     "id": "VERTICAL-CONFLICT-9",
     "checkpoint": "DEAD-61",
@@ -16516,5 +16768,44 @@
       "--ds-surface-card-border-strong (bithire all modes)"
     ],
     "generatedProjection": "PENDING"
+  },
+  "massC3BithireAllExecution": {
+    "id": "MASS-C3-BITHIRE-ALL",
+    "date": "2026-08-14",
+    "scope": "source-only",
+    "note": "The 94-channel bithire extension drain moved every drained declaration to its typed BrandTheme owner. Three shell-geometry channels were graded 'geometry, not paint' and therefore mode-agnostic. That grading is correct about the MODE (a width does not differ between light and dark) and wrong about the EFFECT: the retired declarations were scoped to the light block, so in every other resolution context the channel was simply undeclared and the reader fell back. Authoring them on the theme body resolves them everywhere. The two rows below are the resulting effective deltas in the Classic engine, which reads these two spellings. Classic and Rustic source is NOT edited by this receipt; the delta is recorded, not neutralized.",
+    "classicEffectiveDeltas": [
+      {
+        "owner": "chrome.sidebar.width",
+        "channels": [
+          "--ds-shell-sidebar-width",
+          "--ds-sidebar-width"
+        ],
+        "value": "256px",
+        "previousEffective": "200px",
+        "previousMechanism": "fallback",
+        "reader": "src/foundation/tokens/css/runtime/engines/classic/theme.css",
+        "readerExpression": "var(--ds-sidebar-width, 200px)",
+        "finalState": "SIGHTED_PENDING",
+        "why": "The Classic sider sets width/min-width/max-width from the fallback spelling. Undeclared it resolved to the literal 200px; the typed owner now declares 256px, so the sider is 56px wider wherever the light-scoped extension declaration did not reach."
+      },
+      {
+        "owner": "chrome.layout.headerHeight",
+        "channels": [
+          "--ds-layout-header-height",
+          "--ds-shell-header-block-size",
+          "--ds-shell-topbar-height"
+        ],
+        "value": "56px",
+        "previousEffective": "unresolved",
+        "previousMechanism": "bare-read",
+        "reader": "src/foundation/tokens/css/runtime/engines/classic/theme.css",
+        "readerExpression": "height: var(--ds-layout-header-height)",
+        "finalState": "SIGHTED_PENDING",
+        "why": "The Classic layout header reads the channel BARE for both height and line-height. Undeclared, a bare var() makes each declaration invalid at computed-value time, so the header fell to its initial value. It now resolves to 56px, which is a real repaint rather than a restatement."
+      }
+    ],
+    "ledgerImpact": "NONE. No `entries` row is added, removed or regraded, and `finalStateVocabulary.distribution` / `reconciliation` are untouched: this is a top-level execution receipt, not a census identity.",
+    "sightedConfirmation": "PENDING (FASE M)"
   }
 }

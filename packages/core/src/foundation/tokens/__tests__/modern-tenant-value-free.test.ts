@@ -182,8 +182,79 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
  * Draining an entry means deleting its line here in the same change; the
  * staleness assertion below refuses a pin that no longer matches reality, so
  * the list cannot silently rot in either direction.
+ *
+ * THE 2026-08-14 RE-KEY (`bd5723e7c`, "move palette authority into brand
+ * themes"). Twenty entries were added at once, which reads like the ratchet
+ * running backwards. It is not. What this file measures is an INTERSECTION —
+ * literals default.css declares AND the BrandThemes claim — and that commit
+ * moved only the second half. Measured across it:
+ *
+ *   default.css                    byte-identical (last touched `dcadb8474`)
+ *   the Modern engine tree         still zero, the floor above is untouched
+ *   the twenty literals            absent from the reachable BrandTheme object
+ *                                  graph before, present after
+ *
+ * Field by field the shape is uniform: `rottay.palette.textMutedColor`,
+ * `evnto.modes.dark.palette.ramps.neutral.*`, `bithire.palette.successBgColor`
+ * and the rest go from a bare contract declaration to a declaration WITH an
+ * authored value. The one prior textual occurrence, evnto's `#161619`, sat in
+ * a comment and was never reachable. So no paint moved and no new default was
+ * written; the debt was already in default.css and became attributable the
+ * moment its tenant claimed the same value. That is the `#0f0f12` precedent
+ * below, applied at the scale of a palette-authority migration.
+ *
+ * The distinction is load-bearing, so it is stated once here and not repeated
+ * per line: an entry may join this list ONLY when the value it names is
+ * already declared in an unchanged default.css and a BrandTheme newly claims
+ * it. A literal newly WRITTEN into default.css or the engine tree is a product
+ * defect and belongs in neither list.
  */
 const KNOWN_TENANT_LITERALS: readonly string[] = [
+  // RE-KEY (bd5723e7c). Evnto's dark neutral ramp, `modes.dark.palette.ramps
+  // .neutral.{50,100,200,300,500,600,700,800}` — a slate ladder default.css has
+  // long declared as everyone's dark ground. Steps 400 and 900 are absent
+  // because default.css never declared those two values, not because they were
+  // drained.
+  'foundation/tokens/css/foundation/themes/default.css :: #0b1220',
+  'foundation/tokens/css/foundation/themes/default.css :: #111827',
+  'foundation/tokens/css/foundation/themes/default.css :: #1f2937',
+  'foundation/tokens/css/foundation/themes/default.css :: #334155',
+  'foundation/tokens/css/foundation/themes/default.css :: #64748b',
+  'foundation/tokens/css/foundation/themes/default.css :: #94a3b8',
+  'foundation/tokens/css/foundation/themes/default.css :: #cbd5e1',
+  'foundation/tokens/css/foundation/themes/default.css :: #e2e8f0',
+  // RE-KEY (bd5723e7c). Rottay's own hairline and text neutrals:
+  // `#161619` = borderSubtleColor AND borderTertiaryColor, `#96969e` =
+  // textMutedColor, `#9a9aa2` = textTertiaryColor. Same shape as the
+  // `#6b6b72`/`#a0a0a5` pair already pinned below — one vertical's greys
+  // shipped as the system default.
+  'foundation/tokens/css/foundation/themes/default.css :: #161619',
+  'foundation/tokens/css/foundation/themes/default.css :: #96969e',
+  'foundation/tokens/css/foundation/themes/default.css :: #9a9aa2',
+  // RE-KEY (bd5723e7c). Evnto's `secondaryHoverColor`/`accentHoverColor` — the
+  // hover arm of the `#7a6a5a` pair already pinned below, which arrived without
+  // it because only the resting value had been claimed.
+  'foundation/tokens/css/foundation/themes/default.css :: #5a4a3a',
+  // RE-KEY (bd5723e7c). The tinted status GROUNDS, claimed by two verticals
+  // each (`palette.{success,error,warning}BgColor` on bithire and evnto). The
+  // status ramps they sit under are pinned further down; these are the surfaces
+  // those ramps are read against, so leaving them out would have pinned the ink
+  // and not the paper.
+  'foundation/tokens/css/foundation/themes/default.css :: #f0fdf4',
+  'foundation/tokens/css/foundation/themes/default.css :: #fef2f2',
+  'foundation/tokens/css/foundation/themes/default.css :: #fffbeb',
+  // RE-KEY (bd5723e7c). Rottay's alpha-tinted equivalents of the same four
+  // grounds, each claimed twice over — `palette.{success,warning,error,info}
+  // BgColor` and again as `chrome.alert.*Bg` (info a third time as
+  // `chrome.liveFeed.newBg`). An alpha tint is tenant identity exactly like an
+  // opaque one: it composites against whatever ground the tenant chose.
+  'foundation/tokens/css/foundation/themes/default.css :: rgba(34,197,94,0.10)',
+  'foundation/tokens/css/foundation/themes/default.css :: rgba(59,130,246,0.10)',
+  'foundation/tokens/css/foundation/themes/default.css :: rgba(239,68,68,0.10)',
+  'foundation/tokens/css/foundation/themes/default.css :: rgba(245,158,11,0.10)',
+  // RE-KEY (bd5723e7c). Evnto's `modes.dark.palette.backgroundOverlayColor` —
+  // the scrim every modal and drawer dims the page with.
+  'foundation/tokens/css/foundation/themes/default.css :: rgba(2,6,23,0.88)',
   'foundation/tokens/css/foundation/themes/default.css :: #0c0c0e',
   'foundation/tokens/css/foundation/themes/default.css :: #0d0d10',
   // Not new debt: this ground literal predates the inventory but became

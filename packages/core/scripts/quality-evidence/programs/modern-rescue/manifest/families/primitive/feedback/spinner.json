@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "0c14d48d8ab3377f1e41c0cae646dda526a1750558a8ea83488d7e405cfa5285"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,13 +26,1252 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/feedback/Spinner/compound/index.ts",
+      "packages/core/src/ui/primitives/feedback/Spinner/contracts/index.ts",
+      "packages/core/src/ui/primitives/feedback/Spinner/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/feedback/Spinner/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx",
+      "packages/core/src/ui/primitives/feedback/Spinner/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+    ],
+    "stableParts": [
+      "root",
+      "indicator",
+      "label"
+    ],
     "states": [],
+    "variantAxes": [
+      "data-size"
+    ],
     "propertyGroups": [],
-    "invariants": [],
+    "invariants": [
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:121]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:128, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:132]",
+      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:23, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:59, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:124]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "feedback-overlay",
+        "scoutArtifact": "mr-anatomy-feedback-overlay.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 3,
+        "dynamicPartExpressionsInSource": 1,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:102",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:46",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:47",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:48",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:49"
+          ]
+        },
+        {
+          "part": "indicator",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:107",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:53",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:56",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:66",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:67"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "label",
+          "anchorKind": "data-part",
+          "at": [
+            "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:109",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:108",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:109",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:113",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:114",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:115"
+          ],
+          "atSiteCount": 7
+        }
+      ],
+      "partCensus": {
+        "measuredAbsence": [
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:36, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:39]"
+        ]
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "data-size=sm",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:87",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:88",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:89"
+          ]
+        },
+        {
+          "token": "data-size=md",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:92",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:93",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:94"
+          ]
+        },
+        {
+          "token": "data-size=lg",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:97",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:98",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:99"
+          ]
+        },
+        {
+          "token": "data-size=xl",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:102",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:103",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:104"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "enginesPresent": [
+          "classic",
+          "modern",
+          "rustic"
+        ],
+        "classic": {
+          "emitsDataParts": [],
+          "dataPartCount": 0,
+          "dsVariableReads": 0,
+          "importsAntd": true
+        },
+        "modern": {
+          "emitsDataParts": [
+            "(dynamic-data-part)"
+          ],
+          "dataPartCount": 1,
+          "dsVariableReads": 0,
+          "importsAntd": false
+        },
+        "rustic": {
+          "emitsDataParts": [
+            "indicator",
+            "label",
+            "root"
+          ],
+          "dataPartCount": 3,
+          "dsVariableReads": 4,
+          "importsAntd": false
+        },
+        "summary": "DIVERGENT: the modern engine emits 1 data-part anchors and the classic engine emits none while importing antd. The modern skin CSS addresses parts exclusively through [data-part], so the anatomy bound here is NOT addressable in the classic engine."
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "(scope)": [
+            "transform"
+          ],
+          "root": [
+            "align-items",
+            "display",
+            "flex-direction",
+            "gap"
+          ],
+          "indicator": [
+            "animation",
+            "animation-play-state",
+            "block-size",
+            "border",
+            "border-color",
+            "border-inline-end-color",
+            "border-radius",
+            "border-top-color",
+            "display",
+            "inline-size"
+          ],
+          "label": [
+            "color",
+            "font-family",
+            "font-size",
+            "letter-spacing",
+            "line-height",
+            "max-inline-size",
+            "overflow-wrap",
+            "text-align"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelCensus": [
+          {
+            "variable": "--ds-spinner-label-gap",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "root"
+            ],
+            "landsOn": [
+              "gap"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:49",
+                "readIn": "modern-skin-css",
+                "part": "root",
+                "landsOn": "gap",
+                "fallback": "var(--ds-spacing-sm)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-sm",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "root"
+            ],
+            "landsOn": [
+              "gap"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:125",
+              "src/tooling/testing/fixtures/tenants/default.css:36",
+              "src/foundation/tokens/css/foundation/themes/default.css:703"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:703"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:49",
+                "readIn": "modern-skin-css",
+                "part": "root",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--_ds-spinner-ring-width",
+            "namespace": "private",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:89",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:94",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:99"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:54",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border",
+                "fallback": "2px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-track-color",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "border",
+              "border-inline-end-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:45"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:45"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border",
+                "fallback": "var(--ds-material-control-border, var(--ds-color-border))",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:64",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": "var(--ds-material-control-border, var(--ds-color-border))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-control-border",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "border",
+              "border-inline-end-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:355",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:583",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1342"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:404"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border",
+                "fallback": "var(--ds-color-border)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:64",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": "var(--ds-color-border)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-border",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "border",
+              "border-inline-end-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
+              "src/ui/patterns/customization/brand-studio/index.tsx:147",
+              "src/ui/patterns/customization/brand-studio/index.tsx:165"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:229",
+              "src/foundation/tokens/css/foundation/themes/default.css:2111"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:64",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-color",
+            "namespace": "public",
+            "readCount": 4,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "(const-indirection:spinnerColor)",
+              "border-inline-end-color",
+              "border-top-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/primitives/foundation/loading-indicator/index.tsx:23",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1653",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2607"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:1775"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:56",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-top-color",
+                "fallback": "var(--ds-color-primary)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:63",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": "var(--ds-color-primary)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:124",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": "var(--ds-color-primary)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:68",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(const-indirection:spinnerColor)",
+                "fallback": "var(--ds-color-primary-500, #1890ff)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-primary",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "border-inline-end-color",
+              "border-top-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:156"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:56",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-top-color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:63",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:124",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-segment-color",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "border-inline-end-color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:59",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "border-inline-end-color",
+                "fallback": "color-mix(       in srgb,       var(--ds-spinner-color, var(--ds-color-primary)) 45%,       var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))     )",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-duration",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "animation"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:16"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:16"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:80",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "animation",
+                "fallback": "calc(var(--ds-motion-slow) * 2)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:83",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "animation",
+                "fallback": "0.8s",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-slow",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "animation"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality.css:927",
+              "src/foundation/tokens/css/foundation/animations/transitions.css:96",
+              "src/foundation/tokens/css/foundation/animations/transitions.css:400"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:80",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "animation",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-spin-easing",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "animation"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:81",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "animation",
+                "fallback": "linear",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-sm-size",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "block-size",
+              "inline-size",
+              "sm"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:24"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:24"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:87",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:88",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "block-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:153",
+                "readIn": "shared",
+                "part": null,
+                "landsOn": "sm",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-sm-ring-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "--_ds-spinner-ring-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:89",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "--_ds-spinner-ring-width",
+                "fallback": "2px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-md-size",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "block-size",
+              "inline-size",
+              "md"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:27"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:27"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:92",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:93",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "block-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:155",
+                "readIn": "shared",
+                "part": null,
+                "landsOn": "md",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-md-ring-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "--_ds-spinner-ring-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:94",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "--_ds-spinner-ring-width",
+                "fallback": "2px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-lg-size",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "block-size",
+              "inline-size",
+              "lg"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:30"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:30"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:97",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:98",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "block-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:157",
+                "readIn": "shared",
+                "part": null,
+                "landsOn": "lg",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-lg-ring-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "--_ds-spinner-ring-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:99",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "--_ds-spinner-ring-width",
+                "fallback": "3px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-xl-size",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "block-size",
+              "inline-size",
+              "xl"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:33"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/spinner.css:33"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:102",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:103",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "block-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:159",
+                "readIn": "shared",
+                "part": null,
+                "landsOn": "xl",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-xl-ring-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "indicator"
+            ],
+            "landsOn": [
+              "--_ds-spinner-ring-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:104",
+                "readIn": "modern-skin-css",
+                "part": "indicator",
+                "landsOn": "--_ds-spinner-ring-width",
+                "fallback": "3px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-label-color",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:108",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "color",
+                "fallback": "var(--ds-color-text-secondary)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/ui/patterns/customization/brand-studio/index.tsx:144",
+              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:218",
+              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:108",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-type-caption-font-family",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:551",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:994",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:324"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:555"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:109",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "font-family",
+                "fallback": "var(--ds-font-family-base)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-family-base",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:506"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:109",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "font-family",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spinner-label-size",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:110",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "font-size",
+                "fallback": "var(--ds-type-caption-font-size, var(--ds-font-size-sm))",
+                "hasFallback": true
+              },
+              {
+                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:109",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-size",
+                "fallback": "0.875rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-type-caption-font-size",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:552",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:995",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:325"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:556"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:112",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "font-size",
+                "fallback": "var(--ds-font-size-sm)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/tooling/testing/fixtures/tenants/default.css:30",
+              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:609"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:112",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "font-size",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-type-caption-line-height",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "line-height"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:556",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:999",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:329"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:558"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:114",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "line-height",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-type-caption-letter-spacing",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "letter-spacing"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:555",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:998",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:328"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:559"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:115",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "letter-spacing",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--_ds-spinner-label-measure",
+            "namespace": "private",
+            "readCount": 1,
+            "partsRead": [
+              "label"
+            ],
+            "landsOn": [
+              "max-inline-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:117",
+                "readIn": "modern-skin-css",
+                "part": "label",
+                "landsOn": "max-inline-size",
+                "fallback": "28ch",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-primary-500",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "(const-indirection:spinnerColor)"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/ui/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
+              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:552",
+              "src/tooling/testing/system/tests/theming.test.ts:254"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default.css:30"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:68",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "(const-indirection:spinnerColor)",
+                "fallback": "#1890ff",
+                "hasFallback": true
+              }
+            ]
+          }
+        ],
+        "channelCensusCounts": {
+          "distinctVariables": 31,
+          "totalReads": 49,
+          "publicDs": 29,
+          "privateDs": 2,
+          "privateSocketsDeclaredInSkin": [
+            "--_ds-spinner-ring-width"
+          ]
+        }
+      }
+    },
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
   },
   "themeControls": [
     {
@@ -41,7 +1280,56 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.seeds",
+            "socketPattern": "--_ds-<comp>-progress-color",
+            "prop": "color del avance/actividad no-estado",
+            "tier": "standard",
+            "examples": [
+              "--_ds-progress-fill",
+              "--_ds-spinner-color"
+            ],
+            "sockets": [
+              "--_ds-spinner-color",
+              "--_ds-spinner-label-color",
+              "--_ds-spinner-track-color"
+            ],
+            "socketsResolved": true
+          },
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "background/color/border via los canales de color re-derivados por overlay",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          },
+          {
+            "root": "color.status",
+            "socketPattern": null,
+            "prop": "tonos de estado via cascada compartida",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "SIN socket propio: los tonos de estado (error/info/success/warning) llegan por los canales compartidos --ds-color-*-ink / --ds-tint-* (nivel 2 de la forma canonica)",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border",
+            "--ds-color-primary",
+            "--ds-color-text-secondary"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.pairing",
@@ -49,7 +1337,23 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-type-caption-letter-spacing"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.families",
@@ -57,7 +1361,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-family-base"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-type-caption-font-family"
+          ]
+        }
+      }
     },
     {
       "controlId": "typography.scale",
@@ -65,7 +1388,26 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-type-caption-font-size",
+            "--ds-type-caption-line-height"
+          ]
+        }
+      }
     },
     {
       "controlId": "shape.radius-scale",
@@ -73,7 +1415,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "shape.button-style",
@@ -81,7 +1433,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los botones dentro de alert/toast son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "feedback no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "density.mode",
@@ -89,7 +1453,30 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "sockets de familia derivados de anatomy.sourceBindings",
+            "tier": "standard",
+            "examples": [],
+            "sockets": [
+              "--_ds-spinner-label-gap",
+              "--_ds-spinner-lg-size",
+              "--_ds-spinner-md-size",
+              "--_ds-spinner-sm-size",
+              "--_ds-spinner-xl-size"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "spacing.rhythm",
@@ -97,7 +1484,24 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-sm"
+          ]
+        }
+      }
     },
     {
       "controlId": "motion.dial",
@@ -105,7 +1509,33 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-toast-transition-duration",
+              "--_ds-skeleton-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-spinner-duration",
+              "--_ds-spinner-spin-easing"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-slow"
+          ]
+        }
+      }
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -113,7 +1543,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -121,7 +1561,22 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
+            "--ds-material-control-border"
+          ]
+        }
+      }
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -129,7 +1584,19 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "feedback no es chrome de navegacion",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "feedback no es chrome de navegacion"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "experience.profile",
@@ -137,7 +1604,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.families",
@@ -145,7 +1622,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "chrome.anatomy",
@@ -153,7 +1640,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de spinner no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "token-overrides",
@@ -161,7 +1658,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
     },
     {
       "controlId": "recipe-profile",
@@ -169,7 +1676,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "profiles.expressive",
@@ -177,7 +1694,38 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
     },
     {
       "controlId": "profiles.icon",
@@ -185,7 +1733,29 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "icon.posture",
+            "socketPattern": "--_ds-<comp>-icon-stroke-width",
+            "prop": "stroke-width",
+            "tier": "standard",
+            "examples": [
+              "--_ds-callout-icon-stroke-width"
+            ],
+            "sockets": [
+              "--_ds-spinner-lg-ring-width",
+              "--_ds-spinner-md-ring-width",
+              "--_ds-spinner-sm-ring-width",
+              "--_ds-spinner-xl-ring-width"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
     },
     {
       "controlId": "responsive.posture",
@@ -193,7 +1763,17 @@
       "verificationState": "UNKNOWN",
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
     }
   ],
   "retiredThemeControls": [],

@@ -54,7 +54,7 @@ const anatomyDocument = (
         ),
       },
     },
-  }) as TenantThemeDocument;
+  } as TenantThemeDocument);
 
 describe("W4 schema surface: typography, shape, materials and palette.dark", () => {
   it("performs one coherent schema digest bump for the wave", () => {
@@ -331,9 +331,9 @@ describe("W4 anatomy variants: closed data enums selecting code-owned skins", ()
   });
 
   it("stamps zero attributes for default/absent anatomy", () => {
-    expect(
-      tenantThemeAnatomyAttributes({ normalizedAppearance: {} })
-    ).toEqual({});
+    expect(tenantThemeAnatomyAttributes({ normalizedAppearance: {} })).toEqual(
+      {}
+    );
     expect(
       tenantThemeAnatomyAttributes({
         normalizedAppearance: {
@@ -349,41 +349,29 @@ describe("W4 anatomy variants: closed data enums selecting code-owned skins", ()
   });
 });
 
-describe("W4 compiled artifact: contrast autocorrect and dual light-dark emission", () => {
-  it("autocorrects a failing authored text/ground pairing and reports it", () => {
-    const artifact = compileTenantThemeConfig(
-      hydrateTenantThemeConfig(
-        {
-          schemaVersion: 1,
-          mode: "advanced",
-          visualFoundation: {
-            advanced: {
-              tokenOverrides: {
-                "--ds-color-text-primary": "#BDBDBD",
-                "--ds-color-bg-primary": "#F5F5F5",
+describe("W4 compiled artifact: contrast validation and typed mode emission", () => {
+  it("rejects a failing authored text/ground pairing without repainting it", () => {
+    const compileUnsafePair = () =>
+      compileTenantThemeConfig(
+        hydrateTenantThemeConfig(
+          {
+            schemaVersion: 1,
+            mode: "advanced",
+            visualFoundation: {
+              advanced: {
+                tokenOverrides: {
+                  "--ds-color-text-primary": "#BDBDBD",
+                  "--ds-color-bg-primary": "#F5F5F5",
+                },
               },
             },
           },
-        },
-        IDENTITY
-      ),
-      { verticalEnvelope: BITHIRE_ENVELOPE }
-    );
-    expect(artifact.adjustments).toBeDefined();
-    const adjustment = artifact.adjustments?.find(
-      (row) => row.token === "--ds-color-text-primary"
-    );
-    expect(adjustment).toMatchObject({
-      token: "--ds-color-text-primary",
-      pairedWith: "--ds-color-bg-primary",
-      from: "#BDBDBD",
-    });
-    expect(artifact.variables["--ds-color-text-primary"]).not.toBe("#BDBDBD");
-    expect(artifact.variables["--ds-color-text-primary"]).toMatch(
-      /^#[0-9A-F]{6}$/i
-    );
-    expect(Math.abs(adjustment?.lcAfter ?? 0)).toBeGreaterThan(
-      Math.abs(adjustment?.lcBefore ?? 0)
+          IDENTITY
+        ),
+        { verticalEnvelope: BITHIRE_ENVELOPE }
+      );
+    expect(compileUnsafePair).toThrow(
+      /authored tenant colors must meet the governed floor/i
     );
   });
 
@@ -402,7 +390,7 @@ describe("W4 compiled artifact: contrast autocorrect and dual light-dark emissio
     expect(JSON.stringify(wellFormed)).not.toContain('"adjustments"');
   });
 
-  it("compiles dual dark seeds into validated light-dark() variables", () => {
+  it("compiles dual dark seeds into a validated typed mode delta", () => {
     const artifact = compileTenantThemeConfig(
       hydrateTenantThemeConfig(
         {
@@ -412,21 +400,20 @@ describe("W4 compiled artifact: contrast autocorrect and dual light-dark emissio
             palette: {
               primary: "#2F6B9A",
               backgroundMode: "auto",
-              dark: { primary: "#7FB2DA", background: "#101014" },
+              dark: { primary: "#17415F", background: "#101014" },
             },
           },
         },
         IDENTITY
       )
     );
-    expect(artifact.variables["--ds-color-primary"]).toBe(
-      "light-dark(#2F6B9A, #7FB2DA)"
+    const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
+    expect(artifact.variables["--ds-color-primary"]).toBe("#2F6B9A");
+    expect(dark?.variables["--ds-color-primary"]).toBe("#17415F");
+    expect(dark?.variables["--ds-color-primary-500"]).toMatch(
+      /^#[0-9A-F]{6}$/i
     );
-    expect(artifact.variables["--ds-color-primary-500"]).toMatch(
-      /^light-dark\(#[0-9A-F]{6}, #[0-9A-F]{6}\)$/
-    );
-    expect(artifact.variables["--ds-color-scheme"]).toBe("light dark");
-    expect(artifact.css).toContain("--ds-color-scheme: light dark;");
+    expect(artifact.css).toContain("@media (prefers-color-scheme: dark)");
   });
 
   it("checks authored chart categories against the tenant's own dark ground", () => {
@@ -440,12 +427,20 @@ describe("W4 compiled artifact: contrast autocorrect and dual light-dark emissio
               general: {
                 palette: {
                   backgroundMode: "auto",
-                  dark: { background: "#8A8A8A" },
+                  dark: {
+                    background: "#333333",
+                    foreground: {
+                      primary: "#FFFFFF",
+                      secondary: "#FFFFFF",
+                      muted: "#FFFFFF",
+                      disabled: "#FFFFFF",
+                    },
+                  },
                 },
               },
               advanced: {
-                // 4.6:1 on white and 4.0:1 on #0C0C0E, but ~1.6:1 on the
-                // authored mid-gray dark canvas.
+                // Passes the default grounds but falls below 3:1 on the
+                // authored dark canvas.
                 tokenOverrides: { "--ds-chart-category-1": "#767676" },
               },
             },

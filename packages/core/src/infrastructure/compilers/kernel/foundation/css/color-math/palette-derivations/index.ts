@@ -200,8 +200,13 @@ export function deriveBorderSubtle(
  * sets. `--ds-color-text-on-primary` is not among them — each compile path
  * emits that ink itself through the shared `color-math/readable-ink`
  * derivation, and one channel keeps one author.
+ *
+ * Exported as a SUBSET of `derivePaletteSemantics`, not as a second entry
+ * point: the tenant-seed re-derivation needs the primary leg alone, and
+ * naming that leg is more honest than calling the pair with an absent
+ * background and relying on the ground leg to return nothing.
  */
-function derivePrimarySemantics(
+export function derivePrimarySemantics(
   seeds: PaletteDerivationSeeds
 ): Record<string, string> {
   const primary = seeds.primary;
