@@ -588,6 +588,12 @@ ejecutando en CI. Un baseline histórico que corre en CI no es histórico.
 
 **Propuesta:** v2 canónico; desenchufar `quality-evidence:check`.
 
+> ✅ **EJECUTADO (2026-08-19, F0.5):** v1 retirada entera — `cli/pairwise/
+> registry/schema/scorer.mjs` + `quality-evidence.schema.json` +
+> `scorecard.example.json` + `quality-evidence-gate.test.mjs` borrados, entrada
+> `quality-evidence:check` eliminada de `package.json`, README reescrito a
+> v2-only. Además §3 de ARCHITECTURE la listaba entre los retiros.
+
 ## U3 — El chrome de colección, escrito dos veces
 
 | pattern | structure | admisión escrita |
