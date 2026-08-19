@@ -90,8 +90,11 @@ The generated, on-disk inventory is
 
 For a folder-by-folder map of the whole repository -- what each directory does,
 which directories duplicate each other, and which are empty scaffolding -- see
-[`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md). The architecture reference is
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+[`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md). The keep/delete decisions taken
+from that map -- what stays, what is removed, and which duplicate becomes the
+canonical owner -- are in
+[`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md). The
+architecture reference is [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ### Branding Model
 

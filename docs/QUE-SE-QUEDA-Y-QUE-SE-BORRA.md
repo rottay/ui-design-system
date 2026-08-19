@@ -1,0 +1,507 @@
+# Qué se queda y qué se borra
+
+Documento de decisión. El mapa (`docs/MAPA-DEL-REPO.md`) dice qué hay; este dice
+qué hacemos con eso.
+
+Medido el 2026-08-18. Todo lo que aparece acá está verificado contra el árbol real
+y revisado por un segundo lector: 188 de acuerdo, 14 desacuerdos, todos corregidos.
+
+## La regla
+
+> **Cada cosa está representada una única vez.**
+
+De ahí salen cuatro reglas operativas, y de cada una sale una lista concreta:
+
+1. Una capacidad, un dueño. Si dos carpetas hacen el mismo trabajo, una es la
+   canónica y la otra desaparece o se convierte en alias declarado.
+2. Un archivo sin razón de existir se borra. No hay estado "obsoleto pero
+   presente con un cartel".
+3. Una carpeta vacía no es una promesa. O tiene contenido o no está.
+4. Un documento que describe algo que ya no existe es peor que no tener
+   documento. Se corrige el mismo día o se borra.
+
+## Cómo leer los lotes
+
+Cada lote se aprueba entero o no se aprueba. Los lotes están ordenados por riesgo:
+el 1 no puede romper nada, el 10 necesita trabajo previo.
+
+| campo | significado |
+|---|---|
+| **qué** | los archivos exactos |
+| **por qué** | la prueba de que sobra |
+| **riesgo** | qué se puede romper |
+| **bloqueo** | trabajo que hay que hacer ANTES de borrar |
+
+Ningún archivo se borra hasta que apruebes el lote.
+
+---
+
+# PARTE 1 — SE BORRA
+
+## LOTE 1 — Carpetas vacías
+
+**Verdicto: BORRAR. Riesgo: ninguno.**
+
+**qué:** 34 carpetas con cero archivos dentro, contadas recursivamente.
+
+| grupo | carpetas | qué prometían |
+|---|---:|---|
+| `infrastructure/runtime/presentation-profiles/**` | 7 | calco de `foundation/presets/product-profiles/`, que sí existe y funciona |
+| `infrastructure/runtime/graphics/continuous-runtime-governor/**` | 5 | un gobernador de runtime continuo que nunca se escribió |
+| `entrypoints/public/{patterns,primitives,structures,surfaces}/{contracts,runtime}` | 8 | subpaths públicos que el `package.json` no declara |
+| `charts/**/renderers/{area,waterfall,sparkline,histogram}/tests` | 4 | tests de renderer que no existen |
+| `graphics/icons/runtime/adapters/` + `phosphor-ssr/` | 2 | resto de la relocalización del adaptador de iconos |
+| `motion/**/particles/runtime/governance/` + `animation-lease/` | 2 | el archivo real vive en `runtime/canvas/governance/animation-lease/` |
+| `structures/foundation/chrome/runtime/profile-defaults/{presentation-recipes,attributes}` | 2 | — |
+| `infrastructure/runtime/theming/foundation/color/` + `oklch/` | 2 | — |
+| `patterns/data/data-table/engines/modern/styles/` | 1 | — |
+| `.../modern-rescue/KIMI-ANNOTATIONS/inbox/` | 1 | buzón de anotaciones de un agente |
+
+**por qué:** cero archivos. `grep -r presentation-profiles` da cero referencias en
+todo el repo. Git no versiona carpetas vacías, así que ni siquiera aparecen en un
+`git status`: existen solo en tu disco y en el de quien las creó.
+
+**riesgo:** ninguno. No hay nada que importar.
+
+**bloqueo:** ninguno.
+
+---
+
+## LOTE 2 — Los codemods de febrero de `scripts/` (raíz)
+
+**Verdicto: BORRAR. Riesgo: ninguno.**
+
+**qué:** 17 de los 24 archivos de `scripts/` en la raíz del repo:
+
+```
+add-accent-bars.mjs        fix-glass-adoption.mjs      fix-shadow-helpers.mjs
+add-hover-transforms.mjs   fix-hardcoded-borders.mjs   fix-transition-tokens.mjs
+add-style-memo.mjs         fix-hover-transforms-v2.mjs fix-usememo-v2.mjs
+adopt-card-style.mjs       fix-null-array-guards.mjs   audit-helper-gaps.mjs
+adopt-helpers.mjs          fix-rgba-overlays.mjs       helper-gaps-report.json
+fix-focus-rings.mjs        fix-fontsize.mjs
+```
+
+**por qué:** los 17 escriben sobre `packages/core/src/components/custom/`. Esa ruta
+**no existe**: `ls packages/core/src/components` → *No such file or directory*.
+Desapareció en la reorganización del árbol. Son transformaciones de un solo uso que
+se corrieron una vez en febrero, se commitearon y nunca se retiraron. Correr
+cualquiera de ellos hoy no hace nada o falla.
+
+**se quedan** los 7 que sí tienen trabajo: `dependency-honesty.mjs` (+ test),
+`effect-registry-audit.mjs` (+ test, y este sí corre en CI), `roadmap-status.mjs`
+(+ test), `roadmap-commercial-status.mjs`.
+
+**riesgo:** ninguno. Ningún `package.json` los nombra.
+
+**bloqueo:** ninguno.
+
+---
+
+## LOTE 3 — Los 13 iconos legacy no reexportados
+
+**Verdicto: BORRAR. Riesgo: ninguno.**
+
+**qué:** 13 de las 15 carpetas de `graphics/icons/presentation/legacy/`:
+`UserIcon`, `UsersIcon`, `CheckIcon`, `XIcon`, `InfoIcon`, `ChevronDownIcon`,
+`ChevronUpIcon`, `ChevronLeftIcon`, `ChevronRightIcon`, `SearchIcon`, `EyeIcon`,
+`EyeOffIcon`, `CameraIcon`.
+
+**por qué:** el propio `graphics/icons/index.ts:37-42` lo dice por escrito:
+
+> *"The following legacy components have catalog equivalents with the same name.
+> They are intentionally NOT re-exported here to avoid conflicts."*
+
+Son iconos dibujados a mano que Phosphor ya cubre. `grep -ral "legacy/<Nombre>"`
+da **0** para los 13. El único importador de la carpeta `legacy/` es ese
+`index.ts`, y solo saca de ahí `AlertIcon` y `LoaderIcon`.
+
+**se quedan:** `AlertIcon` y `LoaderIcon`, que sí se reexportan.
+
+**riesgo:** ninguno. No salen por ningún export público.
+
+**bloqueo:** ninguno.
+
+---
+
+## LOTE 4 — El monolito duplicado de la sonda de cascada
+
+**Verdicto: BORRAR 2 archivos. Riesgo: ninguno. LEER LA ADVERTENCIA.**
+
+**qué:** exactamente dos archivos:
+
+```
+packages/core/scripts/quality-evidence/programs/modern-rescue/probe/cascade-probe.mjs       (2.729 líneas)
+packages/core/scripts/quality-evidence/programs/modern-rescue/probe/cascade-probe.test.mjs  (692 líneas)
+```
+
+**por qué:** hay dos implementaciones completas de la misma sonda de dos patas
+(simbólica + Chromium), con el mismo nombre de archivo. La de la raíz
+(`modern-rescue/cascade-probe.mjs`, 776 líneas) está partida en módulos y los
+importa. La de adentro es un monolito que reimplementa todo con solo builtins de
+node. Sobra la segunda.
+
+**ADVERTENCIA — no borrar la carpeta `probe/`.** Los otros cinco archivos
+(`css-parse.mjs`, `css-model.mjs`, `leg1-symbolic.mjs`, `leg2-chromium.mjs`,
+`value-eval.mjs`) son **dependencia directa** de la sonda de la raíz, que los
+importa en sus líneas 76-84. La primera versión de este documento decía "borrar
+`probe/`" y eso rompía la sonda de arriba. Lo encontró el segundo lector.
+
+**riesgo:** ninguno una vez acotado a esos dos archivos.
+
+**bloqueo:** ninguno.
+
+---
+
+## LOTE 5 — Los cuatro `.md` históricos de la raíz
+
+**Verdicto: BORRAR (o mover a `docs-engineering/archive/`). Riesgo: ninguno.**
+
+**qué:** `BACKLOG.md`, `DESIGN_SYSTEM_FINAL_REVIEW.md`,
+`DOCUMENTATION_ENHANCEMENT.md`, `WAVE_4_PRIMITIVES.md`.
+
+**por qué:** son fotos de un momento (una review "final" que no fue final, una ola
+de primitives que terminó, un plan de mejora de documentación ya ejecutado). El
+backlog vivo es `roadmap/registry.json`. Ninguno se actualiza; los cuatro
+describen un árbol que ya cambió. Además eran los únicos que enlazaban
+`docs/ARCHITECTURE.md`, o sea que la referencia de arquitectura vivía colgada de
+cuatro documentos muertos — ya lo arreglé enlazándola desde el `README.md`.
+
+**riesgo:** ninguno.
+
+**bloqueo:** ninguno. Decisión tuya: borrar o archivar.
+
+---
+
+## LOTE 6 — `styles/platform.css`
+
+**Verdicto: BORRAR, pero hay bloqueo. Riesgo: medio.**
+
+**qué:** `packages/core/styles/platform.css` (5,3 MB).
+
+**por qué:** es byte-idéntico a `styles/rottay.css`. Es el residuo del renombre
+`platform` → `rottay`. El generador `build-vertical-css.mjs` declara en su
+cabecera que escribe `styles/{index,modern,rottay,bithire,evnto}.css` — platform
+no está en la lista, o sea que **ya nadie lo genera**. El `package.json` tampoco
+lo exporta: `./styles/default` y `./styles/rottay` apuntan los dos a
+`dist/rottay.css`. Y `platform` ya no es un vertical del roster.
+
+**bloqueo:** el manifiesto de modern-rescue tiene **802 citas** a
+`packages/core/styles/platform.css:<línea>` repartidas en **19 archivos de
+familia**. Hay que reanclarlas a `rottay.css` antes de borrar. Como los dos
+archivos son byte-idénticos, los números de línea se mantienen: es un
+`sed s#styles/platform.css#styles/rottay.css#g` sobre esos 19 archivos, más
+correr la validación del manifiesto.
+
+**riesgo:** si se borra sin reanclar, 802 punteros de evidencia quedan rotos.
+
+**además:** el `README.md` de la raíz todavía documenta
+`@rottay/design-system/styles/platform` como export. Ese export no existe. Va en
+el LOTE 10.
+
+---
+
+## LOTE 7 — Los dos árboles `test-artifacts/`
+
+**Verdicto: NECESITA TU DECISIÓN. Riesgo: pérdida de evidencia.**
+
+**qué:** dos árboles con el mismo nombre y las mismas subcarpetas
+(`release/`, `rottay-design-platform/`):
+
+| | archivos | en git | peso |
+|---|---:|---:|---:|
+| `test-artifacts/` (raíz) | 7.577 | 203 | 479 MB |
+| `packages/core/test-artifacts/` | 589 | 589 | 49 MB |
+
+**por qué:** el `.gitignore` ignora `test-artifacts/*` y después re-admite a mano
+una lista corta de artefactos "autoritativos". Resultado: el **97 %** de los
+archivos y prácticamente todo el peso **no está versionado**. De los 7.577 de la
+raíz, 1.054 son un `node_modules/` de una release embebida. Es un directorio de
+descarga, no un repositorio de evidencia.
+
+**la pregunta que tenés que contestar:** ¿cuál de los dos es el árbol
+autoritativo? Los 203 archivos versionados de la raíz son evidencia citada por
+gates; los 528 MB restantes son basura acumulada de corridas.
+
+**propuesta:** un solo árbol, `packages/core/test-artifacts/` (que está 100 %
+versionado), y la raíz se limpia salvo los 203 archivos que gates citan.
+
+**bloqueo:** tu decisión.
+
+---
+
+## LOTE 8 — El espejo TypeScript de los tokens
+
+**Verdicto: BORRAR, con una migración previa. Riesgo: alto sin el bloqueo.**
+
+**qué:** el grueso de `packages/core/src/foundation/tokens/ts/`.
+
+**por qué:** es un espejo en TypeScript de lo que el CSS ya define. 28 carpetas
+repiten nombres que el CSS tiene con el valor real; el TS solo guarda la cadena
+`var(--ds-...)`. 31 de esas carpetas no las importa nadie. El barril entero tiene
+**un** importador de producción, y solo para dos funciones de Collapse. Todo lo
+demás es duplicación de una autoridad que ya vive en el CSS.
+
+Esto es la mala práctica en estado puro: se mantiene una segunda copia de la
+verdad que no pinta nada, y cada cambio de token hay que hacerlo dos veces o
+divergen.
+
+**bloqueo:** mover las dos funciones de Collapse a su dueño real antes de tocar
+el barril. Después, borrar por tandas verificando `tsc` en cada una.
+
+**riesgo:** alto si se hace de golpe; bajo por tandas.
+
+---
+
+## LOTE 9 — Lo ya declarado obsoleto en el propio código
+
+**Verdicto: BORRAR. Riesgo: bajo (es API pública).**
+
+**qué:** `ui/patterns/workflow/approval-inbox/`.
+
+**por qué:** su propio `index.ts:19-21` dice
+*"@deprecated Use `DecisionInboxSurface` instead... Will be removed in a future
+major version."* El reemplazo existe y funciona. "Un futuro major" lleva meses
+siendo el estado permanente. La regla 2 dice que no hay estado "obsoleto pero
+presente": o se borra o el cartel es mentira.
+
+**riesgo:** sale por el export público. Necesita nota de breaking change.
+
+**bloqueo:** confirmar que ninguna app lo importa (`app-bithire`, `app-evnto`,
+`app-platform`).
+
+---
+
+## LOTE 10 — Documentación que describe cosas inexistentes
+
+**Verdicto: CORREGIR (no borrar). Riesgo: ninguno.**
+
+**qué y por qué:**
+
+| dónde | qué dice | qué pasa |
+|---|---|---|
+| `ui-design-system/CLAUDE.md:154,201-202` | manda adjudicar "los 11 owners de `ui/patterns/commercial/`" | esa carpeta **no existe**; `find -type d -name "*commercial*"` no devuelve nada. Los 11 ya se reclasificaron. |
+| `ui-design-system/CLAUDE.md:243-244` | manda decidir sobre "los 4 componentes inventariados como `surface-composition`" | tampoco existe |
+| `.claude/agents/*.md` | describen el stack como React 18 + Vite 5 + Ant Design como librería base | es React 19 + Next.js 16 + webpack, y Ant Design es solo el engine `classic` |
+| `README.md:169` | documenta el export `@rottay/design-system/styles/platform` | ese export no existe en el `package.json` |
+
+Cada una de estas líneas manda a un agente a trabajar sobre algo que no está. Es
+la regla 4 incumplida cuatro veces.
+
+**bloqueo:** ninguno.
+
+---
+
+## LOTE 11 — Alias de `package.json` que nadie usa
+
+**Verdicto: BORRAR. Riesgo: ninguno.**
+
+**qué:**
+
+- >=11 alias `pnpm` que duplican una invocación que `ci-gates.manifest.mjs` ya hace
+  directo con `node scripts/X.mjs`.
+- `parity:theme:check` y `theme-parity:check`: dos nombres, comando idéntico.
+- `cra-17-integral-gate.mjs`: importa y reejecuta `cra-17-packaging-license-gate.mjs`
+  y `cra-17-public-declaration-gate.mjs`, que además corren por separado. El
+  agregado no corre nunca.
+
+**por qué:** dos vías de invocación para el mismo gate significa que cambiar una
+no cambia la otra. Una sola vía: el manifiesto de gates.
+
+**bloqueo:** ninguno.
+
+---
+
+# PARTE 2 — SE UNIFICA (una queda canónica, la otra se va)
+
+Acá no hay borrado inmediato: hay que declarar cuál es la canónica y migrar. Cada
+fila es una decisión tuya.
+
+## U1 — Dos compiladores emitiendo los mismos canales `--ds-*`
+
+`infrastructure/compilers/kernel/runtime/appearance/` y `.../brand-theme/`.
+
+El `CLAUDE.md` dice que el compilador de marca es "the single lowering from Theme
+to CSS variables". Son dos. El camino real de base de datos ya usa solo
+`brand-theme`.
+
+**Propuesta:** `brand-theme` es el canónico; `appearance` se absorbe o se declara
+explícitamente como capa de compatibilidad con fecha de retiro.
+
+## U2 — Dos CLIs de quality-evidence, los dos enchufados
+
+`quality-evidence/cli.mjs` (v1) corre por `quality-evidence:check`.
+`quality-evidence/v2/cli.mjs` corre por `quality-evidence:v2:*`. v2 no reusa nada
+de v1.
+
+El `README.md` del propio directorio declara que v1 es *"historical baseline only,
+may not be cited as coverage, quality or premium status"* — y el comando lo sigue
+ejecutando en CI. Un baseline histórico que corre en CI no es histórico.
+
+**Propuesta:** v2 canónico; desenchufar `quality-evidence:check`.
+
+## U3 — El chrome de colección, escrito dos veces
+
+| pattern | structure | admisión escrita |
+|---|---|---|
+| `list-toolbar` | `table-toolbar` | sí: *"Unlike the heavier `ListToolbar` pattern..."* |
+| `column-settings` | `column-menu` | sí: *"Key differences from ColumnSettingsDropdown"* |
+| `saved-views` | `saved-views-menu` | sí: *"Different from the SavedViewsBar pattern (also in DS)"* |
+| `filter-panel` | `field-filters-panel` | no (su comentario contrasta con `FilterBuilder`) |
+
+Tres de los cuatro pares tienen, en el código, un comentario que nombra a su
+duplicado. Nadie decidió cuál gana; se documentó el empate.
+
+**Propuesta:** el chrome de página es tier `structures/`. Los cuatro de
+`patterns/` se retiran.
+
+## U4 — Dos recetas de página completas para la misma pantalla
+
+- `surfaces/data/list` vs `surfaces/workspace/collection-workspace`
+- `surfaces/data/detail` vs `surfaces/workspace/record-workbench`
+
+`collection-workspace/index.tsx:4` se autodeclara *"Single canonical workspace
+surface for all collection/list/table screens"* — y `ListSurface` sigue exportada
+por la cadena entera hasta `src/index.ts`. Se escribió la palabra "canónica" y no
+se retiró la otra.
+
+**Propuesta:** cumplir lo que el archivo ya declara.
+
+## U5 — Seis marcos de página
+
+`Layout`, `page-shell`, `app-shell`, `workspace-shell`, `page-shell-surface`,
+`sidebar-surface`. Matiz real: `page-shell-surface` es un adaptador autodeclarado
+y `workspace-shell` dice de sí mismo *"This is page chrome, not a page recipe"*.
+No son seis implementaciones independientes, pero el solape de propósito es real y
+un consumidor no tiene forma de elegir.
+
+**Propuesta:** un árbol de decisión de una línea por marco en la doc, y retirar
+los que no sobrevivan.
+
+## U6 — Cuatro vocabularios de "no hay nada acá"
+
+`primitives/display/Empty`, `patterns/feedback/empty-state`,
+`structures/feedback/surface-lifecycle` (estado EMPTY),
+`surfaces/presentation/pages/experience/empty-state`. Uno por tier.
+
+**Propuesta:** el primitive es el único que dibuja; los otros tres delegan. El de
+`surfaces/` ya es página completa y puede quedarse como receta.
+
+## U7 — Otros duplicados de primitives (decisión de API pública)
+
+| par | qué comparten |
+|---|---|
+| `Switch` / `Toggle` | los dos headers dicen "toggle control for on/off states" |
+| `Steps` / `Stepper` | proceso por pasos; los dos declaran navegación por clic |
+| `Message` / `Notification` / `Toast` | tres formas de avisar |
+| `Drawer` / `Sheet` | `Sheet` se diferencia solo por lo táctil (drag handle, snap points) |
+| `Popover` / `HoverCard` / `Tooltip` | `Popover` acepta ReactNode, `Tooltip` solo texto |
+| `Statistic` / `mono-stat` / `data-terminal-card` | una cifra grande con animación |
+| `stats-grid` / `stats-header` | tira de tarjetas de métrica |
+| `Calendar` / `calendar-view`, `Timeline` / `timeline`, `Tree` / `tree-view` | el primitive dibuja, el pattern agrega datos |
+
+Los tres últimos grupos son duplicación legítima de tier (primitive sin datos vs
+pattern con datos) **si está escrita en la doc**. Hoy no lo está, así que un
+consumidor elige al azar.
+
+**Propuesta:** los pares primitive/pattern se quedan y se documentan; `Switch`/
+`Toggle` y `Steps`/`Stepper` se fusionan.
+
+## U8 — Dos motores de roadmap
+
+`roadmap-status.mjs` (3.177 líneas) y `roadmap-commercial-status.mjs` (304).
+Corrección respecto de la primera versión de este documento: **sí comparten
+código**. La cabecera del comercial dice *"Copied from scripts/roadmap-status.mjs
+(2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences"* y
+`comm -12` da 191 líneas idénticas. Es una copia divergida, no una
+reimplementación.
+
+El aislamiento fue decisión tuya firmada el 2026-07-07, así que esto **se queda**.
+Lo que cambia es la forma: las dos divergencias funcionales se parametrizan y el
+comercial pasa a llamar al motor, en vez de ser una copia que ya perdió el 90 % de
+las capacidades del original.
+
+## U9 — La arquitectura escrita en tres lugares
+
+`docs/ARCHITECTURE.md`,
+`docs-engineering/engineering/design-system/architecture/README.md`, y
+`packages/core/docs/`. Los dos primeros solapan en cuatro secciones y ninguno
+enlaza al otro.
+
+**Propuesta:** `docs-engineering/` es la fuente (lo dice el `CLAUDE.md` de la
+raíz); `docs/ARCHITECTURE.md` queda como puntero.
+
+---
+
+# PARTE 3 — SE QUEDA (y por qué no volver a proponer borrarlo)
+
+Esta lista existe porque el criterio equivocado ya casi borra estas cosas una vez.
+
+| qué | por qué parece muerto | por qué no lo está |
+|---|---|---|
+| `modern-rescue/probe/` (5 archivos) | la carpeta se llamó "segunda implementación" | `cascade-probe.mjs` de la raíz los importa en sus líneas 76-84 |
+| `skin-orphan-scope-audit.mjs` | ningún gate lo llama | su propia cabecera dice que camina *"the OPPOSITE direction to `skin-dead-part-audit.mjs`, deliberately"*. Es la mitad complementaria de un par cuya otra mitad sí corre |
+| `decision-panorama`, `widget-board`, `bulk-select-toggle`, `status-filter-pills`, `mono-stat`, `ascii-diagram`, `token-inspector`, `terminal-block` | "solo el registro del showroom" | los importan tests de contrato de core, el fixture `visual-excellence` de brand-studio, y páginas `probe/`/`torture-sections`/`kit-inventory` del showroom |
+| `scripts/codemods/*.mjs` | ningún script npm los corre | por diseño: se corren a mano en el repo de la app consumidora |
+| `runtime-svg-paint-census.mjs`, `embedded-css-paint-census.mjs` | parecen duplicarse | son dos CLIs sobre los contadores de `lib/`, donde la medición vive una sola vez |
+
+**La lección de método, que vale más que la lista:** ocho componentes se marcaron
+huérfanos porque medí solo contra imports de producción de `ui/`. Contando tests de
+contrato, fixtures internos y showroom, tienen consumidor. **El alcance de la
+medición es parte del resultado.** Cualquier `[SIN CONSUMIDOR]` futuro tiene que
+declarar dónde buscó.
+
+---
+
+# PARTE 4 — Las reglas que cortan la reincidencia
+
+Las cinco formas en que este repo acumuló lo que acumuló, y la regla que corta cada
+una. Van al `CLAUDE.md`.
+
+**1. El codemod de un solo uso que se commitea y no se retira.**
+→ Un codemod declara en su cabecera la fecha en que expira. Pasada esa fecha se
+borra sin discusión. Un codemod cuya ruta de destino no existe se borra ya.
+
+**2. El gate que se escribe con su test, el test entra a CI por glob y el gate
+nunca.** → Un script sin un gate que lo corra no se commitea. Si es diagnóstico y
+no bloquea, va a una carpeta declarada de diagnósticos, no al mismo directorio que
+los gates.
+
+**3. El glob no recursivo que esconde árboles enteros de tests.**
+→ `node --test scripts/*.test.mjs` no alcanza subcarpetas. Hoy hay al menos cinco
+tests que ningún glob toca. Los globs de `test:scripts` se hacen recursivos o cada
+subárbol declara su entrada.
+
+**4. El programa que se documenta como si fuera código y solo se cita a sí mismo.**
+→ Un set de documentos que solo enlaza a sus propios hermanos parece vivo en
+cualquier chequeo de enlaces. La pregunta correcta es si algo **de afuera** lo cita.
+
+**5. La copia declarada que después diverge.**
+→ Copiar está permitido si el aislamiento es una decisión firmada, pero la copia
+declara qué diverge y un test lo verifica. `roadmap-commercial-status.mjs` declaró
+"dos divergencias funcionales" y hoy es el 10 % del original.
+
+**Y la que las cubre a todas:** un documento que describe algo que ya no existe se
+corrige el mismo día o se borra. No hay estado "vigente con cartel de obsoleto".
+
+---
+
+## Qué necesito de vos
+
+Aprobás por lote, no archivo por archivo:
+
+| lote | qué | riesgo | listo para ejecutar |
+|---|---|---|---|
+| 1 | 34 carpetas vacías | ninguno | sí |
+| 2 | 17 codemods de febrero | ninguno | sí |
+| 3 | 13 iconos legacy | ninguno | sí |
+| 4 | 2 archivos de sonda duplicada | ninguno | sí |
+| 5 | 4 `.md` históricos de la raíz | ninguno | sí (borrar o archivar: decidís) |
+| 6 | `styles/platform.css` | medio | no: reanclar 802 citas primero |
+| 7 | `test-artifacts/` (528 MB) | pérdida de evidencia | no: necesito tu decisión |
+| 8 | espejo TS de tokens | alto de golpe | no: migrar 2 funciones primero |
+| 9 | `approval-inbox` (ya deprecado) | API pública | no: confirmar que ninguna app lo importa |
+| 10 | doc que describe cosas inexistentes | ninguno | sí (es corrección, no borrado) |
+| 11 | alias de `package.json` sin uso | ninguno | sí |
+
+Los lotes 1 a 5 más el 10 y el 11 se pueden hacer hoy y no rompen nada.

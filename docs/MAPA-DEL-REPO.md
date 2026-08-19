@@ -10,6 +10,32 @@ Este documento es descriptivo: dice lo que hay, no lo que debería haber. Cuando
 texto marca `[DUPLICA]` significa que dos carpetas hacen el mismo trabajo, y
 `[SIN CONSUMIDOR]` que nada fuera de la propia carpeta la importa.
 
+## Verificación independiente
+
+Las 204 afirmaciones marcadas `[DUPLICA]` o `[SIN CONSUMIDOR]`, más las cinco
+afirmaciones fuertes de la cabecera, fueron revisadas una por una por un segundo
+lector que no escribió este mapa, contra el árbol real:
+
+| bloque | de acuerdo | en desacuerdo | sin poder verificar |
+|---|---:|---:|---:|
+| `foundation/` + `infrastructure/` | 92 | 1 | 0 |
+| `ui/` | 41 | 9 | 0 |
+| `graphics/` + `entrypoints/` + `tooling/` | 22 | 0 | 0 |
+| `packages/core` fuera de `src/` + raíz | 33 | 4 | 0 |
+| **total** | **188** | **14** | **0** |
+
+Los 14 desacuerdos ya están corregidos en el cuerpo del documento. Ocho de ellos
+son el mismo error de método y vale la pena nombrarlo: al marcar `[SIN CONSUMIDOR]`
+no conté como consumidores los tests de contrato de `packages/core`, los fixtures
+internos de `brand-studio`, ni las páginas `probe/`, `torture-sections/` y
+`kit-inventory` del showroom. Ocho componentes marcados como huérfanos sí tienen
+quién los use. **El alcance de la medición es parte del resultado.**
+
+El más caro de los otros seis: `modern-rescue/probe/` no es una carpeta duplicada.
+Cinco de sus siete archivos son dependencia directa de la sonda de la raíz, que los
+importa en sus líneas 76-84. Borrar la carpeta entera, como el texto original
+sugería, rompía la sonda de arriba.
+
 ---
 
 ## Cifras
@@ -25,7 +51,7 @@ texto marca `[DUPLICA]` significa que dos carpetas hacen el mismo trabajo, y
 | `roadmap/` + `roadmap-commercial/` | 54 | 54 | 2 MB |
 | `scripts/` (raíz) | 24 | 24 | 624 KB |
 | `docs/` (raíz) | 2 | 2 | 43 KB |
-| `test-artifacts/` (raíz) | 1.858 | 203 | 436 MB |
+| `test-artifacts/` (raíz) | 7.577 (6.523 sin contar `node_modules/`) | 203 | 479 MB |
 
 Carpetas descritas en este mapa: **1.400**, de las cuales 587 en `foundation/` e
 `infrastructure/`, 422 en `graphics/`, `entrypoints/` y `tooling/`, 295 en `ui/`,
@@ -44,7 +70,11 @@ Resumen; el detalle está en cada sección.
    may not be cited as coverage" mientras el comando sigue ejecutándolo en CI.
 3. **Dos sondas de cascada con el mismo nombre.** `modern-rescue/cascade-probe.mjs`
    (776 líneas, en inglés) y `modern-rescue/probe/cascade-probe.mjs` (2.729 líneas,
-   en español). Ninguna la invoca nada y ningún glob de tests las alcanza.
+   en español). Ninguna la invoca nada y ningún glob de tests las alcanza. Ojo: el
+   duplicado es SOLO ese archivo dentro de `probe/`. El resto de `probe/`
+   (`css-parse`, `css-model`, `leg1-symbolic`, `leg2-chromium`, `value-eval`) son
+   dependencias reales de la sonda de la raíz, que las importa en sus líneas 76-84.
+   Borrar `probe/` entero rompe la sonda de arriba.
 4. **El chrome de colección, escrito en `patterns/` y en `structures/`.**
    `list-toolbar`/`table-toolbar`, `column-settings`/`column-menu`,
    `saved-views`/`saved-views-menu`, `filter-panel`/`field-filters-panel`.
@@ -63,8 +93,11 @@ Resumen; el detalle está en cada sección.
 8. **Dos árboles `test-artifacts/`**, en la raíz y dentro de `packages/core/`, los
    dos con subcarpetas `release/` y `rottay-design-platform/`.
 9. **Dos motores de roadmap.** `roadmap-status.mjs` (3.177 líneas) y
-   `roadmap-commercial-status.mjs` (304), sin una línea compartida. El aislamiento
-   fue decisión del dueño el 2026-07-07; el costo es que ya divergieron diez a uno.
+   `roadmap-commercial-status.mjs` (304). No se importan entre sí, pero sí comparten
+   código: la cabecera del comercial dice "Copied from scripts/roadmap-status.mjs
+   (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences" y
+   `comm -12` da 191 líneas idénticas. Es una copia divergida. El aislamiento fue
+   decisión del dueño el 2026-07-07; el costo es que ya divergieron diez a uno.
 10. **La arquitectura en tres lugares.** `docs/ARCHITECTURE.md`,
     `docs-engineering/engineering/design-system/architecture/README.md` y
     `packages/core/docs/`. Los dos primeros solapan en cuatro secciones y cada uno
@@ -112,7 +145,7 @@ que sí corren en CI, más 17 codemods muertos de febrero de 2026.
 
 - `scripts/roadmap-status.mjs` — (1 archivo, 3.177 líneas) motor de estado del roadmap principal; único camino legal para cambiar el estado de un WO (`pnpm roadmap:status` / `roadmap:check`). VIVO.
 - `scripts/roadmap-status.test.mjs` — (1 archivo, 82 KB) tests del motor anterior, `pnpm roadmap:test`. VIVO.
-- `scripts/roadmap-commercial-status.mjs` — (1 archivo, 304 líneas) el mismo trabajo que `roadmap-status.mjs` pero para el programa comercial aislado; `pnpm roadmap:commercial`. **[DUPLICA]** a `scripts/roadmap-status.mjs`: son dos implementaciones separadas del mismo modelo de estado (registry.json + STATUS.md generado). No comparten ni una línea de código: el comercial reimplementa lectura de registry, cálculo de contadores y render de STATUS desde cero en 304 líneas. La duplicación es una decisión explícita del dueño (aislamiento 2026-07-07), no un accidente, pero es duplicación de maquinaria igual.
+- `scripts/roadmap-commercial-status.mjs` — (1 archivo, 304 líneas) el mismo trabajo que `roadmap-status.mjs` pero para el programa comercial aislado; `pnpm roadmap:commercial`. **[DUPLICA]** a `scripts/roadmap-status.mjs`: son dos implementaciones separadas del mismo modelo de estado (registry.json + STATUS.md generado). No se importan entre sí, pero no es reimplementación: la cabecera del comercial declara "Copied from scripts/roadmap-status.mjs (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences" y `comm -12` da 191 líneas idénticas. Es una copia divergida. La duplicación es una decisión explícita del dueño (aislamiento 2026-07-07), no un accidente, pero es duplicación de maquinaria igual.
 - `scripts/dependency-honesty.mjs` + `.test.mjs` — (2 archivos, 259 KB) el gate de honestidad de dependencias; `pnpm dependency:honesty`, referenciado por `.github/workflows/ci.yml`. VIVO y es el archivo más grande de la carpeta.
 - `scripts/effect-registry-audit.mjs` + `.test.mjs` — (2 archivos) audita la procedencia de los efectos contra `packages/core/provenance/effects`; `pnpm effects:provenance`. VIVO. Importa `CI_GATES` desde `packages/core/scripts/ci-gates.manifest.mjs`.
 - `scripts/add-accent-bars.mjs`, `add-hover-transforms.mjs`, `add-style-memo.mjs`, `adopt-card-style.mjs`, `adopt-helpers.mjs`, `audit-helper-gaps.mjs`, `fix-focus-rings.mjs`, `fix-fontsize.mjs`, `fix-glass-adoption.mjs`, `fix-hardcoded-borders.mjs`, `fix-hover-transforms-v2.mjs`, `fix-null-array-guards.mjs`, `fix-rgba-overlays.mjs`, `fix-shadow-helpers.mjs`, `fix-transition-tokens.mjs`, `fix-usememo-v2.mjs`, `helper-gaps-report.json` — (17 archivos, 17 en git, ~110 KB) **[SIN CONSUMIDOR]** codemods de una sola pasada de las fases P0..P3E. Los 16 scripts escriben sobre `packages/core/src/components/custom/`, **una ruta que ya no existe** (`packages/core/src/components` fue borrado en la reorganización a `foundation/ infrastructure/ graphics/ ui/ tooling/`). Ninguno aparece en `package.json`, en `.github/workflows/ci.yml` ni en ningún `.md`; la única referencia cruzada es entre ellos mismos. Su último commit es del 2026-02-08 ("complete engine-awareness improvements across all 337 presets"). `helper-gaps-report.json` es la salida congelada de `audit-helper-gaps.mjs` y apunta a los mismos paths inexistentes.
@@ -152,7 +185,7 @@ El mismo modelo que `roadmap/` pero para un solo programa: relanzar `showroom.ro
 - `roadmap-commercial/registry.json` — el estado.
 - `roadmap-commercial/STATUS.md` — el tablero generado.
 
-**[DUPLICA]** a `roadmap/` en forma, no en contenido. Duplica: la estructura de carpeta (README + lane + registry + STATUS generado), el modelo de estado, el vocabulario de WO y la maquinaria (`scripts/roadmap-commercial-status.mjs` reimplementa `scripts/roadmap-status.mjs`). No duplica: el alcance (uno es el engine modern, el otro es la superficie comercial). El aislamiento es una decisión firmada del dueño con fecha 2026-07-07, así que esto es duplicación deliberada; el costo es que cualquier mejora al motor de roadmap hay que hacerla dos veces, y el motor comercial es 10 veces más chico (304 vs 3.177 líneas), o sea que ya divergieron en capacidad.
+**[DUPLICA]** a `roadmap/` en forma, no en contenido. Duplica: la estructura de carpeta (README + lane + registry + STATUS generado), el modelo de estado, el vocabulario de WO y la maquinaria (`scripts/roadmap-commercial-status.mjs` es una copia declarada de `scripts/roadmap-status.mjs`, 191 líneas idénticas). No duplica: el alcance (uno es el engine modern, el otro es la superficie comercial). El aislamiento es una decisión firmada del dueño con fecha 2026-07-07, así que esto es duplicación deliberada; el costo es que cualquier mejora al motor de roadmap hay que hacerla dos veces, y el motor comercial es 10 veces más chico (304 vs 3.177 líneas), o sea que ya divergieron en capacidad.
 
 #### 1.5 `.github/` — (1 archivo, 1 en git, 28 KB)
 
@@ -220,9 +253,9 @@ Cuatro directorios de specs y dos configs; el propio `e2e/README.md` prohíbe a�
 
 ---
 
-### 3. `test-artifacts/` — (6.523 archivos, 203 en git, 479 MB)
+### 3. `test-artifacts/` — (7.577 archivos, de los cuales 1.054 son `node_modules/` de una release embebida; 203 en git, 479 MB)
 
-Volcados de evidencia de gates y auditorías. `.gitignore` los ignora todos por defecto (`test-artifacts/*`) y luego re-admite a mano una lista corta de artefactos "autoritativos"; el resultado es que **el 96,9 % de los archivos y prácticamente todo el peso no está versionado**. Solo 203 de 6.523 archivos están en git, y de esos 178 son de un solo directorio (`r1p-round3-evidence`).
+Volcados de evidencia de gates y auditorías. `.gitignore` los ignora todos por defecto (`test-artifacts/*`) y luego re-admite a mano una lista corta de artefactos "autoritativos"; el resultado es que **el 96,9 % de los archivos y prácticamente todo el peso no está versionado**. Solo 203 de 7.577 archivos están en git, y de esos 178 son de un solo directorio (`r1p-round3-evidence`).
 
 #### 3.1 Primer nivel
 
@@ -259,7 +292,7 @@ Al buscar quién escribe en `test-artifacts/`, la ruta más citada del repo (247
 ### Resumen de marcas
 
 **[DUPLICA]**
-- `scripts/roadmap-commercial-status.mjs` vs `scripts/roadmap-status.mjs` (mismo motor reimplementado, 304 vs 3.177 líneas).
+- `scripts/roadmap-commercial-status.mjs` vs `scripts/roadmap-status.mjs` (copia declarada y divergida, 191 líneas idénticas; 304 vs 3.177 líneas).
 - `roadmap-commercial/` vs `roadmap/` (misma estructura y modelo de estado, alcance distinto, aislamiento deliberado 2026-07-07).
 - `docs/ARCHITECTURE.md` vs `docs-engineering/engineering/design-system/architecture/README.md` (solapan cuatro secciones, cada uno tiene tres o cuatro exclusivas, ninguno enlaza al otro).
 - `test-artifacts/releases/` vs `test-artifacts/release/` (dos carpetas para tarballs publicados, nombres a una letra de distancia).
@@ -409,7 +442,7 @@ Convenciones de este documento:
         `foundation/tokens/css/facade/artifacts/` — (0) agrupador de las hojas de pintura de tenant generadas, una carpeta por vertical de primera parte; son salidas de build, no fuentes.
           `foundation/tokens/css/facade/artifacts/bithire/` — (1) `index.css` generado (~2200 líneas) con la pintura del tenant BitHire: declara centenares de `--ds-*` concretos (color, radio, tipografía, sombras por familia) bajo `html[data-tenant='bithire']` / `[data-ds-root][data-vertical='bithire']`, y va deliberadamente SIN capa para ganarle a todas las capas `rottay-*`. [DUPLICA] es la proyección compilada de `packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts` (más la extensión declarada); se regenera con `build:vertical-css` y cualquier edición manual la revierte el gate de paridad.
           `foundation/tokens/css/facade/artifacts/evnto/` — (1) lo mismo para el vertical Evnto: `index.css` generado con los `--ds-*` del tenant Evnto, sin capa, scopeado por `data-tenant`/`data-vertical`. [DUPLICA] proyección compilada de `packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts`.
-          `foundation/tokens/css/facade/artifacts/rottay/` — (1) lo mismo para el vertical Rottay/platform: `index.css` generado (~2900 líneas), `color-scheme: dark`, sin capa. [DUPLICA] proyección compilada de `packages/core/src/foundation/tokens/ts/presentation/brand-themes/platform/index.ts`.
+          `foundation/tokens/css/facade/artifacts/rottay/` — (1) lo mismo para el vertical Rottay/platform: `index.css` generado (~2900 líneas), `color-scheme: dark`, sin capa. [DUPLICA] proyección compilada de `packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts` (no existe una carpeta `platform/`: los brand-themes en fuente son bithire, evnto y rottay).
         `foundation/tokens/css/facade/entrypoints/` — (5) los cinco puntos de entrada CSS: `styles.css` (bundle completo con los tres tenants), `base.css` (todo menos la pintura de tenant, que es lo que consume el build por vertical) y `rottay.css`/`bithire.css`/`evnto.css` (base + un tenant); son los que declaran el orden canónico `@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities` y los que hacen los ~280 `@import` de skins asignando a cada archivo su capa.
           `foundation/tokens/css/facade/entrypoints/tests/` — (1) contrato del piso de 44px de área táctil: fija que la regla compartida y sin capa de `base.css` siga existiendo, que su cobertura de selectores sólo pueda crecer y que su valor siga siendo una longitud en píxeles físicos.
       `foundation/tokens/css/foundation/` — (0) nivel de agrupación de los valores base del sistema: lo que se importa en la capa `rottay-tokens` (y `rottay-motion` / `rottay-responsive`) y de lo que todo lo demás depende; nada de aquí conoce componentes ni motores.
@@ -1003,11 +1036,11 @@ Tampoco existe `surface-composition/` ni un `composition/` como tier. Las dos ú
   - `stats-grid/` (12) — retícula de tarjetas de métrica con sparkline y conteo animado. Su `foundation/layout/` resuelve el eje de columnas y `foundation/personality/` traduce la personalidad global a la familia. [DUPLICA] `structures/dashboard/stats-header`.
   - `record-facts/` (8) — anatomía de solo lectura para registros densos: una sola frontera de sección y ritmo interno, en vez de tarjetas anidadas. [SIN CONSUMIDOR] en `core`: solo su índice y fixtures del showroom.
   - `decision-comparison/` (10) — comparar dos sujetos hecho a hecho con tono semántico.
-  - `decision-panorama/` (7) — panorama de hechos para decidir. [SIN CONSUMIDOR]: el único archivo que lo nombra es su propio `index.ts`.
-  - `widget-board/` (15) — tablero de widgets movibles y redimensionables con catálogo. Su `runtime/adaptive/policy` y `/react` delegan en el solucionador de `patterns/runtime/adaptive-layout`. [SIN CONSUMIDOR]: solo su propio `index.ts`.
-  - `bulk-select-toggle/` (2) — botón para entrar y salir del modo selección múltiple. Sin engines. [SIN CONSUMIDOR]: solo el registro del showroom y una prueba de tokens.
-  - `status-filter-pills/` (1) — fila de píldoras de filtro por estado. Sin engines. [SIN CONSUMIDOR]: solo el registro del showroom.
-  - `mono-stat/` (2) — una cifra monoespaciada que cuenta hacia arriba al entrar en pantalla; hecha para el muro de pruebas monocromo. [SIN CONSUMIDOR]: solo el registro del showroom.
+  - `decision-panorama/` (7) — panorama de hechos para decidir. CON CONSUMIDOR: lo importa y renderiza el fixture `brand-studio/runtime/tenant-theme-preview/fixtures/visual-excellence/index.tsx:46,354`.
+  - `widget-board/` (15) — tablero de widgets movibles y redimensionables con catálogo. Su `runtime/adaptive/policy` y `/react` delegan en el solucionador de `patterns/runtime/adaptive-layout`. CON CONSUMIDOR: el fixture `visual-excellence/index.tsx:48,726` lo renderiza y el showroom tiene `WidgetBoardPreview` (`pattern-preview-fixtures.tsx:1227`).
+  - `bulk-select-toggle/` (2) — botón para entrar y salir del modo selección múltiple. Sin engines. CON CONSUMIDOR: `patterns/data/tests/PatternsLongTailBatch.contract.test.tsx:6` lo importa y dos páginas del showroom lo renderizan.
+  - `status-filter-pills/` (1) — fila de píldoras de filtro por estado. Sin engines. CON CONSUMIDOR: `structures/workspace/tests/WorkspaceChromeBatch.contract.test.tsx:20` lo importa y una torture-section del showroom lo renderiza.
+  - `mono-stat/` (2) — una cifra monoespaciada que cuenta hacia arriba al entrar en pantalla; hecha para el muro de pruebas monocromo. CON CONSUMIDOR: tres tests de integración monochrome lo importan y las probes `config-b` y `kit-inventory` del showroom lo renderizan.
   - `tests/` (1) — contrato del lote de patterns de cola larga.
 
 `ui/patterns/forms/` — (52) armar y filtrar formularios.
@@ -1030,7 +1063,7 @@ Tampoco existe `surface-composition/` ni un `composition/` como tier. Las dos ú
   - `timeline/` (7) — línea de tiempo de eventos. [DUPLICA] parcial de `primitives/display/Timeline`.
   - `tree-view/` (11) — jerarquía en dos presentaciones (interactiva conmutada por engine y estática). [DUPLICA] parcial de `primitives/display/Tree`.
   - `map-view/` (8) — contenedor de mapa; es un placeholder, no trae proveedor de mapas.
-  - `ascii-diagram/` (2) — diagrama de cajas en monoespaciado, con revelado tipo tecleo. Sin engines. [SIN CONSUMIDOR]: solo el registro del showroom.
+  - `ascii-diagram/` (2) — diagrama de cajas en monoespaciado, con revelado tipo tecleo. Sin engines. CON CONSUMIDOR: tres tests monochrome lo importan y `kit-inventory/page.tsx:71` lo renderiza.
   - `tests/` (1).
 
 `ui/patterns/communication/` — (43) conversación y avisos.
@@ -1067,13 +1100,13 @@ Tampoco existe `surface-composition/` ni un `composition/` como tier. Las dos ú
   - `brand-studio/` (23) — el editor acotado de BrandTheme con previsualización en vivo. `runtime/file-export/` serializa y proyecta el theme; `runtime/tenant-theme-preview/` es el motor de preview con `preview-scope/` (aislar el CSS), `contrast-adjustments/`, `pack-warnings/`, `report/` y `fixtures/` (cinco escenas de muestra: métricas, formulario, galería, colección, excelencia visual).
   - `tenant-preview/` (10) — superficie de preview de marca/personalidad conmutada por engine. `runtime/preview-css/` sanea y acota el CSS del preview.
   - `branding-preview-sandbox/` (2) — galería de primitives reales con una TenantAppearance propuesta aplicada en un scope aislado.
-  - `token-inspector/` (2) — overlay de desarrollo (Ctrl+Shift+T) para ver los `--ds-*` resueltos de cualquier elemento; se elimina en producción. [SIN CONSUMIDOR]: solo el registro del showroom.
+  - `token-inspector/` (2) — overlay de desarrollo (Ctrl+Shift+T) para ver los `--ds-*` resueltos de cualquier elemento; se elimina en producción. CON CONSUMIDOR: `patterns/tests/cross-capability.contract.test.tsx` lo importa y dos páginas del showroom lo renderizan.
   - [DUPLICA] los tres primeros resuelven "ver cómo queda la marca antes de guardar" con tres implementaciones distintas.
 
 `ui/patterns/feedback/` — (15) qué mostrar cuando no hay nada o algo va lento.
   - `empty-state/` (7) — placeholder de vacío conmutado por engine. [DUPLICA] `primitives/display/Empty`, `structures/feedback/surface-lifecycle/states` y la surface `experience/empty-state`.
   - `adaptive-overlay/` (5) — el mismo contenido se muestra como modal, drawer o sheet según el tamaño de pantalla.
-  - `terminal-block/` (2) — bloque tipo terminal que escribe línea por línea leyendo cadencias de canales CSS privados. [SIN CONSUMIDOR]: solo el registro del showroom.
+  - `terminal-block/` (2) — bloque tipo terminal que escribe línea por línea leyendo cadencias de canales CSS privados. CON CONSUMIDOR: los tests monochrome lo importan, `config-b` y `kit-inventory` lo renderizan y `ascii-diagram` lo referencia.
 
 `ui/patterns/commerce/` — (9) `pricing-table/` (8): retícula de comparación de planes con filas de features y plan destacado.
 
@@ -1187,7 +1220,7 @@ Tampoco existe `surface-composition/` ni un `composition/` como tier. Las dos ú
   - `admin/` (23) — páginas de administración: `settings/` (2, shell de ajustes con pestañas), `audit/` (3, visor de log de auditoría filtrable y exportable), `billing/` (4, plan, uso y facturación), `profile/` (4, cuenta del usuario), `team/` (2, roster de miembros), `integration/` (2, API keys y webhooks), `import-export/` (3, carga y descarga masiva), `file-browser/` (2, envuelve `PatternFileManager`).
   - `experience/` (23) — páginas de cara pública o de experiencia: `auth/` (2), `marketing/` (1, lienzo editorial pre-login), `pricing/` (2, envuelve `PatternPricingTable`), `chat/` (2, conversación para asistentes o soporte), `editor/` (2, lienzo de edición con toolbar), `media/` (2, navegador de medios con preview), `notification/` (3, centro de notificaciones con preferencias), `empty-state/` (2, la página entera de "todavía no hay nada"), `oauth-transition/` (6, la pantalla de transición del OAuth, la única del grupo con fachada e implementación por capas).
   - `forms/` (10) — `form/` (2, formulario de una página), `detail-form/` (2, edición con aside de resumen), `wizard/` (2, flujo guiado multipaso), `guided-draft-form/` (3, flujos de creación con borrador, recuperación y plantillas).
-    - [DUPLICA] parcial: los cuatro envuelven `PatternFormBuilder` y se distinguen por el chrome (una página, partido, por pasos, con borrador).
+    - [DUPLICA] parcial: tres de los cuatro envuelven `PatternFormBuilder` (`forms/form`, `forms/wizard`, `forms/detail-form`) y se distinguen por el chrome (una página, partido, por pasos). `guided-draft-form` no referencia `FormBuilder` en ninguna línea: compone primitives directamente.
   - `operations/` (9) — `activity/` (2, envuelve `PatternActivityLog`), `kanban/` (2, envuelve `PatternKanbanBoard`), `scheduler/` (2, envuelve `PatternCalendarView`), `operational/` (2, tablero de operaciones en vivo con colas y feeds).
     - Estos cuatro son envoltorios finos: la surface aporta el chrome de `PageShellSurface` y el pattern hace el trabajo.
 
@@ -2422,10 +2455,12 @@ Raíz del programa (autoridad normativa, según `AGENTS.md` y `CLAUDE.md`):
 
 Subcarpetas:
 
-- `probe/` — (7) la segunda implementación de la sonda de cascada, más grande (2729 líneas) y en
-  español, partida en módulos: `cascade-probe.mjs` (pata simbólica), `leg1-symbolic.mjs`,
-  `leg2-chromium.mjs`, `css-model.mjs`, `css-parse.mjs`, `value-eval.mjs`, `cascade-probe.test.mjs`
-  (692 líneas). **[DUPLICA]** de `../cascade-probe.mjs`. Ninguna de las dos corre.
+- `probe/` — (7) los módulos de la sonda de cascada: `leg1-symbolic.mjs`, `leg2-chromium.mjs`,
+  `css-model.mjs`, `css-parse.mjs`, `value-eval.mjs` — que `../cascade-probe.mjs` importa
+  directamente en sus líneas 76-84, o sea que son dependencia viva de la sonda de la raíz, no una
+  copia. El único duplicado real es `probe/cascade-probe.mjs` (2729 líneas, español, monolito con
+  solo builtins de node), que reimplementa entero lo que la raíz hace apoyándose en estos módulos.
+  Su test `cascade-probe.test.mjs` (692 líneas) no lo alcanza ningún glob.
 - `manifest/` — (356) el manifiesto segmentado de customización, canon del repo (20 controles ×
   255 familias). Detalle abajo.
 - `phase-a/` — (1) `ledger-schema.json`, el esquema del ledger de la fase A.
@@ -2584,14 +2619,16 @@ Los 11 conjuntos:
 2. `.../modern-rescue/cascade-probe.mjs` (776 líneas, inglés) vs
    `.../modern-rescue/probe/cascade-probe.mjs` (2729 líneas, español) — dos implementaciones
    independientes de la misma sonda de cascada de dos patas, con el mismo nombre de archivo, más sus
-   dos tests separados (855 y 692 líneas). Ninguna de las dos la invoca nada.
+   dos tests separados (855 y 692 líneas). Ninguna de las dos la invoca nada. El duplicado es ese
+   archivo, no la carpeta: los otros cinco módulos de `probe/` son dependencia de la sonda de la
+   raíz (importados en sus líneas 76-84).
 3. `styles/platform.css` vs `styles/rottay.css` — byte-idénticos; `platform` ya no es un vertical del
    roster y ningún export lo referencia.
 4. `scripts/cra-17-integral-gate.mjs` importa y reejecuta `cra-17-packaging-license-gate.mjs` +
    `cra-17-public-declaration-gate.mjs`, que además corren por separado. El agregado no corre nunca.
 5. `parity:theme:check` == `theme-parity:check` en `package.json` — dos nombres, comando idéntico.
 6. Doble vía de invocación: `ci-gates.manifest.mjs` llama `node scripts/X.mjs` directo mientras
-   `package.json` mantiene un alias pnpm del mismo script; ≥11 alias quedan sin uso (listados en §0).
+   `package.json` mantiene un alias pnpm del mismo script; >=11 alias quedan sin uso (listados en §0).
 7. Hogar partido de codemods: `scripts/codemods/` (para apps consumidoras) vs
    `scripts/codemod-motion-*.mjs` plano en la raíz (para la fuente del DS).
 
@@ -2611,7 +2648,8 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
 - `scripts/codemods/sizetype-to-size.mjs` y `scripts/codemods/variant-tone-split.mjs`
   (por diseño: se corren a mano en el repo de la app)
 - `.../modern-rescue/cascade-extract.mjs`, `cascade-materialize.mjs`, `cascade-backlog.mjs`,
-  `cascade-probe.mjs` y `probe/*` — el subsistema de cascada completo
+  `cascade-probe.mjs` y `probe/cascade-probe.mjs` — el subsistema de cascada completo. Los otros
+  cinco archivos de `probe/` SÍ tienen consumidor: los importa `cascade-probe.mjs` de la raíz
 - Tests que ningún glob alcanza: `.../modern-rescue/cascade-probe.test.mjs`,
   `.../modern-rescue/probe/cascade-probe.test.mjs`, `.../manifest/fanout-facts.test.mjs`,
   `.../manifest/mirror-parity.test.mjs`, `.../manifest/root-checklist.test.mjs`
