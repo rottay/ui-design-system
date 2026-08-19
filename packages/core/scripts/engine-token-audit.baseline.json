@@ -23,7 +23,7 @@
   "themeCss.deadSelectorsRustic": 138,
   "content.magicZIndex": 0,
   "layout.crossEngineDivergences": 0,
-  "a11y.apcaPairings": 0,
+  "a11y.apcaPairings": 1,
   "responsive.fixedWidthLiterals": 0,
   "responsive.overflowCells": 0,
   "vocabulary.rawAntdSizeUnions": 0,
