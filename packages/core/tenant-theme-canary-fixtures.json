@@ -18,7 +18,7 @@
                 "primary": "#141412",
                 "secondary": "#3D3B36",
                 "muted": "#6E6B63",
-                "disabled": "#A6A29A"
+                "disabled": "#928F87"
               },
               "border": {
                 "primary": "#2A2824",
@@ -90,6 +90,8 @@
               "--ds-surface-inset": "#FFFFFF",
               "--ds-surface-panel": "#F1EDE4",
               "--ds-surface-card": "#FFFFFF",
+              "--ds-material-panel-foreground-disabled": "#928F87",
+              "--ds-material-control-foreground-disabled": "#928F87",
               "--ds-material-control-background-hover": "#EDE9DF",
               "--ds-material-control-background-active": "#E4DFD2",
               "--ds-material-control-border": "#2A2824",

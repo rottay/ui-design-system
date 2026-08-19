@@ -54,16 +54,27 @@ const SPECIMENS = [
 
 /** The schema-version constant the fixtures import from the contract root. */
 function readSchemaVersion() {
-  const source = readFileSync(join(CONTRACT_ROOT, "index.ts"), "utf8");
-  const match = source.match(
+  const rootSource = readFileSync(join(CONTRACT_ROOT, "index.ts"), "utf8");
+  const direct = rootSource.match(
     /export const TENANT_THEME_SCHEMA_VERSION\s*=\s*(\d+)/,
   );
-  if (!match) {
-    throw new Error(
-      "Could not read TENANT_THEME_SCHEMA_VERSION from the tenant-theme contract root.",
+  if (direct) return Number(direct[1]);
+  // The constant may live in a submodule and arrive at the root through an
+  // import/re-export hop; follow whichever line names it with a `from`.
+  const hop = rootSource.match(
+    /(?:import|export)[^;]*TENANT_THEME_SCHEMA_VERSION[^;]*from\s+["']([^"']+)["']/s,
+  );
+  if (hop) {
+    const target = join(CONTRACT_ROOT, hop[1], "index.ts");
+    const moduleSource = readFileSync(target, "utf8");
+    const nested = moduleSource.match(
+      /export const TENANT_THEME_SCHEMA_VERSION\s*=\s*(\d+)/,
     );
+    if (nested) return Number(nested[1]);
   }
-  return Number(match[1]);
+  throw new Error(
+    "Could not read TENANT_THEME_SCHEMA_VERSION from the tenant-theme contract root.",
+  );
 }
 
 /**
