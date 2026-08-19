@@ -78,7 +78,7 @@ Estado de la cascada (verificado hoy contra `manifest/` del programa):
 ## 1. Frentes de trabajo (orden secuencial)
 
 Cada frente cierra con `pnpm --filter @rottay/design-system gates:ci` verde y
-estado del roadmap actualizado solo vía `scripts/roadmap-status.mjs`. Ningún
+estado del roadmap actualizado solo vía `scripts/roadmap/status/index.mjs`. Ningún
 borrado ocurre antes de que exista el comando que demostraría que rompió algo.
 
 ### F0 — Piso honesto (lo que queda)

@@ -66,7 +66,7 @@ Lane-wide rules (binding on every WO):
   never self-approve visuals.
 - **Anti-sprawl.** New work = a new `### WO-TOK-NN` block in this file + a `registry.json` entry
   (`pnpm roadmap:check` forces the pairing). No new plan documents. Statuses change ONLY via
-  `scripts/roadmap-status.mjs`.
+  `scripts/roadmap/status/index.mjs`.
 - No emojis anywhere. Repo docs in English. Never `git checkout/restore/reset` on directories.
   `app-bithire`, the other app repos, and `docs-engineering` are READ-ONLY references in this
   lane (build DS capability; never write into them). The showroom dev server is allowed.

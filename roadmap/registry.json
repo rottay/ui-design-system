@@ -4,8 +4,8 @@
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
-  "edit_via": "scripts/roadmap-status.mjs only (claim/done/reopen); never hand-edit statuses",
-  "new_work": "new WO in its lane markdown + registry entry, verified by roadmap-status.mjs check; NO new plan documents anywhere",
+  "edit_via": "scripts/roadmap/status/index.mjs only (claim/done/reopen); never hand-edit statuses",
+  "new_work": "new WO in its lane markdown + registry entry, verified by roadmap/status/index.mjs check; NO new plan documents anywhere",
   "wave_gate": "future phases remain locked until prior checkpoint evidence and explicit owner GO"
  },
  "metrics": [

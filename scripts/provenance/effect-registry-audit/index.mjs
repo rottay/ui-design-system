@@ -3,10 +3,26 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { dirname, relative, resolve, sep } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Ascending marker search, not a hardcoded `..` chain: this file is two
+// levels below scripts/ (scripts/provenance/effect-registry-audit/index.mjs),
+// so a fixed depth breaks the moment either level changes. Fail-closed,
+// mirrors packages/core/scripts/lib/repo-root/index.mjs's repoRoot()
+// without crossing the package boundary to import it.
+function findRepoRoot(fromDir) {
+  let dir = fromDir;
+  for (let i = 0; i < 12; i += 1) {
+    if (existsSync(join(dir, 'pnpm-workspace.yaml'))) return dir;
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error(`could not locate the workspace root (pnpm-workspace.yaml) from ${fromDir}`);
+}
+
+const REPO_ROOT = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 const DEFAULT_PROVENANCE_ROOT = resolve(
   REPO_ROOT,
   'packages/core/provenance/effects',

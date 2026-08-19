@@ -210,7 +210,7 @@ be fixed or deliberately respecified in its own work order.
   `architecture.md`, `showroom.md`). **State** lives
   in [`registry.json`](./registry.json) — the ONLY place a WO status exists. **[`STATUS.md`](./STATUS.md)
   is generated** (`pnpm roadmap:status`); never hand-edit either.
-- Statuses change ONLY through `scripts/roadmap-status.mjs` (`claim` / `progress` / `done` / `reopen`), which
+- Statuses change ONLY through `scripts/roadmap/status/index.mjs` (`claim` / `progress` / `done` / `reopen`), which
   mechanically enforces the dependency graph, the `mustLandWith` sequencing hazards, and mandatory
   evidence on `done`. Do not fight refusals — they encode the sequencing law.
 - `pnpm roadmap:check` (registry and lane file must agree: every WO heading registered, titles/lanes/
@@ -260,8 +260,8 @@ be fixed or deliberately respecified in its own work order.
 > is `ui-design-system/roadmap/` — start with `pnpm roadmap:status`, then read `roadmap/README.md`
 > (this file) and `roadmap/engine-modern.md` in full.
 >
-> HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/roadmap-status.mjs` (claim/progress/done/reopen;
-> deps, mustLandWith hazards, and evidence are enforced). `node scripts/roadmap-status.mjs delegate
+> HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/roadmap/status/index.mjs` (claim/progress/done/reopen;
+> deps, mustLandWith hazards, and evidence are enforced). `node scripts/roadmap/status/index.mjs delegate
 > WO-ENG-NN` prints the ready-to-paste executor prompt. (2) Gates are truth: a WO is done only when its
 > acceptance gate is green — the lane's mechanical gate is `node scripts/engine-token-audit.mjs --check`
 > (created by WO-ENG-01, extended by every later token WO) plus `pnpm --filter @rottay/design-system run
@@ -320,10 +320,10 @@ be fixed or deliberately respecified in its own work order.
 
 1. `pnpm roadmap:status` — regenerates STATUS.md: burn-down, what is in progress (and by whom), what is
    actionable NOW, what is blocked and on what, the sequencing hazards, and the north-star metrics.
-2. Pick from **Next up** (respect the start order below on the first pass). `node scripts/roadmap-status.mjs
+2. Pick from **Next up** (respect the start order below on the first pass). `node scripts/roadmap/status/index.mjs
    show WO-ENG-NN` prints the full spec; `delegate WO-ENG-NN` prints the ready-to-paste executor prompt.
-3. `node scripts/roadmap-status.mjs claim WO-ENG-NN --by <session/agent name>`.
-4. Execute the Steps exactly; respect the Do-NOT fences. After EVERY completed step (and on any blocker) log it: `node scripts/roadmap-status.mjs progress
+3. `node scripts/roadmap/status/index.mjs claim WO-ENG-NN --by <session/agent name>`.
+4. Execute the Steps exactly; respect the Do-NOT fences. After EVERY completed step (and on any blocker) log it: `node scripts/roadmap/status/index.mjs progress
    WO-ENG-NN --note "<what landed / what is next / blockers>"` — the trail lets a successor resume mid-WO.
 5. Run the WO's **Acceptance gate** — a WO is done when its gate is green, never on code landing. Every
    visual WO additionally REQUIRES a sighted before/after gallery scored against the spec (sections 1 +
@@ -336,9 +336,9 @@ be fixed or deliberately respecified in its own work order.
    > the sighted gallery is still captured, still reviewed by eye, and the verdict is still recorded in
    > `done --evidence`. Delegated approval means no waiting, not no review — and every WO closed under this
    > delegation must say so in its evidence, so the trail explains itself without this README.
-6. `node scripts/roadmap-status.mjs done WO-ENG-NN --evidence "<gate command + result>"` — refused if
+6. `node scripts/roadmap/status/index.mjs done WO-ENG-NN --evidence "<gate command + result>"` — refused if
    deps/hazards/evidence are not satisfied.
-7. If interrupted mid-WO: leave it `in-progress` — the successor runs `node scripts/roadmap-status.mjs
+7. If interrupted mid-WO: leave it `in-progress` — the successor runs `node scripts/roadmap/status/index.mjs
    show WO-ENG-NN`, reads the `[progress]` trail, and resumes from the last logged step without redoing
    completed ones. Use `reopen --note "<context>"` only when abandoning.
 
@@ -416,9 +416,9 @@ windows. **WO-ARC-03** only after WO-ARC-02 AND WO-ENG-11 are done. **WO-ARC-04*
 ```bash
 pnpm roadmap:status                              # regenerate STATUS.md + summary
 pnpm roadmap:check                               # registry <-> lane consistency gate (exit 1 on drift)
-node scripts/roadmap-status.mjs next             # actionable WOs (deps satisfied)
-node scripts/roadmap-status.mjs show WO-ENG-01   # full spec block
-node scripts/roadmap-status.mjs delegate WO-ENG-01   # ready-to-paste executor prompt
-node scripts/roadmap-status.mjs claim WO-ENG-01 --by <name>
-node scripts/roadmap-status.mjs done WO-ENG-01 --evidence "<gate + result>"
+node scripts/roadmap/status/index.mjs next             # actionable WOs (deps satisfied)
+node scripts/roadmap/status/index.mjs show WO-ENG-01   # full spec block
+node scripts/roadmap/status/index.mjs delegate WO-ENG-01   # ready-to-paste executor prompt
+node scripts/roadmap/status/index.mjs claim WO-ENG-01 --by <name>
+node scripts/roadmap/status/index.mjs done WO-ENG-01 --evidence "<gate + result>"
 ```

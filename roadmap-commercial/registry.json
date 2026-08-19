@@ -4,8 +4,8 @@
  "rules": {
   "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
   "claim_requires": "all dependsOn done",
-  "edit_via": "scripts/roadmap-commercial-status.mjs only (claim/progress/done/reopen); never hand-edit statuses",
-  "new_work": "new WO in roadmap-commercial/showroom.md + registry entry, verified by roadmap-commercial-status.mjs check; NO new plan documents anywhere",
+  "edit_via": "scripts/roadmap/commercial-status/index.mjs only (claim/progress/done/reopen); never hand-edit statuses",
+  "new_work": "new WO in roadmap-commercial/showroom.md + registry entry, verified by roadmap/commercial-status/index.mjs check; NO new plan documents anywhere",
   "isolation": "ISOLATED commercial-surfaces program (owner decision 2026-07-07) — extracted from the main ui-design-system roadmap; own machinery (pnpm roadmap:commercial), own state. Normative law: docs-engineering/engineering/design-system/commercial-surfaces/README.md (sections 1-10). Cross-roadmap edges (WO-SHW-03 BLOCKED-ON-EXTERNAL ordering vs WO-ENG-02 in the main roadmap; WO-SHW-01's release unblocks app-platform WO-COM-01) are external prose, never registry deps."
  },
  "metrics": [

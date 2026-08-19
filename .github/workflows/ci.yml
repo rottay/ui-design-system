@@ -52,7 +52,7 @@ jobs:
           CORE="false"
           SHOWROOM="false"
 
-          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/dependency-honesty\.(mjs|test\.mjs)$|scripts/effect-registry-audit(\.test)?\.mjs$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
+          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/boundaries/dependency-honesty/index(\.test)?\.mjs$|scripts/provenance/effect-registry-audit/index(\.test)?\.mjs$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
             CORE="true"
           fi
 
@@ -191,7 +191,7 @@ jobs:
       - name: Dependency graph and identity honesty
         run: |
           pnpm dependency:honesty:test
-          node scripts/dependency-honesty.mjs static
+          node scripts/boundaries/dependency-honesty/index.mjs static
 
       # The package postbuild hook runs the WO-CRA-14 public-barrel/chunk gate
       # against the exact dist artifacts produced immediately above it.
@@ -199,7 +199,7 @@ jobs:
         run: pnpm --filter @rottay/design-system run build
 
       - name: Packed artifact and non-consuming bundle honesty
-        run: node scripts/dependency-honesty.mjs pack
+        run: node scripts/boundaries/dependency-honesty/index.mjs pack
 
       # Prepack precondition proven in-band: the build immediately above must have
       # written dist/build-stamp.json, and it must match the current source. This

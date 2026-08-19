@@ -195,7 +195,7 @@ the live residual JSON is the executable post-migration truth.
 Start order: 01 strictly first (everything else derives its file lists from it); 02 before the
 rest (it dissolves suppression interplays the later batches would otherwise have to reproduce);
 03-06 parallelizable pairwise where files are disjoint; 07 last. Statuses change ONLY via
-`scripts/roadmap-status.mjs`.
+`scripts/roadmap/status/index.mjs`.
 
 ### WO-SKIN-08 Stage-2 residue adjudication sweep
 - **Source IDs / phase** — DS-IMP-039, DS-IMP-040, DS-IMP-041, DS-IMP-042, DS-IMP-043, DS-IMP-044, DS-IMP-045, DS-IMP-046, DS-IMP-047, DS-IMP-049, DS-IMP-050; Phase 6.

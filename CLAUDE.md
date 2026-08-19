@@ -598,4 +598,4 @@ to the **Quiet Premium** target. Two artifacts govern this:
   and validate registry/lane agreement with `pnpm roadmap:check`. Read `roadmap/README.md` (start order,
   handoff protocol, bootstrap prompt, sighted-check law) before picking work. The lane's mechanical gate
   is `scripts/engine-token-audit.mjs` (created by WO-ENG-01). Statuses change ONLY via
-  `scripts/roadmap-status.mjs`; never hand-edit `registry.json` or `STATUS.md`.
+  `scripts/roadmap/status/index.mjs`; never hand-edit `registry.json` or `STATUS.md`.

@@ -95,7 +95,7 @@ existe", no "se borra": su salida es lo que `round-evidence` verifica).
 Es cumplimiento legal con gates vivos, no documentación decorativa:
 
 - `effects/sources.json` + 5 licencias: los lee y hashea
-  `scripts/effect-registry-audit.mjs` (raíz), que corre en CI
+  `scripts/provenance/effect-registry-audit/index.mjs` (raíz), que corre en CI
   (`effects:provenance`, ci.yml:181-184) y es reimportado por
   `cra-15-runtime-hardening-gate`. Rechaza licencias archivadas sin referencia.
 - `graphics/pack-allowlist.json` + licencias phosphor/thesvg: los exige

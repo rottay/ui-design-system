@@ -40,7 +40,23 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+// Ascending marker search, not a hardcoded `..` chain: this file is two
+// levels below scripts/ (scripts/roadmap/commercial-status/index.mjs), so a
+// fixed depth breaks the moment either level changes. Fail-closed, mirrors
+// packages/core/scripts/lib/repo-root/index.mjs's repoRoot() without
+// crossing the package boundary to import it.
+function findRepoRoot(fromDir) {
+  let dir = fromDir;
+  for (let i = 0; i < 12; i += 1) {
+    if (fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error(`could not locate the workspace root (pnpm-workspace.yaml) from ${fromDir}`);
+}
+
+const ROOT = findRepoRoot(path.dirname(fileURLToPath(import.meta.url)));
 const ROADMAP = path.join(ROOT, "roadmap-commercial");
 const REGISTRY_PATH = path.join(ROADMAP, "registry.json");
 const STATUS_PATH = path.join(ROADMAP, "STATUS.md");
@@ -268,7 +284,7 @@ switch (cmd) {
     w.progressLog = w.progressLog || [];
     w.progressLog.push({ at: new Date().toISOString().slice(0, 16).replace("T", " "), by: flag(args, "--by") || w.claimedBy || process.env.USER || "agent", note });
     saveRegistry(reg); generateStatus();
-    console.log(`${w.id} progress logged (entry ${w.progressLog.length}). Successors resume via: node scripts/roadmap-status.mjs show ${w.id}`);
+    console.log(`${w.id} progress logged (entry ${w.progressLog.length}). Successors resume via: node scripts/roadmap/status/index.mjs show ${w.id}`);
     break;
   }
   case "done": {

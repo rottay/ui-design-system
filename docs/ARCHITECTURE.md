@@ -332,7 +332,7 @@ honest or the build fails — never pointed at files the build does not produce.
   the wiring gate counts all three. Every test is reachable by a runner glob
   or it does not exist.
 - `roadmap/registry.json` is the operative backlog with mechanical state;
-  statuses change only via `scripts/roadmap-status.mjs`.
+  statuses change only via `scripts/roadmap/status/index.mjs`.
 - Codemods are single-use and declare their expiry; a codemod whose target path
   no longer exists is deleted on sight.
 - A document that describes something that no longer exists is corrected the

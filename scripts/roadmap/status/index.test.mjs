@@ -17,7 +17,7 @@ import {
   validateGat09CompletionBarrier,
   validateRegistryMutationIntegrity,
   validateRegistryTemporalIntegrity,
-} from "./roadmap-status.mjs";
+} from "./index.mjs";
 
 const allIds = Array.from(
   { length: 128 },
@@ -25,7 +25,7 @@ const allIds = Array.from(
 );
 const phases = ["0", "1", "2A", "2B", "2C", "3", "4", "5", "6"];
 const liveRegistry = () => JSON.parse(
-  fs.readFileSync(new URL("../roadmap/registry.json", import.meta.url), "utf8"),
+  fs.readFileSync(new URL("../../../roadmap/registry.json", import.meta.url), "utf8"),
 );
 // Live-registry assertions must follow the program's fixed New York calendar;
 // fixture-only temporal tests below retain their explicit 2026-07-14 clock.

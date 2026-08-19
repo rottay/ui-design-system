@@ -31,12 +31,12 @@ import {
   validatePackedManifest,
   validatePlatformLocalBoundary,
   validateSupplierDeclarations,
-} from './dependency-honesty.mjs';
+} from './index.mjs';
 import {
   inspectInstalledDesignSystem,
   resolveInstalledContractMode,
   scanAppSuppliers as scanPackagedAppSuppliers,
-} from '../packages/core/consumer/ds-supplier-honesty.mjs';
+} from '../../../packages/core/consumer/ds-supplier-honesty.mjs';
 
 function imports(entries) {
   return new Map(entries.map(([name, file = `src/${name}.tsx`]) => [name, [file]]));
@@ -1535,6 +1535,6 @@ test('live lock and installed workspace expose one runtime identity with Motion 
 });
 
 test('live lock fixture comes from the checked-in lockfile', () => {
-  const lock = readFileSync(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8');
+  const lock = readFileSync(new URL('../../../pnpm-lock.yaml', import.meta.url), 'utf8');
   assert.match(lock, /^lockfileVersion:/m);
 });

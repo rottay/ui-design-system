@@ -6,7 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import { after, before, describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { validateSupplierContractShape } from '../../../scripts/dependency-honesty.mjs';
+import { validateSupplierContractShape } from '../../../scripts/boundaries/dependency-honesty/index.mjs';
 import {
   DEFAULT_CONTRACT_PATH,
   deriveSerializedContract,

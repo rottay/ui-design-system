@@ -1,14 +1,27 @@
 import assert from 'node:assert/strict';
-import { copyFileSync, cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import { auditEffectProvenance } from './effect-registry-audit.mjs';
-import { CI_GATES } from '../packages/core/scripts/ci-gates.manifest.mjs';
+import { auditEffectProvenance } from './index.mjs';
+import { CI_GATES } from '../../../packages/core/scripts/ci-gates.manifest.mjs';
 
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Ascending marker search, not a hardcoded `..` chain: this file is two
+// levels below scripts/ (scripts/provenance/effect-registry-audit/index.test.mjs).
+function findRepoRoot(fromDir) {
+  let dir = fromDir;
+  for (let i = 0; i < 12; i += 1) {
+    if (existsSync(join(dir, 'pnpm-workspace.yaml'))) return dir;
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error(`could not locate the workspace root (pnpm-workspace.yaml) from ${fromDir}`);
+}
+
+const repoRoot = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 const canonicalRoot = resolve(repoRoot, 'packages/core/provenance/effects');
 const canonicalRegistry = resolve(
   repoRoot,
@@ -195,8 +208,8 @@ test('effect provenance remains a first-class local and CI release gate', () => 
     ['pnpm', 'run', 'effects:provenance'],
   );
   assert.match(coreManifest.scripts.lint, /effects:provenance/);
-  assert.match(coreManifest.scripts['test:scripts'], /effect-registry-audit\.test\.mjs/);
-  assert.ok(workflow.includes('scripts/effect-registry-audit(\\.test)?\\.mjs$'));
+  assert.match(coreManifest.scripts['test:scripts'], /provenance\/effect-registry-audit\/index\.test\.mjs/);
+  assert.ok(workflow.includes('scripts/provenance/effect-registry-audit/index(\\.test)?\\.mjs$'));
   assert.match(workflow, /^\s+pnpm effects:provenance$/m);
   assert.match(workflow, /^\s+pnpm effects:provenance:test$/m);
 

@@ -8,7 +8,7 @@
 // design system's public API. Consuming apps ship a byte-identical snapshot and
 // the app-side gate (consumer/ds-supplier-honesty.mjs) reads it to decide which
 // external supplier packages an app must declare when it imports a DS symbol.
-// The DS-side gate (scripts/dependency-honesty.mjs -> auditCoreDependencyGraph)
+// The DS-side gate (scripts/boundaries/dependency-honesty/index.mjs -> auditCoreDependencyGraph)
 // re-derives the contract and fails when the committed file drifts from source.
 //
 // SCHEMA (schemaVersion 1)
@@ -43,7 +43,7 @@
 // DERIVATION RULES
 // ----------------
 // This generator does NOT re-implement the export/supplier graph analysis. It
-// delegates to deriveSupplierContract() in scripts/dependency-honesty.mjs, the
+// delegates to deriveSupplierContract() in scripts/boundaries/dependency-honesty/index.mjs, the
 // single source of truth that the DS-side dependency-honesty gate already
 // enforces. Re-deriving here would create a second, drift-prone authority.
 // deriveSupplierContract():
@@ -64,7 +64,7 @@
 //
 // SERIALIZATION
 //   JSON.stringify(contract, null, 2) + "\n", written utf8. This is byte-for-
-//   byte identical to the historical writer in scripts/dependency-honesty.mjs
+//   byte identical to the historical writer in scripts/boundaries/dependency-honesty/index.mjs
 //   (the `contract` subcommand), so --write and --check agree with it exactly.
 //
 // MODES
@@ -78,7 +78,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { deriveSupplierContract } from '../../../scripts/dependency-honesty.mjs';
+import { deriveSupplierContract } from '../../../scripts/boundaries/dependency-honesty/index.mjs';
 import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);

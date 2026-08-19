@@ -20,10 +20,26 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { auditPublicDeclarationClosures } from '../packages/core/scripts/cra-17-public-declaration-gate.mjs';
+import { auditPublicDeclarationClosures } from '../../../packages/core/scripts/cra-17-public-declaration-gate.mjs';
+
+// Ascending marker search, not a hardcoded `..` chain: this file is two
+// levels below scripts/ (scripts/boundaries/dependency-honesty/index.mjs),
+// so a fixed depth breaks the moment either level changes. Fail-closed,
+// mirrors packages/core/scripts/lib/repo-root/index.mjs's repoRoot()
+// without crossing the package boundary to import it.
+function findRepoRoot(fromDir) {
+  let dir = fromDir;
+  for (let i = 0; i < 12; i += 1) {
+    if (existsSync(join(dir, 'pnpm-workspace.yaml'))) return dir;
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error(`could not locate the workspace root (pnpm-workspace.yaml) from ${fromDir}`);
+}
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-export const repositoryRoot = resolve(scriptDir, '..');
+export const repositoryRoot = findRepoRoot(scriptDir);
 export const coreRoot = resolve(repositoryRoot, 'packages/core');
 const sourceRoot = resolve(coreRoot, 'src');
 const supplierContractPath = resolve(coreRoot, 'supplier-contract.json');

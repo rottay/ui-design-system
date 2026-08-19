@@ -29,7 +29,7 @@
 - **The spec** lives in [`showroom.md`](./showroom.md) (the one lane file). **State** lives in
   [`registry.json`](./registry.json) — the ONLY place a WO status exists. **[`STATUS.md`](./STATUS.md) is
   generated** (`pnpm roadmap:commercial`); never hand-edit either.
-- Statuses change ONLY through `scripts/roadmap-commercial-status.mjs`
+- Statuses change ONLY through `scripts/roadmap/commercial-status/index.mjs`
   (`claim` / `progress` / `done` / `reopen`), which mechanically enforces the dependency graph and mandatory
   evidence on `done`. Do not fight refusals — they encode the sequencing law.
 - **Progress mid-WO handoff law**: after every completed step (and on any blocker) log it via
@@ -51,7 +51,7 @@
 > and this README in full. This program is SEPARATE from the main `roadmap/` — use ONLY the commercial
 > machinery below.
 >
-> HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/roadmap-commercial-status.mjs`
+> HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/roadmap/commercial-status/index.mjs`
 > (claim/progress/done/reopen; `delegate WO-SHW-NN` prints the ready-to-paste executor prompt; deps + evidence
 > are enforced). Log step-level progress after every completed step so a cut-off session's successor resumes
 > mid-WO from `show`. (2) Gates are truth: a WO is done only when its acceptance gate is green
@@ -109,9 +109,9 @@
 ```bash
 pnpm roadmap:commercial                                       # regenerate STATUS.md + summary
 pnpm roadmap:commercial:check                                 # registry <-> lane consistency gate (exit 1 on drift)
-node scripts/roadmap-commercial-status.mjs next               # actionable WOs (deps satisfied)
-node scripts/roadmap-commercial-status.mjs show WO-SHW-01     # full spec block
-node scripts/roadmap-commercial-status.mjs delegate WO-SHW-01 # ready-to-paste executor prompt
-node scripts/roadmap-commercial-status.mjs claim WO-SHW-01 --by <name>
-node scripts/roadmap-commercial-status.mjs done WO-SHW-01 --evidence "<gate + result>"
+node scripts/roadmap/commercial-status/index.mjs next               # actionable WOs (deps satisfied)
+node scripts/roadmap/commercial-status/index.mjs show WO-SHW-01     # full spec block
+node scripts/roadmap/commercial-status/index.mjs delegate WO-SHW-01 # ready-to-paste executor prompt
+node scripts/roadmap/commercial-status/index.mjs claim WO-SHW-01 --by <name>
+node scripts/roadmap/commercial-status/index.mjs done WO-SHW-01 --evidence "<gate + result>"
 ```

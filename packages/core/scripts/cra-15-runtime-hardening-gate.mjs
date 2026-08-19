@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { auditEffectProvenance } from "../../../scripts/effect-registry-audit.mjs";
+import { auditEffectProvenance } from "../../../scripts/provenance/effect-registry-audit/index.mjs";
 import { checkCanvasSinkCensus } from "./canvas-sink-census.mjs";
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
