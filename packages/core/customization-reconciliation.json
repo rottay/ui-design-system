@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "Codex reconciliation after Kimi C1 visual elevation; re-derived 2026-08-03 from the current census, dispositions unchanged",
-  "basedOnReportDigest": "4c9c722efbc282cc9d984401de1ba392a7581b04b9da3fbadb44606fdb1fa18d",
+  "generatedBy": "tokens-catalog gate re-derivation, 2026-08-19 — digest+figures re-projected from the current census report; adjudications unchanged",
+  "basedOnReportDigest": "b6326a2cd6da6077331bd895f001ac41700ba1d4959926c1cb3f55fbcec4c999",
   "normative": {
-    "writers": 4811,
-    "deadWriters": 270,
+    "writers": 4802,
+    "deadWriters": 266,
     "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
   },
   "figures": {
@@ -29,11 +29,11 @@
       "final": 506
     },
     "drainSnapshots": {
-      "321": "post FASE-B+lote-2 execution (183 registry rows: 174 decls + 3 emitters + 10 fence-opened) + census v4 adjudication-as-authority + JS-consumer helpers — 2026-08-02",
-      "498": "C2c+D0 remediation final (v1 of this projection)",
-      "315": "post FASE-B/H registry execution before the Kimi premium wave",
+      "270": "post Kimi C1 visual elevation + Codex C1 reconciliation (ambient policy removed from CSS emission)",
       "275": "post Kimi premium wave + Codex canon reconciliation",
-      "270": "post Kimi C1 visual elevation + Codex C1 reconciliation (ambient policy removed from CSS emission)"
+      "315": "post FASE-B/H registry execution before the Kimi premium wave",
+      "321": "post FASE-B+lote-2 execution (183 registry rows: 174 decls + 3 emitters + 10 fence-opened) + census v4 adjudication-as-authority + JS-consumer helpers — 2026-08-02",
+      "498": "C2c+D0 remediation final (v1 of this projection)"
     }
   },
   "familyAdjudication": [
