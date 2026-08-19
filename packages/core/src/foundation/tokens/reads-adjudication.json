@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
-  "basedOnManifestDigest": "b9b00a3e5c8b11aad01a151775779712fbf8dba99935ff4ff9d324e38b56b954",
+  "basedOnManifestDigest": "afb8aebc1340b4617d4106a6f84ab94c4ec649fd48c31d50ef775919bdc4229e",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -2234,27 +2234,6 @@
       }
     },
     {
-      "name": "--ds-avatar-group-border",
-      "family": "--ds-avatar-group",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/avatar-compounds.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/avatar-compounds.css:50  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg-base));",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 4
-        },
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      },
-      "destination": "BRAND_EXTENSION_LEGACY_A_ABSORBER"
-    },
-    {
       "name": "--ds-avatar-group-overlap",
       "family": "--ds-avatar-group",
       "class": "MODERN_PRIVATE",
@@ -3140,84 +3119,6 @@
       }
     },
     {
-      "name": "--ds-button-danger-color",
-      "family": "--ds-button-danger",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
-      "readSites": 3,
-      "evidence": "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css:646  --ds-button-error-color: var(--ds-button-danger-color);",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 2,
-          "rustic": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 2
-        },
-        "withFallback": 1,
-        "bare": 2,
-        "testStoryReads": 0
-      },
-      "destination": "BRAND_EXTENSION_LEGACY_A_ABSORBER"
-    },
-    {
-      "name": "--ds-button-dashed-hover-bg",
-      "family": "--ds-button-dashed",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:208  background: var(--ds-button-dashed-hover-bg, rgba(0, 0, 0, 0.02));",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "rustic": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-button-ghost-hover-bg",
-      "family": "--ds-button-ghost",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:193  background: var(--ds-button-ghost-hover-bg, rgba(0, 0, 0, 0.05));",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "rustic": 2
-        },
-        "declBuckets": {
-          "foundation-tokens": 2
-        },
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-button-link-hover-bg",
-      "family": "--ds-button-link",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:196  background: var(--ds-button-link-hover-bg, transparent);",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "rustic": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-button-outline-bg",
       "family": "--ds-button-outline",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -3290,27 +3191,6 @@
       }
     },
     {
-      "name": "--ds-button-primary-hover-bg",
-      "family": "--ds-button-primary",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:184  background: var(--ds-button-primary-hover-bg, #0052A3);",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "rustic": 2
-        },
-        "declBuckets": {
-          "foundation-tokens": 4,
-          "infrastructure": 1
-        },
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-button-radius",
       "family": "--ds-button-radius",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -3366,26 +3246,6 @@
           "infrastructure": 1
         },
         "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-button-text-hover-bg",
-      "family": "--ds-button-text",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:205  background: var(--ds-button-text-hover-bg, rgba(0, 0, 0, 0.05));",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "rustic": 2
-        },
-        "declBuckets": {
-          "foundation-tokens": 2
-        },
-        "withFallback": 2,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -4531,27 +4391,6 @@
         "bare": 0,
         "testStoryReads": 0
       }
-    },
-    {
-      "name": "--ds-card-side-accent-soft",
-      "family": "--ds-card-side",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:441  var(--ds-card-side-accent-soft, transparent),",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 2
-        },
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      },
-      "destination": "BRAND_EXTENSION_LEGACY_A_ABSORBER"
     },
     {
       "name": "--ds-card-skeleton-gap",
@@ -6690,26 +6529,6 @@
       }
     },
     {
-      "name": "--ds-collapse-bg",
-      "family": "--ds-collapse-bg",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2391  background-color: var(--ds-collapse-bg);",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "classic": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 4
-        },
-        "withFallback": 0,
-        "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-collapse-border-color",
       "family": "--ds-collapse-border",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -7502,29 +7321,6 @@
         "bare": 0,
         "testStoryReads": 0
       }
-    },
-    {
-      "name": "--ds-color-alpha-black-100",
-      "family": "--ds-color-alpha",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-      "readSites": 8,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css:87  background: var(--ds-color-alpha-black-100);",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 2,
-          "modern": 5,
-          "ui": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 4
-        },
-        "withFallback": 2,
-        "bare": 7,
-        "testStoryReads": 1
-      },
-      "destination": "BRAND_EXTENSION_LEGACY_A_ABSORBER"
     },
     {
       "name": "--ds-color-alpha-primary-5",
@@ -9864,215 +9660,6 @@
       }
     },
     {
-      "name": "--ds-surface-bg",
-      "family": "--ds-surface-bg",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 4,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:44  bg: \"var(--ds-surface-bg)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 4
-        },
-        "declBuckets": {
-          "ui": 4
-        },
-        "withFallback": 0,
-        "bare": 4,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-surface-fg",
-      "family": "--ds-surface-fg",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 14,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:43  fg: \"var(--ds-surface-fg)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 14
-        },
-        "declBuckets": {
-          "ui": 4
-        },
-        "withFallback": 0,
-        "bare": 14,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-font-mono",
-      "family": "--ds-font-mono",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 12,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:45  fontMono: \"var(--ds-font-mono)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 12
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 12,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-color-hairline",
-      "family": "--ds-color-hairline",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 9,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:41  hairline: \"var(--ds-color-hairline)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 9
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 9,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-color-hairline-strong",
-      "family": "--ds-color-hairline",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 7,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:42  hairlineStrong: \"var(--ds-color-hairline-strong)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 7
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 7,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-color-surface-ink",
-      "family": "--ds-color-surface-ink",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 4,
-      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:70  --ds-surface-bg: var(--ds-color-surface-ink);",
-      "_audit": {
-        "readBuckets": {
-          "ui": 4
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 4,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-ease-out",
-      "family": "--ds-motion",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 3,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:49  motionEase: \"var(--ds-ease-out)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 3
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 3,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-duration-fast",
-      "family": "--ds-motion",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:46  motionFast: \"var(--ds-duration-fast)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 1
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-duration-normal",
-      "family": "--ds-motion",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:47  motionNormal: \"var(--ds-duration-normal)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 1
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-duration-slow",
-      "family": "--ds-motion",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 3,
-      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:48  motionSlow: \"var(--ds-duration-slow)\",",
-      "_audit": {
-        "readBuckets": {
-          "ui": 3
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 3,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-color-surface-paper",
-      "family": "--ds-color-surface-paper",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
-      "readSites": 3,
-      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:74  --ds-surface-bg: var(--ds-color-surface-paper);",
-      "_audit": {
-        "readBuckets": {
-          "ui": 3
-        },
-        "declBuckets": {
-          "ui": 1
-        },
-        "withFallback": 0,
-        "bare": 3,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-compare-divider-color",
       "family": "--ds-compare-divider",
       "class": "MODERN_PRIVATE",
@@ -11495,28 +11082,6 @@
         "bare": 0,
         "testStoryReads": 0
       }
-    },
-    {
-      "name": "--ds-datepicker-panel-shadow",
-      "family": "--ds-datepicker-panel",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css:304  box-shadow: var(--ds-datepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1,
-          "rustic": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 2
-        },
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      },
-      "destination": "BRAND_EXTENSION_LEGACY_A_ABSORBER"
     },
     {
       "name": "--ds-datepicker-panel-width",
@@ -13989,27 +13554,6 @@
       }
     },
     {
-      "name": "--ds-drawer-body-color",
-      "family": "--ds-drawer-body",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css:136  color: var(--ds-drawer-body-color, inherit);",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 4
-        },
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      },
-      "destination": "BRAND_EXTENSION_LEGACY_A_ABSORBER"
-    },
-    {
       "name": "--ds-drawer-body-padding",
       "family": "--ds-drawer-body",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -14209,26 +13753,6 @@
           "classic": 1
         },
         "declBuckets": {},
-        "withFallback": 0,
-        "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-drawer-title-color",
-      "family": "--ds-drawer-title",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:901  color: var(--ds-drawer-title-color);",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "classic": 1
-        },
-        "declBuckets": {
-          "foundation-tokens": 4
-        },
         "withFallback": 0,
         "bare": 1,
         "testStoryReads": 0
@@ -15079,24 +14603,6 @@
       "_audit": {
         "readBuckets": {
           "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-state-card-icon-size",
-      "family": "--ds-empty-state",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:50  font-size: var(--ds-empty-state-card-icon-size, 3rem);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
         },
         "declBuckets": {},
         "withFallback": 1,
@@ -24428,18 +23934,6 @@
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
-      "name": "--ds-message-bg",
-      "family": "message",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css",
-        "foundation/tokens/css/runtime/engines/rustic/skin/message.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens+compiler); 2 read(s) across classic+rustic",
-      "flag": "tenant-compiler-emitted"
-    },
-    {
       "name": "--ds-message-error-bg",
       "family": "message",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -24605,18 +24099,6 @@
         "foundation/tokens/css/runtime/engines/rustic/skin/message.css"
       ],
       "evidence": "read ONLY by frozen engines (classic+rustic), 2 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-message-shadow",
-      "family": "message",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css",
-        "foundation/tokens/css/runtime/engines/rustic/skin/message.css",
-        "ui/primitives/feedback/Message/engines/classic/index.tsx"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across classic+rustic"
     },
     {
       "name": "--ds-message-success-bg",
@@ -25646,26 +25128,6 @@
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
-      "name": "--ds-pagination-active-bg",
-      "family": "pagination",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/pagination.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across rustic"
-    },
-    {
-      "name": "--ds-pagination-active-color",
-      "family": "pagination",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/pagination.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across rustic"
-    },
-    {
       "name": "--ds-pagination-bg",
       "family": "pagination",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -26425,16 +25887,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/popover.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-popover-title-border",
-      "family": "popover",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/popover.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across rustic"
     },
     {
       "name": "--ds-pricing-table-card-gap",
@@ -29208,17 +28660,6 @@
       "flag": "non-modern-reader:foundation-tokens"
     },
     {
-      "name": "--ds-shell-topbar-height",
-      "family": "shell",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
-      "readSites": [
-        "ui/structures/shell/tests/AppShell.test.tsx",
-        "ui/structures/shell/index.tsx"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 8 read(s) across ui"
-    },
-    {
       "name": "--ds-shortcuts-overlay-backdrop",
       "family": "shortcuts",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -29257,72 +28698,6 @@
         "foundation/tokens/css/runtime/engines/rustic/skin/shortcuts-overlay.css"
       ],
       "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-sidebar-child-padding-inline",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-        "foundation/tokens/css/runtime/engines/modern/theme.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across modern"
-    },
-    {
-      "name": "--ds-sidebar-icon-column-size",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-        "foundation/tokens/css/runtime/engines/modern/theme.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across modern"
-    },
-    {
-      "name": "--ds-sidebar-item-child-height",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/menu.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across modern"
-    },
-    {
-      "name": "--ds-sidebar-item-font-size-child",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/menu.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across modern"
-    },
-    {
-      "name": "--ds-sidebar-item-height",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/theme.css",
-        "foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-        "ui/primitives/navigation/Menu/tests/Menu.modern-engine.test.tsx"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 4 read(s) across modern"
-    },
-    {
-      "name": "--ds-sidebar-shell-padding-collapsed",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/presentation/components/skin/app-shell.css",
-        "foundation/tokens/css/runtime/engines/modern/skin/layout.css",
-        "foundation/tokens/css/runtime/engines/rustic/skin/layout.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across foundation-tokens+modern+rustic"
     },
     {
       "name": "--ds-size-touch-target",
@@ -31313,26 +30688,6 @@
       "evidence": "read ONLY by frozen engines (rustic), 2 read(s); outside the modern critical path, not edited"
     },
     {
-      "name": "--ds-steps-finish-bg",
-      "family": "steps",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/steps.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across rustic"
-    },
-    {
-      "name": "--ds-steps-finish-border",
-      "family": "steps",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/steps.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 2 read(s) across rustic"
-    },
-    {
       "name": "--ds-steps-finish-text",
       "family": "steps",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -31661,26 +31016,6 @@
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
-      "name": "--ds-steps-process-bg",
-      "family": "steps",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/steps.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across rustic"
-    },
-    {
-      "name": "--ds-steps-process-border",
-      "family": "steps",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/steps.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 2 read(s) across rustic"
-    },
-    {
       "name": "--ds-steps-process-ring-width",
       "family": "steps",
       "class": "MODERN_PRIVATE",
@@ -31783,26 +31118,6 @@
       "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
     },
     {
-      "name": "--ds-steps-wait-bg",
-      "family": "steps",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/steps.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across rustic"
-    },
-    {
-      "name": "--ds-steps-wait-border",
-      "family": "steps",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/steps.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 2 read(s) across rustic"
-    },
-    {
       "name": "--ds-steps-wait-text",
       "family": "steps",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -31850,17 +31165,6 @@
       "liveBareSitesAfter": 0,
       "frozenBareSites": [],
       "flag": "executed-fase2"
-    },
-    {
-      "name": "--ds-surface-radius-md",
-      "family": "surface",
-      "class": "ALIAS_READ",
-      "owner": "foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/presentation/components/semantic-surface.css"
-      ],
-      "evidence": "pure alias: declared as var(--ds-radius-md); migration to canon handled separately | fase3b: 0 ocurrencias en src fuera de registros (control positivo ds-radius-md=434); alias autorado en _source = clase brand/owner",
-      "destination": "VERIFIED_ZERO_CONSUMERS"
     },
     {
       "name": "--ds-surface-subtle",
@@ -32892,16 +32196,6 @@
       "evidence": "undeclared internal channel; 4 read(s) in modern, 4 with a governing fallback"
     },
     {
-      "name": "--ds-table-row-focus-shadow",
-      "family": "table",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/data-table.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across modern"
-    },
-    {
       "name": "--ds-table-row-selected-shadow",
       "family": "table",
       "class": "MODERN_PRIVATE",
@@ -33322,16 +32616,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/tabs.css"
       ],
       "evidence": "declared and consumed inside the modern engine; 1 read(s)"
-    },
-    {
-      "name": "--ds-tag-border",
-      "family": "tag",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/tag.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across modern"
     },
     {
       "name": "--ds-tag-close-focus-ring",
@@ -34228,17 +33512,6 @@
         "foundation/tokens/css/runtime/engines/classic/theme.css"
       ],
       "evidence": "read ONLY by frozen engines (classic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-timepicker-panel-shadow",
-      "family": "timepicker",
-      "class": "ALIAS_READ",
-      "owner": "foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/time-picker.css"
-      ],
-      "evidence": "pure alias: declared as var(--ds-shadow-popover); migration to canon handled separately | fase3b: 0 ocurrencias en src fuera de registros (control positivo ds-radius-md=434); alias autorado en _source = clase brand/owner",
-      "destination": "VERIFIED_ZERO_CONSUMERS"
     },
     {
       "name": "--ds-timepicker-touch-target-min",
@@ -36241,28 +35514,6 @@
       "evidence": "undeclared internal channel; 3 read(s) in modern, 3 with a governing fallback"
     },
     {
-      "name": "--ds-transfer-bg",
-      "family": "transfer",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css",
-        "foundation/tokens/css/runtime/engines/rustic/skin/transfer.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 2 read(s) across classic+rustic"
-    },
-    {
-      "name": "--ds-transfer-border",
-      "family": "transfer",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/transfer.css",
-        "foundation/tokens/css/runtime/engines/classic/theme.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across classic+rustic"
-    },
-    {
       "name": "--ds-transfer-button-bg",
       "family": "transfer",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -36391,27 +35642,6 @@
       ]
     },
     {
-      "name": "--ds-transfer-header-bg",
-      "family": "transfer",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css",
-        "foundation/tokens/css/runtime/engines/rustic/skin/transfer.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 2 read(s) across classic+rustic"
-    },
-    {
-      "name": "--ds-transfer-header-border",
-      "family": "transfer",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/transfer.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across rustic"
-    },
-    {
       "name": "--ds-transfer-header-font-weight",
       "family": "transfer",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -36450,18 +35680,6 @@
         "foundation/tokens/css/runtime/engines/classic/theme.css"
       ],
       "evidence": "read ONLY by frozen engines (classic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-transfer-item-bg-hover",
-      "family": "transfer",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css",
-        "foundation/tokens/css/runtime/engines/modern/skin/transfer.css",
-        "foundation/tokens/css/runtime/engines/rustic/skin/transfer.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across classic+modern+rustic"
     },
     {
       "name": "--ds-transfer-item-bg-selected",
@@ -37548,26 +36766,6 @@
       "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
     },
     {
-      "name": "--ds-upload-bg",
-      "family": "upload",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across classic"
-    },
-    {
-      "name": "--ds-upload-border",
-      "family": "upload",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across classic"
-    },
-    {
       "name": "--ds-upload-border-active",
       "family": "upload",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -37576,16 +36774,6 @@
         "foundation/tokens/css/runtime/engines/classic/theme.css"
       ],
       "evidence": "read ONLY by frozen engines (classic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-upload-border-hover",
-      "family": "upload",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/classic/theme.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 1 read(s) across classic"
     },
     {
       "name": "--ds-upload-card-size",
