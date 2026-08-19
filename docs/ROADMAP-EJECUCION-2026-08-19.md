@@ -357,6 +357,12 @@ como heredado.*
 | F0.10 resello gat-07 | ⏳ | | yo; Node 22 + DOCS_ENGINEERING_ROOT local ya verificados |
 | F0.11 gates nuevos | ✅ | `cd06b8dee` + `e7ea7c795` | 3 gates + drills 6/6 + wiring postbuild/prepack; root-catalog corregido |
 | F0.12 declaración canales | ✅ | `675d2e3b3` | §1.10 ARCHITECTURE + wiring gate los cuenta |
-| F0.13 gates rojos | ⏳ en curso | | ya adjudicados: `channel-liveness-drill` (`ae1a829e9`, regla surfaces.elevation), `contract:check` (`afd75c6c2`, contrato regenerado); censo completo de los 75 corriendo para el resto |
+| F0.13 gates rojos | ⏳ en curso | | adjudicados y commiteados: channel-liveness (regla `surfaces.elevation`), contract:check, hooks:check, tokens-catalog (vistas + reconciliación re-derivada), presupuestos de bytes (nota: mueren en F6), tenant-theme-fixtures (seguía mal el re-export), first-party-artifacts (regenerados tras build verde). Censo definitivo de los 78 corriendo sobre árbol estable |
+
+**Notas de ejecución:**
+- `pnpm build` de core quedó **verde de punta a punta** (prebuild 7 gates + tsc + vite + CSS + postbuild con `exports-artifact` nuevo).
+- La regeneración de vistas de tokens escribe en `../docs-engineering` (repo hermano): su worktree tiene 344 cambios ajenos preexistentes — NO tocar; el commit/push de ese repo queda fuera de alcance (CI lo clona del remoto).
+- El build por filtro (`pnpm --filter`) captura el paquete desempaquetado de `test-artifacts/release/2.19.29/` y falla ahí — usar `pnpm build` directo en `packages/core` hasta que F7 limpie ese árbol.
+- Warnings APCA del build de artefactos (dark-mode colores 900, |Lc|=0) → material de craft para F4, no bloquean.
 
 **Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5.
