@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "3a80b3604e528e47c8a14cce3b0186b07d776efc8007a1cd90b28c4b3ac33a57",
+    "authorityDigest": "9da100eadcc2d31b675bae279176cc2ebe33d7f3694e830c8bea314acdb21fb2",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 48001,
-        "sha256": "6007dd1e8d42d5825be69a30d79820e8485cf6a18bd6dd0421889563e41462e8"
+        "bytes": 48151,
+        "sha256": "a3198006d40e32bf8ed0ff892141154ba14c9392ef9712fee20baa11c4c260b2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/analyze-bundle.mjs",
@@ -513,8 +513,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 30350,
-        "sha256": "6f2b64a93b9a0dcef5c4b4e187d359f6796a621842f590a26265d66da125797e"
+        "bytes": 31661,
+        "sha256": "46cda4f93e46b28dcc481c03b734167072cdbea11265db5878bd6a3b6ceac3ee"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-e-migration-certification.test.mjs",
@@ -547,22 +547,6 @@
         ],
         "bytes": 4370,
         "sha256": "faf6f1efdf0c9ffab7a494904ff44bddb82dfb60fa3b4b656a869858ec9cd090"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/codemod-motion-durations.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 2439,
-        "sha256": "121b0903ba21a72e65421c3e997838a454d2260d1423a793b96afdc164999a73"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/codemod-motion-tokens.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 3857,
-        "sha256": "70ecb2984b0a5f3d19d8b40d32383cfdae1757327cfc1d941011c49ae2edac8b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/codemods/sizetype-to-size.mjs",
@@ -917,14 +901,6 @@
         "sha256": "51f6959e5f389999a752416b8552d2bfefe286f143d75d8151bfc01e3c1f0f45"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/embedded-css-paint-census.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 2805,
-        "sha256": "1b659f5e2ab9103b19ccd97964f3a975a2965f61acb7846683aa5b8170ad6a7f"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/embedded-css-paint-counter.test.mjs",
         "roles": [
           "audit-machinery"
@@ -1017,16 +993,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 2728,
-        "sha256": "5bb1911523af6965d220b5a83cf8a347332d8cbff45a476f283462bd54494333"
+        "bytes": 2987,
+        "sha256": "be255a7aef11dc36244e466980ffcabbda08fc8778888e790355dd6878887189"
       },
       {
         "path": "ui-design-system/packages/core/scripts/f0-honesty-gates.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3258,
-        "sha256": "92da478342c5782220df2e7db4caa18c8762c265eb6bbbaf6c2f21d64b2ddb83"
+        "bytes": 5467,
+        "sha256": "8a190c768c528672db46586b899849976cb554ed69b1174ba745aa05d95af165"
       },
       {
         "path": "ui-design-system/packages/core/scripts/first-party-single-author-gate.mjs",
@@ -5049,14 +5025,6 @@
         "sha256": "b17781728ef940da72ec8b5065a90ffca5c63668cbe064bbaddcca47d4fb13a3"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/skin-census.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 7433,
-        "sha256": "3d482961e35d97e1aa1ee62f1b2032fd2c88790f4fc8097b6c8b83f2999bb3af"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/skin-dead-part-audit.mjs",
         "roles": [
           "audit-machinery"
@@ -5079,22 +5047,6 @@
         ],
         "bytes": 9291,
         "sha256": "eabff9d87adf7b6ccf69f00fc446c781acc3a5a7ef7cf930eeab4943a3c345d1"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/skin-orphan-scope-audit.baseline.json",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 3185,
-        "sha256": "ae426f9589bffe12bd005844a068b54ccc462dbc8d747fd35f3349cfa2b808d0"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/skin-orphan-scope-audit.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 12450,
-        "sha256": "f4114270bb76958511362ad24e8d548a08b232ca002bc4218de7ebc8f6ce8506"
       },
       {
         "path": "ui-design-system/packages/core/scripts/spacing-rhythm-contract-gate.mjs",
@@ -5185,14 +5137,6 @@
         "sha256": "88465fb343b365b2e7547d0a59e2e24da8a9d3e4be3954e8721189b4d1ee1c07"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/tenant-reach-census.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 6721,
-        "sha256": "77591948b334d30e6009a1c024ebf0a582200d20f40076b52515e841b5511e4b"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/tenant-theme-canary-fixtures.mjs",
         "roles": [
           "audit-machinery"
@@ -5237,8 +5181,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 64455,
-        "sha256": "74c4289d7275f469b35874eb8fe52125ec177520724f8cfc24eebaacae8d7fda"
+        "bytes": 64484,
+        "sha256": "83a754c79f0f91bb76530a45b92133c1bd221008233bd95bf5f9a468803d0e0c"
       },
       {
         "path": "ui-design-system/packages/core/scripts/typecheck-tests-ratchet.mjs",
@@ -5255,6 +5199,14 @@
         ],
         "bytes": 12399,
         "sha256": "422b970979297b63f60dbf8cb983b7d772ddf14b7ad229461e3d742b4cb875df"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/wiring-coverage-gate.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 4000,
+        "sha256": "5d2f348ba66f23aedc78513516354edd7048260f1a6ce7bddcd0d03f17c6780a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/workflow-script-wiring-gate.mjs",
@@ -45431,7 +45383,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "3a80b3604e528e47c8a14cce3b0186b07d776efc8007a1cd90b28c4b3ac33a57"
+    "digest": "9da100eadcc2d31b675bae279176cc2ebe33d7f3694e830c8bea314acdb21fb2"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118812,8 +118764,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "869c551f4bf13f34044769f4d7c2016f5a87b926b0d7c8c0d3d8eb0f361180db",
-      "869c551f4bf13f34044769f4d7c2016f5a87b926b0d7c8c0d3d8eb0f361180db"
+      "57c9581f3275f60b5f121250d38ee0815825918dcc6aecb28cc3b6fb365d15b4",
+      "57c9581f3275f60b5f121250d38ee0815825918dcc6aecb28cc3b6fb365d15b4"
     ],
     "agree": true
   }
