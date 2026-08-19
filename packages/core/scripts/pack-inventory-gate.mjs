@@ -43,9 +43,10 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRootDefault = resolve(scriptDir, '..');
+const packageRootDefault = findPackageRoot(scriptDir);
 const BASELINE_PATH = resolve(scriptDir, 'pack-inventory.baseline.json');
 const ADDITIONS_PATH = resolve(scriptDir, 'pack-inventory.additions.json');
 const LUCIDE_ALLOWLIST_PATH = resolve(scriptDir, 'pack-inventory.lucide-allowlist.json');

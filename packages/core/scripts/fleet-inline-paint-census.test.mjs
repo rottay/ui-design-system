@@ -17,8 +17,10 @@ import {
   isFleetInlinePaintSourceFile,
 } from "./lib/fleet-inline-paint-census.mjs";
 import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
+import { packageRoot as findPackageRoot } from "./lib/repo-root/index.mjs";
 
-const COMPONENTS_DIR = fileURLToPath(new URL("../src/ui/", import.meta.url));
+const HERE = dirname(fileURLToPath(import.meta.url));
+const COMPONENTS_DIR = join(findPackageRoot(HERE), "src/ui");
 
 function write(root, path) {
   const full = join(root, path);

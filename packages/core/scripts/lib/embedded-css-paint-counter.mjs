@@ -3,6 +3,7 @@ import { dirname, extname, isAbsolute, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 import ts from "typescript";
+import { packageRoot as findPackageRoot } from './repo-root/index.mjs';
 
 const CSS_PAINT_PROPERTIES = new Set([
   "accent-color",
@@ -48,9 +49,8 @@ const CERTIFIED_DATA_CSS_IMPORTS = new Map([
     "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview",
   ],
 ]);
-const CORE_PACKAGE_ROOT = realpathSync(
-  resolve(dirname(fileURLToPath(import.meta.url)), "../..")
-);
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_PACKAGE_ROOT = realpathSync(findPackageRoot(HERE));
 const MODULE_RESOLUTION_SUFFIXES = [
   "",
   ".ts",

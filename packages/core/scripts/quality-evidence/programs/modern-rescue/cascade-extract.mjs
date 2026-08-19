@@ -38,10 +38,10 @@ import {
 } from "node:fs";
 import { join, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-// modern-rescue -> programs -> quality-evidence -> scripts -> core -> packages -> repo root
-const REPO_ABS = join(HERE, "../../../../../..");
+const REPO_ABS = findRepoRoot(HERE);
 const CSS_ROOT = join(REPO_ABS, "packages/core/src/foundation/tokens/css");
 const CSS_ROOT_REL = "packages/core/src/foundation/tokens/css";
 const OUT = join(HERE, "manifest/cascade/extracted/css-edges.json");

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "9da100eadcc2d31b675bae279176cc2ebe33d7f3694e830c8bea314acdb21fb2",
+    "authorityDigest": "f305a9eebb2bb90285322547d1558995eb4304b8556cef2dbf024f35cfdabba9",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -281,8 +281,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13157,
-        "sha256": "c92af74d7ecd9cd7e30a60820e7bb33a9ef9211c40aa0d858a941fb488128464"
+        "bytes": 13235,
+        "sha256": "4d99b97923447648a701b9d925fd4f554e6da0aaa999901c6ae844dbe4f84814"
       },
       {
         "path": "ui-design-system/packages/core/scripts/anatomy-variant-gate.test.mjs",
@@ -305,16 +305,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 11091,
-        "sha256": "5180e531cfaee16bf60d842301527cee3933922228f23f7b77bb51f3da308704"
+        "bytes": 11199,
+        "sha256": "c2e609a1bd5c6d19dcb8d25ce8419894d16a1ab6bcf599a613eb99de36834cf4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/app-ds-boundary-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6808,
-        "sha256": "a8e6ae2f5da8abed3dbc72c0409c79ad40e4066c41bc1284044a403c1913b919"
+        "bytes": 6886,
+        "sha256": "e45f1a336d156f40b2933dc712b0bec89f6604e7cc6f47fa154ef3e9642350a2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/app-ds-hook-contract-gate.baseline.json",
@@ -329,8 +329,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 28097,
-        "sha256": "a2dcce14ea51b4c091b5ca1e3949165c6fa0db707db17d5f9272ceaac077c32d"
+        "bytes": 28175,
+        "sha256": "06a46b51415d93f8a593c7f7fe2ac57dc665ca023a36cc3287d12822a0b0dbc7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/app-ds-hook-contract-gate.test.mjs",
@@ -345,8 +345,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 21311,
-        "sha256": "f71453cec4529306abe177065a2d7e7a542fe0029cef9af73584cba3ac5be0ba"
+        "bytes": 21389,
+        "sha256": "afb5b5a704b4ecfba81f35ce220369a5f1d0148426357a2c1356e8b080287da0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/app-root-writer-gate.test.mjs",
@@ -361,8 +361,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9972,
-        "sha256": "be87d825a50d23d4de3bea5683cf26bd76c0775c4cdaf73c893eef4c1a96994e"
+        "bytes": 10030,
+        "sha256": "e3aa3bbcb596bc3b8c11623deddf564c2358df063540855baba5cbfc64e70ccd"
       },
       {
         "path": "ui-design-system/packages/core/scripts/application-boundary-gate.baseline.json",
@@ -377,8 +377,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 16589,
-        "sha256": "40ebb20f05df0025783ae9af14d1844df712cbbad7ec2f1920802731c27c9ebb"
+        "bytes": 16667,
+        "sha256": "503252895541adff00018ad6d4c2b770b288b0ac14ada1f2316f0c848995149c"
       },
       {
         "path": "ui-design-system/packages/core/scripts/application-boundary-gate.test.mjs",
@@ -401,16 +401,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 14857,
-        "sha256": "96c91f64ca61b682a483749d5bf68c9617a0fe22c07e25a64db92c47d7b86740"
+        "bytes": 14932,
+        "sha256": "cfc4fa704007d059aed4e3b013e5897a83eb9c4d618a615ac4265072efe84c99"
       },
       {
         "path": "ui-design-system/packages/core/scripts/build-font-packs.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 2214,
-        "sha256": "a83e72ea9d238ba38912a8b62aed9d8b53bb6d8df3bb9888226daeac7afde9de"
+        "bytes": 2302,
+        "sha256": "146c28e8f9042775ff40a24fc122395dd605676b5581d0f830db4096d20d25a3"
       },
       {
         "path": "ui-design-system/packages/core/scripts/build-vertical-artifacts.apca-baseline.json",
@@ -425,24 +425,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9194,
-        "sha256": "fcc7a4f765480d753123afb812ca20b6b66c80d3cf9c974d41935a0e36d27ba8"
+        "bytes": 9272,
+        "sha256": "222e84f29b507258a077f9ae358c6fadd9369ea383f4a4e6d70091866e6f0f4a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/build-vertical-css.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 18112,
-        "sha256": "270eb5de44f63a4acb75f0f3cbc37912379770de591852d79a8163e42380fbba"
+        "bytes": 18190,
+        "sha256": "e918f328a2565bbcbc37ca9dc7fcf0c605799e02610b699986cadb77472816f2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/canvas-sink-census.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5089,
-        "sha256": "115400838d73c68fb69e1c8f0ee1c796291c04966074a61eff9d5f9d665d8dbf"
+        "bytes": 5186,
+        "sha256": "26f5bd7245d120d6bd1a19ca5cc5a6f498bfb839bbf8b57f88ce57e5ffd8fbc9"
       },
       {
         "path": "ui-design-system/packages/core/scripts/canvas-sink-census.test.mjs",
@@ -457,8 +457,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 76686,
-        "sha256": "e4eb6fae667d58f1fff5ded99d270302a117b6cb7670f3461182bc89a2c19605"
+        "bytes": 76692,
+        "sha256": "34e4ce0446616b01c43027e161ef5b5e5d78c7456173e17b573fe565e8d827fd"
       },
       {
         "path": "ui-design-system/packages/core/scripts/channel-liveness-gate.test.mjs",
@@ -473,16 +473,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 16295,
-        "sha256": "9ffb7dce14380f4e2649fe20fdd322ca8d2441a2c2c6dd368ba1ca99a78083c3"
+        "bytes": 16373,
+        "sha256": "3a98c2fee4f5e7b1f9c2be4f2829832202245072c5edda1001cc55f264615681"
       },
       {
         "path": "ui-design-system/packages/core/scripts/chart-series-reserved-name-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13641,
-        "sha256": "12458122aaf77e17a03f13ae72551dce04b42211664419e2b384837afe640706"
+        "bytes": 13719,
+        "sha256": "81033395640f3cc17b15dd0477065169591eecbfac8eba604960f64860cf1dbd"
       },
       {
         "path": "ui-design-system/packages/core/scripts/chart-series-reserved-name-gate.test.mjs",
@@ -505,8 +505,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3743,
-        "sha256": "fa65e74062557c932794c62214aeae851cbf958f82f8be40f8030767024740f7"
+        "bytes": 3812,
+        "sha256": "d5e1c97847a18598e6b1b591616e54d1463f3ea9e09cfa31d6e4fc62ee1cc24b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ci-gates.manifest.mjs",
@@ -521,32 +521,32 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 38888,
-        "sha256": "6dc6474ea2a54d78ce1267bd694fd1407e9672a7d53998ca6c43d1eece081984"
+        "bytes": 38988,
+        "sha256": "51f23e4933c86bbf01930027584c10eb4ea1ce4799faabfdcb3a2bba7b2bc1d5"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-e-noncharts-migration.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 131720,
-        "sha256": "24c449d7fef283f4630caaa3f5f0a297fdbcc38636dc51dc0961acc61fc582b2"
+        "bytes": 131820,
+        "sha256": "a905dc10c08000988bfb574d7d557e806208a6bb0d36255268ec34fde6a76ef6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-h1-floor-identity.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4559,
-        "sha256": "66d3a082bcb6273dfbf3bad781cc3699ee01a4b1b541914385fc4881a34e22f0"
+        "bytes": 4659,
+        "sha256": "c3f891e170907be2a5ac098dbf06ba803ebee0ab3b4b22559f32e1fb9619c80f"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-h1-inert-prestep.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4370,
-        "sha256": "faf6f1efdf0c9ffab7a494904ff44bddb82dfb60fa3b4b656a869858ec9cd090"
+        "bytes": 4470,
+        "sha256": "fb57ad847e14a8946261e514f50de54129ffd8c3569f517935fdab45c581613a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/codemods/sizetype-to-size.mjs",
@@ -569,16 +569,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5154,
-        "sha256": "7451ce7891dd1534119548d21530a7c5d84092fd8edfe9ab535bd082dddd9f74"
+        "bytes": 5254,
+        "sha256": "b0989383d8cf68ad5a95019bf237383f09665705400a77dc8cd75aa94dc0f821"
       },
       {
         "path": "ui-design-system/packages/core/scripts/color-mix-argument-purity-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 14725,
-        "sha256": "c2aa5250cbbf5fd86ff76e6d3f7b30d203e805880445decb3d47e02836ac06c8"
+        "bytes": 14799,
+        "sha256": "96ba5905cc6b27079c823ba11a1ec52b8125e329ac74b8e5c746ebfe61f07ee6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/color-mix-argument-purity-gate.test.mjs",
@@ -601,8 +601,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 15865,
-        "sha256": "69c2b522f432b5d0115629915ca8ed6b0fae4f58a39efaad775d8c90512aaec4"
+        "bytes": 15943,
+        "sha256": "375ff96690043232e6852469e79a779735d374d956f53659a8b0e337df9a681c"
       },
       {
         "path": "ui-design-system/packages/core/scripts/container-query-gate.test.mjs",
@@ -625,16 +625,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 14597,
-        "sha256": "ef06bce2823692f52b3910e78323768c40fd19edf9ae5873378b25f1cdf43b1c"
+        "bytes": 14685,
+        "sha256": "967257654c7ab2a16b858ab1fb561f3ff0796046f6d1718585918d5774dba35d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/core-owner-boundaries.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12289,
-        "sha256": "14385cc1e946a71b9fc2d8fe94c93b43f9c8a12a99d30ac1137de72d80def756"
+        "bytes": 12379,
+        "sha256": "047e0c5521bd12fca66db7be9b684254c6a41031f65587a347e1fa526aef6682"
       },
       {
         "path": "ui-design-system/packages/core/scripts/core-structure-audit.baseline.json",
@@ -649,24 +649,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 58708,
-        "sha256": "a832239e9333d19fa10f6cc896bc2db45eed76f1202d0d8bd68bf0518b013c2a"
+        "bytes": 58786,
+        "sha256": "52478872bd3f99b86ef9d4a670c12e85b301160493b26cf06a47fde235eff3f7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/core-structure-audit.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 49454,
-        "sha256": "ddaf01d4b653cd278409b307c18f1b96489a195da5e08210c9ecf3cbd92b979c"
+        "bytes": 49544,
+        "sha256": "f832f9da204bdf204bda85eebeda0eb3f81706b949c5b1e166f119568ce9f5ce"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-11-adaptive-contract-census.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 2658,
-        "sha256": "307a5ee4f8257ce6192ee8d8972b71d4f2d1cb25783bcae7bc48296e12e88c7e"
+        "bytes": 2716,
+        "sha256": "076dfef41af79696e392b83d79cb3f77e32bb279682e9864a9506bf99d8aa9e5"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-11-adaptive-contract-census.test.mjs",
@@ -681,16 +681,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 30258,
-        "sha256": "faceed9ca9a5bc74e3ac858d76a1181a0a5b67d7c17bf8a67b97c71617438023"
+        "bytes": 30321,
+        "sha256": "438eb66f9ec6cecaf621f8ba7f27940fafcd530c437aaee2e9cdcf470dd91760"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-12-motion-governance.reanchor.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 7644,
-        "sha256": "bbd8a84c4debd8cdd09f91e139b02a015bb41614c08d5a1832de0e3a3385f706"
+        "bytes": 7722,
+        "sha256": "0115c6630954d6bb8f7744ef79f4b8fdcf57b759519ba07a534bde274ecd933b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-12-motion-governance.registry.json",
@@ -713,24 +713,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6160,
-        "sha256": "0b3149cd4b80621f020f2b9cd3592f6ae0a5c247b24cbd365b65094c23ec5622"
+        "bytes": 6238,
+        "sha256": "af0356ebe4894096fa567c19f7571ec179c5b7029e3fce3991d57e995f0d0a15"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-15-runtime-hardening-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 26280,
-        "sha256": "3f40e2c9029ec40fb6ef30055cd3142d1069490b032bb28ba61cae157c49dc6c"
+        "bytes": 26376,
+        "sha256": "bdfd5ff77b455e4c57c77a16b0f1b0e1df348ecdaab68584ac3de59a5ed38062"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-15-runtime-hardening-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 8168,
-        "sha256": "b56c8d27d6bb3b321cb941679211b15fbeded43ed10796087fe38e155d58344d"
+        "bytes": 8231,
+        "sha256": "bdc4a90cbe2510b7e7616e676900d597ec9bbcc7b98e833704622e8ebc02a762"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-asset-entrypoints.test.mjs",
@@ -745,8 +745,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 28611,
-        "sha256": "8d76b5456d111b59df5eeea032bdc220e2fdca772cc0679b90c8b8fad90c0a5f"
+        "bytes": 28674,
+        "sha256": "e553b094b530f908f44cca3e9662544f229a464524ab6b64a8fcb997cdef76f2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-integral-gate.test.mjs",
@@ -761,56 +761,56 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 30812,
-        "sha256": "d878f3bbf697eee2f01773ba3f2494b4ef46e7d6e2e2f36d8d2527851f2748c0"
+        "bytes": 30890,
+        "sha256": "4265e0e6df0d76dc8dc633c4034af45963a39b2737c3c7e513e33549bbb7a6f2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-packaging-license-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6441,
-        "sha256": "0369f1222d99641a7d31449432bbc15b142e7c41fa243072e6b35d4b1de04e3d"
+        "bytes": 6538,
+        "sha256": "ca902aa1c7cc4677f7bbf5959428e46337609598b2c78fecd35264fc87b815d1"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-public-declaration-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9425,
-        "sha256": "ac08fda7bb86685d573d8be41cc254c04c0268c871bf2e4eb7950a27df1d85a3"
+        "bytes": 9503,
+        "sha256": "f13317625cb29d05f879cf10ee177a8e6e0c1ce6982cf44eafef421b927827c7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-public-declaration-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 8720,
-        "sha256": "5059c365ca118edee9c925e8adaede0d3c7693f4bc355f29054bd54bebe2a107"
+        "bytes": 8817,
+        "sha256": "a589635dae4053ad7e580e20da27331108b7a5086569eb0ace9529c6d8175496"
       },
       {
         "path": "ui-design-system/packages/core/scripts/css-layer-paint-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13993,
-        "sha256": "cc39caedef2bd97537cacb4d87eee6a3188b1b797496dd62207358375bb3abc4"
+        "bytes": 14071,
+        "sha256": "899a2c800bcdaf4dc14afb3d96a7be229a678dd5bb6e430708c4f2f5e5ff0150"
       },
       {
         "path": "ui-design-system/packages/core/scripts/css-layer-paint-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 11831,
-        "sha256": "7f14ac1ec2a415266b3fc12337f3241bd6005a52b386780bee45e543c3536797"
+        "bytes": 11918,
+        "sha256": "e0f9751c1fedb51876db7a9a58bc6f67ad2713dc32f0d412f9e5e1dab71a1c11"
       },
       {
         "path": "ui-design-system/packages/core/scripts/css-source-integrity-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3368,
-        "sha256": "eda1d37b7c8248879e76ef548113e23d8ec650d19665f7498e981358a44cd73f"
+        "bytes": 3513,
+        "sha256": "73d48579d45c1691584c5a5e42aec490cdf62714e2888d349f09fcafe0565f09"
       },
       {
         "path": "ui-design-system/packages/core/scripts/customization-census-classifier.test.mjs",
@@ -833,16 +833,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 30362,
-        "sha256": "9bc2f06796d53e4c98904759f56be7e62f129a351841061a6781bd6196a6ef26"
+        "bytes": 30450,
+        "sha256": "d4b7a615fbdc4b0c942b7347ef788eb6086bd1970c8e86348c26a70ee3f85cc7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/customization-surface-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1964,
-        "sha256": "85d59febe716ff7239f54426bcc62394678d7e4cabb3bf9697e0cf41f6c22618"
+        "bytes": 2052,
+        "sha256": "7d22b15aef1cd80481d12413c6066f7efb8b90ff3d2e528744b7bcfdd0295b4a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/daisy-painted-classes.mjs",
@@ -865,24 +865,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5805,
-        "sha256": "943d13679cf157c21ce80067275d9b281c9708c9a3dfc95f5ab300d569709d97"
+        "bytes": 5886,
+        "sha256": "cf453da95e73470b91061bb3dbea228038d3fa18ba05d44ee93593288840665a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/dev.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4095,
-        "sha256": "fbcb71d7c46fc090555b1d8b8a52c00f4f16b89ae6df2fc5da1fc00e4c5e2aff"
+        "bytes": 4173,
+        "sha256": "920eaff419f231daa4ce8b130dca20704b6f299968dc0bac2b1d4232d7669f0f"
       },
       {
         "path": "ui-design-system/packages/core/scripts/dist-freshness-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5567,
-        "sha256": "951233179ce6c38d945bb2628f8f45e727d43eebb383167ef0e2c8ab8649f272"
+        "bytes": 5645,
+        "sha256": "b885c47dc4da8b41087619427500b8613b7dffea667bb8787d6e80ff70edbe8b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/dist-freshness-gate.test.mjs",
@@ -897,16 +897,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 2456,
-        "sha256": "51f6959e5f389999a752416b8552d2bfefe286f143d75d8151bfc01e3c1f0f45"
+        "bytes": 2199,
+        "sha256": "2e89af3c7a344b33e963945287228d164ec433c92ab135e406f5cc4b76c25d32"
       },
       {
         "path": "ui-design-system/packages/core/scripts/embedded-css-paint-counter.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 14391,
-        "sha256": "dc157e8c2dbe273fdb72d14eeb49ad380fe9fbb76ae38944e2c5461b8d196d55"
+        "bytes": 14491,
+        "sha256": "1daf8e47b0f5fc839d46ca4f5f1d2b0100674b45e558095e3d7e5c44b43d41bf"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-freeze-gate.baseline.json",
@@ -921,8 +921,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 19585,
-        "sha256": "64ca3e2f4e1c3950baaf12d30c01e0b16f51462ec98e215e1163547dc94ce225"
+        "bytes": 19680,
+        "sha256": "72b36f9d629e91124a2cdca00b4ee7028de7804354127b6bb3d8485e087717e0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-freeze-gate.test.mjs",
@@ -969,48 +969,48 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 129934,
-        "sha256": "2b1d5cb04b81badc19835ecf78ffd04fc27279788d53ab1791f721f80b4f4ee6"
+        "bytes": 130045,
+        "sha256": "bf77d1cc8ec5a1257c7b3b78fc1d3e58a0af7fe328c14e93bc42f72447624813"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-token-audit.motion-recipes.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3538,
-        "sha256": "ee4393e5dc38fc6fe3a3d025a29df952b2a919ca839352d6aaba50f26f659f53"
+        "bytes": 3628,
+        "sha256": "5e2f03ade794186e77f624ab36224be9a7cd4eca6491ef11a69d6e55a95e0fe5"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-token-audit.runtime-svg.integration.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13285,
-        "sha256": "76cdcd10582ff4012ea1d5756f128bafeeba67aa5f859f987c8609e2c9f437f1"
+        "bytes": 13363,
+        "sha256": "c68c5ce6a1cdc817fb3556bf8c34bc783f8e6a3a9263fa5dfe2e36cd713387a6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/exports-artifact-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 2987,
-        "sha256": "be255a7aef11dc36244e466980ffcabbda08fc8778888e790355dd6878887189"
+        "bytes": 3068,
+        "sha256": "2490731c93192d916dbf4f7889832c72c22411ed2cb52e2910fb9b496d48f73c"
       },
       {
         "path": "ui-design-system/packages/core/scripts/f0-honesty-gates.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5467,
-        "sha256": "8a190c768c528672db46586b899849976cb554ed69b1174ba745aa05d95af165"
+        "bytes": 5798,
+        "sha256": "5e63e5eaebc37c047eb3c47e7d672beb6f9a8b4b0d28f38dbf893a03bc9c8814"
       },
       {
         "path": "ui-design-system/packages/core/scripts/first-party-single-author-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 16818,
-        "sha256": "7715657d9e72a2dc701d2352b94eb982e01925ea2a68615ffaee21891f116642"
+        "bytes": 16915,
+        "sha256": "8093f60c859aa6f0d8bd674458fad6604f41348f914dee55ee6dd4c2e9fd7d70"
       },
       {
         "path": "ui-design-system/packages/core/scripts/first-party-single-author-gate.test.mjs",
@@ -1025,8 +1025,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 18263,
-        "sha256": "28181965a78774245525882ee272858130919de39ef2c8a481077955586f3cc9"
+        "bytes": 18377,
+        "sha256": "31720da69ebc4e7009cdc00a01e29d66c71282f81a70cbac441ef2384d6187b6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/gat-07-doc-claim-allowlist.json",
@@ -1051,16 +1051,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 62679,
-        "sha256": "d9f6d493daa9e1937711f2a230e04a335a0b48e7bfb6123c1795ad4ba554b0af"
+        "bytes": 62774,
+        "sha256": "de6dd65b8887958c883107843480b2e326831d1e4514c3aa0eab93d98116865e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/gat-07-exact-proof.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 99434,
-        "sha256": "66746d9ce4652cec2f2ea6094f4f3543eeaa688bd74f0a3c20d3f12d921fc39c"
+        "bytes": 99501,
+        "sha256": "d71229a353419bb7e56ea9e0cb6dbc5829ed9ac5ef2016ef6d3efe072791c396"
       },
       {
         "path": "ui-design-system/packages/core/scripts/gat-07-public-claim-floor.json",
@@ -1085,8 +1085,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 35105,
-        "sha256": "6dd59174284b190c74e6b18974d8641c123ea6d8ecdf6930c8a7227f30449118"
+        "bytes": 35168,
+        "sha256": "450a16982e9c8a35db4175afd744b3f031d9d30e4d73ebf4c475714384e37b02"
       },
       {
         "path": "ui-design-system/packages/core/scripts/gat-09-full-claim-integrity.test.mjs",
@@ -1109,40 +1109,40 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 33555,
-        "sha256": "ca2ed2a931b377e7ac5472d8d78fd1e45eead9fbe7cbfd889e18d69355e29d5f"
+        "bytes": 33633,
+        "sha256": "c46ae19da0cf3c21235a1821a4e62dc4bd7cc47a8c3f0256d81b735a200e352d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/generate-semantic-icons.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 15194,
-        "sha256": "d3cb5fef69a66942134db4ed88bb98f282494be91ea2a07adc9954f994ba0b01"
+        "bytes": 15291,
+        "sha256": "835714dfcfa69679fdf376010126893fb62c73e19f7b04a1255512df2e8295c5"
       },
       {
         "path": "ui-design-system/packages/core/scripts/generate-supplier-contract.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9587,
-        "sha256": "284e4fb79374fae216b60195042425a1271b3dbf065eeeb657718dddca211bdf"
+        "bytes": 9681,
+        "sha256": "06a971b96945ead3a8bc1268c520030beade5d92bfbf59f129487857a88fdd8b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/generate-supplier-contract.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9295,
-        "sha256": "3ad7e1dd10ad940f67eb9eec004cf49d13f8b5e5e890cb376cc5c0d490bbec13"
+        "bytes": 9373,
+        "sha256": "f6d25338f3891e65edac46bec77c527dcf8b4c045da7a96a485b06315231990a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/generate-surface-capability-census.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1710,
-        "sha256": "a55eb1ee5f644a635ec44d2af70c4135ae73c458fb90c8813ead295ea1a5b806"
+        "bytes": 1768,
+        "sha256": "a47a39972a020f4a2b740c59b490b0e63e67d826dd4f4b65fa94887280eee636"
       },
       {
         "path": "ui-design-system/packages/core/scripts/generate-taxonomy.mjs",
@@ -1165,8 +1165,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 16688,
-        "sha256": "2c219a0b78bc03d1097edd11eb3b5afb1f3ad44b9d6d37adec34f6e197ed467c"
+        "bytes": 16766,
+        "sha256": "1e0a5189a94312f769d8b033bec3093906b5f23ca9530b39217c929ee0717a00"
       },
       {
         "path": "ui-design-system/packages/core/scripts/i18n-key-parity-gate.test.mjs",
@@ -1189,8 +1189,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10009,
-        "sha256": "9ffb722541b924166428f4d404923812dfa746d3c333d18de93d578aaaf0a264"
+        "bytes": 10087,
+        "sha256": "9e8e5e6622330c5f5e6c65147455cc4f650151bda89c36c43dcb9392e8db0c42"
       },
       {
         "path": "ui-design-system/packages/core/scripts/icon-embed-inventory-gate.test.mjs",
@@ -1205,8 +1205,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 7959,
-        "sha256": "264429c7add2af294e661081345854bf20b0842fa6235ad97ca7d6154c7cd0dc"
+        "bytes": 8032,
+        "sha256": "634cf54f49eedd77091db6f643bf1abf15e467ae6b675d02f785b250b0ccb279"
       },
       {
         "path": "ui-design-system/packages/core/scripts/import-binding-integrity-gate.test.mjs",
@@ -1221,40 +1221,40 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10503,
-        "sha256": "36d3fb872a2370c4253b4c19e0abdc58d146eed37df078594e9a7fefe2e67b84"
+        "bytes": 10626,
+        "sha256": "13e3cdd6597834056b43f5fbb22efef6095f8013e5d40a74036230cc57f50481"
       },
       {
         "path": "ui-design-system/packages/core/scripts/kimi-preservation-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1545,
-        "sha256": "dba68eacb9b018d368dbb17b0939d84dc03a19a46ee0876d8241c583b70d6070"
+        "bytes": 1633,
+        "sha256": "873ed0c57210d26ab6f0809aa7ec12a84be3c03fc7abe75fd62bb22f9cf7d501"
       },
       {
         "path": "ui-design-system/packages/core/scripts/kimi-preservation-manifest.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9995,
-        "sha256": "6f666c99d5c68cef7e7db30d82a6e826fe4fd80fd16349a0da30e21690bfd8db"
+        "bytes": 10083,
+        "sha256": "df4c8e440b45ec1358eef145a3ce34a35dce0a678faabd486380ce67bec05c73"
       },
       {
         "path": "ui-design-system/packages/core/scripts/kimi-worklist-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 33433,
-        "sha256": "741f7e324de08dfb4d4cd18cad4116d33f89eabdcfc9a76e32a1689a3151b283"
+        "bytes": 33561,
+        "sha256": "eeffa11ab4c535a5505c1565d841eb8b63a25607e742edf207cf1379a35a13e7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/kimi-worklist-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 20145,
-        "sha256": "4b1e76a17ff073db69538e3f051c295242bb49ebe90c16adda43fe553c9ddc5b"
+        "bytes": 20223,
+        "sha256": "acf3592b939c73096a4064f7297c8887589723177e431be9d31ceedbc2ea9663"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/build-input-hash.mjs",
@@ -1317,8 +1317,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 66516,
-        "sha256": "955a496e5d7d0248214b954d38ae51d09edebd1d467c8cd4694bd4b27caeebd2"
+        "bytes": 66602,
+        "sha256": "ee1cd4610e4f896e668cfda05e5b8d799cbda7a710c78b8ceb65ad577cd1fa7d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/engine-corpus.mjs",
@@ -1341,16 +1341,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5698,
-        "sha256": "d9cbef8b6d3c0741bcdf1ecba2f45bb00519bde4802fb212976016ec4cf1dbda"
+        "bytes": 5788,
+        "sha256": "7c385064924f122618708f75a3032032e3de7ba7fd074c955d9047648fba0732"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/first-party-roster-source.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1867,
-        "sha256": "56ed31919bb4655e0500cab9a181b57f999c4f359c1a5369132d2635f4d0bf96"
+        "bytes": 1938,
+        "sha256": "6f2f4c74fed51c48ec161c708a3957e94cac44101602f8fd2695d0981a7e3fdf"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/fleet-inline-paint-census.mjs",
@@ -1365,8 +1365,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 163844,
-        "sha256": "de57dbc2b8884e40aedb0a523d1d9525ef529cb3ff0b4813912f2178ea8d103e"
+        "bytes": 163925,
+        "sha256": "c47549301cc428ecc3847cfe92591365d1b421b9587176a0d05c589fc70deae9"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/inline-paint-counter.mjs",
@@ -1425,6 +1425,22 @@
         "sha256": "702eab9aaa0e77e06a7306be6d06470fa9766517b6b636ce1ce550d41e2103b9"
       },
       {
+        "path": "ui-design-system/packages/core/scripts/lib/repo-root/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 2088,
+        "sha256": "4b1e91629d6a5e38f52610c1b4410823e270883e7de44a86031a2fb939231ea3"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/lib/repo-root/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 1840,
+        "sha256": "f48c999989ed84a6b59dadd824511ed7bde8c89a1a2a48fab12c8f200b5afa2e"
+      },
+      {
         "path": "ui-design-system/packages/core/scripts/lib/root-public-resolver.mjs",
         "roles": [
           "audit-machinery"
@@ -1469,8 +1485,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1288,
-        "sha256": "efa03b4e5d331749fef13d564c792e555888baff2d9fffb9233d46bfc3aa6014"
+        "bytes": 1369,
+        "sha256": "65334887b88b266f7b1e78f34eb61bb4a247e36a4c953cde524996250c5bb41a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/surface-capability-census.mjs",
@@ -1517,8 +1533,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 8479,
-        "sha256": "b84a753d9a45521b363b92a403bf5b51dc7c5bf5ed15268863003fff5b1fb27f"
+        "bytes": 8567,
+        "sha256": "396b33c44174942ecd41cb706f8368af44a8e27c639108919eaa85fbec9f73be"
       },
       {
         "path": "ui-design-system/packages/core/scripts/literal-ownership-gate.test.mjs",
@@ -1533,8 +1549,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5332,
-        "sha256": "c46f051b7c084f596530828b4b658568bea3947044f9d7bae6bda5b898ecd6fd"
+        "bytes": 5405,
+        "sha256": "02db198d6c259aab2d17b800a21ceea63b8f3659eee281e758f274756d355972"
       },
       {
         "path": "ui-design-system/packages/core/scripts/migrate-public-entrypoints.test.mjs",
@@ -1549,8 +1565,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12374,
-        "sha256": "9792dc8f4097468dcabb4e46cc2ce013bafc7c79245ebfb639b0a12553d69d00"
+        "bytes": 12452,
+        "sha256": "91fe66f6ecfdacdf139326bb4777e2c52b18134976aa04e11d3fb1b10a2a5382"
       },
       {
         "path": "ui-design-system/packages/core/scripts/modern-bundle-framework-gate.test.mjs",
@@ -1565,24 +1581,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 7505,
-        "sha256": "1c4aaea1f375b0966a95c77d701ae8d3849dfc556447283556187c96bfbe52fa"
+        "bytes": 7605,
+        "sha256": "fd4ca80a8fa2925cca6abffb4ef908a6f66dec2e9e222ff0087c0efd1662fba5"
       },
       {
         "path": "ui-design-system/packages/core/scripts/pack-inventory-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13564,
-        "sha256": "91a6367e6f5d7bf08aa05d54900c06179cacd99fdbc23b1d3509265e47019d88"
+        "bytes": 13642,
+        "sha256": "647f7742ac8b2e857dbde5d69c3a9c39fb1a0f28792fbd4c76a2293d6ff358a1"
       },
       {
         "path": "ui-design-system/packages/core/scripts/pack-inventory-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 7544,
-        "sha256": "fda2a0fa1b27896a774fba91129a762af77975a8e98e091a0a3cbf66f1e06595"
+        "bytes": 7633,
+        "sha256": "c8c75b8180935fc1c5f4078c505788c52ba2e7bf6ec9cbf11da31f664777066e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/pack-inventory.additions.json",
@@ -1637,8 +1653,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 34557,
-        "sha256": "5b0f513516971e7c5b89dd65d154f86a1c40d528ec1c029bc69652596f71c38e"
+        "bytes": 34635,
+        "sha256": "4a38b77ae7e4aa1effc1dc243c8e7fae01308797ff8b2f3d377aa5cb581110b2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/pattern-surface-ownership-gate.test.mjs",
@@ -1653,16 +1669,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6229,
-        "sha256": "ab5d321a0d8e0b8971240b6e6cf92e9700bb84189ee85e9422f3051a8fe40709"
+        "bytes": 6324,
+        "sha256": "2b34ba49e2062626f51b4e7dc8fb19546b5fae658378b1858bf01ffbcb9f1d70"
       },
       {
         "path": "ui-design-system/packages/core/scripts/platform-identity-zero-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4176,
-        "sha256": "c786963c78cca480db53938b6d6f6fbc672694e690a555e793aadbb5e06ca019"
+        "bytes": 4245,
+        "sha256": "852cb934f3104bc731008c746c7eef01b6ceacbd56257ffd3250f27c06036b5f"
       },
       {
         "path": "ui-design-system/packages/core/scripts/portal-substrate-gate.allowlist.json",
@@ -1677,8 +1693,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10218,
-        "sha256": "61001a6e296af3fdb2ba28bd2297bd9aa130149d8081e845aad458e789ecf38f"
+        "bytes": 10296,
+        "sha256": "3e2daa8dc528260815f1f6454f31752e7acddfeacdb267069c5e7245a3c8a33e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/portal-substrate-gate.test.mjs",
@@ -1693,40 +1709,40 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12594,
-        "sha256": "defaa494fd84a98f833d8529f898857396cf5b73a1fa29b0a3b04e509bc7373e"
+        "bytes": 12667,
+        "sha256": "68d7d7173cfa6e8707b8a091b2a7bf6da982c90d45f55903d750ac92f6640681"
       },
       {
         "path": "ui-design-system/packages/core/scripts/prototype-ledger-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 15839,
-        "sha256": "ac61f8975cb6ec6c6bd154527bc9bac7ee83d348a05d2df451b49330925d1f9e"
+        "bytes": 15917,
+        "sha256": "2810ca189323a17a47c717b82f91e420787971246dfb71aa83ce0ee7804df76b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/prototype-ledger-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 11589,
-        "sha256": "492645e39c5b0139314c44b3bd005e582b4d140e75db154e0ed45d4de3c4ce31"
+        "bytes": 11658,
+        "sha256": "9b6025b171b56c89e87558d414aa5f76b2352f3a96eb857a24d6b5d4d0f37204"
       },
       {
         "path": "ui-design-system/packages/core/scripts/public-component-row-projection.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 20592,
-        "sha256": "484c34baa80516a1c3f1323d5a760e74d26ce2848a2b6666e672046af7d05e25"
+        "bytes": 20665,
+        "sha256": "547a083653b3917652575d2cd80e76c3c08a432308269e3020097e1473cf72d4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/public-entrypoint-boundary-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12252,
-        "sha256": "afee970425a5c6d39f1fb9b9e8f87fa57c64fc305f4f67c37df92ad57bbf036a"
+        "bytes": 12325,
+        "sha256": "3c4fbc5a072709fe649608efe1e652405c41088c9b0d3d8c6a9d2b046d77a660"
       },
       {
         "path": "ui-design-system/packages/core/scripts/public-entrypoint-boundary-gate.test.mjs",
@@ -1773,16 +1789,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 27999,
-        "sha256": "115307623511dde3f9d957fd074a761c43d754686170e6d2260c628188765994"
+        "bytes": 28063,
+        "sha256": "71ef9e1712b84df2aa8d53238985b0594d6b2eb282ffdc2e8511d2aeca758f1b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-extract.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 44809,
-        "sha256": "332c7a6f488199315e76a2a22307faeb731a8f7f338a765c3112071377d4d7e5"
+        "bytes": 44780,
+        "sha256": "5766f5ba24c708cfef27e889f02de768ae5b30dbe47613af0fa6093d9d33e951"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-materialize.mjs",
@@ -4557,8 +4573,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 27540,
-        "sha256": "5351d95702d47a7530a62ddf56551fc92eb30e7a41d79aee904781edf0c5dd76"
+        "bytes": 27517,
+        "sha256": "7a9d79308dc17fbacbf379c0ab50b88331995ae58b46466e15254a195205e584"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.test.mjs",
@@ -4597,16 +4613,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 31379,
-        "sha256": "b22df7bccd3143b855ffdd81a067a8333c87cf03658dee96b10703efbcc3fe43"
+        "bytes": 31440,
+        "sha256": "e81f06d3dc951e94712554ed1ea651d80aeb2615e3a3f6a9eeff52308e243ff6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/generator.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 47367,
-        "sha256": "f62ed6b70e9ac4daec3651c02ec9344151b802549a1e25fffa33eb1f240065cf"
+        "bytes": 47431,
+        "sha256": "3fb9b9764dcec57e930598a17f95c83e2b71f8e704dc057f5df39c37d5c1bb7e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/groups/collection-card-anatomy.json",
@@ -4645,8 +4661,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 43617,
-        "sha256": "efe4991311ed83983a0c18bd20659d893d537710f0c3653c4c2be50d0991d3b5"
+        "bytes": 43688,
+        "sha256": "22bf952de727808bc350edfb619d426d3e05236f4a617f2646819a6d2bfb2c45"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/mirror-parity.test.mjs",
@@ -4661,8 +4677,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 43789,
-        "sha256": "1ee7ebc30cf508b65c9d0ffdfa9dbb760ae073d94947d33129c9c3e442309055"
+        "bytes": 43860,
+        "sha256": "fa203f7f3f72d59a97d22e81c7a49119c966582e7f685df708aee456c893b9e4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/root-checklist.test.mjs",
@@ -4701,8 +4717,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12045,
-        "sha256": "cf5ab6e0472d4eae8e6fd09905cd65e2d45f338def1870743991bc0d27c6cec0"
+        "bytes": 12009,
+        "sha256": "245263b8f018587c4c91ab89b740d39cf4045a3e2d6b7435f7e9a9fce2de27bf"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/probe/css-parse.mjs",
@@ -4741,16 +4757,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 66092,
-        "sha256": "718e2991f75fec8f0a3052c900e10fbc1eb48d4a3acd616fe38f962e194a7382"
+        "bytes": 66141,
+        "sha256": "a807656a7029e0ea3f52e280df8eebcc234bc20e0052a29d3140f6af7dc962d0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 21361,
-        "sha256": "9b7e4df5c39ed13e17207714db95cd5da5fea064fbc1f8bf42ca63a56098330a"
+        "bytes": 21410,
+        "sha256": "735cbc0c38f5917ea0c4fcc9707267b632ce77e68d1cdd8913d5b190f4a097f4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/program.json",
@@ -4853,8 +4869,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 2440,
-        "sha256": "b168599f9ca9e81579fb5daf739ea500fef0a8fbf5d308b3b8060955f8262db4"
+        "bytes": 2496,
+        "sha256": "5ea76c20eec4ada8e00b8483bc123f9769374f2e1be528fc0be84e113cd7e59a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/v2/craft-score.mjs",
@@ -4869,8 +4885,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 114475,
-        "sha256": "58b5f9088f7317e2b59248ceb1bdb84ac2a50fc2a91c86161dd28fdb260b2844"
+        "bytes": 114595,
+        "sha256": "dd7d4e51b196527138a5a5ede57266faadd5683f983ecb09b6eb66ac4d207b1e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/v2/eligibility.mjs",
@@ -4925,24 +4941,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4177,
-        "sha256": "6e2a4535813aed48d07440d39f07733bee60244adc9cbdf58b9446b7896453e3"
+        "bytes": 4265,
+        "sha256": "a9551839d6981c9536704e005a1c7aa15779ac45ef040d4f26cb32f85ae4153b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/red-inventory-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 22730,
-        "sha256": "9a95a27a6365cc4ff87788cb4463399d0b8542c6167be69a05fa3d01d860d8a7"
+        "bytes": 22809,
+        "sha256": "51df3011e4d2caa8302817f6c9eb59b2fbcb9aa5bc72923da98f56145062b483"
       },
       {
         "path": "ui-design-system/packages/core/scripts/red-inventory-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13090,
-        "sha256": "db1494d615fc474475055aae332a7f873168208c98cc1a8d423c1d0137db17fc"
+        "bytes": 13159,
+        "sha256": "19d959d834adf2e6749b0782d157b15b53e0520abdd318e2105bab936825dd1b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/red-inventory.json",
@@ -4957,40 +4973,40 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3805,
-        "sha256": "2910e7cbe502557989c907180ce2e733891eb200c306260a4fda2ecdde5ac6d0"
+        "bytes": 3883,
+        "sha256": "812c16cd51dcac820da9de782c030e9ae5ea1c803972367fa689403c87cf637f"
       },
       {
         "path": "ui-design-system/packages/core/scripts/root-catalog-freshness-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3733,
-        "sha256": "29bbb83a149b90a4c93d31f2b67e26c63f15a372a3bac519e7ef992ce326d3bc"
+        "bytes": 3814,
+        "sha256": "bef43ddbdd77a86e99949e562faee0ef0a362a9f25698e369e06eefebce45c54"
       },
       {
         "path": "ui-design-system/packages/core/scripts/run-ci-gates.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3336,
-        "sha256": "777293e402abf5f130241b33ad1076fcaf7a86ae07fb67696c38355f3da4b2b3"
+        "bytes": 3424,
+        "sha256": "20a23d6775e6cadc795f32375b8829abe54960b9c2b4e53f7029c541e13c6375"
       },
       {
         "path": "ui-design-system/packages/core/scripts/run-ci-gates.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13424,
-        "sha256": "3277e023eeebaa6d2f92fa850f39d75b1171ff3048c1397f7783b563d17d0e95"
+        "bytes": 13515,
+        "sha256": "8d44878c912f7db3431bd3c07e25e21ef95b8cbeb78e9f7c39ff0fbca9fbb83b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/runtime-svg-paint-census.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5537,
-        "sha256": "d6856a48e0d90632b37d1c889eeecd44a510e6b0885748cf5fc96cc13e3e9b86"
+        "bytes": 5634,
+        "sha256": "abb79de16745498eca5dfb343986453226e6ecea07da5f56ca9e3f67a92311cd"
       },
       {
         "path": "ui-design-system/packages/core/scripts/runtime-svg-paint-counter.test.mjs",
@@ -5013,8 +5029,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9813,
-        "sha256": "9536b25873d4510facd19ee88f50b4c9482066c69068ecc0f2ab393fca66706d"
+        "bytes": 9891,
+        "sha256": "23f92df031f90d63e748a0a2ad4ed3719e5228a1699c00598622083f17398e88"
       },
       {
         "path": "ui-design-system/packages/core/scripts/size-axis-law-gate.test.mjs",
@@ -5029,8 +5045,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5912,
-        "sha256": "d8648c4d4efa6893e9dce8ac67d80e73400679182da7d34658bb502437a65e39"
+        "bytes": 6002,
+        "sha256": "f188f4934c3f3b1ee25830dd5ffcc6067ec65267f1c874679c9ca984820a0415"
       },
       {
         "path": "ui-design-system/packages/core/scripts/skin-dead-part-audit.test.mjs",
@@ -5045,16 +5061,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9291,
-        "sha256": "eabff9d87adf7b6ccf69f00fc446c781acc3a5a7ef7cf930eeab4943a3c345d1"
+        "bytes": 9364,
+        "sha256": "6d73f13d03e219d2b03743ccc48607f5de27881e5af544b7621bce1e15603af2"
       },
       {
         "path": "ui-design-system/packages/core/scripts/spacing-rhythm-contract-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 74998,
-        "sha256": "2d24a377c8e72ee2dd97208690377760708435d098e283babd826ed5becb378a"
+        "bytes": 75076,
+        "sha256": "68bfa3ed3a547bb7959af81b2617e17698966b2d5e48ca6bb77622ac48e11e78"
       },
       {
         "path": "ui-design-system/packages/core/scripts/spacing-rhythm-contract-gate.test.mjs",
@@ -5069,32 +5085,32 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3221,
-        "sha256": "8c97ed99156a56f24fac0e69105e3c145e47614aee546f90877e26cb564dfc3a"
+        "bytes": 3279,
+        "sha256": "ea5c9e30a1e702103b0992271daad69c888cabe393d903e3320ab91d93a964ae"
       },
       {
         "path": "ui-design-system/packages/core/scripts/surface-presentation-boundary.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 13686,
-        "sha256": "94fcc42363c130a4aad7fac1172066699d5c26284c485b627d6c3bc9f1b98e96"
+        "bytes": 13759,
+        "sha256": "5da7fab2a782da30d69281afcb4386f331f8ffeff15ee3b3aaf4cf08d3e0b64e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/surface-profile-overrides.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12147,
-        "sha256": "d530ff49df6c37c90692e55bc013f17c7826c7aac6210e03b9bdf99a25bbe2b4"
+        "bytes": 12247,
+        "sha256": "c7e284f8168420e15591f93bc5209008c963bba3c8ed7a795d059edc93e3702d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/taxonomy-parity-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 38085,
-        "sha256": "4a1b26cc406e198b4527c088d70ac7c80c325c13d4446ffc4714b5e1c42973ac"
+        "bytes": 38170,
+        "sha256": "97efb0b41aa305ec683c47cf245fce28558678871518ce5cef7770e6e77f7c43"
       },
       {
         "path": "ui-design-system/packages/core/scripts/taxonomy-parity-gate.test.mjs",
@@ -5117,8 +5133,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 29933,
-        "sha256": "4f260157291ad6a4fa3669869ec9ad1a736e22ae7f6eaeb61560550242154878"
+        "bytes": 30011,
+        "sha256": "2d0d60d42578adebf8e02253c9e9a7116a3db01ca2f633690b892665b5bbf209"
       },
       {
         "path": "ui-design-system/packages/core/scripts/tenant-channel-consumer-gate.modern.baseline.json",
@@ -5133,16 +5149,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 18417,
-        "sha256": "88465fb343b365b2e7547d0a59e2e24da8a9d3e4be3954e8721189b4d1ee1c07"
+        "bytes": 18501,
+        "sha256": "f1da00b223c1093b6e6ca5d3d53de4d86153ecbdacfb87fa0b50925121437250"
       },
       {
         "path": "ui-design-system/packages/core/scripts/tenant-theme-canary-fixtures.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6053,
-        "sha256": "1287ae0caa9ef713dfa5002594f0026f09d484a08172c182dc8ba2f759da7409"
+        "bytes": 6141,
+        "sha256": "3e5c065e40d2fe09d2c1bfeed23700346742a012e38d84a6ad6be6c9daff24fc"
       },
       {
         "path": "ui-design-system/packages/core/scripts/theme-channel-parity-gate.baseline.json",
@@ -5157,8 +5173,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 11306,
-        "sha256": "450dd30ecd5db630955800b1b3a096b34a5a30ff2f24ad7b7fc8c41286d02219"
+        "bytes": 11384,
+        "sha256": "62da33997bb7db11a471e98d5bcf129d80324dc0356d9b13133f3e025ee4a6aa"
       },
       {
         "path": "ui-design-system/packages/core/scripts/theme-channel-parity-gate.test.mjs",
@@ -5173,16 +5189,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4711,
-        "sha256": "3fcdc5afa63eeebd25b705cb0fbb3f771f6ce6772527c2c09df5c22e2a7f66ca"
+        "bytes": 4808,
+        "sha256": "1f5806f4d4999a9f7c1baab206eb3129247545dfbc1e951b95956db25121a282"
       },
       {
         "path": "ui-design-system/packages/core/scripts/tokens-catalog.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 64484,
-        "sha256": "83a754c79f0f91bb76530a45b92133c1bd221008233bd95bf5f9a468803d0e0c"
+        "bytes": 64581,
+        "sha256": "5056462f72b0012f92990f07520b1ebb5a05c084ec9cc635461124fde1aa76e3"
       },
       {
         "path": "ui-design-system/packages/core/scripts/typecheck-tests-ratchet.mjs",
@@ -5197,40 +5213,40 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12399,
-        "sha256": "422b970979297b63f60dbf8cb983b7d772ddf14b7ad229461e3d742b4cb875df"
+        "bytes": 12477,
+        "sha256": "d3a9a19504a4453ec71d9da3e1805bbf890c846bcfd78182deba8729bed2b7ca"
       },
       {
         "path": "ui-design-system/packages/core/scripts/wiring-coverage-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4000,
-        "sha256": "5d2f348ba66f23aedc78513516354edd7048260f1a6ce7bddcd0d03f17c6780a"
+        "bytes": 4101,
+        "sha256": "39cd431ccec3369043688b11a8a37a1be6c8507bd6170330f14e45399158b57a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/workflow-script-wiring-gate.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6891,
-        "sha256": "de349846623700e25eecc636e208bd7280353c7b2b27b37caeecf6b1c27b9a04"
+        "bytes": 6984,
+        "sha256": "9d94fe5431ef073d0c7523f6ab2e292edd215b2e0276252fa61d3e8a5873f647"
       },
       {
         "path": "ui-design-system/packages/core/scripts/workflow-script-wiring-gate.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 7228,
-        "sha256": "9dd9f6b31e08ea2ddc7ef4254bba6270eeed7ca7aca08546e79fd4168dd42326"
+        "bytes": 7565,
+        "sha256": "5a0ea05cd007e1ad8fb836c37800706e48127014cacaf734f221b3cb4a24074a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/write-build-stamp.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4532,
-        "sha256": "095e945103187b2d50dc52de7a9be6092d48fed9f8d8ad64cc31f76c52d6a5b2"
+        "bytes": 4610,
+        "sha256": "f01c622068de46c80b83c9344c161831d1713ebc3d4da210562023500b206af9"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/charts/access/index.ts",
@@ -45383,7 +45399,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "9da100eadcc2d31b675bae279176cc2ebe33d7f3694e830c8bea314acdb21fb2"
+    "digest": "f305a9eebb2bb90285322547d1558995eb4304b8556cef2dbf024f35cfdabba9"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118764,8 +118780,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "57c9581f3275f60b5f121250d38ee0815825918dcc6aecb28cc3b6fb365d15b4",
-      "57c9581f3275f60b5f121250d38ee0815825918dcc6aecb28cc3b6fb365d15b4"
+      "475c38fc891e9bfb195955ffa3fe1e8cddb0b7292a909cf77791c52c30d7566f",
+      "475c38fc891e9bfb195955ffa3fe1e8cddb0b7292a909cf77791c52c30d7566f"
     ],
     "agree": true
   }

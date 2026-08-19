@@ -35,9 +35,10 @@ import {
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = resolve(__dirname, '..');
+const root = findPackageRoot(__dirname);
 const check = process.argv.includes('--check');
 
 const REGENERATE_COMMAND = FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND;

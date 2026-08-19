@@ -169,12 +169,13 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import postcssModule from 'postcss';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const postcss = postcssModule.default ?? postcssModule;
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);
 
-export const CORE_ROOT = resolve(SCRIPTS_DIR, '..');
+export const CORE_ROOT = findPackageRoot(SCRIPTS_DIR);
 /**
  * The authored source tree, not just the token tree. A rhythm read that lands
  * in a component-local stylesheet under `src/ui/**` paints exactly as hard as

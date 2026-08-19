@@ -7,9 +7,10 @@ import {
   buildCra11Census,
   serializeCra11Census,
 } from './lib/cra-11-adaptive-contract-census.mjs';
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const designSystemRoot = path.resolve(scriptDirectory, '../../..');
+const designSystemRoot = findRepoRoot(scriptDirectory);
 const workspaceRoot = path.dirname(designSystemRoot);
 const artifactPath = path.join(
   designSystemRoot,

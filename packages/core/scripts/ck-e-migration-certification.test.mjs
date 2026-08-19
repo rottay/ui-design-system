@@ -5,8 +5,10 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import postcss from 'postcss';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const packageRoot = findPackageRoot(HERE);
 const cssRoot = join(packageRoot, 'src/foundation/tokens/css');
 
 const skins = [

@@ -16,6 +16,7 @@ import {
   createStructureBaseline,
   isBarrelSource,
 } from './core-structure-audit.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 function write(path, source) {
   mkdirSync(dirname(path), { recursive: true });
@@ -155,7 +156,7 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
 });
 
 test('every scoped owner and ranked child resolves to a real directory', () => {
-  const sourceRoot = resolve(import.meta.dirname, '../src');
+  const sourceRoot = resolve(findPackageRoot(import.meta.dirname), 'src');
   const owners = Object.keys(SCOPED_OWNER_RANKS);
   const rankedChildren = owners.flatMap((owner) => (
     Object.keys(SCOPED_OWNER_RANKS[owner]).map((child) => `${owner}/${child}`)

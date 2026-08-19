@@ -54,9 +54,10 @@ import {
 } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(scriptDir, '..');
+const packageRoot = findPackageRoot(scriptDir);
 const BASELINE_PATH = resolve(scriptDir, 'icon-embed-inventory-gate.baseline.json');
 
 // -- pure audit ---------------------------------------------------------------

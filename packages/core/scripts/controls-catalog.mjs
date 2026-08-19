@@ -30,10 +30,12 @@
  */
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const REPORT = join(ROOT, 'customization-surface-report.json');
 const OUT_DIR = join(ROOT, 'tokens/controls');
 const OUT = join(OUT_DIR, 'README.md');

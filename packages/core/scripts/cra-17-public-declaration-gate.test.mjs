@@ -13,8 +13,10 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { auditPublicDeclarationClosures } from './cra-17-public-declaration-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
 
 async function writeFixture(root, files) {
   for (const [path, source] of Object.entries(files)) {

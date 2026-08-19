@@ -24,8 +24,10 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { analyzeClaimSourceRecords } from './lib/gat-07-static-analysis.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const CORE_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
 const FLOOR = JSON.parse(readFileSync(join(CORE_ROOT, 'scripts/gat-07-public-claim-floor.json'), 'utf8'));
 const CLAIM = FLOOR.claims.find((claim) => claim.id === 'surface-profile-overrides');
 

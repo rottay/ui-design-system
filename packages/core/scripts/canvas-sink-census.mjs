@@ -3,8 +3,10 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
 
 export const CANVAS_SINK_MANIFEST = Object.freeze([
   Object.freeze({

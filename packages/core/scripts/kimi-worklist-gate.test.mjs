@@ -18,12 +18,13 @@ import {
   resolveRepoRoots,
   validateWorklistAuthority,
 } from './kimi-worklist-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'kimi-worklist-gate.mjs');
 const run = (name) => spawnSync('node', [SCRIPT, `--drill=${name}`], { encoding: 'utf8' });
 
-const CORE_ROOT = resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const WORKLIST = join(CORE_ROOT, 'KIMI-VISUAL-WORKLIST.json');
 const UPSTREAM = join(CORE_ROOT, 'src/foundation/tokens/premium-dead-adjudication.json');
 const WORKFLOW = resolve(CORE_ROOT, '../../.github/workflows/ci.yml');

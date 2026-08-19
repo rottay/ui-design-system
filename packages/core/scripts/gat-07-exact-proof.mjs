@@ -41,10 +41,11 @@ import {
   findStaleClaimsInRecords,
   validateClaimDocumentationInventory,
 } from './lib/gat-07-static-analysis.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '..');
-const UI_ROOT = resolve(CORE_ROOT, '../..');
+const CORE_ROOT = findPackageRoot(HERE);
+const UI_ROOT = findRepoRoot(HERE);
 const WORKSPACE_ROOT = resolve(UI_ROOT, '..');
 export const DOCS_ROOT = resolve(
   process.env.DOCS_ENGINEERING_ROOT || join(WORKSPACE_ROOT, 'docs-engineering'),

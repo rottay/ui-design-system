@@ -12,7 +12,7 @@
 
 import { strict as assert } from 'node:assert';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,10 +41,14 @@ function withRepo({ rootScripts = {}, coreScripts = {}, workflow }) {
     JSON.stringify({ name: '@rottay/design-system', scripts: coreScripts }, null, 2),
   );
   writeFileSync(join(repo, '.github/workflows/ci.yml'), workflow, 'utf8');
+  // The repo root is found by its workspace marker, not by counting directories.
+  writeFileSync(join(repo, 'pnpm-workspace.yaml'), "packages:\n  - 'packages/*'\n", 'utf8');
 
   // The gate locates the repo from its own path, so it must run from the copy.
   const copied = join(core, 'workflow-script-wiring-gate.mjs');
   writeFileSync(copied, readGate(), 'utf8');
+  mkdirSync(join(core, 'lib/repo-root'), { recursive: true });
+  cpSync(resolve(HERE, 'lib/repo-root/index.mjs'), join(core, 'lib/repo-root/index.mjs'));
 
   return {
     repo,

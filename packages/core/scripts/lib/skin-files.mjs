@@ -8,10 +8,12 @@
  * Every unlayered skin stylesheet: the per-engine homes plus the agnostic one.
  */
 import { readdirSync } from 'node:fs';
-import { dirname, join, resolve, sep } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './repo-root/index.mjs';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const root = findPackageRoot(HERE);
 
 export function collectSkinFiles() {
   const skins = [];

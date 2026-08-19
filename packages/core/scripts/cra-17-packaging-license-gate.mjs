@@ -9,9 +9,10 @@ import {
 import { createRequire } from 'node:module';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
-const DEFAULT_CORE_ROOT = resolve(dirname(SCRIPT_PATH), '..');
+const DEFAULT_CORE_ROOT = findPackageRoot(dirname(SCRIPT_PATH));
 const DEFAULT_MANIFEST_PATH = resolve(
   DEFAULT_CORE_ROOT,
   'provenance/graphics/pack-allowlist.json',

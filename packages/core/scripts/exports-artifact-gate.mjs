@@ -18,9 +18,10 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = join(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const PKG = JSON.parse(readFileSync(join(CORE_ROOT, 'package.json'), 'utf8'));
 
 function collectTargets(value, out = new Set()) {

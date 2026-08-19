@@ -3,10 +3,11 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '..');
-const UI_ROOT = resolve(CORE_ROOT, '../..');
+const CORE_ROOT = findPackageRoot(HERE);
+const UI_ROOT = findRepoRoot(HERE);
 
 const SOURCE_EXTENSIONS = new Set(['.cjs', '.css', '.js', '.jsx', '.json', '.mjs', '.ts', '.tsx']);
 const RETIRED = ['plat', 'form'].join('');

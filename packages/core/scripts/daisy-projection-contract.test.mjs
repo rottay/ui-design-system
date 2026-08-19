@@ -13,9 +13,10 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE = join(HERE, "..");
+const CORE = findPackageRoot(HERE);
 const require = createRequire(import.meta.url);
 
 const PINNED_DAISY_VERSION = "5.5.19";

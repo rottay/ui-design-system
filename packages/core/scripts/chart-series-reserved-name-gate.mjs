@@ -50,9 +50,10 @@ import { fileURLToPath } from 'node:url';
 
 import postcss from 'postcss';
 import ts from 'typescript';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = resolve(here, '..');
+const root = findPackageRoot(here);
 const srcDir = join(root, 'src');
 
 export const RESERVED_NAME = '--ds-chart-series-';

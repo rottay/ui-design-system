@@ -23,12 +23,13 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const args = process.argv.slice(2);
 const appDirIdx = args.indexOf('--app-dir');
 if (appDirIdx === -1 || !args[appDirIdx + 1]) {
   const scriptDir = dirname(fileURLToPath(import.meta.url));
-  const repoRoot = resolve(scriptDir, '../../../..');
+  const repoRoot = resolve(findRepoRoot(scriptDir), '..');
   const appDirs = readdirSync(repoRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name.startsWith('app-'))
     .map((entry) => join(repoRoot, entry.name, 'src'))

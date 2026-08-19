@@ -67,9 +67,10 @@ import { fileURLToPath } from 'node:url';
 // root, whichever workspace CWD invokes it). This is ADDITIVE gate machinery: it does NOT touch
 // the shipped WCAG validator at src/foundation/kernel/accessibility/branding-contrast/index.ts (a published /server API).
 import { calcAPCA } from 'apca-w3';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = resolve(here, '..');
+const root = findPackageRoot(here);
 const componentsDir = join(root, 'src/ui');
 const baselinePath = join(here, 'engine-token-audit.baseline.json');
 const quiet = process.argv.includes('--quiet');
@@ -1607,7 +1608,7 @@ function renderCoverageMarkdown(coverage) {
   return lines.join('\n');
 }
 
-const repoRoot = resolve(root, '..', '..');
+const repoRoot = findRepoRoot(here);
 const gatesDir = join(repoRoot, 'test-artifacts', 'gates');
 
 /** Write the `--coverage` mode artifacts (JSON + Markdown) to `test-artifacts/gates/`. */
@@ -2319,7 +2320,7 @@ function countFixedWidthLiterals(skinFiles, modernThemeCss) {
  * the spec bootstraps it on first run.
  */
 function countResponsiveOverflowCells() {
-  const baselineFile = join(here, '../../showroom/e2e/responsive/overflow-baseline.json');
+  const baselineFile = join(findPackageRoot(here), '../showroom/e2e/responsive/overflow-baseline.json');
   if (!existsSync(baselineFile)) {
     // Never return 0 for a missing file: a vacuous zero would report a green
     // ratchet for a gate that is not wired at all.

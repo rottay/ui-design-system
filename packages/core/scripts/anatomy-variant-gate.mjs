@@ -41,9 +41,10 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(scriptDir, '..');
+const packageRoot = findPackageRoot(scriptDir);
 
 const ENGINES_ROOT = join(
   packageRoot,

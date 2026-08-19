@@ -4,9 +4,10 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const coreRoot = path.resolve(scriptDirectory, '..');
+const coreRoot = findPackageRoot(scriptDirectory);
 const FORBIDDEN_POLICY_KEYS = new Set([
   'permissions',
   'granted',

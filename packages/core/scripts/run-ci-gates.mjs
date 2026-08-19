@@ -17,12 +17,14 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { CI_GATES, validateManifest } from './ci-gates.manifest.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const packageRoot = findPackageRoot(HERE);
 const listOnly = process.argv.includes('--list');
 
 const problems = validateManifest();

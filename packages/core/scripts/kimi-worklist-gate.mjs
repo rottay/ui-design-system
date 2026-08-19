@@ -37,8 +37,10 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectReachable } from './css-layer-paint-gate.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const WORKLIST = join(ROOT, 'KIMI-VISUAL-WORKLIST.json');
 const CSS_ROOT = join(ROOT, 'src/foundation/tokens/css');
 const ENTRY_DIR = join(CSS_ROOT, 'facade/entrypoints');
@@ -88,7 +90,7 @@ function relTail(value) {
   return idx >= 0 ? clean.slice(idx + 'foundation/tokens/css/'.length) : null;
 }
 
-const SIBLINGS_ROOT = resolve(ROOT, '../..', '..');
+const SIBLINGS_ROOT = resolve(findRepoRoot(HERE), '..');
 
 /**
  * The app-bithire commit every CONSUMER_APPLIED row resolves against, pinned as

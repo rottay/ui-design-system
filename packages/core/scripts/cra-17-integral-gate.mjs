@@ -15,9 +15,10 @@ import { auditGraphicsPackaging } from './cra-17-packaging-license-gate.mjs';
 import {
   auditPublicDeclarationClosures,
 } from './cra-17-public-declaration-gate.mjs';
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
-const DEFAULT_REPO_ROOT = resolve(dirname(SCRIPT_PATH), '../../..');
+const DEFAULT_REPO_ROOT = findRepoRoot(dirname(SCRIPT_PATH));
 const EXPECTED_SUPPLIER = Object.freeze({
   name: 'Phosphor Icons',
   packageName: '@phosphor-icons/react',

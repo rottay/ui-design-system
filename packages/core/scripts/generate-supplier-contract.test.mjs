@@ -16,10 +16,11 @@ import {
   runWrite,
   serializeContract,
 } from './generate-supplier-contract.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GENERATOR = resolve(HERE, 'generate-supplier-contract.mjs');
-const CORE_ROOT = resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const DERIVE_TIMEOUT_MS = 180000;
 
 function runGenerator(args) {

@@ -41,9 +41,10 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(HERE, '..');
+const packageRoot = findPackageRoot(HERE);
 
 /**
  * `--workspace-root <dir>` relocates the corpus search. It exists so the
@@ -59,8 +60,8 @@ function argValue(flag) {
   return index !== -1 ? process.argv[index + 1] : undefined;
 }
 
-// packageRoot is <repo>/packages/core, so the workspace is three levels up.
-const workspaceRoot = resolve(argValue('--workspace-root') ?? resolve(packageRoot, '../../..'));
+// The workspace holding the sibling app repos is the parent of this repo root.
+const workspaceRoot = resolve(argValue('--workspace-root') ?? resolve(findRepoRoot(HERE), '..'));
 
 /**
  * Where the app corpus lives.

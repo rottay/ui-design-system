@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = path.resolve(SCRIPT_DIR, '..');
+const CORE_ROOT = findPackageRoot(SCRIPT_DIR);
 const DEFAULT_MANIFEST = path.join(CORE_ROOT, 'public-entrypoints.manifest.json');
 
 export function createSymbolMap(manifest) {

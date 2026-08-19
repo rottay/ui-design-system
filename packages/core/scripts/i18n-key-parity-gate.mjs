@@ -51,9 +51,10 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const CONTRACTS_PATH = join(CORE_ROOT, 'src/foundation/i18n/kernel/contracts/index.ts');
 const LOCALES_ROOT = join(
   CORE_ROOT,

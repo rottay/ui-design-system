@@ -16,9 +16,10 @@ import {
   collectForbiddenTenantTokens,
   loadLucideAllowlist,
 } from './pack-inventory-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(scriptDir, '..');
+const packageRoot = findPackageRoot(scriptDir);
 
 const TOKENS = {
   all: new Set(['themanagementmiami', 'torture', 'torture-dark', 'torture-light', 'tortureDarkBrandTheme']),
@@ -166,6 +167,6 @@ test('the shipped lucide allowlist covers the ban-rule subtree and the honesty c
   // Phosphor-only (ruling R1b) the shipped CLI carries zero 'lucide' tokens, and a
   // dead allowlist entry would reopen the door for the token to return unnoticed.
   assert.ok(!allow.exacts.has('consumer/ds-supplier-honesty.mjs'));
-  const cliSource = readFileSync(resolve(scriptDir, '..', 'consumer/ds-supplier-honesty.mjs'), 'utf8');
+  const cliSource = readFileSync(resolve(findPackageRoot(scriptDir), 'consumer/ds-supplier-honesty.mjs'), 'utf8');
   assert.ok(!/lucide/iu.test(cliSource), 'shipped consumer CLI must stay lucide-free');
 });

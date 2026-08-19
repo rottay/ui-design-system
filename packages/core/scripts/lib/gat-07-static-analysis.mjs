@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import { posix } from 'node:path';
+import { dirname, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './repo-root/index.mjs';
 import postcss from 'postcss';
 import ts from 'typescript';
 
@@ -1728,7 +1729,7 @@ const PINNED_STAMP_HELPERS = {
   },
 };
 
-const ANALYSIS_PACKAGE_ROOT = fileURLToPath(import.meta.url).replaceAll('\\', '/').split('/scripts/lib/')[0];
+const ANALYSIS_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url))).replaceAll('\\', '/');
 
 function moduleFileCandidates(base) {
   return [`${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`];

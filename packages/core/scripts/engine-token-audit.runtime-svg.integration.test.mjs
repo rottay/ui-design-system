@@ -6,9 +6,10 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { collectMissingPrefixedCounters } from './lib/counter-presence-audit.mjs';
 import { ARC09_INLINE_PAINT_FILES } from './lib/fleet-inline-paint-census.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(scriptsDir, '..');
+const packageRoot = findPackageRoot(scriptsDir);
 const baseline = JSON.parse(readFileSync(join(scriptsDir, 'engine-token-audit.baseline.json'), 'utf8'));
 const exemptions = JSON.parse(readFileSync(resolve(packageRoot, '../..', 'roadmap/skin-exemptions.json'), 'utf8'));
 

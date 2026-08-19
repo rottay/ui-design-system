@@ -92,10 +92,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { createRootPublicResolver } from './lib/root-public-resolver.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = path.resolve(HERE, '..');
-const REPOSITORY_ROOT = path.resolve(CORE_ROOT, '../..');
+const CORE_ROOT = findPackageRoot(HERE);
+const REPOSITORY_ROOT = findRepoRoot(HERE);
 
 const PROGRAM_ROOT = path.join(
   CORE_ROOT,

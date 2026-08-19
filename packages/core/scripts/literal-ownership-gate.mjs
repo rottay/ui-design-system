@@ -25,11 +25,13 @@
  *                  pin-drift | planted-literal
  */
 import { readFileSync } from 'node:fs';
-import { dirname, join, resolve, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectSkinFiles } from './lib/skin-files.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const CSS_ROOT = join(ROOT, 'src/foundation/tokens/css');
 const REGISTRY = join(ROOT, 'src/foundation/tokens/residual-adjudication.json');
 const BASELINE = join(ROOT, 'scripts/engine-token-audit.baseline.json');

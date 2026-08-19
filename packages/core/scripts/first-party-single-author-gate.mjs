@@ -96,8 +96,10 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { readFirstPartyRosterSource } from './lib/first-party-roster-source.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
 
 /**
  * The literal identities this severance preserves. G1 asserts the executed

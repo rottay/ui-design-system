@@ -50,9 +50,10 @@ import {
   parseEmitterMappings,
   parseTypeRegistry,
 } from './lib/theme-channel-parity-graph.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = resolve(here, '..');
+const root = findPackageRoot(here);
 const srcDir = join(root, 'src');
 const contractsDir = join(srcDir, 'foundation', 'contracts');
 const tenantThemeContract = join(

@@ -1,10 +1,12 @@
 /** No-loss drills: each preservation law must be able to fail. */
 import { spawnSync } from 'node:child_process';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const run = (...a) => {
   const r = spawnSync(process.execPath, [join(ROOT, 'scripts/kimi-preservation-manifest.mjs'), ...a], { cwd: ROOT, encoding: 'utf8' });
   return { status: r.status, out: `${r.stdout}\n${r.stderr}` };

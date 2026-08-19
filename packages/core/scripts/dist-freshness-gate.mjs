@@ -27,9 +27,10 @@ import {
   computeBuildInputHash,
   fingerprintBuildInputManifest,
 } from './lib/build-input-hash.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRootDefault = resolve(scriptDir, '..');
+const packageRootDefault = findPackageRoot(scriptDir);
 const BUILD_COMMAND = 'pnpm --filter @rottay/design-system build';
 
 function parseArgs(argv) {

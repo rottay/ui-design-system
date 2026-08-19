@@ -42,9 +42,10 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const SRC = join(HERE, '../src');
+const SRC = join(findPackageRoot(HERE), 'src');
 const COMPONENTS = join(SRC, 'ui');
 const SKIN_DIRS = [
   'foundation/tokens/css/runtime/engines/modern/skin',

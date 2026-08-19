@@ -24,10 +24,11 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(HERE, '..');
-const repoRoot = resolve(packageRoot, '../..');
+const packageRoot = findPackageRoot(HERE);
+const repoRoot = findRepoRoot(HERE);
 const WORKFLOWS = resolve(repoRoot, '.github/workflows');
 
 /** Every package.json in the workspace, by directory and by package name. */

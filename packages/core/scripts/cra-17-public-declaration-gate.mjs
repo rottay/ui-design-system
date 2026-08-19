@@ -15,6 +15,7 @@ import {
   sep,
 } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const ts = require('typescript');
@@ -247,7 +248,7 @@ function cliArgument(name) {
 
 function runCli() {
   const scriptDirectory = dirname(fileURLToPath(import.meta.url));
-  const packageRoot = resolve(cliArgument('--package-root') ?? resolve(scriptDirectory, '..'));
+  const packageRoot = resolve(cliArgument('--package-root') ?? findPackageRoot(scriptDirectory));
   const result = auditPublicDeclarationClosures(packageRoot);
   if (result.errors.length > 0) {
     throw new Error(`supplier-owned public declarations found:\n- ${result.errors.join('\n- ')}`);

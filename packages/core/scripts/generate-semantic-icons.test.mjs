@@ -19,8 +19,10 @@ import {
   validateIconPresetManifest,
   validateLocalPhosphor,
 } from './generate-semantic-icons.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
 const ICON_OWNER_ROOT = resolve(CORE_ROOT, 'src/graphics/icons');
 const CORPUS_PATH = resolve(
   ICON_OWNER_ROOT,

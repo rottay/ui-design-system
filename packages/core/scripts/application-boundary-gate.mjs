@@ -25,9 +25,10 @@
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, "..");
+const CORE_ROOT = findPackageRoot(HERE);
 const BASELINE_PATH = join(HERE, "application-boundary-gate.baseline.json");
 
 /** Sibling application repositories scanned by this gate (gat-09 precedent). */

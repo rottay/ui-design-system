@@ -79,10 +79,11 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { createRootPublicResolver } from './lib/root-public-resolver.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 /** `packages/core`. */
-const CORE_ROOT = path.resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 /** Repository root: inventory `sourceOwner` values are relative to it. */
 const REPO_ROOT = path.resolve(CORE_ROOT, '..', '..');
 const ENTRY_FILE = path.join(CORE_ROOT, 'src', 'index.ts');

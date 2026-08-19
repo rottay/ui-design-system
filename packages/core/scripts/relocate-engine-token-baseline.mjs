@@ -23,9 +23,10 @@ import {
   parseGitRenameStatus,
   relocatePathKeyedCounters,
 } from './lib/path-keyed-baseline-relocation.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(scriptDirectory, '..');
+const packageRoot = findPackageRoot(scriptDirectory);
 const repositoryRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], {
   cwd: packageRoot,
   encoding: 'utf8',

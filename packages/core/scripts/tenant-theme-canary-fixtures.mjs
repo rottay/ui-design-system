@@ -22,12 +22,14 @@
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import ts from "typescript";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const HERE = dirname(fileURLToPath(import.meta.url));
+const PACKAGE_ROOT = findPackageRoot(HERE);
 const ARTIFACT_PATH = join(PACKAGE_ROOT, "tenant-theme-canary-fixtures.json");
 
 const CONTRACT_ROOT = join(

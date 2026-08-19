@@ -13,9 +13,10 @@ import { spawn } from 'node:child_process';
 import { watch } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = resolve(__dirname, '..');
+const root = findPackageRoot(__dirname);
 const isWindows = process.platform === 'win32';
 
 let activeCssBuild = null;

@@ -63,10 +63,11 @@ import {
   resolveNestedSelectors,
   serializeHookManifest,
 } from './lib/ds-hook-manifest.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);
-export const CORE_ROOT = resolve(SCRIPTS_DIR, '..');
+export const CORE_ROOT = findPackageRoot(SCRIPTS_DIR);
 export const DEFAULT_BASELINE_PATH = resolve(SCRIPTS_DIR, 'app-ds-hook-contract-gate.baseline.json');
 export const DEFAULT_APP_ROOT = resolve(CORE_ROOT, '../../../app-bithire');
 

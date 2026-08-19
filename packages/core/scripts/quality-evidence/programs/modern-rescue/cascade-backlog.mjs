@@ -46,6 +46,7 @@
 import { readFileSync, readdirSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOTS = join(HERE, "manifest/cascade/roots");
@@ -346,7 +347,7 @@ const familyByFile = new Map();
 
 /* fallback completo (parentesis balanceados) del canal en un sitio */
 import { existsSync as existsSyncFs } from "node:fs";
-const REPO_ROOT = join(HERE, "../../../../../..");
+const REPO_ROOT = findRepoRoot(HERE);
 const literalAt = (site, channel) => {
   const abs = join(REPO_ROOT, site.file);
   if (!existsSyncFs(abs)) return null;

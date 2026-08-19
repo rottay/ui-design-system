@@ -22,9 +22,10 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = join(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const CATALOG_PATH = join(
   CORE_ROOT,
   'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json',

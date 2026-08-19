@@ -6,6 +6,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 import { admitWriterLane, matchesReserved, validateConflictGraph } from './admission.mjs';
 import { loadProgramContracts } from './contracts.mjs';
 import {
@@ -1777,7 +1778,7 @@ test('DRILL: the barrels category only judges files the adjudicated pattern matc
 // the wired public path is proven, not merely the function behind it.
 
 const CLI = path.join(import.meta.dirname, 'cli.mjs');
-const REPO_ROOT = path.resolve(import.meta.dirname, '../../../../..');
+const REPO_ROOT = findRepoRoot(import.meta.dirname);
 
 function runCli(args) {
   const result = spawnSync(process.execPath, [CLI, ...args], { cwd: REPO_ROOT, encoding: 'utf8' });
@@ -1967,7 +1968,7 @@ test('DRILL: laneScopeContains agrees with effectiveFiles on every real file of 
   // The intensional twin must not be looser than the extensional authority it stands in for.
   const proposal = JSON.parse(
     fs.readFileSync(
-      path.join(import.meta.dirname, '../../../test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
+      path.join(findPackageRoot(import.meta.dirname), 'test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
       'utf8',
     ),
   );
@@ -1985,7 +1986,7 @@ test('DRILL: the analyzer owning-lane invariant is asserted, not assumed', () =>
   // Every permitted entry the analyzer emits must name the lane it was found under.
   const proposal = JSON.parse(
     fs.readFileSync(
-      path.join(import.meta.dirname, '../../../test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
+      path.join(findPackageRoot(import.meta.dirname), 'test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
       'utf8',
     ),
   );
@@ -1999,7 +2000,7 @@ test('DRILL: the analyzer owning-lane invariant is asserted, not assumed', () =>
 // --- R1 executable-plan drills --------------------------------------------------------------
 const R1_PROPOSAL = JSON.parse(
   fs.readFileSync(
-    path.join(import.meta.dirname, '../../../test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
+    path.join(findPackageRoot(import.meta.dirname), 'test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
     'utf8',
   ),
 );
@@ -2117,7 +2118,7 @@ test('DRILL: a lane claiming a declared no-write domain turns the plan red', () 
 const R1_DOM = loadRoundWriteDomains('R1');
 const R1_PLAN = JSON.parse(
   fs.readFileSync(
-    path.join(import.meta.dirname, '../../../test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
+    path.join(findPackageRoot(import.meta.dirname), 'test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json'),
     'utf8',
   ),
 );

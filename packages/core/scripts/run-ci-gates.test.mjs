@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import { CI_GATES, blockingGates, validateManifest } from './ci-gates.manifest.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const runner = resolve(scriptsDir, 'run-ci-gates.mjs');
@@ -123,7 +124,7 @@ test('a fully specified excluded gate is still representable', () => {
 
 test('the runner --list plan matches the manifest and runs nothing', () => {
   const result = spawnSync(process.execPath, [runner, '--list'], {
-    cwd: resolve(scriptsDir, '..'),
+    cwd: findPackageRoot(scriptsDir),
     encoding: 'utf8',
   });
   assert.equal(result.status, 0);
@@ -255,11 +256,11 @@ test('the modern-rescue tooling drills are reachable, enforced, and run ahead of
   // command carries and require both suites in the matched set. Explicit names
   // and a recursive glob both satisfy it; narrowing the glob back, or dropping
   // a path, fails here exactly as before.
-  const pkg = JSON.parse(readFileSync(resolve(scriptsDir, '..', 'package.json'), 'utf8'));
+  const pkg = JSON.parse(readFileSync(resolve(findPackageRoot(scriptsDir), 'package.json'), 'utf8'));
   const testScripts = pkg.scripts['test:scripts'];
   assert.ok(typeof testScripts === 'string' && testScripts.length > 0, 'test:scripts must exist');
 
-  const packageRoot = resolve(scriptsDir, '..');
+  const packageRoot = findPackageRoot(scriptsDir);
   const reached = new Set();
   for (const raw of testScripts.split(/\s+/)) {
     const arg = raw.replace(/^["']|["']$/g, '');

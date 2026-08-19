@@ -1,7 +1,10 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { extname, join, relative } from "node:path";
+import { dirname, extname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const packageRoot = new URL("..", import.meta.url).pathname;
+import { packageRoot as findPackageRoot } from "./lib/repo-root/index.mjs";
+
+const packageRoot = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 const sourceRoot = join(packageRoot, "src");
 const patchResidue = /^\+(?=\/\*|@|[.#:[a-zA-Z*])/;
 const conflictMarker = /^(?:<{7}|={7}|>{7})(?:\s|$)/;

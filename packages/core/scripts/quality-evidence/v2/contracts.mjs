@@ -1,11 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 export const PROGRAM_ROOT = path.resolve(HERE, '../programs/modern-rescue');
-export const REPOSITORY_ROOT = path.resolve(HERE, '../../../../..');
+export const REPOSITORY_ROOT = findRepoRoot(HERE);
 
 const CONTRACT_FILES = Object.freeze({
   program: 'program.json',

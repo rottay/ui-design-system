@@ -5,12 +5,13 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { build } from 'vite';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const packageRootFlag = process.argv.indexOf('--package-root');
 const packageRoot = packageRootFlag >= 0
   ? resolve(process.argv[packageRootFlag + 1])
-  : resolve(scriptDirectory, '..');
+  : findPackageRoot(scriptDirectory);
 const packageJsonPath = resolve(packageRoot, 'package.json');
 
 function fail(message) {

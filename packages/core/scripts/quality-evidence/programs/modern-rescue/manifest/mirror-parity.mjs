@@ -44,10 +44,11 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from '../../../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PROGRAM_ROOT = path.resolve(HERE, '..');
-export const PACKAGE_ROOT = path.resolve(HERE, '../../../../..');
+export const PACKAGE_ROOT = findPackageRoot(HERE);
 export const OUTPUT_PATH = path.join(HERE, 'generated', 'mirror-parity.json');
 
 /** Los tres verticales de primera parte, en orden fijo y declarado. */

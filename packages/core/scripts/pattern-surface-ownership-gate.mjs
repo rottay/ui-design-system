@@ -43,10 +43,11 @@ import {
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIR = dirname(SCRIPT_PATH);
-const DEFAULT_PACKAGE_ROOT = resolve(SCRIPT_DIR, '..');
+const DEFAULT_PACKAGE_ROOT = findPackageRoot(SCRIPT_DIR);
 const DEFAULT_SOURCE_ROOT = resolve(DEFAULT_PACKAGE_ROOT, 'src');
 const DEFAULT_BASELINE_PATH = resolve(SCRIPT_DIR, 'pattern-surface-ownership-gate.baseline.json');
 const DEFAULT_ALLOWLIST_PATH = resolve(SCRIPT_DIR, 'pattern-surface-ownership-gate.allowlist.json');

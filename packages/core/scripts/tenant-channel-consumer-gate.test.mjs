@@ -13,6 +13,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 import {
   ANATOMY_ATTRIBUTE_BY_FAMILY,
@@ -186,7 +187,7 @@ test('the retired --ds-color-dark-* family has no reason bucket and no inventory
   // pre-build test:scripts slot exactly like the rest of this suite.
   const contract = readFileSync(
     join(
-      dirname(dirname(fileURLToPath(import.meta.url))),
+      findPackageRoot(dirname(fileURLToPath(import.meta.url))),
       'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',
     ),
     'utf-8',

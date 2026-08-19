@@ -20,10 +20,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProgramContracts } from '../../v2/contracts.mjs';
 import { validateCustomizationManifest } from './manifest/generator.mjs';
 import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from './manifest/rules.mjs';
+import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const repoRoot = join(__dirname, '..', '..', '..', '..', '..', '..');
+const repoRoot = findRepoRoot(__dirname);
 
 const PROGRAM_DIR = 'packages/core/scripts/quality-evidence/programs/modern-rescue';
 const PROGRAM_ROOT = join(repoRoot, PROGRAM_DIR);

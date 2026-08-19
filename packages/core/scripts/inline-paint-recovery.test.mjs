@@ -1,12 +1,14 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const CORE_SRC = fileURLToPath(new URL('../src/', import.meta.url));
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_SRC = join(findPackageRoot(HERE), 'src');
 const COMPONENTS = join(CORE_SRC, 'ui');
 const CSS = join(CORE_SRC, 'foundation/tokens/css');
 

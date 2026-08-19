@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -23,9 +23,10 @@ import {
   scanArtifacts,
   scanSources,
 } from './prototype-ledger-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 
 const SKIN = 'src/foundation/tokens/css/runtime/engines/modern/skin/fixture.css';
 const ARTIFACT = 'src/foundation/tokens/css/facade/artifacts/fixture/index.css';

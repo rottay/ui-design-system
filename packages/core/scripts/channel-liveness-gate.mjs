@@ -152,6 +152,7 @@ import {
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const postcssModule = require('postcss');
@@ -160,12 +161,10 @@ const postcss = postcssModule.default ?? postcssModule;
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);
 
-export const CORE_ROOT = resolve(SCRIPTS_DIR, '..');
-// CORE_ROOT is `<monorepo>/ui-design-system/packages/core`; the monorepo
-// root (the parent of `ui-design-system` itself, where sibling repos such
-// as `app-bithire` live) is three levels up: core -> packages ->
-// ui-design-system -> <monorepo root>.
-export const REPO_ROOT = resolve(CORE_ROOT, '../../..');
+export const CORE_ROOT = findPackageRoot(SCRIPTS_DIR);
+// The monorepo root is the parent of this repo root: it is where sibling
+// repos such as `app-bithire` live, one level above `ui-design-system`.
+export const REPO_ROOT = resolve(findRepoRoot(SCRIPTS_DIR), '..');
 export const DEFAULT_TENANT_THEME_CONTRACT = resolve(
   CORE_ROOT,
   'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',

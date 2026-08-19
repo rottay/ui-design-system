@@ -43,15 +43,17 @@
  */
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const postcss = require('postcss');
 const ts = require('typescript');
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const REPORT_PATH = join(ROOT, 'customization-surface-report.json');
 const DEAD_BASELINE_PATH = join(ROOT, 'scripts', 'customization-dead-writers.baseline.json');
 const MANIFEST_PATH = join(ROOT, 'hooks-manifest.json');

@@ -26,9 +26,10 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { computeBuildInputHash } from './lib/build-input-hash.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRootDefault = resolve(scriptDir, '..');
+const packageRootDefault = findPackageRoot(scriptDir);
 
 function parseArgs(argv) {
   const options = { packageRoot: packageRootDefault, dist: null };

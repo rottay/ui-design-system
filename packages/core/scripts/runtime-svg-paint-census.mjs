@@ -11,6 +11,7 @@ import {
 } from "node:path";
 import { fileURLToPath } from "node:url";
 import { countRuntimeSvgPaintByFile } from "./lib/runtime-svg-paint-counter.mjs";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 /**
  * Productive component-tree census for runtime SVG presentation paint emitted through D3
@@ -23,7 +24,8 @@ const NON_PRODUCTION_DIRECTORY_RE =
   /\/(?:__tests__|tests?|__fixtures__|fixtures?|__stories__|stories|__mocks__|mocks)\//i;
 const NON_PRODUCTION_BASENAME_RE =
   /(?:^|[._-])(?:tests?|spec|stories?|fixtures?|mocks?|test-utils?|test-helpers?|story-helpers?)(?:[._-]|$)/i;
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const HERE = dirname(fileURLToPath(import.meta.url));
+const packageRoot = findPackageRoot(HERE);
 
 function isSourceFile(path) {
   return SOURCE_EXTENSION_RE.test(path) && !DECLARATION_EXTENSION_RE.test(path);

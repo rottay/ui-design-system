@@ -7,9 +7,10 @@ import {
   readModernRescueContracts,
   validateModernRescueContracts,
 } from "./program-check.mjs";
+import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = join(__dirname, "..", "..", "..", "..", "..", "..");
+const repoRoot = findRepoRoot(__dirname);
 const programDir = "packages/core/scripts/quality-evidence/programs/modern-rescue";
 const programRoot = join(repoRoot, programDir);
 

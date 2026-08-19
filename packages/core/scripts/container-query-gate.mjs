@@ -36,9 +36,10 @@
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
 import { join, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(HERE, '..');
+const ROOT = findPackageRoot(HERE);
 
 /** Reads a `--flag value` pair from argv; falls back to `fallback` when absent. */
 function argValue(flag, fallback) {

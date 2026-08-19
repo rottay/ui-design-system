@@ -18,10 +18,11 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = join(HERE, '..');
-const REPO_ROOT = join(CORE_ROOT, '../..');
+const CORE_ROOT = findPackageRoot(HERE);
+const REPO_ROOT = findRepoRoot(HERE);
 
 /** All script paths named by any of the three channels. */
 function collectWiredPaths() {

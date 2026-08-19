@@ -9,9 +9,10 @@ import {
   readFirstPartyRosterSource,
   validateExecutableRoster,
 } from './first-party-roster-source.mjs';
+import { packageRoot as findPackageRoot } from './repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '../..');
+const CORE_ROOT = findPackageRoot(HERE);
 const ROSTER_PATH = resolve(
   CORE_ROOT,
   'src/foundation/tokens/ts/presentation/brand-themes/index.ts',

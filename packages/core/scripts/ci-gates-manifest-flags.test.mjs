@@ -17,13 +17,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { CI_GATES } from './ci-gates.manifest.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 
 /** Flags consumed by the node binary itself, never by the target script. */
 const NODE_OWNED = new Set(['--test', '--experimental-vm-modules', '--conditions']);

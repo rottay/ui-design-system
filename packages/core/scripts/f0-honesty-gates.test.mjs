@@ -14,9 +14,10 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = join(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 
 function run(script, cwd = CORE_ROOT) {
   try {
@@ -37,6 +38,9 @@ function runOnSyntheticTree(scriptName, files) {
   const scriptsDir = join(root, 'packages/core/scripts');
   mkdirSync(scriptsDir, { recursive: true });
   cpSync(join(HERE, scriptName), join(scriptsDir, scriptName));
+  // The gates resolve their root through the shared helper, so the copy needs it too.
+  mkdirSync(join(scriptsDir, 'lib/repo-root'), { recursive: true });
+  cpSync(join(HERE, 'lib/repo-root/index.mjs'), join(scriptsDir, 'lib/repo-root/index.mjs'));
   for (const [path, content] of Object.entries(files)) {
     const target = join(root, 'packages/core', path);
     mkdirSync(dirname(target), { recursive: true });

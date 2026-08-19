@@ -68,9 +68,10 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 import { OUTPUT_PATH as FACTS_PATH, PAINT_PLANES, INLINE_EXPR } from './fanout-facts.mjs';
+import { packageRoot as findPackageRoot } from '../../../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-export const PACKAGE_ROOT = path.resolve(HERE, '../../../../..');
+export const PACKAGE_ROOT = findPackageRoot(HERE);
 export const PROGRAM_ROOT = path.resolve(HERE, '..');
 export const OUTPUT_PATH = path.join(HERE, 'generated', 'root-checklists.json');
 

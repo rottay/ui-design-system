@@ -12,9 +12,10 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-export const designSystemRoot = resolve(HERE, '../../..');
+export const designSystemRoot = findRepoRoot(HERE);
 export const defaultWorkspaceRoot = resolve(designSystemRoot, '..');
 export const defaultRegistryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
 

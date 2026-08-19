@@ -8,8 +8,10 @@ import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const packageRoot = findPackageRoot(HERE);
 
 const SOURCES = {
   modern: join(packageRoot, 'src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx'),

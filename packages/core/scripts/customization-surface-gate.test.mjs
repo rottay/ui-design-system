@@ -6,12 +6,14 @@
  * on the real tree, so a red drill can never be blamed on setup.
  */
 import { spawnSync } from 'node:child_process';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const SCRIPT = join(ROOT, 'scripts', 'customization-surface-census.mjs');
 
 function run(...args) {

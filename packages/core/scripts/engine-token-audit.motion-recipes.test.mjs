@@ -18,9 +18,10 @@ import {
   countMotionRecipeConsumers,
 } from './lib/motion-recipe-consumer-counter.mjs';
 import { ENGINE_TOKEN_MINIMUM } from './lib/engine-token-governance.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const componentsDir = resolve(here, '../src/ui');
+const componentsDir = resolve(findPackageRoot(here), 'src/ui');
 
 test('consumer signal matches calls only, not mentions or re-exports', () => {
   assert.ok(MOTION_RECIPE_CONSUMER_RE.test("const m = useMotionRecipe('feedback.press');"));

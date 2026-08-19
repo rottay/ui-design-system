@@ -49,8 +49,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+
 const here = dirname(fileURLToPath(import.meta.url));
-const coreRoot = resolve(here, '..');
+const coreRoot = findPackageRoot(here);
 const inventoryPath = join(here, 'red-inventory.json');
 
 /** The closed class vocabulary. A class names WHY the red is not executable here. */

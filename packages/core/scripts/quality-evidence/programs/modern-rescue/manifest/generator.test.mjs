@@ -35,10 +35,11 @@ import {
   validateRedTestClassifications,
   validateSection,
 } from './rules.mjs';
+import { repoRoot as findRepoRoot } from '../../../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PROGRAM_ROOT = join(HERE, '..');
-const REPOSITORY_ROOT = join(HERE, '../../../../../../..');
+const REPOSITORY_ROOT = findRepoRoot(HERE);
 const INDEX = JSON.parse(readFileSync(join(HERE, 'index.json'), 'utf8'));
 const SCHEMA = JSON.parse(readFileSync(join(HERE, 'schema.json'), 'utf8'));
 const MODEL = JSON.parse(readFileSync(join(PROGRAM_ROOT, 'customization-model.json'), 'utf8'));

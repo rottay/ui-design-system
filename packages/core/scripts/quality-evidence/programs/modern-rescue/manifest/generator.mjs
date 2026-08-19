@@ -35,6 +35,7 @@ import {
   validateSection,
   validateSourceBindings,
 } from './rules.mjs';
+import { repoRoot as findRepoRoot } from '../../../../lib/repo-root/index.mjs';
 
 export {
   APPLICABLE_FAMILY_FIELDS,
@@ -50,7 +51,7 @@ export {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PROGRAM_ROOT = resolve(HERE, '..');
-const REPOSITORY_ROOT = resolve(HERE, '../../../../../../..');
+const REPOSITORY_ROOT = findRepoRoot(HERE);
 const INVENTORY_PATH = join(PROGRAM_ROOT, 'family-inventory.json');
 const PROGRAM_PATH = join(PROGRAM_ROOT, 'program.json');
 const SCHEMA_PATH = join(HERE, 'schema.json');

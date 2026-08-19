@@ -12,10 +12,12 @@
  * unique across packs; the copy fails closed on a collision.
  */
 import { copyFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const packageRoot = findPackageRoot(HERE);
 const packsRoot = join(
   packageRoot,
   'src/foundation/tokens/css/foundation/typography/font-packs'

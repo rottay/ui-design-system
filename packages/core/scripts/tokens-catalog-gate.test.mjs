@@ -15,8 +15,10 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const SCRIPT = join(ROOT, 'scripts', 'tokens-catalog.mjs');
 const DOCS = resolve(ROOT, '../../../docs-engineering/engineering/design-system/tokens');
 

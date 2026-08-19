@@ -17,9 +17,10 @@ import { readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(HERE, '..');
+const packageRoot = findPackageRoot(HERE);
 const gate = resolve(HERE, 'cra-12-motion-governance.mjs');
 const registryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
 

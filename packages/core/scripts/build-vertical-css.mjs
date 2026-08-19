@@ -46,9 +46,10 @@ import { wrapModernFrameworkLayer } from "./lib/modern-framework-layer.mjs";
 // (build:vertical-css sequences it).
 import { springLinearEasing } from "../dist/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.js";
 import { FIRST_PARTY_VERTICAL_ROSTER } from "../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = resolve(__dirname, "..");
+const root = findPackageRoot(__dirname);
 const srcCss = resolve(root, "src/foundation/tokens/css");
 const dist = resolve(root, "dist");
 const styles = resolve(root, "styles");

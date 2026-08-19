@@ -8,8 +8,9 @@ import {
   auditCra15RuntimeHardening,
   resolveCra15GateDisposition,
 } from "./cra-15-runtime-hardening-gate.mjs";
+import { repoRoot as findRepoRoot } from "./lib/repo-root/index.mjs";
 
-const REPOSITORY_ROOT = resolve(import.meta.dirname, "../../..");
+const REPOSITORY_ROOT = findRepoRoot(import.meta.dirname);
 
 function override(relativePath, mutate) {
   const source = readFileSync(resolve(REPOSITORY_ROOT, relativePath), "utf8");

@@ -15,23 +15,10 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolveCoreRoot();
-
-function resolveCoreRoot() {
-  let dir = HERE;
-  for (let i = 0; i < 6; i += 1) {
-    try {
-      const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
-      if (pkg.name === '@rottay/design-system') return dir;
-    } catch {
-      /* keep walking up */
-    }
-    dir = dirname(dir);
-  }
-  return join(HERE, '..');
-}
+const CORE_ROOT = findPackageRoot(HERE);
 
 function* walkCss(dir) {
   for (const entry of readdirSync(dir)) {

@@ -36,13 +36,14 @@ import { fileURLToPath } from "node:url";
 
 import { wrapModernFrameworkLayer } from "./lib/modern-framework-layer.mjs";
 import { readFirstPartyRosterSource } from "./lib/first-party-roster-source.mjs";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const postcss = require("postcss");
 const tailwind = require("@tailwindcss/postcss");
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const root = resolve(HERE, "..");
+const root = findPackageRoot(HERE);
 const srcCss = resolve(root, "src/foundation/tokens/css");
 const styles = resolve(root, "styles");
 

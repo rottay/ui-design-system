@@ -26,10 +26,11 @@ import {
 import { spawnSync } from "node:child_process";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const HERE = dirname(SCRIPT_PATH);
-const DEFAULT_REPO_ROOT = resolve(HERE, "../../..");
+const DEFAULT_REPO_ROOT = findRepoRoot(HERE);
 const EVIDENCE_MAP_PATH =
   "packages/core/scripts/gat-09-public-claim-evidence.json";
 const ROADMAP_REGISTRY_PATH = "roadmap/registry.json";

@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+
 /**
  * Every `color-mix()` argument must resolve to a `<color>` under every tenant.
  *
@@ -28,7 +30,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
  */
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULT_ROOT = path.resolve(SCRIPT_DIR, '..');
+const DEFAULT_ROOT = findPackageRoot(SCRIPT_DIR);
 
 /**
  * A path change must not let this gate pass by scanning nothing. The real

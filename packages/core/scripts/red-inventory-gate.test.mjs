@@ -7,7 +7,7 @@
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -24,9 +24,10 @@ import {
   SEALED_RED_IDENTITIES,
   staticTitleTail,
 } from './red-inventory-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const coreRoot = resolve(here, '..');
+const coreRoot = findPackageRoot(here);
 
 const SHAPE = 'is stale or hand-edited';
 

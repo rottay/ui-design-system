@@ -16,8 +16,10 @@ import {
   countEmbeddedCssPaintByFile,
   countEmbeddedCssPaintInFile,
 } from "./lib/embedded-css-paint-counter.mjs";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const HERE = dirname(fileURLToPath(import.meta.url));
+const packageRoot = findPackageRoot(HERE);
 const realBadgeSource = join(
   packageRoot,
   "src/ui/primitives/display/Badge/engines/modern/index.tsx"

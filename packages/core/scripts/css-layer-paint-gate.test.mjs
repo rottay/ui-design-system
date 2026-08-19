@@ -12,10 +12,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import postcss from "postcss";
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const gate = join(scriptDir, "css-layer-paint-gate.mjs");
-const cssRoot = join(scriptDir, "..", "src/foundation/tokens/css");
+const cssRoot = join(findPackageRoot(scriptDir), "src/foundation/tokens/css");
 const canonical =
   "@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;";
 

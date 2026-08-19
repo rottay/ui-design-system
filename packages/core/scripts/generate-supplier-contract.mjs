@@ -79,9 +79,13 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { deriveSupplierContract } from '../../../scripts/dependency-honesty.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
-export const DEFAULT_CONTRACT_PATH = resolve(dirname(SCRIPT_PATH), '..', 'supplier-contract.json');
+export const DEFAULT_CONTRACT_PATH = resolve(
+  findPackageRoot(dirname(SCRIPT_PATH)),
+  'supplier-contract.json',
+);
 
 // Byte-canonical serialization. Kept in lockstep with the historical writer so
 // the committed artifact never depends on which entrypoint produced it.

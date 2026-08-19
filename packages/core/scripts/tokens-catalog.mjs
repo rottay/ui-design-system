@@ -50,11 +50,13 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 
 import { parseRegistry, parseAllowlist } from './customization-surface-census.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const postcss = require('postcss');
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 const DOCS_TOKENS_DIR = resolve(ROOT, '../../../docs-engineering/engineering/design-system/tokens');
 const REPORT_PATH = join(ROOT, 'customization-surface-report.json');
 const MANIFEST_PATH = join(ROOT, 'hooks-manifest.json');

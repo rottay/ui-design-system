@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULT_ROOT = path.resolve(SCRIPT_DIR, '..');
+const DEFAULT_ROOT = findPackageRoot(SCRIPT_DIR);
 const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.mts', '.cts'];
 
 function relative(root, filePath) {

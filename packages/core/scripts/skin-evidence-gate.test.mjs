@@ -3,9 +3,10 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = path.resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const REPO_ROOT = path.resolve(CORE_ROOT, '../..');
 
 const CSS_ROOT = path.join(CORE_ROOT, 'src/foundation/tokens/css');

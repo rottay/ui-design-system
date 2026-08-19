@@ -4,9 +4,10 @@ import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
-const CORE_ROOT = resolve(dirname(SCRIPT_PATH), '..');
+const CORE_ROOT = findPackageRoot(dirname(SCRIPT_PATH));
 const ICON_OWNER_ROOT = resolve(CORE_ROOT, 'src/graphics/icons');
 const CORPUS_PATH = resolve(
   ICON_OWNER_ROOT,

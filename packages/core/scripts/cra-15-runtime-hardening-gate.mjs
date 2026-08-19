@@ -7,10 +7,11 @@ import { fileURLToPath } from "node:url";
 
 import { auditEffectProvenance } from "../../../scripts/effect-registry-audit.mjs";
 import { checkCanvasSinkCensus } from "./canvas-sink-census.mjs";
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_PACKAGE_ROOT = resolve(SCRIPT_DIRECTORY, "..");
-const DEFAULT_REPOSITORY_ROOT = resolve(DEFAULT_PACKAGE_ROOT, "../..");
+const DEFAULT_PACKAGE_ROOT = findPackageRoot(SCRIPT_DIRECTORY);
+const DEFAULT_REPOSITORY_ROOT = findRepoRoot(SCRIPT_DIRECTORY);
 const DEFAULT_ARTIFACT_PATH = resolve(
   DEFAULT_REPOSITORY_ROOT,
   "test-artifacts/craft/cra-15/certification.json"

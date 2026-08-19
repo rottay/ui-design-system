@@ -3,8 +3,10 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const coreRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const coreRoot = findPackageRoot(HERE);
 const sourceRoots = [
   'src/ui/surfaces',
   'src/ui/structures/dashboard',

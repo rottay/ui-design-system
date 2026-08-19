@@ -35,12 +35,13 @@ import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const ts = require('typescript');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = resolve(HERE, '..');
+const CORE_ROOT = findPackageRoot(HERE);
 const TSCONFIG_PATH = join(CORE_ROOT, 'tsconfig.json');
 const ALLOWLIST_PATH = join(HERE, 'portal-substrate-gate.allowlist.json');
 

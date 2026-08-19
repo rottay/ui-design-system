@@ -3,8 +3,10 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const coreRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const coreRoot = findPackageRoot(HERE);
 const component = readFileSync(
   join(coreRoot, 'src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx'),
   'utf8'

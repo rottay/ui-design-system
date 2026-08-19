@@ -32,11 +32,12 @@ import {
   projectGat07RegistryDefinition,
   sealedDocumentationContentMatches,
 } from './gat-07-exact-proof.mjs';
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const AUDIT = join(HERE, 'engine-token-audit.mjs');
 const CLAIM_FLOOR = join(HERE, 'gat-07-public-claim-floor.json');
-const REGISTRY = join(HERE, '../../../roadmap/registry.json');
+const REGISTRY = join(findRepoRoot(HERE), 'roadmap/registry.json');
 
 test('zero-lock policy rejects slack, laundering, deletion and exact/floor drift', () => {
   assert.deepEqual(summarizeZeroLocks(
@@ -1416,7 +1417,7 @@ test('all reviewed paint evasion classes turn the production audit red', async (
   ];
 
   const control = spawnSync(process.execPath, [AUDIT, '--check', '--quiet'], {
-    cwd: join(HERE, '../../..'),
+    cwd: findRepoRoot(HERE),
     encoding: 'utf8',
     timeout: 120_000,
   });
@@ -1435,7 +1436,7 @@ test('all reviewed paint evasion classes turn the production audit red', async (
         const result = spawnSync(
           process.execPath,
           [AUDIT, '--check', '--quiet', `--gat07-evasion-fixture=${path}`],
-          { cwd: join(HERE, '../../..'), encoding: 'utf8', timeout: 120_000 },
+          { cwd: findRepoRoot(HERE), encoding: 'utf8', timeout: 120_000 },
         );
         const output = `${result.stdout}\n${result.stderr}`;
         assert.equal(result.status, 1, output);

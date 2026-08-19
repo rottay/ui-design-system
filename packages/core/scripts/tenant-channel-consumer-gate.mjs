@@ -66,9 +66,10 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve, dirname, join, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = resolve(here, '..');
+const root = findPackageRoot(here);
 const srcDir = join(root, 'src');
 const distDir = join(root, 'dist');
 const baselinePath = join(here, 'tenant-channel-consumer-gate.baseline.json');

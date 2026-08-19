@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
@@ -10,6 +10,7 @@ import {
   findSemanticPlatformIdentity,
   isExcludedPlatformZeroPath,
 } from './platform-identity-zero-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 test('rejects each retired identity carrier', () => {
   const retired = ['plat', 'form'].join('');
@@ -95,7 +96,7 @@ test('JSON quoted registry keys are semantic identities, not invisible text', ()
 
 test('excludes only the gate files at their exact repository paths, not matching basenames', () => {
   const scripts = dirname(fileURLToPath(import.meta.url));
-  const core = resolve(scripts, '..');
+  const core = findPackageRoot(scripts);
   assert.equal(
     isExcludedPlatformZeroPath(join(scripts, 'platform-identity-zero-gate.mjs')),
     true,

@@ -8,9 +8,10 @@ import {
   serializeSurfaceCapabilityCensus,
   SURFACE_CAPABILITY_KINDS,
 } from './lib/surface-capability-census.mjs';
+import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const designSystemRoot = path.resolve(scriptDirectory, '../../..');
+const designSystemRoot = findRepoRoot(scriptDirectory);
 const workspaceRoot = path.dirname(designSystemRoot);
 const outputDirectory = path.join(designSystemRoot, 'test-artifacts/architecture/arc-11');
 const appNames = ['app-bithire', 'app-evnto', 'app-platform'];

@@ -1,8 +1,10 @@
 import { spawnSync } from 'node:child_process';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './repo-root/index.mjs';
 
-const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
 
 const EXECUTABLE_PROJECTION = String.raw`
 import { createServer } from 'vite';

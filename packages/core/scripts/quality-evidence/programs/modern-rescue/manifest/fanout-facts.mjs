@@ -20,10 +20,10 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { packageRoot as findPackageRoot } from '../../../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-// manifest → modern-rescue → programs → quality-evidence → scripts → packages/core
-export const PACKAGE_ROOT = path.resolve(HERE, '../../../../..');
+export const PACKAGE_ROOT = findPackageRoot(HERE);
 export const OUTPUT_PATH = path.join(HERE, 'generated', 'fanout-facts.json');
 
 /* ─────────────────────────────────────────────────────────────────────────

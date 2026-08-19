@@ -32,10 +32,10 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { parseStylesheet, varReferences } from "./css-parse.mjs";
+import { repoRoot as findRepoRoot } from '../../../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-// probe -> modern-rescue -> programs -> quality-evidence -> scripts -> core -> packages -> repo
-export const REPO_ROOT = resolve(HERE, "../../../../../../..");
+export const REPO_ROOT = findRepoRoot(HERE);
 export const CORE_ROOT = join(REPO_ROOT, "packages/core");
 export const CSS_ROOT = join(CORE_ROOT, "src/foundation/tokens/css");
 

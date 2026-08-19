@@ -53,9 +53,10 @@ import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRoot = resolve(scriptDir, '..');
+const packageRoot = findPackageRoot(scriptDir);
 
 /**
  * Parent of 6ce8cd54 ("feat(design-system): advance modern platform quality
@@ -86,7 +87,7 @@ function argValue(flag, fallback) {
 }
 
 const REPO_OVERRIDE = argValue('--repo', null);
-const repoRoot = REPO_OVERRIDE ? resolve(REPO_OVERRIDE) : resolve(packageRoot, '..', '..');
+const repoRoot = REPO_OVERRIDE ? resolve(REPO_OVERRIDE) : findRepoRoot(scriptDir);
 const BASELINE_PATH = resolve(
   argValue('--baseline', join(scriptDir, 'engine-freeze-gate.baseline.json')),
 );

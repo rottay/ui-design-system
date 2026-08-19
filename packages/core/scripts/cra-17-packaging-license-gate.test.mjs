@@ -12,8 +12,10 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import { auditGraphicsPackaging } from './cra-17-packaging-license-gate.mjs';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const coreRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const coreRoot = findPackageRoot(HERE);
 const canonicalManifestRoot = resolve(coreRoot, 'provenance/graphics');
 const canonicalCloudAdapter = resolve(
   coreRoot,

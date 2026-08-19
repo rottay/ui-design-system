@@ -58,9 +58,10 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const packageRootDefault = resolve(scriptDir, '..');
+const packageRootDefault = findPackageRoot(scriptDir);
 
 /** The daisyui release the vocabulary below was derived from. */
 export const DERIVED_FROM_DAISY_VERSION = '5.5.19';

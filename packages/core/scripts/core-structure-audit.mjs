@@ -43,10 +43,11 @@ import { basename, dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import ts from 'typescript';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIRECTORY = dirname(SCRIPT_PATH);
-const DEFAULT_PACKAGE_ROOT = resolve(SCRIPT_DIRECTORY, '..');
+const DEFAULT_PACKAGE_ROOT = findPackageRoot(SCRIPT_DIRECTORY);
 const DEFAULT_SOURCE_ROOT = resolve(DEFAULT_PACKAGE_ROOT, 'src');
 const DEFAULT_BASELINE_PATH = resolve(SCRIPT_DIRECTORY, 'core-structure-audit.baseline.json');
 
