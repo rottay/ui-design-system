@@ -5,6 +5,14 @@ qué hacemos con eso.
 
 Medido el 2026-08-18. Todo lo que aparece acá está verificado contra el árbol real
 y revisado por un segundo lector: 188 de acuerdo, 14 desacuerdos, todos corregidos.
+Un **tercer lector** independiente lo releyó el 2026-08-19
+([`docs/AUDITORIA-KIMI.md`](AUDITORIA-KIMI.md)); sus correcciones ya están
+aplicadas acá, y de él salieron el lote 12, la regla 6 y la parte 5.
+
+El documento tiene cinco partes: **1** lo que se borra (12 lotes), **2** lo que
+se unifica (13 pares), **3** lo que se queda y por qué no volver a proponerlo,
+**4** las reglas que cortan la reincidencia (6), y **5** tres defectos de
+cableado — cosas que parecen conectadas y no lo están.
 
 ## La regla
 
@@ -23,7 +31,7 @@ De ahí salen cuatro reglas operativas, y de cada una sale una lista concreta:
 ## Cómo leer los lotes
 
 Cada lote se aprueba entero o no se aprueba. Los lotes están ordenados por riesgo:
-el 1 no puede romper nada, el 10 necesita trabajo previo.
+el 1 no puede romper nada, el 6 al 9 necesitan trabajo previo.
 
 | campo | significado |
 |---|---|
@@ -464,6 +472,35 @@ no cambia la otra. Una sola vía: el manifiesto de gates.
 
 ---
 
+## LOTE 12 — Lo que los tres documentos anteriores no vieron
+
+**Verdicto: BORRAR. Riesgo: ninguno.**
+
+Tres borrados de riesgo cero que ningún lote había reclamado. Salieron del tercer
+lector, y los verifiqué uno por uno.
+
+**a) `audit-presets.mjs` y `audit-report.json` en la raíz del repo.** Están
+muertos por exactamente el mismo motivo que los 17 codemods del lote 2: escanean
+`packages/core/src/composition/components/custom`, una ruta que no existe
+(`test -d` → no existe). El `.json` es del 19 de febrero. Y no aparecen en el
+mapa: `grep "audit-presets\|audit-report" docs/MAPA-DEL-REPO.md` da **0**. El
+mapa que dice qué hace cada carpeta se saltó dos archivos de la raíz.
+
+**b) `packages/showroom/.tmp/` — 32 scripts de depuración.** El mapa los marca
+borrables en dos lugares y ningún lote los tomó. Además hay una valla escrita en
+`AGENTS.md` que prohíbe `.tmp` en el árbol de trabajo final. Están ignorados por
+git, así que el borrado no toca historia.
+
+**c) `coverage/`, `coverage-final/` y `packages/core/coverage/`.** El mapa las
+declara borrables; la tabla del lote 1 suma 34 carpetas sin ellas. Son salida de
+herramienta, regenerable.
+
+**riesgo:** ninguno en los tres casos.
+
+**bloqueo:** ninguno.
+
+---
+
 # PARTE 2 — SE UNIFICA (una queda canónica, la otra se va)
 
 Acá no hay borrado inmediato: hay que declarar cuál es la canónica y migrar. Cada
@@ -700,11 +737,89 @@ las capacidades del original.
 
 `docs/ARCHITECTURE.md`,
 `docs-engineering/engineering/design-system/architecture/README.md`, y
-`packages/core/docs/`. Los dos primeros solapan en cuatro secciones y ninguno
-enlaza al otro.
+`packages/core/ARCHITECTURE.md`. Los dos primeros solapan en cuatro secciones y
+ninguno enlaza al otro.
 
-**Propuesta:** `docs-engineering/` es la fuente (lo dice el `CLAUDE.md` de la
-raíz); `docs/ARCHITECTURE.md` queda como puntero.
+**Corrección del tercer lector, verificada:** el tercer documento es
+`packages/core/ARCHITECTURE.md`, no `packages/core/docs/`. Y la frase que manda
+usar `docs-engineering/` como fuente está en el `CLAUDE.md` del monorepo padre,
+no en el de este repo — este repo, clonado solo, se queda sin arquitectura si
+`docs/ARCHITECTURE.md` se convierte en un puntero a un repo externo. Hay cinco
+enlaces internos apuntando a él.
+
+**Propuesta corregida:** `docs-engineering/` es la fuente de la arquitectura del
+ecosistema; `docs/ARCHITECTURE.md` se queda con la arquitectura **de este
+paquete** y enlaza a la otra, en vez de ser un puntero vacío.
+`packages/core/ARCHITECTURE.md` se pliega dentro de él.
+
+---
+
+## U11 — Dos `Link` públicos con props incompatibles
+
+Hay dos contratos `LinkProps` distintos, los dos exportados:
+
+- `ui/primitives/navigation/Link/contracts/index.ts:84` extiende
+  `AnchorHTMLAttributes<HTMLAnchorElement>`.
+- `ui/primitives/display/Typography/contracts/index.ts:398` extiende
+  `BaseComponentProps, EngineAwareProps, TypographyCraftProps`.
+
+El segundo es el que sale publicado con el nombre `Link` por el subpath
+`./primitives/typography` (`entrypoints/public/primitives/typography/index.ts:4`),
+mientras el primero se publica como `NavLink` — y su propio barril
+(`ui/primitives/navigation/index.ts:67-71`) dice que *"NavLink is the canonical
+navigation-primitive name"*.
+
+Es decir: quien importa `Link` del paquete recibe el que **no** es el canónico
+de navegación, con props que no son intercambiables con el otro.
+
+**Propuesta:** un solo nombre `Link` para el primitive de navegación; el de
+Typography pasa a llamarse `TextLink` en el subpath público, o deja de
+exportarse con ese nombre. Es cambio de API pública: necesita tu firma.
+
+---
+
+## U12 — `command-center` reescribió el vocabulario de dashboard, y ya divergió
+
+`ui/surfaces/presentation/pages/workspace/command-center/index.tsx` define en sus
+líneas 40 y 57 sus propios `StatItem` y `ActivityItem`, dos conceptos que ya
+tienen dueño:
+
+| concepto | dueño | forma | forma en command-center |
+|---|---|---|---|
+| `StatItem` | `structures/dashboard/stats-header/contracts/index.ts:41` | `change?: number` + `direction` aparte | `change?: { value, direction }` |
+| `ActivityItem` | `structures/dashboard/insights/foundation/contracts/index.ts:21` | `time` / `type` | `timestamp` / `user` |
+
+No es una copia: **ya son formas distintas**, así que hoy no se pueden
+intercambiar. Y `command-center` no importa ninguna de las dos structures — solo
+primitives.
+
+Esto además corrige a U7: ahí se propone retirar `stats-header` sin notar que su
+vocabulario sobrevive bifurcado dentro de una surface.
+
+**Propuesta:** `command-center` consume los contratos de `structures/dashboard/`
+y borra sus dos definiciones locales. Si alguna de las dos formas es mejor, gana
+esa, pero en el archivo del dueño.
+
+---
+
+## U13 — La fachada `visual-authority` está marcada obsoleta y es el camino real
+
+`infrastructure/runtime/theming/foundation/visual-authority/index.ts` se declara
+`@deprecated` en su línea 10 y manda importar de `./foundation/admission` o
+`./runtime/retention` directamente.
+
+Lo importan **13 archivos** — 7 de producción y 6 tests — y entre los de
+producción están **los dos entrypoints públicos del paquete**:
+`entrypoints/server/index.ts` (líneas 92, 97, 116, 121) y
+`entrypoints/public/contracts/runtime/index.ts:2`. Los otros cinco son
+`tenant-preview/runtime/preview-css`, `brand-studio/.../preview-scope`,
+`tenant/.../use-create-tenant`, y el provider de theming.
+
+O sea: la API pública del paquete se sirve a través de un camino que el propio
+código declara muerto. Es el caso exacto que prohíbe la regla 6.
+
+**Propuesta:** o se migran los 7 importadores de producción, o se saca el
+`@deprecated`. Las dos son baratas; lo que no se sostiene es el estado actual.
 
 ---
 
@@ -743,9 +858,9 @@ no bloquea, va a una carpeta declarada de diagnósticos, no al mismo directorio 
 los gates.
 
 **3. El glob no recursivo que esconde árboles enteros de tests.**
-→ `node --test scripts/*.test.mjs` no alcanza subcarpetas. Hoy hay al menos cinco
-tests que ningún glob toca. Los globs de `test:scripts` se hacen recursivos o cada
-subárbol declara su entrada.
+→ `node --test scripts/*.test.mjs` no alcanza subcarpetas. Hoy son **nueve** los
+tests que ningún script npm toca; están contados uno por uno en la parte 5. Los
+globs de `test:scripts` se hacen recursivos o cada subárbol declara su entrada.
 
 **4. El programa que se documenta como si fuera código y solo se cita a sí mismo.**
 → Un set de documentos que solo enlaza a sus propios hermanos parece vivo en
@@ -758,35 +873,6 @@ declara qué diverge y un test lo verifica. `roadmap-commercial-status.mjs` decl
 
 **Y la que las cubre a todas:** un documento que describe algo que ya no existe se
 corrige el mismo día o se borra. No hay estado "vigente con cartel de obsoleto".
-
----
-
-## LOTE 12 — Lo que los tres documentos anteriores no vieron
-
-**Verdicto: BORRAR. Riesgo: ninguno.**
-
-Tres borrados de riesgo cero que ningún lote había reclamado. Salieron del tercer
-lector, y los verifiqué uno por uno.
-
-**a) `audit-presets.mjs` y `audit-report.json` en la raíz del repo.** Están
-muertos por exactamente el mismo motivo que los 17 codemods del lote 2: escanean
-`packages/core/src/composition/components/custom`, una ruta que no existe
-(`test -d` → no existe). El `.json` es del 19 de febrero. Y no aparecen en el
-mapa: `grep "audit-presets\|audit-report" docs/MAPA-DEL-REPO.md` da **0**. El
-mapa que dice qué hace cada carpeta se saltó dos archivos de la raíz.
-
-**b) `packages/showroom/.tmp/` — 32 scripts de depuración.** El mapa los marca
-borrables en dos lugares y ningún lote los tomó. Además hay una valla escrita en
-`AGENTS.md` que prohíbe `.tmp` en el árbol de trabajo final. Están ignorados por
-git, así que el borrado no toca historia.
-
-**c) `coverage/`, `coverage-final/` y `packages/core/coverage/`.** El mapa las
-declara borrables; la tabla del lote 1 suma 34 carpetas sin ellas. Son salida de
-herramienta, regenerable.
-
-**riesgo:** ninguno en los tres casos.
-
-**bloqueo:** ninguno.
 
 ---
 
@@ -818,6 +904,90 @@ palabra escrita hizo de sustituto del trabajo.
 
 ---
 
+---
+
+# PARTE 5 — Tres defectos de cableado, verificados hoy
+
+No son borrados ni unificaciones: son cosas que **parecen estar conectadas y no
+lo están**. Ninguna aparece en los tres documentos anteriores. Las tres tienen
+arreglo de una línea, y las tres son de la misma familia que la regla 2.
+
+## D1 — Un gate bloqueante que corre con una bandera que el script no lee
+
+`ci-gates.manifest.mjs:151` declara:
+
+```
+{ id: 'gat-07-exact-proof', run: ['node', 'scripts/gat-07-exact-proof.mjs', '--check'], blocking: true }
+```
+
+El script no parsea `--check` en ningún lado. Las banderas que sí lee son
+`--print-doc-allowlist`, `--write`, `--check-artifact` y
+`--allow-unsealed-documentation` (líneas 1354-1369). Con `--check`, el script
+reconstruye el artefacto entero y lo **descarta**: no escribe y no compara. La
+entrada bloqueante gasta el tiempo y no verifica nada.
+
+La cobertura real del artefacto existe, pero por otro camino: `ci.yml:183` corre
+`gat07:check`, que es `--check-artifact`. O sea que el defecto no dejó el
+artefacto sin proteger — dejó una entrada del inventario de gates mintiendo
+sobre lo que hace.
+
+**Arreglo:** cambiar `--check` por `--check-artifact` en el manifiesto. Y un test
+que falle si un `run:` del manifiesto pasa una bandera que el script destino no
+reconoce — porque este mismo error es indetectable a ojo.
+
+## D2 — 53 archivos de app-platform importan un subpath que el paquete no declara
+
+`packages/core/package.json` no tiene ninguna entrada `./commercial` en
+`exports` (las únicas con "comm" o "style" son `./patterns/command-palette` y las
+seis de `./styles*`). Sin embargo:
+
+- 53 archivos de `app-platform/src` importan `@rottay/design-system/commercial`
+  (54 usos) y 3 importan `@rottay/design-system/commercial.css`.
+- Resuelven porque `app-platform/next.config.ts:53,60` los alias-ea a mano a
+  `dist/commercial.js` y `dist/commercial.css`.
+
+Es una puerta trasera de webpack sosteniendo 53 archivos de producción. El día
+que esa app se compile con otro bundler, o que alguien limpie el `next.config`,
+se cae sin que ningún gate de este repo se entere.
+
+En el mismo lugar hay un segundo síntoma: `./styles/rottay` y `./styles/default`
+apuntan los dos a `dist/rottay.css`, que **no existe** (`dist/platform.css` sí).
+El `dist` está viejo, y los `exports` describen un artefacto que no está.
+
+**Arreglo:** declarar `./commercial` y `./commercial.css` en `exports` y sacar el
+alias del `next.config`; y un gate que falle cuando un `exports` apunta a un
+archivo que el build no produce.
+
+## D3 — Nueve tests y cinco gates que nadie corre
+
+**Nueve `.test.mjs` bajo `packages/core/scripts/` no los alcanza ningún script
+npm** — ni por nombre, ni por glob, ni por el `vitest` de `test:scripts`, que
+solo incluye `scripts/**/*.vitest.test.ts`:
+
+```
+scripts/lib/first-party-roster-source.test.mjs
+scripts/lib/modern-framework-layer.test.mjs
+scripts/lib/owner-nesting.test.mjs
+scripts/lib/root-public-resolver.test.mjs
+scripts/quality-evidence/programs/modern-rescue/cascade-probe.test.mjs
+scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.test.mjs
+scripts/quality-evidence/programs/modern-rescue/manifest/mirror-parity.test.mjs
+scripts/quality-evidence/programs/modern-rescue/manifest/root-checklist.test.mjs
+scripts/quality-evidence/programs/modern-rescue/probe/cascade-probe.test.mjs
+```
+
+Son 9 de 97. Los cuatro de `scripts/lib/` prueban los módulos compartidos que
+usan los demás gates: es la capa peor cubierta del árbol y no corre.
+
+**Y cinco gates de `scripts/` no los nombra ni `package.json` ni el manifiesto de
+CI:** `channel-wiring-zero-delta-gate.mjs`, `chart-series-reserved-name-gate.mjs`,
+`color-mix-argument-purity-gate.mjs`, `cra-17-integral-gate.mjs`,
+`modern-bundle-framework-gate.mjs`. Cinco de 40.
+
+**Arreglo:** los globs de `test:scripts` se hacen recursivos, y cada gate entra
+al manifiesto o se borra. No hay tercera opción: un gate que no corre es un
+archivo que miente sobre estar protegiendo algo.
+
 ## Qué necesito de vos
 
 Aprobás por lote, no archivo por archivo:
@@ -837,11 +1007,20 @@ Aprobás por lote, no archivo por archivo:
 | 11 | alias de `package.json` sin uso | ninguno | sí |
 | 12 | `audit-presets.mjs` + `audit-report.json` de la raíz, `showroom/.tmp/` (32 scripts), las 3 carpetas de `coverage` | ninguno | sí |
 
-Los lotes 1 a 5 más el 10 y el 11 se pueden hacer hoy. El 9 volvió a bloquearse
-al medir dentro del repo. El 6 necesita trabajo previo, el 7 una decisión tuya y
-el 8 hay que reducirlo de alcance.
+Los lotes 1 a 5 más el 10, el 11 y el 12 se pueden hacer hoy. El 9 volvió a
+bloquearse al medir dentro del repo. El 6 necesita trabajo previo, el 7 una
+decisión tuya y el 8 hay que reducirlo de alcance.
 
-Y tres preguntas que no puedo contestar yo, porque son de diseño y no de archivo:
+**Aparte de los lotes, tres arreglos de cableado (parte 5) que no borran nada y
+que puedo hacer sin aprobación si me decís que sí:** la bandera fantasma del
+gate `gat-07` (una palabra en un archivo), los globs de `test:scripts` para que
+alcancen los 9 tests que hoy nadie corre, y los 5 gates sin invocador — estos
+últimos hay que decidirlos uno por uno: entran al manifiesto o se borran. El
+cuarto, el subpath `/commercial` sin declarar, toca `app-platform` y por eso no
+lo tomo desde acá.
+
+Y cuatro preguntas que no puedo contestar yo, porque son de diseño y no de
+archivo:
 
 1. **U4, mitad de detalle.** `DetailSurface` 3 contra `RecordWorkbenchSurface` 3.
    ¿Cuál es la receta canónica de pantalla de detalle, o todavía no hay una?
@@ -849,3 +1028,6 @@ Y tres preguntas que no puedo contestar yo, porque son de diseño y no de archiv
    ¿Se hace ahora o se difiere?
 3. **U10, los dos sistemas de iconos.** ¿Se migran evnto y platform a la fachada
    semántica, o se admite por escrito que hay dos entradas soportadas?
+4. **U11, los dos `Link`.** Hoy el que se publica con el nombre `Link` no es el
+   canónico de navegación. Renombrar el de Typography a `TextLink` es cambio de
+   API pública. ¿Se hace?
