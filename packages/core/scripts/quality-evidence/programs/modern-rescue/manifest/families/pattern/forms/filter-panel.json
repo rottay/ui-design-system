@@ -3646,8 +3646,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608",
               "packages/core/src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:117",
-              "packages/core/styles/rottay.css:1650",
-              "packages/core/styles/platform.css:1650"
+              "packages/core/styles/rottay.css:1650"
             ],
             "declarationSiteCount": 7,
             "declarationForms": [
@@ -3713,7 +3712,6 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default.css:623",
               "packages/core/styles/rottay.css:1665",
-              "packages/core/styles/platform.css:1665",
               "packages/core/styles/index.css:1744"
             ],
             "declarationSiteCount": 6,
@@ -3763,7 +3761,6 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default.css:624",
               "packages/core/styles/rottay.css:1666",
-              "packages/core/styles/platform.css:1666",
               "packages/core/styles/index.css:1745"
             ],
             "declarationSiteCount": 6,
@@ -3823,8 +3820,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123",
               "packages/core/src/graphics/motion/react/runtime/flip-layout/tests/use-flip-layout.test.tsx:83",
-              "packages/core/styles/rottay.css:3385",
-              "packages/core/styles/platform.css:3385"
+              "packages/core/styles/rottay.css:3385"
             ],
             "declarationSiteCount": 7,
             "declarationForms": [
@@ -4577,7 +4573,6 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default.css:283",
               "packages/core/styles/rottay.css:1325",
-              "packages/core/styles/platform.css:1325",
               "packages/core/styles/index.css:1404"
             ],
             "declarationSiteCount": 6,
@@ -4797,7 +4792,6 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/base/z-index.css:55",
               "packages/core/styles/rottay.css:1036",
-              "packages/core/styles/platform.css:1036",
               "packages/core/styles/index.css:1115"
             ],
             "declarationSiteCount": 6,

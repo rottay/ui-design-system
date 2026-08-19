@@ -137,6 +137,46 @@ function addCheck(checks, name, errors, pending = [], details = {}) {
   };
 }
 
+/**
+ * Blank out comment bodies, preserving every newline so line numbers survive.
+ *
+ * WHY. The boundary is about IMPORTING the supplier, not about naming it. This
+ * detector matched raw text, so the docstring in `search-command-bar` recording
+ * that "the legacy lucide re-exports are retired" counted as a supplier
+ * reintroduction: the gate fired on the sentence announcing compliance. A
+ * commented-out import is not an import either. Strings stay intact -- a module
+ * specifier lives in one, and that is exactly what must still trip the boundary.
+ */
+function blankComments(source) {
+  let out = '';
+  let i = 0;
+  let state = 'code';
+  let quote = '';
+  while (i < source.length) {
+    const ch = source[i];
+    const next = source[i + 1];
+    if (state === 'code') {
+      if (ch === '/' && next === '*') { state = 'block'; out += '  '; i += 2; continue; }
+      if (ch === '/' && next === '/') { state = 'line'; out += '  '; i += 2; continue; }
+      if (ch === '"' || ch === "'" || ch === '`') { state = 'string'; quote = ch; }
+      out += ch; i += 1; continue;
+    }
+    if (state === 'string') {
+      out += ch;
+      if (ch === '\\') { out += next ?? ''; i += 2; continue; }
+      if (ch === quote) state = 'code';
+      i += 1; continue;
+    }
+    if (state === 'block') {
+      if (ch === '*' && next === '/') { state = 'code'; out += '  '; i += 2; continue; }
+      out += ch === '\n' ? '\n' : ' '; i += 1; continue;
+    }
+    if (ch === '\n') { state = 'code'; out += '\n'; i += 1; continue; }
+    out += ' '; i += 1;
+  }
+  return out;
+}
+
 export function auditNoLucideBoundary({ repoRoot, paths } = {}) {
   const root = resolve(repoRoot ?? DEFAULT_REPO_ROOT);
   const coreRoot = resolve(root, 'packages/core');
@@ -196,6 +236,7 @@ export function auditNoLucideBoundary({ repoRoot, paths } = {}) {
         scanned = source;
       }
     }
+    if (SOURCE_EXTENSIONS.test(display)) scanned = blankComments(scanned);
     if (!LUCIDE_TEXT.test(scanned)) continue;
     const lines = lineNumbers(source, LUCIDE_TEXT);
     violations.push({

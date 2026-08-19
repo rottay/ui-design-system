@@ -19,8 +19,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
  * keep rendering, which is why this survives review.
  *
  * Usage:
- *   node scripts/color-mix-argument-purity-gate.mjs --check
- *   node scripts/color-mix-argument-purity-gate.mjs --check --quiet
+ *   node scripts/color-mix-argument-purity-gate.mjs
+ *   node scripts/color-mix-argument-purity-gate.mjs --quiet
+ *
+ * `--quiet` is the ONLY flag parsed; it suppresses the PASS line. The block
+ * above previously advertised a `--check` this script never read, which is the
+ * same lie that let a blocking gate elsewhere run on a flag it ignored.
  */
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));

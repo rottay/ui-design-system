@@ -1500,8 +1500,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:220",
-              "packages/core/styles/rottay.css:1698",
-              "packages/core/styles/platform.css:220"
+              "packages/core/styles/rottay.css:1698"
             ],
             "readSiteCount": 13,
             "readWithFallbackCount": 1,
@@ -1564,7 +1563,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1777",
-              "packages/core/styles/platform.css:1777",
               "packages/core/styles/index.css:1856"
             ],
             "readSiteCount": 1,
@@ -1596,7 +1594,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1770",
-              "packages/core/styles/platform.css:1770",
               "packages/core/styles/index.css:1849"
             ],
             "readSiteCount": 1,
@@ -1628,8 +1625,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1922",
-              "packages/core/styles/rottay.css:33832",
-              "packages/core/styles/platform.css:1922"
+              "packages/core/styles/rottay.css:33832"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -1700,7 +1696,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1650",
-              "packages/core/styles/platform.css:1650",
               "packages/core/styles/index.css:1729"
             ],
             "readSiteCount": 1,
@@ -1732,7 +1727,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1665",
-              "packages/core/styles/platform.css:1665",
               "packages/core/styles/index.css:1744"
             ],
             "readSiteCount": 1,
@@ -1764,7 +1758,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1664",
-              "packages/core/styles/platform.css:1664",
               "packages/core/styles/index.css:1743"
             ],
             "readSiteCount": 1,
@@ -1796,7 +1789,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1666",
-              "packages/core/styles/platform.css:1666",
               "packages/core/styles/index.css:1745"
             ],
             "readSiteCount": 1,
@@ -1828,7 +1820,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1530",
-              "packages/core/styles/platform.css:1530",
               "packages/core/styles/index.css:1609"
             ],
             "readSiteCount": 3,
@@ -1876,7 +1867,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6888",
-              "packages/core/styles/platform.css:6888",
               "packages/core/styles/index.css:6967"
             ],
             "readSiteCount": 1,
@@ -1908,7 +1898,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6884",
-              "packages/core/styles/platform.css:6884",
               "packages/core/styles/index.css:6963"
             ],
             "readSiteCount": 1,
@@ -1940,7 +1929,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6887",
-              "packages/core/styles/platform.css:6887",
               "packages/core/styles/index.css:6966"
             ],
             "readSiteCount": 1,
@@ -1972,7 +1960,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6883",
-              "packages/core/styles/platform.css:6883",
               "packages/core/styles/index.css:6962"
             ],
             "readSiteCount": 1,
@@ -2004,7 +1991,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6886",
-              "packages/core/styles/platform.css:6886",
               "packages/core/styles/index.css:6965"
             ],
             "readSiteCount": 2,
@@ -2076,7 +2062,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6860",
-              "packages/core/styles/platform.css:6860",
               "packages/core/styles/index.css:6939"
             ],
             "readSiteCount": 1,
@@ -2108,7 +2093,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6861",
-              "packages/core/styles/platform.css:6861",
               "packages/core/styles/index.css:6940"
             ],
             "readSiteCount": 1,
@@ -2140,7 +2124,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6856",
-              "packages/core/styles/platform.css:6856",
               "packages/core/styles/index.css:6935"
             ],
             "readSiteCount": 3,
@@ -2187,7 +2170,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6855",
-              "packages/core/styles/platform.css:6855",
               "packages/core/styles/index.css:6934"
             ],
             "readSiteCount": 6,
@@ -2243,7 +2225,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6859",
-              "packages/core/styles/platform.css:6859",
               "packages/core/styles/index.css:6938"
             ],
             "readSiteCount": 1,
@@ -2275,7 +2256,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6862",
-              "packages/core/styles/platform.css:6862",
               "packages/core/styles/index.css:6941"
             ],
             "readSiteCount": 1,
@@ -2307,7 +2287,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6857",
-              "packages/core/styles/platform.css:6857",
               "packages/core/styles/index.css:6936"
             ],
             "readSiteCount": 3,
@@ -2356,7 +2335,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6858",
-              "packages/core/styles/platform.css:6858",
               "packages/core/styles/index.css:6937"
             ],
             "readSiteCount": 1,
@@ -2390,7 +2368,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7012",
-              "packages/core/styles/platform.css:7012",
               "packages/core/styles/index.css:7091"
             ],
             "readSiteCount": 2,
@@ -2429,7 +2406,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7014",
-              "packages/core/styles/platform.css:7014",
               "packages/core/styles/index.css:7093"
             ],
             "readSiteCount": 2,
@@ -2468,7 +2444,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7013",
-              "packages/core/styles/platform.css:7013",
               "packages/core/styles/index.css:7092"
             ],
             "readSiteCount": 1,
@@ -2856,7 +2831,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6797",
-              "packages/core/styles/platform.css:6797",
               "packages/core/styles/index.css:6876"
             ],
             "readSiteCount": 1,
@@ -2888,7 +2862,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6795",
-              "packages/core/styles/platform.css:6795",
               "packages/core/styles/index.css:6874"
             ],
             "readSiteCount": 2,
@@ -2928,7 +2901,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6801",
-              "packages/core/styles/platform.css:6801",
               "packages/core/styles/index.css:6880"
             ],
             "readSiteCount": 3,
@@ -2974,7 +2946,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6880",
-              "packages/core/styles/platform.css:6880",
               "packages/core/styles/index.css:6959"
             ],
             "readSiteCount": 1,
@@ -3006,7 +2977,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6879",
-              "packages/core/styles/platform.css:6879",
               "packages/core/styles/index.css:6958"
             ],
             "readSiteCount": 1,
@@ -3038,7 +3008,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6881",
-              "packages/core/styles/platform.css:6881",
               "packages/core/styles/index.css:6960"
             ],
             "readSiteCount": 1,
@@ -3070,7 +3039,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6882",
-              "packages/core/styles/platform.css:6882",
               "packages/core/styles/index.css:6961"
             ],
             "readSiteCount": 1,
@@ -3173,7 +3141,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6885",
-              "packages/core/styles/platform.css:6885",
               "packages/core/styles/index.css:6964"
             ],
             "readSiteCount": 1,
@@ -3355,7 +3322,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6903",
-              "packages/core/styles/platform.css:6903",
               "packages/core/styles/index.css:6982"
             ],
             "readSiteCount": 1,
@@ -3387,7 +3353,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6902",
-              "packages/core/styles/platform.css:6902",
               "packages/core/styles/index.css:6981"
             ],
             "readSiteCount": 1,
@@ -3419,7 +3384,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6996",
-              "packages/core/styles/platform.css:6996",
               "packages/core/styles/index.css:7075"
             ],
             "readSiteCount": 2,
@@ -3459,8 +3423,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6995",
-              "packages/core/styles/rottay.css:123617",
-              "packages/core/styles/platform.css:6995"
+              "packages/core/styles/rottay.css:123617"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -3491,7 +3454,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6834",
-              "packages/core/styles/platform.css:6834",
               "packages/core/styles/index.css:6913"
             ],
             "readSiteCount": 1,
@@ -3628,7 +3590,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6929",
-              "packages/core/styles/platform.css:6929",
               "packages/core/styles/index.css:7008"
             ],
             "readSiteCount": 1,
@@ -3660,8 +3621,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6933",
-              "packages/core/styles/rottay.css:123620",
-              "packages/core/styles/platform.css:6933"
+              "packages/core/styles/rottay.css:123620"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 1,
@@ -3878,7 +3838,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6987",
-              "packages/core/styles/platform.css:6987",
               "packages/core/styles/index.css:7066"
             ],
             "readSiteCount": 1,
@@ -3910,8 +3869,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6988",
-              "packages/core/styles/rottay.css:123625",
-              "packages/core/styles/platform.css:6988"
+              "packages/core/styles/rottay.css:123625"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 1,
@@ -3942,8 +3900,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6799",
-              "packages/core/styles/rottay.css:123626",
-              "packages/core/styles/platform.css:6799"
+              "packages/core/styles/rottay.css:123626"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 1,
@@ -4041,7 +3998,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6923",
-              "packages/core/styles/platform.css:6923",
               "packages/core/styles/index.css:7002"
             ],
             "readSiteCount": 2,
@@ -4121,8 +4077,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6989",
-              "packages/core/styles/rottay.css:123632",
-              "packages/core/styles/platform.css:6989"
+              "packages/core/styles/rottay.css:123632"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -4153,7 +4108,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6752",
-              "packages/core/styles/platform.css:6752",
               "packages/core/styles/index.css:6831"
             ],
             "readSiteCount": 1,
@@ -4185,8 +4139,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6749",
-              "packages/core/styles/rottay.css:123633",
-              "packages/core/styles/platform.css:6749"
+              "packages/core/styles/rottay.css:123633"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -4227,8 +4180,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6746",
-              "packages/core/styles/rottay.css:123634",
-              "packages/core/styles/platform.css:6746"
+              "packages/core/styles/rottay.css:123634"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 0,
@@ -4278,8 +4230,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6750",
-              "packages/core/styles/rottay.css:123636",
-              "packages/core/styles/platform.css:6750"
+              "packages/core/styles/rottay.css:123636"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -4310,8 +4261,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6747",
-              "packages/core/styles/rottay.css:123637",
-              "packages/core/styles/platform.css:6747"
+              "packages/core/styles/rottay.css:123637"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -4384,7 +4334,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6894",
-              "packages/core/styles/platform.css:6894",
               "packages/core/styles/index.css:6973"
             ],
             "readSiteCount": 1,
@@ -4416,7 +4365,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6895",
-              "packages/core/styles/platform.css:6895",
               "packages/core/styles/index.css:6974"
             ],
             "readSiteCount": 2,
@@ -4458,7 +4406,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6892",
-              "packages/core/styles/platform.css:6892",
               "packages/core/styles/index.css:6971"
             ],
             "readSiteCount": 3,
@@ -4508,8 +4455,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6893",
-              "packages/core/styles/rottay.css:123639",
-              "packages/core/styles/platform.css:6893"
+              "packages/core/styles/rottay.css:123639"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -4540,7 +4486,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6743",
-              "packages/core/styles/platform.css:6743",
               "packages/core/styles/index.css:6822"
             ],
             "readSiteCount": 1,
@@ -4614,8 +4559,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6737",
-              "packages/core/styles/rottay.css:123641",
-              "packages/core/styles/platform.css:6737"
+              "packages/core/styles/rottay.css:123641"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 0,
@@ -4665,8 +4609,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6742",
-              "packages/core/styles/rottay.css:123642",
-              "packages/core/styles/platform.css:6742"
+              "packages/core/styles/rottay.css:123642"
             ],
             "readSiteCount": 6,
             "readWithFallbackCount": 0,
@@ -4722,8 +4665,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6741",
-              "packages/core/styles/rottay.css:123643",
-              "packages/core/styles/platform.css:6741"
+              "packages/core/styles/rottay.css:123643"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -4754,8 +4696,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6738",
-              "packages/core/styles/rottay.css:123644",
-              "packages/core/styles/platform.css:6738"
+              "packages/core/styles/rottay.css:123644"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -4828,7 +4769,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6800",
-              "packages/core/styles/platform.css:6800",
               "packages/core/styles/index.css:6879"
             ],
             "readSiteCount": 1,
@@ -4860,7 +4800,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6804",
-              "packages/core/styles/platform.css:6804",
               "packages/core/styles/index.css:6883"
             ],
             "readSiteCount": 1,
@@ -4892,7 +4831,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6798",
-              "packages/core/styles/platform.css:6798",
               "packages/core/styles/index.css:6877"
             ],
             "readSiteCount": 1,
@@ -4924,7 +4862,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7002",
-              "packages/core/styles/platform.css:7002",
               "packages/core/styles/index.css:7081"
             ],
             "readSiteCount": 1,
@@ -4956,7 +4893,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7004",
-              "packages/core/styles/platform.css:7004",
               "packages/core/styles/index.css:7083"
             ],
             "readSiteCount": 1,
@@ -4988,8 +4924,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7006",
-              "packages/core/styles/rottay.css:123646",
-              "packages/core/styles/platform.css:7006"
+              "packages/core/styles/rottay.css:123646"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -5020,7 +4955,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7003",
-              "packages/core/styles/platform.css:7003",
               "packages/core/styles/index.css:7082"
             ],
             "readSiteCount": 1,
@@ -5052,8 +4986,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:7005",
-              "packages/core/styles/rottay.css:123647",
-              "packages/core/styles/platform.css:7005"
+              "packages/core/styles/rottay.css:123647"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -5176,7 +5109,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6959",
-              "packages/core/styles/platform.css:6959",
               "packages/core/styles/index.css:7038"
             ],
             "readSiteCount": 1,
@@ -5208,7 +5140,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6802",
-              "packages/core/styles/platform.css:6802",
               "packages/core/styles/index.css:6881"
             ],
             "readSiteCount": 1,
@@ -5240,7 +5171,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6803",
-              "packages/core/styles/platform.css:6803",
               "packages/core/styles/index.css:6882"
             ],
             "readSiteCount": 1,
@@ -5326,7 +5256,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6841",
-              "packages/core/styles/platform.css:6841",
               "packages/core/styles/index.css:6920"
             ],
             "readSiteCount": 1,
@@ -5358,7 +5287,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6840",
-              "packages/core/styles/platform.css:6840",
               "packages/core/styles/index.css:6919"
             ],
             "readSiteCount": 2,
@@ -5397,7 +5325,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6734",
-              "packages/core/styles/platform.css:6734",
               "packages/core/styles/index.css:6813"
             ],
             "readSiteCount": 1,
@@ -5429,8 +5356,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6731",
-              "packages/core/styles/rottay.css:123649",
-              "packages/core/styles/platform.css:6731"
+              "packages/core/styles/rottay.css:123649"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -5471,8 +5397,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6728",
-              "packages/core/styles/rottay.css:123650",
-              "packages/core/styles/platform.css:6728"
+              "packages/core/styles/rottay.css:123650"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 0,
@@ -5522,8 +5447,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6732",
-              "packages/core/styles/rottay.css:123652",
-              "packages/core/styles/platform.css:6732"
+              "packages/core/styles/rottay.css:123652"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -5554,8 +5478,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6729",
-              "packages/core/styles/rottay.css:123653",
-              "packages/core/styles/platform.css:6729"
+              "packages/core/styles/rottay.css:123653"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -5628,7 +5551,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6817",
-              "packages/core/styles/platform.css:6817",
               "packages/core/styles/index.css:6896"
             ],
             "readSiteCount": 1,
@@ -5660,8 +5582,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6816",
-              "packages/core/styles/rottay.css:123655",
-              "packages/core/styles/platform.css:6816"
+              "packages/core/styles/rottay.css:123655"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 1,
@@ -5748,7 +5669,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6889",
-              "packages/core/styles/platform.css:6889",
               "packages/core/styles/index.css:6968"
             ],
             "readSiteCount": 3,
@@ -5798,8 +5718,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6966",
-              "packages/core/styles/rottay.css:123657",
-              "packages/core/styles/platform.css:6966"
+              "packages/core/styles/rottay.css:123657"
             ],
             "readSiteCount": 9,
             "readWithFallbackCount": 9,
@@ -5854,8 +5773,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6967",
-              "packages/core/styles/rottay.css:123658",
-              "packages/core/styles/platform.css:6967"
+              "packages/core/styles/rottay.css:123658"
             ],
             "readSiteCount": 9,
             "readWithFallbackCount": 9,
@@ -5910,7 +5828,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6825",
-              "packages/core/styles/platform.css:6825",
               "packages/core/styles/index.css:6904"
             ],
             "readSiteCount": 1,
@@ -5942,8 +5859,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6824",
-              "packages/core/styles/rottay.css:123659",
-              "packages/core/styles/platform.css:6824"
+              "packages/core/styles/rottay.css:123659"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 1,
@@ -6030,7 +5946,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6761",
-              "packages/core/styles/platform.css:6761",
               "packages/core/styles/index.css:6840"
             ],
             "readSiteCount": 1,
@@ -6062,8 +5977,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6758",
-              "packages/core/styles/rottay.css:123661",
-              "packages/core/styles/platform.css:6758"
+              "packages/core/styles/rottay.css:123661"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -6104,8 +6018,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6755",
-              "packages/core/styles/rottay.css:123662",
-              "packages/core/styles/platform.css:6755"
+              "packages/core/styles/rottay.css:123662"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 0,
@@ -6155,8 +6068,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6759",
-              "packages/core/styles/rottay.css:123664",
-              "packages/core/styles/platform.css:6759"
+              "packages/core/styles/rottay.css:123664"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -6187,8 +6099,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6756",
-              "packages/core/styles/rottay.css:123665",
-              "packages/core/styles/platform.css:6756"
+              "packages/core/styles/rottay.css:123665"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -6261,7 +6172,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6725",
-              "packages/core/styles/platform.css:6725",
               "packages/core/styles/index.css:6804"
             ],
             "readSiteCount": 1,
@@ -6293,8 +6203,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6722",
-              "packages/core/styles/rottay.css:123667",
-              "packages/core/styles/platform.css:6722"
+              "packages/core/styles/rottay.css:123667"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -6335,8 +6244,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6719",
-              "packages/core/styles/rottay.css:123668",
-              "packages/core/styles/platform.css:6719"
+              "packages/core/styles/rottay.css:123668"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 0,
@@ -6386,8 +6294,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6723",
-              "packages/core/styles/rottay.css:123670",
-              "packages/core/styles/platform.css:6723"
+              "packages/core/styles/rottay.css:123670"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -6418,8 +6325,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:6720",
-              "packages/core/styles/rottay.css:123671",
-              "packages/core/styles/platform.css:6720"
+              "packages/core/styles/rottay.css:123671"
             ],
             "readSiteCount": 2,
             "readWithFallbackCount": 0,
@@ -6492,7 +6398,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1674",
-              "packages/core/styles/platform.css:1674",
               "packages/core/styles/index.css:1753"
             ],
             "readSiteCount": 2,
@@ -6533,7 +6438,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1426",
-              "packages/core/styles/platform.css:1426",
               "packages/core/styles/index.css:1505"
             ],
             "readSiteCount": 1,
@@ -6565,7 +6469,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1446",
-              "packages/core/styles/platform.css:1446",
               "packages/core/styles/index.css:1525"
             ],
             "readSiteCount": 1,
@@ -6597,7 +6500,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1448",
-              "packages/core/styles/platform.css:1448",
               "packages/core/styles/index.css:1527"
             ],
             "readSiteCount": 1,
@@ -6629,7 +6531,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:3385",
-              "packages/core/styles/platform.css:3385",
               "packages/core/styles/index.css:3464"
             ],
             "readSiteCount": 9,
@@ -6773,7 +6674,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:896",
-              "packages/core/styles/platform.css:896",
               "packages/core/styles/index.css:975"
             ],
             "readSiteCount": 1,
@@ -6805,7 +6705,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1813",
-              "packages/core/styles/platform.css:1813",
               "packages/core/styles/index.css:1892"
             ],
             "readSiteCount": 1,
@@ -6837,7 +6736,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1812",
-              "packages/core/styles/platform.css:1812",
               "packages/core/styles/index.css:1891"
             ],
             "readSiteCount": 2,
@@ -6876,7 +6774,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1811",
-              "packages/core/styles/platform.css:1811",
               "packages/core/styles/index.css:1890"
             ],
             "readSiteCount": 3,
@@ -6924,7 +6821,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1814",
-              "packages/core/styles/platform.css:1814",
               "packages/core/styles/index.css:1893"
             ],
             "readSiteCount": 1,
@@ -6956,8 +6852,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:229",
-              "packages/core/styles/rottay.css:1726",
-              "packages/core/styles/platform.css:229"
+              "packages/core/styles/rottay.css:1726"
             ],
             "readSiteCount": 3,
             "readWithFallbackCount": 0,
@@ -7007,8 +6902,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:230",
-              "packages/core/styles/rottay.css:1727",
-              "packages/core/styles/platform.css:230"
+              "packages/core/styles/rottay.css:1727"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 0,
@@ -7039,8 +6933,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:234",
-              "packages/core/styles/rottay.css:1731",
-              "packages/core/styles/platform.css:234"
+              "packages/core/styles/rottay.css:1731"
             ],
             "readSiteCount": 1,
             "readWithFallbackCount": 1,
@@ -7071,7 +6964,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1304",
-              "packages/core/styles/platform.css:1304",
               "packages/core/styles/index.css:1383"
             ],
             "readSiteCount": 1,
@@ -7103,7 +6995,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1309",
-              "packages/core/styles/platform.css:1309",
               "packages/core/styles/index.css:1388"
             ],
             "readSiteCount": 1,
@@ -7135,7 +7026,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1308",
-              "packages/core/styles/platform.css:1308",
               "packages/core/styles/index.css:1387"
             ],
             "readSiteCount": 2,
@@ -7175,7 +7065,6 @@
             "declaredInPackage": true,
             "declarationSites": [
               "packages/core/styles/rottay.css:1963",
-              "packages/core/styles/platform.css:1963",
               "packages/core/styles/index.css:2042"
             ],
             "readSiteCount": 1,
@@ -7256,7 +7145,7 @@
             "--ds-input-responsive-radius (private resolved channel)",
             "--ds-input-responsive-gap (private resolved channel)"
           ],
-          "note": "All five --ds-input-<size>-gap expansions are UNDECLARED anywhere in packages/core. They are read with the fallback var(--ds-input-affix-gap), which is declared only in the generated bundles packages/core/styles/rottay.css:6855, packages/core/styles/platform.css:6855 and packages/core/styles/index.css:6934 - i.e. the effective affix gap of every Input size is governed by a fallback whose own declaration lives only in generated output, not in src."
+          "note": "All five --ds-input-<size>-gap expansions are UNDECLARED anywhere in packages/core. They are read with the fallback var(--ds-input-affix-gap), which is declared only in the generated bundles packages/core/styles/rottay.css:6855 and packages/core/styles/index.css:6934 - i.e. the effective affix gap of every Input size is governed by a fallback whose own declaration lives only in generated output, not in src."
         },
         "hardcodedValues": [
           {

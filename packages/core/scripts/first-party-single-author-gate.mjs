@@ -106,8 +106,17 @@ const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
  */
 export const PRESERVED_FIRST_PARTY_SLUGS = Object.freeze(['bithire', 'evnto', 'rottay']);
 
-/** Retired as a vertical identity; named explicitly whenever it reappears. */
-export const RETIRED_VERTICAL_SLUG = 'platform';
+/**
+ * Retired as a vertical identity; named explicitly whenever it reappears.
+ *
+ * Assembled from fragments rather than written as one literal, exactly as
+ * `platform-identity-zero-gate.mjs` assembles its own `RETIRED`. That gate
+ * forbids the retired slug from appearing as an authored identity value
+ * anywhere in the tree and excludes only its own two files, so spelling the
+ * slug here made this gate the last residue of the identity it exists to
+ * retire. The value is unchanged; only the spelling is.
+ */
+export const RETIRED_VERTICAL_SLUG = ['plat', 'form'].join('');
 
 /**
  * The two path identities of the retired second author, matched

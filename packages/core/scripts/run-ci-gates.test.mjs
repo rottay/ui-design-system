@@ -9,8 +9,8 @@
 
 import { strict as assert } from 'node:assert';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { globSync, readFileSync } from 'node:fs';
+import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
@@ -246,15 +246,28 @@ test('the modern-rescue tooling drills are reachable, enforced, and run ahead of
   }
 
   // CI is not the only caller. `test:scripts` is what a developer runs by hand,
-  // and its two globs -- `quality-evidence/v2/*.test.mjs` and the
-  // non-recursive `scripts/*.test.mjs` -- are precisely what could not see
-  // these files. Assert the exact paths appear in the command, so restoring a
-  // glob-only form fails here instead of silently going dark again.
+  // and it used to carry two non-recursive globs -- `quality-evidence/v2/*.test.mjs`
+  // and `scripts/*.test.mjs` -- which could not see these files. The fix was a
+  // single recursive glob, so the old form of this assertion ("name both paths
+  // explicitly, a glob cannot reach them") now encodes a premise that is false.
+  //
+  // Assert REACHABILITY instead of spelling: expand whatever patterns the
+  // command carries and require both suites in the matched set. Explicit names
+  // and a recursive glob both satisfy it; narrowing the glob back, or dropping
+  // a path, fails here exactly as before.
   const pkg = JSON.parse(readFileSync(resolve(scriptsDir, '..', 'package.json'), 'utf8'));
   const testScripts = pkg.scripts['test:scripts'];
   assert.ok(typeof testScripts === 'string' && testScripts.length > 0, 'test:scripts must exist');
+
+  const packageRoot = resolve(scriptsDir, '..');
+  const reached = new Set();
+  for (const raw of testScripts.split(/\s+/)) {
+    const arg = raw.replace(/^["']|["']$/g, '');
+    if (!arg.endsWith('.test.mjs')) continue;
+    for (const hit of globSync(arg, { cwd: packageRoot })) reached.add(hit.split(sep).join('/'));
+  }
   for (const path of [PROGRAM_DRILL, GENERATOR_DRILL]) {
-    assert.ok(testScripts.includes(path), `test:scripts must name ${path} explicitly; a glob cannot reach it`);
+    assert.ok(reached.has(path), `test:scripts does not reach ${path}; it matched ${reached.size} suites`);
   }
 });
 

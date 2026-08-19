@@ -148,7 +148,7 @@ export const CI_GATES = Object.freeze([
   // `pnpm run gat07:check`, so a doc could contradict source with the whole
   // dashboard green. It sits AFTER the audit deliberately: when the audit is red
   // this gate is red for the same reason but far more slowly.
-  { id: 'gat-07-exact-proof', run: ['node', 'scripts/gat-07-exact-proof.mjs', '--check'], blocking: true },
+  { id: 'gat-07-exact-proof', run: ['node', 'scripts/gat-07-exact-proof.mjs', '--check-artifact'], blocking: true },
   { id: 'anatomy-variant-gate', run: ['node', 'scripts/anatomy-variant-gate.mjs', '--check'], blocking: true },
   { id: 'size-axis-law-gate', run: ['node', 'scripts/size-axis-law-gate.mjs', '--check'], blocking: true },
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/application-boundary-gate.test.mjs'], blocking: true },
@@ -165,6 +165,36 @@ export const CI_GATES = Object.freeze([
   // would report zero findings and look identical to a clean tree.
   { id: 'prototype-ledger-drill', run: ['node', '--test', 'scripts/prototype-ledger-gate.test.mjs'], blocking: true },
   { id: 'prototype-ledger', run: ['node', 'scripts/prototype-ledger-gate.mjs', '--check'], blocking: true },
+
+  // --- paint validity + shipped-bundle honesty ---
+  //
+  // Both gates existed with passing drills and were reachable only by hand, so
+  // nothing in CI held the law they encode. Triage 2026-08-19: both green on
+  // the current tree, so they enter blocking rather than being deleted.
+  //
+  // color-mix argument purity: an argument that resolves to a gradient, a
+  // shadow list or a bare number makes the WHOLE declaration invalid at
+  // computed-value time, so the surface paints nothing. Invalid CSS does not
+  // throw, does not warn and does not move a snapshot -- no suite can see it.
+  // The script parses no flags; its own corpus floor (300 stylesheets) is what
+  // stops a broken glob from passing by scanning nothing.
+  { id: 'color-mix-argument-purity-drill', run: ['node', '--test', 'scripts/color-mix-argument-purity-gate.test.mjs'], blocking: true },
+  { id: 'color-mix-argument-purity', run: ['node', 'scripts/color-mix-argument-purity-gate.mjs'], blocking: true },
+  // Shipped bundles carry no third-party framework CSS. Safe to run before
+  // Build: the five committed `styles/*.css` mirrors are required and the
+  // `dist/*` copies are audited only when present, so a clean clone certifies
+  // the same law without a build step.
+  { id: 'modern-bundle-framework-drill', run: ['node', '--test', 'scripts/modern-bundle-framework-gate.test.mjs'], blocking: true },
+  { id: 'modern-bundle-framework', run: ['node', 'scripts/modern-bundle-framework-gate.mjs'], blocking: true },
+  // The palette seam: `--ds-chart-series-1..10` may be DEFINED only by a
+  // tenant-scope compiler, never by anything closer to the marks. It was
+  // orphaned and red on 2026-08-19 -- not because a component had defined the
+  // channel, but because the palette authority moved into the brand-theme
+  // compiler in dcc65ca34 without the allowlist moving with it. Allowlist
+  // corrected, drill re-pinned at two sanctioned definers, gate wired here so
+  // the next such move cannot land unreviewed.
+  { id: 'chart-series-reserved-name-drill', run: ['node', '--test', 'scripts/chart-series-reserved-name-gate.test.mjs'], blocking: true },
+  { id: 'chart-series-reserved-name', run: ['node', 'scripts/chart-series-reserved-name-gate.mjs', '--check'], blocking: true },
 
   // --- D0 customization-surface truth (drill first: a census computed by a
   // broken scanner reports zero findings and looks identical to a clean
@@ -190,7 +220,7 @@ export const CI_GATES = Object.freeze([
 
   // FASE K (Codex 2026-08-02): every read the hook contract fences as
   // unadjudicated carries exactly one ownership row — 0 reads without owner.
-  { id: 'reads-adjudication', run: ['node', 'scripts/reads-adjudication-gate.mjs', '--check'], blocking: true },
+  { id: 'reads-adjudication', run: ['node', 'scripts/reads-adjudication-gate.mjs'], blocking: true },
 
   // Codex blocker 2: the binding worklist may never point Kimi at CSS that
   // does not ship — owners shipping-reachable, renderProof is a node (path
@@ -199,13 +229,13 @@ export const CI_GATES = Object.freeze([
   // with named-cause assertions and a no-op meta-drill — a gate whose drills
   // only fire by hand certifies nothing.
   { id: 'kimi-worklist-drill', run: ['node', '--test', 'scripts/kimi-worklist-gate.test.mjs'], blocking: true },
-  { id: 'kimi-worklist', run: ['node', 'scripts/kimi-worklist-gate.mjs', '--check'], blocking: true },
+  { id: 'kimi-worklist', run: ['node', 'scripts/kimi-worklist-gate.mjs'], blocking: true },
 
   // Codex blocker 4B: every counted Modern font-size literal carries an
   // adjudicated ownership row — a sold typography.scale control may not fail
   // silently behind an unowned literal.
   { id: 'literal-ownership-drill', run: ['node', '--test', 'scripts/literal-ownership-gate.test.mjs'], blocking: true },
-  { id: 'literal-ownership', run: ['node', 'scripts/literal-ownership-gate.mjs', '--check'], blocking: true },
+  { id: 'literal-ownership', run: ['node', 'scripts/literal-ownership-gate.mjs'], blocking: true },
 
   // FASE 4 (normalización integral 2026-08-02): la tabla de controles Standard/Pro/Expert
   // es API de producto generada de los contratos reales — fresca y completa o roja.

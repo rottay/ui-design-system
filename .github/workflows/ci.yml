@@ -151,6 +151,14 @@ jobs:
           echo "app-bithire corpus SHA: $(git rev-parse HEAD)"
           echo "app-bithire corpus ref: 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f"
 
+      - name: Checkout WO-GAT-07 documentation evidence
+        uses: actions/checkout@v4
+        with:
+          repository: rottay/docs-engineering
+          ref: 9865c253eca40093515f6662630280aef2818f13
+          path: .gat07/docs-engineering
+          token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
+
       # CI runs `test:ci`, and npm fires `pre<name>` only for the EXACT script
       # `test` -- so the `pretest` chain never executed here and sixteen gates
       # that looked enforced were not. `gates:ci` is the single inventory
@@ -161,6 +169,10 @@ jobs:
       - name: Quality gates (manifest-driven, blocking)
         env:
           APP_BITHIRE_ROOT: ${{ github.workspace }}/.corpora/app-bithire
+          # The manifest runs gat-07-exact-proof, which reads the sealed
+          # documentation corpus. The checkout above must precede this step or
+          # the gate dies on a missing input instead of proving anything.
+          DOCS_ENGINEERING_ROOT: ${{ github.workspace }}/.gat07/docs-engineering
         run: pnpm --filter @rottay/design-system run gates:ci
 
       - name: Audit machinery regression tests
@@ -170,14 +182,6 @@ jobs:
         run: |
           pnpm effects:provenance
           pnpm effects:provenance:test
-
-      - name: Checkout WO-GAT-07 documentation evidence
-        uses: actions/checkout@v4
-        with:
-          repository: rottay/docs-engineering
-          ref: 9865c253eca40093515f6662630280aef2818f13
-          path: .gat07/docs-engineering
-          token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
 
       - name: WO-GAT-07 exact proof and artifact freshness
         run: pnpm --filter @rottay/design-system run gat07:check

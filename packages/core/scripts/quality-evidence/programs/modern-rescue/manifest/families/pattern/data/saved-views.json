@@ -916,8 +916,7 @@
             {
               "variable": "--ds-saved-views-menu-list-max-block-size",
               "declaredAt": [
-                "packages/core/styles/rottay.css:100977",
-                "packages/core/styles/platform.css:100977"
+                "packages/core/styles/rottay.css:100977"
               ],
               "readByAnyFamilyInThisCohort": false,
               "repoWideVarReadOccurrences": 6,
@@ -926,8 +925,7 @@
             {
               "variable": "--ds-saved-views-menu-view-item-label-measure",
               "declaredAt": [
-                "packages/core/styles/rottay.css:100978",
-                "packages/core/styles/platform.css:100978"
+                "packages/core/styles/rottay.css:100978"
               ],
               "readByAnyFamilyInThisCohort": false,
               "repoWideVarReadOccurrences": 6,

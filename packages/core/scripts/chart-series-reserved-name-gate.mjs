@@ -63,7 +63,23 @@ const LAST_SLOT = 10;
 
 /** Sanctioned definers of the reserved channel, relative to src/. */
 export const DEFINER_ALLOWLIST = [
-  // The tenant appearance compiler: THE emission point for generated palettes.
+  // The brand-theme compiler: the canonical `compileTheme` lowering both the
+  // static BrandTheme and the DB TenantThemeDocument transports resolve into.
+  // The palette authority moved here in dcc65ca34 (2026-08-18) and this list
+  // was not updated in the same commit, so the gate flagged the canonical
+  // definer while sanctioning the compatibility one.
+  'infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+  // The tenant appearance compiler. Still a sanctioned definer, but now as the
+  // compatibility projection: `appearanceToVariables()` is documented (same
+  // file, above `compileAppearanceVariables`) as the raw projection kept for
+  // low-level compiler tests and compatibility consumers.
+  //
+  // BOTH emit at the tenant root scope, so neither shadows the other the way
+  // CHT-03 describes -- the hazard this gate exists for is a definition BELOW
+  // the tenant scope (component skin CSS, an inline style key), and that is
+  // still zero. The residual duplication is that two call sites now derive the
+  // same ten slots with different ground resolution; collapsing them to one
+  // definer is an open unification, not something this allowlist decides.
   'infrastructure/compilers/kernel/runtime/appearance/index.ts',
   // Derives the ten emitted slot colors for the compiler; names the channel
   // in its documentation and derivation API.

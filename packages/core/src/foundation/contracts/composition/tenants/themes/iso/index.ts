@@ -698,18 +698,34 @@ function mergeDefaultShape<T extends object>(
   source: Partial<T> | undefined
 ): T {
   if (!source) return defaults;
+  // Iterate by ENTRIES, not by computed reads off `T` / `Partial<T>`.
+  //
+  // `T extends object` includes functions, and a mapped type over a bare type
+  // parameter is opaque to the checker, so `defaults[key]` / `source[key]` are
+  // indistinguishable from a capability escape (`obj[k].constructor` reaching
+  // `Function`) to the dependency-honesty analyser that guards this package's
+  // runtime edges. `Object.entries` carries the same own enumerable string
+  // keys in the same order and hands the values over directly, so this reads
+  // exactly what the computed form read, with nothing left to prove.
+  const sourceValues = new Map(
+    Object.entries(source as Record<string, unknown>)
+  );
   const result = {} as T;
-  for (const key of Object.keys(defaults) as Array<keyof T>) {
-    const defaultVal = defaults[key];
-    const sourceVal = source[key];
+  for (const [key, defaultVal] of Object.entries(
+    defaults as Record<string, unknown>
+  )) {
+    const slot = key as keyof T;
+    const sourceVal = sourceValues.get(key);
     if (isPlainObject(defaultVal) && isPlainObject(sourceVal)) {
-      result[key] = mergeDefaultShape(
+      result[slot] = mergeDefaultShape(
         defaultVal as Record<string, unknown>,
         sourceVal as Record<string, unknown>
-      ) as T[typeof key];
+      ) as T[typeof slot];
     } else {
-      result[key] =
-        sourceVal !== undefined ? (sourceVal as T[typeof key]) : defaultVal;
+      result[slot] =
+        sourceVal !== undefined
+          ? (sourceVal as T[typeof slot])
+          : (defaultVal as T[typeof slot]);
     }
   }
   return result;

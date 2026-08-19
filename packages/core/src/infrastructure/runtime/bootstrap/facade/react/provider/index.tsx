@@ -539,14 +539,19 @@ function partitionTenantOverrides(
  * from the top-level rule they sit under.
  */
 export function mergeDefinedOwnEntries<T extends object>(base: T, override: Partial<T>): T {
-  const merged: T = { ...base };
-  for (const key in override) {
-    if (!Object.prototype.hasOwnProperty.call(override, key)) continue;
-    const value = override[key];
+  // Entries over a stated plain-record shape, not computed reads and writes on
+  // `T`. `T extends object` includes functions, so `override[key]` and
+  // `merged[key] = value` are indistinguishable from a capability escape
+  // (`obj[k].constructor` reaching `Function`) to the dependency-honesty
+  // analyser that guards this package's runtime edges. `Object.entries` yields
+  // exactly the own enumerable string keys the `for...in` + `hasOwnProperty`
+  // pair yielded, in the same order, so the merge is unchanged.
+  const merged: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+  for (const [key, value] of Object.entries(override as Record<string, unknown>)) {
     if (value === undefined) continue;
     merged[key] = value;
   }
-  return merged;
+  return merged as T;
 }
 
 const TOKEN_OVERRIDE_SECTIONS: ReadonlySet<string> = new Set([

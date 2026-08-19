@@ -661,7 +661,7 @@
     "gat07:write": "node scripts/gat-07-exact-proof.mjs --write",
     "gat09:structural": "node scripts/gat-09-full-claim-integrity.mjs --structural",
     "gat09:gate": "node scripts/gat-09-full-claim-integrity.mjs",
-    "test:scripts": "node --test scripts/quality-evidence/v2/*.test.mjs && node --test scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs scripts/quality-evidence/programs/modern-rescue/manifest/generator.test.mjs && node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\" && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
     "pretest": "pnpm run gates:ci",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",

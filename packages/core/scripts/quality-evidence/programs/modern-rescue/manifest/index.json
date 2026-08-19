@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/generator.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "f6b6b8b69fcc6b58c5dccd8a5313a30b9a698cfe7806817fe022de7cc93f3d31",
+  "inputsDigest": "8c44df8a775375c5c1de1cac8690621bbccbaf74ca1f2395464b21859b969b5f",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1722,7 +1722,7 @@
     {
       "familyId": "pattern/data/saved-views",
       "path": "manifest/families/pattern/data/saved-views.json",
-      "digest": "3554a2d36aeea5ea6913283776524bf72d3c514b7c77fa9192d6c3c18221b56d",
+      "digest": "78c1443c1d0acbce6d76960f32e2f743743be3e4b9c839519b29565f6725f93f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -1771,35 +1771,35 @@
     {
       "familyId": "pattern/forms/filter-builder",
       "path": "manifest/families/pattern/forms/filter-builder.json",
-      "digest": "e5a2ad23aea24f26956882e2433a0f45ec93b305b998b2e0583854eda2fe4c85",
+      "digest": "3f5f364d2db9dad6f95e1edaf5742b7e103a25e42b971899932a581b3cce0ea9",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/forms/filter-panel",
       "path": "manifest/families/pattern/forms/filter-panel.json",
-      "digest": "392f07b763636b10cfaad0bf5e89d1b25c9408f71e2e2d48f1a80755323f11f5",
+      "digest": "d6e33aeaa996cc5548dacfff35e3734e110256404da02292f7e3fb770bd4712c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/forms/invoice-template",
       "path": "manifest/families/pattern/forms/invoice-template.json",
-      "digest": "f7945c5a69193b2688539c76605cd047aeaff21f2c74926fa60503b3833b8b4f",
+      "digest": "3a3f498895e90c5caa57b132ff3624dd7ca627e476957632597d50183a0ffded",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/forms/pattern-form-builder",
       "path": "manifest/families/pattern/forms/pattern-form-builder.json",
-      "digest": "410d188f7d34ba2ed068500dd721f27692a5f14c0d39e437797db195787153e4",
+      "digest": "ab6341d6af9f32901a5f26b3cdfcc021a60d23288556c9d564b4f4af68e6e7c7",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/forms/step-wizard",
       "path": "manifest/families/pattern/forms/step-wizard.json",
-      "digest": "357d0e0d40d7f2b50a772113a9caff0836ed60aedce476a51c3f662fc60377c2",
+      "digest": "22ae984c7a63c003b59a5698d5997fd98ab7b79d5fbc2ffdca5f9f0371724f4c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2233,91 +2233,91 @@
     {
       "familyId": "primitive/inputs/auto-complete",
       "path": "manifest/families/primitive/inputs/auto-complete.json",
-      "digest": "53b4d5a6f00c7b38c93b7229c9adbd95986f011755f0e008c6abe3f28ac29c49",
+      "digest": "3d1128689cf52cc0b7ee536de5f1fd9be0bb69e2efff2807fc928594a72582b1",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/button",
       "path": "manifest/families/primitive/inputs/button.json",
-      "digest": "62be4569b5c3e3096df7c9a6f88eecbcc4f2adff4a510d7b3423fc8d6d768f84",
+      "digest": "b3ea4588de7f04860dc7a8f96d942581712ef3d2a130f5bb58c46276e829ba6a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/cascader",
       "path": "manifest/families/primitive/inputs/cascader.json",
-      "digest": "8341fc638583f448b5db9fb357bac61a3a2920071529bd6c597105c69a0d0e18",
+      "digest": "6d0160cdd7a9c94fd31d08c140a0ddb88682929c1fa16a4d4924de40d2d012c7",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/checkbox",
       "path": "manifest/families/primitive/inputs/checkbox.json",
-      "digest": "2a0004140e542ae50da552a1b9ec59a58b4b96ece644f4e6454186d5b148e705",
+      "digest": "a93157036eadf43c9ef433b62a84fa91285d16d5ac349e35c3fc40839017c497",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/color-picker",
       "path": "manifest/families/primitive/inputs/color-picker.json",
-      "digest": "ac0f47d8b2f33e5c45f03e1a8c503eb15e7492be6709a029da6d9447726fd3ca",
+      "digest": "f9139a2f6cab751798e5aa84dfd0cc7d887ffa944ec9916a3326e630b13cd020",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/date-picker",
       "path": "manifest/families/primitive/inputs/date-picker.json",
-      "digest": "dea9579d7ea39e77f20d962118bef665d1462e23a0b2dfd02afc3c2f4c96d147",
+      "digest": "ba879ffae22a49caa05e212305faaf1b27968efb4916c1c5fc6d8216b8893108",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/form",
       "path": "manifest/families/primitive/inputs/form.json",
-      "digest": "6473e2258fd9e1b4febb20cb98284ed84295d04d0d1f2a5390e835abdefa7fd9",
+      "digest": "288e1167ead7fb04b8c1f173f2455c142868fa6e01f7c978f8efa4f20acd44fb",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/form-field",
       "path": "manifest/families/primitive/inputs/form-field.json",
-      "digest": "a75a61ecf29a7f216e782106ec48a5d758a3ce29b38cb2a0ce53be0cef2326d7",
+      "digest": "2f278ff604475133f7cdde4cbb36cb400da872af7613611549f370077165231f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/input",
       "path": "manifest/families/primitive/inputs/input.json",
-      "digest": "fc3a2dfb848316d2d1100c610d1813f97f7d48d82c26236cc43bad7d686203c6",
+      "digest": "1acfe8a19b284d2635306a711f00f78411bfe1e438f746c53202e8a23103f91b",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/input-number",
       "path": "manifest/families/primitive/inputs/input-number.json",
-      "digest": "801f51829392d03729044805f7b3b59eb55ac1cc619a190709ea11040243bbc3",
+      "digest": "229e8794acd1d29fd101f9153203ccf84a4950d1163b044a9ff6ce2251fac44d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/mentions",
       "path": "manifest/families/primitive/inputs/mentions.json",
-      "digest": "3b736b547977f71395ccc665047229a4369bbf4f24157bf7754af23c93458718",
+      "digest": "bf702500a95752f272559d6ad16606b261c8fec6ddfeaa18e437e3bd7da4beb0",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/otp-input",
       "path": "manifest/families/primitive/inputs/otp-input.json",
-      "digest": "53dabe6711ef8fcdfed28b59037f72f8304496f55a663e46e30d0d4416c29fab",
+      "digest": "17b48b8e6477eda3ee25e714ff1c9f971cf30a480f640f33ac81a149eb818fc5",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/inputs/password-input",
       "path": "manifest/families/primitive/inputs/password-input.json",
-      "digest": "d518c9318020fccaeda4e5f193a78432dd47298329fd04a99acdc78d6e600d46",
+      "digest": "66d229bce508c03e2b86791d093bcee95dcc209bc1c1adcc47a3b676bf043a70",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
