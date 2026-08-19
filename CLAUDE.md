@@ -18,6 +18,13 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 - **Capability Map (read first)**: `/docs-engineering/engineering/design-system/capability-map/README.md` — the full DS surface in two orientations (what a tenant can white-label; what an app can consume, with the app-bithire reference adoption per row). Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
 - **Catálogo Central**: `/docs-engineering/README.md`
 - **Component Reference**: `/docs-engineering/engineering/design-system/`
+- **Architecture (target law)**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) —
+  the normative definition of what this repository must be: doctrine, the full
+  target tree with every owner's purpose and relations, and the delta against
+  the current tree. Read it before moving, renaming or deleting anything.
+- **Diagnostic & plan**: [`docs/DIAGNOSTICO-Y-PLAN-2026-08-19.md`](docs/DIAGNOSTICO-Y-PLAN-2026-08-19.md)
+  — the verified diagnosis, the ordered work fronts, and the master removal
+  list derived from the target architecture.
 - **Repo map**: [`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md) — what every
   folder in this repository does, where something is written twice, and which
   folders are empty scaffolding. Independently verified claim by claim.
@@ -66,9 +73,9 @@ Update the hub `README.md` inventory counts when component totals change.
 
 - Multi-engine design system with three built-in physical engines plus a custom registry:
   - **classic** — Ant Design 5.21 wrapper
-  - **modern** — the Rottay-native premium skin. A residual DaisyUI class layer survives in
-    sixteen engine files; `daisy.classConsumers` is a decrease-only ratchet that lets it shrink
-    and never grow (WO-TOK-03 verdict, 2026-07-10)
+  - **modern** — the Rottay-native premium skin. The residual DaisyUI class layer is
+    fully drained (`daisy.classConsumers: 0`, WO-TOK-03); the ratchet stays
+    decrease-only so it never comes back
   - **rustic** — Vanilla CSS fallback
   - **custom** — White-label component packs registered at runtime; not a fourth physical
     implementation copied into every component owner
@@ -515,30 +522,31 @@ pnpm typecheck    # TypeScript check
 
 ---
 
-### Component CSS variable pattern (2026-04-17)
+### Component paint pattern (skin-first; supersedes the 2026-04-17 inline pattern)
 
-Modern engine components read **component-specific CSS variables** with fallback to generic tokens:
+Modern engine components are painted by their **skin file**
+(`foundation/tokens/css/runtime/engines/modern/skin/<component>.css`), keyed on
+the `data-part` / `data-state` / `data-variant` anatomy the TSX stamps. The TSX
+owns structure and interaction state only — no visual values. The skin reads
+component channels with a chained fallback to the cascade roots:
 
-```tsx
-// Pattern: var(--ds-{component}-{property}, var(--ds-{generic-fallback}))
-background: 'var(--ds-button-primary-bg, var(--ds-color-primary))'
-border: 'var(--ds-input-border, var(--ds-color-border))'
-color: 'var(--ds-card-title-color, var(--ds-color-text-primary))'
+```css
+/* Pattern: var(--ds-{component}-{property}, var(--ds-{root})) */
+background: var(--ds-button-primary-bg, var(--ds-color-primary));
 ```
 
-This enables per-component customization through the governed visual compiler
-without breaking existing code. When the component-specific variable is not
-set, the generic token is used.
-
-Representative migrated families include Button, Input, Card, Table,
-PatternDataTable, Modal, Tabs, Radio and Checkbox.
+Per-component customization flows through the governed visual compiler into the
+skin's channels. Nobody restyles a primitive's internals, and nobody edits an
+engine TSX to change how a component looks. Inline `var(--ds-*)` reads left in
+engine files are migration debt tracked by the paint censuses (decrease-only),
+not the pattern to copy. Reference implementation: `Button`.
 
 ### TenantAppearanceAdvanced (normalized compatibility shape)
 
 `TenantAppearanceAdvanced` is the normalized compiler/compat shape, not the DB
 write contract. `TenantThemeDocument` exposes bounded advanced fields that can
 compile into these chrome sections:
-- `chrome.controls` -- all 10 button variants + full input chrome + disabled + focus
+- `chrome.controls` -- the full button variant domain + full input chrome + disabled + focus
 - `chrome.table` -- header, row, cell, loading overlay
 - `chrome.cardComponent` -- bg, border, shadow, header/body/footer
 - `chrome.modal` -- bg, overlay, header/body/footer, close
@@ -548,10 +556,10 @@ compile into these chrome sections:
 - `chrome.shell` -- grid overlay
 - `tokenOverrides` -- raw `--ds-*` vars (max 200)
 
-The appearance compiler
-(`packages/core/src/infrastructure/compilers/kernel/runtime/appearance/`)
-converts these to bounded CSS variables. Production DB themes are server
-compiled; provider-side emission is the compatibility/preview path.
+These fields compile through the single Theme→CSS lowering
+(`packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/`); the
+legacy `appearance/` compiler is being absorbed into it. Production DB themes
+are server compiled; provider-side emission is the compatibility/preview path.
 
 ---
 
@@ -565,8 +573,8 @@ to the **Quiet Premium** target. Two artifacts govern this:
   contract, gradient/glass/glow roles, color purity, scale hygiene, theme.css drain, content integrity,
   cross-engine layout, premium signature, and the section 12 metrics ratchet). Read it FULLY before
   touching the modern engine, tokens, or the `packages/core/src/foundation/tokens/css/runtime/engines/modern/` tree.
-- **Operative backlog (the work)**: `roadmap/` holds six lanes totalling 99 work orders —
-  `engine-modern.md` (25, WO-ENG-01..25), `craft.md` (22), `architecture.md` (21), `gates.md` (12),
+- **Operative backlog (the work)**: `roadmap/` holds six lanes totalling 100 work orders —
+  `engine-modern.md` (25, WO-ENG-01..25), `craft.md` (23), `architecture.md` (21), `gates.md` (12),
   `tokens.md` (11), `skin-adoption.md` (8) — each WO with file-level steps, a blocking acceptance
   gate, and a ready-to-paste delegation prompt. State lives in `roadmap/registry.json`; check status with `pnpm roadmap:status`
   and validate registry/lane agreement with `pnpm roadmap:check`. Read `roadmap/README.md` (start order,
