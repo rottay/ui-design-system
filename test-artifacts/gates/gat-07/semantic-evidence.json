@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "addb27b57f16000302e9c74b4bea723a0b2c50b8eb439241e17ef56f439012e3",
+    "authorityDigest": "63cdae449dd336b1fd72f038689342759d8c695f4707ba03279d6ae632c0524a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1001,8 +1001,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5798,
-        "sha256": "5e63e5eaebc37c047eb3c47e7d672beb6f9a8b4b0d28f38dbf893a03bc9c8814"
+        "bytes": 9160,
+        "sha256": "4004d33d0f24b4aabbc7ca17961b182684144f9629dd69f44312e1a07ece85be"
       },
       {
         "path": "ui-design-system/packages/core/scripts/first-party-single-author-gate.mjs",
@@ -5157,8 +5157,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 4101,
-        "sha256": "39cd431ccec3369043688b11a8a37a1be6c8507bd6170330f14e45399158b57a"
+        "bytes": 5562,
+        "sha256": "d8d650bd9522bfee4e6aca95cc52b538378a4e8be08f634b157420f5cd71bc87"
       },
       {
         "path": "ui-design-system/packages/core/scripts/workflow-script-wiring-gate.mjs",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "addb27b57f16000302e9c74b4bea723a0b2c50b8eb439241e17ef56f439012e3"
+    "digest": "63cdae449dd336b1fd72f038689342759d8c695f4707ba03279d6ae632c0524a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "3fb87af716e47ed9f38eaa37e7016b675768421437f6a39cd8554b6f8f68cf40",
-      "3fb87af716e47ed9f38eaa37e7016b675768421437f6a39cd8554b6f8f68cf40"
+      "ea9ecb12618a5871c4985124e0e524e5ef5281d6c3103204629ceddb11881ab3",
+      "ea9ecb12618a5871c4985124e0e524e5ef5281d6c3103204629ceddb11881ab3"
     ],
     "agree": true
   }
