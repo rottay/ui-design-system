@@ -130,7 +130,7 @@ export const TreeMap = memo(function TreeMap({
     <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {model.tiles.map((tile) => (
         <div key={tile.id} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" data-color-source={tile.colorSource} style={{ width: 12, height: 12, backgroundColor: tile.color, display: 'inline-block' }} />
+          <span data-part="legend-swatch" data-color-source={tile.colorSource} style={{ width: 'var(--ds-chart-legend-swatch-size, 12px)', height: 'var(--ds-chart-legend-swatch-size, 12px)', backgroundColor: tile.color, display: 'inline-block' }} />
           <span data-part="legend-label">{tile.name}</span>
         </div>
       ))}
