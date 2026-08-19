@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/kimi-preservation-manifest.mjs --write",
-  "basedOnReportDigest": "4c9c722efbc282cc9d984401de1ba392a7581b04b9da3fbadb44606fdb1fa18d",
+  "basedOnReportDigest": "f65562fb490052cc95a39739cb6bea96914f47583caecc74d7f7632cff834fd9",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,11 +2153,11 @@
     ]
   },
   "deadWriters": {
-    "total": 270,
+    "total": 266,
     "byProvenance": {
-      "E-reserved-frontier": 3,
-      "B-modern-current": 69,
-      "D-compiler-generated": 15,
+      "E-reserved-frontier": 5,
+      "B-modern-current": 61,
+      "D-compiler-generated": 17,
       "A-kimi-premium": 183
     },
     "entries": [
@@ -2456,42 +2456,42 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-color-bg",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-color-dark-accent",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-color-dark-primary",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-color-dark-secondary",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-color-interactive-bg-muted",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
+        "provenance": "D-compiler-generated",
+        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
+        "owner": "design-system/D1-compilers",
         "status": "dead-writer"
       },
       {
         "name": "--ds-color-interactive-border",
+        "provenance": "D-compiler-generated",
+        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
+        "owner": "design-system/D1-compilers",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-color-mono-100",
+        "provenance": "B-modern-current",
+        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
+        "owner": "design-system/D1-modern",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-color-mono-200",
+        "provenance": "B-modern-current",
+        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
+        "owner": "design-system/D1-modern",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-color-mono-800",
+        "provenance": "B-modern-current",
+        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
+        "owner": "design-system/D1-modern",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-color-mono-900",
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
         "owner": "design-system/D1-modern",
@@ -2544,41 +2544,6 @@
         "provenance": "D-compiler-generated",
         "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
         "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-commercial-gray-100",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-commercial-gray-200",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-commercial-gray-400",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-commercial-gray-800",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-commercial-gray-900",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
         "status": "dead-writer"
       },
       {
@@ -2855,21 +2820,7 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-duration-slow",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-ease-in-out",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-ease-out",
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
         "owner": "design-system/D1-modern",
@@ -2954,6 +2905,13 @@
       },
       {
         "name": "--ds-error-state-icon-bg",
+        "provenance": "B-modern-current",
+        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
+        "owner": "design-system/D1-modern",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-input-placeholder",
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
         "owner": "design-system/D1-modern",
@@ -3895,6 +3853,20 @@
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-16",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-4",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
         "status": "dead-writer"
       },
       {

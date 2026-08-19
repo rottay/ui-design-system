@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "generatedBy": "tokens-catalog gate re-derivation, 2026-08-19 — digest+figures re-projected from the current census report; adjudications unchanged",
-  "basedOnReportDigest": "b6326a2cd6da6077331bd895f001ac41700ba1d4959926c1cb3f55fbcec4c999",
+  "basedOnReportDigest": "f65562fb490052cc95a39739cb6bea96914f47583caecc74d7f7632cff834fd9",
   "normative": {
-    "writers": 4802,
+    "writers": 4668,
     "deadWriters": 266,
     "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
   },
