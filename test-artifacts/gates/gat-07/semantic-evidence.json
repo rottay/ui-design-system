@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "98ccc71b9c077a4d4e7458b6250b2202c04abe32f015539d0e806dc561069da8",
+    "authorityDigest": "3a80b3604e528e47c8a14cce3b0186b07d776efc8007a1cd90b28c4b3ac33a57",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -25414,8 +25414,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7032,
-        "sha256": "de80d2e66bf643c806375889c3a306e8cb9cfed2e6872f89ba677d4da07a5367"
+        "bytes": 7034,
+        "sha256": "49e3e1347b597b4f98dddbef8faf8e6c184c40fcb5bb7dd177014db86dd965b5"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/visualization/charts/families/waterfall/index.tsx",
@@ -45431,7 +45431,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "98ccc71b9c077a4d4e7458b6250b2202c04abe32f015539d0e806dc561069da8"
+    "digest": "3a80b3604e528e47c8a14cce3b0186b07d776efc8007a1cd90b28c4b3ac33a57"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118812,8 +118812,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "c79a76bf6c865aa3ca7f9c3ad27a501375e0bd248f1c50a8181dc6a37a15e50f",
-      "c79a76bf6c865aa3ca7f9c3ad27a501375e0bd248f1c50a8181dc6a37a15e50f"
+      "869c551f4bf13f34044769f4d7c2016f5a87b926b0d7c8c0d3d8eb0f361180db",
+      "869c551f4bf13f34044769f4d7c2016f5a87b926b0d7c8c0d3d8eb0f361180db"
     ],
     "agree": true
   }
