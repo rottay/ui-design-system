@@ -1099,8 +1099,8 @@ importer each: migrate those pages first).
 
 **Retires — ui/:** `Toggle` (into `Switch`); `Stepper` (covered by `Steps`);
 `HoverCard` (covered by `Popover`/`Tooltip`); `Message` (into `Toast`);
-`Callout` (into `Alert` — note its contract already imports from Callout:
-undo that dependency first); `Space` (into `Stack`); `ConfirmDialog` (into
+`Callout` (into `Alert` — clean absorption; the two Callout mentions in
+Alert's contracts are docstrings only); `Space` (into `Stack`); `ConfirmDialog` (into
 `AlertDialog`); standalone `BackTop` is the canonical control and the
 `FloatButton.BackTop` compound retires — one capability, one public name; the
 duplicated side of the four collection-chrome pairs, **canonical per pair with
