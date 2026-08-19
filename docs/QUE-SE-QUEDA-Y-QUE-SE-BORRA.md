@@ -38,6 +38,40 @@ Ningún archivo se borra hasta que apruebes el lote.
 
 # PARTE 1 — SE BORRA
 
+---
+
+## Evidencia: qué importan de verdad las apps
+
+Todo lo que sigue apoya sus decisiones en una medición, no en una lectura. La
+medición es esta:
+
+- se recorrieron `app-bithire/src`, `app-evnto/src`, `app-platform/src` y
+  `app-bithire-desktop/src`;
+- se extrajo cada `import { ... } from "@rottay/design-system..."` real;
+- se contó **en cuántos archivos** aparece cada símbolo importado.
+
+Resultado: **2000 archivos** de app importan del design system y usan **546
+símbolos distintos**. Por app: bithire 1240, platform 441, evnto 319, y
+`app-bithire-desktop` **0** — esa app no consume el DS en absoluto.
+
+Subpaths realmente usados: raíz (1970), `/icons` (1130), `/commercial` (53),
+`/server` (15), `/icons/presets/bithire` (10), `/marks` (10), `/charts` (8),
+`/charts/renderers` (5), `/motion` (3), `/charts/access` (1), `/charts/spec` (1).
+
+**Advertencia de método, porque me equivoqué antes.** El primer intento contó
+apariciones del nombre en el código de las apps (`grep -l "\bDetailSurface\b"`)
+y dio 127. Contando imports reales da **3**. La diferencia son variables locales,
+tipos propios, strings y comentarios que se llaman igual. Contar apariciones mide
+el rastro de la forma de escribir, no la población. Ningún número de este
+documento sale de ese método.
+
+**Para qué sirve acá.** No para borrar por poco uso — algo recién publicado
+también tiene cero. Sirve como desempate: cuando dos cosas hacen lo mismo y una
+tiene cero importadores, esa es la copia, no la canónica. Ese es el único uso que
+se le da abajo.
+
+---
+
 ## LOTE 1 — Carpetas vacías
 
 **Verdicto: BORRAR. Riesgo: ninguno.**
@@ -117,6 +151,13 @@ da **0** para los 13. El único importador de la carpeta `legacy/` es ese
 `index.ts`, y solo saca de ahí `AlertIcon` y `LoaderIcon`.
 
 **se quedan:** `AlertIcon` y `LoaderIcon`, que sí se reexportan.
+
+**el dato que lo confirma:** los nombres sí están vivos —  las apps importan
+`UsersIcon` 83 veces, `CheckCircleIcon` 73, `SearchIcon` y compañía. Pero todos
+resuelven a `presentation/catalog/`, que es Phosphor por debajo
+(`catalog/user/index.ts:29`). Ni un solo import llega a `legacy/`. Es el peor
+caso posible de segunda copia: un nombre muy usado con dos implementaciones,
+donde la copia dibujada a mano es la que nadie alcanza.
 
 **riesgo:** ninguno. No salen por ningún export público.
 
@@ -286,8 +327,14 @@ presente": o se borra o el cartel es mentira.
 
 **riesgo:** sale por el export público. Necesita nota de breaking change.
 
-**bloqueo:** confirmar que ninguna app lo importa (`app-bithire`, `app-evnto`,
-`app-platform`).
+**bloqueo: resuelto.** Medido sobre los 2000 archivos de app que importan del DS:
+`ApprovalInbox` **0**, `PatternApprovalInbox` **0**. Ninguna app lo importa, así
+que el breaking change no rompe a nadie hoy.
+
+**pero ojo con el reemplazo:** `DecisionInboxSurface`, que el propio `@deprecated`
+señala como sustituto, también tiene **0** importadores. Borrar el viejo está
+bien; declarar que el nuevo "ya funciona en producción" no, porque no está en
+producción en ninguna app.
 
 ---
 
@@ -377,6 +424,19 @@ ejecutando en CI. Un baseline histórico que corre en CI no es histórico.
 Tres de los cuatro pares tienen, en el código, un comentario que nombra a su
 duplicado. Nadie decidió cuál gana; se documentó el empate.
 
+**La adopción confirma cuál gana**, y no por poco:
+
+| par | lado `patterns/` | lado `structures/` |
+|---|---|---|
+| toolbar | `ListToolbar` **1** | `TableToolbar` **3** |
+| columnas | `ColumnSettingsDropdown` **0**, `PatternColumnSettings` **0** | `ColumnMenu` **2** |
+| vistas guardadas | `SavedViewsBar` **0** | `SavedViewsMenu` **1** |
+| filtros | `FilterPanel` **0** | `FieldFiltersPanel` **1** |
+
+El lado `patterns/` suma **1 importador en total** entre los cinco símbolos; el
+lado `structures/` suma **7**. Son cifras chicas en los dos lados, pero no están
+empatadas: cuatro de los cinco duplicados de `patterns/` tienen cero.
+
 **Propuesta:** el chrome de página es tier `structures/`. Los cuatro de
 `patterns/` se retiran.
 
@@ -390,7 +450,21 @@ surface for all collection/list/table screens"* — y `ListSurface` sigue export
 por la cadena entera hasta `src/index.ts`. Se escribió la palabra "canónica" y no
 se retiró la otra.
 
-**Propuesta:** cumplir lo que el archivo ya declara.
+**La adopción parte el caso en dos mitades distintas:**
+
+| par | adopción |
+|---|---|
+| `ListSurface` vs `CollectionWorkspaceSurface` | **0** vs **61** (bithire 1, evnto 13, platform 47) |
+| `DetailSurface` vs `RecordWorkbenchSurface` | **3** vs **3** |
+
+**Propuesta (mitad de colección):** cumplir lo que el archivo ya declara.
+`ListSurface` tiene cero importadores y la otra tiene 61: se retira.
+
+**Propuesta (mitad de detalle): decisión tuya, no la tomo yo.** Es 3 contra 3.
+Acá "cumplir lo que el archivo declara" no aplica, porque ninguna de las dos es
+canónica en la práctica; las dos son casi inexistentes. Las opciones honestas
+son elegir una por diseño y migrar 3 archivos, o admitir que la pantalla de
+detalle todavía no tiene receta canónica y no fingir que sí.
 
 ## U5 — Seis marcos de página
 
@@ -400,8 +474,15 @@ y `workspace-shell` dice de sí mismo *"This is page chrome, not a page recipe"*
 No son seis implementaciones independientes, pero el solape de propósito es real y
 un consumidor no tiene forma de elegir.
 
+**Adopción:** `PatternPageShell` **6**, `AppShell` **3**, `PageShellSurface`
+**1**, y `Layout` **0**, `WorkspaceShell` **0**, `SidebarSurface` **0**. Tres de
+los seis marcos no los usa nadie.
+
 **Propuesta:** un árbol de decisión de una línea por marco en la doc, y retirar
-los que no sobrevivan.
+los que no sobrevivan. Los tres con cero importadores son los primeros
+candidatos, pero `SidebarSurface` y `WorkspaceShell` se usan internamente dentro
+del propio DS: hay que mirar el consumo interno antes de tocarlos, no solo el de
+las apps.
 
 ## U6 — Cuatro vocabularios de "no hay nada acá"
 
@@ -409,8 +490,13 @@ los que no sobrevivan.
 `structures/feedback/surface-lifecycle` (estado EMPTY),
 `surfaces/presentation/pages/experience/empty-state`. Uno por tier.
 
+**Adopción:** `Empty` **27**, `PatternEmptyState` **5**, `SurfaceEmptyState`
+**1**, `EmptyStateSurface` **0**. El primitive es el que la gente usa, cinco a
+uno.
+
 **Propuesta:** el primitive es el único que dibuja; los otros tres delegan. El de
-`surfaces/` ya es página completa y puede quedarse como receta.
+`surfaces/` ya es página completa y puede quedarse como receta — aunque con cero
+importadores hay que decidir si la receta se mantiene o se retira.
 
 ## U7 — Otros duplicados de primitives (decisión de API pública)
 
@@ -429,8 +515,63 @@ Los tres últimos grupos son duplicación legítima de tier (primitive sin datos
 pattern con datos) **si está escrita en la doc**. Hoy no lo está, así que un
 consumidor elige al azar.
 
-**Propuesta:** los pares primitive/pattern se quedan y se documentan; `Switch`/
-`Toggle` y `Steps`/`Stepper` se fusionan.
+**La adopción separa tres casos que no son el mismo problema:**
+
+*Uno de los dos tiene cero importadores — se retira, no se fusiona:*
+
+| par | adopción |
+|---|---|
+| `Steps` **6** / `Stepper` **0** | retirar `Stepper` |
+| `Drawer` **8** / `Sheet` **0** | retirar `Sheet` |
+| `Tooltip` **199** / `Popover` **0** / `HoverCard` **0** | retirar los dos de cero |
+| `Statistic` **0** / `MonoStat` **7** / `DataTerminalCard` **57** | retirar `Statistic` |
+| `PatternStatsGrid` **1** / `StatsHeader` **0** | retirar `StatsHeader` |
+| `Calendar` **0** / `CalendarView` **0** | ninguno se usa: decisión de producto |
+| `Tree` **0** / `TreeView` **2** | retirar `Tree` |
+
+*Fusión de verdad, con dos lados vivos:* `Switch` **35** (platform 24, bithire
+10, evnto 1) contra `Toggle` **8** (todo bithire). Es el único par del grupo que
+rompe código real: 8 archivos de bithire a migrar.
+
+*No es un problema de duplicación sino de documentación:* `Message` **0**,
+`Notification` **2**, `Toast` **3** — pero la función `toast()` tiene **214**
+importadores. Nadie usa los tres componentes; todos usan la función. Los tres
+componentes son fachada de algo que ya se consume de otra forma.
+
+**Un hallazgo aparte, y es el más grande del grupo:** el "primitive canónico" de
+métrica es `Statistic`, con **0**. El que la gente usa es `DataTerminalCard`,
+una `structure/`, con **57** (todos en platform). El tier no está prediciendo la
+canonicidad acá.
+
+**Propuesta:** los pares primitive/pattern con los dos lados vivos se quedan y se
+documentan; los siete de la primera tabla se retiran; `Switch`/`Toggle` se fusiona
+con migración; el grupo de avisos se documenta en vez de tocarse.
+
+## U10 — Dos sistemas de iconos conviviendo en producción
+
+Este no salió del mapa; salió de medir las apps, y es el caso más claro de "dos
+sistemas dentro de uno".
+
+La documentación dice que el código nuevo usa nombres semánticos independientes
+del proveedor (`<Icon name="action.search" />`) y que el catálogo con forma de
+Lucide es solo compatibilidad. Los números dicen otra cosa:
+
+| sistema | símbolos distintos | archivos que lo importan |
+|---|---|---|
+| fachada semántica `Icon` | 1 | **704**, todos en bithire |
+| nombres con forma de vendor (`UsersIcon`, `AlertTriangleIcon`, …) | **153** | **1770** (platform 888, evnto 606, bithire 276) |
+
+`app-evnto` y `app-platform` importan la fachada semántica **cero** veces. El
+sistema declarado "de compatibilidad" es, medido, el sistema mayoritario: más
+del doble de uso y 153 nombres de superficie pública contra uno.
+
+No es un borrado, es una migración con costo real, y hasta que se haga la
+documentación está describiendo una intención, no el repo.
+
+**Propuesta:** o se migra evnto y platform a la fachada y el catálogo pasa a ser
+de verdad compatibilidad, o se admite por escrito que hay dos entradas
+soportadas. Lo que no puede seguir es que la doc afirme una cosa y el código haga
+la otra.
 
 ## U8 — Dos motores de roadmap
 
@@ -525,8 +666,20 @@ Aprobás por lote, no archivo por archivo:
 | 6 | `styles/platform.css` | medio | no: reanclar 802 citas primero |
 | 7 | `test-artifacts/` (528 MB) | pérdida de evidencia | no: necesito tu decisión |
 | 8 | espejo TS de tokens | alto de golpe | no: migrar 2 funciones primero |
-| 9 | `approval-inbox` (ya deprecado) | API pública | no: confirmar que ninguna app lo importa |
+| 9 | `approval-inbox` (ya deprecado) | API pública | sí: medido, 0 importadores en las apps |
 | 10 | doc que describe cosas inexistentes | ninguno | sí (es corrección, no borrado) |
 | 11 | alias de `package.json` sin uso | ninguno | sí |
 
-Los lotes 1 a 5 más el 10 y el 11 se pueden hacer hoy y no rompen nada.
+Los lotes 1 a 5 más el 9, el 10 y el 11 se pueden hacer hoy y no rompen nada.
+El 9 pasó a ejecutable con la medición de imports; los únicos que siguen
+esperando algo son el 6 (trabajo previo), el 7 (decisión tuya) y el 8 (migrar dos
+funciones).
+
+Y tres preguntas que no puedo contestar yo, porque son de diseño y no de archivo:
+
+1. **U4, mitad de detalle.** `DetailSurface` 3 contra `RecordWorkbenchSurface` 3.
+   ¿Cuál es la receta canónica de pantalla de detalle, o todavía no hay una?
+2. **U7, `Switch` contra `Toggle`.** Fusionar rompe 8 archivos de bithire.
+   ¿Se hace ahora o se difiere?
+3. **U10, los dos sistemas de iconos.** ¿Se migran evnto y platform a la fachada
+   semántica, o se admite por escrito que hay dos entradas soportadas?
