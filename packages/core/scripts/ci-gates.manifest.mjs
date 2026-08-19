@@ -394,6 +394,23 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/taxonomy-parity-gate.mjs'],
     blocking: true,
   },
+  // The lane-control drill runner runs all five suites and goes red on any
+  // misbehaving one. tenant-reachability is red 10/13 since the 2026-08-18
+  // checkpoint: three interpolated emitters (`--ds-button-${x}-hover-bg`,
+  // `--ds-chart-series-${i}`, `--ds-chart-category-${i}`) have no enumerator,
+  // and the checker is fail-closed about reporting a number it cannot
+  // enumerate. Wiring it EXCLUDED makes the red visible in every CI summary
+  // while F2 (the cascade front) supplies the missing enumerators; it returns
+  // to blocking there.
+  {
+    id: 'lane-control-drills',
+    run: ['node', 'src/tooling/lane-control/integration/tests/drills/index.mjs'],
+    blocking: false,
+    excluded: {
+      reason: 'tenant-reachability is red 10/13 (three interpolated emitters without enumerators; union 606 vs rottay 625). The other four suites pass. F2 supplies the enumerators and this returns to blocking.',
+      owner: 'F2 cascade front (roadmap §5)',
+    },
+  },
   // The --ds_ experimentation space never reaches shipped CSS (canon: --ds-).
   {
     id: 'ds-prefix',
@@ -405,6 +422,14 @@ export const CI_GATES = Object.freeze([
   {
     id: 'root-catalog-freshness',
     run: ['node', 'scripts/root-catalog-freshness-gate.mjs'],
+    blocking: true,
+  },
+  // Every production script is wired through a declared channel (manifest,
+  // lifecycle chain or ci.yml) or it does not exist. This gate is what makes
+  // §1.10's "the wiring gate counts all three channels" true.
+  {
+    id: 'wiring-coverage',
+    run: ['node', 'scripts/wiring-coverage-gate.mjs'],
     blocking: true,
   },
   // Drills for the three F0 honesty gates: a gate that cannot fail is not a

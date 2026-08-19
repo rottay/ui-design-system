@@ -35,14 +35,18 @@ function collectTargets(value, out = new Set()) {
 }
 
 function wildcardSatisfied(pattern) {
+  // The search root is the literal prefix BEFORE the wildcard, treated as a
+  // directory itself — never its parent (a trailing-slash prefix like
+  // `./dist/*.css` must search inside `dist/`, not the whole package).
   const [prefix] = pattern.split('*');
-  const dir = join(CORE_ROOT, dirname(prefix));
+  const dir = join(CORE_ROOT, prefix);
   if (!existsSync(dir) || !statSync(dir).isDirectory()) return false;
   const suffix = pattern.slice(pattern.indexOf('*') + 1);
   const stack = [dir];
   while (stack.length > 0) {
     const current = stack.pop();
     for (const entry of readdirSync(current)) {
+      if (entry === 'node_modules') continue;
       const path = join(current, entry);
       if (statSync(path).isDirectory()) {
         stack.push(path);

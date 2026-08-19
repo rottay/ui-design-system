@@ -1,12 +1,15 @@
 /**
- * Drills for the three F0.11 gates: ds-underscore-prefix, exports-artifact and
- * root-catalog-freshness. A gate that cannot fail is not a gate, so each check
- * asserts both the green path and a planted-violation path.
+ * Drills for the three F0 honesty gates: ds-underscore-prefix,
+ * exports-artifact and root-catalog-freshness. A gate that cannot fail is not
+ * a gate, so each check asserts the green path against the real tree AND a
+ * planted-violation path against a synthetic tree built outside the repo (the
+ * gate scripts resolve their roots from their own location, so a copy under a
+ * temp `packages/core/scripts/` audits the synthetic tree).
  */
 
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,12 +18,11 @@ import test from 'node:test';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = join(HERE, '..');
 
-function run(script, env = {}) {
+function run(script, cwd = CORE_ROOT) {
   try {
-    const stdout = execFileSync('node', [join(HERE, script)], {
-      cwd: CORE_ROOT,
+    const stdout = execFileSync('node', [script], {
+      cwd,
       encoding: 'utf8',
-      env: { ...process.env, ...env },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     return { code: 0, out: stdout };
@@ -29,52 +31,109 @@ function run(script, env = {}) {
   }
 }
 
-test('ds-underscore-prefix-gate passes on the current tree', () => {
-  const result = run('ds-underscore-prefix-gate.mjs');
-  assert.equal(result.code, 0, result.out);
-  assert.match(result.out, /OK/);
-});
-
-test('ds-underscore-prefix-gate pattern would catch a planted --ds_ channel', () => {
-  const source = readFileSync(join(HERE, 'ds-underscore-prefix-gate.mjs'), 'utf8');
-  const patternMatch = source.match(/PATTERN = (\/.+\/[a-z]*)/);
-  assert.ok(patternMatch, 'pattern not found in source');
-  // eslint-disable-next-line no-eval
-  const pattern = eval(patternMatch[1]);
-  assert.ok(pattern.test('color: var(--ds_experimental-red);'));
-  assert.ok(!pattern.test('color: var(--ds-color-primary);'));
-});
-
-test('exports-artifact-gate reports missing targets after a fresh tree (no dist)', () => {
-  // With dist/ absent the gate must fail (honest red); with dist/ present it
-  // must pass. We assert the current state coherently either way.
-  const result = run('exports-artifact-gate.mjs');
-  if (result.code === 0) {
-    assert.match(result.out, /OK/);
-  } else {
-    assert.match(result.out, /declared target\(s\) missing/);
+/** Plant a synthetic package tree and run a COPY of the gate against it. */
+function runOnSyntheticTree(scriptName, files) {
+  const root = mkdtempSync(join(tmpdir(), 'f0-drill-'));
+  const scriptsDir = join(root, 'packages/core/scripts');
+  mkdirSync(scriptsDir, { recursive: true });
+  cpSync(join(HERE, scriptName), join(scriptsDir, scriptName));
+  for (const [path, content] of Object.entries(files)) {
+    const target = join(root, 'packages/core', path);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, content);
   }
+  return run(join(scriptsDir, scriptName), join(root, 'packages/core'));
+}
+
+/* ---------------- ds-underscore-prefix-gate ---------------- */
+
+test('ds-underscore-prefix-gate passes on the current tree', () => {
+  const result = run(join(HERE, 'ds-underscore-prefix-gate.mjs'));
+  assert.equal(result.code, 0, result.out);
 });
 
-test('exports-artifact-gate collects every condition target', () => {
-  const source = readFileSync(join(HERE, 'exports-artifact-gate.mjs'), 'utf8');
-  assert.match(source, /collectTargets/);
-  // Sanity: the package declares exports and the gate sees >100 targets.
-  const pkg = JSON.parse(readFileSync(join(CORE_ROOT, 'package.json'), 'utf8'));
-  assert.ok(Object.keys(pkg.exports).length > 100);
+test('ds-underscore-prefix-gate FAILS on a planted --ds_ in a synthetic skin', () => {
+  const result = runOnSyntheticTree('ds-underscore-prefix-gate.mjs', {
+    'src/skin/button.css': '.x { color: var(--ds_experimental-red); }\n',
+    'package.json': JSON.stringify({ name: '@rottay/design-system' }),
+  });
+  assert.equal(result.code, 1, result.out);
+  assert.match(result.out, /--ds_experimental-red/);
 });
+
+test('ds-underscore-prefix-gate ignores the private --_ds- namespace', () => {
+  const result = runOnSyntheticTree('ds-underscore-prefix-gate.mjs', {
+    'src/skin/button.css': '.x { width: var(--_ds-private-swatch, 12px); }\n',
+    'package.json': JSON.stringify({ name: '@rottay/design-system' }),
+  });
+  assert.equal(result.code, 0, result.out);
+});
+
+/* ---------------- exports-artifact-gate ---------------- */
+
+test('exports-artifact-gate passes on the built tree', () => {
+  const result = run(join(HERE, 'exports-artifact-gate.mjs'));
+  assert.equal(result.code, 0, result.out);
+});
+
+test('exports-artifact-gate FAILS on a missing exact target', () => {
+  const result = runOnSyntheticTree('exports-artifact-gate.mjs', {
+    'package.json': JSON.stringify({
+      name: '@rottay/design-system',
+      exports: { './a': './dist/a.js' },
+    }),
+  });
+  assert.equal(result.code, 1, result.out);
+  assert.match(result.out, /dist\/a\.js/);
+});
+
+test('exports-artifact-gate FAILS on a wildcard whose prefix dir is missing', () => {
+  const result = runOnSyntheticTree('exports-artifact-gate.mjs', {
+    'package.json': JSON.stringify({
+      name: '@rottay/design-system',
+      exports: { './styles/*': './dist/*.css' },
+    }),
+    // A .css somewhere else must NOT satisfy the dist wildcard (H1 regression).
+    'src/random.css': '.x{}\n',
+  });
+  assert.equal(result.code, 1, result.out);
+});
+
+/* ---------------- root-catalog-freshness-gate ---------------- */
 
 test('root-catalog-freshness-gate passes on the current tree', () => {
-  const result = run('root-catalog-freshness-gate.mjs');
+  const result = run(join(HERE, 'root-catalog-freshness-gate.mjs'));
   assert.equal(result.code, 0, result.out);
-  assert.match(result.out, /63 roots agree/);
 });
 
-test('root-catalog-freshness-gate detects a stale por-crear entry', () => {
-  // Plant: temporarily poison a copy of the catalog and point the gate at it
-  // via a swapped file is too invasive; instead assert the script contains
-  // both failure branches.
-  const source = readFileSync(join(HERE, 'root-catalog-freshness-gate.mjs'), 'utf8');
-  assert.match(source, /catalog says 'existe' but/);
-  assert.match(source, /is now declared in src/);
+test('root-catalog-freshness-gate FAILS on an existe root with no declaration', () => {
+  const catalog = {
+    roots: [
+      { rootId: 'fake.root', channel: '--ds-fake-head', channelStatus: 'existe' },
+    ],
+  };
+  const result = runOnSyntheticTree('root-catalog-freshness-gate.mjs', {
+    'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json':
+      JSON.stringify(catalog),
+    'src/skin/whatever.css': '.x { color: red; }\n',
+    'package.json': JSON.stringify({ name: '@rottay/design-system' }),
+  });
+  assert.equal(result.code, 1, result.out);
+  assert.match(result.out, /catalog says 'existe' but --ds-fake-head/);
+});
+
+test('root-catalog-freshness-gate FAILS on a por-crear root that gained a declaration', () => {
+  const catalog = {
+    roots: [
+      { rootId: 'fake.root', channel: '--ds-fake-head', channelStatus: 'por-crear' },
+    ],
+  };
+  const result = runOnSyntheticTree('root-catalog-freshness-gate.mjs', {
+    'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json':
+      JSON.stringify(catalog),
+    'src/skin/whatever.css': '.x { --ds-fake-head: 1px; }\n',
+    'package.json': JSON.stringify({ name: '@rottay/design-system' }),
+  });
+  assert.equal(result.code, 1, result.out);
+  assert.match(result.out, /now declared in src/);
 });

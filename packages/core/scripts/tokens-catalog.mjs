@@ -960,7 +960,7 @@ Derivation edges come from real \`var()\` fallback chains. Two graphs, stated
 apart because they answer different questions:
 
 - **theme layer** (${edges.size} upstream names) — the adjudicated cycle-check
-  graph. \`tokens:catalog:check\` fails on a cycle here.
+  graph. \`tokens-catalog --check\` (en el manifiesto de CI) fails on a cycle here.
 - **authored corpus** (${context.corpusEdges.size} upstream names) — every
   authored CSS file, used ONLY for the three-valued impact column. It is a
   reachability graph across scopes, so it is deliberately not the cycle
@@ -1102,7 +1102,7 @@ ${topDead.map(([f, c]) => `| \`${f}-*\` | ${c} |`).join('\n')}
 | --- | --- | --- |
 ${ADJUDICATED_DUAL_AUTHORITIES.map((d) => `| \`${d.legacyPrefix}*\` | \`${d.canonicalPrefix}*\` | ${d.batch} |`).join('\n')}
 
-Any OTHER coexisting legacy/canonical pair fails \`tokens:catalog:check\` —
+Any OTHER coexisting legacy/canonical pair fails \`tokens-catalog --check\` —
 aliases require a replacement and a retirement batch to exist at all.
 
 ## Drainage program

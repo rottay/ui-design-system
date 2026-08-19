@@ -349,9 +349,11 @@ operative:
 - Mirror-theme parity is a blocking gate (§1.5).
 - The closed control vocabulary is complete (no empty enums) and phase-1
   adjudications live in the governed manifest field (§1.6).
-- The exports→artifact gate enforces §1.9 mechanically.
+- The exports→artifact gate enforces §1.9 mechanically — **materialized in F0
+  (`exports-artifact-gate`, wired post-build/prepack)**.
 - The explicit root-barrel API list (§1.9) replaces `export *` aggregation.
-- The `--ds_` experimentation-space gate (§1.6) exists.
+- The `--ds_` experimentation-space gate (§1.6) — **materialized in F0
+  (`ds-underscore-prefix-gate`, blocking)**.
 
 ---
 

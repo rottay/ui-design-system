@@ -54,6 +54,10 @@ finalized at publish time. Consumers must run the codemods in
 
 - The legacy hand-drawn icon set (`graphics/icons/presentation/legacy/`) is
   removed; the governed 282-role semantic corpus covers every case
-  (`security-alert`, `status-loading`, …).
+  (`security-alert`, `status-loading`, …). `AlertIcon` remains until its two
+  consumers migrate in the app phase.
+- The R0 receipt of the quality-evidence v2 programme referenced the retired
+  `quality-evidence:v1` CLI and the retired aliases; the receipt is a
+  historical transcript (not re-run) and the v2 drills are the live coverage.
 - Apps pinned to `2.19.x` keep working; nothing in this release changes the
   2.x line.
