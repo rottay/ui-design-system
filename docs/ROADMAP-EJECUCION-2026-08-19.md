@@ -348,15 +348,15 @@ como heredado.*
 | F0.1 changeset major 3.0.0 | ✅ | `de9e71c3f` | `changeset status` valida el bump major |
 | F0.2 borrados triviales repo | ✅ | `65bb266f7` | 24 archivos, 5.995 líneas; Sonnet + verificación mía |
 | F0.3 carpetas vacías | ✅ | — (disco) | 23 src + 7 extra; queda solo el inbox declarado; structure:check verde |
-| F0.4 iconos legacy | ⏳ | | 13 + LoaderIcon + barrel + re-seed packinv |
-| F0.5 monolito probe | ⏳ | | solo `probe/cascade-probe.mjs` + test |
-| F0.6 aliases | ⏳ | | 14 fuera, quedan 3 |
-| F0.7 channel-wiring + enmienda lane-control | ⏳ | | 4 archivos de ley en el mismo lote |
-| F0.8 cra-17-integral al manifiesto | ⏳ | | se cablea, no se borra |
-| F0.9 doc-rot | ⏳ | | NUL→`\0`, comentario manifest, :v2:seal, packinv comment |
-| F0.10 resello gat-07 | ⏳ | | yo; después de todos los borrados |
-| F0.11 gates nuevos | ⏳ | | `--ds_`, exports→artefacto post-build, frescura root-catalog |
-| F0.12 declaración canales | ✅ | docs | §1.10 ARCHITECTURE + wiring gate los cuenta |
-| F0.13 gates rojos | ⏳ | | adjudicación uno por uno; empezó: `channel-liveness-drill` (6 `--ds-elevation-*` sin fila en SEMANTIC_OWNER_RULES) |
+| F0.4 iconos legacy | ✅ | `959028f90` | 14 carpetas + barrels recortados + re-seed packinv; typecheck 0 errores |
+| F0.5 monolito probe | ✅ | `255a86762` | program-check CONSTITUTION_READY; 37/37 tests de la sonda raíz |
+| F0.6 aliases | ✅ | `412473315` | 15 fuera; quedan 3 con invocador + `theme-parity:check` |
+| F0.7 channel-wiring + enmienda lane-control | ⏳ | | Opus; 4 archivos de ley en el mismo lote |
+| F0.8 cra-17-integral al manifiesto | ⏳ | | Opus; se cablea, no se borra |
+| F0.9 doc-rot | ⏳ | | Sonnet; NUL→`\0`, comentario manifest, `:v2:seal`, packinv comment |
+| F0.10 resello gat-07 | ⏳ | | yo; después de todos los borrados; exige Node 22 (local corre v25) |
+| F0.11 gates nuevos | ⏳ casi | | 3 gates escritos + drills 6/6 verdes; root-catalog ya pescó deriva real (4 canales `solo-artefacto` → `existe`, corregido); falta el wiring |
+| F0.12 declaración canales | ✅ | `675d2e3b3` | §1.10 ARCHITECTURE + wiring gate los cuenta |
+| F0.13 gates rojos | ⏳ | | adjudicación uno por uno; empezó: `channel-liveness-drill` (6 `--ds-elevation-*` sin fila en SEMANTIC_OWNER_RULES); `hooks:check` quedó rojo por manifest stale post-iconos |
 
 **Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5.
