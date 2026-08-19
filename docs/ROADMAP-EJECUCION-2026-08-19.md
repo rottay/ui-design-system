@@ -344,7 +344,16 @@ como heredado.*
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 77 blocking gate(s) passed` (1 excluded con razón y dueño:
 channel-liveness hasta F2); `find src -type d -empty` vacío salvo el inbox
-declarado; changeset major commiteado. Auditoría de hito: Fable, en curso.
+declarado; changeset major commiteado. **Auditoría Fable del hito: APROBADO
+("sustancialmente real", 0 bloqueantes)** — sus 5 hallazgos menores quedaron
+integrados en el lote F0.14 (`14dee7dc3`): fix del wildcard de
+exports-artifact, drills con violaciones plantadas reales, `wiring-coverage-gate`
+nuevo (implementa la cuenta de los 3 canales de §1.10), lane-control drills
+cableados como excluded visible (tenant-reachability, dueño F2), 7 scripts
+adjudicados que faltaban por borrar, y la deuda doc barrida (§1.11 ya no
+promete gates que ya existen, prosa de tokens-catalog, recibo R0 en el
+changeset). Pendiente fuera de este repo: README de quality-rubric en
+docs-engineering (cita `gate:styles-css`; su commit/push es de ese repo).
 
 | Lote | Estado | Commit | Nota |
 |---|---|---|---|
