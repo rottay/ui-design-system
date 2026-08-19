@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 // Pack-inventory gate (BLD packaging honesty).
 //
-// `npm pack` decides what ships from the `files` allowlist + `.npmignore` +
-// the working-tree `dist/`. Nothing pinned that surface, so the tarball could
+// `npm pack` decides what ships from the `files` allowlist (this package's
+// own `.npmignore` excludes nothing that `files` did not already omit, so
+// `files` is the effective, authoritative allowlist) + the working-tree
+// `dist/`. Nothing pinned that surface, so the tarball could
 // silently grow (a new dir slips into `files`), balloon in size, or ship
 // content it must never ship -- test fixtures, tenant proof-fixture names, or
 // lucide-tainted icon code -- with every other gate green.
@@ -58,7 +60,7 @@ const SEED_HINT =
  * Run `npm pack --dry-run` and return the parsed inventory. `--ignore-scripts`
  * skips lifecycle hooks: it prevents this gate (reachable from prepack) from
  * re-triggering prepack, and keeps the file list identical (the list is decided
- * by files/.npmignore, not by scripts). `--dry-run` writes no tarball.
+ * by the `files` allowlist, not by scripts). `--dry-run` writes no tarball.
  */
 export function runNpmPackDryRun(packageRoot) {
   const result = spawnSync(

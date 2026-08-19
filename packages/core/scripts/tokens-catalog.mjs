@@ -735,9 +735,10 @@ function buildViews(inputs, edges, context, { drill } = {}) {
 This folder is the single entry point for the Rottay DS token and
 customization surface. THE AUTHORITY IS CODE — contracts, registries,
 compilers, manifests, recipes and ledgers; everything tabular here is a
-deterministic projection (\`pnpm tokens:catalog:write\`, checked by
-\`pnpm tokens:catalog:check\`). The only hand-written files are the two
-guides.
+deterministic projection (\`pnpm tokens:catalog:write\`, checked by the
+\`tokens-catalog\` gate in \`pnpm gates:ci\` -- or directly, \`node
+scripts/tokens-catalog.mjs --check\`). The only hand-written files are the
+two guides.
 
 ## The two trees
 

@@ -426,7 +426,7 @@ function aliasBases(graph, fromFile, specifier) {
  */
 function resolveSpecifier(graph, fromFile, specifier) {
   if (!specifier || !isAbsolute(fromFile)) return null;
-  const key = `${fromFile} ${specifier}`;
+  const key = `${fromFile}\0${specifier}`;
   if (graph.specifiers.has(key)) return graph.specifiers.get(key);
 
   let bases;
