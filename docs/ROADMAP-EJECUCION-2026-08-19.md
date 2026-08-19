@@ -446,15 +446,35 @@ coordinador usan `git commit -o -- <paths>` explícitos mientras un worker
 tenga trabajo sin commitear en el árbol.
 
 **Cola de F0.5 (orden estricto):**
-1. Lote scripts de raíz (f05-sonnet, en vuelo) → verificar + commit + sello.
-2. Commit del retiro v1 (listo en árbol) + sello.
-3. Lote 0: `wiring-coverage-gate` recursivo + drill de huérfano plantado
-   (F5 del mapeo: hoy lee `readdirSync` plano y pasaría vacuamente en cuanto
-   baje el primer script). Lo hace el coordinador.
-4. Fase 0-bis (Sonnet, brief listo).
-5. Paso B lotes A–I (Opus, brief `/tmp/f05-pasoB-brief.md`): A i18n ·
-   B builders+generators+taxonomy · C structure+verticals · D boundaries ·
+1. ~~Lote scripts de raíz~~ ✅ `4a674d81c` (+ retiro v1 `6de85d530` con sello).
+2. ~~Lote 0: wiring-coverage recursivo~~ ✅ `d3c431df0` + gates:ci 78 verdes.
+   Incluye guarda anti-vacío y un-salto por profundidad real (el resolver con
+   `resolve()` absolutizaba y flaggeó 3 huérfanos reales al probarlo —
+   fail-path ejercido en vivo; fix a `posix.normalize`). 4 drills (13/13).
+3. Fase 0-bis (Sonnet f02, EN VUELO — brief `/tmp/f05-fase0bis-brief.md`).
+4. Paso B lotes A–I (Opus, brief `/tmp/f05-pasoB-brief.md` YA corregido con
+   la auditoría de Fable): A i18n · B builders+generators+taxonomy ·
+   C structure+verticals (SIN audit-vertical-compliance) · D boundaries ·
    E packaging+evidence (C2 atómico) · F ci · G tokens · H engine · I lib.
-6. Paso C (renombres, opcional) y Paso D (scripts-structure-gate, mío).
+5. Lote J (coordinador): `audit-vertical-compliance` a `structure/` + edición
+   de `lint:vertical` en los 3 repos hermanos (SIN commitear allá — las revisa
+   el dueño). Diferido por Fable H3 (cross-repo no atómico).
+6. Paso C (renombres, opcional) y Paso D (scripts-structure-gate, mío; nace
+   DESPUÉS del Paso C o con las excepciones A1/A2 escritas — Fable H10).
 7. Graduación del manifest (censo: 32 lit + 7 calc + 15 solo-programa).
 8. gates:ci final + auditoría Fable del frente.
+
+**Auditoría Fable del mapeo (previa a Paso B): PROCEDER CON CORRECCIONES**
+(`/tmp/fable-mapeo-verdict.md`). 5 bloqueantes, todos integrados al brief:
+H1 Lote 0 (ya existía como `d3c431df0` — Fable auditó durante su ejecución);
+H2 6+ consumidores en `src/tooling/` no censados → fixup F11 por lote +
+lane-control-drills comparado contra su baseline roja en E/F/G/H; H3 tres
+repos hermanos invocan `audit-vertical-compliance` → lote J diferido; H4
+`dependency-honesty` de raíz importa `cra-17-public-declaration-gate` → lote E;
+H5 test de `effect-registry-audit` de raíz rompe dos veces en lote F →
+verificación ahora es `pnpm test:scripts` + grep residual desde la RAÍZ del
+repo y por basename. Menores integrados: H7 constantes repo-relativas por
+lote, H8 pareja pineada de analyze-bundle en lote F, H9 letra de F3 desfasada
+(el árbol manda), H10 enmiendas de ley ya commiteadas (`7419d0758`,
+`7c6e3bfcc`). Rechazada: smoke `import()` de scripts sin test (son CLIs con
+efectos al importar; la ejecución real la cubre gates:ci + build).
