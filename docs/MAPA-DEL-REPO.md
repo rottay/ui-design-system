@@ -122,7 +122,7 @@ Resumen; el detalle está en cada sección.
 - Declara `patterns/commercial/` como deuda de migración con 11 owners a adjudicar.
   **Esa carpeta ya no existe**; los 11 fueron reclasificados por lo que hacen.
 - Declara `surface-composition` como taxonomía a corregir. Tampoco existe.
-- `.claude/agents/*.md` describen React 18, Vite 5 y Ant Design como librería base.
+- `.claude/agents/*.md` describen React 18.2.0 y Ant Design 5.21.0 "como librería base". El repo desarrolla contra React 19.2.5 (el peer acepta 18 o 19) y Ant Design 5.29.3, que además es solo el engine `classic`, no la base. Vite 5 sí es correcto: `packages/core` compila con `vite ^5.4.21`; el que usa Next.js 16 + webpack es el showroom.
   El repo es React 19, Next.js 16, webpack, y Ant Design es solo el engine `classic`.
 
 ---
@@ -197,7 +197,7 @@ Configuración local de Claude Code, mitad viva mitad fósil.
 
 - `.claude/settings.local.json` — (1 archivo, en git aunque `.gitignore` línea "Claude Code local settings" pretende ignorarlo — está versionado desde antes) lista de permisos de Bash.
 - `.claude/RESUME.md` — (1 archivo, NO en git) checkpoint automático de sesión escrito el 2026-08-18T01:32Z por la sesión `7e39d28d`. Es un artefacto de herramienta, no del proyecto.
-- `.claude/agents/componentes-agent.md` y `storybook-agent.md` — (2 archivos, 2 en git) **[SIN CONSUMIDOR]** definiciones de agente escritas en español que describen un stack que ya no es el del repo: dicen "React 18.2.0", "Ant Design 5.21.0 como librería base", "Vite 5 como build tool", "Storybook 9.1.10 con Vite como builder". El repo hoy es React 19 + Next.js 16 + webpack, y Ant Design es solo el engine `classic`, no la base. Ningún archivo del repo los invoca ni los enlaza.
+- `.claude/agents/componentes-agent.md` y `storybook-agent.md` — (2 archivos, 2 en git) **[SIN CONSUMIDOR]** definiciones de agente escritas en español con datos vencidos: dicen "React 18.2.0" (hoy 19.2.5 en desarrollo; el peer acepta 18 o 19) y "Ant Design 5.21.0: Librería de componentes base" (hoy 5.29.3, y no es la base: es solo el engine `classic`). "Vite 5" y "Storybook 9" sí siguen siendo correctos para `packages/core`; el que usa Next.js 16 + webpack es el showroom. Ningún archivo del repo los invoca ni los enlaza.
 
 #### 1.7 `.changeset/` — (2 archivos, 2 en git, 8 KB)
 
@@ -301,7 +301,7 @@ Al buscar quién escribe en `test-artifacts/`, la ruta más citada del repo (247
 
 **[SIN CONSUMIDOR]**
 - Los 16 codemods + `helper-gaps-report.json` de `scripts/` (escriben sobre `packages/core/src/components/custom/`, ruta borrada).
-- `.claude/agents/*.md` (describen React 18 + Vite + Ant Design como base; nadie los invoca).
+- `.claude/agents/*.md` (dan React 18.2.0 y Ant Design 5.21.0 "como base"; hoy es 19.2.5 y Ant es solo el engine `classic`; nadie los invoca).
 - `coverage/` y `coverage-final/` (vacías).
 - `packages/showroom/.tmp/` (32 scripts de depuración a mano, congelados el 2026-07-27).
 - `test-artifacts/release/` (tarballs npm desempaquetados, ningún script los referencia).

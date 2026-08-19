@@ -169,7 +169,8 @@ engine-agnostic, theme-aware and personality-driven.
 | `@rottay/design-system/server`          | Server-only utilities (branding validation)                            |
 | `@rottay/design-system/eslint`          | ESLint rules (no-raw-html, no-hardcoded-colors, no-db-in-components)   |
 | `@rottay/design-system/styles`          | Full bundle: skins, states, keyframes, tokens, code-owned verticals    |
-| `@rottay/design-system/styles/platform` | Platform vertical CSS                                                  |
+| `@rottay/design-system/styles/rottay`   | Rottay vertical CSS                                                    |
+| `@rottay/design-system/styles/default`  | Alias of the Rottay bundle (`dist/rottay.css`)                         |
 | `@rottay/design-system/styles/bithire`  | BitHire vertical CSS                                                   |
 | `@rottay/design-system/styles/evnto`    | Evnto vertical CSS                                                     |
 | `@rottay/design-system/styles/modern`   | Supplemental modern-engine CSS only; not a standalone component bundle |

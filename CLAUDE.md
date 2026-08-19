@@ -18,6 +18,12 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 - **Capability Map (read first)**: `/docs-engineering/engineering/design-system/capability-map/README.md` — the full DS surface in two orientations (what a tenant can white-label; what an app can consume, with the app-bithire reference adoption per row). Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
 - **Catálogo Central**: `/docs-engineering/README.md`
 - **Component Reference**: `/docs-engineering/engineering/design-system/`
+- **Repo map**: [`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md) — what every
+  folder in this repository does, where something is written twice, and which
+  folders are empty scaffolding. Independently verified claim by claim.
+- **Keep/delete decisions**: [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md)
+  — which duplicate is canonical, which owners are removed, and which owners
+  only look dead. Read it before proposing that anything is redundant.
 
 ### Documentation Update Rule (CRITICAL)
 
@@ -151,10 +157,10 @@ Product groups are `commerce/`, `communication/`,
 `customization/`, `data/`, `feedback/`, `forms/`, `identity/`, `navigation/`,
 `shell/`, `visualization/`, and `workflow/`. `foundation/`, `runtime/`, and
 `tooling/` are explicit support owners; generic `misc/`, `_internal/`, `hooks/`
-and `shared/` owners are forbidden. The existing `patterns/commercial/` tree is
-migration debt, not a canonical group and not a precedent for new work. Its
-owners must be reclassified by reusable task/role or removed before the
-Modern Rescue point-zero freeze.
+and `shared/` owners are forbidden. A `patterns/commercial/` group must not be
+reintroduced: it was migration debt, its owners were already reclassified by
+reusable task/role, and as of 2026-08-18 no directory matching `*commercial*`
+exists anywhere under `packages/core/src`.
 
 **Example:** PatternDataTable, PatternFormBuilder, PatternKanbanBoard, PatternStatsGrid.
 
@@ -239,11 +245,20 @@ blocking architecture gate and must prove:
    agree exactly; and
 6. a planted forbidden layer/duplicate/unowned folder makes the gate fail.
 
-For the current known debt, explicitly adjudicate all 11 owners under
-`ui/patterns/commercial/` and the four components currently inventoried as
-`surface-composition`. Do not bulk-rename them: decide migrate, merge, make
-internal, move to Showroom/app, or delete from source and evidence based on
-their actual semantics and consumers.
+The debt this paragraph used to name -- the 11 owners under
+`ui/patterns/commercial/` and the four components inventoried as
+`surface-composition` -- is settled: neither directory exists any more
+(`find packages/core/src -type d -name "*commercial*"` and `-name
+"*surface-composition*"` both return nothing, verified 2026-08-18).
+
+The current known debt is enumerated instead in
+[`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md) (what every folder does, where
+something is written twice, which folders are empty scaffolding) and adjudicated
+in [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md)
+(eleven removal lots, nine unifications with a proposed canonical owner, and the
+list of owners that only look dead). Read both before proposing that any folder
+is redundant; the second one records eight components that a liveness-only reading
+wrongly marked as orphans.
 
 ### What does NOT go in the DS
 

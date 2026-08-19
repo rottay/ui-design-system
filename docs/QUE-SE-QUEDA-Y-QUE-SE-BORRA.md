@@ -153,23 +153,42 @@ importa en sus líneas 76-84. La primera versión de este documento decía "borr
 
 ---
 
-## LOTE 5 — Los cuatro `.md` históricos de la raíz
+## LOTE 5 — Documentos que describen un repo que ya no existe
 
 **Verdicto: BORRAR (o mover a `docs-engineering/archive/`). Riesgo: ninguno.**
 
-**qué:** `BACKLOG.md`, `DESIGN_SYSTEM_FINAL_REVIEW.md`,
-`DOCUMENTATION_ENHANCEMENT.md`, `WAVE_4_PRIMITIVES.md`.
+**qué (a):** los cuatro `.md` históricos de la raíz: `BACKLOG.md`,
+`DESIGN_SYSTEM_FINAL_REVIEW.md`, `DOCUMENTATION_ENHANCEMENT.md`,
+`WAVE_4_PRIMITIVES.md`.
 
-**por qué:** son fotos de un momento (una review "final" que no fue final, una ola
-de primitives que terminó, un plan de mejora de documentación ya ejecutado). El
-backlog vivo es `roadmap/registry.json`. Ninguno se actualiza; los cuatro
-describen un árbol que ya cambió. Además eran los únicos que enlazaban
+**por qué (a):** son fotos de un momento (una review "final" que no fue final, una
+ola de primitives que terminó, un plan de mejora de documentación ya ejecutado). El
+backlog vivo es `roadmap/registry.json`. Ninguno se actualiza; los cuatro describen
+un árbol que ya cambió. Además eran los únicos que enlazaban
 `docs/ARCHITECTURE.md`, o sea que la referencia de arquitectura vivía colgada de
 cuatro documentos muertos — ya lo arreglé enlazándola desde el `README.md`.
 
+**qué (b):** `.claude/agents/componentes-agent.md` y
+`.claude/agents/storybook-agent.md`.
+
+**por qué (b):** no es que tengan versiones viejas: describen **otro sistema de
+diseño**. `componentes-agent.md` declara que los componentes son *"wrappers de Ant
+Design"* que *"re-exportan componentes de Ant Design manteniendo su API completa"*
+con *"compatibilidad 100 % con Ant Design"*, y enumera *"8 temas predefinidos:
+Spotify, Facebook, GitHub, Slack, Notion, Linear, Netflix, Base"*. Nada de eso
+existe: hoy hay tres engines físicos (`classic` es el único que envuelve Ant,
+`modern` es Rottay nativo, `rustic` es CSS a mano) y los brand themes en fuente
+son `bithire`, `evnto` y `rottay`. Un agente que lea ese archivo va a escribir
+wrappers de Ant en el engine equivocado. Los datos de versión también están
+vencidos (React 18.2.0 → 19.2.5, Ant 5.21.0 → 5.29.3), pero eso es lo de menos.
+
+Nadie los invoca ni los enlaza. Este lote es el ejemplo más caro de la regla 4:
+son instrucciones activas para un agente, no documentación pasiva.
+
 **riesgo:** ninguno.
 
-**bloqueo:** ninguno. Decisión tuya: borrar o archivar.
+**bloqueo:** ninguno. Decisión tuya: borrar, archivar, o reescribirlos contra el
+modelo de engines actual.
 
 ---
 
@@ -282,11 +301,17 @@ presente": o se borra o el cartel es mentira.
 |---|---|---|
 | `ui-design-system/CLAUDE.md:154,201-202` | manda adjudicar "los 11 owners de `ui/patterns/commercial/`" | esa carpeta **no existe**; `find -type d -name "*commercial*"` no devuelve nada. Los 11 ya se reclasificaron. |
 | `ui-design-system/CLAUDE.md:243-244` | manda decidir sobre "los 4 componentes inventariados como `surface-composition`" | tampoco existe |
-| `.claude/agents/*.md` | describen el stack como React 18 + Vite 5 + Ant Design como librería base | es React 19 + Next.js 16 + webpack, y Ant Design es solo el engine `classic` |
 | `README.md:169` | documenta el export `@rottay/design-system/styles/platform` | ese export no existe en el `package.json` |
 
 Cada una de estas líneas manda a un agente a trabajar sobre algo que no está. Es
-la regla 4 incumplida cuatro veces.
+la regla 4 incumplida tres veces; la cuarta, `.claude/agents/*.md`, está tan
+desactualizada que no se corrige: va al LOTE 5.
+
+**Ya corregidas** (commit de este documento): las dos de `CLAUDE.md`, que ahora
+apuntan a este par de documentos en vez de a carpetas inexistentes, y la del
+`README.md`, cuya tabla de exports ahora coincide con el `package.json`
+(`styles/default`, `styles/rottay`, `styles/bithire`, `styles/evnto`,
+`styles/modern`).
 
 **bloqueo:** ninguno.
 
@@ -496,7 +521,7 @@ Aprobás por lote, no archivo por archivo:
 | 2 | 17 codemods de febrero | ninguno | sí |
 | 3 | 13 iconos legacy | ninguno | sí |
 | 4 | 2 archivos de sonda duplicada | ninguno | sí |
-| 5 | 4 `.md` históricos de la raíz | ninguno | sí (borrar o archivar: decidís) |
+| 5 | 4 `.md` históricos de la raíz + 2 definiciones de agente que describen otro design system | ninguno | sí (borrar o archivar: decidís) |
 | 6 | `styles/platform.css` | medio | no: reanclar 802 citas primero |
 | 7 | `test-artifacts/` (528 MB) | pérdida de evidencia | no: necesito tu decisión |
 | 8 | espejo TS de tokens | alto de golpe | no: migrar 2 funciones primero |
