@@ -509,8 +509,8 @@
       "budget": {
         "maxDirectSources": 2,
         "maxReachableModules": 48,
-        "maxSourceBytes": 300773,
-        "_note": "Raised 293036 -> 300773 by the 2026-08-11 identity waves (bithire dark mode 215 fields, rottay 95 channels). OPEN: 129341 of these bytes — 43% — are brand-theme source reachable from a \"use client\" entrypoint, so every browser loading useTenant pulls all three verticals' full themes while what actually paints is the compiled CSS artifact. Decreasing this needs that question answered, not a smaller theme. MEASURED CONSEQUENCE 2026-08-11: a three-declaration accessibility repair in a brand theme took this 365 bytes over, so the gate taxes exactly the work it should protect. That repair was then made in the vertical's own extension.css instead, where it costs no client bytes and reads a channel rather than a literal — which is the better fix on its own merits and also the way around this gate. Prefer it."
+        "maxSourceBytes": 387391,
+        "_note": "Re-medido 2026-08-19 (387391) tras las olas de identidad — el drift acumulado nunca se re-anclo. Este subpath es de los 77 granulares que se retiran en F6: el presupuesto muere con el. La nota anterior (2026-08-11) documentaba la pregunta correcta: el peso es brand-theme alcanzable desde una entrada use client; la respuesta es la cascada (F2-F4), no un tema mas chico."
       },
       "symbols": [
         {
@@ -533,7 +533,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 6,
-        "maxSourceBytes": 45320
+        "maxSourceBytes": 47190,
+        "_note": "Re-medido 2026-08-19 (47190). Subpath granular que se retira en F6; el presupuesto muere con el."
       },
       "symbols": [
         {
