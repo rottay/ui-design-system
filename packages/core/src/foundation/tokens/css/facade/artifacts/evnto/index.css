@@ -2,10 +2,9 @@
 /*
  * Evnto tenant theme.
  *
- * This file is a BUILD OUTPUT assembled from two authored sources; any manual
+ * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   1. foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileBrandTheme)
- *   2. foundation/tokens/css/facade/artifacts/evnto/_source/extension.css (declared extension)
+ *   foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileBrandTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
@@ -13,6 +12,7 @@
 /* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   color-scheme: light;
+  color: var(--ds-color-text-primary);
   --ds-button-ai-shadow: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
@@ -23,6 +23,7 @@
   --ds-button-default-bg-hover: #FAFAFA;
   --ds-button-default-border: rgba(0, 0, 0, 0.1);
   --ds-button-default-color: #171717;
+  --ds-button-default-hover-bg: #FAFAFA;
   --ds-button-default-shadow: var(--ds-shadow-button-rest);
   --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-default-shadow-hover: var(--ds-shadow-button-hover);
@@ -37,6 +38,7 @@
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.03);
   --ds-button-ghost-color: #525252;
+  --ds-button-ghost-hover-bg: rgba(0, 0, 0, 0.03);
   --ds-button-ghost-shadow: none;
   --ds-button-ghost-shadow-active: var(--ds-button-ghost-shadow);
   --ds-button-ghost-shadow-hover: var(--ds-button-ghost-shadow);
@@ -50,6 +52,7 @@
   --ds-button-primary-bg-hover: #262626;
   --ds-button-primary-border: transparent;
   --ds-button-primary-color: #ffffff;
+  --ds-button-primary-hover-bg: #262626;
   --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   --ds-button-primary-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-primary-shadow-hover: var(--ds-shadow-button-hover);
@@ -57,6 +60,7 @@
   --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
   --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
   --ds-button-secondary-color: #171717;
+  --ds-button-secondary-hover-bg: rgba(0, 0, 0, 0.04);
   --ds-button-secondary-shadow: var(--ds-shadow-button-rest);
   --ds-button-secondary-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-secondary-shadow-hover: var(--ds-shadow-button-hover);
@@ -74,6 +78,17 @@
   --ds-card-border-color: rgba(0, 0, 0, 0.08);
   --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --ds-card-side-accent-soft: transparent;
+  --ds-chart-series-1: #935267;
+  --ds-chart-series-10: #B87CA4;
+  --ds-chart-series-2: #C27F68;
+  --ds-chart-series-3: #846324;
+  --ds-chart-series-4: #7A9F66;
+  --ds-chart-series-5: #237961;
+  --ds-chart-series-6: #42A2AC;
+  --ds-chart-series-7: #316F97;
+  --ds-chart-series-8: #828EC9;
+  --ds-chart-series-9: #755B93;
   --ds-color-accent: #7A6A5A;
   --ds-color-accent-100: #E6DBD0;
   --ds-color-accent-200: #CBBDAF;
@@ -85,20 +100,21 @@
   --ds-color-accent-700: #42372B;
   --ds-color-accent-800: #292018;
   --ds-color-accent-900: #110C08;
+  --ds-color-accent-hover: #5A4A3A;
   --ds-color-background: #FFFFFF;
   --ds-color-bg: #FFFFFF;
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-input: #ffffff;
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.5);
   --ds-color-bg-primary: #FFFFFF;
   --ds-color-bg-secondary: #fafafa;
   --ds-color-bg-tertiary: #f5f5f5;
   --ds-color-border: var(--ds-color-border-primary);
+  --ds-color-border-focus: #171717;
+  --ds-color-border-primary: rgba(0, 0, 0, 0.08);
+  --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
   --ds-color-border-subtle: color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent);
   --ds-color-border-tertiary: color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent);
-  --ds-color-dark-accent: #A89880;
-  --ds-color-dark-bg: #131210;
-  --ds-color-dark-primary: #E8E8E0;
-  --ds-color-dark-secondary: #A89880;
   --ds-color-error: #B91C1C;
   --ds-color-error-100: #FFD1CA;
   --ds-color-error-200: #FFA398;
@@ -110,6 +126,7 @@
   --ds-color-error-700: #710005;
   --ds-color-error-800: #480002;
   --ds-color-error-900: #230001;
+  --ds-color-error-bg: #fef2f2;
   --ds-color-error-border: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
   --ds-color-info: #475569;
   --ds-color-info-100: #D4DEED;
@@ -122,7 +139,21 @@
   --ds-color-info-700: #2F3A49;
   --ds-color-info-800: #1B232D;
   --ds-color-info-900: #0A0E13;
+  --ds-color-info-bg: #f8fafc;
   --ds-color-info-border: color-mix(in srgb, var(--ds-color-info) 20%, transparent);
+  --ds-color-link: #171717;
+  --ds-color-link-hover: #525252;
+  --ds-color-link-visited: #737373;
+  --ds-color-neutral-100: #f5f5f5;
+  --ds-color-neutral-200: #e5e5e5;
+  --ds-color-neutral-300: #d4d4d4;
+  --ds-color-neutral-400: #a3a3a3;
+  --ds-color-neutral-50: #fafafa;
+  --ds-color-neutral-500: #737373;
+  --ds-color-neutral-600: #525252;
+  --ds-color-neutral-700: #404040;
+  --ds-color-neutral-800: #262626;
+  --ds-color-neutral-900: #171717;
   --ds-color-on-error: #ffffff;
   --ds-color-on-info: #ffffff;
   --ds-color-on-success: #ffffff;
@@ -138,6 +169,9 @@
   --ds-color-primary-700: #393939;
   --ds-color-primary-800: #222222;
   --ds-color-primary-900: #0D0D0D;
+  --ds-color-primary-foreground: #ffffff;
+  --ds-color-primary-hover: #262626;
+  --ds-color-primary-rgb: 23, 23, 23;
   --ds-color-secondary: #7A6A5A;
   --ds-color-secondary-100: #E6DBD0;
   --ds-color-secondary-200: #CBBDAF;
@@ -149,6 +183,8 @@
   --ds-color-secondary-700: #42372B;
   --ds-color-secondary-800: #292018;
   --ds-color-secondary-900: #110C08;
+  --ds-color-secondary-hover: #5A4A3A;
+  --ds-color-secondary-rgb: 122, 106, 90;
   --ds-color-success: #15803D;
   --ds-color-success-100: #B6EDC1;
   --ds-color-success-200: #8AD49A;
@@ -160,8 +196,14 @@
   --ds-color-success-700: #00461C;
   --ds-color-success-800: #002B0E;
   --ds-color-success-900: #001204;
+  --ds-color-success-bg: #f0fdf4;
   --ds-color-success-border: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
+  --ds-color-text-disabled: #b3b3b3;
+  --ds-color-text-muted: #737373;
   --ds-color-text-on-primary: #ffffff;
+  --ds-color-text-primary: #111111;
+  --ds-color-text-secondary: #3d3d3d;
+  --ds-color-text-tertiary: #5c5c5c;
   --ds-color-warning: #A16207;
   --ds-color-warning-100: #FFD5AA;
   --ds-color-warning-200: #EAB37B;
@@ -173,15 +215,27 @@
   --ds-color-warning-700: #533000;
   --ds-color-warning-800: #341C00;
   --ds-color-warning-900: #170A00;
+  --ds-color-warning-bg: #fefce8;
   --ds-color-warning-border: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
+  --ds-control-brand-border: color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border));
+  --ds-control-brand-tint: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-control-surface));
+  --ds-control-brand-tint-hover: color-mix(in srgb, var(--ds-color-primary) 15%, var(--ds-control-surface));
+  --ds-control-ink: var(--ds-color-text-primary);
+  --ds-control-ink-muted: var(--ds-color-text-secondary);
+  --ds-control-on-brand: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  --ds-control-surface: var(--ds-surface-card-bg);
+  --ds-control-surface-raised: color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg));
+  --ds-datepicker-panel-shadow: var(--ds-shadow-md);
   --ds-density-scale: 1.125;
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ds-effect-intensity: 1;
-  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Noto Sans Arabic", sans-serif;
-  --ds-font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Noto Sans Arabic", sans-serif;
-  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Noto Sans Arabic", sans-serif;
-  --ds-font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace;
+  --ds-focus-ring-color: var(--ds-color-primary);
+  --ds-font-family-base: var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
+  --ds-font-family-display: var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
+  --ds-font-family-heading: var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
+  --ds-font-family-mono: var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
+  --ds-icon-tile-border: var(--ds-surface-icon-border);
   --ds-input-bg: #ffffff;
   --ds-input-bg-disabled: #FAFAFA;
   --ds-input-border: rgba(0, 0, 0, 0.12);
@@ -225,13 +279,40 @@
   --ds-overlay-heavy: rgba(0, 0, 0, 0.06);
   --ds-overlay-light: rgba(0, 0, 0, 0.01);
   --ds-overlay-medium: rgba(0, 0, 0, 0.03);
+  --ds-premium-card-bg: var(--ds-material-card-background, var(--ds-card-bg));
+  --ds-premium-card-border: var(--ds-material-card-border, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color)));
+  --ds-premium-card-border-hover: var(--ds-material-card-border-hover, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-material-card-border-strong, var(--ds-card-border-color))));
+  --ds-premium-card-footer-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 72%, var(--ds-card-bg));
+  --ds-premium-card-header-bg: var(--ds-rich-card-header-bg);
+  --ds-premium-card-section-alt-bg: var(--ds-rich-card-section-alt-bg);
+  --ds-premium-card-section-bg: var(--ds-rich-card-section-bg);
+  --ds-premium-card-selected-border: var(--ds-material-card-border-selected, color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-material-card-border-strong, var(--ds-card-border-color))));
+  --ds-premium-card-selected-ring: var(--ds-material-card-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent));
+  --ds-premium-card-sheen: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-card-bg) 42%, transparent), transparent);
+  --ds-radius-full: 9999px;
   --ds-radius-lg-base: 18px;
   --ds-radius-md-base: 14px;
   --ds-radius-scale: 1;
   --ds-radius-sm-base: 10px;
   --ds-radius-xl-base: 24px;
+  --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
+  --ds-select-bg-focus: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
+  --ds-select-bg-hover: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
+  --ds-select-border-color: var(--ds-color-neutral-300);
+  --ds-select-border-color-focus: var(--ds-color-primary-500);
+  --ds-select-border-color-hover: var(--ds-color-neutral-400);
+  --ds-select-color: var(--ds-color-neutral-900);
+  --ds-select-color-placeholder: var(--ds-color-neutral-400);
+  --ds-select-dropdown-bg: var(--ds-color-white);
+  --ds-select-dropdown-border-color: var(--ds-color-neutral-200);
+  --ds-select-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-select-option-bg-hover: var(--ds-color-neutral-100);
+  --ds-select-option-bg-selected: var(--ds-color-primary-50);
+  --ds-select-option-color: var(--ds-color-neutral-900);
+  --ds-select-option-color-selected: var(--ds-color-primary-700);
   --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
   --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --ds-shadow-popover: var(--ds-shadow-md);
   --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
   --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
   --ds-shell-grid-line: transparent;
@@ -242,6 +323,9 @@
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-font-weight: 600;
   --ds-sidebar-group-letter-spacing: 0.04em;
+  --ds-sidebar-group-margin-bottom: 4px;
+  --ds-sidebar-group-margin-top: 12px;
+  --ds-sidebar-group-padding-top: 12px;
   --ds-sidebar-icon-size: 18px;
   --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.06);
   --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
@@ -250,9 +334,19 @@
   --ds-sidebar-item-font-size: 14px;
   --ds-sidebar-item-font-weight: 400;
   --ds-sidebar-item-font-weight-active: 500;
+  --ds-sidebar-item-indent: 8px;
   --ds-sidebar-item-padding: 8px 12px;
   --ds-sidebar-text: #171717;
   --ds-sidebar-text-muted: #525252;
+  --ds-surface-card-grid-bg: linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--ds-surface-card-grid-line) 1px, transparent 1px);
+  --ds-surface-card-grid-line: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 5%, transparent);
+  --ds-surface-card-grid-size: var(--ds-premium-card-grid-size, 22px);
+  --ds-surface-chip-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
+  --ds-surface-icon-bg: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)), color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg)));
+  --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-surface-card-border));
+  --ds-surface-radius-md: var(--ds-radius-md);
+  --ds-surface-shadow: var(--ds-shadow-sm);
+  --ds-surface-shadow-hover: var(--ds-shadow-md);
   --ds-table-header-bg: rgba(0, 0, 0, 0.02);
   --ds-table-header-color: #737373;
   --ds-table-header-font-size: 0.75rem;
@@ -288,6 +382,7 @@
   --ds-text-title-line-height: 1.75rem;
   --ds-text-title-size: 1.25rem;
   --ds-text-title-weight: 600;
+  --ds-timepicker-panel-shadow: var(--ds-shadow-md);
   --ds-tint-12: color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
   --ds-tint-16: color-mix(in oklab, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
   --ds-tint-24: color-mix(in oklab, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
@@ -394,182 +489,98 @@
   --ds-button-default-bg-hover: #24221C;
   --ds-button-default-border: #2E2C24;
   --ds-button-default-color: #E8E8E0;
+  --ds-button-default-hover-bg: #24221C;
   --ds-button-disabled-bg: #1C1A16;
   --ds-button-disabled-border: #222018;
   --ds-button-disabled-border-color: #222018;
   --ds-button-disabled-color: #484838;
   --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-button-ghost-color: #A8A898;
+  --ds-button-ghost-hover-bg: rgba(255, 255, 255, 0.04);
   --ds-button-primary-bg: #E8E8E0;
+  --ds-button-primary-bg-hover: #F0F0E8;
   --ds-button-primary-color: #131210;
+  --ds-button-primary-hover-bg: #F0F0E8;
+  --ds-button-secondary-bg-hover: #1C1A16;
   --ds-button-secondary-border: #2E2C24;
   --ds-button-secondary-color: #A8A898;
+  --ds-button-secondary-hover-bg: #1C1A16;
   --ds-card-bg: #1C1A16;
   --ds-card-border: #2E2C24;
   --ds-card-border-color: #2E2C24;
+  --ds-chart-series-1: #9F9C58;
+  --ds-chart-series-10: #8C712F;
+  --ds-chart-series-2: #4F8354;
+  --ds-chart-series-3: #4CAAA1;
+  --ds-chart-series-4: #3F7BA5;
+  --ds-chart-series-5: #8A93D0;
+  --ds-chart-series-6: #86659B;
+  --ds-chart-series-7: #C181A3;
+  --ds-chart-series-8: #A35E5D;
+  --ds-chart-series-9: #C58864;
   --ds-color-accent: #A89880;
+  --ds-color-accent-hover: var(--ds-color-secondary-hover);
   --ds-color-background: #131210;
   --ds-color-bg: #131210;
   --ds-color-bg-elevated: #2A2820;
   --ds-color-bg-input: #131210;
+  --ds-color-bg-overlay: rgba(2, 6, 23, 0.88);
   --ds-color-bg-primary: #131210;
   --ds-color-bg-secondary: #1C1A16;
   --ds-color-bg-tertiary: #24221C;
   --ds-color-border-focus: #A89880;
   --ds-color-border-primary: #2E2C24;
   --ds-color-border-secondary: #222018;
+  --ds-color-error-900: #FFF2F0;
+  --ds-color-error-bg: var(--ds-color-error-50);
+  --ds-color-info-900: #F0F6FE;
+  --ds-color-info-bg: var(--ds-color-info-50);
+  --ds-color-link: var(--ds-color-primary);
+  --ds-color-link-hover: var(--ds-color-primary-hover);
+  --ds-color-link-visited: var(--ds-color-neutral-600);
+  --ds-color-neutral-100: #111827;
+  --ds-color-neutral-200: #1f2937;
+  --ds-color-neutral-300: #334155;
+  --ds-color-neutral-400: #475569;
+  --ds-color-neutral-50: #0b1220;
+  --ds-color-neutral-500: #64748b;
+  --ds-color-neutral-600: #94a3b8;
+  --ds-color-neutral-700: #cbd5e1;
+  --ds-color-neutral-800: #e2e8f0;
+  --ds-color-neutral-900: #f8fafc;
   --ds-color-primary: #E8E8E0;
   --ds-color-primary-foreground: #131210;
   --ds-color-primary-hover: #F0F0E8;
+  --ds-color-primary-rgb: 232, 232, 224;
   --ds-color-secondary: #A89880;
   --ds-color-secondary-hover: #B8A890;
+  --ds-color-secondary-rgb: 168, 152, 128;
+  --ds-color-success-900: #DFFFE4;
+  --ds-color-success-bg: var(--ds-color-success-50);
   --ds-color-text-disabled: #484838;
   --ds-color-text-muted: #686858;
   --ds-color-text-on-primary: #131210;
   --ds-color-text-primary: #E8E8E0;
   --ds-color-text-secondary: #A8A898;
+  --ds-color-text-tertiary: var(--ds-color-neutral-600);
+  --ds-color-warning-900: #FFF3E7;
+  --ds-color-warning-bg: var(--ds-color-warning-50);
+  --ds-focus-ring-color: var(--ds-color-primary-400);
   --ds-input-bg: #131210;
   --ds-input-bg-disabled: #1C1A16;
   --ds-input-border: #2E2C24;
   --ds-input-border-color-disabled: #222018;
   --ds-input-border-disabled: #222018;
   --ds-input-color-disabled: #484838;
+  --ds-input-color-placeholder: #686858;
   --ds-layout-bg: #131210;
   --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
   --ds-layout-header-border: #2E2C24;
   --ds-layout-sider-bg: #0E0D0B;
   --ds-layout-sider-border: #222018;
-  --ds-radius-full: 9999px;
   --ds-sidebar-bg: #0E0D0B;
   --ds-sidebar-text: #A8A898;
   --ds-table-border: #222018;
   --ds-table-header-bg: #1C1A16;
   --ds-table-header-color: #A8A898;
-}
-
-/* === Declared artifact extension (authored source, mechanically scoped) === */
-/* ============================================
-   EVNTO BRAND COLORS (Light Mode Default)
-   Declared extension for domain-owned ticket/event tokens (frozen decision
-   12). Kept as a complete, self-contained block so each theme-scoped selector
-   stays independently readable.
-   ============================================ */
-/* @ds-exception kind=capability-gap
-   owner=claude
-   purpose="flat channels the BrandTheme contract cannot express at this granularity"
-   reachability=shipped
-   retire="BrandTheme gains fields for the evnto-only marquee channels declared here" */
-:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])):not([data-theme='dark']):not(.dark) {
-  /* Primary main color - Black. The --ds-color-primary-{50..900} ramp is
-     generated by compileBrandTheme (deriveTenantColorRamps, WO-TOK-02) --
-     declaring it here would silently shadow the derivation via this block's
-     higher selector specificity. */
-  --ds-color-primary-hover: #262626;
-
-  /* Focus ring color follows the tenant primary (17.9:1 on the light ground).
-     Must be re-declared here: the :root fallback is the tenant-less
-     dark-default literal, not var(--ds-color-primary) (W8). */
-  --ds-focus-ring-color: var(--ds-color-primary);
-
-  /* Secondary main color - Warm Beige/Sand. The
-     --ds-color-secondary-{50..900} ramp is generated by compileBrandTheme
-     (deriveTenantColorRamps, WO-TOK-02). */
-  --ds-color-secondary-hover: #5A4A3A;
-
-  /* Accent - Sand/Beige for highlights */
-  --ds-color-accent-hover: #5A4A3A;
-
-  /* Neutral - Light grays */
-  --ds-color-neutral-50: #fafafa;
-  --ds-color-neutral-100: #f5f5f5;
-  --ds-color-neutral-200: #e5e5e5;
-  --ds-color-neutral-300: #d4d4d4;
-  --ds-color-neutral-400: #a3a3a3;
-  --ds-color-neutral-500: #737373;
-  --ds-color-neutral-600: #525252;
-  --ds-color-neutral-700: #404040;
-  --ds-color-neutral-800: #262626;
-  --ds-color-neutral-900: #171717;
-
-  /* Backgrounds - Light theme */
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.5);
-
-  /* Text - Dark on light (high contrast for readability) */
-  --ds-color-text-primary: #111111;
-  --ds-color-text-secondary: #3d3d3d;
-  --ds-color-text-tertiary: #5c5c5c;
-  --ds-color-text-muted: #737373;
-  --ds-color-text-disabled: #b3b3b3;
-
-  /* Borders - subtle on light; --ds-color-border is the BrandTheme's. */
-  --ds-color-border-primary: rgba(0, 0, 0, 0.08);
-  --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
-  --ds-color-border-focus: #171717;
-
-  /* Border Radius - largest of the three brands (H4) */
-  --ds-radius-full: 9999px;
-
-  /* Link colors */
-  --ds-color-link: #171717;
-  --ds-color-link-hover: #525252;
-  --ds-color-link-visited: #737373;
-
-  /* Status colors - Neutral tones, avoid bright blue/red */
-  --ds-color-success-bg: #f0fdf4;
-  --ds-color-warning-bg: #fefce8;
-  --ds-color-error-bg: #fef2f2;
-  --ds-color-info-bg: #f8fafc;
-
-  /* Group Headers */
-  --ds-sidebar-group-margin-top: 12px;
-  --ds-sidebar-group-margin-bottom: 4px;
-  --ds-sidebar-group-padding-top: 12px;
-
-  /* Nav Items */
-  --ds-sidebar-item-indent: 8px;
-
-  /* Domain-owned tokens: these should migrate to app-evnto.
-     They are not part of the DS brand system per frozen decision 12.
-     Kept here temporarily for backward compat. */
-  --ds-ticket-available: #f0fdf4;
-  --ds-ticket-available-text: #16a34a;
-  --ds-ticket-sold: #fef2f2;
-  --ds-ticket-sold-text: #dc2626;
-  --ds-ticket-reserved: #eff6ff;
-  --ds-ticket-reserved-text: #2563eb;
-
-  --ds-event-draft: rgba(0, 0, 0, 0.04);
-  --ds-event-draft-text: #737373;
-  --ds-event-published: #f0fdf4;
-  --ds-event-published-text: #16a34a;
-  --ds-event-live: #eff6ff;
-  --ds-event-live-text: #2563eb;
-  --ds-event-ended: rgba(0, 0, 0, 0.04);
-  --ds-event-ended-text: #a3a3a3;
-  --ds-event-cancelled: #fef2f2;
-  --ds-event-cancelled-text: #dc2626;
-}
-
-/* ============================================
-   EVNTO BRAND COLORS (Dark Mode)
-   Activated by [data-theme='dark'] or .dark class. evntoBrandTheme.palette
-   and chrome are single-valued and light-authored, so dark mode is
-   declared extension.
-   ============================================ */
-/* @ds-exception kind=capability-gap
-   owner=claude
-   purpose="dark-mode channels with no typed BrandTheme field; the compiler owns every channel it can express"
-   reachability=mode:dark
-   retire="each channel either gains a semantic contract field or moves to its owning app/component layer" */
-:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'],
-:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
-
-  /* Button tokens - dark */
-  --ds-button-primary-hover-bg: #F0F0E8;
-  --ds-button-secondary-hover-bg: #1C1A16;
-
-  /* Input tokens - dark */
-  --ds-input-text: #E8E8E0;
-  --ds-input-placeholder: #686858;
-  --ds-input-focus-border: #A89880;
 }
