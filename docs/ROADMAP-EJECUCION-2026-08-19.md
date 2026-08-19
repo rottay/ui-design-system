@@ -414,5 +414,47 @@ QUE-SE-QUEDA ejecutado); `.claude/settings.local.json` fuera del índice
 `iconography-fleet-census`) NO son historia — son evidencia viva referenciada
 por `cra-17-integral-gate` (bloqueante) y `craft.md`; verificado 2026-08-19.
 
-Fase 1 (movidas por familia dentro de `scripts/`) pendiente de brief; la
-ejecuta la misma terminal Opus (conserva contexto del árbol).
+**Fase 1 — Paso A (mapeo) CERRADO y ADJUDICADO (2026-08-19).** La terminal
+Opus produjo `/tmp/f05-fase1-mapping.md`: 225 filas (78 prod + 86 tests + 31
+sidecars + 30 lib), 12 clusters (C1–C12), 17 adjudicaciones (A1–A17), 7
+anomalías (AN1–AN7) y checklist de fixups (F1–F10). Decisiones del
+coordinador: A1(a) mover-con-basename (renombres anti-redundancia = Paso C,
+lote propio posterior); A10 `ci/f0-honesty-gates/`; A11(a) toolchain se queda
+(excepción escrita en §1.2, la hace el coordinador); A13 aprobadas
+`lib/verticals/` y `lib/source/` (§2.9 lo actualiza el coordinador); A17(a)
+permanente por ahora; AN3 aprobado — gate `structure/scripts-structure-gate/`
+como Paso D, lo escribe el coordinador; AN4 resuelto por borrado (v1, abajo);
+AN5 ya cerrado (`1f3aa3012`); AN1/AN2 → Fase 0-bis (brief
+`/tmp/f05-fase0bis-brief.md`, 5 archivos + 4 cadenas, cuarto idioma
+`fileURLToPath(new URL('.', …))`). Addendum cross-package verificado a mano:
+`/tmp/f05-fase1-addendum.md` (root package.json, showroom package.json,
+import real desde `cra-15-assemble.mjs`, `new URL` en spec de whitelabel).
+
+**Retiro de quality-evidence v1 (U2 + §3):** borrados los 7 archivos + su
+gate test, entrada `quality-evidence:check` fuera de package.json, README
+reescrito v2-only, v2 verificado (inventory exit=0). **Commit PENDIENTE**:
+quedó entrelazado en el árbol con el lote de scripts de raíz (f05-sonnet en
+vuelo); se commitea inmediatamente después de ese lote, con re-sello.
+
+**Incidente y regla nueva (2026-08-19):** un `git commit` pelado del
+coordinador barrió las movidas staged del worker (las `git mv` quedan staged
+por diseño). Se deshizo con `reset --soft` sin pérdida. **Reglas duras desde
+ya:** (1) UN SOLO lote que toque el corpus del sello (scripts/, src/, ci.yml,
+package.json de raíz, roadmap/registry.json) en vuelo a la vez — la
+verificación §13 + commiteo mío entre lote y lote; (2) los commits del
+coordinador usan `git commit -o -- <paths>` explícitos mientras un worker
+tenga trabajo sin commitear en el árbol.
+
+**Cola de F0.5 (orden estricto):**
+1. Lote scripts de raíz (f05-sonnet, en vuelo) → verificar + commit + sello.
+2. Commit del retiro v1 (listo en árbol) + sello.
+3. Lote 0: `wiring-coverage-gate` recursivo + drill de huérfano plantado
+   (F5 del mapeo: hoy lee `readdirSync` plano y pasaría vacuamente en cuanto
+   baje el primer script). Lo hace el coordinador.
+4. Fase 0-bis (Sonnet, brief listo).
+5. Paso B lotes A–I (Opus, brief `/tmp/f05-pasoB-brief.md`): A i18n ·
+   B builders+generators+taxonomy · C structure+verticals · D boundaries ·
+   E packaging+evidence (C2 atómico) · F ci · G tokens · H engine · I lib.
+6. Paso C (renombres, opcional) y Paso D (scripts-structure-gate, mío).
+7. Graduación del manifest (censo: 32 lit + 7 calc + 15 solo-programa).
+8. gates:ci final + auditoría Fable del frente.
