@@ -101,6 +101,14 @@ cierre:
    `:v2:seal` para `seal-round`; comentario en `pack-inventory-gate.mjs:4,61`.
 7. **Regularización del symlink de evnto** (declaración; la acción es app-side).
 8. **Limpieza de disco:** `coverage*/`, `showroom/.tmp/`, tarballs viejos.
+9. **F0.13 — Adjudicación de los gates rojos restantes.** `gates:ci` es
+   fail-fast y hoy muere antes de gat-07 (`channel-liveness-drill`: 6 canales
+   `--ds-elevation-{0..5}` sin fila en `SEMANTIC_OWNER_RULES`). Quedan ~20
+   gates rojos (handoff): 8 artefactos stale, 4 deuda real de canal (material
+   de F2/F3 — esos se eximen por escrito o se mueven a su frente), 3 de forma.
+   Cada rojo se adjudica: se arregla la ley, se regenera el artefacto, o se
+   mueve el gate al frente que le corresponde con nota. Sin esto, el criterio
+   de cierre es inalcanzable.
 
 **Criterio de cierre:** `gates:ci` verde DESPUÉS del resello; `find src -type d
 -empty` vacío (menos el inbox declarado); changeset major commiteado.
@@ -304,26 +312,51 @@ anotado.
    manifiesto + lifecycle hooks (prebuild/prepack/postbuild) + ci.yml son todos
    canales válidos; el gate de wiring los cuenta todos.
 
-**Pendientes (con el frente donde hacen falta):**
+**Pendientes — adoptadas las recomendaciones del DT (dueño, 2026-08-19):**
 
-5. **Symlink de evnto** — antes de F5/F8. Mi recomendación: link declarado y
-   documentado mientras dure la reconstrucción; pin honesto al publicar 3.0.
-6. **`ProductWindow`** — F8 (fase app-platform). Mi recomendación: decidir
-   cuando se reclasifique la capacidad commercial; hoy no bloquea nada del DS.
-7. **`map-view`** — F5. Mi recomendación: se retira (un placeholder sin
-   provider no es una capacidad).
-8. **Evidencia `cra-16`** — F7. Mi recomendación: archivar en test-artifacts
-   con nota de "productor retirado".
-9. **Las 10 raíces `gap`** — F1. Mi recomendación: backlog aceptado por ahora;
-   abrir diales solo cuando un tema los necesite (la cascada no los bloquea).
+5. **Symlink de evnto:** link declarado y documentado mientras dure la
+   reconstrucción; pin honesto al publicar 3.0 (se trata en F5/F8).
+6. **`ProductWindow`:** se decide en la fase de app-platform al reclasificar
+   commercial; hoy no bloquea nada del DS.
+7. **`map-view`:** **se retira** (un placeholder sin provider no es capacidad).
+8. **Evidencia `cra-16`:** **se archiva** en test-artifacts con nota de
+   "productor retirado" (F7).
+9. **Las 10 raíces `gap`:** **backlog aceptado**; se abren diales solo cuando
+   un tema los necesite.
 
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
-ejecución y pasan a ser checklist de la fase de cada vertical.
+ejecución y pasan a ser checklist de la fase de cada vertical. El DT trabaja
+autónomo; **Fable audita cada hito antes de pasar al frente siguiente**; este
+roadmap se mantiene al estado real (ver §13).
 
 ---
 
 *Fuentes: DIAGNOSTICO, DEPURACION-SCRIPTS, CONFORMIDAD-SRC, REAUDITORIA-FABLE
 ×2. Todo número de este roadmap fue medido al menos dos veces o queda marcado
 como heredado.*
+
+---
+
+## 13. Estado de ejecución (vivo — se actualiza con cada lote)
+
+**F0 — en curso.**
+
+| Lote | Estado | Commit | Nota |
+|---|---|---|---|
+| F0.1 changeset major 3.0.0 | ✅ | `de9e71c3f` | `changeset status` valida el bump major |
+| F0.2 borrados triviales repo | ✅ | `65bb266f7` | 24 archivos, 5.995 líneas; Sonnet + verificación mía |
+| F0.3 carpetas vacías | ✅ | — (disco) | 23 src + 7 extra; queda solo el inbox declarado; structure:check verde |
+| F0.4 iconos legacy | ⏳ | | 13 + LoaderIcon + barrel + re-seed packinv |
+| F0.5 monolito probe | ⏳ | | solo `probe/cascade-probe.mjs` + test |
+| F0.6 aliases | ⏳ | | 14 fuera, quedan 3 |
+| F0.7 channel-wiring + enmienda lane-control | ⏳ | | 4 archivos de ley en el mismo lote |
+| F0.8 cra-17-integral al manifiesto | ⏳ | | se cablea, no se borra |
+| F0.9 doc-rot | ⏳ | | NUL→`\0`, comentario manifest, :v2:seal, packinv comment |
+| F0.10 resello gat-07 | ⏳ | | yo; después de todos los borrados |
+| F0.11 gates nuevos | ⏳ | | `--ds_`, exports→artefacto post-build, frescura root-catalog |
+| F0.12 declaración canales | ✅ | docs | §1.10 ARCHITECTURE + wiring gate los cuenta |
+| F0.13 gates rojos | ⏳ | | adjudicación uno por uno; empezó: `channel-liveness-drill` (6 `--ds-elevation-*` sin fila en SEMANTIC_OWNER_RULES) |
+
+**Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5.

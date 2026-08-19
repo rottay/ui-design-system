@@ -326,9 +326,11 @@ honest or the build fails — never pointed at files the build does not produce.
 ### 1.10 Governance
 
 - `packages/core/scripts/` holds the mechanical governance: gates, censuses,
-  generators and evidence. Every gate is wired into `ci-gates.manifest.mjs` or
-  it does not exist; every test is reachable by a runner glob or it does not
-  exist.
+  generators and evidence. Every gate is wired or it does not exist; the
+  legitimate wiring channels are `ci-gates.manifest.mjs`, the npm lifecycle
+  hooks (`prebuild`/`postbuild`/`prepack`) and `.github/workflows/ci.yml`, and
+  the wiring gate counts all three. Every test is reachable by a runner glob
+  or it does not exist.
 - `roadmap/registry.json` is the operative backlog with mechanical state;
   statuses change only via `scripts/roadmap-status.mjs`.
 - Codemods are single-use and declare their expiry; a codemod whose target path
