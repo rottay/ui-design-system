@@ -409,8 +409,10 @@ escaneo residual propio.
 `WAVE_4_PRIMITIVES`) movidos a `docs/history/` (LOTE 5(a) de
 QUE-SE-QUEDA ejecutado); `.claude/settings.local.json` fuera del índice
 (rotación del PAT = acción del dueño). Restan de raíz: `scripts/`
-(graduación en curso), `test-artifacts/` (unificación §3, con F7) y la
-poda fina de `roadmap/` (2 fotos datadas candidatas a history/).
+(graduación en curso), `test-artifacts/` (unificación §3, con F7).
+`roadmap/` queda como está: las 2 fotos datadas (`icon-supplier-decision`,
+`iconography-fleet-census`) NO son historia — son evidencia viva referenciada
+por `cra-17-integral-gate` (bloqueante) y `craft.md`; verificado 2026-08-19.
 
 Fase 1 (movidas por familia dentro de `scripts/`) pendiente de brief; la
 ejecuta la misma terminal Opus (conserva contexto del árbol).
