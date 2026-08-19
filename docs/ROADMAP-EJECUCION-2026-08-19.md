@@ -393,13 +393,24 @@ Verificado por el coordinador: diffs de gates sensibles, drills 23/23,
 escaneo residual propio.
 
 **Deudas nuevas que destapó la Fase 0** (anotadas para su lote):
-- **Bytes NUL en fuentes**: `color-mix-argument-purity-gate.mjs` y
-  `red-inventory-gate.mjs` contienen bytes NUL crudos — los vuelve
-  invisibles a cualquier auditoría por grep sin `-a`. Lote propio:
-  limpiarlos + gate que prohíba bytes de control en fuentes.
+- ~~**Bytes NUL en fuentes**~~ ✅ CERRADA (`1f3aa3012`):
+  `color-mix-argument-purity-gate.mjs` y `red-inventory-gate.mjs` ya no
+  tienen bytes crudos (escape `\0`, runtime idéntico, 28/28 tests); son
+  visibles a grep. Queda pendiente SOLO el gate que prohíba bytes de
+  control en fuentes — nace post-Fase 1, directamente en su familia.
 - **Raíz de repo y showroom**: sus scripts siguen resolviendo raíz a mano
   (no pueden importar el helper sin cruzar paquetes). Se adjudican en la
-  fase de raíces de F0.5.
+  fase de raíces de F0.5. ▶ Lote de graduación folder/index de los 4
+  capabilities de `scripts/` de raíz EN CURSO (terminal f05-sonnet,
+  brief `/tmp/root-scripts-brief.md`).
+
+**Lote raíces (parcial) — `39dd2ae6f`:** los 4 `.md` históricos
+(`BACKLOG`, `DESIGN_SYSTEM_FINAL_REVIEW`, `DOCUMENTATION_ENHANCEMENT`,
+`WAVE_4_PRIMITIVES`) movidos a `docs/history/` (LOTE 5(a) de
+QUE-SE-QUEDA ejecutado); `.claude/settings.local.json` fuera del índice
+(rotación del PAT = acción del dueño). Restan de raíz: `scripts/`
+(graduación en curso), `test-artifacts/` (unificación §3, con F7) y la
+poda fina de `roadmap/` (2 fotos datadas candidatas a history/).
 
 Fase 1 (movidas por familia dentro de `scripts/`) pendiente de brief; la
 ejecuta la misma terminal Opus (conserva contexto del árbol).
