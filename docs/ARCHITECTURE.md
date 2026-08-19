@@ -76,17 +76,26 @@ the thing is before you open it. The target reader is a non-technical person:
 - No loose authored files at any root: not the repo root, not a package root,
   not the scripts root, not a group directory. Toolchain files a tool resolves
   by convention (`package.json`, `tsconfig.json`, `*.config.ts`, `.gitignore`…)
-  are the only exception, and they stay at the root that tool requires.
+  plus the ambient declarations those configs name (`*.d.ts` referenced by a
+  `tsconfig`) are the only exception, and they stay at the root that tool
+  requires.
 - `packages/core/src/index.ts` is the only loose file at the source root.
 - Two or more related units gain a named family directory; a family name never
   repeats inside its children (`tokens/channel-parity/`, not
   `tokens/tokens-channel-parity/`).
 - A barrel may aggregate child owners but does not share its level with loose
   authored peers.
-- Tests live in the owning unit's `tests/` branch; cross-owner tests live under
-  explicit `integration/` or `architecture/` owners.
+- Tests live inside the owning unit's folder as `<capability>/index.test.mjs`
+  (the same statement as §2.9: tests and baselines inside the owner's folder).
+  A suite whose subject spans owners lives in the family that owns the suite's
+  *subject* — the CI-honesty drill suite lives in `ci/` because gate honesty
+  is a CI concern.
 - A gate's baselines, allowlists and sealed evidence live **inside the gate's
-  own folder** (`<capability>/baseline.json`), never loose in a shared root.
+  own folder**, never loose in a shared root. The file keeps the capability's
+  full basename (`<capability>/<capability>.baseline.json`) because twenty
+  gates and several hash seals read those paths today; the short
+  `baseline.json` form is a Paso C decision, executed with the path-keyed
+  relocation machinery, not by hand.
 - Generated files, declarations, fixtures, examples, stories and registered
   package entrypoints are classified exceptions, not patterns for product code.
 - Generic ownership segments such as `_internal`, `internal`, `misc`, `shared`,
@@ -1025,8 +1034,10 @@ scripts/
   codemods/            App-side migrations, run by hand in consumers
   lib/                 Shared measurement, one metric once, in subfamilies:
                        paint/, engine/, taxonomy/, evidence/, hooks/, tokens/,
-                       build/ — plus repo-root/ (the single ascending
-                       root-finder every path resolution uses)
+                       build/, verticals/ (first-party rosters), source/
+                       (text preparation, e.g. comment stripping) — plus
+                       repo-root/ (the single ascending root-finder every path
+                       resolution uses)
   quality-evidence/
     v2/                The active evidence generation
     programs/modern-rescue/  The WO-CRA-23 program: contracts, cascade chain,
