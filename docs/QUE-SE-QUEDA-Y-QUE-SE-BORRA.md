@@ -40,37 +40,106 @@ Ningún archivo se borra hasta que apruebes el lote.
 
 ---
 
-## Evidencia: qué importan de verdad las apps
+## Evidencia: quién consume qué, en los cuatro lugares donde se consume
 
-Todo lo que sigue apoya sus decisiones en una medición, no en una lectura. La
-medición es esta:
+Este documento tuvo dos versiones de esta sección y las dos primeras estaban
+mal. Vale la pena dejar los tres intentos escritos, porque el error es siempre
+el mismo y es el error central de todo el trabajo.
 
-- se recorrieron `app-bithire/src`, `app-evnto/src`, `app-platform/src` y
-  `app-bithire-desktop/src`;
-- se extrajo cada `import { ... } from "@rottay/design-system..."` real;
-- se contó **en cuántos archivos** aparece cada símbolo importado.
+**Intento 1 (mal).** Conté apariciones del nombre en el código de las apps
+(`grep -l "\bDetailSurface\b"`). Dio 127. Contaba variables locales, tipos
+propios y comentarios que se llaman igual.
 
-Resultado: **2000 archivos** de app importan del design system y usan **546
-símbolos distintos**. Por app: bithire 1240, platform 441, evnto 319, y
-`app-bithire-desktop` **0** — esa app no consume el DS en absoluto.
+**Intento 2 (mal, y es el que casi te hago aprobar).** Conté los `import` reales
+de `@rottay/design-system` en las apps. El número era correcto pero el **alcance**
+no: una app no es el único consumidor. El propio DS se consume a sí mismo, el
+showroom lo consume, y los tests también. Con ese alcance dije que
+`approval-inbox` "no rompe nada" — y rompe cinco grupos de cosas acá adentro.
 
-Subpaths realmente usados: raíz (1970), `/icons` (1130), `/commercial` (53),
-`/server` (15), `/icons/presets/bithire` (10), `/marks` (10), `/charts` (8),
-`/charts/renderers` (5), `/motion` (3), `/charts/access` (1), `/charts/spec` (1).
+**Intento 3 (el que vale).** Cuatro columnas, contadas por separado:
 
-**Advertencia de método, porque me equivoqué antes.** El primer intento contó
-apariciones del nombre en el código de las apps (`grep -l "\bDetailSurface\b"`)
-y dio 127. Contando imports reales da **3**. La diferencia son variables locales,
-tipos propios, strings y comentarios que se llaman igual. Contar apariciones mide
-el rastro de la forma de escribir, no la población. Ningún número de este
-documento sale de ese método.
+- **core-ajeno** — archivos de producción de `packages/core/src` que lo importan
+  **desde afuera de su propia familia**. Es la columna que decide si algo se
+  puede sacar.
+- **core-propio** — archivos de su propia carpeta. No cuentan como consumo.
+- **tests** — tests, stories y fixtures del core.
+- **showroom** y **apps** — los dos consumidores externos.
 
-**Para qué sirve acá.** No para borrar por poco uso — algo recién publicado
-también tiene cero. Sirve como desempate: cuando dos cosas hacen lo mismo y una
-tiene cero importadores, esa es la copia, no la canónica. Ese es el único uso que
-se le da abajo.
+Y un cuarto error de método, que encontró Kimi y confirmé: contar solo
+`import { X }` **pierde los imports por defecto**. `tree-view` consume el
+primitive `Tree` como `import ModernTree from '.../Tree/engines/modern'`. Con la
+primera regex, `Tree` daba cero. Los números de abajo incluyen imports por
+defecto.
 
----
+### La tabla
+
+| símbolo | core-ajeno | tests | showroom | apps |
+|---|---|---|---|---|
+| `PageShellSurface` | **29** | 1 | 2 | 1 |
+| `SurfaceEmptyState` | **27** | 2 | 2 | 1 |
+| `Empty` | 17 | 6 | 6 | 27 |
+| `Tooltip` | 12 | 3 | 6 | 199 |
+| `PatternFilterPanel` | 9 | 3 | 4 | 1 |
+| `PatternStatsGrid` | 5 | 5 | 3 | 1 |
+| `Layout` | 4 | 5 | 6 | 0 |
+| `Drawer` | 4 | 3 | 4 | 8 |
+| `Sheet` | 3 | 7 | 4 | 0 |
+| `Popover` | 3 | 8 | 6 | 0 |
+| `Notification` | 3 | 3 | 1 | 2 |
+| `Statistic` | 2 | 7 | 4 | 0 |
+| `Switch` | 2 | 5 | 8 | 35 |
+| `PatternListToolbar` | 2 | 4 | 4 | 0 |
+| `Tree` | 1 | 9 | 5 | 0 |
+| `ColumnMenu` | 1 | 2 | 3 | 2 |
+| `WorkspaceShell` | 1 | 3 | 3 | 0 |
+| `PatternPageShell` | 1 | 2 | 4 | 6 |
+| `PatternEmptyState` | 1 | 2 | 3 | 5 |
+| `CollectionWorkspaceSurface` | 0 | 6 | 3 | **61** |
+| `DataTerminalCard` | 0 | 2 | 3 | 57 |
+| `MonoStat` | 0 | 3 | 3 | 7 |
+| `Toggle` | 0 | 3 | 4 | 8 |
+| `Steps` | 0 | 4 | 5 | 6 |
+| `AppShell` | 0 | 1 | 2 | 3 |
+| `DetailSurface` | 0 | 4 | 3 | 3 |
+| `RecordWorkbenchSurface` | 0 | 2 | 3 | 3 |
+| `TableToolbar` | 0 | 2 | 3 | 3 |
+| `Toast` | 0 | 6 | 9 | 3 |
+| `TreeView` | 0 | 0 | 0 | 2 |
+| `PatternTimeline` | 0 | 1 | 3 | 2 |
+| `ListToolbar` | 0 | 0 | 0 | 1 |
+| `SavedViewsMenu` | 0 | 1 | 3 | 1 |
+| `FieldFiltersPanel` | 0 | 3 | 3 | 1 |
+| `Timeline` | 0 | 3 | 5 | 3 |
+| `ListSurface` | 0 | 9 | 4 | 0 |
+| `SidebarSurface` | 0 | 4 | 3 | 0 |
+| `EmptyStateSurface` | 0 | 2 | 2 | 0 |
+| `StatsHeader` | 0 | 3 | 4 | 0 |
+| `Stepper` | 0 | 8 | 5 | 0 |
+| `HoverCard` | 0 | 4 | 4 | 0 |
+| `Calendar` | 0 | 3 | 5 | 0 |
+| `CalendarView` | 0 | 0 | 0 | 0 |
+| `PatternColumnSettings` | 0 | 0 | 2 | 0 |
+| `DecisionInboxSurface` | 0 | 3 | 3 | 0 |
+| `PatternApprovalInbox` | 0 | 0 | 2 | 0 |
+| `ApprovalInbox` | 0 | 0 | 0 | 0 |
+| `Message` | 0 | 0 | 0 | 0 |
+
+Escala del lado de las apps: **2000 archivos** de app importan del DS y usan
+**546 símbolos**. bithire 1240, platform 441, evnto 319, y `app-bithire-desktop`
+**0** — esa app no consume el DS en absoluto.
+
+### Cómo se lee
+
+Un cero en **core-ajeno** no autoriza a borrar: hay que mirar las cuatro
+columnas. Lo que sí decide es lo contrario — **un número distinto de cero en
+core-ajeno prohíbe el retiro barato**, porque rompe el propio design system.
+
+Cuatro retiros que yo había propuesto por "cero importadores" están prohibidos
+por esta columna: `Sheet` (3), `Popover` (3), `Statistic` (2) y `Tree` (1).
+
+Y hay un caso que se lee al revés de lo que yo escribí: `Statistic` tiene 0 en
+apps y 2 acá adentro. No es "un primitive que nadie usa"; es un primitive que
+solo usa el propio DS y ninguna app.
 
 ## LOTE 1 — Carpetas vacías
 
@@ -327,14 +396,25 @@ presente": o se borra o el cartel es mentira.
 
 **riesgo:** sale por el export público. Necesita nota de breaking change.
 
-**bloqueo: resuelto.** Medido sobre los 2000 archivos de app que importan del DS:
-`ApprovalInbox` **0**, `PatternApprovalInbox` **0**. Ninguna app lo importa, así
-que el breaking change no rompe a nadie hoy.
+**bloqueo de las apps: resuelto.** `ApprovalInbox` **0** y
+`PatternApprovalInbox` **0** en los 2000 archivos de app.
 
-**pero ojo con el reemplazo:** `DecisionInboxSurface`, que el propio `@deprecated`
-señala como sustituto, también tiene **0** importadores. Borrar el viejo está
-bien; declarar que el nuevo "ya funciona en producción" no, porque no está en
-producción en ninguna app.
+**bloqueo nuevo, dentro del repo: NO resuelto.** Dije que "no rompe nada" y era
+falso; era el alcance de la medición otra vez. Acá adentro sí tiene consumidores:
+
+- el showroom, en 4 archivos (`pattern-preview-fixtures.tsx`, `navigation.ts`,
+  `registry/patterns.ts`, y el probe `r2-behavior`);
+- 3 tests propios y los dos engines;
+- la skin `runtime/engines/modern/skin/approval-inbox.css`, importada desde
+  `facade/entrypoints/base.css` y `styles.css`;
+- `supplier-contract.json` y los manifiestos de modern-rescue, que fallan
+  cerrado.
+
+Sigue siendo borrable, pero es un lote con cinco grupos de pasos, no un `rm`.
+
+**y ojo con el reemplazo:** `DecisionInboxSurface`, que el propio `@deprecated`
+señala como sustituto, tiene **0** en las cuatro columnas. Borrar el viejo está
+bien; declarar que el nuevo "ya funciona" no, porque no lo usa nadie.
 
 ---
 
@@ -424,21 +504,26 @@ ejecutando en CI. Un baseline histórico que corre en CI no es histórico.
 Tres de los cuatro pares tienen, en el código, un comentario que nombra a su
 duplicado. Nadie decidió cuál gana; se documentó el empate.
 
-**La adopción confirma cuál gana**, y no por poco:
+**La adopción NO confirma lo que yo había propuesto.** Con las cuatro columnas:
 
-| par | lado `patterns/` | lado `structures/` |
+| par | lado `patterns/` (core-ajeno / apps) | lado `structures/` (core-ajeno / apps) |
 |---|---|---|
-| toolbar | `ListToolbar` **1** | `TableToolbar` **3** |
-| columnas | `ColumnSettingsDropdown` **0**, `PatternColumnSettings` **0** | `ColumnMenu` **2** |
-| vistas guardadas | `SavedViewsBar` **0** | `SavedViewsMenu` **1** |
-| filtros | `FilterPanel` **0** | `FieldFiltersPanel` **1** |
+| toolbar | `PatternListToolbar` **2** / 0 | `TableToolbar` **0** / 3 |
+| columnas | `PatternColumnSettings` **0** / 0 | `ColumnMenu` **1** / 2 |
+| vistas guardadas | (no se exporta con ese nombre) | `SavedViewsMenu` **0** / 1 |
+| filtros | `PatternFilterPanel` **9** / 1 | `FieldFiltersPanel` **0** / 1 |
 
-El lado `patterns/` suma **1 importador en total** entre los cinco símbolos; el
-lado `structures/` suma **7**. Son cifras chicas en los dos lados, pero no están
-empatadas: cuatro de los cinco duplicados de `patterns/` tienen cero.
+`PatternFilterPanel` lo consumen nueve archivos de producción del propio DS:
+`data-table`, y las surfaces `audit`, `list`, `report`, `search`, `kanban`,
+`collection-workspace`, `decision-inbox`. Retirarlo rompe el design system por
+dentro. `PatternListToolbar` tiene 2.
 
-**Propuesta:** el chrome de página es tier `structures/`. Los cuatro de
-`patterns/` se retiran.
+**Propuesta corregida:** la regla "el chrome de página es tier `structures/`, así
+que los de `patterns/` se retiran" **no se sostiene**. Lo que se puede hacer hoy
+sin romper nada es retirar `PatternColumnSettings` (0 en las cuatro columnas
+salvo 2 páginas del showroom). Para los otros tres pares hay que decidir el
+canónico **y migrar los consumidores internos primero**; no es un borrado, es una
+refactorización con orden.
 
 ## U4 — Dos recetas de página completas para la misma pantalla
 
@@ -452,19 +537,23 @@ se retiró la otra.
 
 **La adopción parte el caso en dos mitades distintas:**
 
-| par | adopción |
-|---|---|
-| `ListSurface` vs `CollectionWorkspaceSurface` | **0** vs **61** (bithire 1, evnto 13, platform 47) |
-| `DetailSurface` vs `RecordWorkbenchSurface` | **3** vs **3** |
+| par | core-ajeno | tests | showroom | apps |
+|---|---|---|---|---|
+| `ListSurface` | 0 | 9 | 4 | **0** |
+| `CollectionWorkspaceSurface` | 0 | 6 | 3 | **61** |
+| `DetailSurface` | 0 | 4 | 3 | 3 |
+| `RecordWorkbenchSurface` | 0 | 2 | 3 | 3 |
 
 **Propuesta (mitad de colección):** cumplir lo que el archivo ya declara.
-`ListSurface` tiene cero importadores y la otra tiene 61: se retira.
+`ListSurface` tiene cero consumidores en producción y cero en apps, contra 61.
+Se retira — pero arrastra 9 tests del core, 4 páginas del showroom, un fixture
+del brand studio y dos gates de API pública. Es un lote de trabajo, no un `rm`.
 
-**Propuesta (mitad de detalle): decisión tuya, no la tomo yo.** Es 3 contra 3.
-Acá "cumplir lo que el archivo declara" no aplica, porque ninguna de las dos es
-canónica en la práctica; las dos son casi inexistentes. Las opciones honestas
-son elegir una por diseño y migrar 3 archivos, o admitir que la pantalla de
-detalle todavía no tiene receta canónica y no fingir que sí.
+**Propuesta (mitad de detalle): decisión tuya, no la tomo yo.** Es 3 contra 3, y
+las dos tienen cero consumo interno. Acá "cumplir lo que el archivo declara" no
+aplica, porque ninguna es canónica en la práctica. Las opciones honestas son
+elegir una por diseño y migrar 3 archivos, o admitir que la pantalla de detalle
+todavía no tiene receta canónica y no fingir que sí.
 
 ## U5 — Seis marcos de página
 
@@ -474,15 +563,26 @@ y `workspace-shell` dice de sí mismo *"This is page chrome, not a page recipe"*
 No son seis implementaciones independientes, pero el solape de propósito es real y
 un consumidor no tiene forma de elegir.
 
-**Adopción:** `PatternPageShell` **6**, `AppShell` **3**, `PageShellSurface`
-**1**, y `Layout` **0**, `WorkspaceShell` **0**, `SidebarSurface` **0**. Tres de
-los seis marcos no los usa nadie.
+**Los ceros que yo había citado eran del alcance equivocado.** Con las cuatro
+columnas, dos de los "cero" son los dos componentes más consumidos del grupo:
 
-**Propuesta:** un árbol de decisión de una línea por marco en la doc, y retirar
-los que no sobrevivan. Los tres con cero importadores son los primeros
-candidatos, pero `SidebarSurface` y `WorkspaceShell` se usan internamente dentro
-del propio DS: hay que mirar el consumo interno antes de tocarlos, no solo el de
-las apps.
+| marco | core-ajeno | tests | showroom | apps |
+|---|---|---|---|---|
+| `PageShellSurface` | **29** | 1 | 2 | 1 |
+| `Layout` | 4 | 5 | 6 | 0 |
+| `WorkspaceShell` | 1 | 3 | 3 | 0 |
+| `PatternPageShell` | 1 | 2 | 4 | 6 |
+| `AppShell` | 0 | 1 | 2 | 3 |
+| `SidebarSurface` | 0 | 4 | 3 | 0 |
+
+`PageShellSurface`, que yo había anotado con 1, sostiene **29 surfaces de
+producción** más `HeaderSurface`. `WorkspaceShell`, que había anotado con 0,
+sostiene a `CollectionWorkspaceSurface`. Ninguno de los dos se toca.
+
+**Propuesta corregida:** no son seis duplicados, son capas. Lo que falta no es
+borrar sino escribir el árbol de decisión: cuál usar para qué. Los únicos
+candidatos a retiro con daño acotado son `Layout` (0 en apps, pero 4 consumidores
+internos que habría que migrar) y `SidebarSurface`.
 
 ## U6 — Cuatro vocabularios de "no hay nada acá"
 
@@ -490,13 +590,27 @@ las apps.
 `structures/feedback/surface-lifecycle` (estado EMPTY),
 `surfaces/presentation/pages/experience/empty-state`. Uno por tier.
 
-**Adopción:** `Empty` **27**, `PatternEmptyState` **5**, `SurfaceEmptyState`
-**1**, `EmptyStateSurface` **0**. El primitive es el que la gente usa, cinco a
-uno.
+**Adopción, cuatro columnas:**
 
-**Propuesta:** el primitive es el único que dibuja; los otros tres delegan. El de
-`surfaces/` ya es página completa y puede quedarse como receta — aunque con cero
-importadores hay que decidir si la receta se mantiene o se retira.
+| pieza | core-ajeno | tests | showroom | apps |
+|---|---|---|---|---|
+| `SurfaceEmptyState` | **27** | 2 | 2 | 1 |
+| `Empty` | 17 | 6 | 6 | **27** |
+| `PatternEmptyState` | 1 | 2 | 3 | 5 |
+| `EmptyStateSurface` | 0 | 2 | 2 | 0 |
+
+No hay un huérfano acá: el más usado adentro es `SurfaceEmptyState` (27 surfaces)
+y el más usado afuera es `Empty` (27 archivos de app). Son dos hubs distintos
+para dos públicos distintos.
+
+**El defecto real no es la duplicación de nombres, es que la cadena no delega
+del todo:** `EmptyStateSurface` → `SurfaceEmptyState` → `PatternEmptyState` sí
+delega, pero `PatternEmptyState` **no** delega en `Empty`: duplica el markup en
+su engine modern. Ahí está la segunda copia, no en los cuatro nombres.
+
+**Propuesta corregida:** cerrar la delegación que falta (que `PatternEmptyState`
+dibuje con `Empty`), lo cual exige agrandar la API de `Empty` con slots de
+título, icono y acción. Ningún retiro barato en este grupo.
 
 ## U7 — Otros duplicados de primitives (decisión de API pública)
 
@@ -515,37 +629,32 @@ Los tres últimos grupos son duplicación legítima de tier (primitive sin datos
 pattern con datos) **si está escrita en la doc**. Hoy no lo está, así que un
 consumidor elige al azar.
 
-**La adopción separa tres casos que no son el mismo problema:**
+**Cuatro de los retiros que yo propuse por "cero importadores" están
+prohibidos: rompen el propio design system.**
 
-*Uno de los dos tiene cero importadores — se retira, no se fusiona:*
+| par | core-ajeno | apps | veredicto |
+|---|---|---|---|
+| `Drawer` 4 / `Sheet` **3** | 8 / 0 | **no retirar `Sheet`**: lo usan `app-shell`, `widget-board` y `adaptive-overlay` |
+| `Tooltip` 12 / `Popover` **3** / `HoverCard` 0 | 199 / 0 / 0 | **no retirar `Popover`**: lo usan `list-toolbar` y `column-menu`. Solo `HoverCard` es retirable |
+| `Statistic` **2** / `MonoStat` 0 / `DataTerminalCard` 0 | 0 / 7 / 57 | **no retirar `Statistic`**: lo usa `stats-header`. Y el dato interesante se mantiene: es un primitive que solo consume el propio DS |
+| `Tree` **1** / `TreeView` 0 | 0 / 2 | **no retirar `Tree`**: `tree-view` lo compone por import por defecto |
+| `Steps` 0 / `Stepper` 0 | 6 / 0 | `Stepper` sí es retirable: cero en las cuatro columnas salvo tests y showroom propios |
+| `PatternStatsGrid` 5 / `StatsHeader` 0 | 1 / 0 | `StatsHeader` retirable, pero primero hay que ver que no sea el que consume `Statistic` |
+| `Calendar` 0 / `CalendarView` 0 | 0 / 0 | ninguno se usa en ningún lado: decisión de producto, no de limpieza |
 
-| par | adopción |
-|---|---|
-| `Steps` **6** / `Stepper` **0** | retirar `Stepper` |
-| `Drawer` **8** / `Sheet` **0** | retirar `Sheet` |
-| `Tooltip` **199** / `Popover` **0** / `HoverCard` **0** | retirar los dos de cero |
-| `Statistic` **0** / `MonoStat` **7** / `DataTerminalCard` **57** | retirar `Statistic` |
-| `PatternStatsGrid` **1** / `StatsHeader` **0** | retirar `StatsHeader` |
-| `Calendar` **0** / `CalendarView` **0** | ninguno se usa: decisión de producto |
-| `Tree` **0** / `TreeView` **2** | retirar `Tree` |
+*Fusión de verdad, con dos lados vivos:* `Switch` (2 internos, 35 apps) contra
+`Toggle` (0 internos, 8 apps, todas bithire). Es el único par del grupo que
+rompe código de producto real.
 
-*Fusión de verdad, con dos lados vivos:* `Switch` **35** (platform 24, bithire
-10, evnto 1) contra `Toggle` **8** (todo bithire). Es el único par del grupo que
-rompe código real: 8 archivos de bithire a migrar.
+*No es duplicación sino documentación:* `Message` **0 en las cuatro columnas**,
+`Notification` 3/2, `Toast` 0/3 — pero la función `toast()` tiene **214**
+importadores en apps. Nadie usa los componentes; todos usan la función. Existen
+además `message()` y `notification()` exportadas. El problema es que hay dos
+formas de la misma cosa y la doc no dice cuál es la buena.
 
-*No es un problema de duplicación sino de documentación:* `Message` **0**,
-`Notification` **2**, `Toast` **3** — pero la función `toast()` tiene **214**
-importadores. Nadie usa los tres componentes; todos usan la función. Los tres
-componentes son fachada de algo que ya se consume de otra forma.
-
-**Un hallazgo aparte, y es el más grande del grupo:** el "primitive canónico" de
-métrica es `Statistic`, con **0**. El que la gente usa es `DataTerminalCard`,
-una `structure/`, con **57** (todos en platform). El tier no está prediciendo la
-canonicidad acá.
-
-**Propuesta:** los pares primitive/pattern con los dos lados vivos se quedan y se
-documentan; los siete de la primera tabla se retiran; `Switch`/`Toggle` se fusiona
-con migración; el grupo de avisos se documenta en vez de tocarse.
+**Propuesta corregida:** retirables hoy `HoverCard` y `Stepper`. `Sheet`,
+`Popover`, `Statistic` y `Tree` **se quedan**. `Switch`/`Toggle` es una fusión
+con migración de 8 archivos de bithire. El grupo de avisos se documenta.
 
 ## U10 — Dos sistemas de iconos conviviendo en producción
 
@@ -666,14 +775,13 @@ Aprobás por lote, no archivo por archivo:
 | 6 | `styles/platform.css` | medio | no: reanclar 802 citas primero |
 | 7 | `test-artifacts/` (528 MB) | pérdida de evidencia | no: necesito tu decisión |
 | 8 | espejo TS de tokens | alto de golpe | no: migrar 2 funciones primero |
-| 9 | `approval-inbox` (ya deprecado) | API pública | sí: medido, 0 importadores en las apps |
+| 9 | `approval-inbox` (ya deprecado) | API pública | no: 0 en apps, pero showroom + skin CSS + manifiestos adentro |
 | 10 | doc que describe cosas inexistentes | ninguno | sí (es corrección, no borrado) |
 | 11 | alias de `package.json` sin uso | ninguno | sí |
 
-Los lotes 1 a 5 más el 9, el 10 y el 11 se pueden hacer hoy y no rompen nada.
-El 9 pasó a ejecutable con la medición de imports; los únicos que siguen
-esperando algo son el 6 (trabajo previo), el 7 (decisión tuya) y el 8 (migrar dos
-funciones).
+Los lotes 1 a 5 más el 10 y el 11 se pueden hacer hoy. El 9 volvió a bloquearse
+al medir dentro del repo. El 6 necesita trabajo previo, el 7 una decisión tuya y
+el 8 hay que reducirlo de alcance.
 
 Y tres preguntas que no puedo contestar yo, porque son de diseño y no de archivo:
 
