@@ -1,8 +1,8 @@
 {
   "_comment": "Decrease-only accepted-debt ledger for tenant visual channels with zero source consumers. A NEW dead channel (not listed here) fails tenant-channel-consumer-gate --check. Revive a channel by wiring a var()/selector consumer, or tighten this list once revived.",
   "generatedFrom": {
-    "overrideTokens": 294,
-    "emittedChromeChannels": 1306,
+    "overrideTokens": 290,
+    "emittedChromeChannels": 1649,
     "chartSeriesChannels": 10,
     "anatomyChannels": 10,
     "anatomyContractPresent": true
@@ -266,6 +266,12 @@
     "--ds-metric-card-title-color": {
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
+    "--ds-premium-card-footer-color": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-premium-card-glass-bg": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
     "--ds-shell-active-gradient": {
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
     },
@@ -279,9 +285,6 @@
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
     },
     "--ds-shell-shimmer-strong": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-sidebar-text-muted": {
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
     },
     "--ds-signal-card-action-bg": {

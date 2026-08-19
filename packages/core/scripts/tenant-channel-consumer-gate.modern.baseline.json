@@ -3,23 +3,79 @@
   "view": "engine=modern",
   "states": "DECLARED = the contract exposes the dial | EMITTED = a compiler writes it | CONSUMED = some source reads it in any engine | PAINTED = a modern-reachable source reads it (not under engines/classic|rustic). CONSUMED and not PAINTED = dead-in-modern.",
   "generatedFrom": {
-    "channelsInventoried": 1620,
-    "declared": 314,
-    "emitted": 1306,
-    "consumed": 1428,
-    "painted": 1420,
-    "neverConsumed": 192,
-    "consumedFrozenOnly": 8,
-    "paintedWithoutModernBlock": 422,
+    "channelsInventoried": 1959,
+    "declared": 310,
+    "emitted": 1649,
+    "consumed": 1770,
+    "painted": 1642,
+    "neverConsumed": 189,
+    "consumedFrozenOnly": 128,
+    "paintedWithoutModernBlock": 510,
     "sourceFilesByScope": {
-      "frozen-engine": 380,
-      "modern-engine": 266,
-      "engine-neutral": 1905
+      "frozen-engine": 378,
+      "modern-engine": 265,
+      "engine-neutral": 1987
     },
     "anatomyContractPresent": true
   },
   "channels": {
+    "--ds-autocomplete-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-badge-height": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-badge-text-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-danger-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-danger-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-danger-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-danger-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-dashed-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-default-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
     "--ds-button-disabled-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-ghost-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-link-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-primary-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-secondary-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-button-text-hover-bg": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
@@ -34,6 +90,26 @@
     "--ds-card-shadow-elevated": {
       "state": "never-consumed",
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-checkbox-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-checkbox-bg-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-checkbox-checked-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-checkbox-error-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-checkbox-label-color-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
     "--ds-collection-card-action-bg": {
       "state": "never-consumed",
@@ -150,6 +226,34 @@
     "--ds-command-line": {
       "state": "never-consumed",
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-command-palette-backdrop": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-command-palette-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-command-palette-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-command-palette-empty-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-command-palette-group-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-command-palette-item-hover-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-command-palette-shortcut-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
     "--ds-compact-card-action-bg": {
       "state": "never-consumed",
@@ -299,15 +403,147 @@
       "state": "never-consumed",
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
+    "--ds-datepicker-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-bg-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-clear-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-error-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-icon-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-separator-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-datepicker-warning-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-divider-text-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-form-error-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-form-extra-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-form-help-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-form-required-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-form-success-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-form-warning-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-image-overlay-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
     "--ds-input-search-clear-color": {
       "state": "never-consumed",
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-inputnumber-addon-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-addon-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-addon-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-affix-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-bg-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-border-focus": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-control-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-error-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-shadow-focus": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-inputnumber-warning-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
     "--ds-layout-header-height": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
     "--ds-layout-sider-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-list-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-list-item-bg-hover": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-list-skeleton-bg": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
@@ -375,6 +611,58 @@
       "state": "never-consumed",
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
+    "--ds-page-shell-subtitle-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-premium-card-footer-color": {
+      "state": "never-consumed",
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-premium-card-glass-bg": {
+      "state": "never-consumed",
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-radio-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-radio-bg-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-radio-error-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-radio-label-color-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-rate-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-select-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-select-border-focus": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-select-border-hover": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-select-check-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-select-dropdown-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
     "--ds-shell-active-gradient": {
       "state": "never-consumed",
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
@@ -398,10 +686,6 @@
     "--ds-sidebar-header-height": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
-    },
-    "--ds-sidebar-text-muted": {
-      "state": "never-consumed",
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
     },
     "--ds-sidebar-width": {
       "state": "consumed-frozen-only",
@@ -542,6 +826,54 @@
     "--ds-signal-card-value-color-hover": {
       "state": "never-consumed",
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-slider-focus-ring": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-handle-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-handle-bg-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-handle-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-handle-shadow": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-mark-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-rail-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-track-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-slider-track-color-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-switch-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-switch-bg-hover": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-switch-focus-ring": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
     "--ds-table-filter-focus-shadow": {
       "state": "consumed-frozen-only",
@@ -726,6 +1058,158 @@
     "--ds-tall-card-value-color-hover": {
       "state": "never-consumed",
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-timepicker-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-bg-disabled": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-clear-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-error-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-icon-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-separator-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-timepicker-warning-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-toggle-error-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-toggle-focus-ring": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-toggle-inner-label-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-toggle-track-bg-checked": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-tooltip-z-index": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-transfer-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-transfer-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-transfer-header-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-transfer-header-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-border-hover": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-button-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-button-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-button-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-card-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-card-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-dragger-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-dragger-bg-hover": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-dragger-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-dragger-border-active": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-dragger-icon-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-dragger-text-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-error-border": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-file-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-file-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-file-remove-color": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-progress-bar": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-upload-progress-track": {
+      "state": "consumed-frozen-only",
+      "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
     "--ds-workspace-card-action-color": {
       "state": "never-consumed",
