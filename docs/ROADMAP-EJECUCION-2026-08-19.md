@@ -341,7 +341,10 @@ como heredado.*
 
 ## 13. Estado de ejecución (vivo — se actualiza con cada lote)
 
-**F0 — en curso.**
+**F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
+`ci-gates OK — 77 blocking gate(s) passed` (1 excluded con razón y dueño:
+channel-liveness hasta F2); `find src -type d -empty` vacío salvo el inbox
+declarado; changeset major commiteado. Auditoría de hito: Fable, en curso.
 
 | Lote | Estado | Commit | Nota |
 |---|---|---|---|
