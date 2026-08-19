@@ -461,7 +461,7 @@
       "rootId": "tier.page.fg",
       "group": "superficie-por-nivel",
       "channel": "--ds-sidebar-item-color",
-      "channelStatus": "existe",
+      "channelStatus": "solo-artefacto",
       "collapses": {
         "total": 75,
         "rottay": 60,
@@ -612,7 +612,7 @@
       "rootId": "type.scale",
       "group": "tipografia",
       "channel": "--ds-type-scale",
-      "channelStatus": "existe",
+      "channelStatus": "solo-artefacto",
       "collapses": {
         "total": 68,
         "rottay": 28,
@@ -1296,7 +1296,7 @@
       "rootId": "motion.intensity",
       "group": "movimiento-perfil",
       "channel": "--ds-motion-intensity",
-      "channelStatus": "existe",
+      "channelStatus": "solo-artefacto",
       "collapses": {
         "total": 36,
         "rottay": 12,
@@ -1691,7 +1691,7 @@
       "rootId": "experience.profile",
       "group": "movimiento-perfil",
       "channel": "--ds-experience-profile",
-      "channelStatus": "existe",
+      "channelStatus": "solo-artefacto",
       "collapses": {
         "total": 16,
         "rottay": 5,

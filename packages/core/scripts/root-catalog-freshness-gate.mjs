@@ -36,6 +36,10 @@ function* walkCss(dir) {
     const stat = statSync(path);
     if (stat.isDirectory()) {
       if (entry === 'node_modules') continue;
+      // `facade/artifacts/` is GENERATED output (compiled themes), not authored
+      // CSS — a channel born there is exactly the catalog's 'solo-artefacto'
+      // class, so it must not count as an authored declaration.
+      if (relative(SRC_ROOT, path).split('/').join('/').includes('facade/artifacts')) continue;
       yield* walkCss(path);
     } else if (entry.endsWith('.css')) {
       yield path;
@@ -45,6 +49,7 @@ function* walkCss(dir) {
 
 const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf8'));
 const roots = catalog.roots ?? [];
+const SRC_ROOT = join(CORE_ROOT, 'src');
 
 // The declared-channel set: every `--ds-<name>:` definition in authored CSS.
 const DECLARATION = /(--ds-[a-zA-Z0-9-]+)\s*:/g;
