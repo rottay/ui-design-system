@@ -302,6 +302,15 @@ importa en sus líneas 76-84. La primera versión de este documento decía "borr
 `DESIGN_SYSTEM_FINAL_REVIEW.md`, `DOCUMENTATION_ENHANCEMENT.md`,
 `WAVE_4_PRIMITIVES.md`.
 
+> ✅ **EJECUTADO (2026-08-19, lote raíces de F0.5):** movidos a
+> `docs/history/` con `git mv` (destino según `ARCHITECTURE.md` §2.1, que
+> refina el «docs-engineering/archive/» de este veredicto: la historia vive
+> en ESTE repo). Ningún link navegable se rompió; las referencias restantes
+> son prosa de adjudicación. En el mismo lote: `.claude/settings.local.json`
+> salió del índice (`git rm --cached`; el directorio ya estaba ignorado) —
+> contenía credenciales locales; **la rotación del PAT es acción del dueño**
+> porque el valor sigue en la historia de git.
+
 **por qué (a):** son fotos de un momento (una review "final" que no fue final, una
 ola de primitives que terminó, un plan de mejora de documentación ya ejecutado). El
 backlog vivo es `roadmap/registry.json`. Ninguno se actualiza; los cuatro describen
