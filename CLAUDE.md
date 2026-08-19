@@ -21,6 +21,10 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 - **Repo map**: [`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md) — what every
   folder in this repository does, where something is written twice, and which
   folders are empty scaffolding. Independently verified claim by claim.
+- **Third-reader audit**: [`docs/AUDITORIA-KIMI.md`](docs/AUDITORIA-KIMI.md) —
+  an independent audit that overturned four proposed removals (`Sheet`,
+  `Popover`, `Statistic`, `Tree` all have in-DS production consumers) and
+  re-blocked LOTE 9. Read it before executing any removal lot.
 - **Keep/delete decisions**: [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md)
   — which duplicate is canonical, which owners are removed, and which owners
   only look dead. Read it before proposing that anything is redundant.

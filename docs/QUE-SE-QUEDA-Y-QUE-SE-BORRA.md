@@ -761,6 +761,63 @@ corrige el mismo día o se borra. No hay estado "vigente con cartel de obsoleto"
 
 ---
 
+## LOTE 12 — Lo que los tres documentos anteriores no vieron
+
+**Verdicto: BORRAR. Riesgo: ninguno.**
+
+Tres borrados de riesgo cero que ningún lote había reclamado. Salieron del tercer
+lector, y los verifiqué uno por uno.
+
+**a) `audit-presets.mjs` y `audit-report.json` en la raíz del repo.** Están
+muertos por exactamente el mismo motivo que los 17 codemods del lote 2: escanean
+`packages/core/src/composition/components/custom`, una ruta que no existe
+(`test -d` → no existe). El `.json` es del 19 de febrero. Y no aparecen en el
+mapa: `grep "audit-presets\|audit-report" docs/MAPA-DEL-REPO.md` da **0**. El
+mapa que dice qué hace cada carpeta se saltó dos archivos de la raíz.
+
+**b) `packages/showroom/.tmp/` — 32 scripts de depuración.** El mapa los marca
+borrables en dos lugares y ningún lote los tomó. Además hay una valla escrita en
+`AGENTS.md` que prohíbe `.tmp` en el árbol de trabajo final. Están ignorados por
+git, así que el borrado no toca historia.
+
+**c) `coverage/`, `coverage-final/` y `packages/core/coverage/`.** El mapa las
+declara borrables; la tabla del lote 1 suma 34 carpetas sin ellas. Son salida de
+herramienta, regenerable.
+
+**riesgo:** ninguno en los tres casos.
+
+**bloqueo:** ninguno.
+
+---
+
+## Regla 6 — La etiqueta no retira
+
+Las cinco reglas anteriores cubren codemods de un solo uso, gates huérfanos,
+globs no recursivos, documentación que se autocita y copias que divergen.
+Ninguna cubre el mecanismo de acumulación más repetido de este árbol: **declarar
+un retiro y no ejecutarlo.**
+
+> Toda declaración de "deprecated", "canonical", "historical" o "legacy" en un
+> docstring, README o comentario tiene que llevar fecha límite y un chequeo
+> mecánico que falle si lo declarado muerto sigue alcanzable pasada esa fecha.
+> Sin eso, la palabra es deuda disfrazada de decisión.
+
+Los cuatro casos que la fundan, todos en este repo y todos en este documento:
+
+- `approval-inbox/index.ts:19-21` dice *"Will be removed in a future major
+  version"*. Ese futuro lleva meses siendo el presente (lote 9).
+- `collection-workspace/index.tsx:4` se declara *"Single canonical workspace
+  surface"* mientras `ListSurface` sigue exportada hasta `src/index.ts` (U4).
+- `quality-evidence/README.md:8` dice *"v1 — HISTORICAL BASELINE ONLY"* mientras
+  `package.json` sigue ejecutando v1 (U2).
+- `graphics/icons/index.ts:37-42` dice que los 13 legacy están
+  *"intentionally NOT re-exported"* — y siguen físicamente en el árbol (lote 3).
+
+En los cuatro, alguien tomó la decisión correcta, la escribió, y ahí se quedó. La
+palabra escrita hizo de sustituto del trabajo.
+
+---
+
 ## Qué necesito de vos
 
 Aprobás por lote, no archivo por archivo:
@@ -778,6 +835,7 @@ Aprobás por lote, no archivo por archivo:
 | 9 | `approval-inbox` (ya deprecado) | API pública | no: 0 en apps, pero showroom + skin CSS + manifiestos adentro |
 | 10 | doc que describe cosas inexistentes | ninguno | sí (es corrección, no borrado) |
 | 11 | alias de `package.json` sin uso | ninguno | sí |
+| 12 | `audit-presets.mjs` + `audit-report.json` de la raíz, `showroom/.tmp/` (32 scripts), las 3 carpetas de `coverage` | ninguno | sí |
 
 Los lotes 1 a 5 más el 10 y el 11 se pueden hacer hoy. El 9 volvió a bloquearse
 al medir dentro del repo. El 6 necesita trabajo previo, el 7 una decisión tuya y

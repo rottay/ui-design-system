@@ -95,7 +95,9 @@ from that map -- what stays, what is removed, and which duplicate becomes the
 canonical owner -- are in
 [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md). The
 independent claim-by-claim verification of that map is in
-[`docs/VERIFICACION-FABLE.md`](docs/VERIFICACION-FABLE.md). The architecture
+[`docs/VERIFICACION-FABLE.md`](docs/VERIFICACION-FABLE.md), and a third
+independent audit -- which overturned several of those decisions -- is in
+[`docs/AUDITORIA-KIMI.md`](docs/AUDITORIA-KIMI.md). The architecture
 reference is [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ### Branding Model
