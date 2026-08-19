@@ -377,4 +377,9 @@ docs-engineering (cita `gate:styles-css`; su commit/push es de ese repo).
 - El build por filtro (`pnpm --filter`) captura el paquete desempaquetado de `test-artifacts/release/2.19.29/` y falla ahí — usar `pnpm build` directo en `packages/core` hasta que F7 limpie ese árbol.
 - Warnings APCA del build de artefactos (dark-mode colores 900, |Lc|=0) → material de craft para F4, no bloquean.
 
-**Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5.
+**Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5. ✅
+Aprobado; hallazgos integrados en F0.14.
+
+**F0.5 — en curso.** Fase 0: helper `repo-root` creado
+(`lib/repo-root/index.mjs`, doble predicado, 5/5 drills, `b222ff311`) y la
+migración de las ~145 resoluciones manuales corre en terminal Opus.
