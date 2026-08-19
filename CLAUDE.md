@@ -9,6 +9,24 @@
 2. General project rules below apply only where the programme contracts are
    silent.
 
+## Operating model (owner decree, 2026-08-19)
+
+- **Kimi K3 (max effort) is the DT/coordinator.** It decomposes work into
+  bounded packets, makes every architecture/adjudication decision, and
+  verifies every packet with gates and diff review before any commit. It
+  implements personally only the critical pieces (seals, programme contracts,
+  delicate surgery).
+- **Mechanical packets are delegated to Claude terminals via tmux**, with the
+  model tier chosen by risk: Sonnet for pure mechanical work, Opus for
+  mid-risk, Fable for the full independent audit at the close of each front.
+  Kimi sub-agents inherit the coordinator's model (no per-subagent model
+  selection exists), so cross-model delegation happens through tmux sessions,
+  each carrying a written brief and a mechanical acceptance check.
+- The coordinator decides whether a terminal stays open (context reuse) or
+  closes when its packet completes.
+- One commit per lot, conventional format, **never push**. Version publishes
+  are allowed.
+
 ## Non-Negotiable: No Cross-Module Direct Queries
 
 Apps, verticals, and modules must never query tables owned by another module/schema directly. Cross-module communication must go through the owning module's exported use cases, actions, factories, or repository ports. If a needed capability does not exist, create and export it in the owning module first; do not import foreign Drizzle schemas, create local bridge queries, or duplicate tables across schemas. Infrastructure-only health checks such as `SELECT 1` may test connectivity, but they must not read or mutate module-owned tables.
