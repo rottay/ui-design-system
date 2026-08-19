@@ -380,6 +380,26 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/taxonomy-parity-gate.mjs'],
     blocking: true,
   },
+  // The --ds_ experimentation space never reaches shipped CSS (canon: --ds-).
+  {
+    id: 'ds-prefix',
+    run: ['node', 'scripts/ds-underscore-prefix-gate.mjs'],
+    blocking: true,
+  },
+  // The 63-root cascade catalog must agree with the tree it describes; until
+  // this gate existed nothing read it at all.
+  {
+    id: 'root-catalog-freshness',
+    run: ['node', 'scripts/root-catalog-freshness-gate.mjs'],
+    blocking: true,
+  },
+  // Drills for the three F0 honesty gates: a gate that cannot fail is not a
+  // gate.
+  {
+    id: 'f0-honesty-gates-drill',
+    run: ['node', '--test', 'scripts/f0-honesty-gates.test.mjs'],
+    blocking: true,
+  },
 ]);
 
 /** Gates the runner will actually enforce. */
