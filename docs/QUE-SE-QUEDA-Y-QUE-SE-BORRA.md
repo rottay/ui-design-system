@@ -153,20 +153,35 @@ solo usa el propio DS y ninguna app.
 
 **Verdicto: BORRAR. Riesgo: ninguno.**
 
-**qué:** 34 carpetas con cero archivos dentro, contadas recursivamente.
+**qué:** 36 carpetas con cero archivos dentro, contadas recursivamente. (Decía
+34; el tercer lector corrigió el conteo y lo volví a medir: son 36, en 21
+subárboles.)
 
 | grupo | carpetas | qué prometían |
 |---|---:|---|
 | `infrastructure/runtime/presentation-profiles/**` | 7 | calco de `foundation/presets/product-profiles/`, que sí existe y funciona |
-| `infrastructure/runtime/graphics/continuous-runtime-governor/**` | 5 | un gobernador de runtime continuo que nunca se escribió |
 | `entrypoints/public/{patterns,primitives,structures,surfaces}/{contracts,runtime}` | 8 | subpaths públicos que el `package.json` no declara |
+| `infrastructure/runtime/graphics/continuous-runtime-governor/**` | 6 | ver el aviso de abajo: no es la carpeta viva |
 | `charts/**/renderers/{area,waterfall,sparkline,histogram}/tests` | 4 | tests de renderer que no existen |
 | `graphics/icons/runtime/adapters/` + `phosphor-ssr/` | 2 | resto de la relocalización del adaptador de iconos |
 | `motion/**/particles/runtime/governance/` + `animation-lease/` | 2 | el archivo real vive en `runtime/canvas/governance/animation-lease/` |
 | `structures/foundation/chrome/runtime/profile-defaults/{presentation-recipes,attributes}` | 2 | — |
 | `infrastructure/runtime/theming/foundation/color/` + `oklch/` | 2 | — |
+| `.../modern-rescue/KIMI-ANNOTATIONS/` + `inbox/` | 2 | buzón de anotaciones de un agente |
 | `patterns/data/data-table/engines/modern/styles/` | 1 | — |
-| `.../modern-rescue/KIMI-ANNOTATIONS/inbox/` | 1 | buzón de anotaciones de un agente |
+
+**Aviso, y es el único de este lote:** hay **dos** árboles llamados
+`continuous-runtime-governor`, y solo uno está vacío.
+
+- `infrastructure/runtime/**graphics**/continuous-runtime-governor/` → vacío, es
+  el cascarón que quedó de una relocalización. **Este es el que se borra.**
+- `infrastructure/runtime/**foundation/graphics**/continuous-runtime-governor/` →
+  **vivo**: tiene los `index.ts` reales, dos consumidores de producción
+  (`particles/.../animation-lease/index.ts:6` y
+  `spatial/runtime/browser/context-lease/index.ts:6`) y está cableado por
+  nombre en `cra-15-runtime-hardening-gate.mjs:47,166`. **No se toca.**
+
+Un `rm -rf` por nombre de carpeta en vez de por ruta completa borra el vivo.
 
 **por qué:** cero archivos. `grep -r presentation-profiles` da cero referencias en
 todo el repo. Git no versiona carpetas vacías, así que ni siquiera aparecen en un
@@ -238,7 +253,15 @@ donde la copia dibujada a mano es la que nadie alcanza.
 
 **riesgo:** ninguno. No salen por ningún export público.
 
-**bloqueo:** ninguno.
+**bloqueo:** ninguno, pero **un paso después**, que el tercer lector encontró y
+verifiqué. El `grep -ral "legacy/<Nombre>"` no da exactamente 0: los 15 nombres
+están como strings en `scripts/pack-inventory.baseline.json`, el inventario
+congelado de lo que el paquete publica. No es un consumidor y no bloquea —
+`pack-inventory-gate.mjs:229-231` trata las entradas que desaparecen como
+*"allowed shrink"* y el gate corre en CI (`ci.yml:214`). Pero después del borrado
+hay que re-sembrar el baseline con `packinv:write`, o el inventario queda
+describiendo 13 carpetas que ya no existen — que es exactamente el defecto que
+este documento persigue.
 
 ---
 
@@ -371,20 +394,37 @@ versionado), y la raíz se limpia salvo los 203 archivos que gates citan.
 
 **Verdicto: BORRAR, con una migración previa. Riesgo: alto sin el bloqueo.**
 
-**qué:** el grueso de `packages/core/src/foundation/tokens/ts/`.
+**qué:** **parte** de `packages/core/src/foundation/tokens/ts/` — no el árbol
+entero. El alcance original era demasiado ancho y lo reduje midiendo dueño por
+dueño.
 
-**por qué:** es un espejo en TypeScript de lo que el CSS ya define. 28 carpetas
-repiten nombres que el CSS tiene con el valor real; el TS solo guarda la cadena
-`var(--ds-...)`. 31 de esas carpetas no las importa nadie. El barril entero tiene
-**un** importador de producción, y solo para dos funciones de Collapse. Todo lo
-demás es duplicación de una autoridad que ya vive en el CSS.
+**la medición, hecha de nuevo:** el espejo tiene **45 dueños** con `index.ts`.
+**32 no los importa nadie desde fuera del propio espejo.** Esos 32 son el lote.
 
-Esto es la mala práctica en estado puro: se mantiene una segunda copia de la
-verdad que no pinta nada, y cada cambio de token hay que hacerlo dos veces o
-divergen.
+**Los 13 restantes NO se tocan**, y algunos ni de lejos: son los que sí tienen
+lectores de producción.
 
-**bloqueo:** mover las dos funciones de Collapse a su dueño real antes de tocar
-el barril. Después, borrar por tandas verificando `tsc` en cada una.
+| dueño | importadores externos |
+|---|---:|
+| `presentation/brand-themes` (+ `bithire`, `evnto`, `rottay`) | 71 + 18 + 9 + 10 |
+| `runtime/personality` | 16 |
+| `presentation/expressive-profiles` (+ `emphasis`, `expansion`) | 11 + 2 + 5 |
+| `foundation/base` (+ `density`) | 8 + 8 |
+| `presentation/recipe-profiles` | 6 |
+| `presentation/responsive-postures` | 4 |
+| `presentation/typography/pairings` | 1 |
+
+`brand-themes` con 71 importadores no es un espejo muerto: es una autoridad viva.
+Proponer borrar "el espejo TS" entero habría roto el design system.
+
+**por qué se borran los 32:** repiten en TypeScript nombres que el CSS ya define
+con el valor real; el TS solo guarda la cadena `var(--ds-...)`. Es la segunda
+copia de una verdad que no pinta nada, y cada cambio de token hay que hacerlo dos
+veces o divergen.
+
+**bloqueo:** borrar por tandas verificando `tsc` en cada una, y confirmar dueño
+por dueño con la medición de arriba antes de cada tanda — el conteo es de hoy y
+un import nuevo lo cambia.
 
 **riesgo:** alto si se hace de golpe; bajo por tandas.
 
@@ -456,17 +496,27 @@ apuntan a este par de documentos en vez de a carpetas inexistentes, y la del
 
 **Verdicto: BORRAR. Riesgo: ninguno.**
 
-**qué:**
+**qué:** vuelto a contar, exacto:
 
-- >=11 alias `pnpm` que duplican una invocación que `ci-gates.manifest.mjs` ya hace
-  directo con `node scripts/X.mjs`.
-- `parity:theme:check` y `theme-parity:check`: dos nombres, comando idéntico.
+- **11 alias `pnpm` cuyo comando es idéntico, carácter por carácter, a una
+  entrada que `ci-gates.manifest.mjs` ya corre**: `appboundary:check`,
+  `channel-liveness:check`, `cra12:check:local`, `engine-audit:check`,
+  `hooks:check`, `ownership:patterns:check`, `platform-identity:check`,
+  `size-axis:check`, `spacing-rhythm:check`, `tokens:catalog:check`,
+  `wiring:check`. De los 11, **diez no los usa nadie** — ni el `ci.yml` ni otro
+  script npm. El que sí se usa es `hooks:check`, que lo llama `prebuild`; ese se
+  queda.
+- `parity:theme:check` y `theme-parity:check`: dos nombres, el mismo comando
+  literal (`node scripts/theme-channel-parity-gate.mjs --check`). Sobra uno.
 - `cra-17-integral-gate.mjs`: importa y reejecuta `cra-17-packaging-license-gate.mjs`
   y `cra-17-public-declaration-gate.mjs`, que además corren por separado. El
-  agregado no corre nunca.
+  agregado no corre nunca — de hecho es uno de los cinco gates sin invocador de
+  la parte 5, D3.
 
 **por qué:** dos vías de invocación para el mismo gate significa que cambiar una
 no cambia la otra. Una sola vía: el manifiesto de gates.
+
+**riesgo:** ninguno para los diez sin usar. `hooks:check` **no se borra**.
 
 **bloqueo:** ninguno.
 
@@ -994,22 +1044,22 @@ Aprobás por lote, no archivo por archivo:
 
 | lote | qué | riesgo | listo para ejecutar |
 |---|---|---|---|
-| 1 | 34 carpetas vacías | ninguno | sí |
+| 1 | 36 carpetas vacías | ninguno | sí (ojo con el gemelo vivo del *governor*) |
 | 2 | 17 codemods de febrero | ninguno | sí |
-| 3 | 13 iconos legacy | ninguno | sí |
+| 3 | 13 iconos legacy | ninguno | sí (después, `packinv:write`) |
 | 4 | 2 archivos de sonda duplicada | ninguno | sí |
 | 5 | 4 `.md` históricos de la raíz + 2 definiciones de agente que describen otro design system | ninguno | sí (borrar o archivar: decidís) |
 | 6 | `styles/platform.css` | medio | no: reanclar 802 citas primero |
 | 7 | `test-artifacts/` (528 MB) | pérdida de evidencia | no: necesito tu decisión |
-| 8 | espejo TS de tokens | alto de golpe | no: migrar 2 funciones primero |
+| 8 | 32 de los 45 dueños del espejo TS de tokens | alto de golpe | no: por tandas, y los otros 13 no se tocan |
 | 9 | `approval-inbox` (ya deprecado) | API pública | no: 0 en apps, pero showroom + skin CSS + manifiestos adentro |
 | 10 | doc que describe cosas inexistentes | ninguno | sí (es corrección, no borrado) |
-| 11 | alias de `package.json` sin uso | ninguno | sí |
+| 11 | 10 alias `pnpm` duplicados sin uso + 1 nombre repetido | ninguno | sí (`hooks:check` se queda) |
 | 12 | `audit-presets.mjs` + `audit-report.json` de la raíz, `showroom/.tmp/` (32 scripts), las 3 carpetas de `coverage` | ninguno | sí |
 
 Los lotes 1 a 5 más el 10, el 11 y el 12 se pueden hacer hoy. El 9 volvió a
 bloquearse al medir dentro del repo. El 6 necesita trabajo previo, el 7 una
-decisión tuya y el 8 hay que reducirlo de alcance.
+decisión tuya, y el 8 ya está reducido de alcance (32 dueños de 45).
 
 **Aparte de los lotes, tres arreglos de cableado (parte 5) que no borran nada y
 que puedo hacer sin aprobación si me decís que sí:** la bandera fantasma del
