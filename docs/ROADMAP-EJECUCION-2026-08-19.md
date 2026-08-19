@@ -351,12 +351,12 @@ como heredado.*
 | F0.4 iconos legacy | ✅ | `959028f90` | 14 carpetas + barrels recortados + re-seed packinv; typecheck 0 errores |
 | F0.5 monolito probe | ✅ | `255a86762` | program-check CONSTITUTION_READY; 37/37 tests de la sonda raíz |
 | F0.6 aliases | ✅ | `412473315` | 15 fuera; quedan 3 con invocador + `theme-parity:check` |
-| F0.7 channel-wiring + enmienda lane-control | ⏳ | | Opus; 4 archivos de ley en el mismo lote |
-| F0.8 cra-17-integral al manifiesto | ⏳ | | Opus; se cablea, no se borra |
-| F0.9 doc-rot | ⏳ | | Sonnet; NUL→`\0`, comentario manifest, `:v2:seal`, packinv comment |
-| F0.10 resello gat-07 | ⏳ | | yo; después de todos los borrados; exige Node 22 (local corre v25) |
-| F0.11 gates nuevos | ⏳ casi | | 3 gates escritos + drills 6/6 verdes; root-catalog ya pescó deriva real (4 canales `solo-artefacto` → `existe`, corregido); falta el wiring |
+| F0.7 channel-wiring + enmienda lane-control | ✅ | `feb577197` | la ley de WO ahora lee el registro vivo del manifiesto (mejor que la spec) |
+| F0.8 cra-17-integral al manifiesto | ✅ | `feb577197` | corre y pasa; 75 gates bloqueantes |
+| F0.9 doc-rot | ✅ | `dc8082f8a` | NUL→`\0` (era funcional, verificado con aislamiento), `:v2:seal`, comentarios |
+| F0.10 resello gat-07 | ⏳ | | yo; Node 22 + DOCS_ENGINEERING_ROOT local ya verificados |
+| F0.11 gates nuevos | ✅ | `cd06b8dee` + `e7ea7c795` | 3 gates + drills 6/6 + wiring postbuild/prepack; root-catalog corregido |
 | F0.12 declaración canales | ✅ | `675d2e3b3` | §1.10 ARCHITECTURE + wiring gate los cuenta |
-| F0.13 gates rojos | ⏳ | | adjudicación uno por uno; empezó: `channel-liveness-drill` (6 `--ds-elevation-*` sin fila en SEMANTIC_OWNER_RULES); `hooks:check` quedó rojo por manifest stale post-iconos |
+| F0.13 gates rojos | ⏳ en curso | | ya adjudicados: `channel-liveness-drill` (`ae1a829e9`, regla surfaces.elevation), `contract:check` (`afd75c6c2`, contrato regenerado); censo completo de los 75 corriendo para el resto |
 
 **Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5.
