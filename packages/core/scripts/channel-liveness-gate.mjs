@@ -910,6 +910,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-motion-/, () => 'motion'],
   [/^--ds-radius-/, () => 'surfaces.radius'],
   [/^--ds-shadow-/, () => 'surfaces.shadow'],
+  [/^--ds-elevation-/, () => 'surfaces.elevation'],
   [/^--ds-glass-/, () => 'surfaces.glass'],
   [/^--ds-gradient-/, () => 'surfaces.gradient'],
   [/^--ds-overlay-/, () => 'surfaces.overlay'],
