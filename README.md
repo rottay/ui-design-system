@@ -88,6 +88,11 @@ src/ui/
 The generated, on-disk inventory is
 [`packages/core/docs/TAXONOMY.generated.md`](packages/core/docs/TAXONOMY.generated.md).
 
+For a folder-by-folder map of the whole repository -- what each directory does,
+which directories duplicate each other, and which are empty scaffolding -- see
+[`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md). The architecture reference is
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
 ### Branding Model
 
 ```
