@@ -342,8 +342,8 @@ como heredado.*
 ## 13. Estado de ejecución (vivo — se actualiza con cada lote)
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
-`ci-gates OK — 77 blocking gate(s) passed` (1 excluded con razón y dueño:
-channel-liveness hasta F2); `find src -type d -empty` vacío salvo el inbox
+`ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
+dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
 declarado; changeset major commiteado. **Auditoría Fable del hito: APROBADO
 ("sustancialmente real", 0 bloqueantes)** — sus 5 hallazgos menores quedaron
 integrados en el lote F0.14 (`14dee7dc3`): fix del wildcard de
@@ -366,10 +366,10 @@ docs-engineering (cita `gate:styles-css`; su commit/push es de ese repo).
 | F0.7 channel-wiring + enmienda lane-control | ✅ | `feb577197` | la ley de WO ahora lee el registro vivo del manifiesto (mejor que la spec) |
 | F0.8 cra-17-integral al manifiesto | ✅ | `feb577197` | corre y pasa; 75 gates bloqueantes |
 | F0.9 doc-rot | ✅ | `dc8082f8a` | NUL→`\0` (era funcional, verificado con aislamiento), `:v2:seal`, comentarios |
-| F0.10 resello gat-07 | ⏳ | | yo; Node 22 + DOCS_ENGINEERING_ROOT local ya verificados |
+| F0.10 resello gat-07 | ✅ | `1750cdf46` | Node 22 + DOCS_ENGINEERING_ROOT; re-sello vigente al cierre de F0 |
 | F0.11 gates nuevos | ✅ | `cd06b8dee` + `e7ea7c795` | 3 gates + drills 6/6 + wiring postbuild/prepack; root-catalog corregido |
 | F0.12 declaración canales | ✅ | `675d2e3b3` | §1.10 ARCHITECTURE + wiring gate los cuenta |
-| F0.13 gates rojos | ⏳ en curso | | adjudicados y commiteados: channel-liveness (regla `surfaces.elevation`), contract:check, hooks:check, tokens-catalog (vistas + reconciliación re-derivada), presupuestos de bytes (nota: mueren en F6), tenant-theme-fixtures (seguía mal el re-export), first-party-artifacts (regenerados tras build verde). Censo definitivo de los 78 corriendo sobre árbol estable |
+| F0.13 gates rojos | ✅ | ver nota | adjudicados y commiteados: channel-liveness (regla `surfaces.elevation`), contract:check, hooks:check, tokens-catalog (vistas + reconciliación re-derivada), presupuestos de bytes (nota: mueren en F6), tenant-theme-fixtures (seguía mal el re-export), first-party-artifacts (regenerados tras build verde). Censo definitivo: 78 blocking + 2 excluded verdes sobre árbol estable |
 
 **Notas de ejecución:**
 - `pnpm build` de core quedó **verde de punta a punta** (prebuild 7 gates + tsc + vite + CSS + postbuild con `exports-artifact` nuevo).
@@ -380,6 +380,26 @@ docs-engineering (cita `gate:styles-css`; su commit/push es de ese repo).
 **Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5. ✅
 Aprobado; hallazgos integrados en F0.14.
 
-**F0.5 — en curso.** Fase 0: helper `repo-root` creado
-(`lib/repo-root/index.mjs`, doble predicado, 5/5 drills, `b222ff311`) y la
-migración de las ~145 resoluciones manuales corre en terminal Opus.
+**F0.5 — en curso.** Fase 0 CERRADA (`5ab118884`): helper `repo-root`
+(`lib/repo-root/index.mjs`, doble predicado, 5/5 drills, `b222ff311`) y
+migración de las resoluciones manuales ejecutada por terminal Opus —
+147 archivos usaban idiomas de auto-ubicación, **131 migrados**
+(83 producción + 48 tests), 16 no migraban (solo alcanzan vecinos).
+Cubre las 3 familias (`dirname(fileURLToPath)/..`, `import.meta.dirname`,
+`new URL('..', import.meta.url)`). Suite: 1621 tests, mismas 23 fallas
+preexistentes (conjunto idéntico); wiring-coverage OK; escaneo residual
+independiente (Python, no grep): 0. Re-sello gat-07 en el mismo commit.
+Verificado por el coordinador: diffs de gates sensibles, drills 23/23,
+escaneo residual propio.
+
+**Deudas nuevas que destapó la Fase 0** (anotadas para su lote):
+- **Bytes NUL en fuentes**: `color-mix-argument-purity-gate.mjs` y
+  `red-inventory-gate.mjs` contienen bytes NUL crudos — los vuelve
+  invisibles a cualquier auditoría por grep sin `-a`. Lote propio:
+  limpiarlos + gate que prohíba bytes de control en fuentes.
+- **Raíz de repo y showroom**: sus scripts siguen resolviendo raíz a mano
+  (no pueden importar el helper sin cruzar paquetes). Se adjudican en la
+  fase de raíces de F0.5.
+
+Fase 1 (movidas por familia dentro de `scripts/`) pendiente de brief; la
+ejecuta la misma terminal Opus (conserva contexto del árbol).
