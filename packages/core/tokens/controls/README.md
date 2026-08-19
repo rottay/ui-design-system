@@ -8,7 +8,7 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: 45e1cbdd262ba4bf4176618c01e8ca2622d5e25b44ead766d41ff14eb2c00881
+digest: f3f2b6e80e133cf82a435fc772dbc59ec50fb151c590023ec579a92fc5b4b768
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
@@ -42,8 +42,8 @@ digest: 45e1cbdd262ba4bf4176618c01e8ca2622d5e25b44ead766d41ff14eb2c00881
 
 ## EXPERT — allowlist cerrada
 
-- **294 tokens** raw-override permitidos (fuente: dist-runtime).
-- Dominios: color 31 · semantic-surface 8 · semantic-material 160 · other 32 · semantic-typography 63.
+- **290 tokens** raw-override permitidos (fuente: dist-runtime).
+- Dominios: color 27 · semantic-surface 8 · semantic-material 160 · other 32 · semantic-typography 63.
 - Overlap con writers vivos: 182.
 - Contrato: `TENANT_THEME_OVERRIDE_TOKENS` (bounded); todo lo fuera de la lista es rechazado.
 
