@@ -473,7 +473,7 @@ export function evaluateObservationReconciliation(rows, observations) {
   if (!Array.isArray(observations)) {
     return ['observation set must be an array of failing identities'];
   }
-  const key = (entry) => `${entry.surface} ${entry.file} ${entry.test}`;
+  const key = (entry) => `${entry.surface}\0${entry.file}\0${entry.test}`;
   const rowsByKey = new Map();
   for (const row of rows) rowsByKey.set(key(row), row);
   const observedKeys = new Set();

@@ -249,11 +249,11 @@ function splitArguments(inner) {
 
 /** Removes `calc()`-family interiors: their `var()` references are numbers. */
 function stripNumericFunctions(argument) {
-  const marked = argument.replace(NUMERIC_FUNCTION, ' (');
+  const marked = argument.replace(NUMERIC_FUNCTION, '\0(');
   let out = '';
   let i = 0;
   while (i < marked.length) {
-    if (marked[i] !== ' ') {
+    if (marked[i] !== '\0') {
       out += marked[i];
       i += 1;
       continue;
