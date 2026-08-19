@@ -43,6 +43,10 @@ import { assertNoCatalogOverride } from '../../runtime/ownership-rows/index.mjs'
 import { buildSingleOwnerSet, singleOwnerHits } from '../../runtime/shared-files/index.mjs';
 import { laneCovers, loadContext, resolveLane } from '../../composition/plan/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
+// The CI manifest is the ONE inventory of gates CI runs. W4 reads the set of
+// admissible acceptance gates out of it rather than restating any of them here;
+// see CI_MANIFEST_PATH below for why that direction is the load-bearing one.
+import { blockingGates } from '../../../../../scripts/ci-gates.manifest.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SCHEMA_PATH = resolve(HERE, 'schema.json');
@@ -56,8 +60,67 @@ export const MANDATORY_SENTENCE =
   'Do not reorder, reformat, dedupe, rename, or fix anything adjacent; every out-of-scope observation ' +
   'is a written finding, not an edit.';
 
-/** The build-free verification §2 requires of every lane. */
-export const REQUIRED_VERIFICATION = 'channel-wiring-zero-delta-gate.mjs';
+/**
+ * The registry a lane's acceptance gate has to be listed in.
+ *
+ * AMENDED 2026-08-19 (owner decision, `docs/ROADMAP-EJECUCION-2026-08-19.md`
+ * §12.3). This constant used to name ONE script —
+ * `channel-wiring-zero-delta-gate.mjs` — as the verification §2 required of
+ * every lane. That gate is retired: its doctrine (a fallback is the ORIGINAL
+ * literal, byte-identical) contradicts the cascade F2 is building (a fallback
+ * is `var(<root>)`), so a lane could satisfy the gate or the programme, not
+ * both. The requirement is not dropped, it is generalised — a lane still has
+ * to name the instrument it will be judged by, and that instrument still has
+ * to be one somebody actually runs.
+ *
+ * WHY A REGISTRY AND NOT A SECOND CONSTANT. A hard-coded script name is
+ * exactly how the previous version of this rule outlived the script it named:
+ * the gate lost its last invoker, and the law went on demanding it for another
+ * programme's worth of work orders. The manifest below IS the inventory of
+ * gates CI runs, so the admissible set is READ from it. A gate retired there
+ * stops being quotable here in the same commit, with no drift window — the
+ * same reason W3 reads §2's sentence off the README instead of trusting the
+ * copy in this file.
+ *
+ * Every gate in that manifest also runs BEFORE the build, which is what keeps
+ * this half of W4 consistent with the build-free half above it.
+ */
+export const CI_MANIFEST_PATH = 'packages/core/scripts/ci-gates.manifest.mjs';
+
+/**
+ * The blocking gates of the CI manifest, keyed by the token a verification
+ * command has to carry to be running one: the script path CI hands to `node`,
+ * or the script name CI hands to `pnpm run`. A gate whose argv holds neither
+ * is not addressable from a work order, so it is left out rather than matched
+ * on something looser.
+ *
+ * BLOCKING ONLY. `blocking: false` requires an exclusion record with a reason
+ * and an owner, and a gate the manifest has explicitly excluded from CI cannot
+ * be the thing that accepts a lane.
+ */
+export function registeredAcceptanceGates(gates = blockingGates()) {
+  const tokens = new Map();
+  const remember = (token, id) => {
+    if (typeof token !== 'string' || token.length === 0) return;
+    const owners = tokens.get(token);
+    if (owners) owners.push(id);
+    else tokens.set(token, [id]);
+  };
+  for (const gate of gates) {
+    const argv = Array.isArray(gate.run) ? gate.run : [];
+    argv.forEach((entry, index) => {
+      if (typeof entry !== 'string') return;
+      if (/\.(?:cjs|js|mjs|ts|tsx)$/.test(entry)) remember(entry, gate.id);
+      // `pnpm run <name>` / `npm run <name>`, and NOT `pnpm exec vitest run
+      // <suite>` — there the word `run` belongs to vitest and the suite is
+      // already caught by the extension test above.
+      if (entry === 'run' && (argv[index - 1] === 'pnpm' || argv[index - 1] === 'npm')) {
+        remember(argv[index + 1], gate.id);
+      }
+    });
+  }
+  return tokens;
+}
 
 /**
  * Commands that need a build. The build has been red for this programme's
@@ -293,7 +356,8 @@ export function validateWorkOrder(workOrder, { root, schema, context = null, ski
     }
   }
 
-  // W4 — verification must be runnable while the build is red.
+  // W4 — verification must be runnable while the build is red, and it must
+  // name an acceptance gate CI enforces.
   const commands = workOrder.verificationCommands;
   for (const command of commands) {
     for (const rule of BUILD_BOUND) {
@@ -302,11 +366,50 @@ export function validateWorkOrder(workOrder, { root, schema, context = null, ski
       }
     }
   }
-  if (!commands.some((command) => command.includes(REQUIRED_VERIFICATION))) {
+  // ...and it must name the gate that will ACCEPT the lane. Declaring a gate is
+  // not the same as passing it — passing it is the lane's job, and this
+  // document cannot witness it — but a lane that never names one cannot be
+  // accepted by anything, and that is checkable here.
+  //
+  // FAIL-CLOSED IN BOTH DIRECTIONS. An unreadable or empty registry is refused
+  // rather than waved through: a verdict about whether a gate is registered,
+  // reached without the register, is not a verdict.
+  let registered = null;
+  let registryError = null;
+  try {
+    registered = registeredAcceptanceGates();
+  } catch (error) {
+    registryError = error;
+  }
+  if (registryError) {
     add({
       rule: 'W4-build-free',
-      message: `§2 makes ${REQUIRED_VERIFICATION} mandatory for every lane, and no verification command runs it`,
+      message: `the acceptance registry ${CI_MANIFEST_PATH} could not be read (${registryError.message}); a lane cannot be accepted against a register nobody can open`,
     });
+  } else if (registered.size === 0) {
+    add({
+      rule: 'W4-build-free',
+      message: `${CI_MANIFEST_PATH} yielded no blocking gate this check can recognise, so no work order could ever name one; the registry, not the work order, is what has to be fixed`,
+    });
+  } else {
+    const accepted = new Set();
+    for (const command of commands) {
+      for (const [token, owners] of registered) {
+        if (command.includes(token)) for (const owner of owners) accepted.add(owner);
+      }
+    }
+    if (accepted.size === 0) {
+      add({
+        rule: 'W4-build-free',
+        message:
+          `§2 requires every lane to declare the acceptance gate it will be judged by, and none of the `
+          + `${commands.length} verification command(s) runs a gate registered as blocking in ${CI_MANIFEST_PATH}`,
+        details: [
+          ...commands.map((command) => `· declared: ${command}`),
+          `· ${registered.size} invocation(s) are admissible today; a script CI does not run cannot accept a lane`,
+        ],
+      });
+    }
   }
 
   // THE LANE IS RESOLVED HERE, BEFORE W5 — not with W7 where it used to be.

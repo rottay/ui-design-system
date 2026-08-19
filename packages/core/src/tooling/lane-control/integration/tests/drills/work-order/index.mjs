@@ -10,14 +10,14 @@
  * refusal for an unrelated reason does not count.
  */
 import { pathToFileURL } from 'node:url';
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createDrillSuite, inProcess, run, withTempDir } from '../../harness/index.mjs';
 // The no-repository path is exercised through the module API, because the
 // command no longer offers one: a public exit 0 reached without the catalog is
 // a certificate for something nobody checked.
-import { SCHEMA_PATH, validateWorkOrder } from '../../../../public/work-order/index.mjs';
+import { registeredAcceptanceGates, SCHEMA_PATH, validateWorkOrder } from '../../../../public/work-order/index.mjs';
 // A fabricated nesting needs a fabricated catalog, and the catalog is not an
 // argument: it is injected here, through the module API, exactly as the
 // intersection drills do it.
@@ -112,17 +112,44 @@ export function runDrills() {
       rule: 'W4-build-free',
       showOutput: true,
       result: check('build-bound', (wo) => {
+        // A REGISTERED gate, so the build is the only thing wrong with it.
         wo.verificationCommands = [
-          'pnpm -C packages/core build && node packages/core/scripts/channel-wiring-zero-delta-gate.mjs --baseline <pinned>',
+          'pnpm -C packages/core build && node packages/core/scripts/engine-token-audit.mjs --check',
         ];
       }),
     });
 
     suite.expectRefusal({
-      label: 'W4 — a work order omitting the mandatory channel-wiring gate is refused',
+      label: 'W4 — a work order naming no acceptance gate at all is refused: nothing can accept a lane that names no instrument',
       rule: 'W4-build-free',
       result: check('no-gate', (wo) => {
         wo.verificationCommands = ['git diff --stat'];
+      }),
+    });
+
+    // W4 REGISTRY. The case above is refused by any implementation that looks
+    // for something; this one is the rule's actual claim — the gate has to be
+    // one CI ENFORCES. A check that accepted any plausible `*-gate.mjs` path
+    // passes the drill above and fails here, which is the difference between
+    // reading the manifest and pattern-matching a filename.
+    const UNREGISTERED_GATE = 'packages/core/scripts/cra-14-public-barrel-gate.mjs';
+    const registeredTokens = [...registeredAcceptanceGates().keys()];
+    suite.expectFact({
+      label: 'W4 SETUP — the script the next drill declares EXISTS and is not a blocking gate, so its refusal is about the register and not about a typo',
+      ok:
+        existsSync(`${ROOT}/${UNREGISTERED_GATE}`) &&
+        !registeredTokens.some((token) => UNREGISTERED_GATE.includes(token)),
+      details: [
+        `${UNREGISTERED_GATE} is on disk and reachable by hand (\`pnpm cra14:check\`)`,
+        `${String(registeredTokens.length)} invocation(s) are registered as blocking in ci-gates.manifest.mjs; this is not one of them`,
+      ],
+    });
+    suite.expectRefusal({
+      label: 'W4 — a verification running a REAL script CI does not enforce is refused: an acceptance gate nobody runs accepts nothing',
+      rule: 'W4-build-free',
+      showOutput: true,
+      result: check('unregistered-gate', (wo) => {
+        wo.verificationCommands = [`node ${UNREGISTERED_GATE} --check`];
       }),
     });
 

@@ -36,21 +36,48 @@ export const CI_GATES = Object.freeze([
   { id: 'platform-identity-zero-drill', run: ['node', '--test', 'scripts/platform-identity-zero-gate.test.mjs'], blocking: true },
   { id: 'platform-identity-zero', run: ['node', 'scripts/platform-identity-zero-gate.mjs'], blocking: true },
   { id: 'cra17:licenses', run: ['pnpm', 'run', 'cra17:licenses'], blocking: true },
+  // The NAMED acceptance instrument of WO-CRA-17, wired here by owner decision
+  // (2026-08-19, `docs/ROADMAP-EJECUCION-2026-08-19.md` §12.2). It was the
+  // other half of the "two gates with no invoker" finding: reachable only by
+  // hand while the work order it accepts is still `todo`, so the thing that
+  // decides whether CRA-17 may close was the one thing nothing ran.
+  //
+  // It COMPOSES the entry above -- `auditGraphicsPackaging` is imported from
+  // the same module `cra17:licenses` runs -- and adds the planes no single
+  // gate covers: supplier/catalog identity, the no-Lucide boundary outside the
+  // adapter, asset entrypoint closure, public declaration closure, bundle
+  // retention, the optical matrix and roadmap truth. The overlap is
+  // deliberate: `cra17:licenses` fails cheaper and therefore first.
+  //
+  // `--structural`, NOT the default `final`, and the distinction is the whole
+  // reason this can be blocking at all. Structural asks whether the WO's
+  // invariants hold TODAY and is green; final additionally asks whether the
+  // work order may CLOSE, which is false while two evidence items are pending
+  // (bundle retention behind the version bump, phase 2B awaiting owner GO).
+  // Wiring `final` would enlist a knowingly-red gate, which is exactly the
+  // habit the docstring at the top of this file exists to refuse. Same split
+  // as `cra15:gate` (`--check --structural`) versus `cra15:gate:final`. When
+  // WO-CRA-17 closes, this flag is what changes.
+  //
+  // Its drill (`scripts/cra-17-integral-gate.test.mjs`) is reached by
+  // `test:scripts`, which globs `scripts/**/*.test.mjs` recursively.
+  { id: 'cra-17-integral', run: ['node', 'scripts/cra-17-integral-gate.mjs', '--structural'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
   { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/daisy-projection-contract.test.mjs'], blocking: true },
-  // WO-CRA-23 quality tooling. These live under `scripts/quality-evidence/v2/`,
-  // which the `scripts/*.test.mjs` glob cannot reach -- a non-recursive glob is
-  // exactly how a gate ends up looking enforced without ever running.
-  // The drills for the two modern-rescue production gates below
+  // WO-CRA-23 quality tooling. These live under `scripts/quality-evidence/v2/`
+  // and `scripts/quality-evidence/programs/modern-rescue/`. `test:scripts` now
+  // globs `scripts/**/*.test.mjs` (recursive), which DOES reach every test
+  // file under `scripts/` -- including these. They are still listed here by
+  // name because passing under `test:scripts` is not the same as blocking CI:
+  // this manifest is the ONE inventory `pretest` and the CI job both consume
+  // (see the module docstring above), and a test that only lives inside
+  // `test:scripts` does not block a CI run that never invokes it. The drills
+  // for the two modern-rescue production gates below
   // (`modern-rescue-program-contract` and
-  // `modern-rescue-customization-manifest-freshness`). They sit under
-  // `scripts/quality-evidence/programs/modern-rescue/`, which NEITHER glob in
-  // `test:scripts` reaches: `scripts/quality-evidence/v2/*.test.mjs` stops at
-  // the v2 folder and `scripts/*.test.mjs` is non-recursive. So 48 assertions
-  // that read as the safety net for those two gates were never executed by any
-  // command -- the same "enforced but never run" defect this manifest exists to
-  // close, one level down.
+  // `modern-rescue-customization-manifest-freshness`) are the same case one
+  // level down: 48 assertions that read as their safety net had to be listed
+  // here explicitly to actually gate CI, glob reach notwithstanding.
   //
   // Drill first, exactly as everywhere else in this file: program-check and the
   // generator both COMPUTE a verdict, and a computation that has silently
