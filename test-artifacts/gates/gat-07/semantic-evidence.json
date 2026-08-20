@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "7e3bab14c79893a00014a629c7ab27b10d76bc901725105bc8654f5297b26383",
+    "authorityDigest": "5b3d14b0b3ffac6c5aece8d9d1e6d1e3cefa834de5176bedfdc7a1d1ef75b28a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 49176,
-        "sha256": "6280c459b549a8f45b2fa2e75c1b5682b69760f68bb2abe7b2623e2303671d7f"
+        "bytes": 49255,
+        "sha256": "81db0b1cfbb36da57a7519c152abb91d0752e37e5085102f76ea9ea146ead033"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.doc-claim-allowlist.json",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "7e3bab14c79893a00014a629c7ab27b10d76bc901725105bc8654f5297b26383"
+    "digest": "5b3d14b0b3ffac6c5aece8d9d1e6d1e3cefa834de5176bedfdc7a1d1ef75b28a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "7d719968e9f7291086daa35ae2cc0e3d93e81c18a4268aa0c3616b7009907855",
-      "7d719968e9f7291086daa35ae2cc0e3d93e81c18a4268aa0c3616b7009907855"
+      "b4cc3ee9a4242eb2a2d4bc805979f8d49063ae30a2458d8fc5f0ef6ed81ce96f",
+      "b4cc3ee9a4242eb2a2d4bc805979f8d49063ae30a2458d8fc5f0ef6ed81ce96f"
     ],
     "agree": true
   }

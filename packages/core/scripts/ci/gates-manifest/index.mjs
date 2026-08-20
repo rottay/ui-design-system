@@ -429,6 +429,21 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/tokens/root-catalog-freshness-gate/index.mjs'],
     blocking: true,
   },
+  // Companion to the freshness gate and deliberately disjoint from it: that one
+  // answers whether a head channel EXISTS, this one answers WHO is allowed to
+  // move it. Drill first, as everywhere in this file -- the gate computes a
+  // verdict, and a computation that has quietly stopped detecting anything
+  // reports zero findings and looks exactly like a clean tree.
+  {
+    id: 'root-exposure-drill',
+    run: ['node', '--test', 'scripts/tokens/root-exposure-gate/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'root-exposure',
+    run: ['node', 'scripts/tokens/root-exposure-gate/index.mjs'],
+    blocking: true,
+  },
   // Every production script is wired through a declared channel (manifest,
   // lifecycle chain or ci.yml) or it does not exist. This gate is what makes
   // §1.10's "the wiring gate counts all three channels" true.

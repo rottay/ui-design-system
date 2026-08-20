@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "law": "La exposicion de cada raiz del catalogo de cascada, pineada como snapshot. gap es decrease-only: nunca crece, y cuando baja hay que achicar este archivo a proposito.",
+  "producedOn": "F1.3",
+  "counts": {
+    "tenant-dial": 26,
+    "internal-head": 27,
+    "gap": 10
+  },
+  "reading": "De las 63 raices, 26 tienen control (1302 canales), 27 son cabezas internas correctas sin perilla (1477 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura, 1477 canales, NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps."
+}
