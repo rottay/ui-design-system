@@ -1853,7 +1853,7 @@ compilado.
   **shipped** (`styles/*.css`), para probar una migración de token en vez de
   argumentarla. Existe porque leer el source hizo perder que
   `--ds-input-md-height` es 40px en tres verticales y 36px en bithire.
-  Consumido por `scripts/tokens-catalog.mjs` y tests de tokens.
+  Consumido por `scripts/tokens/tokens-catalog/index.mjs` y tests de tokens.
     `.../no-loss/tests/` — (2) `no-loss-harness.test.ts` y
     `rhythm-adoption-census.test.ts`.
       `.../no-loss/tests/fixtures/` — (1) fixture.
@@ -2148,22 +2148,22 @@ Qué hace: mide y ratchea la distancia entre un dial del tenant y el píxel: can
 declarados vs emitidos vs leídos, literales pinchados, prototokens, catálogos.
 Cómo se invoca: mayormente `ci-gates.manifest.mjs`; tres no llegan a CI.
 
-- `theme-channel-parity-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI. **[DUPLICA parcial]**
+- `tokens/theme-channel-parity-gate/index.mjs` (+ `.test.mjs`, `.baseline.json`) — CI. **[DUPLICA parcial]**
   tiene DOS alias idénticos en `package.json`: `parity:theme:check` y `theme-parity:check`,
   mismo comando byte a byte.
-- `tenant-channel-consumer-gate.mjs` (+ `.test.mjs`, `.baseline.json`, `.modern.baseline.json`) —
+- `tokens/tenant-channel-consumer-gate/index.mjs` (+ `.test.mjs`, `.baseline.json`, `.modern.baseline.json`) —
   CI en dos modos (`--check`, `--modern-check`); el ratchet de canal muerto.
-- `channel-liveness-gate.mjs` (+ `.test.mjs`) — CI; productor canónico de `channel-liveness.json`.
+- `tokens/channel-liveness-gate/index.mjs` (+ `.test.mjs`) — CI; productor canónico de `channel-liveness.json`.
 - `channel-wiring-zero-delta-gate.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** prueba que un canal
   recién cableado es zero-delta cuando está sin setear. Ni CI ni `package.json`.
 - `literal-ownership-gate.mjs` (+ `.test.mjs`) — CI; alimenta `LITERAL-OWNERSHIP-MATRIX.json` de la raíz.
-- `reads-adjudication-gate.mjs` — CI; toda lectura `--ds-*` no adjudicada tiene exactamente un dueño.
-- `prototype-ledger-gate.mjs` (+ `.test.mjs`) — CI; todo `--_ds-proto-*` está gobernado o no existe.
+- `tokens/reads-adjudication-gate/index.mjs` — CI; toda lectura `--ds-*` no adjudicada tiene exactamente un dueño.
+- `tokens/prototype-ledger-gate/index.mjs` (+ `.test.mjs`) — CI; todo `--_ds-proto-*` está gobernado o no existe.
 - `red-inventory-gate.mjs` (+ `.test.mjs`, `red-inventory.json`) — CI; inventario sellado de rojos.
-- `tokens-catalog.mjs` (+ `tokens-catalog-gate.test.mjs`) — CI (`--check`) y generador (`--write`).
-- `controls-catalog.mjs` (+ `controls-catalog-gate.test.mjs`) — CI (`--check`); escribe
+- `tokens/tokens-catalog/index.mjs` (+ `tokens-catalog-gate.test.mjs`) — CI (`--check`) y generador (`--write`).
+- `tokens/controls-catalog/index.mjs` (+ `controls-catalog-gate.test.mjs`) — CI (`--check`); escribe
   `tokens/controls/README.md` con `--write`.
-- `customization-surface-census.mjs` (+ `customization-surface-gate.test.mjs`,
+- `tokens/customization-surface-census/index.mjs` (+ `customization-surface-gate.test.mjs`,
   `customization-census-classifier.test.mjs`, `customization-dead-writers.baseline.json`) — CI en
   4 modos (`freshness`, `classification`, `capabilities`, `dead`); produce
   `customization-surface-report.json` (2,7 MB en la raíz del paquete).
@@ -2186,16 +2186,16 @@ cinco corren solo por su drill y tres no corren nunca.
 - `engine-freeze-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI.
 - `anatomy-variant-gate.mjs` (+ `.test.mjs`) — CI.
 - `boundaries/size-axis-law-gate/index.mjs` (+ `index.test.mjs`) — CI.
-- `spacing-rhythm-contract-gate.mjs` (+ `.test.mjs`) — CI; sin baseline y sin lista de archivos,
+- `tokens/spacing-rhythm-contract-gate/index.mjs` (+ `.test.mjs`) — CI; sin baseline y sin lista de archivos,
   camina el corpus desde la fuente.
 - `css-layer-paint-gate.mjs` (+ `.test.mjs`) — `csspaint:check` en `package.json`, no en el manifiesto de CI.
 - `css-source-integrity-gate.mjs` — `csssource:check`; detecta residuo de parche y marcadores de conflicto en CSS.
 - `container-query-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — `containerquery:check` / `:seed`.
-- `color-mix-argument-purity-gate.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** todo argumento de
+- `tokens/color-mix-argument-purity-gate/index.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** todo argumento de
   `color-mix()` debe resolver a `<color>` bajo cualquier tenant.
 - `modern-bundle-framework-gate.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** el bundle modern no puede
   filtrar capas de Tailwind/DaisyUI fuera de `rottay-framework`.
-- `chart-series-reserved-name-gate.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** ley de la costura de
+- `tokens/chart-series-reserved-name-gate/index.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** ley de la costura de
   paleta `--ds-chart-series-1..10`.
 - `daisy-painted-classes.mjs` (+ `.test.mjs`) — genera y verifica `lib/daisy-painted-classes.json`
   desde el paquete DaisyUI instalado. No está en CI ni en `package.json`, pero `lib/daisy-class-consumer-counter.mjs` lo importa, así que sí tiene consumidor.
@@ -2245,9 +2245,9 @@ Cómo se invoca: mitad CI, mitad `package.json`, dos huérfanos.
   `cra-17-public-declaration-gate.mjs`: los IMPORTA a los dos (`auditGraphicsPackaging`, etc.)
   y los reejecuta como un agregado. Los dos componentes sí corren por separado; el agregado no
   corre nunca.
-- `kimi-preservation-manifest.mjs` (+ `kimi-preservation-gate.test.mjs`) — CI `--check`;
+- `tokens/kimi-preservation-manifest/index.mjs` (+ `kimi-preservation-gate.test.mjs`) — CI `--check`;
   genera `KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json` (220 KB en la raíz).
-- `kimi-worklist-gate.mjs` (+ `.test.mjs`) — CI `--check`; valida `KIMI-VISUAL-WORKLIST.json` (749 KB).
+- `tokens/kimi-worklist-gate/index.mjs` (+ `.test.mjs`) — CI `--check`; valida `KIMI-VISUAL-WORKLIST.json` (749 KB).
 - `packaging/icon-embed-inventory-gate/index.mjs` (+ `.test.mjs`, `.baseline.json`) — `iconembed:check|write`.
 - `packaging/pack-inventory-gate/index.mjs` (+ `.test.mjs`, `pack-inventory.baseline.json`,
   `pack-inventory.additions.json`, `pack-inventory.lucide-allowlist.json`) — `packinv:check|write`.
@@ -2526,9 +2526,9 @@ Dentro de `manifest/` (356 archivos):
 
 - `tokens/controls/README.md` — (1) el catálogo de la API de producto de customización, en tablas
   por tier (STANDARD 13 controles, más los tiers pro y expert). Generado por
-  `scripts/controls-catalog.mjs --write` (`pnpm tokens:catalog:write` — ojo: el alias se llama
+  `scripts/tokens/controls-catalog/index.mjs --write` (`pnpm tokens:catalog:write` — ojo: el alias se llama
   `tokens:catalog:*` pero escribe acá), lleva su propio `digest:` y el encabezado dice "NO editar a
-  mano". `scripts/controls-catalog.mjs --check` es gate bloqueante en CI, así que un README
+  mano". `scripts/tokens/controls-catalog/index.mjs --check` es gate bloqueante en CI, así que un README
   editado a mano rompe el build.
 
 ---
@@ -2660,9 +2660,9 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
 #### `[SOLO DRILL]` (el detector se prueba, pero nunca se ejecuta contra el árbol)
 
 - `scripts/channel-wiring-zero-delta-gate.mjs`
-- `scripts/color-mix-argument-purity-gate.mjs`
+- `scripts/tokens/color-mix-argument-purity-gate/index.mjs`
 - `scripts/modern-bundle-framework-gate.mjs`
-- `scripts/chart-series-reserved-name-gate.mjs`
+- `scripts/tokens/chart-series-reserved-name-gate/index.mjs`
 - `scripts/evidence/cra-17-integral-gate/index.mjs`
 - `scripts/embedded-css-paint-census.mjs` (solo lo spawnea un test de integración)
 

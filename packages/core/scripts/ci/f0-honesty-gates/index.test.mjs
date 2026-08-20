@@ -57,12 +57,12 @@ function runOnSyntheticTree(scriptRelativePath, files) {
 /* ---------------- ds-underscore-prefix-gate ---------------- */
 
 test('ds-underscore-prefix-gate passes on the current tree', () => {
-  const result = run(join(SCRIPTS_ROOT, 'ds-underscore-prefix-gate.mjs'));
+  const result = run(join(SCRIPTS_ROOT, 'tokens/ds-underscore-prefix-gate/index.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
 test('ds-underscore-prefix-gate FAILS on a planted --ds_ in a synthetic skin', () => {
-  const result = runOnSyntheticTree('ds-underscore-prefix-gate.mjs', {
+  const result = runOnSyntheticTree('tokens/ds-underscore-prefix-gate/index.mjs', {
     'src/skin/button.css': '.x { color: var(--ds_experimental-red); }\n',
     'package.json': JSON.stringify({ name: '@rottay/design-system' }),
   });
@@ -71,7 +71,7 @@ test('ds-underscore-prefix-gate FAILS on a planted --ds_ in a synthetic skin', (
 });
 
 test('ds-underscore-prefix-gate ignores the private --_ds- namespace', () => {
-  const result = runOnSyntheticTree('ds-underscore-prefix-gate.mjs', {
+  const result = runOnSyntheticTree('tokens/ds-underscore-prefix-gate/index.mjs', {
     'src/skin/button.css': '.x { width: var(--_ds-private-swatch, 12px); }\n',
     'package.json': JSON.stringify({ name: '@rottay/design-system' }),
   });
@@ -111,7 +111,7 @@ test('exports-artifact-gate FAILS on a wildcard whose prefix dir is missing', ()
 /* ---------------- root-catalog-freshness-gate ---------------- */
 
 test('root-catalog-freshness-gate passes on the current tree', () => {
-  const result = run(join(SCRIPTS_ROOT, 'root-catalog-freshness-gate.mjs'));
+  const result = run(join(SCRIPTS_ROOT, 'tokens/root-catalog-freshness-gate/index.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
@@ -121,7 +121,7 @@ test('root-catalog-freshness-gate FAILS on an existe root with no declaration', 
       { rootId: 'fake.root', channel: '--ds-fake-head', channelStatus: 'existe' },
     ],
   };
-  const result = runOnSyntheticTree('root-catalog-freshness-gate.mjs', {
+  const result = runOnSyntheticTree('tokens/root-catalog-freshness-gate/index.mjs', {
     'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json':
       JSON.stringify(catalog),
     'src/skin/whatever.css': '.x { color: red; }\n',
@@ -137,7 +137,7 @@ test('root-catalog-freshness-gate FAILS on a por-crear root that gained a declar
       { rootId: 'fake.root', channel: '--ds-fake-head', channelStatus: 'por-crear' },
     ],
   };
-  const result = runOnSyntheticTree('root-catalog-freshness-gate.mjs', {
+  const result = runOnSyntheticTree('tokens/root-catalog-freshness-gate/index.mjs', {
     'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json':
       JSON.stringify(catalog),
     'src/skin/whatever.css': '.x { --ds-fake-head: 1px; }\n',

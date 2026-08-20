@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "e2b21d25b7fe9182fac63013e7738ca62400bc640ae84b7eefec3721b05e3a86",
+    "authorityDigest": "0ac05b22a28e43c2c5c0aa2f88217a663cfa9ca574f1636b80595e0b3a0b329d",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 48990,
-        "sha256": "83288ec086221e0e05854852767ad2b42aaf29bd4718c5a92b984a801d0c2a30"
+        "bytes": 49042,
+        "sha256": "c6537aac2ccc15cb5352e5bee6a534d895bf2e03e110b01e48c6cf466addff25"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-doc-claim-allowlist.json",
@@ -7373,8 +7373,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 79823,
-        "sha256": "037fa8be4bfb4e4b0bdc2a1ab005bcb032bedf782656c1bdaa5521dce896750c"
+        "bytes": 79836,
+        "sha256": "58af7f48756b7feaf7a94afb093c6a81df70dd8133d138215d5e99493787a314"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/prototype-ledger.schema.json",
@@ -15455,8 +15455,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 7063,
-        "sha256": "3933cbbffb95884ea6f1fa441e9a4bcd90f5c707932ab1a058d1b12dbf001ceb"
+        "bytes": 7076,
+        "sha256": "6ea76860c9d1d4d92d61668f1ab55ec6561abe267e3d98ef9434535b66de5ad2"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/quality/no-loss/index.ts",
@@ -34586,8 +34586,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 8528,
-        "sha256": "4b3b90b4ca3d224a77689047eb1df54a259ad5615b8b99c0b07faa475e922d86"
+        "bytes": 8541,
+        "sha256": "9b4d340a87517857f61afe5b50db1d6dbd13b30b2386a9dd2ea993c381682b33"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/dashboard/tests/DashboardWidgetsBatch.contract.test.tsx",
@@ -40479,7 +40479,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "e2b21d25b7fe9182fac63013e7738ca62400bc640ae84b7eefec3721b05e3a86"
+    "digest": "0ac05b22a28e43c2c5c0aa2f88217a663cfa9ca574f1636b80595e0b3a0b329d"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113860,8 +113860,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "a3e50930ea14d19401003cfe0c2c98281ad848abdb7271cfedc12dab6a12f0f6",
-      "a3e50930ea14d19401003cfe0c2c98281ad848abdb7271cfedc12dab6a12f0f6"
+      "b0b87c6182a97a29f08ffd4afb9ad0dec403542003023b65d586594aa53e296f",
+      "b0b87c6182a97a29f08ffd4afb9ad0dec403542003023b65d586594aa53e296f"
     ],
     "agree": true
   }

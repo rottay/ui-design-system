@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "scripts/kimi-preservation-manifest.mjs --write",
-  "basedOnReportDigest": "0f9580675a32b7de9bc9f5f6c9b7f4275fa72e8fcef48adfd99e95ac6ec661ff",
+  "generatedBy": "scripts/tokens/kimi-preservation-manifest/index.mjs --write",
+  "basedOnReportDigest": "7f74bf2783ff0dcfadfed08a63ae78e084dd21291780ad32d2dba8bbd9207842",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",

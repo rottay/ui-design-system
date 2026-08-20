@@ -28,7 +28,7 @@ import {
   parsePorcelainUntracked,
   sha256,
 } from './engine-freeze-gate.mjs';
-import { FROZEN_ENGINE_PATH } from './tenant-channel-consumer-gate.mjs';
+import { FROZEN_ENGINE_PATH } from './tokens/tenant-channel-consumer-gate/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const gate = join(scriptDir, 'engine-freeze-gate.mjs');

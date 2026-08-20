@@ -108,8 +108,8 @@ export const CI_GATES = Object.freeze([
   // failure rather than an unchanged count. Drill first: a classifier that
   // returned "allowed" for everything would report zero findings and look
   // exactly like a clean tree.
-  { id: 'spacing-rhythm-contract-drill', run: ['node', '--test', 'scripts/spacing-rhythm-contract-gate.test.mjs'], blocking: true },
-  { id: 'spacing-rhythm-contract', run: ['node', 'scripts/spacing-rhythm-contract-gate.mjs'], blocking: true },
+  { id: 'spacing-rhythm-contract-drill', run: ['node', '--test', 'scripts/tokens/spacing-rhythm-contract-gate/index.test.mjs'], blocking: true },
+  { id: 'spacing-rhythm-contract', run: ['node', 'scripts/tokens/spacing-rhythm-contract-gate/index.mjs'], blocking: true },
   // The channel-liveness producer for the modern-rescue evidence-contract
   // artifact `channel-liveness.json` (execution gate 5: "complete
   // control/family edges, recipe groups and CHANNEL LIVENESS"). Scoped to
@@ -128,7 +128,7 @@ export const CI_GATES = Object.freeze([
   // check stopped firing. Drill first: a classifier that returned a
   // live/protected verdict for everything would report zero findings and
   // look exactly like a clean tree.
-  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/channel-liveness-gate.test.mjs'], blocking: true },
+  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/tokens/channel-liveness-gate/index.test.mjs'], blocking: true },
   // Excluded from blocking until F2 (cascade wiring) adjudicates the channel
   // debt it measures: 24 AUTHORABLE_UNPROVEN_EFFECT + 3 READ_NO_PRODUCTIVE_TERMINAL
   // + 1 READ_UNPROVEN + 4 UNREAD_EMITTED_NO_KNOWN_ROUTE + 52 unknown-family
@@ -137,7 +137,7 @@ export const CI_GATES = Object.freeze([
   // to blocking with its findings drained by the rewiring, not by re-baseline.
   {
     id: 'channel-liveness',
-    run: ['node', 'scripts/channel-liveness-gate.mjs', '--check'],
+    run: ['node', 'scripts/tokens/channel-liveness-gate/index.mjs', '--check'],
     blocking: false,
     excluded: {
       reason: 'Real channel debt slated for F2 (cascade): unproven/unread channels are adjudicated by the rewiring fronts, not in F0. Drill remains blocking.',
@@ -204,8 +204,8 @@ export const CI_GATES = Object.freeze([
   // that a governed prototoken compiled into a shipped bundle is legal while an
   // ungoverned one is not. Drill first: a census computed by a broken scanner
   // would report zero findings and look identical to a clean tree.
-  { id: 'prototype-ledger-drill', run: ['node', '--test', 'scripts/prototype-ledger-gate.test.mjs'], blocking: true },
-  { id: 'prototype-ledger', run: ['node', 'scripts/prototype-ledger-gate.mjs', '--check'], blocking: true },
+  { id: 'prototype-ledger-drill', run: ['node', '--test', 'scripts/tokens/prototype-ledger-gate/index.test.mjs'], blocking: true },
+  { id: 'prototype-ledger', run: ['node', 'scripts/tokens/prototype-ledger-gate/index.mjs', '--check'], blocking: true },
 
   // --- paint validity + shipped-bundle honesty ---
   //
@@ -219,8 +219,8 @@ export const CI_GATES = Object.freeze([
   // throw, does not warn and does not move a snapshot -- no suite can see it.
   // The script parses no flags; its own corpus floor (300 stylesheets) is what
   // stops a broken glob from passing by scanning nothing.
-  { id: 'color-mix-argument-purity-drill', run: ['node', '--test', 'scripts/color-mix-argument-purity-gate.test.mjs'], blocking: true },
-  { id: 'color-mix-argument-purity', run: ['node', 'scripts/color-mix-argument-purity-gate.mjs'], blocking: true },
+  { id: 'color-mix-argument-purity-drill', run: ['node', '--test', 'scripts/tokens/color-mix-argument-purity-gate/index.test.mjs'], blocking: true },
+  { id: 'color-mix-argument-purity', run: ['node', 'scripts/tokens/color-mix-argument-purity-gate/index.mjs'], blocking: true },
   // Shipped bundles carry no third-party framework CSS. Safe to run before
   // Build: the five committed `styles/*.css` mirrors are required and the
   // `dist/*` copies are audited only when present, so a clean clone certifies
@@ -234,8 +234,8 @@ export const CI_GATES = Object.freeze([
   // compiler in dcc65ca34 without the allowlist moving with it. Allowlist
   // corrected, drill re-pinned at two sanctioned definers, gate wired here so
   // the next such move cannot land unreviewed.
-  { id: 'chart-series-reserved-name-drill', run: ['node', '--test', 'scripts/chart-series-reserved-name-gate.test.mjs'], blocking: true },
-  { id: 'chart-series-reserved-name', run: ['node', 'scripts/chart-series-reserved-name-gate.mjs', '--check'], blocking: true },
+  { id: 'chart-series-reserved-name-drill', run: ['node', '--test', 'scripts/tokens/chart-series-reserved-name-gate/index.test.mjs'], blocking: true },
+  { id: 'chart-series-reserved-name', run: ['node', 'scripts/tokens/chart-series-reserved-name-gate/index.mjs', '--check'], blocking: true },
 
   // --- D0 customization-surface truth (drill first: a census computed by a
   // broken scanner reports zero findings and looks identical to a clean
@@ -243,25 +243,25 @@ export const CI_GATES = Object.freeze([
   // manifest, capability registry, raw allowlist, expressive lists) plus a
   // PostCSS/TS-AST consumption scan; these gates keep it fresh, fully
   // classified, evidence-backed and decrease-only on dead writers.
-  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/customization-surface-gate.test.mjs', 'scripts/customization-census-classifier.test.mjs'], blocking: true },
-  { id: 'customization-surface-freshness', run: ['node', 'scripts/customization-surface-census.mjs', '--check=freshness'], blocking: true },
-  { id: 'customization-surface-classification', run: ['node', 'scripts/customization-surface-census.mjs', '--check=classification'], blocking: true },
-  { id: 'customization-capability-consumers', run: ['node', 'scripts/customization-surface-census.mjs', '--check=capabilities'], blocking: true },
-  { id: 'customization-dead-writers', run: ['node', 'scripts/customization-surface-census.mjs', '--check=dead'], blocking: true },
+  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/tokens/customization-surface-census/customization-surface-gate.test.mjs', 'scripts/tokens/customization-surface-census/customization-census-classifier.test.mjs'], blocking: true },
+  { id: 'customization-surface-freshness', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=freshness'], blocking: true },
+  { id: 'customization-surface-classification', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=classification'], blocking: true },
+  { id: 'customization-capability-consumers', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=capabilities'], blocking: true },
+  { id: 'customization-dead-writers', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=dead'], blocking: true },
   // Official tokens documentation is a deterministic projection; stale docs,
   // derivation cycles, undocumented public hooks, unknown capability
   // channels and unadjudicated dual authorities all block here.
-  { id: 'tokens-catalog-drill', run: ['node', '--test', 'scripts/tokens-catalog-gate.test.mjs'], blocking: true },
-  { id: 'tokens-catalog', run: ['node', 'scripts/tokens-catalog.mjs', '--check'], blocking: true },
+  { id: 'tokens-catalog-drill', run: ['node', '--test', 'scripts/tokens/tokens-catalog/tokens-catalog-gate.test.mjs'], blocking: true },
+  { id: 'tokens-catalog', run: ['node', 'scripts/tokens/tokens-catalog/index.mjs', '--check'], blocking: true },
   // Binding preservation correction: premium depth is preserved, never
   // cleaned away — 80/80 protos decided, dead writers classified by
   // provenance, Kimi-premium RETIRE unrepresentable.
-  { id: 'kimi-preservation-drill', run: ['node', '--test', 'scripts/kimi-preservation-gate.test.mjs'], blocking: true },
-  { id: 'kimi-preservation', run: ['node', 'scripts/kimi-preservation-manifest.mjs', '--check'], blocking: true },
+  { id: 'kimi-preservation-drill', run: ['node', '--test', 'scripts/tokens/kimi-preservation-manifest/kimi-preservation-gate.test.mjs'], blocking: true },
+  { id: 'kimi-preservation', run: ['node', 'scripts/tokens/kimi-preservation-manifest/index.mjs', '--check'], blocking: true },
 
   // FASE K (Codex 2026-08-02): every read the hook contract fences as
   // unadjudicated carries exactly one ownership row — 0 reads without owner.
-  { id: 'reads-adjudication', run: ['node', 'scripts/reads-adjudication-gate.mjs'], blocking: true },
+  { id: 'reads-adjudication', run: ['node', 'scripts/tokens/reads-adjudication-gate/index.mjs'], blocking: true },
 
   // Codex blocker 2: the binding worklist may never point Kimi at CSS that
   // does not ship — owners shipping-reachable, renderProof is a node (path
@@ -269,8 +269,8 @@ export const CI_GATES = Object.freeze([
   // Codex final remediation blocker 4: the drill SUITES run in CI, grouped,
   // with named-cause assertions and a no-op meta-drill — a gate whose drills
   // only fire by hand certifies nothing.
-  { id: 'kimi-worklist-drill', run: ['node', '--test', 'scripts/kimi-worklist-gate.test.mjs'], blocking: true },
-  { id: 'kimi-worklist', run: ['node', 'scripts/kimi-worklist-gate.mjs'], blocking: true },
+  { id: 'kimi-worklist-drill', run: ['node', '--test', 'scripts/tokens/kimi-worklist-gate/index.test.mjs'], blocking: true },
+  { id: 'kimi-worklist', run: ['node', 'scripts/tokens/kimi-worklist-gate/index.mjs'], blocking: true },
 
   // Codex blocker 4B: every counted Modern font-size literal carries an
   // adjudicated ownership row — a sold typography.scale control may not fail
@@ -282,13 +282,13 @@ export const CI_GATES = Object.freeze([
   // es API de producto generada de los contratos reales — fresca y completa o roja.
   // Codex blocker 5: the drills must run IN CI, grouped — a gate whose drills
   // only fire by hand certifies nothing.
-  { id: 'controls-catalog-drill', run: ['node', '--test', 'scripts/controls-catalog-gate.test.mjs'], blocking: true },
-  { id: 'controls-catalog', run: ['node', 'scripts/controls-catalog.mjs', '--check'], blocking: true },
+  { id: 'controls-catalog-drill', run: ['node', '--test', 'scripts/tokens/controls-catalog/controls-catalog-gate.test.mjs'], blocking: true },
+  { id: 'controls-catalog', run: ['node', 'scripts/tokens/controls-catalog/index.mjs', '--check'], blocking: true },
 
   // --- white-label channel + theme parity ---
-  { id: 'theme-channel-parity', run: ['node', 'scripts/theme-channel-parity-gate.mjs', '--check', '--quiet'], blocking: true },
-  { id: 'tenant-channel-consumer', run: ['node', 'scripts/tenant-channel-consumer-gate.mjs', '--check'], blocking: true },
-  { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/tenant-channel-consumer-gate.mjs', '--modern-check'], blocking: true },
+  { id: 'theme-channel-parity', run: ['node', 'scripts/tokens/theme-channel-parity-gate/index.mjs', '--check', '--quiet'], blocking: true },
+  { id: 'tenant-channel-consumer', run: ['node', 'scripts/tokens/tenant-channel-consumer-gate/index.mjs', '--check'], blocking: true },
+  { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/tokens/tenant-channel-consumer-gate/index.mjs', '--modern-check'], blocking: true },
   { id: 'i18n-key-parity', run: ['node', 'scripts/i18n/i18n-key-parity-gate/index.mjs', '--check'], blocking: true },
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
@@ -414,14 +414,14 @@ export const CI_GATES = Object.freeze([
   // The --ds_ experimentation space never reaches shipped CSS (canon: --ds-).
   {
     id: 'ds-prefix',
-    run: ['node', 'scripts/ds-underscore-prefix-gate.mjs'],
+    run: ['node', 'scripts/tokens/ds-underscore-prefix-gate/index.mjs'],
     blocking: true,
   },
   // The 63-root cascade catalog must agree with the tree it describes; until
   // this gate existed nothing read it at all.
   {
     id: 'root-catalog-freshness',
-    run: ['node', 'scripts/root-catalog-freshness-gate.mjs'],
+    run: ['node', 'scripts/tokens/root-catalog-freshness-gate/index.mjs'],
     blocking: true,
   },
   // Every production script is wired through a declared channel (manifest,

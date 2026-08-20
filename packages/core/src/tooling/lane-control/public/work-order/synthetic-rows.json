@@ -96,7 +96,7 @@
         "packages/core/scripts/**/generate-*.mjs",
         "packages/core/scripts/**/build-*.mjs",
         "packages/core/scripts/codemods/**",
-        "packages/core/scripts/tokens-catalog.mjs"
+        "packages/core/scripts/tokens/tokens-catalog/index.mjs"
       ],
       "writeExcludes": [
         "packages/core/scripts/**/*-gate.mjs",

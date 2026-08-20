@@ -11,7 +11,7 @@ import {
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { parseRegistry } from '../../../../customization-surface-census.mjs';
+import { parseRegistry } from '../../../../tokens/customization-surface-census/index.mjs';
 import { loadProgramContracts } from '../../../v2/contracts.mjs';
 import {
   APPLICABLE_FAMILY_FIELDS,

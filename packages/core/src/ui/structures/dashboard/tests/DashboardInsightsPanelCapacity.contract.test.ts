@@ -17,7 +17,7 @@
  * no tenant pipeline writes it and it is not a rhythm channel -- but its
  * fallback is now the shipped 415px measure, stated rather than computed.
  *
- * WHY A TEST AND NOT ONLY THE GATE. `scripts/spacing-rhythm-contract-gate.mjs`
+ * WHY A TEST AND NOT ONLY THE GATE. `scripts/tokens/spacing-rhythm-contract-gate/index.mjs`
  * is the census authority: it classifies every rhythm read in the whole
  * authored Modern corpus and fails closed. This suite is the FOCAL
  * counterfactual for the eight roots that carried the defect, so a silent

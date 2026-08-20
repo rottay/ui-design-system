@@ -1,6 +1,6 @@
 {
   "$schema": "./prototype-ledger.schema.json",
-  "description": "Governed inventory of every --_ds-proto-* prototoken. A prototoken is a PRIVATE candidate axis: a hook a family opens so a future authority can be adjudicated over it. It is never a public contract and never reaches a generated tenant artifact. It may remain embedded inside a shipped skin bundle only while its source and every consumer are governed by an active ledger row. Enforced by scripts/prototype-ledger-gate.mjs; there is no baseline.",
+  "description": "Governed inventory of every --_ds-proto-* prototoken. A prototoken is a PRIVATE candidate axis: a hook a family opens so a future authority can be adjudicated over it. It is never a public contract and never reaches a generated tenant artifact. It may remain embedded inside a shipped skin bundle only while its source and every consumer are governed by an active ledger row. Enforced by scripts/tokens/prototype-ledger-gate/index.mjs; there is no baseline.",
   "categories": [
     "PRIVATE",
     "DERIVE_FROM_EXISTING",
