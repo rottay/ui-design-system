@@ -658,6 +658,10 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.5 ✅ `0f7aeadae`** — celda gobernada bloqueante en program-check
+(6 drills, 7 mutaciones, 2 sobre el árbol real; piso anti-vacuo leído del
+denominador del índice). Cierra la brecha de rules:633 desde afuera. Con esto
+**F1 queda completo de ejecutor** — resta la auditoría Fable del frente.
 **F1.4c ✅ (adjudicación del coordinador, medida):** las 5.100 celdas
 quedaron 100% gobernadas — 1.472 con filas + 3.628 con ley escrita, **0
 peladas**. `targetBinding` **NO se borra** (corrección al §4: el plan decía
