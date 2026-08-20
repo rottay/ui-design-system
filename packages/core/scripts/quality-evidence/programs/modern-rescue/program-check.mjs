@@ -18,8 +18,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProgramContracts } from '../../v2/contracts.mjs';
-import { validateCustomizationManifest } from '../../../../manifest/generator.mjs';
-import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from '../../../../manifest/rules.mjs';
+import { validateCustomizationManifest } from '../../../../manifest/generator/index.mjs';
+import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from '../../../../manifest/rules/index.mjs';
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,7 +40,7 @@ const FILES = {
   model: join(PROGRAM_DIR, 'customization-model.json'),
   orchestration: join(PROGRAM_DIR, 'agent-orchestration.json'),
   schema: join(MANIFEST_DIR, 'schema.json'),
-  rules: join(MANIFEST_DIR, 'rules.mjs'),
+  rules: join(MANIFEST_DIR, 'rules/index.mjs'),
 };
 
 // T-1 live implementer identity. The seat was transferred by explicit owner order
@@ -260,7 +260,7 @@ function collectTextualFailures() {
   const rulesText = readText(FILES.rules).text;
   if (rulesText) {
     if (!rulesText.includes("'--ds-'") || !rulesText.includes("'--_ds-'") || !rulesText.includes("'data-'")) {
-      failures.push('manifest/rules.mjs CHANNEL_PREFIXES must include --ds-, --_ds- and data-');
+      failures.push('manifest/rules/index.mjs CHANNEL_PREFIXES must include --ds-, --_ds- and data-');
     }
   }
 
@@ -273,7 +273,7 @@ function collectTextualFailures() {
       DOMAIN_KINDS.some((k) => !kinds.includes(k)) ||
       kinds.some((k) => !DOMAIN_KINDS.includes(k));
     if (mismatch) {
-      failures.push('manifest/schema.json vocabulary.domainKinds must match rules.mjs DOMAIN_KINDS exactly');
+      failures.push('manifest/schema.json vocabulary.domainKinds must match rules/index.mjs DOMAIN_KINDS exactly');
     }
   }
   // 6c. CASCADA (adjudicacion): validar manifest/cascade/roots/* con diente

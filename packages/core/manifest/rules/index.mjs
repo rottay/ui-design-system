@@ -16,7 +16,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { SIGHTED_APPROVER, validateReceipt } from '../scripts/quality-evidence/v2/receipts.mjs';
+import { SIGHTED_APPROVER, validateReceipt } from '../../scripts/quality-evidence/v2/receipts.mjs';
 
 export { SIGHTED_APPROVER };
 

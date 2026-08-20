@@ -11,8 +11,8 @@ import {
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { parseRegistry } from '../scripts/tokens/customization-surface-census/index.mjs';
-import { loadProgramContracts } from '../scripts/quality-evidence/v2/contracts.mjs';
+import { parseRegistry } from '../../scripts/tokens/customization-surface-census/index.mjs';
+import { loadProgramContracts } from '../../scripts/quality-evidence/v2/contracts.mjs';
 import {
   APPLICABLE_FAMILY_FIELDS,
   ASSESSMENT_STATE_RANK,
@@ -34,8 +34,8 @@ import {
   validateRedTestClassifications,
   validateSection,
   validateSourceBindings,
-} from './rules.mjs';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../scripts/lib/repo-root/index.mjs';
+} from '../rules/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../scripts/lib/repo-root/index.mjs';
 
 export {
   APPLICABLE_FAMILY_FIELDS,
@@ -53,16 +53,19 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 /** `packages/core/` -- the anchor every path inside `index.json` is relative to.
  *  The manifest graduated to `packages/core/manifest/`, so HERE is that folder. */
 const PACKAGE_ROOT = findPackageRoot(HERE);
+/** The manifest ROOT -- the data (`index.json`, `schema.json`, `controls/`,
+ *  `groups/`, `families/`) did NOT move into the capability folders. */
+const MANIFEST_ROOT = resolve(HERE, '..');
 /** The programme folder did NOT graduate: it stays under `scripts/`. */
 const PROGRAM_ROOT = resolve(PACKAGE_ROOT, 'scripts/quality-evidence/programs/modern-rescue');
 const REPOSITORY_ROOT = findRepoRoot(HERE);
 const INVENTORY_PATH = join(PROGRAM_ROOT, 'family-inventory.json');
 const PROGRAM_PATH = join(PROGRAM_ROOT, 'program.json');
-const SCHEMA_PATH = join(HERE, 'schema.json');
-const INDEX_PATH = join(HERE, 'index.json');
-const CONTROLS_ROOT = join(HERE, 'controls');
-const GROUPS_ROOT = join(HERE, 'groups');
-const FAMILIES_ROOT = join(HERE, 'families');
+const SCHEMA_PATH = join(MANIFEST_ROOT, 'schema.json');
+const INDEX_PATH = join(MANIFEST_ROOT, 'index.json');
+const CONTROLS_ROOT = join(MANIFEST_ROOT, 'controls');
+const GROUPS_ROOT = join(MANIFEST_ROOT, 'groups');
+const FAMILIES_ROOT = join(MANIFEST_ROOT, 'families');
 const REGISTRY_SOURCE = join(
   REPOSITORY_ROOT,
   'packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts',
@@ -430,7 +433,7 @@ function buildIndex(inventory, controls, familyRecords, controlRecords, groups) 
 
   return {
     schemaVersion: 1,
-    generatedBy: 'node packages/core/manifest/generator.mjs --sync',
+    generatedBy: 'node packages/core/manifest/generator/index.mjs --sync',
     authorityLaw: 'Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.',
     inputsDigest,
     denominators: {
@@ -758,7 +761,7 @@ export function validateCustomizationManifest() {
     const expectedIndex = buildIndex(inventory, controls, familyRecords, controlRecords, groups);
     const actualIndex = readJson(INDEX_PATH);
     if (JSON.stringify(actualIndex) !== JSON.stringify(expectedIndex)) {
-      errors.push('manifest/index.json is stale; run generator.mjs --write');
+      errors.push('manifest/index.json is stale; run generator/index.mjs --write');
     }
   } else {
     errors.push('manifest/index.json is missing');

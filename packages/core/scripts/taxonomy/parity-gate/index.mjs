@@ -77,7 +77,7 @@
  * `manifest/index.json` and the per-family cells as evidence and does not
  * regenerate them, so against a stale manifest it would certify rows nobody
  * rebuilt. `ci-gates.manifest.mjs` therefore runs
- * `manifest/generator.mjs --check` as its own blocking entry, positioned ahead
+ * `manifest/generator/index.mjs --check` as its own blocking entry, positioned ahead
  * of this chain. That ordering is the contract; the
  * `validateCustomizationManifest()` side effect inside program-check is not a
  * substitute for it.

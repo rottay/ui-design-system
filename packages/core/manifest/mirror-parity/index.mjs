@@ -44,13 +44,15 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from '../scripts/lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../scripts/lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 /** The programme folder stays under `scripts/`; only the manifest graduated. */
-export const PROGRAM_ROOT = path.resolve(HERE, '../scripts/quality-evidence/programs/modern-rescue');
+export const PROGRAM_ROOT = path.resolve(HERE, '../../scripts/quality-evidence/programs/modern-rescue');
 export const PACKAGE_ROOT = findPackageRoot(HERE);
-export const OUTPUT_PATH = path.join(HERE, 'generated', 'mirror-parity.json');
+/** `generated/` lives at the manifest ROOT; only this producer moved. */
+export const MANIFEST_ROOT = path.resolve(HERE, '..');
+export const OUTPUT_PATH = path.join(MANIFEST_ROOT, 'generated', 'mirror-parity.json');
 
 /** Los tres verticales de primera parte, en orden fijo y declarado. */
 export const TENANTS = ['rottay', 'bithire', 'evnto'];
@@ -908,11 +910,11 @@ export function build() {
   const byTenant = Object.fromEntries(TENANTS.map((t) => [t, declarationsOf(artifactText[t])]));
 
   const surface = surfaceParity(byTenant);
-  const checklists = JSON.parse(readFileSync(path.join(HERE, 'generated', 'root-checklists.json'), 'utf8'));
+  const checklists = JSON.parse(readFileSync(path.join(MANIFEST_ROOT, 'generated', 'root-checklists.json'), 'utf8'));
 
   return {
-    $generatedBy: 'manifest/mirror-parity.mjs',
-    $regenerate: 'node manifest/mirror-parity.mjs',
+    $generatedBy: 'manifest/mirror-parity/index.mjs',
+    $regenerate: 'node manifest/mirror-parity/index.mjs',
     $warning: [
       'Los artefactos `facade/artifacts/<tenant>/index.css` son SNAPSHOTS GENERADOS por',
       '`build:vertical-css`, no fuente. Las secciones `surface`, `valueParity` y `cascade`',
@@ -947,7 +949,7 @@ if (invokedDirectly) {
     let current = null;
     try { current = readFileSync(OUTPUT_PATH, 'utf8'); } catch { /* no existe */ }
     if (current !== text) {
-      console.error('✗ mirror-parity: generated/mirror-parity.json desactualizado — corre `node manifest/mirror-parity.mjs`');
+      console.error('✗ mirror-parity: generated/mirror-parity.json desactualizado — corre `node manifest/mirror-parity/index.mjs`');
       process.exit(1);
     }
     console.log('✓ mirror-parity: generated/mirror-parity.json al dia');

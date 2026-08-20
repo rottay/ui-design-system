@@ -164,7 +164,7 @@ test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
   const FRESHNESS = 'modern-rescue-customization-manifest-freshness';
   const FRESHNESS_ARGV = [
     'node',
-    'manifest/generator.mjs',
+    'manifest/generator/index.mjs',
     '--check',
   ];
 
@@ -207,7 +207,7 @@ test('the modern-rescue tooling drills are reachable, enforced, and run ahead of
   // Every clause below is load-bearing, so state them separately rather than
   // as one loose "is it mentioned somewhere" check.
   const PROGRAM_DRILL = 'scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs';
-  const GENERATOR_DRILL = 'manifest/generator.test.mjs';
+  const GENERATOR_DRILL = 'manifest/generator/index.test.mjs';
   const DRILLS = 'modern-rescue-tooling-drills';
   const DRILLS_ARGV = ['node', '--test', PROGRAM_DRILL, GENERATOR_DRILL];
 

@@ -7,11 +7,11 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { computeSourceDigest } from '../scripts/quality-evidence/v2/receipts.mjs';
+import { computeSourceDigest } from '../../scripts/quality-evidence/v2/receipts.mjs';
 import {
   certifyCustomizationManifest,
   validateCustomizationManifest,
-} from './generator.mjs';
+} from './index.mjs';
 import {
   APPLICABLE_FAMILY_FIELDS,
   CELL_MECHANISMS,
@@ -34,14 +34,16 @@ import {
   validateMaximumClaim,
   validateRedTestClassifications,
   validateSection,
-} from './rules.mjs';
-import { repoRoot as findRepoRoot } from '../scripts/lib/repo-root/index.mjs';
+} from '../rules/index.mjs';
+import { repoRoot as findRepoRoot } from '../../scripts/lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PROGRAM_ROOT = join(HERE, '../scripts/quality-evidence/programs/modern-rescue');
+const PACKAGE_ROOT = join(HERE, '..', '..');
+const MANIFEST_ROOT = join(HERE, '..');
+const PROGRAM_ROOT = join(HERE, '../../scripts/quality-evidence/programs/modern-rescue');
 const REPOSITORY_ROOT = findRepoRoot(HERE);
-const INDEX = JSON.parse(readFileSync(join(HERE, 'index.json'), 'utf8'));
-const SCHEMA = JSON.parse(readFileSync(join(HERE, 'schema.json'), 'utf8'));
+const INDEX = JSON.parse(readFileSync(join(MANIFEST_ROOT, 'index.json'), 'utf8'));
+const SCHEMA = JSON.parse(readFileSync(join(MANIFEST_ROOT, 'schema.json'), 'utf8'));
 const MODEL = JSON.parse(readFileSync(join(PROGRAM_ROOT, 'customization-model.json'), 'utf8'));
 const PROGRAM = JSON.parse(readFileSync(join(PROGRAM_ROOT, 'program.json'), 'utf8'));
 const EVIDENCE_CONTRACT = JSON.parse(
@@ -75,7 +77,7 @@ test('frontier, internal and proposed controls never create R0-R6 family cells',
     ['palette.dark-mode', 'palette.status-seeds'],
   );
   const dataTable = JSON.parse(
-    readFileSync(join(HERE, 'families/pattern/data/pattern-data-table.json'), 'utf8'),
+    readFileSync(join(MANIFEST_ROOT, 'families/pattern/data/pattern-data-table.json'), 'utf8'),
   );
   assert.equal(dataTable.themeControls.length, 20);
   assert.equal(dataTable.themeControls.some((cell) => cell.controlId === 'surface.edge'), false);
@@ -84,7 +86,7 @@ test('frontier, internal and proposed controls never create R0-R6 family cells',
 
 test('controls and recipe groups do not duplicate reverse family edges', () => {
   for (const entry of [...INDEX.controls, ...INDEX.groups]) {
-    const value = JSON.parse(readFileSync(join(HERE, '..', entry.path), 'utf8'));
+    const value = JSON.parse(readFileSync(join(PACKAGE_ROOT, entry.path), 'utf8'));
     // Recursive, at every depth. A top-level-only check passed for an entire
     // session while `calibration.representativeFamilyIds` hand-listed four
     // families and `calibration.mountClassIds` named DOM classes (`ds-flex`)
@@ -126,7 +128,7 @@ test('the reverse control -> family/part/channel view is generated from family c
   for (const entry of view.controls) {
     for (const row of entry.families) {
       const family = JSON.parse(
-        readFileSync(join(HERE, `families/${row.familyId}.json`), 'utf8'),
+        readFileSync(join(MANIFEST_ROOT, `families/${row.familyId}.json`), 'utf8'),
       );
       const cell = family.themeControls.find((item) => item.controlId === entry.controlId);
       assert.equal(cell.disposition, row.disposition);
@@ -137,7 +139,7 @@ test('the reverse control -> family/part/channel view is generated from family c
 
 test('family identity does not promote category-wide export candidates into family API truth', () => {
   const table = JSON.parse(
-    readFileSync(join(HERE, 'families/pattern/data/pattern-data-table.json'), 'utf8'),
+    readFileSync(join(MANIFEST_ROOT, 'families/pattern/data/pattern-data-table.json'), 'utf8'),
   );
   assert.deepEqual(table.identity.publicComponents, ['PatternDataTable']);
   assert.equal(Object.hasOwn(table.identity, 'publicExports'), false);
@@ -160,7 +162,7 @@ test('certification fails closed while cells or family reviews remain unknown', 
 test('bootstrap refuses to overwrite the existing manifest', () => {
   const result = spawnSync(
     process.execPath,
-    ['packages/core/manifest/generator.mjs', '--bootstrap'],
+    ['packages/core/manifest/generator/index.mjs', '--bootstrap'],
     { cwd: REPOSITORY_ROOT, encoding: 'utf8' },
   );
   assert.notEqual(result.status, 0);
@@ -959,7 +961,7 @@ test('schema.json, customization-model.json and the generator vocabularies agree
  * an explicit context object precisely so a fixture can be graded instead.
  */
 const CASCADE_FIXTURE_SITE =
-  'packages/core/manifest/rules.mjs';
+  'packages/core/manifest/rules/index.mjs';
 
 const CASCADE_FIXTURE_CONTEXT = Object.freeze({
   label: 'fixture/cascade/roots/fixture.axis.json',
@@ -999,7 +1001,7 @@ const NAMED_VARIANT = Object.freeze({
 });
 
 const VARIANTS_REASON =
-  'CERO variantes por diseno: el eje es un escape hatch, no un vocabulario cerrado. Declarado en fuente, no tapado: packages/core/manifest/rules.mjs:1.';
+  'CERO variantes por diseno: el eje es un escape hatch, no un vocabulario cerrado. Declarado en fuente, no tapado: packages/core/manifest/rules/index.mjs:1.';
 
 test('a cascade root with an empty vocabulary and no declared reason fails closed', () => {
   const errors = validateCascadeRoot(
@@ -1109,7 +1111,7 @@ const NAMED_DERIVATION = Object.freeze({
 });
 
 const DERIVATIONS_REASON =
-  'CERO derivaciones por diseno: el eje emite su canal cabeza y nadie deriva de el. Declarado en fuente, no tapado: packages/core/manifest/rules.mjs:1.';
+  'CERO derivaciones por diseno: el eje emite su canal cabeza y nadie deriva de el. Declarado en fuente, no tapado: packages/core/manifest/rules/index.mjs:1.';
 
 test('a cascade root with an empty derivation tail and no declared reason fails closed', () => {
   const empty = cascadeRootFixture({ derivations: [] });

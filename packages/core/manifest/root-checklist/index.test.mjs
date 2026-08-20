@@ -13,7 +13,7 @@ import { readFileSync, readdirSync, mkdtempSync, writeFileSync, rmSync, existsSy
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { INLINE_EXPR } from './fanout-facts.mjs';
+import { INLINE_EXPR } from '../fanout-facts/index.mjs';
 import {
   OUTPUT_PATH,
   PACKAGE_ROOT,
@@ -46,7 +46,7 @@ import {
   buildChecklists,
   serialize,
   toMarkdown,
-} from './root-checklist.mjs';
+} from './index.mjs';
 
 /* ─────────────────────────────────────────────────────────────────────────
  * Ayudas sinteticas
@@ -520,8 +520,8 @@ test('lineOfRootChannelKey no confunde "channels" con "channel"', () => {
 });
 
 test('citeLiteral resuelve rutas con y sin el prefijo packages/core', () => {
-  const conPrefijo = citeLiteral('packages/core/manifest/fanout-facts.mjs', 'EXCLUDED_PREFIXES = [');
-  const sinPrefijo = citeLiteral('manifest/fanout-facts.mjs', 'EXCLUDED_PREFIXES = [');
+  const conPrefijo = citeLiteral('packages/core/manifest/fanout-facts/index.mjs', 'EXCLUDED_PREFIXES = [');
+  const sinPrefijo = citeLiteral('manifest/fanout-facts/index.mjs', 'EXCLUDED_PREFIXES = [');
   assert.equal(conPrefijo, sinPrefijo, 'el prefijo del paquete se normaliza');
   // La cita es relativa al PAQUETE. El prefijo concreto no era la ley: cuando el
   // manifiesto vivia bajo `scripts/`, esta asercion pineaba ese segmento y se

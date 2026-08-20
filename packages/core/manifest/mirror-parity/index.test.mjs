@@ -34,7 +34,7 @@ import {
   authoredLeafPaths,
   build,
   serialize,
-} from './mirror-parity.mjs';
+} from './index.mjs';
 
 const doc = JSON.parse(readFileSync(OUTPUT_PATH, 'utf8'));
 
@@ -47,11 +47,11 @@ const doc = JSON.parse(readFileSync(OUTPUT_PATH, 'utf8'));
  * que es exactamente lo que se confundio cuando `root-checklist.mjs` se
  * generalizo. Ningun test escribe: los artefactos se LEEN.
  */
-const CHECKLISTS = JSON.parse(readFileSync(new URL('./generated/root-checklists.json', import.meta.url), 'utf8'));
+const CHECKLISTS = JSON.parse(readFileSync(new URL('../generated/root-checklists.json', import.meta.url), 'utf8'));
 const ARTIFACT_DECLS = Object.fromEntries(
   TENANTS.map((t) => [
     t,
-    declarationsOf(readFileSync(new URL(`../${artifactPath(t)}`, import.meta.url), 'utf8')),
+    declarationsOf(readFileSync(new URL(`../../${artifactPath(t)}`, import.meta.url), 'utf8')),
   ]),
 );
 
@@ -260,7 +260,7 @@ test('el sha256 registrado es el del artefacto en disco', () => {
   for (const t of TENANTS) {
     const rec = doc.provenance.artifacts.find((a) => a.file === artifactPath(t));
     const real = createHash('sha256')
-      .update(readFileSync(new URL(`../${artifactPath(t)}`, import.meta.url), 'utf8'))
+      .update(readFileSync(new URL(`../../${artifactPath(t)}`, import.meta.url), 'utf8'))
       .digest('hex');
     assert.equal(rec.sha256, real, t);
   }

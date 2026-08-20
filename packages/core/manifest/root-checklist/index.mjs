@@ -67,14 +67,16 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-import { OUTPUT_PATH as FACTS_PATH, PAINT_PLANES, INLINE_EXPR } from './fanout-facts.mjs';
-import { packageRoot as findPackageRoot } from '../scripts/lib/repo-root/index.mjs';
+import { OUTPUT_PATH as FACTS_PATH, PAINT_PLANES, INLINE_EXPR } from '../fanout-facts/index.mjs';
+import { packageRoot as findPackageRoot } from '../../scripts/lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
 /** The programme folder stays under `scripts/`; only the manifest graduated. */
-export const PROGRAM_ROOT = path.resolve(HERE, '../scripts/quality-evidence/programs/modern-rescue');
-export const OUTPUT_PATH = path.join(HERE, 'generated', 'root-checklists.json');
+export const PROGRAM_ROOT = path.resolve(HERE, '../../scripts/quality-evidence/programs/modern-rescue');
+/** `generated/` and `cascade/` live at the manifest ROOT; only this producer moved. */
+export const MANIFEST_ROOT = path.resolve(HERE, '..');
+export const OUTPUT_PATH = path.join(MANIFEST_ROOT, 'generated', 'root-checklists.json');
 
 const PAINT_SET = new Set(PAINT_PLANES);
 
@@ -84,12 +86,12 @@ export const ROOT_PATTERN = /^--ds-[a-z0-9-]+-scale$/;
 export const UNATTRIBUTED_PREFIX = 'unattributed';
 
 /** Manifiestos de raiz de cascada: la segunda fuente de raices. */
-export const CASCADE_ROOTS_DIR = path.join(HERE, 'cascade', 'roots');
+export const CASCADE_ROOTS_DIR = path.join(MANIFEST_ROOT, 'cascade', 'roots');
 export const CASCADE_ROOTS_REL = 'manifest/cascade/roots';
 
 /** Snapshots generados que el corpus de hechos excluye (fanout-facts.mjs). */
 export const ARTIFACTS_REL = 'src/foundation/tokens/css/facade/artifacts';
-export const FACTS_GENERATOR_REL = 'manifest/fanout-facts.mjs';
+export const FACTS_GENERATOR_REL = 'manifest/fanout-facts/index.mjs';
 
 /** Vocabulario cerrado de motivos de no-medibilidad. No se inventan motivos. */
 export const NOT_MEASURABLE_REASONS = [
@@ -815,7 +817,7 @@ export function buildChecklists(
   for (const c of checklists) for (const f of c.families) if (f.manifestFamily) touched.add(f.family);
 
   return {
-    generator: 'manifest/root-checklist.mjs',
+    generator: 'manifest/root-checklist/index.mjs',
     source: 'manifest/generated/fanout-facts.json',
     familyCanon: 'scripts/quality-evidence/programs/modern-rescue/family-inventory.json',
     corpusProvenance: {

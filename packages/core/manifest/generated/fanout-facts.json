@@ -1,5 +1,5 @@
 {
-  "generator": "manifest/fanout-facts.mjs",
+  "generator": "manifest/fanout-facts/index.mjs",
   "scanRoot": "src",
   "planes": [
     "modern-skin-css",

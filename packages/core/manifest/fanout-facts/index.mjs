@@ -13,18 +13,20 @@
  *   • que escalares multiplican en la misma declaracion (`scalars`)
  *
  * Uso:
- *   node manifest/fanout-facts.mjs
- *   node manifest/fanout-facts.mjs --check
+ *   node manifest/fanout-facts/index.mjs
+ *   node manifest/fanout-facts/index.mjs --check
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { packageRoot as findPackageRoot } from '../scripts/lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../scripts/lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
-export const OUTPUT_PATH = path.join(HERE, 'generated', 'fanout-facts.json');
+/** `generated/` lives at the manifest ROOT; only this producer moved. */
+export const MANIFEST_ROOT = path.resolve(HERE, '..');
+export const OUTPUT_PATH = path.join(MANIFEST_ROOT, 'generated', 'fanout-facts.json');
 
 /* ─────────────────────────────────────────────────────────────────────────
  * Vocabulario cerrado de planos. NO se inventan planos: un sitio que no cae
@@ -690,7 +692,7 @@ export function buildFacts(packageRoot = PACKAGE_ROOT) {
   }
 
   return {
-    generator: 'manifest/fanout-facts.mjs',
+    generator: 'manifest/fanout-facts/index.mjs',
     scanRoot: SCAN_ROOT,
     planes: PLANES,
     paintPlanes: PAINT_PLANES,

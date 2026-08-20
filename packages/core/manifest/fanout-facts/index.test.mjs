@@ -5,7 +5,7 @@
  * owner antes de escribir el generador. Si uno de ellos se pone rojo, lo que
  * esta mal es el generador (o la fuente cambio), nunca el oraculo.
  *
- *   node --test manifest/fanout-facts.test.mjs
+ *   node --test manifest/fanout-facts/index.test.mjs
  */
 
 import test from 'node:test';
@@ -31,7 +31,7 @@ import {
   INLINE_EXPR,
   stripCssComments,
   stripTsComments,
-} from './fanout-facts.mjs';
+} from './index.mjs';
 
 const facts = JSON.parse(readFileSync(OUTPUT_PATH, 'utf8'));
 const byChannel = new Map(facts.channels.map((c) => [c.channel, c]));
