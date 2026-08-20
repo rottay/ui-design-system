@@ -815,6 +815,28 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F4A-0 ✅ (worker Opus, read-only, `/tmp/f4a-0-baseline.md` + datos en
+`/tmp/f4a-0/`).** Cero escrituras en el repo. **7 predicciones falsifican
+EXACTO**: hojas evaluadas 3.726 = 3.738 − 12 (el −12 son exactamente los 12
+recables de F2, al canal); sourceSkeleton 1820/1503/397; unión 2.613,
+intersección 345; exclusivos 1061/788/2; hex literales 1134/468/188; las 37
+internal-head+gap sin `governedBy`; las 10 por-crear inertes (0 declaraciones,
+0 lectores). Matriz CHROME completa: 54 familias × 34 subfamilias — el
+hallazgo es la asimetría de cobertura (`cardComponent`: 29/36/**4** hojas;
+evnto no es más simple, está vacío). **5 NO falsifican — y las 5 son
+adjudicaciones de F4A-1, no re-mediciones:** (A.1) las 45 hojas de metadato
+del catálogo nunca fueron enumeradas → el denominador 3.693 no es
+reproducible (la regla se adjudica y se enumera, no se hereda); (A.2)
+"asignación" como la define el catálogo no replica (263 vs 159 re-medidas,
+95 divergencias en las dos direcciones — "tomar posición sobre una raíz" ≠
+"declarar su canal cabeza"; F4A-1 define qué es una asignación); (A.3) 2
+referencias `var()` fantasma en rottay y evnto, inatribuibles; (A.4) raíces
+con un tema en cero: son **16**, no 9 — y 14 de las 16 son derivationDebt;
+(A.5) `tier.page.fg`: **42** canales, no 43. Nudos medidos hoy: par border
+(3 temas, 3 relaciones distintas); tier.page.fg (3 destinos rivales con el
+mismo valor); `--ds-color-primary` congelada en los 3 con **135 lectores
+arrastrados** (la palanca más grande del frente); H4 bien excluido de W3 (no
+era cero-delta contra tier.control.bg — confirmado).
 **F4A — plan de ejecución ADOPTADO (coordinador, 2026-08-20; plan completo
 medido contra el árbol por subagente plan).** Fases: **F4A-0** medición
 pre-rewrite (worker, read-only: reproduce el walk evaluado sobre el árbol de
