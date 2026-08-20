@@ -658,6 +658,16 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**Auditoría Fable de F1: APROBADO, 0 bloqueantes** (11 mutaciones con
+restauración byte-exacta; todos los números duros recomputados). Las 7
+correcciones aplicadas en `03ef51b54` (ADMISSION universal 10 raíces/74
+variantes, cascade/ al digest, status cerrado, spawn del runner + 2 rojos
+re-adjudicados, FORMA dura, piso fail-closed, prosa). **F1 — CERRADO
+(2026-08-20).** gates:ci 82+2 verdes en HEAD. Baseline de suite: **1674/22**
+(bajó de 24: los 2 rojos escondidos del runner quedaron re-adjudicados).
+Anotado para F2: raíces con dominio no enumerado quedan fuera de ADMISSION
+con nota (si una pasa a enum, entra sola); los 7 rojos estables sin forma
+sellada siguen comparándose por nombre.
 **F1.5 ✅ `0f7aeadae`** — celda gobernada bloqueante en program-check
 (6 drills, 7 mutaciones, 2 sobre el árbol real; piso anti-vacuo leído del
 denominador del índice). Cierra la brecha de rules:633 desde afuera. Con esto
