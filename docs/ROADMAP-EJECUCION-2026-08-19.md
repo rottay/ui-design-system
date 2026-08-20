@@ -658,7 +658,12 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
-**F2.3 (en dos pasos) — regen + cableo del trío stale:** los 3 artefactos de
+**F2.3 (en dos pasos)
+Estado final: **`b57b8022d`** — 87 gates verdes, suite **1683/13** (la más
+honesta del programa: quedan los rojos adjudicados y nada que grite sin
+querer). Re-anchor ejecutado con disciplina total (pines desde el artefacto,
+dientes por mutación, guarda HISTORICOS viva con nota).
+ — regen + cableo del trío stale:** los 3 artefactos de
 `manifest/generated/` regenerados y enchufados blocking (87 gates). Delta por
 clase revisado: fanout-facts (1 canal entra: `--_ds-chart-legend-swatch-size`;
 17 con solo números de línea); root-checklists (summary byte-idéntico; 43/41
