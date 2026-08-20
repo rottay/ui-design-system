@@ -658,6 +658,11 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2.2 ✅ `2d08292a1`** — `cascade-wiring-ratchet` bloqueante (84 gates):
+deuda medida por nombre = **2.171** (denominador 4.374; 768 destinos excluidos
+por la regla a como está escrita; 2.203 cableados por la regla b). Falla en
+las dos direcciones. Adjudicación: regla (a) como está escrita; la variante
+estrecha (319 destinos → deuda 2.618) queda documentada no adoptada.
 **F2.1 ✅ `0de3acab6`** — las 12 raíces bautizadas (channel: null = 0). La
 declaración en CSS quedó fuera por adjudicación **B** (el worker midió que
 declarar sin lector = dead writer; el ratchet lo prohíbe por ley): **la
