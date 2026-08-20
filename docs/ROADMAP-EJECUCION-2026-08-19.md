@@ -658,6 +658,13 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.3 ✅ `5c260b3a0`** — `root-exposure-gate` bloqueante (82 gates en CI).
+La exposición de las 63 raíces queda gobernada: 26 tenant-dial con `governedBy`
+real, 27 internal-head protegidas de ganar perilla en silencio, 10 gap
+decrease-only con adjudicación escrita obligatoria (la nota debe NOMBRAR el
+control — ejercitado por 2 gaps vivos). Hallazgo de diseño: `declaredOutputs`
+es `representativeOnly` — el vínculo es `governedBy`, no la lista. Anotado
+para F2: `tier.accent.bg` es el único gap con `channel: null`.
 **F1.2 — la saga completa (2 paradas del worker, ambas correctas).** La
 primera versión (lift) se auto-cancelaba: `domain` se regenera entero y solo
 `calibration`/`retiredAliases` sobreviven al `--sync`; y contradecía el ruling
