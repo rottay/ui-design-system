@@ -658,6 +658,16 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2.4 — correcciones del piloto (parada medida del worker, adoptadas):**
+(a) el conjunto batch es `derivationDebt` (41) — mi lectura "simetría de modos"
+era otro eje; la intersección segura (4 raíces) no tiene trabajo recableable
+(spring = args de física, no pintura; 2 solo-artefacto; motion.duration ya
+deriva). (b) **cero-delta redefinido**: la pintura COMPUTADA no cambia (contra
+el artefacto compilado, loop tsc→artifacts→mirror-parity); el colapso de
+restituciones redundantes cuenta como mejora permitida. (c) rosters T2/T3:
+re-anclaje permitido cuando el valor computado no cambia (cambia la forma,
+no el drenaje). (d) piloto = el sexteto de `ramp.seed.primary` en rottay — el
+único cluster con cero-delta demostrable (el piso ya los deriva).
 **F2.3 (en dos pasos)
 Estado final: **`b57b8022d`** — 87 gates verdes, suite **1683/13** (la más
 honesta del programa: quedan los rojos adjudicados y nada que grite sin
