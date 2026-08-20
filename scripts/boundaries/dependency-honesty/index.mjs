@@ -3296,8 +3296,8 @@ export function assertPackedBuildPrerequisite(root = coreRoot) {
       'vite.config.ts',
       'postcss.config.mjs',
       'scripts/build-commercial-css.mjs',
-      'scripts/build-vertical-artifacts.mjs',
-      'scripts/build-vertical-css.mjs',
+      'scripts/verticals/build-vertical-artifacts/index.mjs',
+      'scripts/verticals/build-vertical-css/index.mjs',
     ].map((path) => resolve(root, path)).filter(existsSync),
     ...(resolve(root) === resolve(coreRoot)
       ? ['package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml']

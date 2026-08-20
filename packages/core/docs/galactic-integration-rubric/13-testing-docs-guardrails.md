@@ -17,11 +17,11 @@ The problem is not absence of scaffolding. It is synchronization drift.
 
 ### Structural hygiene
 
-- `ui-design-system/packages/core/scripts/lint-folder-index.mjs`
+- `ui-design-system/packages/core/scripts/structure/lint-folder-index/index.mjs`
 
 ### Integration honesty checks
 
-- `ui-design-system/packages/core/scripts/audit-integration.mjs`
+- `ui-design-system/packages/core/scripts/structure/audit-integration/index.mjs`
 
 ### Taxonomy generation
 

@@ -1741,7 +1741,7 @@ nada de esto se publica en el tarball; el único subpath público es `./eslint`
   `tooling/declarations/css/` — (1) `index.d.ts` con `declare module '*.css'`, para
   que los módulos UI puedan importar su hoja co-locada como side effect bajo
   `moduleResolution: "bundler"`. Consumido por `tsconfig.tests.json` y por
-  `scripts/core-structure-audit.mjs`.
+  `scripts/structure/core-structure-audit/index.mjs`.
 
 ##### tooling/eslint/ (total=12)
 
@@ -1841,7 +1841,7 @@ provablemente disjuntos" era prosa. Expone 4 comandos.
     puede alcanzar por alguna de las tres rutas.
 
   **[SIN CONSUMIDOR] desde `package.json`**: ninguno de los scripts npm del paquete
-  invoca `lane-control`. Se referencia desde `scripts/core-structure-audit.test.mjs`,
+  invoca `lane-control`. Se referencia desde `scripts/structure/core-structure-audit/index.test.mjs`,
   `scripts/lib/owner-nesting.mjs` y la documentación del programa modern-rescue; se
   corre a mano.
 
@@ -1926,7 +1926,7 @@ Sin app, sin dev server, sin puerto.
     nuevo tras escribir la propiedad inline (la posición de máxima prioridad).
 
   **[SIN CONSUMIDOR] desde `package.json`**: igual que lane-control, ningún script
-  npm lo invoca; se referencia desde `scripts/core-structure-audit.mjs` y desde el
+  npm lo invoca; se referencia desde `scripts/structure/core-structure-audit/index.mjs` y desde el
   manifiesto de modern-rescue.
 
 ##### tooling/testing/ (total=56)
@@ -2126,19 +2126,19 @@ alias en `package.json`.
 - `app-ds-hook-contract-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI (3 modos: `--check`,
   `--manifest-check`, `--manifest-write`); genera/valida `hooks-manifest.json` de la raíz del paquete.
 - `app-root-writer-gate.mjs` (+ `.test.mjs`) — CI; qué app puede escribir `--ds-*` en su propia raíz.
-- `core-structure-audit.mjs` (+ `.test.mjs`, `.baseline.json`) — el ratchet decrease-only del árbol
+- `structure/core-structure-audit/index.mjs` (+ `index.test.mjs`, `core-structure-audit.baseline.json`) — el ratchet decrease-only del árbol
   de `src/`; `structure:check`, `structure:report`, `lint:folders`.
-- `lint-folder-index.mjs` (+ `.test.mjs`) — naming + `folder/index` + propiedad; `lint:folders`.
+- `structure/lint-folder-index/index.mjs` (+ `index.test.mjs`) — naming + `folder/index` + propiedad; `lint:folders`.
 - `pattern-surface-ownership-gate.mjs` (+ `.test.mjs`, `.baseline.json`, `.allowlist.json`,
   `.README.md`) — CI; frontera patternvssurface.
 - `taxonomy/taxonomy-parity-gate/index.mjs` (+ `index.test.mjs`) — CI; paridad entre taxonomía declarada e inventario real.
 - `public-entrypoint-boundary-gate.mjs` (+ `.test.mjs`) — `public-entrypoints:check`.
 - `cra-14-public-barrel-gate.mjs` — `cra14:check`. Sin autotest hermano.
 - `portal-substrate-gate.mjs` (+ `.test.mjs`, `.allowlist.json`) — CI; un solo substrato de portal.
-- `import-binding-integrity-gate.mjs` (+ `.test.mjs`) — CI, primero de la lista: import nombrado
+- `structure/import-binding-integrity-gate/index.mjs` (+ `index.test.mjs`) — CI, primero de la lista: import nombrado
   de un binding que el módulo destino nunca publica.
 - `platform-identity-zero-gate.mjs` (+ `.test.mjs`) — CI; `platform` ya no es un vertical, cero residuos.
-- `first-party-single-author-gate.mjs` (+ `.test.mjs`) — CI; un solo autor por artefacto first-party.
+- `verticals/first-party-single-author-gate/index.mjs` (+ `index.test.mjs`) — CI; un solo autor por artefacto first-party.
 
 ---
 
@@ -2260,9 +2260,9 @@ Qué hace: producen los archivos que sí se empaquetan (CSS por vertical, fuente
 iconos, contratos), o los que se comitean como snapshot.
 Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
 
-- `build-vertical-css.mjs` — escribe `styles/{index,modern,rottay,bithire,evnto}.css` y sus
+- `verticals/build-vertical-css/index.mjs` — escribe `styles/{index,modern,rottay,bithire,evnto}.css` y sus
   copias en `dist/`; `--check` falla si algún `styles/*.css` está stale. Es el ÚNICO generador de `styles/`.
-- `build-vertical-artifacts.mjs` (+ `.apca-baseline.json`) — regenera
+- `verticals/build-vertical-artifacts/index.mjs` (+ `build-vertical-artifacts.apca-baseline.json`) — regenera
   `src/foundation/tokens/css/facade/artifacts/<slug>/index.css` desde la fuente autorizada; `lint:artifacts`.
 - `builders/build-font-packs/index.mjs` — copia los font packs opt-in a `dist/fonts/` para que resuelvan los
   subpaths `./fonts/<id>.css`.
@@ -2281,7 +2281,7 @@ Qué hace: impedir que se publique o se evalúe contra artefactos viejos.
 
 - `dist-freshness-gate.mjs` (+ `.test.mjs`) — `distfresh:check`, precondición de `prepack`;
   compara el hash de entrada de `lib/build-input-hash.mjs` contra el sello que dejó `builders/write-build-stamp/index.mjs`.
-- `vertical-css-staleness.gate.mjs` — en CI (`node --test`, es un archivo de test disfrazado de gate)
+- `verticals/vertical-css-staleness.gate/index.mjs` — en CI (`node --test`, es un archivo de test disfrazado de gate)
   y en `package.json` como `gate:styles-css`.
 
 ---
@@ -2308,7 +2308,7 @@ codemods, y sin embargo estos tres viven planos en la raíz. Son audiencias dist
 
 Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-platform`.
 
-- `audit-integration.mjs` — `lint:integration`; guardrail de integración del DS.
+- `structure/audit-integration/index.mjs` — `lint:integration`; guardrail de integración del DS.
 - `audit-vertical-compliance.mjs` — `lint:vertical`; chequeos de arquitectura world-class por vertical.
 - `i18n/i18n-key-parity-gate/index.mjs` (+ `index.test.mjs`, `i18n-key-parity-gate.baseline.json`) — CI `--check`; paridad de claves i18n.
 
@@ -2497,7 +2497,7 @@ Dentro de `manifest/` (356 archivos):
 ### 2. `packages/core/styles/` — (6 archivos)
 
 **Son ARTEFACTOS GENERADOS, no fuente.** Los seis los escribe
-`scripts/build-vertical-css.mjs`; `node scripts/build-vertical-css.mjs --check` (parte de
+`scripts/verticals/build-vertical-css/index.mjs`; `node scripts/verticals/build-vertical-css/index.mjs --check` (parte de
 `pnpm lint`) falla si alguno está stale. Se comitean a git pero NO se publican:
 `files` de `package.json` no incluye `styles/`, y todos los exports `./styles/*` apuntan a `dist/`.
 
@@ -2672,6 +2672,6 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
   en `packages/core/scripts/`: vive en `../../scripts/` (raíz del monorepo). Ni `effects:provenance`
   ni `test:scripts` están rotos — las rutas apuntan hacia afuera del paquete — pero es el único caso
   en el que un gate bloqueante de CI de este paquete se resuelve fuera de él.
-- `dist/` está desactualizado respecto a `src/`: `scripts/build-vertical-css.mjs` importa
+- `dist/` está desactualizado respecto a `src/`: `scripts/verticals/build-vertical-css/index.mjs` importa
   `../dist/foundation/tokens/ts/presentation/brand-themes/index.js` y ese archivo hoy no existe en
   `dist/`. Cualquier chequeo de staleness de `styles/` requiere reconstruir primero.

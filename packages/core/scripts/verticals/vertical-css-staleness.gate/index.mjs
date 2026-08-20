@@ -23,7 +23,7 @@
 // bundles (see the note by that assertion). Any divergence surfaces here as a
 // failing diff rather than as silent drift.
 //
-// Run: node --test scripts/vertical-css-staleness.gate.mjs
+// Run: node --test scripts/verticals/vertical-css-staleness.gate/index.mjs
 // (Named .gate.mjs, not .test.mjs, so it stays out of the `test:scripts` glob
 // and runs only at its own dedicated, clearly-attributed CI step before Build.)
 
@@ -34,9 +34,9 @@ import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { wrapModernFrameworkLayer } from "./lib/modern-framework-layer.mjs";
-import { readFirstPartyRosterSource } from "./lib/first-party-roster-source.mjs";
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { wrapModernFrameworkLayer } from "../../lib/modern-framework-layer.mjs";
+import { readFirstPartyRosterSource } from "../../lib/first-party-roster-source.mjs";
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const postcss = require("postcss");

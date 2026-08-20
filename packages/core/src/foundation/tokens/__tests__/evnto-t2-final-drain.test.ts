@@ -127,7 +127,7 @@ function compileMutant(mutant: MutableEvntoTheme): CompiledResult {
 // parsed `artifacts/evnto/_source/extension.css` and asserted it declared zero
 // custom properties, zero declarations and zero rules. The file no longer
 // exists, so those assertions cannot be restated here; the claim they made is
-// now carried unconditionally by `scripts/first-party-single-author-gate.mjs`
+// now carried unconditionally by `scripts/verticals/first-party-single-author-gate/index.mjs`
 // law G2, which fails if any `extension.css` or `_source/` directory returns
 // anywhere under the authored token CSS tree. An empty file could be refilled;
 // an absent one cannot. The compiled-surface and skin sections below are

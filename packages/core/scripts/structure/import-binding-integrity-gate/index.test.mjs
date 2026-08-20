@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { runImportBindingIntegrityGate } from './import-binding-integrity-gate.mjs';
+import { runImportBindingIntegrityGate } from './index.mjs';
 
 function fixture(files) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'import-binding-gate-'));

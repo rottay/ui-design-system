@@ -13,14 +13,14 @@
  * Exit 0 = all checks passed.
  * Exit 1 = violations found.
  *
- * Run: `node scripts/audit-integration.mjs`
- * Hook: `"lint:integration": "node scripts/audit-integration.mjs"`
+ * Run: `node scripts/structure/audit-integration/index.mjs`
+ * Hook: `"lint:integration": "node scripts/structure/audit-integration/index.mjs"`
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SRC_ROOT = join(findPackageRoot(HERE), 'src');
@@ -499,7 +499,7 @@ for (const exemptedName of PRE_EXISTING_PERSONALITY_ORPHANS) {
     violations.push({
       rule: 'stale-personality-orphan-exemption',
       path: relPath(PERSONALITY_CANONICAL_PATH),
-      message: `PRE_EXISTING_PERSONALITY_ORPHANS names "${exemptedName}", which resolvePartialPersonalityCssVariables() no longer emits. Remove it from the exemption list in scripts/audit-integration.mjs.`,
+      message: `PRE_EXISTING_PERSONALITY_ORPHANS names "${exemptedName}", which resolvePartialPersonalityCssVariables() no longer emits. Remove it from the exemption list in scripts/structure/audit-integration/index.mjs.`,
     });
   }
 }

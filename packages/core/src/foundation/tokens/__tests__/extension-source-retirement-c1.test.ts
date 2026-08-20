@@ -231,7 +231,7 @@ const C2_TOTAL_DECLARATIONS = 68;
 // caller threw at read time. Each caller is excised or reduced below with its
 // own note; the "the extension declares nothing" family of claims they served
 // is now carried unconditionally by law G2 of
-// `scripts/first-party-single-author-gate.mjs`, which fails on ANY resurrected
+// `scripts/verticals/first-party-single-author-gate/index.mjs`, which fails on ANY resurrected
 // extension.css or `_source/` directory under the authored token CSS tree.
 
 function rosterHash(names: readonly string[]): string {

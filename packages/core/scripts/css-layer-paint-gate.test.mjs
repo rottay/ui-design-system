@@ -218,7 +218,7 @@ test("obsolete paint bridges cannot re-enter either entrypoint", () => {
 // collection with ENOENT rather than proving anything. The claim it carried —
 // no second authored source reinstates a fleet-wide `*, ::after, ::before,
 // ::backdrop, ::file-selector-button { border-color }` floor — is now
-// unconditional under law G2 of `scripts/first-party-single-author-gate.mjs`:
+// unconditional under law G2 of `scripts/verticals/first-party-single-author-gate/index.mjs`:
 // there is no authored extension left to declare a floor in. The three
 // matching `UNREACHABLE_BY_DESIGN` rows were dropped from the gate in the same
 // edit, because a stale entry there is itself a gate failure.

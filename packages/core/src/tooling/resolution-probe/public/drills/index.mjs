@@ -21,7 +21,7 @@
  *               was derived from, which is TypeScript this harness cannot
  *               import.
  *   formula     the `fresh` composition claims to use the same formula as
- *               `scripts/vertical-css-staleness.gate.mjs`. That claim is
+ *               `scripts/verticals/vertical-css-staleness.gate/index.mjs`. That claim is
  *               checked by running the gate and comparing the line at which
  *               each side says the shipped bundle diverges from source.
  *
@@ -175,7 +175,7 @@ export function runFixtureDrill() {
  *
  * `runtime/bundle` restates the formula from `build-vertical-css.mjs`, so it
  * could drift from it silently and produce a "fresh" bundle that is fresh
- * only by its own definition. `scripts/vertical-css-staleness.gate.mjs`
+ * only by its own definition. `scripts/verticals/vertical-css-staleness.gate/index.mjs`
  * independently recomposes the same bundles and reports the first line at
  * which each committed file diverges.
  *
@@ -196,7 +196,7 @@ export function runFixtureDrill() {
 export async function runFormulaAgreementDrill() {
   const gateLines = await streamMatchingLines(
     process.execPath,
-    ['--test', 'scripts/vertical-css-staleness.gate.mjs'],
+    ['--test', 'scripts/verticals/vertical-css-staleness.gate/index.mjs'],
     /^\s*(styles\/[a-z]+\.css is stale or hand-edited|line \d+|(not )?ok \d+)/,
   );
 

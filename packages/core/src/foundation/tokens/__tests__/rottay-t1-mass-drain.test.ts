@@ -2146,7 +2146,7 @@ function buildDocument(path: string, field: string, value: string): unknown {
 // would take the whole suite down. Every assertion it fed is excised below,
 // named individually. The extension corpus it parsed no longer exists; the
 // claim "rottay's extension declares none of these channels" is carried
-// unconditionally by `scripts/first-party-single-author-gate.mjs` law G2.
+// unconditionally by `scripts/verticals/first-party-single-author-gate/index.mjs` law G2.
 const migrateRows = ROSTER.filter((row) => row.disposition === "migrate");
 const deleteRows = ROSTER.filter((row) => row.disposition === "delete");
 
@@ -2293,7 +2293,7 @@ describe("ROTTAY-T1 MASS - census", () => {
 // the empty read was a fact about the stylesheet rather than about the reader.
 // That distinction dies with the file and cannot be restated here — an absent
 // file has no parse to defend. It is replaced by a strictly stronger structural
-// claim in `scripts/first-party-single-author-gate.mjs` law G2, which fails if
+// claim in `scripts/verticals/first-party-single-author-gate/index.mjs` law G2, which fails if
 // any `extension.css` or `_source/` directory reappears anywhere under the
 // authored token CSS tree. The digest CONSTANTS and the roster ledger survive
 // above and below; only the assertions that read bytes off disk are gone.
@@ -2852,7 +2852,7 @@ describe("ROTTAY-T1 MASS - the derivations are common, not rottay-shaped", () =>
 // was allowed to exist provided it did not collide. SEV-1 removed the second
 // author from the renderer and SEV-2 deleted its file, so non-collision is now
 // structural rather than measured — there is no second author left to collide.
-// `scripts/first-party-single-author-gate.mjs` law G2 keeps it that way.
+// `scripts/verticals/first-party-single-author-gate/index.mjs` law G2 keeps it that way.
 
 /**
  * Causality. Every mutation below preserves the declaration COUNT, so none of
@@ -2868,7 +2868,7 @@ describe("T1 P0 REPAIR - causality", () => {
   // rewriting them as `[planted]` would keep a green while deleting the claim:
   // the carrier they were drilling is what SEV-2 removed. The reinsertion
   // channel itself is closed structurally by
-  // `scripts/first-party-single-author-gate.mjs` law G2 rather than detected
+  // `scripts/verticals/first-party-single-author-gate/index.mjs` law G2 rather than detected
   // after the fact. The same-count digest drill below is UNTOUCHED — it mutates
   // REPAIR_ROWS, not the file.
 

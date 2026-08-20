@@ -27,9 +27,9 @@
  * updated.
  *
  * Usage:
- *   node scripts/core-structure-audit.mjs --check
- *   node scripts/core-structure-audit.mjs --report --details=30
- *   node scripts/core-structure-audit.mjs --write-baseline
+ *   node scripts/structure/core-structure-audit/index.mjs --check
+ *   node scripts/structure/core-structure-audit/index.mjs --report --details=30
+ *   node scripts/structure/core-structure-audit/index.mjs --write-baseline
  */
 
 import {
@@ -43,7 +43,7 @@ import { basename, dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import ts from 'typescript';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIRECTORY = dirname(SCRIPT_PATH);

@@ -1549,7 +1549,7 @@ describe("ROTTAY-T3 MASS - the signed partition", () => {
 //      compiled `--ds-color-text-primary` channel and fails closed when that
 //      channel is missing. The render laws in
 //      `artifact-renderer/tests/single-author.test.ts` (L1/L2/L4/L6/L7) prove
-//      that, and `scripts/first-party-single-author-gate.mjs` law G2 proves no
+//      that, and `scripts/verticals/first-party-single-author-gate/index.mjs` law G2 proves no
 //      new exception can be authored back onto the tree.
 // `PINS.terminal` itself is left in the pin block below, unreferenced, because
 // the pin table is a signed historical record of this tranche.
@@ -2028,7 +2028,7 @@ describe("ROTTAY-T3 MASS - causality", () => {
   // byte-equal value" — it planted a roster row back into the live extension
   // corpus (`[...live, row]`). The corpus is gone; reinsertion is now
   // structurally impossible rather than detected, per
-  // `scripts/first-party-single-author-gate.mjs` law G2. The wrong-block and
+  // `scripts/verticals/first-party-single-author-gate/index.mjs` law G2. The wrong-block and
   // hash-recipe mutants below are UNTOUCHED — they mutate T3_ROSTER.
 
   it("a row reinserted in the WRONG block is caught as a mode conflict", () => {

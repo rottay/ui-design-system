@@ -79,7 +79,7 @@ export const RED_SURFACES = Object.freeze({
     'src/foundation/tokens/__tests__', 'src/infrastructure/compilers',
   ]),
   census2: Object.freeze(['pnpm', 'exec', 'vitest', 'run', 'src/tooling']),
-  staleness: Object.freeze(['node', '--test', 'scripts/vertical-css-staleness.gate.mjs']),
+  staleness: Object.freeze(['node', '--test', 'scripts/verticals/vertical-css-staleness.gate/index.mjs']),
 });
 
 /**
@@ -238,28 +238,28 @@ export const SEALED_RED_IDENTITIES = Object.freeze([
     class: 'generated-artifact-byte-staleness',
     surface: 'staleness',
     shape: 'dcb6192a0260d70b',
-    identity: 'dbb1fc5703381a72',
+    identity: '3eab45cd991d7168',
   },
   {
     id: 'styles-bundle-bithire',
     class: 'generated-artifact-byte-staleness',
     surface: 'staleness',
     shape: '8253ba49d98b696d',
-    identity: '3d37495fe267a9f6',
+    identity: '8d7a4ef8bcc38a0c',
   },
   {
     id: 'styles-bundle-evnto',
     class: 'generated-artifact-byte-staleness',
     surface: 'staleness',
     shape: 'd1f275e509b6f986',
-    identity: 'd873a948631c33ed',
+    identity: 'b6883b561c749922',
   },
   {
     id: 'styles-bundle-index',
     class: 'generated-artifact-byte-staleness',
     surface: 'staleness',
     shape: '82544fdcdf4ff17b',
-    identity: '550a5da709fa4a14',
+    identity: 'b0923c34655cdba8',
   },
 ]);
 

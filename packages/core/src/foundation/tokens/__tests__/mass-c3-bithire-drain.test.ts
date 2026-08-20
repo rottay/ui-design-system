@@ -434,7 +434,7 @@ const compileWithout = (keypath: string) => {
 // zero-declaration census and asserted the FILE SURVIVED because the renderer
 // embedded it. SEV-1 severed that embedding and SEV-2 deleted the file, so the
 // third test now asserts the opposite of the law. The census claim is carried
-// unconditionally by `scripts/first-party-single-author-gate.mjs` law G2: an
+// unconditionally by `scripts/verticals/first-party-single-author-gate/index.mjs` law G2: an
 // absent file cannot be refilled, which a zero-declaration ratchet allowed.
 // The classification table below is UNTOUCHED — it grades the 94 declarations
 // this tranche drained against the compiled surface, and reads no file.

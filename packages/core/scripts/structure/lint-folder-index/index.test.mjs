@@ -1,5 +1,5 @@
 /**
- * Self-test for lint-folder-index.mjs — exact-path exception contract.
+ * Self-test for structure/lint-folder-index/index.mjs — exact-path exception contract.
  *
  * The gate carries two exception sets and both are *exact* `Set.has` lookups on
  * a fully qualified `category/.../folder` path:
@@ -14,7 +14,8 @@
  *
  * Every case runs hermetically: the gate is copied into a throwaway package
  * whose `src/` is built per-case, so the assertions never depend on the live
- * tree. The gate resolves its roots from its own location (`__dirname/../src`),
+ * tree. The gate resolves its roots from its own location
+ * (`__dirname/../../../src`),
  * which is what makes the copy work.
  */
 import assert from 'node:assert/strict';
@@ -26,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const gate = join(scriptDir, 'lint-folder-index.mjs');
+const gate = join(scriptDir, 'index.mjs');
 
 /** The 4 component roots plus the token owners the gate requires to exist. */
 const FIXTURE_BASE_DIRS = [
@@ -45,8 +46,8 @@ const FIXTURE_BASE_DIRS = [
 function runGateOn(componentDirs) {
   const root = mkdtempSync(join(tmpdir(), 'lint-folder-index-'));
   try {
-    mkdirSync(join(root, 'scripts'), { recursive: true });
-    copyFileSync(gate, join(root, 'scripts', 'lint-folder-index.mjs'));
+    mkdirSync(join(root, 'scripts/structure/lint-folder-index'), { recursive: true });
+    copyFileSync(gate, join(root, 'scripts/structure/lint-folder-index/index.mjs'));
 
     for (const dir of FIXTURE_BASE_DIRS) {
       mkdirSync(join(root, dir), { recursive: true });
@@ -55,7 +56,7 @@ function runGateOn(componentDirs) {
       mkdirSync(join(root, 'src/ui', dir), { recursive: true });
     }
 
-    const proc = spawnSync(process.execPath, [join(root, 'scripts', 'lint-folder-index.mjs')], {
+    const proc = spawnSync(process.execPath, [join(root, 'scripts/structure/lint-folder-index/index.mjs')], {
       encoding: 'utf8',
     });
 

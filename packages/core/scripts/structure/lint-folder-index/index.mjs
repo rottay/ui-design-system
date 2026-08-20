@@ -18,8 +18,8 @@
  *    structures/, surfaces/). Compat shims are allowed if they are <= 5
  *    lines (one re-export + comment).
  *
- * Run: `node scripts/lint-folder-index.mjs`
- * Hook into package.json: `"lint:folders": "node scripts/lint-folder-index.mjs"`
+ * Run: `node scripts/structure/lint-folder-index/index.mjs`
+ * Hook into package.json: `"lint:folders": "node scripts/structure/lint-folder-index/index.mjs"`
  */
 
 import { readdirSync, statSync, readFileSync } from 'node:fs';
@@ -27,7 +27,7 @@ import { join, basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const COMPONENTS_ROOT = resolve(__dirname, '../src/ui');
+const COMPONENTS_ROOT = resolve(__dirname, '../../../src/ui');
 
 const CATEGORY_ROOTS = [
   { category: 'primitives', relativeRoot: 'primitives' },
@@ -192,7 +192,7 @@ for (const { relativeRoot } of CATEGORY_ROOTS) {
 // ── Rule 4: Owner-boundary enforcement (non-component subsystems) ──
 // These rules ensure the ownership cleanup from Waves G2-G3 stays honest.
 
-const SRC_ROOT = resolve(__dirname, '../src');
+const SRC_ROOT = resolve(__dirname, '../../../src');
 
 // 4a. infrastructure/runtime/tenant/ must not have root-level .ts leaf files
 //     except index.ts (personality presets live under

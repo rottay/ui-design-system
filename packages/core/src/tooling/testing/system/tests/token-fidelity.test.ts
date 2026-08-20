@@ -138,7 +138,7 @@ const FIDELITY_MATRIX = [
  * consumes the same tokens. Counting only the `.tsx` would report zero
  * consumption for a component that consumes every token it defines.
  *
- * The identical rule lives in `scripts/audit-integration.mjs`
+ * The identical rule lives in `scripts/structure/audit-integration/index.mjs`
  * (`token-consumption-ratio`). The two run in different runtimes and must be
  * changed together; a rule honoured in one emitter and ignored in its twin is
  * the defect this design system has found more times than any other.

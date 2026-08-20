@@ -1293,7 +1293,7 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
   // (no PostCSS needed)`. It read all three `_source/extension.css` files,
   // which were deleted in this tranche, and asserted none of the 9 CONFLICT9
   // roster channels was re-declared there. There is no authored extension left
-  // to declare them; law G2 of `scripts/first-party-single-author-gate.mjs`
+  // to declare them; law G2 of `scripts/verticals/first-party-single-author-gate/index.mjs`
   // fails on any resurrected extension source or `_source/` directory, which
   // is strictly stronger than a per-channel absence scan. The compiled-surface
   // assertions for the same 9 channels are directly below and untouched.
@@ -1431,7 +1431,7 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
     // all three). With the source gone those bounds are satisfied by zero, so
     // the test would have stayed green while measuring nothing. The successor
     // does not bound the second author, it forbids it:
-    // `scripts/first-party-single-author-gate.mjs`.
+    // `scripts/verticals/first-party-single-author-gate/index.mjs`.
   });
 
   describe("mutants", () => {

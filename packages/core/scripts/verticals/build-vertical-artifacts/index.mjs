@@ -16,8 +16,8 @@
  * there and must not be added here.
  *
  * Usage:
- *   node scripts/build-vertical-artifacts.mjs           # write artifacts
- *   node scripts/build-vertical-artifacts.mjs --check    # fail if any artifact is stale
+ *   node scripts/verticals/build-vertical-artifacts/index.mjs           # write artifacts
+ *   node scripts/verticals/build-vertical-artifacts/index.mjs --check    # fail if any artifact is stale
  *
  * Imports the compiled package from dist/, so run after `tsc && vite build`
  * (the `build` script sequences this for you via build:vertical-css).
@@ -27,15 +27,15 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { isDarkSurfaceTheme } from '../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
-import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../dist/foundation/kernel/accessibility/branding-contrast/index.js';
+import { isDarkSurfaceTheme } from '../../../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
+import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../../../dist/foundation/kernel/accessibility/branding-contrast/index.js';
 import {
   renderFirstPartyArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
-} from '../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
-import { FIRST_PARTY_VERTICAL_ROSTER } from '../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+} from '../../../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = findPackageRoot(__dirname);

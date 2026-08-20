@@ -96,7 +96,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
 // property at all", the `declared.has(property)` half of the C1-retirement
 // rows, and the `declared.get(property)` shadow check. All three were forms of
 // "the extension declares nothing", which
-// `scripts/first-party-single-author-gate.mjs` law G2 now makes unconditional.
+// `scripts/verticals/first-party-single-author-gate/index.mjs` law G2 now makes unconditional.
 // Every COMPILER-side assertion survives untouched below — those are the ones
 // that pin where the four channels went, and they never read a file.
 describe('bithire channels the retired extension used to own', () => {

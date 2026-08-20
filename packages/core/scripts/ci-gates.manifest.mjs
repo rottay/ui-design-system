@@ -31,8 +31,8 @@ export const CI_GATES = Object.freeze([
   // at runtime and renders an invalid element. A deep-path import rewrite landed
   // 22 of them at once because the short alias for a compound primitive lives in
   // the parent barrel; no other gate in this list can see that edge.
-  { id: 'import-binding-integrity-drill', run: ['node', '--test', 'scripts/import-binding-integrity-gate.test.mjs'], blocking: true },
-  { id: 'import-binding-integrity', run: ['node', 'scripts/import-binding-integrity-gate.mjs'], blocking: true },
+  { id: 'import-binding-integrity-drill', run: ['node', '--test', 'scripts/structure/import-binding-integrity-gate/index.test.mjs'], blocking: true },
+  { id: 'import-binding-integrity', run: ['node', 'scripts/structure/import-binding-integrity-gate/index.mjs'], blocking: true },
   { id: 'platform-identity-zero-drill', run: ['node', '--test', 'scripts/platform-identity-zero-gate.test.mjs'], blocking: true },
   { id: 'platform-identity-zero', run: ['node', 'scripts/platform-identity-zero-gate.mjs'], blocking: true },
   { id: 'cra17:licenses', run: ['pnpm', 'run', 'cra17:licenses'], blocking: true },
@@ -151,7 +151,7 @@ export const CI_GATES = Object.freeze([
   // can also compare committed output against a stale local build.
   { id: 'first-party-roster-source-drill', run: ['node', '--test', 'scripts/lib/first-party-roster-source.test.mjs'], blocking: true },
   { id: 'first-party-artifacts-source-staleness', run: ['pnpm', 'exec', 'vitest', 'run', 'src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts'], blocking: true },
-  { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/vertical-css-staleness.gate.mjs'], blocking: true },
+  { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/verticals/vertical-css-staleness.gate/index.mjs'], blocking: true },
   // Single-author law, replacing the retired artifact-provenance trio. That
   // gate BOUNDED a second author (the hand-written `_source/extension.css`)
   // by reading the compiled block back out of the committed artifact; the
@@ -165,8 +165,8 @@ export const CI_GATES = Object.freeze([
   // Committed-byte closure is by composition: the render laws pin the fresh
   // output, and `first-party-artifacts-source-staleness` above byte-compares
   // that same fresh output against the committed artifact.
-  { id: 'first-party-single-author-drill', run: ['node', '--test', 'scripts/first-party-single-author-gate.test.mjs'], blocking: true },
-  { id: 'first-party-single-author', run: ['node', 'scripts/first-party-single-author-gate.mjs', '--check'], blocking: true },
+  { id: 'first-party-single-author-drill', run: ['node', '--test', 'scripts/verticals/first-party-single-author-gate/index.test.mjs'], blocking: true },
+  { id: 'first-party-single-author', run: ['node', 'scripts/verticals/first-party-single-author-gate/index.mjs', '--check'], blocking: true },
   { id: 'first-party-single-author-render-laws', run: ['pnpm', 'exec', 'vitest', 'run', 'src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/tests/single-author.test.ts'], blocking: true },
   // The three staleness surfaces immediately above are RED on purpose while the
   // generated artifacts are unregenerated, and a knowingly-red gate is exactly

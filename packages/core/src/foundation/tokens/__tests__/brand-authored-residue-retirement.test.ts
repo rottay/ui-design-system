@@ -39,7 +39,7 @@ import { rottayBrandTheme } from "../ts/presentation/brand-themes/rottay";
 // a second authored source (bytes/declarations/literals/capability-gap regions
 // per slug); with no second source, every one of its ceilings is vacuously
 // satisfied, and a vacuously green ratchet is worse than none — it reads as
-// enforcement. Its successor is `scripts/first-party-single-author-gate.mjs`,
+// enforcement. Its successor is `scripts/verticals/first-party-single-author-gate/index.mjs`,
 // which forbids the source outright instead of bounding its size.
 
 const ROOT = process.cwd();
@@ -697,7 +697,7 @@ function scanD1Consumers(): Record<string, { file: string; count: number }[]> {
 // is excised alongside it (each site carries its own note). The claim it
 // carried — "no retired roster name is re-declared by a second authored
 // source" — is now unconditional under law G2 of
-// `scripts/first-party-single-author-gate.mjs`: there is no second source to
+// `scripts/verticals/first-party-single-author-gate/index.mjs`: there is no second source to
 // declare anything. Every LEDGER, SCANNER and COMPILED assertion in this file
 // is untouched.
 
@@ -1148,9 +1148,9 @@ describe("compileBrandTheme full roster parity (channel=value hash)", () => {
 // exists is satisfied by zero, so keeping these would have manufactured four
 // permanently-green tests that assert nothing. The successor law does not
 // bound the second author's volume -- it forbids the second author:
-// `scripts/first-party-single-author-gate.mjs` (G1 roster exactness, G2
+// `scripts/verticals/first-party-single-author-gate/index.mjs` (G1 roster exactness, G2
 // resurrection scan, G3 API/marker scan, G4 delegated ink causality), drilled
-// by `scripts/first-party-single-author-gate.test.mjs` and wired blocking in
+// by `scripts/verticals/first-party-single-author-gate/index.test.mjs` and wired blocking in
 // `scripts/ci-gates.manifest.mjs`.
 
 // ── productive-consumer scan ───────────────────────────────────────────────
@@ -1284,7 +1284,7 @@ describe("planted mutants turn red", () => {
   // re-insertion into the real file"). The enforcer they exercised
   // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
   // extension source is now caught by law G2 of
-  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // `scripts/verticals/first-party-single-author-gate/index.mjs`. The SCANNER mutants below
   // are untouched — they never read the artifact tree.
 
   it("a new CSS consumer of a DEAD name is detected by the shared scanner", () => {
@@ -1328,7 +1328,7 @@ describe("VERTICAL-DEAD-4 planted mutants turn red", () => {
   // re-insertion into the real file"). The enforcer they exercised
   // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
   // extension source is now caught by law G2 of
-  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // `scripts/verticals/first-party-single-author-gate/index.mjs`. The SCANNER mutants below
   // are untouched — they never read the artifact tree.
 
   it("a new CSS consumer of a D1 name is detected by the shared scanner", () => {
@@ -1402,7 +1402,7 @@ describe("VERTICAL-PALETTE-90/89 planted mutants turn red", () => {
   // re-insertion into the real file"). The enforcer they exercised
   // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
   // extension source is now caught by law G2 of
-  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // `scripts/verticals/first-party-single-author-gate/index.mjs`. The SCANNER mutants below
   // are untouched — they never read the artifact tree.
 
   it("double-counting the pre-retired --ds-color-bg-primary in B29 is wrong", () => {
@@ -1746,7 +1746,7 @@ describe("SEV-DEAD-21 planted mutants turn red", () => {
   // re-insertion into the real file"). The enforcer they exercised
   // (`enforceExtensionDeadAbsent`) is retired with them; resurrection of any
   // extension source is now caught by law G2 of
-  // `scripts/first-party-single-author-gate.mjs`. The SCANNER mutants below
+  // `scripts/verticals/first-party-single-author-gate/index.mjs`. The SCANNER mutants below
   // are untouched — they never read the artifact tree.
 
   it("a new CSS consumer of a SEV-DEAD-21 name is detected by the shared scanner", () => {

@@ -15,8 +15,8 @@ import {
   compareStructureBaseline,
   createStructureBaseline,
   isBarrelSource,
-} from './core-structure-audit.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+} from './index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 function write(path, source) {
   mkdirSync(dirname(path), { recursive: true });

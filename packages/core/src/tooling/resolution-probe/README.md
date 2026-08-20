@@ -78,7 +78,7 @@ before it existed. `--bundle dist|styles` refuse for it rather than quietly
 recomposing, because nothing ships a tenant-less bundle.
 
 Layers, in dependency order — every edge runs downward, and
-`node scripts/core-structure-audit.mjs --check` is green with these files in
+`node scripts/structure/core-structure-audit/index.mjs --check` is green with these files in
 the tree:
 
 ```
@@ -127,7 +127,7 @@ to measure. Three facts complicate that:
 
 1. **`dist/` goes stale, and nothing warns you when it has.** It is regenerated
    by a build, so between a compiler change and the next build the shipped
-   bundle describes the previous tree. `node --test scripts/vertical-css-staleness.gate.mjs`
+   bundle describes the previous tree. `node --test scripts/verticals/vertical-css-staleness.gate/index.mjs`
    is the authority on which regime you are in: it recomposes the five committed
    bundles from source and names the first diverging line of each. It has been
    red on all five (platform first diverging at line 77); at HEAD 6a4a78b29 it
@@ -481,7 +481,7 @@ position they were written, so "the design system ignored this input" is never
 confused with "the input never landed".
 
 **The composition formula is checked against the repository's own.** The
-formula drill runs `scripts/vertical-css-staleness.gate.mjs` as a subprocess and
+formula drill runs `scripts/verticals/vertical-css-staleness.gate/index.mjs` as a subprocess and
 compares first-divergence lines. Writing that drill surfaced a second false
 green worth knowing about: `node --test` sets `NODE_TEST_CONTEXT` on its
 children, a nested runner that sees it stops emitting TAP, and the scan matched

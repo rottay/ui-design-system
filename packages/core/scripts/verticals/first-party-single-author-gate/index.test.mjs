@@ -22,7 +22,7 @@ import {
   PRESERVED_FIRST_PARTY_SLUGS,
   RETIRED_VERTICAL_SLUG,
   runFirstPartySingleAuthorGate,
-} from './first-party-single-author-gate.mjs';
+} from './index.mjs';
 
 const scratchRoots = [];
 

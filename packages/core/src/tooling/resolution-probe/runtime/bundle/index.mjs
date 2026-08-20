@@ -3,7 +3,7 @@
  *
  * THE TRAP THIS EXISTS TO AVOID. `dist/*.css` is what the npm tarball ships,
  * so it looks like the obvious thing to measure. It is also STALE: the repo's
- * own `scripts/vertical-css-staleness.gate.mjs` recomposes the five committed
+ * own `scripts/verticals/vertical-css-staleness.gate/index.mjs` recomposes the five committed
  * bundles from source and currently fails on all five. `styles/*.css` is not a
  * second opinion — this module verifies it is byte-identical to `dist/`, which
  * is exactly what `build-vertical-css.mjs` promises. And `build-vertical-*.mjs`
@@ -221,7 +221,7 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
         freshnessProven: false,
         freshnessNote:
           'Shipped bundle read as-is. Freshness NOT proven here: run ' +
-          '`node --test scripts/vertical-css-staleness.gate.mjs` — it recomposes these ' +
+          '`node --test scripts/verticals/vertical-css-staleness.gate/index.mjs` — it recomposes these ' +
           'bundles from source and reports the first divergent line.',
       },
     };
@@ -262,7 +262,7 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
  * put the formula drill permanently at odds with the staleness gate.
  *
  * Whether a tail is the *sanctioned* spring block is
- * `scripts/vertical-css-staleness.gate.mjs`'s question, and it is deliberately
+ * `scripts/verticals/vertical-css-staleness.gate/index.mjs`'s question, and it is deliberately
  * not re-answered here: that gate owns the grammar, and a second copy of it
  * would make the two instruments' agreement worthless (they would share the
  * derivation). This reports the tail's size and says whose question it is.
@@ -279,7 +279,7 @@ function describeShippedDrift(fresh, shipped) {
       meaning:
         'The shipped bundle is this exact text plus a trailing remainder — the expected ' +
         'shape, since `fresh` omits the per-tenant --ds-motion-spring tail. Whether that ' +
-        'remainder is the sanctioned spring block is scripts/vertical-css-staleness.gate.mjs\'s ' +
+        'remainder is the sanctioned spring block is scripts/verticals/vertical-css-staleness.gate/index.mjs\'s ' +
         'question, not this harness\'s.',
     };
   }

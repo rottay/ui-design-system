@@ -87,16 +87,16 @@
  * enforcers at fixture trees; there is no parallel regex copy to keep in sync.
  *
  * Usage:
- *   node scripts/first-party-single-author-gate.mjs           # report
- *   node scripts/first-party-single-author-gate.mjs --check   # exit 1 on findings
+ *   node scripts/verticals/first-party-single-author-gate/index.mjs           # report
+ *   node scripts/verticals/first-party-single-author-gate/index.mjs --check   # exit 1 on findings
  */
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { readFirstPartyRosterSource } from './lib/first-party-roster-source.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { readFirstPartyRosterSource } from '../../lib/first-party-roster-source.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -150,7 +150,7 @@ export const DEFAULT_ROSTER_SOURCE = resolve(
 export const DEFAULT_PRODUCTION_FILES = Object.freeze([
   resolve(CORE_ROOT, 'src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts'),
   resolve(CORE_ROOT, 'src/infrastructure/compilers/runtime/tenant-css/index.ts'),
-  resolve(CORE_ROOT, 'scripts/build-vertical-artifacts.mjs'),
+  resolve(CORE_ROOT, 'scripts/verticals/build-vertical-artifacts/index.mjs'),
 ]);
 
 function label(target, root) {

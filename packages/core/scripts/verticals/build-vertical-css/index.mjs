@@ -28,8 +28,8 @@
  * writing.
  *
  * Usage:
- *   node scripts/build-vertical-css.mjs           # write dist/ and styles/ bundles
- *   node scripts/build-vertical-css.mjs --check    # fail if any styles/*.css is stale
+ *   node scripts/verticals/build-vertical-css/index.mjs           # write dist/ and styles/ bundles
+ *   node scripts/verticals/build-vertical-css/index.mjs --check    # fail if any styles/*.css is stale
  *
  * Run after build:modern-css so dist/modern-engine.css exists; both modes fail
  * loudly (exit 1) if it is missing.
@@ -39,14 +39,14 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { wrapModernFrameworkLayer } from "./lib/modern-framework-layer.mjs";
+import { wrapModernFrameworkLayer } from "../../lib/modern-framework-layer.mjs";
 
 // Spring precompute inputs (TASK S item 2). Imported from dist, like
 // build-vertical-artifacts.mjs, so this script runs after `tsc && vite build`
 // (build:vertical-css sequences it).
-import { springLinearEasing } from "../dist/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.js";
-import { FIRST_PARTY_VERTICAL_ROSTER } from "../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { springLinearEasing } from "../../../dist/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.js";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = findPackageRoot(__dirname);

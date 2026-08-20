@@ -807,7 +807,7 @@ const T1_REPAIRED_SELECT = [
 // Every assertion it fed is named where it was removed. The survivor set it
 // measured was ALREADY empty (ROTTAY-T3 drained the last 380 rows), so nothing
 // below loses a non-vacuous claim — but the emptiness was measured then and is
-// structural now: `scripts/first-party-single-author-gate.mjs` law G2 fails if
+// structural now: `scripts/verticals/first-party-single-author-gate/index.mjs` law G2 fails if
 // the file or any `_source/` directory reappears.
 const migrateRows = T2_ROSTER.filter((row) => row.disposition === "migrate");
 const deleteRows = T2_ROSTER.filter((row) => row.disposition === "delete");
@@ -1711,7 +1711,7 @@ describe("ROTTAY-T2 MASS - causality", () => {
   // the live extension corpus (`[...live, planted]`). Rewriting them as
   // `[planted]` would keep three greens while deleting what they tested: the
   // reinsertion channel, not the detector. That channel is closed structurally
-  // by `scripts/first-party-single-author-gate.mjs` law G2. The roster-hash and
+  // by `scripts/verticals/first-party-single-author-gate/index.mjs` law G2. The roster-hash and
   // duplicate-row mutants below are UNTOUCHED — they mutate T2_ROSTER, not the
   // file. One byte-equality claim did belong to the compiler rather than the
   // corpus, and is preserved here so it is not lost with the drill:

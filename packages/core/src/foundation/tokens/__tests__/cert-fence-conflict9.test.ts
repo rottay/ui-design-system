@@ -620,7 +620,7 @@ function assertMatrix12(candidate: MatrixRow[]): void {
 // were its entire corpus, so with them deleted the enforcer has nothing to
 // enforce over and its self-drill would be a decoration. The claim it made —
 // no CONFLICT9 channel is authored outside the compiler — is now carried by
-// `scripts/first-party-single-author-gate.mjs` law G2, which is strictly
+// `scripts/verticals/first-party-single-author-gate/index.mjs` law G2, which is strictly
 // stronger: the enforcer proved the files did not DECLARE those nine channels,
 // and G2 proves no such file may exist to declare anything at all.
 
@@ -792,7 +792,7 @@ describe("CERT-FENCE-CONFLICT9 mutants turn red", () => {
   // Retargeting it at a synthetic string would keep the green while testing a
   // function no production caller invokes. The exact-prefix precision it proved
   // is preserved in the G3 token scan of
-  // `scripts/first-party-single-author-gate.mjs`, whose drills include a
+  // `scripts/verticals/first-party-single-author-gate/index.mjs`, whose drills include a
   // matching negative, and the reinsertion channel itself is closed by G2.
 
   it("reverting a B6 retarget breaks the B6 validator", () => {
