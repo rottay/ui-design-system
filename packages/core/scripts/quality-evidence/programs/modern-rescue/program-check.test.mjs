@@ -38,33 +38,40 @@ test("live modern-rescue program contracts are internally consistent", () => {
 test("role drift fails closed", () => {
   expectError(
     mutated((copy) => { copy.orchestration.coordinator.model = "Opus"; }),
-    "coordinator must be Codex",
+    "coordinator must be Kimi K3",
     "Opus as coordinator must be rejected"
   );
   expectError(
     mutated((copy) => { copy.orchestration.modelRouting.implementer.actor = "Sonnet"; }),
-    "implementer must be the Cloud Opus implementer pool",
+    "implementer must be the Claude implementer pool (Sonnet/Opus)",
     "Sonnet as implementer must be rejected"
   );
   expectError(
     mutated((copy) => { copy.orchestration.modelRouting.implementer.actor = "Kimi 2.7"; }),
-    "implementer must be the Cloud Opus implementer pool",
+    "implementer must be the Claude implementer pool (Sonnet/Opus)",
     "reverting to the retired Kimi 2.7 implementer must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.coordinator.model = "Kimi 2.7";
-      copy.orchestration.modelRouting.implementer.actor = "Codex";
+      copy.orchestration.coordinator.model = "Claude implementer pool (Sonnet/Opus)";
+      copy.orchestration.modelRouting.implementer.actor = "Kimi K3";
     }),
-    "coordinator must be Codex",
+    "coordinator must be Kimi K3",
     "swapped coordinator/implementer must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5"];
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = [];
     }),
-    "must name Fable 5 and Kimi K3",
-    "dropping Kimi K3 from advisors must be rejected"
+    "must name Fable 5 as an advisor",
+    "dropping Fable 5 from advisors must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Kimi K3"];
+    }),
+    "must not include the coordinator",
+    "decision 13: the DT reappearing in advisoryReadOnly must be rejected"
   );
   expectError(
     mutated((copy) => {
@@ -89,38 +96,64 @@ test("implementer succession fails closed", () => {
     "removing the succession record must be rejected"
   );
   expectError(
+    mutated((copy) => { copy.orchestration.modelRouting.implementer.succession = []; }),
+    "implementer must carry a succession record",
+    "an empty succession chain must be rejected"
+  );
+  expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession.predecessor = "Codex";
+      copy.orchestration.modelRouting.implementer.succession[0].predecessor = "Codex";
     }),
-    "succession predecessor must be Kimi 2.7",
+    "succession must begin with predecessor Kimi 2.7",
     "rewriting the retired implementer must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession.ownerOrderDate = "2026-08-16";
+      copy.orchestration.modelRouting.implementer.succession[0].ownerOrderDate = "2026-08-16";
     }),
     "succession must cite the 2026-08-17 owner order",
-    "an unmoored succession date must be rejected"
+    "an unmoored first succession date must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession.proof = "";
+      copy.orchestration.modelRouting.implementer.succession[1].ownerOrderDate = "2026-08-19";
     }),
-    "succession must state a written succession proof",
+    "succession must cite the 2026-08-20 owner order for its latest record",
+    "an unmoored second succession date must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.implementer.succession[1].predecessor = "Kimi 2.7";
+    }),
+    "succession chain must be unbroken",
+    "a succession chain with a gap must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.implementer.succession[1].successor = "Cloud Opus implementer pool";
+    }),
+    "succession must end with the Claude implementer pool (Sonnet/Opus)",
+    "a succession chain that never reaches the live implementer must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.implementer.succession[0].proof = "";
+    }),
+    "every implementer succession record must state a written succession proof",
     "an empty succession proof must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession.retainedAuditCapacity = ["Fable 5"];
+      copy.orchestration.modelRouting.implementer.succession[1].retainedAuditCapacity = [];
     }),
-    "succession must retain Kimi K3 audit capacity",
-    "dropping Kimi K3 audit capacity in the succession must be rejected"
+    "succession must retain Fable 5 audit capacity",
+    "dropping Fable 5 audit capacity in the succession must be rejected"
   );
   expectError(
     mutated((copy) => {
       copy.orchestration.doubleAccept.implementationActor = "Kimi 2.7";
     }),
-    "doubleAccept implementationActor must be the Cloud Opus implementer pool",
+    "doubleAccept implementationActor must be the Claude implementer pool (Sonnet/Opus)",
     "a doubleAccept implementer that contradicts the succession must be rejected"
   );
   expectError(
@@ -130,7 +163,7 @@ test("implementer succession fails closed", () => {
   );
   expectError(
     mutated((copy) => { copy.orchestration.r7Execution.mechanicalWriters.actor = "Kimi 2.7"; }),
-    "r7Execution mechanical writer must be the Cloud Opus implementer pool",
+    "r7Execution mechanical writer must be the Claude implementer pool (Sonnet/Opus)",
     "an R7 mechanical writer that contradicts the succession must be rejected"
   );
 });
@@ -343,17 +376,17 @@ test("double-accept does not authorize commit or R7", () => {
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.doubleAccept.actors = ["Fable 5"];
+      copy.orchestration.doubleAccept.actors = [];
     }),
-    "actors must be Fable 5 and Kimi K3",
-    "dropping Kimi K3 from doubleAccept must be rejected"
+    "doubleAccept actors must include Fable 5",
+    "dropping Fable 5 from doubleAccept must be rejected"
   );
   expectError(
     mutated((copy) => {
       copy.orchestration.doubleAccept.coordinator = "Kimi 2.7";
     }),
-    "doubleAccept coordinator must be Codex",
-    "non-Codex doubleAccept coordinator must be rejected"
+    "doubleAccept coordinator must be Kimi K3",
+    "non-Kimi-K3 doubleAccept coordinator must be rejected"
   );
 });
 
@@ -406,8 +439,8 @@ test("historical quality rubric checks fail closed", () => {
   );
   expectError(
     mutated((copy) => { copy.rubric.eligibility.finalSightedAuthority = "writer"; }),
-    "Codex must remain final sighted authority",
-    "non-Codex final sighted authority must be rejected"
+    "Kimi K3 (DT) must remain final sighted authority",
+    "non-DT final sighted authority must be rejected"
   );
   expectError(
     mutated((copy) => { copy.rubric.hardVetoes = copy.rubric.hardVetoes.slice(0, 19); }),

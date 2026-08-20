@@ -152,7 +152,7 @@ test('a family with a resolved profile clears its threshold and reports the sigh
   assert.deepEqual(verdict.blockers, []);
   assert.equal(verdict.binaryEligible, true);
   assert.equal(verdict.craftScore, 100);
-  assert.equal(verdict.sightedAuthority, 'Codex');
+  assert.equal(verdict.sightedAuthority, 'Kimi K3 (DT)');
   assert.equal(verdict.maximumClaim, 'IMPLEMENTED_PENDING_CODEX_AUDIT');
 });
 
@@ -1045,10 +1045,10 @@ test('NEGATIVE DRILL: color-only tenant divergence is rejected', () => {
   assert.ok(verdict.blockers.some((blocker) => blocker.includes('color-only')));
 });
 
-test('NEGATIVE DRILL: Claude cannot record Codex sighted approval', () => {
+test('NEGATIVE DRILL: Claude cannot record DT sighted approval', () => {
   const verdict = evaluateFamilyEligibility(baseFamilyReceipt({ codexSightedApproval: true }));
   assert.equal(verdict.binaryEligible, false);
-  assert.ok(verdict.blockers.some((blocker) => blocker.includes('only Codex may accept sighted quality')));
+  assert.ok(verdict.blockers.some((blocker) => blocker.includes('only the DT may accept sighted quality')));
 });
 
 test('NEGATIVE DRILL: ELEVATED without a productive source change is rejected', () => {
@@ -1141,7 +1141,7 @@ test('NEGATIVE DRILL: a receipt whose artifact hash is stale is rejected', () =>
 });
 
 test('NEGATIVE DRILL: the sighted approver may not be the evidence producer', () => {
-  const result = validateReceipt({ producer: 'Codex', sourceFiles: [] });
+  const result = validateReceipt({ producer: 'Kimi K3 (DT)', sourceFiles: [] });
   assert.ok(result.failures.some((failure) => failure.includes('producer must not be the sighted approver')));
 });
 

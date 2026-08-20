@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "principle": "Parallelize independent ownership, not the number twenty.",
   "doubleAccept": {
-    "law": "A Fable 5 plus Kimi K3 ACCEPT on a bounded packet is the sighted quality signal required before Codex may request an explicit owner order. It is not itself a commit authorization, it does not substitute for Codex sighted acceptance where the contract requires it, and it does not bypass the no-stage/no-commit/no-push fence.",
+    "law": "A closure audit ACCEPT from Fable 5 plus the DT (Kimi K3) per-lot verification is the sighted quality signal. The DT commits bounded packets locally under the owner's standing order (2026-08-20); push is always forbidden. This does not substitute owner decisions nor product-domain adjudications.",
     "requiredFor": "requesting an explicit owner order for the sighted packet",
     "notAuthorizationFor": [
       "local commit",
@@ -11,12 +11,12 @@
       "R7 execution",
       "owner decision"
     ],
-    "actors": ["Fable 5", "Kimi K3"],
-    "coordinator": "Codex",
-    "implementationActor": "Cloud Opus implementer pool"
+    "actors": ["Fable 5"],
+    "coordinator": "Kimi K3",
+    "implementationActor": "Claude implementer pool (Sonnet/Opus)"
   },
   "coordinator": {
-    "model": "Codex",
+    "model": "Kimi K3",
     "role": "DT and programme coordinator",
     "responsibilities": [
       "read selected round and current worktree",
@@ -33,7 +33,7 @@
   "modelRouting": {
     "law": "Roles are fixed for the Modern Rescue programme. Model names are not a reason to wait, duplicate work, substitute actors or weaken a fence.",
     "programCoordinatorAndArchitectureControl": {
-      "actor": "Codex",
+      "actor": "Kimi K3",
       "work": [
         "round control and conflict graph",
         "architecture and single-authority decisions",
@@ -43,7 +43,7 @@
       ]
     },
     "advisoryReadOnly": {
-      "actors": ["Fable 5", "Kimi K3"],
+      "actors": ["Fable 5"],
       "work": [
         "read-only architecture challenge",
         "behavioral and accessibility parity review",
@@ -51,24 +51,35 @@
         "vacuous-evidence and canon-gap detection"
       ]
     },
+    "dtNotAuditorLaw": "Decision 13 (2026-08-20): the DT does not hold an audit seat. Kimi K3 left advisoryReadOnly the day it assumed the coordinator seat, by conflict of interest, not by capacity removal; audit capacity is consolidated in Fable 5, which stays independent of the DT.",
     "implementer": {
-      "actor": "Cloud Opus implementer pool",
+      "actor": "Claude implementer pool (Sonnet/Opus)",
       "work": [
         "source implementation in delegated packets",
         "contract, manifest, compiler and test edits within bounded ownership",
         "structured evidence assembly",
         "i18n parity and barrel synchronization"
       ],
-      "succession": {
-        "predecessor": "Kimi 2.7",
-        "successor": "Cloud Opus implementer pool",
-        "ownerOrderDate": "2026-08-17",
-        "proof": "The explicit owner order of 2026-08-17 retires Kimi 2.7 from the live implementer seat and vests delegated source implementation in the Cloud Opus implementer pool. The seat is transferred, not removed: exactly one implementer authority exists before and after this succession.",
-        "retainedAuditCapacity": ["Fable 5", "Kimi K3"],
-        "capacityLaw": "This succession removes no audit capacity. Kimi K3 keeps its full read-only audit seat in advisoryReadOnly and doubleAccept, so the kimi-capacity-removal-lacks-successor-or-death-proof stop condition is discharged by a named successor rather than suppressed."
-      }
+      "succession": [
+        {
+          "predecessor": "Kimi 2.7",
+          "successor": "Cloud Opus implementer pool",
+          "ownerOrderDate": "2026-08-17",
+          "proof": "The explicit owner order of 2026-08-17 retires Kimi 2.7 from the live implementer seat and vests delegated source implementation in the Cloud Opus implementer pool. The seat is transferred, not removed: exactly one implementer authority exists before and after this succession.",
+          "retainedAuditCapacity": ["Fable 5", "Kimi K3"],
+          "capacityLaw": "This succession removes no audit capacity. Kimi K3 keeps its full read-only audit seat in advisoryReadOnly and doubleAccept, so the kimi-capacity-removal-lacks-successor-or-death-proof stop condition is discharged by a named successor rather than suppressed."
+        },
+        {
+          "predecessor": "Cloud Opus implementer pool",
+          "successor": "Claude implementer pool (Sonnet/Opus)",
+          "ownerOrderDate": "2026-08-20",
+          "proof": "The owner order of this session (2026-08-20) expands the live implementer seat from the Cloud Opus implementer pool to the Claude implementer pool (Sonnet/Opus), delegated through tmux terminals with the model tier chosen by risk. The seat is transferred, not removed: exactly one implementer authority exists before and after this succession.",
+          "retainedAuditCapacity": ["Fable 5"],
+          "capacityLaw": "This succession removes no audit capacity. Fable 5 keeps its full independent closure-audit seat. Kimi K3 left advisoryReadOnly the same day solely because it assumed the DT seat (decision 13: the DT is not the auditor), not because audit capacity was removed."
+        }
+      ]
     },
-    "promotionLaw": "Escalate any authority conflict to Codex. No other model may invent architecture, authorize commits, or override the programme contracts.",
+    "promotionLaw": "Escalate any authority conflict to the DT (Kimi K3); owner adjudication where the law requires the owner. No other model may invent architecture, authorize commits, or override the programme contracts.",
     "reportingLaw": "Record the chosen route and reason once per cohort in structured fields; do not narrate model deliberation per family."
   },
   "graph": {
@@ -254,11 +265,11 @@
   ],
   "r7Execution": {
     "enabled": false,
-    "main": "Codex coordinator owning conflict graph architecture canon and integration",
-    "advisor": "Fable 5 and Kimi K3 read-only lanes for architecture behavioral parity and visual coherence",
+    "main": "Kimi K3 coordinator owning conflict graph architecture canon and integration",
+    "advisor": "Fable 5 read-only lane for architecture behavioral parity and visual coherence",
     "mechanicalWriters": {
       "maximum": 1,
-      "actor": "Cloud Opus implementer pool",
+      "actor": "Claude implementer pool (Sonnet/Opus)",
       "allowedWork": [
         "disjoint family anatomy mappings",
         "control and recipe ledgers",
@@ -282,7 +293,7 @@
       "chromium": 1
     },
     "longIterationLaw": "MAIN works through the complete current checkpoint without asking for reversible choices resolved by the contracts. Each lane writes durable JSON receipts and releases ownership before the next integration batch.",
-    "telemetryLaw": "Codex uses compact periodic telemetry and interrupts only at a checkpoint verified stall duplicate writer or hard external blocker."
+    "telemetryLaw": "The DT (Kimi K3) uses compact periodic telemetry and interrupts only at a checkpoint verified stall duplicate writer or hard external blocker."
   },
   "stopConditions": [
     "head-or-worktree-ownership-cannot-be-reconciled",

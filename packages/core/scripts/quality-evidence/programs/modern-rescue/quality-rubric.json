@@ -14,15 +14,15 @@
   },
   "eligibility": {
     "formula": "binaryContractsPass && hardVetoCount===0 && craftScore>=layerThreshold && criticalDimensionsMin>=4 && resilience===1 && canonClosure===1 && evidenceFresh && codexSightedApproved",
-    "dimensionEvidenceLaw": "Every scored dimension requires one concrete observable selector, rule, behavior or sighted observation. Missing evidence scores zero until Codex review.",
+    "dimensionEvidenceLaw": "Every scored dimension requires one concrete observable selector, rule, behavior or sighted observation. Missing evidence scores zero until DT review.",
     "resilienceCaseFloor": "Declared cases must include every applicable case from stressMatrix for the family's critical dimensions; a lane may add cases but never remove the floor.",
     "testsAwardCraftPoints": false,
     "writerMayApproveSightedScore": false,
     "coordinatorMayApproveSightedScore": false,
-    "finalSightedAuthority": "Codex"
+    "finalSightedAuthority": "Kimi K3 (DT)"
   },
   "familyCompletionContract": {
-    "progressUnit": "A family accepted by Codex after source-bound before/after evidence; files visited, files changed, lines, comments, tests, generated output and agent reports never count as progress.",
+    "progressUnit": "A family accepted by the DT after source-bound before/after evidence; files visited, files changed, lines, comments, tests, generated output and agent reports never count as progress.",
     "writerMaximumStatus": "ELEVATED_PENDING_CODEX_AUDIT",
     "statuses": [
       "ELEVATED_PENDING_CODEX_AUDIT",
@@ -30,7 +30,7 @@
       "ASSESSED_NOT_ELEVATED",
       "BLOCKED_OWNER_DECISION"
     ],
-    "countingLaw": "No Claude status increments completed-family progress. Only Codex may turn a pending family into ACCEPTED after independent machine and sighted review.",
+    "countingLaw": "No Claude status increments completed-family progress. Only the DT may turn a pending family into ACCEPTED after independent machine and sighted review.",
     "sourceChangeLaw": "ELEVATED requires a material productive source change that closes named observable defects. Tests, docs, comments, snapshots, stories, generated CSS/dist and token declarations without a causal live consumer cannot make a family ELEVATED.",
     "partialLaw": "A shallow or partial improvement remains ASSESSED_NOT_ELEVATED and stays in the current round. The coordinator may not move on merely because every file or family was visited.",
     "twoChangeLaw": "One or two source changes may close a family only when they close every named deficit and the unchanged applicable dimensions are independently evidenced at 4/5 or above; otherwise the family remains ASSESSED_NOT_ELEVATED.",
@@ -54,7 +54,7 @@
       "every applicable critical dimension is already at least 4/5",
       "all applicable binary contracts, stress cases and tenant-divergence axes pass",
       "hard veto count and unresolved applicable P0/P1 defect count are zero",
-      "Codex independently confirms the sighted claim"
+      "The DT independently confirms the sighted claim"
     ],
     "materialImprovement": {
       "premiumDimensionFloor": 4,

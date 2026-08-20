@@ -111,7 +111,7 @@ try {
         familiesByLayerProfile: byProfile,
         dimensionPolicy: 'all twelve rubric dimensions apply to every family; narrowing requires a per-receipt NOT_APPLICABLE_WITH_REASON',
         assessedThisRound: 0,
-        note: 'R0 writes quality tooling and contracts only. No family carries a craft score yet, and no family status may be claimed until a family receipt exists and Codex audits it.',
+        note: 'R0 writes quality tooling and contracts only. No family carries a craft score yet, and no family status may be claimed until a family receipt exists and the DT audits it.',
         families: resolved.rows.map((row) => ({
           id: row.id,
           layer: row.layer,

@@ -31,7 +31,7 @@
     "SUMMARY.md"
   ],
   "roundLayoutLaw": "roundLayout is the union of allowed evidence artifacts, not a requirement to materialize every entry in every round",
-  "checkpointEvidenceLaw": "Every R1-R4 and R7 calibration and cohort checkpoint materializes checkpoint.json, visual-craft.json, paired before/after captures for three representative families in both tenants, one narrow/mobile capture per representative family, CSS ownership/causality receipts and an explicit Codex GO or correction receipt before further writes.",
+  "checkpointEvidenceLaw": "Every R1-R4 and R7 calibration and cohort checkpoint materializes checkpoint.json, visual-craft.json, paired before/after captures for three representative families in both tenants, one narrow/mobile capture per representative family, CSS ownership/causality receipts and an explicit DT GO or correction receipt before further writes.",
   "checkpointRequiredFields": [
     "roundId",
     "checkpointId",

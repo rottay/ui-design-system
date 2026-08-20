@@ -33,14 +33,22 @@ these files in order and obey the machine checks before editing.
 
 | Role | Actor |
 |---|---|
-| DT / coordinator | Codex |
-| Implementer | Cloud Opus implementer pool |
-| Auditors | Fable 5, Kimi K3 (read-only) |
+| DT / coordinator | Kimi K3 |
+| Implementer | Claude implementer pool (Sonnet/Opus) |
+| Auditor | Fable 5 (independent, closure audits) |
+
+DT succession: Codex → Kimi K3, by explicit owner order of 2026-08-20
+(decision 13 of the sequencing amendment). The seat was transferred, not
+removed. Kimi K3 left the read-only audit seat the same day it assumed the DT
+seat — DT ≠ auditor (decision 13) is a conflict-of-interest fence, not a
+removal of audit capacity; the capacity is consolidated in Fable 5, which
+remains independent of the DT.
 
 Implementer succession: Kimi 2.7 → Cloud Opus implementer pool, by explicit
-owner order of 2026-08-17. The seat was transferred, not removed; exactly one
-implementer authority exists before and after. Kimi K3 keeps its full read-only
-audit seat, so no audit capacity was removed.
+owner order of 2026-08-17; Cloud Opus implementer pool → Claude implementer
+pool (Sonnet/Opus), by explicit owner order of 2026-08-20. Each seat was
+transferred, not removed; exactly one implementer authority exists before,
+during and after both successions.
 
 No other model may claim programme authority, commit permission, or final
 sighted acceptance.

@@ -183,7 +183,7 @@ export function evaluateFamilyEligibility(receipt, options = {}) {
   }
 
   if (receipt?.codexSightedApproval === true) {
-    blockers.push('Claude may not record Codex sighted approval; only Codex may accept sighted quality');
+    blockers.push('Claude may not record DT sighted approval; only the DT may accept sighted quality');
   }
 
   const productiveChanges = (receipt?.sourceFilesChanged ?? []).filter(isProductiveSourceChange);

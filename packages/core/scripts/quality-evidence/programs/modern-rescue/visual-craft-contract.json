@@ -4,7 +4,7 @@
   "purpose": "Prevent ordinary, harsh, disconnected or superficially retouched families from propagating through Modern.",
   "authority": {
     "executorMaximumClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT",
-    "sightedAdjudicator": "Codex",
+    "sightedAdjudicator": "Kimi K3 (DT)",
     "sameTreeTenantComparison": true,
     "productApplicationMayCertifyCraft": false
   },
@@ -415,9 +415,9 @@
   "checkpointPolicy": {
     "calibrationFamilyCount": 3,
     "maximumFamiliesBetweenCodexCheckpoints": 25,
-    "calibrationLaw": "For every new layer or shared grammar, Claude implements only the first three representative families, submits complete before/after receipts, and waits for an explicit Codex GO before wider propagation.",
+    "calibrationLaw": "For every new layer or shared grammar, Claude implements only the first three representative families, submits complete before/after receipts, and waits for an explicit DT GO before wider propagation.",
     "restartLaw": "Changing a shared recipe, anatomy, palette direction or composition law after calibration invalidates dependent visual receipts and restarts that cohort checkpoint.",
-    "cohortLaw": "Every named cohort stops for Codex machine and sighted review. Claude may prepare the next conflict graph read-only but may not write the next cohort.",
+    "cohortLaw": "Every named cohort stops for DT machine and sighted review. Claude may prepare the next conflict graph read-only but may not write the next cohort.",
     "checkpointArtifacts": [
       "three representative paired before-after captures per tenant",
       "one narrow-container or mobile capture per representative family",
@@ -425,7 +425,7 @@
       "hard-veto and mechanical-floor report",
       "tenant grayscale and neutralized-primary comparison when grammar changes",
       "CSS ownership and static-DB causality receipt",
-      "explicit Codex GO or correction list"
+      "explicit DT GO or correction list"
     ],
     "roundCohorts": {
       "R1": [

@@ -191,7 +191,8 @@ A family is DONE only when:
 - applicable viewport/container, locale/RTL, content, input, forced-colors and
   reduced-motion cases pass;
 - evidence is bound to the frozen source and artifact hashes; and
-- Codex performs final sighted acceptance.
+- Kimi K3 (DT) performs final sighted acceptance, with Fable 5 independent
+  closure audit.
 
 Programme closure requires an honest disposition for every family in the active
 inventory. A family
@@ -304,7 +305,7 @@ The slice must:
 7. prove monotonicity and the density × rhythm × type-scale responsive matrix;
 8. prove exact restore for normalized output, variables, root attributes and
    computed properties; and
-9. obtain Codex sighted acceptance before propagation is credited.
+9. obtain DT (Kimi K3) sighted acceptance before propagation is credited.
 
 Valid enum stops currently share `TENANT_THEME_RHYTHM_FACTORS`, but invalid
 input handling, effective CSS clamping and exact static/DB parity remain claims
@@ -348,21 +349,30 @@ Builds, servers and browsers are serialized at reconciliation points.
 
 ## Roles
 
-- **Codex** is the DT/coordinator: resolves disagreements, owns the canonical
-  programme tree, and authorizes packets. It does not implement source changes
-  directly except within a packet it explicitly owns.
-- The **Cloud Opus implementer pool** is the sole implementer for source changes
-  delegated by Codex. No other model may write programme source, contracts,
-  manifests or evidence.
+- **Kimi K3** is the DT/coordinator: resolves disagreements, owns the
+  canonical programme tree, verifies every delegated packet (diff, battery,
+  seals) and authorizes packets, committing bounded lots locally under the
+  owner's standing order — it never pushes. Kimi K3 succeeded Codex in this
+  seat by explicit owner order on 2026-08-20 (decision 13 of the sequencing
+  amendment); Codex is retired from the DT seat as of that date.
+- The **Claude implementer pool (Sonnet/Opus)** is the sole implementer for
+  source changes delegated by the DT, working through tmux terminals with the
+  model tier chosen by risk. No other model may write programme source,
+  contracts, manifests or evidence.
   - Succession: **Kimi 2.7** held this seat until the explicit owner order of
     2026-08-17, which transferred it to the Cloud Opus implementer pool. The
-    seat is transferred, not removed — exactly one implementer authority exists
-    before and after — and the succession removes no audit capacity.
-- **Fable 5** and **Kimi K3** are independent read-only advisors. Their
-  narratives are ephemeral inputs; accepted findings are reproduced against
-  source and recorded in the owning JSON. Neither creates programme authority.
-  **Kimi K3 retains its full read-only audit seat** under the 2026-08-17
-  succession.
+    owner order of 2026-08-20 then expanded that pool into the Claude implementer pool (Sonnet/Opus). The
+    seat is transferred, not removed —
+    exactly one implementer authority exists before, during and after both
+    successions.
+- **Fable 5** is the sole independent read-only auditor, performing the
+  closure audit at the end of each front. Its narratives are ephemeral
+  inputs; accepted findings are reproduced against source and recorded in the
+  owning JSON. It creates no programme authority.
+  - **Kimi K3 left the read-only audit seat on 2026-08-20** because it
+    assumed the DT seat: DT is not the auditor (decision 13) is a
+    conflict-of-interest fence, not a removal of audit capacity — the
+    capacity is consolidated in Fable 5, which remains independent of the DT.
 - Mechanical writers receive disjoint, pre-proven ownership only.
 
 Disagreement is recorded as a finding and resolved against source. Model names

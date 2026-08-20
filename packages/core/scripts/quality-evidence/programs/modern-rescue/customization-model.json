@@ -103,12 +103,12 @@
       "recipe-and-anatomy"
     ],
     "migrationLaw": "Published profile ids keep their meaning. A new art direction either composes existing axes without semantic mutation or adds a reviewed versioned registry entry through the same static and DB lowering path.",
-    "advisorLaw": "Fable and Kimi may advise read-only. Their narratives are ephemeral; only a Codex-reproduced source finding enters this model or an owning canonical contract."
+    "advisorLaw": "Fable 5 may advise read-only. Its narratives are ephemeral; only a DT-reproduced source finding enters this model or an owning canonical contract."
   },
   "r7Execution": {
     "enabled": false,
     "contract": "rounds.json#R7",
-    "entryLaw": "R7 begins only from a Codex-accepted R6 frozen baseline and cannot silently reclassify R0-R6 history.",
+    "entryLaw": "R7 begins only from a DT-accepted R6 frozen baseline and cannot silently reclassify R0-R6 history.",
     "familyDispositionDenominator": 255,
     "benchmarkLaw": "External systems provide ideas, edge cases and capability comparisons only. Existing Rottay semantic names and authorities win; no wholesale source, styling, markup, naming or trade-dress copy.",
     "benchmarkDispositions": [

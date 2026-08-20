@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { REPOSITORY_ROOT, getFamily, getRound, loadProgramContracts } from './contracts.mjs';
 
-export const SIGHTED_APPROVER = 'Codex';
+export const SIGHTED_APPROVER = 'Kimi K3 (DT)';
 
 export function sha256OfFile(absolutePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(absolutePath)).digest('hex');

@@ -4,7 +4,7 @@
   "authority": {
     "workOrder": "WO-CRA-23",
     "purpose": "Binding product-art-direction input for R1-R7; it does not create a second theming system or own program progress. R7 reference postures are non-product fixtures owned by customization-model.json and do not become tenant targets here.",
-    "adjudicator": "Codex",
+    "adjudicator": "Kimi K3 (DT)",
     "executor": "Claude after an explicitly authorized round",
     "creativeAdvisor": "Kimi through KIMI-ANNOTATIONS only",
     "sameTree": true,
@@ -363,8 +363,8 @@
     "root": "packages/core/scripts/quality-evidence/programs/modern-rescue/KIMI-ANNOTATIONS/inbox",
     "allowedWrites": "new proposal files under the inbox only",
     "forbiddenWrites": "all product code, roadmap, program contracts, token contracts, generated output and existing annotation files",
-    "retentionLaw": "delete each raw submission after Codex reproduces and incorporates accepted observations into canonical contracts",
-    "promotionAuthority": "Codex",
+    "retentionLaw": "delete each raw submission after the DT reproduces and incorporates accepted observations into canonical contracts",
+    "promotionAuthority": "Kimi K3 (DT)",
     "claudeMayConsume": "canonical parent program files only; never raw or retained Kimi submissions"
   }
 }

@@ -43,22 +43,34 @@ const FILES = {
   rules: join(MANIFEST_DIR, 'rules/index.mjs'),
 };
 
-// T-1 live implementer identity. The seat was transferred by explicit owner order
-// on 2026-08-17; it was never vacated, so the checker pins the successor by name
-// and requires the succession record that discharges the
-// kimi-capacity-removal-lacks-successor-or-death-proof stop condition.
-const LIVE_IMPLEMENTER = 'Cloud Opus implementer pool';
+// T-1 live implementer identity. The seat has moved twice by explicit owner
+// order (2026-08-17, 2026-08-20) and was never vacated, so the checker pins
+// the current successor by name and requires the unbroken succession chain
+// that discharges the kimi-capacity-removal-lacks-successor-or-death-proof
+// stop condition. Decision 13 (2026-08-20) also moved the DT seat from Codex
+// to Kimi K3 and consolidated the audit seat in Fable 5 alone: the DT does
+// not hold an audit seat (conflict of interest, not capacity removal).
+const LIVE_IMPLEMENTER = 'Claude implementer pool (Sonnet/Opus)';
 const RETIRED_IMPLEMENTER = 'Kimi 2.7';
 const IMPLEMENTER_SUCCESSION_ORDER_DATE = '2026-08-17';
-const RETAINED_AUDITORS = Object.freeze(['Fable 5', 'Kimi K3']);
+const IMPLEMENTER_SUCCESSION_2_ORDER_DATE = '2026-08-20';
+const RETIRED_COORDINATOR = 'Codex';
+const COORDINATOR_SUCCESSION_ORDER_DATE = '2026-08-20';
+const RETAINED_AUDITORS = Object.freeze(['Fable 5']);
+// The 2026-08-17 successor seat, retired in turn on 2026-08-20. Its name
+// contains "Opus", and the succession chain must still be able to narrate
+// it, so it is admitted alongside the live pool name below -- never as a
+// routing target, only as the historical predecessor record requires.
+const RETIRED_IMPLEMENTER_2 = 'Cloud Opus implementer pool';
 
 /**
- * The programme still refuses Opus/Sonnet *routing*. The only admitted mention
- * is the exact governed name of the live implementer pool, so strip that name
- * before looking for an ungoverned model route.
+ * The programme still refuses Opus/Sonnet *routing*. The only admitted
+ * mentions are the exact governed names of the live implementer pool and its
+ * immediate predecessor (needed to narrate the succession chain), so strip
+ * both before looking for an ungoverned model route.
  */
 function routesUngovernedModel(text) {
-  const stripped = text.split(LIVE_IMPLEMENTER).join('');
+  const stripped = text.split(LIVE_IMPLEMENTER).join('').split(RETIRED_IMPLEMENTER_2).join('');
   return stripped.includes('Opus') || stripped.includes('Sonnet');
 }
 
@@ -203,16 +215,25 @@ function collectTextualFailures() {
   }
 
   if (
-    !readmeText.includes('Codex') ||
+    !readmeText.includes('Kimi K3') ||
     !readmeText.includes(LIVE_IMPLEMENTER) ||
-    !readmeText.includes('Fable 5') ||
-    !readmeText.includes('Kimi K3')
+    !readmeText.includes('Fable 5')
   ) {
-    failures.push(`README.md Roles must name Codex, ${LIVE_IMPLEMENTER}, Fable 5 and Kimi K3`);
+    failures.push(`README.md Roles must name Kimi K3, ${LIVE_IMPLEMENTER} and Fable 5`);
   }
   if (!readmeText.includes(RETIRED_IMPLEMENTER) || !readmeText.includes(IMPLEMENTER_SUCCESSION_ORDER_DATE)) {
     failures.push(
       `README.md Roles must record the ${RETIRED_IMPLEMENTER} implementer succession and its ${IMPLEMENTER_SUCCESSION_ORDER_DATE} owner order`,
+    );
+  }
+  if (!readmeText.includes(IMPLEMENTER_SUCCESSION_2_ORDER_DATE)) {
+    failures.push(
+      `README.md Roles must record the Cloud Opus implementer pool succession and its ${IMPLEMENTER_SUCCESSION_2_ORDER_DATE} owner order`,
+    );
+  }
+  if (!readmeText.includes(RETIRED_COORDINATOR) || !readmeText.includes(COORDINATOR_SUCCESSION_ORDER_DATE)) {
+    failures.push(
+      `README.md Roles must record the ${RETIRED_COORDINATOR} DT succession and its ${COORDINATOR_SUCCESSION_ORDER_DATE} owner order`,
     );
   }
   if (routesUngovernedModel(readmeText)) {
@@ -608,8 +629,8 @@ function collectContractFailures(contracts) {
 
   // agent-orchestration.json exact roles (T-1 rewrite)
   if (orchestration) {
-    if (orchestration.coordinator?.model !== 'Codex') {
-      failures.push('agent-orchestration.json coordinator must be Codex');
+    if (orchestration.coordinator?.model !== 'Kimi K3') {
+      failures.push('agent-orchestration.json coordinator must be Kimi K3');
     }
     const routingText = JSON.stringify(orchestration.modelRouting ?? {});
     if (routesUngovernedModel(routingText)) {
@@ -620,25 +641,48 @@ function collectContractFailures(contracts) {
     if (orchestration.modelRouting?.implementer?.actor !== LIVE_IMPLEMENTER) {
       failures.push(`agent-orchestration.json implementer must be the ${LIVE_IMPLEMENTER}`);
     }
+    // The seat has moved twice (2026-08-17, 2026-08-20), so succession is a
+    // chain, not a single record: each entry's predecessor must equal the
+    // prior entry's successor, the chain must begin at RETIRED_IMPLEMENTER
+    // and end at LIVE_IMPLEMENTER, and every entry must carry a dated,
+    // written proof. This generalizes the single-record law from before the
+    // second move without weakening it: exactly one implementer seat exists
+    // at every point in the chain.
     const succession = orchestration.modelRouting?.implementer?.succession;
-    if (!succession) {
+    if (!Array.isArray(succession) || succession.length === 0) {
       failures.push('agent-orchestration.json implementer must carry a succession record');
     } else {
-      if (succession.predecessor !== RETIRED_IMPLEMENTER) {
-        failures.push(`implementer succession predecessor must be ${RETIRED_IMPLEMENTER}`);
+      const [first] = succession;
+      const latest = succession[succession.length - 1];
+      if (first.predecessor !== RETIRED_IMPLEMENTER) {
+        failures.push(`implementer succession must begin with predecessor ${RETIRED_IMPLEMENTER}`);
       }
-      if (succession.successor !== LIVE_IMPLEMENTER) {
-        failures.push(`implementer succession successor must be the ${LIVE_IMPLEMENTER}`);
-      }
-      if (succession.ownerOrderDate !== IMPLEMENTER_SUCCESSION_ORDER_DATE) {
+      if (first.ownerOrderDate !== IMPLEMENTER_SUCCESSION_ORDER_DATE) {
         failures.push(
           `implementer succession must cite the ${IMPLEMENTER_SUCCESSION_ORDER_DATE} owner order`,
         );
       }
-      if (typeof succession.proof !== 'string' || succession.proof.length === 0) {
-        failures.push('implementer succession must state a written succession proof');
+      for (let i = 1; i < succession.length; i += 1) {
+        if (succession[i].predecessor !== succession[i - 1].successor) {
+          failures.push(
+            'implementer succession chain must be unbroken: each record predecessor must equal the prior record successor',
+          );
+        }
       }
-      const retained = succession.retainedAuditCapacity ?? [];
+      if (succession.length > 1 && latest.ownerOrderDate !== IMPLEMENTER_SUCCESSION_2_ORDER_DATE) {
+        failures.push(
+          `implementer succession must cite the ${IMPLEMENTER_SUCCESSION_2_ORDER_DATE} owner order for its latest record`,
+        );
+      }
+      if (latest.successor !== LIVE_IMPLEMENTER) {
+        failures.push(`implementer succession must end with the ${LIVE_IMPLEMENTER}`);
+      }
+      for (const record of succession) {
+        if (typeof record.proof !== 'string' || record.proof.length === 0) {
+          failures.push('every implementer succession record must state a written succession proof');
+        }
+      }
+      const retained = latest.retainedAuditCapacity ?? [];
       for (const auditor of RETAINED_AUDITORS) {
         if (!retained.includes(auditor)) {
           failures.push(`implementer succession must retain ${auditor} audit capacity`);
@@ -646,8 +690,19 @@ function collectContractFailures(contracts) {
       }
     }
     const advisory = orchestration.modelRouting?.advisoryReadOnly?.actors ?? [];
-    if (!advisory.includes('Fable 5') || !advisory.includes('Kimi K3')) {
-      failures.push('agent-orchestration.json must name Fable 5 and Kimi K3 as advisors');
+    for (const auditor of RETAINED_AUDITORS) {
+      if (!advisory.includes(auditor)) {
+        failures.push(`agent-orchestration.json must name ${auditor} as an advisor`);
+      }
+    }
+    // Decision 13: DT != auditor. The coordinator left the advisory/audit
+    // seat the day it assumed the DT seat; a coordinator that still appears
+    // in advisoryReadOnly is a live conflict of interest, not a harmless
+    // overlap.
+    if (orchestration.coordinator?.model && advisory.includes(orchestration.coordinator.model)) {
+      failures.push(
+        'agent-orchestration.json advisoryReadOnly.actors must not include the coordinator (decision 13: the DT is not the auditor)',
+      );
     }
     if (orchestration.r7Execution?.enabled !== false) {
       failures.push('agent-orchestration.json r7Execution.enabled must be false');
@@ -666,11 +721,13 @@ function collectContractFailures(contracts) {
       if (!Array.isArray(da.notAuthorizationFor) || da.notAuthorizationFor.length === 0) {
         failures.push('doubleAccept.notAuthorizationFor must list actions it cannot authorize');
       }
-      if (!da.actors?.includes('Fable 5') || !da.actors?.includes('Kimi K3')) {
-        failures.push('doubleAccept actors must be Fable 5 and Kimi K3');
+      for (const auditor of RETAINED_AUDITORS) {
+        if (!da.actors?.includes(auditor)) {
+          failures.push(`doubleAccept actors must include ${auditor}`);
+        }
       }
-      if (da.coordinator !== 'Codex') {
-        failures.push('doubleAccept coordinator must be Codex');
+      if (da.coordinator !== 'Kimi K3') {
+        failures.push('doubleAccept coordinator must be Kimi K3');
       }
       if (da.implementationActor !== LIVE_IMPLEMENTER) {
         failures.push(`doubleAccept implementationActor must be the ${LIVE_IMPLEMENTER}`);
@@ -945,8 +1002,8 @@ function collectHistoricalContractFailures(contracts) {
   if (rubric?.eligibility?.testsAwardCraftPoints !== false) {
     errors.push('tests must not award craft points');
   }
-  if (rubric?.eligibility?.finalSightedAuthority !== 'Codex') {
-    errors.push('Codex must remain final sighted authority');
+  if (rubric?.eligibility?.finalSightedAuthority !== 'Kimi K3 (DT)') {
+    errors.push('Kimi K3 (DT) must remain final sighted authority');
   }
   if (rubric?.dimensions?.some((dimension) => dimension.evidenceRequired !== true)) {
     errors.push('every scored quality dimension must require observable evidence');
@@ -982,8 +1039,8 @@ function collectHistoricalContractFailures(contracts) {
       errors.push(`family completion status ${status} must remain representable`);
     }
   }
-  if (!familyCompletion?.countingLaw?.includes('Only Codex')) {
-    errors.push('only Codex-accepted families may count as progress');
+  if (!familyCompletion?.countingLaw?.includes('Only the DT')) {
+    errors.push('only DT-accepted families may count as progress');
   }
   if (!familyCompletion?.sourceChangeLaw?.includes('productive source change')) {
     errors.push('family elevation must require a productive source change');
@@ -1157,7 +1214,7 @@ function collectHistoricalContractFailures(contracts) {
   }
   if (
     artDirection?.kimiProposalBoundary?.retentionLaw !==
-    'delete each raw submission after Codex reproduces and incorporates accepted observations into canonical contracts'
+    'delete each raw submission after the DT reproduces and incorporates accepted observations into canonical contracts'
   ) {
     errors.push('Kimi submissions must remain temporary and deletion-bound');
   }
@@ -1278,8 +1335,8 @@ function collectHistoricalContractFailures(contracts) {
   if (checkpointPolicy?.maximumFamiliesBetweenCodexCheckpoints !== 25) {
     errors.push('no visual cohort may exceed twenty-five families');
   }
-  if (!checkpointPolicy?.calibrationLaw?.includes('explicit Codex GO')) {
-    errors.push('calibration must stop for explicit Codex GO');
+  if (!checkpointPolicy?.calibrationLaw?.includes('explicit DT GO')) {
+    errors.push('calibration must stop for explicit DT GO');
   }
   if (!checkpointPolicy?.restartLaw?.includes('restarts')) {
     errors.push('shared grammar changes must restart dependent checkpoints');
@@ -1592,8 +1649,8 @@ function collectHistoricalContractFailures(contracts) {
   if (evidence?.schemaVersion !== 2) {
     errors.push('evidence contract schema must remain v2 with visual checkpoints');
   }
-  if (!evidence?.checkpointEvidenceLaw?.includes('explicit Codex GO')) {
-    errors.push('checkpoint evidence must require explicit Codex GO before writes');
+  if (!evidence?.checkpointEvidenceLaw?.includes('explicit DT GO')) {
+    errors.push('checkpoint evidence must require explicit DT GO before writes');
   }
   for (const field of [
     'checkpointId',

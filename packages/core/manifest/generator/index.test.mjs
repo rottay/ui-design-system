@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { computeSourceDigest } from '../../scripts/quality-evidence/v2/receipts.mjs';
+import { computeSourceDigest, SIGHTED_APPROVER } from '../../scripts/quality-evidence/v2/receipts.mjs';
 import {
   certifyCustomizationManifest,
   validateCustomizationManifest,
@@ -786,7 +786,7 @@ test('SIGHTED_ACCEPTED needs a sighted receipt the sighted approver did not prod
     });
 
   assertNames(
-    gradeAgainst(build('Codex'), 'SIGHTED_ACCEPTED'),
+    gradeAgainst(build(SIGHTED_APPROVER), 'SIGHTED_ACCEPTED'),
     'producer must not be the sighted approver',
   );
   assert.deepEqual(gradeAgainst(build('lane-a'), 'SIGHTED_ACCEPTED'), []);
