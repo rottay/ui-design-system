@@ -658,6 +658,15 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2.3 (en dos pasos) — regen + cableo del trío stale:** los 3 artefactos de
+`manifest/generated/` regenerados y enchufados blocking (87 gates). Delta por
+clase revisado: fanout-facts (1 canal entra: `--_ds-chart-legend-swatch-size`;
+17 con solo números de línea); root-checklists (summary byte-idéntico; 43/41
+canales ganan atribución a las 2 familias que F1.4b cableó — la prueba de que
+llegó); mirror-parity (**la paridad mejoró sola**: intersectionPctOfSmallest
+85,8→91,9%, sameRoleTwice a 0 en ambos temas — el stale SUBESTIMABA).
+Adjudicación sighted del coordinador: re-anclar los pines del control a los
+valores medidos del artefacto (la suite baja de 22 a 16 honesta).
 **F2.2 ✅ `2d08292a1`** — `cascade-wiring-ratchet` bloqueante (84 gates):
 deuda medida por nombre = **2.171** (denominador 4.374; 768 destinos excluidos
 por la regla a como está escrita; 2.203 cableados por la regla b). Falla en
