@@ -507,7 +507,9 @@ adjudicar al cierre del frente). **ADJUDICADO (2026-08-19, coordinador): se
 BORRA al cierre del frente.** Verificado: el productor actual
 (`build-vertical-css`) genera el roster `{index,modern,rottay,bithire,evnto}`
 — platform ya no es vertical (contradice platform-identity-zero); ningún
-script lo sella ni lo referencia; `dist/platform.css` no existe; el único
+script de core lo sella ni lo referencia (el `dependency-honesty` de RAÍZ sí
+espera el alias `dist/platform.css`, línea ~3210: se retira en el mismo
+commit del borrado); `dist/platform.css` no existe; el único
 "consumidor" es un import fantasma en `app-platform/globals.css:14`
 (`@import '@rottay/design-system/dist/platform.css'` — 404 hoy; deuda del
 vertical app-platform, fuera de alcance F0.5); la fila de PERFORMANCE_BUDGET
