@@ -862,15 +862,29 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
-**F4A-1c roster — EN VUELO (worker Opus, regeneración con text-page).**
-Borrador anterior: 65 raíces × 3 temas = 195 (fila agregada duplicada de
-text-secondary eliminada por decisión mía: universo limpio), posture por tema
-(authored/unassigned — el roster YA NO es idéntico ×3), `color.border` como
-raíz autora #2 fuera del eje de tiers (resuelve el BLOCKED de 4
-tier.*.border), baseline/pro-expert = 0 a nivel raíz por diseño (viven a
-nivel hoja/familia: K5 se etiqueta en F4A-15; pro-expert se ancla al roster
-CAPABILITIES). La regeneración agrega text-page (66ª raíz) con la medición
-por tema. Al aterrizar: reviso conteos y cierro F4A-1.
+**F4A-1 ✅ CERRADO (2026-08-20, tarde).** Roster final `/tmp/f4a-1c-roster-draft.json`
+(schemaVersion 3) + `.md` (729 líneas): **66 raíces × 3 temas = 198 entradas**,
+universo limpio (fila agregada retirada), **BLOCKED 0 · MISSING-CITATION 0**.
+Descomposición: 63 raíces catálogo + color.border (autora #2, fuera del eje de
+tiers) + text-secondary (seed existente, intacta) + text-page (NUEVA). Por
+domicilio: seed 85 / derived 33 / baseline 0 / unassigned 80; baseline y
+pro-expert son 0 A NIVEL RAÍZ por diseño (viven a nivel hoja/familia: K5 se
+etiqueta en F4A-15; pro-expert se ancla al roster CAPABILITIES). Posture medido
+por tema con `compileBrandTheme` sobre FUENTE (no artefacto) — el roster YA NO
+es idéntico ×3. **Medición del punto 4 (page.fg por tema, verificada por mí):**
+los TRES temas autoran su literal propio (caso a — ninguno deriva hoy):
+rottay `#A0A0A5` base / `#6B6B6B` light; bithire `#53697E` base / `#9aacbf`
+dark; evnto `#3d3d3d` base SIN dark. Dos rulings míos sobre lo medido: (1)
+**bithire se autora con text-page aunque ya era cero-delta contra
+text-secondary** — uniformidad del canon (misma raíz, misma semántica en los 3)
+y, sobre todo, independencia de diales: atarlo a text-secondary acoplaría la
+tinta de página al dial de tinta secundaria en F4B, un acoplamiento que hoy no
+existe; (2) **evnto autora text-page SOLO en base** (sin dark) — su
+`sidebar.itemColor` no tiene scope dark y text-secondary sí (#A8A898): atarlos
+le daría una tinta en oscuro que hoy no tiene (no cero-delta). Corrección de
+conteo registrada: `#A0A0A5` son 50 OCURRENCIAS en fuente rottay (yo cité 48
+líneas), 42 canales tier.page.fg + 8 en hojas ajenas — el packet F4A-6 enumera
+exacto. Verificado contra el JSON por mí, no de palabra.
 **F4A-0 ✅ (worker Opus, read-only, `/tmp/f4a-0-baseline.md` + datos en
 `/tmp/f4a-0/`).** Cero escrituras en el repo. **7 predicciones falsifican
 EXACTO**: hojas evaluadas 3.726 = 3.738 − 12 (el −12 son exactamente los 12

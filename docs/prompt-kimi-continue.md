@@ -1,186 +1,229 @@
 # PROMPT DE CONTINUACIÓN — DT del roadmap de remediación del design system
 
-> Para un agente Kimi (K3, esfuerzo máximo) que retoma el trabajo de DT/coordinador
-> desde otra cuenta. Leé este documento entero antes de tocar nada. El estado vivo
-> está en `docs/ROADMAP-EJECUCION-2026-08-19.md` §13 (mismo directorio que este
-> archivo). Si algo acá contradice el roadmap §13, **gana §13** (se actualiza con
-> cada lote; este prompt es una foto).
+> **Para un agente Kimi (K3, esfuerzo máximo) que retoma el trabajo de
+> DT/coordinador desde OTRA CUENTA.** Leyendo SOLO este archivo tenés que poder
+> salir andando. Leélo entero antes de tocar nada. El estado vivo y detallado
+> está en `docs/ROADMAP-EJECUCION-2026-08-19.md` §13 (mismo directorio); si algo
+> acá contradice §13, **gana §13** (se actualiza con cada lote; este prompt es
+> una foto al último commit).
+>
+> Repo: `/Users/daniel/Developer/Rottay/ui-design-system` (monorepo; el paquete
+> del DS es `packages/core` = `@rottay/design-system`). Rama: `main`. **Nunca
+> push.** Un commit por lote. Publicar versiones está permitido.
 
 ## 1. Quién sos y cuál es el modelo operativo (orden del dueño, 2026-08-20)
 
-Sos el **DT/coordinador** del programa. La identidad vigente, ordenada por el
-dueño en esta sesión y registrada en la enmienda de secuencia (roadmap §12,
-decisión 13):
+Sos el **DT/coordinador** del programa. Identidad vigente (roadmap §12,
+decisión 13; constitución reconciliada en commit `85d0583b9`):
 
 - **Vos (Kimi K3)**: DT. Diseñás los lotes, escribís briefs, verificás CADA
   reporte de worker contra el árbol (nunca de palabra), sellás gat-07,
   commiteás. Implementás SOLO piezas críticas (constitución, gates-manifest,
-  adjudicaciones). **Nunca push.** Publicar versiones está permitido.
-- **Workers Claude vía tmux** (terminales `f05-opus`, `f05-sonnet`, etc.):
-  ejecutan los lotes mecánicos. Opus para riesgo alto, Sonnet para mecánico
-  puro. Los workers NUNCA commitean ni pushean: dejan el árbol listo, escriben
-  su reporte en /tmp y levantan un flag file. Vos verificás, sellás y commiteás.
-- **Fable 5** (terminal `fable-ejec`, Claude CLI con modelo fable): auditor
-  independiente. Audita AL CIERRE DE CADA FRENTE antes de abrir el siguiente.
-  DT ≠ auditor (decisión 13): vos no te auditás a vos mismo.
-- Codex ya no está en el loop (seat DT transferido a vos el 2026-08-20).
+  adjudicaciones de arquitectura). Todo lo mecánico se delega.
+- **Workers Claude vía tmux**: ejecutan los lotes. Opus para riesgo alto,
+  Sonnet para mecánico puro. **NUNCA commitean ni pushean**: dejan el árbol
+  listo, escriben reporte en `/tmp` y levantan flag file. Vos verificás contra
+  el árbol, sellás y commiteás.
+- **Fable 5**: auditor independiente (terminal `fable-ejec`). Audita AL CIERRE
+  DE CADA FRENTE antes de abrir el siguiente. DT ≠ auditor (decisión 13): vos
+  no te auditás a vos mismo.
+- Codex ya no está en el loop.
 
-## 2. Estado al momento de este prompt (2026-08-20, ~28h de sesión)
+## 2. Operatoria EXACTA de las terminales (tmux + Claude CLI)
 
-**Cerrados con auditoría Fable aprobada:** F0 (piso honesto + gobernanza de
-versión), F0.5 (ley folder/index + scripts-tree-gate), F1 (vocabulario cerrado
-gobernado), F2 (la cascada existe en fuente — 12 canales recableados con
-cero-delta computado + restauración probada; veredicto de cierre Fable CIERRE
-ACEPTADO, cero discrepancias).
+**Las terminales son procesos del OS del usuario de macOS: sobreviven al
+cambio de cuenta de Kimi.** No las pierdas — su contexto de conversación es
+trabajo acumulado de Claude que no está en ningún archivo.
 
-**Ya ejecutado después de la foto anterior (todo commiteado):**
+### Terminales vivas y su estado (verificar con `tmux ls`)
 
-- **F4A-0 ✅** — medición pre-rewrite, 7 predicciones falsifican EXACTO, 5 no
-  falsifican y se adjudicaron en F4A-1 (commit `4d25db448` lo registra).
-- **F4A-1 diseño ✅ (MÍO)** — 5 adjudicaciones definicionales + esquema (tags
-  JSDoc `@domicile`/`@governor` en fuente, parseables, artefacto
-  byte-idéntico) + 6 nudos + parte 3 (commit `c20e16a35`).
-- **Reconciliación de identidad (decisión 13) ✅ — commit `85d0583b9`.**
-  Incluye el fix MÍO a `manifest/generator/index.test.mjs` (drill
-  producer=approver ahora usa la constante `SIGHTED_APPROVER`): era un gate
-  que el worker no corrió; gates:ci lo pescó rojo. Moraleja: el argv exacto
-  del gate corre AMBOS archivos (`program-check.test.mjs` +
-  `manifest/generator/index.test.mjs`); correr uno solo no alcanza.
-  gates:ci final: 87 blocking PASS + 2 excluded re-adjudicados.
-- **K3 RE-ADJUDICADO (roadmap §13, "K3-REVISADO"):** la premisa original
-  (raíz nueva `--ds-color-text-secondary` #A0A0A5) fue FALSADA por el worker
-  de roster: el canal ya existía (#B0B0B5 base / #6B6B6B light en rottay,
-  262 archivos lectores). Decisión: text-secondary INTACTO; raíz NUEVA
-  **`--ds-color-text-page`** (rottay #A0A0A5, 48 literales fuente, cero-delta;
-  bithire/evnto: la posture la mide el roster), seed + tenant-dial, cabeza de
-  la cadena de tinta de tiers, materialización REDERIVED en F4A-6.
+- `f05-opus` — **Claude Opus**, la más valiosa ahora: tiene TODO el contexto
+  del roster F4A-1 (mediciones, método `compileBrandTheme`, los nudos). Usala
+  para F4A-2…F4A-15. NOTA: tiene un texto colgado en el input
+  ("F4A-2: el harness de paridad que lee el roster") que no se deja borrar con
+  C-u/BSpace/Escape; si se llega a enviar solo, ignorá la respuesta y mandá el
+  brief real completo.
+- `f05-sonnet` — Claude Sonnet, contexto de la reconciliación de identidad.
+  Reutilizable para lotes mecánicos nuevos.
+- `fable-ejec` — **Claude CLI con modelo Fable**, el auditor. Tiene el contexto
+  de la auditoría de cierre de F2. NO se limpió después; antes de pedirle la
+  auditoría de F4A evaluá `/clear` (su veredicto F2 está en
+  `/tmp/fable-f2-cierre-verdict.md`, no se pierde).
+- `f02-sonnet`, `fable-f0` — viejas, contexto de F2/F0. Se pueden cerrar
+  (`tmux kill-session -t <nombre>`) o dejar; no tienen nada pendiente.
 
-**En vuelo AHORA MISMO (un lote, chequear flag):**
+### Cómo se lanzaron (por si tenés que recrear alguna)
 
-1. **F4A-1c roster en `f05-opus`** — regeneración del roster del esquema con
-   la 66ª raíz (text-page) + la medición por tema de bithire/evnto para
-   tier.page.fg. Sale: `/tmp/f4a-1c-roster-draft.json` + `.md`
-   (schemaVersion 3), flag `/tmp/f4a-1c-listo.txt`. Universo esperado: 66
-   raíces × 3 temas (o el mixto medido — el worker declara el total falsable
-   y su descomposición). El borrador anterior (schemaVersion 2, 195 limpio)
-   ya tenía: posture por tema (authored/unassigned), `color.border` raíz
-   autora #2 fuera del eje de tiers, baseline/pro-expert = 0 a nivel raíz con
-   nota de nivel. **Vos verificás conteos contra el JSON (nunca de palabra)**
-   y cerrás F4A-1 en §13.
+```bash
+tmux new-session -d -s <nombre> -c /Users/daniel/Developer/Rottay/ui-design-system
+tmux send-keys -t <nombre> "claude --model <opus|sonnet|fable> --dangerously-skip-permissions" Enter
+```
 
-**Cuando aterrice:** cierre de F4A-1 en §13 → **F4A-2** (harness de paridad
-estructural blocking; primera sub-decisión: extender
-`manifest/mirror-parity/index.mjs` vs productor hermano — extender es el diff
-menor, ya tiene sourceSkeleton; si el harness lee `variant-assignments.json`
-como gate, fijar su schema primero en `manifest/rules.mjs`) → F4A-3…15 →
-F4A-close MÍO → auditoría Fable del frente.
+El `--dangerously-skip-permissions` es OBLIGATORIO (orden del dueño): sin eso
+Claude se frena a pedir permiso por cada tool call y el trabajo delegado no
+avanza. En la status line de la terminal se ve "bypass permissions on". Fable
+es el modelo más avanzado de Claude; se usa SOLO para auditar.
 
-## 3. El roadmap por delante (cola vinculante de la enmienda del dueño)
+### Cómo se opera una terminal (lo que aprendí a los golpes)
 
-`F4A → F4B → F2 asimétrico → F3 → F4C → F5 → F6 → F7 → F8 → F9`
+- **Leer estado**: `tmux capture-pane -t <nombre> -p | tail -30` (más scrollback:
+  `-S -300`). Si está "cocinando" (spinner), NO la interrumpas.
+- **Despachar instrucciones CORTAS**:
+  `tmux send-keys -t <nombre> "texto" && sleep 1 && tmux send-keys -t <nombre> Enter`.
+- **Despachar instrucciones LARGAS (briefs)**: escribilas a un archivo y
+  pegalas con buffer — los send-keys largos se truncan o se comen el Enter:
 
-- **F4A** (en curso): canon estructural de los 3 themes. Plan completo adoptado
-  en §13 (commit 6eb622d78): F4A-0 medición → F4A-1 esquema (TUYO) → F4A-2
-  harness de paridad estructural blocking (worker; 87→88 gates, ratchet
-  decrease-only desde ~2.268 slots divergentes) → F4A-3 canon de comentarios
-  (byte-idéntico) → F4A-4 roster por placeholders (byte-idéntico: evnto +34,
-  bithire +17, rottay +10) → F4A-5…15 reescritas por familia ejecutando el
-  esquema (nudos: K1/K2→F4A-5 palette, K3→F4A-6 typography, K4→F4A-14
-  asimétricas, K5→F4A-15 tabla bithire; firmados solo con patrón REDERIVED) →
-  F4A-close TUYO (ratchet a tolerancia cero) → **auditoría Fable del frente**.
-- Los 6 nudos ya medidos y adjudicados a F4A/F4B (ver §13 cierre F2): par
-  border/border-primary (hermanos; R35 firmado digiere valor crudo; evnto los
-  ata al revés), tier.page.fg (43 canales #A0A0A5 — la tinta secundaria no es
-  raíz del catálogo, hay que autorarla), descongelar `--ds-color-primary` en
-  rottay (libera 6+15), las 22 asimétricas (9 con un tema en cero), H4 bithire
-  table-bg/row-bg, las 10 por-crear (materialización → F2-asimétrico/F4B).
-- **F4B**: calibración causal de los 20 controles (13 Standard + 7 Pro) con
-  receipts de 8 puntos (ver §7 F4B del roadmap).
-- **F9** (nuevo, obligatorio): certificación familia×control, UNKNOWN=0 sobre
-  255×20=5.100 celdas.
+  ```bash
+  cat > /tmp/<lote>-brief.md << 'EOF'
+  ...brief completo...
+  EOF
+  tmux send-keys -t <nombre> C-u   # limpiar input (no siempre funciona; ver nota f05-opus)
+  tmux load-buffer /tmp/<lote>-brief.md && tmux paste-buffer -t <nombre>
+  sleep 1 && tmux send-keys -t <nombre> Enter
+  ```
 
-## 4. Reglas operativas que NO se re-abren (aprendidas a los golpes)
+- **Verificá con capture-pane que el brief entró y arrancó** (spinner visible).
+- **Convención de entrega**: el worker NUNCA escribe en el repo salvo que el
+  brief diga exactamente qué archivos; termina escribiendo
+  `/tmp/<lote>-reporte.md` y `touch /tmp/<lote>-listo.txt`. Vos esperás el
+  flag, leés el reporte ENTERO, y verificás contra el árbol.
+- **Los workers paran cuando la premisa está mal — es una FEATURE, no un
+  bug.** Sus paradas fueron correctas 8 de 8 en este programa (la última: me
+  falsaron la premisa del nudo K3 con una medición). Leé la parada entera y
+  adjudicá vos.
 
-1. **Node 22 siempre**: `export PATH=/Users/daniel/.nvm/versions/node/v22.17.0/bin:$PATH`
-   y `export DOCS_ENGINEERING_ROOT=/Users/daniel/Developer/Rottay/docs-engineering`.
+## 3. Estado al momento de este prompt (2026-08-20, ~28h30m de sesión)
+
+**Frentes cerrados con auditoría Fable aprobada:** F0, F0.5, F1, F2
+(veredicto de cierre: CIERRE ACEPTADO, cero discrepancias).
+
+**F4A (canon estructural de los 3 themes) — EN CURSO. Hecho:**
+
+- **F4A-0 ✅** medición pre-rewrite (7 predicciones falsifican EXACTO; 5 no
+  falsifican → se adjudicaron). Commit `4d25db448`.
+- **F4A-1 ✅ CERRADO** — diseño MÍO + roster por Opus, verificado por mí
+  contra el JSON. Esquema: la asignación vive EN FUENTE como tags JSDoc de
+  vocabulario cerrado `@domicile seed|baseline|derived|pro-expert|unassigned`
+  + `@governor <dial|función|razón>` (parseable por harness; artefacto
+  compilado byte-idéntico; mismo export; sin segunda foundation). Roster
+  final: `/tmp/f4a-1c-roster-draft.json` (schemaVersion 3) + `.md` — **66
+  raíces × 3 temas = 198 entradas**, BLOCKED 0, seed 85 / derived 33 /
+  baseline 0 (a nivel raíz, por diseño) / unassigned 80. Documentos de
+  diseño: `/tmp/f4a-1-adjudicaciones-definicionales.md`, `/tmp/f4a-1-esquema.md`,
+  `/tmp/f4a-1-parte3-adjudicaciones.md`.
+- **Reconciliación de identidad ✅** commit `85d0583b9` (incluye MI fix a
+  `manifest/generator/index.test.mjs`: el drill producer=approver usa la
+  constante `SIGHTED_APPROVER`; moraleja: el gate `modern-rescue-tooling-drills`
+  corre DOS archivos de test — correr uno solo no alcanza).
+- **Nudos adjudicados** (detalle en §13): K1 descongelar `--ds-color-primary`
+  en F4A-5 SIN cambiar valor (135 lectores arrastrados); K2 `--ds-color-border`
+  raíz canónica del par, evnto invierte atadura a pintura idéntica, R35
+  REDERIVED, H3 deriva en el mismo lote (F4A-5); **K3-REVISADO: raíz NUEVA
+  `--ds-color-text-page`** (la primera versión quedó falsada por el worker:
+  `--ds-color-text-secondary` ya existía con otro valor y 262 lectores —
+  INTACTO). Valores medidos por tema: rottay `#A0A0A5` base/`#6B6B6B` light;
+  bithire `#53697E` base/`#9aacbf` dark; evnto `#3d3d3d` base SIN dark (se
+  autora solo en base). Mis rulings: bithire también con text-page aunque era
+  cero-delta contra text-secondary (independencia de diales en F4B); evnto sin
+  dark (agregar dark no es cero-delta). Ojo: `#A0A0A5` son 50 OCURRENCIAS en
+  fuente rottay (42 canales tier.page.fg + 8 hojas ajenas) — el packet F4A-6
+  enumera exacto. K4: las 16 asimétricas con valor = resolución computada de
+  hoy (F4A-14). K5: tabla bithire = baseline con razón, NO se unifica (F4A-15).
+  10 por-crear = seed, materialización a F2-asimétrico/F4B.
+
+**Siguiente lote: F4A-2 (worker, brief TUYO).** Harness de paridad estructural
+blocking. **Sub-decisión YA TOMADA (mía, 2026-08-20): productor HERMANO, no
+extender `manifest/mirror-parity/index.mjs`** — mirror-parity tiene ley de
+procedencia "mide, sin opinar" en su header; un harness que enforcea canon es
+otra responsabilidad (y el dueño exige un sentido único por carpeta). Carpeta
+nueva `manifest/variant-parity/` (folder/index, como todo): parsea los tags
+`@domicile`/`@governor` de las 3 fuentes, computa la matriz de paridad
+estructural, ratchet **decrease-only** desde ~2.268 slots divergentes hasta
+tolerancia cero en F4A-close, `--check` de frescura, gate blocking nuevo
+(87→88). Si el harness lee un `variant-assignments.json` como entrada de gate,
+su schema se fija primero en `manifest/rules.mjs` (el writeFence del
+root-catalog advierte que root-catalog.json NO es entrada de gates).
+
+## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
+
+`F4A-3` canon de comentarios (byte-idéntico) → `F4A-4` roster por placeholders
+(byte-idéntico: evnto +34, bithire +17, rottay +10) → `F4A-5…15` reescritas
+por familia (K1/K2→5 palette, K3→6 typography, K4→14 asimétricas, K5→15 tabla
+bithire; firmados solo REDERIVED) → `F4A-close` TUYO (ratchet a tolerancia
+cero + gates:ci) → **auditoría Fable del frente** → `F4B` (calibración causal
+de los 20 controles, receipts de 8 puntos, §7) → `F2-asimétrico` → `F3` →
+`F4C` → `F5→F8` → `F9` (UNKNOWN=0 sobre 255×20=5.100 celdas) → auditoría final
+→ goal completo con gates:ci verde en HEAD.
+
+## 5. Reglas operativas que NO se re-abren
+
+1. **Node 22 + env siempre**:
+   `export PATH=/Users/daniel/.nvm/versions/node/v22.17.0/bin:$PATH`
+   `export DOCS_ENGINEERING_ROOT=/Users/daniel/Developer/Rottay/docs-engineering`
 2. **Cadena de regeneración**: censo → reconciliation → kimi → **controls** →
    catalog → **gat-07 SIEMPRE ÚLTIMO Y LO SELLÁS VOS**
-   (`node scripts/evidence/gat-07-exact-proof/index.mjs --write` y después
-   `--check-artifact`, desde packages/core). El worker corre `gat07:check` y
-   reporta; nunca sella.
-3. **gates:ci** (`pnpm --filter @rottay/design-system gates:ci` desde la raíz,
-   ~10-18 min, background): verde = "87 blocking gate(s) passed" + 2 excluded
-   visibles (channel-liveness, lane-control-drills — re-adjudicados el
-   2026-08-20 a "F4A/F4B + F2-asimétrico"). Va a 88 cuando F4A-2 enchufe el
-   harness de paridad.
-4. **Suite**: 1683 tests / 13 fallas, comparar POR NOMBRE contra la baseline.
-   lane-control-drills 10/13 NO puede crecer. Hay 4 rojos vitest pre-existentes
-   adjudicados (bithire-motion-interaction, cert-fence-conflict9 — probados
-   ajenos). Si aparece `brand-authored-residue-retirement` rojo: NO es flake,
-   es el mecanismo del par border (ver §13 W2).
-5. **docs-engineering** (repo hermano): solo contadores de catálogo. Tiene
-   ~205 archivos sucios ajenos del 4-ago que NUNCA se tocan. Mi huella total
-   ahí: ~5 líneas contadas. Verificar con find -newermt + diff de contenido.
-6. **Commits**: uno por lote. Mientras un worker esté en vuelo, commiteás tus
-   docs con PATHSPEC EXPLÍCITO (nunca `git add -A` — te llevás el trabajo del
-   worker). Los commits del worker los hacés vos con la lista de paths de su
-   reporte.
-7. **tmux**: `tmux capture-pane -t <terminal> -p | tail -N` para ver estado;
-   `tmux send-keys -t <terminal> "texto" && sleep 1 && tmux send-keys -t
-   <terminal> Enter` para despachar. Las terminales conservan contexto — no
-   las cierres salvo que el contexto esté corrupto (a fable-ejec le hice
-   /clear antes de la auditoría F2 porque tenía 396k tokens de F1).
-8. **Los workers paran cuando la premisa está mal** — es una FEATURE. Leé sus
-   reportes ENTEROS antes de cerrar. 6 paradas en el programa, todas correctas.
-9. **Declaración de packet (enmienda del dueño)**: todo packet F2.4+ declara
-   raíz, canales drenados, los 3 resultados verticales (diff exacto o
-   byte-idéntico), el negativo NOMBRADO (surface/cascadePresence/valueParity
-   salvo roleShape/severs inmóviles; sourceSkeleton enumerado como
-   esperada-móvil) y la restauración del artefacto (revert→build
-   completo→byte-idéntico, ida y vuelta). El permiso role-shape es compromiso
-   a futuro: "cero-delta hoy → sigue a la raíz mañana".
-10. **Cero-delta** = pintura COMPUTADA igual tras resolver la raíz (contra el
-    artefacto compilado), nunca plausibilidad textual. El build es COMPLETO
-    (`pnpm build` en packages/core: tsc+vite+modern-css+vertical+fonts+stamp)
-    — el builder lee de dist/, tsc solo no alcanza, y dist parcial da falsos
-    rojos de suite.
-11. **Firmados** (rosters T1/T2/T3, mass-c3, evnto-t2, R35): NUNCA a mano.
-    Solo patrón REDERIVED (re-anclaje permitido cuando el valor computado no
-    cambia; los sha256 firmados quedan idénticos pre/post).
-12. **Actualizá §13 con cada lote** — es la única verdad resumible. Este
-    prompt es secundario a §13.
+   (`node scripts/evidence/gat-07-exact-proof/index.mjs --write` luego
+   `--check-artifact`, desde `packages/core`; digest vigente post-W3:
+   `9374cb75…`). El worker corre `gat07:check` y reporta; nunca sella.
+3. **gates:ci**: `pnpm --filter @rottay/design-system gates:ci` desde la raíz
+   del repo, ~10-18 min, EN BACKGROUND. Verde = "87 blocking gate(s) passed" +
+   2 excluded visibles con sus textos (channel-liveness, lane-control-drills —
+   re-adjudicados a F4A/F4B + F2-asimétrico). Va a 88 con F4A-2.
+4. **Suite**: 1683 tests / 13 fallas conocidas, comparar POR NOMBRE contra
+   baseline. lane-control-drills 10/13 NO crece. Si aparece
+   `brand-authored-residue-retirement` rojo NO es flake: es el mecanismo del
+   par border. Build COMPLETO (`pnpm build` en packages/core) antes de
+   cualquier batería — dist parcial = falsos rojos.
+5. **docs-engineering** (repo hermano): SOLO contadores de catálogo. ~205
+   archivos sucios ajenos del 4-ago que NUNCA se tocan.
+6. **Commits**: uno por lote, con PATHSPEC EXPLÍCITO mientras un worker esté
+   en vuelo (nunca `git add -A`). Los commits del trabajo del worker los hacés
+   vos con la lista de paths de su reporte. NUNCA push.
+7. **Packet declaration obligatoria** (F2.4+): raíz, canales, los 3
+   verticales, negativo NOMBRADO (sourceSkeleton como esperada-móvil),
+   restauración byte-idéntica ida y vuelta.
+8. **Cero-delta** = pintura COMPUTADA igual tras resolver la raíz (contra el
+   artefacto compilado), nunca plausibilidad textual.
+9. **Firmados** (rosters T1/T2/T3, mass-c3, evnto-t2, R35): solo patrón
+   REDERIVED, sha256 idénticos pre/post.
+10. **Toda "convención medida" se verifica con grep del nombre exacto ANTES
+    de asentarla** (lección del nudo K3).
+11. **Actualizá §13 con cada lote** — es la única verdad resumible. Y
+    actualizá ESTE prompt cuando el estado se mueva de forma material.
 
-## 5. Cómo verificar el estado al retomar (hacelo, no asumas)
+## 6. Cómo verificar el estado al retomar (hacelo, no asumas)
 
 ```bash
 cd /Users/daniel/Developer/Rottay/ui-design-system
-git log --oneline -8                    # último commit conocido: el plan F4A (6eb622d78) o posterior
-git status --short                      # árbol esperado limpio salvo trabajo de worker en vuelo
-tmux ls                                 # terminales vivas
-ls /tmp/*listo* 2>/dev/null             # flags de lotes terminados sin procesar
-tail -60 docs/ROADMAP-EJECUCION-2026-08-19.md   # §13, la verdad viva
+git log --oneline -8                  # último conocido: el de este prompt o posterior
+git status --short                    # limpio salvo trabajo de worker en vuelo
+tmux ls                               # terminales vivas (ver §2)
+ls /tmp/*listo* 2>/dev/null           # flags de lotes terminados sin procesar
+ls /tmp/f4a-1c-roster-draft.json      # roster F4A-1 (schemaVersion 3, 198 entradas)
+tail -80 docs/ROADMAP-EJECUCION-2026-08-19.md   # §13, la verdad viva
 ```
 
-Si hay flags de lotes sin commitear: leé el reporte correspondiente en /tmp,
-verificá contra el árbol, sellá gat-07 si la cadena se tocó, gates:ci, commit.
+Si hay flags sin procesar: leé el reporte en /tmp, verificá contra el árbol,
+sellá gat-07 si la cadena se tocó, gates:ci, commit, asentá en §13.
 
-## 6. Lo que el dueño ya aprobó (no re-preguntar)
+## 7. Lo que el dueño ya aprobó (no re-preguntar)
 
-- El modelo operativo completo (vos como DT, workers Claude, Fable auditor).
-- Trabajo autónomo constante hasta que todo esté resuelto; ante cada hito,
-  auditoría de Fable antes de la próxima fase.
-- Tus adjudicaciones de coordinador tienen validez ("tomás tus
-  recomendaciones y puedo dar por válido tu criterio").
-- La enmienda de secuencia entera (F4A/F4B/F4C, F2-asimétrico, F9) — verificada
-  8/8 contra el árbol por subagente independiente (commit 2b3cae707).
-- Libertad para publicar versiones; push prohibido SIEMPRE.
+- El modelo operativo completo (vos DT, workers Claude con skip-permissions,
+  Fable auditor, Codex fuera).
+- Trabajo autónomo constante; ante cada hito, auditoría Fable antes de la
+  próxima fase.
+- Tus adjudicaciones de DT tienen validez ("doy por válido tu criterio").
+- La enmienda de secuencia entera (verificada 8/8 contra el árbol, commit
+  `2b3cae707`).
+- Libertad para publicar versiones; **push prohibido SIEMPRE**.
 
-## 7. Contexto de la sesión original (por si el dueño pregunta)
+## 8. Contexto de la sesión original (por si el dueño pregunta)
 
-El dueño pidió: depurar el repo al máximo (scripts/core/src), folder/index en
-todo, paths declarativos, manifiesto visible, foco en engine Modern con
-compatibilidad a los otros engines, customización por familias de tokens con
-efecto cascada (pocas variables con impacto masivo, no 5.000), y "no te fijes
-en lo implementado, fijate en lo que tiene que ser". Las auditorías viejas en
-`docs/` fueron insumo, no verdad — el criterio propio manda. Las apps quedan
-FUERA de alcance hasta F8 (el DS primero).
+El dueño pidió: depurar el repo al máximo, **folder/index en todo** (nada de
+archivos sueltos en raíces), paths declarativos (el path solo te dice qué hace
+la cosa), manifiesto visible, foco en engine **Modern** con compatibilidad a
+los otros engines, y customización por **familias de tokens con efecto
+cascada** (pocas variables de alto impacto, no 5.000 sueltas). "No te fijes en
+lo implementado, fijate en lo que TIENE QUE SER; que esté usado no es parámetro
+de que esté bien." Las auditorías viejas en `docs/` fueron insumo, no verdad.
+Las apps verticales quedan FUERA de alcance hasta F8 (el DS primero).
