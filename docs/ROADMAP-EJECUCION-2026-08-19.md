@@ -628,6 +628,16 @@ phase-a no se reescribe (1082 citas selladas; scope `:!**/phase-a/**`); hueco
 de wiring-coverage y forma capability de manifest/ (9 planos) anotados para
 F1/Paso C; zombi de 12h/100% CPU eliminado. gates:ci **80 VERDES** + sello
 gat-07 (`a0f35f34…`).
+**Auditoría Fable del frente F0.5: APROBADO, 0 bloqueantes**
+(`/tmp/fable-frente-f05-verdict.md` — verificación de primera mano: gates:ci
+propio, sha256 de la cadena computados a mano, 3 corridas de suite 24/24
+idénticas al baseline). Condiciones del cierre implementadas en `652cf285e`:
+H3 (worklist KIMI a su capability + exención exact-path con drill),
+H4 (spacing.rhythm + registry measure fields; leg2-chromium anotado),
+H6 (invariante de lint-folder-index en el archivo). H1+H2 = **primer lote de
+F1** junto con Paso C; H5 (continue silencioso cross-repo) a F7.
+**F0.5 — CERRADO (2026-08-20).** gates:ci final: 80 blocking + 2 excluded
+visibles (dueño F2).
 **Deuda nueva descubierta en el cierre (NO del frente):** (a) el
 `dependency-honesty` de raíz en modos `static`/`check` reporta un unresolved
 runtime module edge en `recipes/profiles/index.ts:76` — preexistente a F0.5
