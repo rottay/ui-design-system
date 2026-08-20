@@ -827,11 +827,50 @@ ni metadata paralela ni prosa libre; artefacto compilado byte-idéntico, mismo
 export, mismo lowering, sin segunda foundation. Los 6 nudos adjudicados: K1
 descongelar primary con valor sin cambiar; K2 `--ds-color-border` raíz
 canónica del par, evnto invierte, R35 REDERIVED; K3 raíz NUEVA
-`--ds-color-text-secondary` #A0A0A5 tenant-dial, los 42 derivan en F4A-6; K4
+`--ds-color-text-page` (VER K3-REVISADO abajo — la primera versión,
+`--ds-color-text-secondary` #A0A0A5, quedó FALSADA por medición del worker:
+ese canal ya existía con otro valor y 262 lectores), los 42 derivan en
+F4A-6; K4
 las 16 con valor = resolución de hoy; K5 tabla bithire baseline con razón,
 no se unifica; 10 por-crear seed, materialización a F2-asimétrico/F4B). En
-producción: roster borrador por worker (F4A-1b, 190 entradas esperadas;
-BLOCKED lo que no tenga domicilio evidente — lo decido yo).
+producción: roster borrador por worker (F4A-1c, ver estado abajo).
+**K3-REVISADO (adjudicación DT, 2026-08-20, tarde).** La medición del worker
+de roster falsó la premisa original: `--ds-color-text-secondary` YA EXISTE en
+las tres fuentes (baja del campo autorado `textSecondaryColor`; rottay
+#B0B0B5 base / #6B6B6B light) y lo leen **262 archivos** en `src/`. Derivar
+los 42 de él repintaría (base #A0A0A5→#B0B0B5) o repintaría a sus lectores
+(al revés): ambas violan cero-delta. Decisión: (1) text-secondary INTACTO —
+raíz seed existente gobernada por `textSecondaryColor`, dial tenant en F4B;
+(2) la tinta de página se autora como raíz NUEVA **`--ds-color-text-page`**
+(nombre sin colisión, verificado por grep en `src/`): rottay #A0A0A5 (48
+literales fuente; bithire/evnto tienen CERO ocurrencias de #A0A0A5 — su
+posture la mide el roster, no se inventa), domicilio seed, exposición
+tenant-dial como cabeza de la cadena de tinta de tiers
+(page→base→raised→overlay), materialización REDERIVED en F4A-6; (3)
+overlay.fg citaba "la cabeza K3": ese nombre ahora es text-page. Lección de
+método asentada: toda "convención medida" se verifica con grep del nombre
+exacto ANTES de asentarla. Universo del roster: 66 raíces por tema donde
+text-page se autore (total falsable lo declara el roster regenerado).
+**Reconciliación de identidad (decisión 13) EJECUTADA — commit
+`85d0583b9`.** 16 archivos: AGENTS.md + contratos modern-rescue + v2
+(SIGHTED_APPROVER='Kimi K3 (DT)'; la clave `codexSightedApproval` y los enums
+`*_PENDING_CODEX_AUDIT` NO se renombran — romperían receipts) +
+`manifest/generator/index.test.mjs` (el drill de conflicto producer=approver
+ahora usa la constante SIGHTED_APPROVER — tracción con el seat, no nombre
+duro; este archivo era un gate que el worker no corrió y yo lo reparé antes
+del commit). Succession = cadena de 2 registros unbroken validada por
+program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
+el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
+gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
+**F4A-1c roster — EN VUELO (worker Opus, regeneración con text-page).**
+Borrador anterior: 65 raíces × 3 temas = 195 (fila agregada duplicada de
+text-secondary eliminada por decisión mía: universo limpio), posture por tema
+(authored/unassigned — el roster YA NO es idéntico ×3), `color.border` como
+raíz autora #2 fuera del eje de tiers (resuelve el BLOCKED de 4
+tier.*.border), baseline/pro-expert = 0 a nivel raíz por diseño (viven a
+nivel hoja/familia: K5 se etiqueta en F4A-15; pro-expert se ancla al roster
+CAPABILITIES). La regeneración agrega text-page (66ª raíz) con la medición
+por tema. Al aterrizar: reviso conteos y cierro F4A-1.
 **F4A-0 ✅ (worker Opus, read-only, `/tmp/f4a-0-baseline.md` + datos en
 `/tmp/f4a-0/`).** Cero escrituras en el repo. **7 predicciones falsifican
 EXACTO**: hojas evaluadas 3.726 = 3.738 − 12 (el −12 son exactamente los 12

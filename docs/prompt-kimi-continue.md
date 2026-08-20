@@ -25,7 +25,7 @@ decisión 13):
   DT ≠ auditor (decisión 13): vos no te auditás a vos mismo.
 - Codex ya no está en el loop (seat DT transferido a vos el 2026-08-20).
 
-## 2. Estado al momento de este prompt (2026-08-20, ~27h de sesión)
+## 2. Estado al momento de este prompt (2026-08-20, ~28h de sesión)
 
 **Cerrados con auditoría Fable aprobada:** F0 (piso honesto + gobernanza de
 versión), F0.5 (ley folder/index + scripts-tree-gate), F1 (vocabulario cerrado
@@ -33,30 +33,47 @@ gobernado), F2 (la cascada existe en fuente — 12 canales recableados con
 cero-delta computado + restauración probada; veredicto de cierre Fable CIERRE
 ACEPTADO, cero discrepancias).
 
-**En vuelo AHORA MISMO (dos lotes, chequear flags):**
+**Ya ejecutado después de la foto anterior (todo commiteado):**
 
-1. **F4A-0 en `f05-opus`** — medición pre-rewrite READ-ONLY. Brief:
-   `/tmp/f4a-0-brief.md`. Sale: `/tmp/f4a-0-baseline.md` + `/tmp/f4a-0/*.txt`,
-   flag `/tmp/f4a-0-listo.txt`. Las predicciones del catálogo (3.693 canales
-   ±12 recables F2, 263 asignaciones, sourceSkeleton 1820/1503/397, ∩345) son
-   A FALSAR contra el árbol de hoy. Si el worker paró, leé por qué — sus
-   paradas fueron correctas 6 de 6 veces en este programa.
-2. **Reconciliación de identidad en `f05-sonnet`** — decisión 13, diseño exacto
-   del DT en `/tmp/const-reconciliation-diseno.md`. El worker aplica el texto
-   exacto en AGENTS.md + agent-orchestration.json + program-check.mjs +
-   contratos vivos (program/customization-model/evidence-contract/
-   tenant-art-direction/visual-craft-contract/quality-rubric), historia
-   (rounds.json, phase-a/, receipts) INTACTA. Reporte:
-   `/tmp/const-reconciliation-reporte.md`, flag
-   `/tmp/const-reconciliation-listo.txt`. **Vos commiteás** tras verificar:
-   `node programs/modern-rescue/program-check.mjs` (CONSTITUTION_READY) + su
-   test + gates:ci verde, desde `packages/core`.
+- **F4A-0 ✅** — medición pre-rewrite, 7 predicciones falsifican EXACTO, 5 no
+  falsifican y se adjudicaron en F4A-1 (commit `4d25db448` lo registra).
+- **F4A-1 diseño ✅ (MÍO)** — 5 adjudicaciones definicionales + esquema (tags
+  JSDoc `@domicile`/`@governor` en fuente, parseables, artefacto
+  byte-idéntico) + 6 nudos + parte 3 (commit `c20e16a35`).
+- **Reconciliación de identidad (decisión 13) ✅ — commit `85d0583b9`.**
+  Incluye el fix MÍO a `manifest/generator/index.test.mjs` (drill
+  producer=approver ahora usa la constante `SIGHTED_APPROVER`): era un gate
+  que el worker no corrió; gates:ci lo pescó rojo. Moraleja: el argv exacto
+  del gate corre AMBOS archivos (`program-check.test.mjs` +
+  `manifest/generator/index.test.mjs`); correr uno solo no alcanza.
+  gates:ci final: 87 blocking PASS + 2 excluded re-adjudicados.
+- **K3 RE-ADJUDICADO (roadmap §13, "K3-REVISADO"):** la premisa original
+  (raíz nueva `--ds-color-text-secondary` #A0A0A5) fue FALSADA por el worker
+  de roster: el canal ya existía (#B0B0B5 base / #6B6B6B light en rottay,
+  262 archivos lectores). Decisión: text-secondary INTACTO; raíz NUEVA
+  **`--ds-color-text-page`** (rottay #A0A0A5, 48 literales fuente, cero-delta;
+  bithire/evnto: la posture la mide el roster), seed + tenant-dial, cabeza de
+  la cadena de tinta de tiers, materialización REDERIVED en F4A-6.
 
-**Cuando los dos aterricen:** commit de la reconciliación (la verificación la
-hace el worker, vos re-verificás y commiteás) → después **F4A-1 ES TUYO** (el
-lote de diseño irreemplazable: el esquema de asignación de variantes — 63
-raíces × 3 temas a 4 domicilios — + la adjudicación escrita de los 6 nudos).
-Usá los datos de F4A-0 como insumo.
+**En vuelo AHORA MISMO (un lote, chequear flag):**
+
+1. **F4A-1c roster en `f05-opus`** — regeneración del roster del esquema con
+   la 66ª raíz (text-page) + la medición por tema de bithire/evnto para
+   tier.page.fg. Sale: `/tmp/f4a-1c-roster-draft.json` + `.md`
+   (schemaVersion 3), flag `/tmp/f4a-1c-listo.txt`. Universo esperado: 66
+   raíces × 3 temas (o el mixto medido — el worker declara el total falsable
+   y su descomposición). El borrador anterior (schemaVersion 2, 195 limpio)
+   ya tenía: posture por tema (authored/unassigned), `color.border` raíz
+   autora #2 fuera del eje de tiers, baseline/pro-expert = 0 a nivel raíz con
+   nota de nivel. **Vos verificás conteos contra el JSON (nunca de palabra)**
+   y cerrás F4A-1 en §13.
+
+**Cuando aterrice:** cierre de F4A-1 en §13 → **F4A-2** (harness de paridad
+estructural blocking; primera sub-decisión: extender
+`manifest/mirror-parity/index.mjs` vs productor hermano — extender es el diff
+menor, ya tiene sourceSkeleton; si el harness lee `variant-assignments.json`
+como gate, fijar su schema primero en `manifest/rules.mjs`) → F4A-3…15 →
+F4A-close MÍO → auditoría Fable del frente.
 
 ## 3. El roadmap por delante (cola vinculante de la enmienda del dueño)
 
