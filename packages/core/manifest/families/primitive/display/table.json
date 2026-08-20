@@ -4103,7 +4103,8 @@
             "noSocketReason": "lee la familia base compartida."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4171,7 +4172,8 @@
             "noSocketReason": "el marco redondea por el contenedor que la aloja; sin canal de radio propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4506,7 +4508,8 @@
             "noSocketReason": "sin iconos con canal propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

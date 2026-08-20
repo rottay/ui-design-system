@@ -3699,7 +3699,8 @@
             "noSocketReason": "lee los roles semanticos compartidos."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3734,7 +3735,8 @@
           "--ds-type-supporting",
           "--ds-font-size-xs",
           "--ds-line-height-snug"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4008,7 +4010,8 @@
             "noSocketReason": "las sombras vienen de la escalera compartida (--ds-elevation-3/4, --ds-shadow-*); sin canal propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4284,7 +4287,8 @@
             "noSocketReason": "sin iconos con canal propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

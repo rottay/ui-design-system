@@ -3409,7 +3409,8 @@
             "--ds-workspace-switcher-trigger-name-font-weight"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3433,7 +3434,8 @@
             "why": "debe reflejarse sin socket propio: tipografia de chrome fragmentada por familia rompe la lectura del sistema de navegacion",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

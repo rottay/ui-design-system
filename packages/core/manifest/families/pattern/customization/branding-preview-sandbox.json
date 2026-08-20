@@ -1218,7 +1218,8 @@
             "--ds-color-text-secondary"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

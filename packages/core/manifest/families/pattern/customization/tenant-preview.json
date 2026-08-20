@@ -2905,7 +2905,8 @@
             "--ds-surface-inset"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

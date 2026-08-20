@@ -3281,7 +3281,8 @@
           "--ds-color-text-secondary",
           "--ds-color-text-tertiary",
           "--ds-color-warning"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3309,7 +3310,8 @@
             "noSocketReason": "el componente ES el consumidor de los roles semanticos compartidos --ds-type-*; un socket por familia duplicaria la autoridad de los roles"
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3345,7 +3347,8 @@
           "--ds-font-family-mono",
           "--ds-type-body-font-family",
           "--ds-type-code-font-family"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3388,7 +3391,8 @@
           "--ds-font-size-base",
           "--ds-font-size-fluid-5xl",
           "--ds-line-height-normal"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3416,7 +3420,8 @@
             "noSocketReason": "mark/code-inline radius son facetas de los roles compartidos (--ds-type-mark-radius, --ds-type-code-inline-radius), no de la familia"
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3466,7 +3471,8 @@
           "--ds-type-code-inline-padding",
           "--ds-type-paragraph-measure",
           "--ds-type-line-clamp"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3522,7 +3528,8 @@
             "noSocketReason": "sin sombras."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3628,7 +3635,8 @@
           "--ds-focus-ring-offset",
           "--ds-focus-ring-width",
           "--ds-type-decoration-thickness"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3729,7 +3737,8 @@
             "noSocketReason": "sin iconos."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

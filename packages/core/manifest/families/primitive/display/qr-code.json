@@ -1713,7 +1713,8 @@
             "noSocketReason": "sin canales de peso/espaciado propios."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1741,7 +1742,8 @@
             "noSocketReason": "lee la familia base compartida."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1969,7 +1971,8 @@
         "reviewedFrom": "anatomy",
         "sharedChannels": [
           "--ds-state-press-scale"
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

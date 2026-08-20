@@ -915,7 +915,8 @@
             "--ds-surface-fg"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -945,7 +946,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -980,7 +982,8 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-font-mono"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1044,7 +1047,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1074,7 +1078,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1109,7 +1114,8 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-width"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1313,7 +1319,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

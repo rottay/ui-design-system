@@ -860,7 +860,8 @@
             "--ds-surface-panel-bg"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -884,7 +885,8 @@
             "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -908,7 +910,8 @@
             "why": "debe reflejarse sin socket propio; el socket de titular vive en structures/headers, no duplicarlo aqui",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -932,7 +935,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -970,7 +974,25 @@
         },
         "reviewedFrom": "anatomy",
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/shell/feature-workspace-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -1212,7 +1234,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/shell/feature-workspace-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

@@ -2000,7 +2000,8 @@
             "noSocketReason": "sin sombras propias; es tipografia sobre el panel anfitrion."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2101,7 +2102,8 @@
             "noSocketReason": "sin bordes propios; separa por tipografia y fondo."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2202,7 +2204,8 @@
             "noSocketReason": "sin iconos con canal propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

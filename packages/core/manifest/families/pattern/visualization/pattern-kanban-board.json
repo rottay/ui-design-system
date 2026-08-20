@@ -5304,7 +5304,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -5573,7 +5574,8 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-color"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {

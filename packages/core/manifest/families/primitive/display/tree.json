@@ -2115,7 +2115,8 @@
             "noSocketReason": "lee la familia base compartida."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2143,7 +2144,8 @@
             "noSocketReason": "lee la rampa compartida (--ds-font-size-xs); sin canal propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2297,7 +2299,8 @@
             "noSocketReason": "sin sombras propias."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

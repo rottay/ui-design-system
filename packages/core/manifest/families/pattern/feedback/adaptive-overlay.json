@@ -144,7 +144,8 @@
               "--ds-empty-state-title-family"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -175,7 +176,8 @@
               "--ds-terminal-block-font-size"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

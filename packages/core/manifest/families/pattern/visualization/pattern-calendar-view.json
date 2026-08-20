@@ -4477,7 +4477,8 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-font-weight-semibold"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4512,7 +4513,8 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-font-family-base"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4584,7 +4586,8 @@
             "--ds-radius-lg",
             "--ds-radius-sm"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {

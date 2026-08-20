@@ -5081,7 +5081,8 @@
             ]
           }
         ],
-        "remediatedFrom": "dedup2-grupoB"
+        "remediatedFrom": "dedup2-grupoB",
+        "migratedToInternalChannels": true
       }
     },
     {

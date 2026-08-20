@@ -1902,7 +1902,8 @@
             "--ds-numeric-tabular"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1932,7 +1933,8 @@
             "--ds-font-family-mono"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2005,7 +2007,8 @@
             ]
           }
         ],
-        "remediatedFrom": "dedup2-grupoB"
+        "remediatedFrom": "dedup2-grupoB",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2060,7 +2063,8 @@
             ]
           }
         ],
-        "remediatedFrom": "dedup2-grupoB"
+        "remediatedFrom": "dedup2-grupoB",
+        "migratedToInternalChannels": true
       }
     },
     {

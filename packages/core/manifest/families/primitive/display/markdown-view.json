@@ -1537,7 +1537,8 @@
             "noSocketReason": "la prosa hereda el pairing global; sin sesgo propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1778,7 +1779,8 @@
             "noSocketReason": "sin sombras; es contenido."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2010,7 +2012,8 @@
             "noSocketReason": "el task-checkbox hereda de la familia checkbox."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

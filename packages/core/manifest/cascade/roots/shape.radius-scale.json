@@ -351,6 +351,11 @@
       "state": "PRESCRIPCION"
     },
     {
+      "channelId": "--_ds-page-panel-radius",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
       "channelId": "--_ds-page-header-icon-radius",
       "familyId": "pattern/shell/pattern-page-shell",
       "state": "PRESCRIPCION"

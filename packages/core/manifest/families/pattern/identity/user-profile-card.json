@@ -2849,7 +2849,8 @@
             "--ds-surface-panel"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2887,7 +2888,8 @@
           "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
             "--ds-letter-spacing-wide"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2917,7 +2919,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2960,7 +2963,8 @@
           "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo)": [
             "--ds-line-height-tight"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2996,7 +3000,8 @@
             "--ds-radius-lg",
             "--ds-radius-md"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3051,7 +3056,8 @@
           "Pisos de accesibilidad (touch-target-min): clase de exclusion propia - el piso no se negocia por tema": [
             "--ds-touch-target-min"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3091,7 +3097,8 @@
             "--ds-spacing-5",
             "--ds-spacing-6"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3254,7 +3261,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

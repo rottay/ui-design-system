@@ -1149,7 +1149,8 @@
               "--ds-message-density-factor"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1226,7 +1227,8 @@
               "--ds-notification-rule-style"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

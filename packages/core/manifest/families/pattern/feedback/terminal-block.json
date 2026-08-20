@@ -477,7 +477,8 @@
               "--ds-empty-state-title-family"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

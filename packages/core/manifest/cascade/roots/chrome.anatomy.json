@@ -1889,6 +1889,21 @@
       "channelId": "--_ds-page-rule-style",
       "familyId": "structure/shell/sidebar-surface",
       "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-rule-style",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-rule-style",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-rule-style",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
     }
   ],
   "variantDisposition": "by-pack-enum",

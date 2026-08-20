@@ -2424,7 +2424,8 @@
               "--ds-notification-rule-style"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

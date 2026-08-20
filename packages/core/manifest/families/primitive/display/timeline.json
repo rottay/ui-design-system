@@ -1550,7 +1550,8 @@
             "noSocketReason": "lee la familia base compartida."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1633,7 +1634,8 @@
             "noSocketReason": "el dot es circulo de identidad (radius-full estructural); sin radio autorable."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1763,7 +1765,8 @@
             "noSocketReason": "sin sombras propias."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1977,7 +1980,8 @@
             "noSocketReason": "sin iconos con canal propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

@@ -6310,7 +6310,8 @@
           }
         ],
         "remediatedFrom": "dedup2-grupoB",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

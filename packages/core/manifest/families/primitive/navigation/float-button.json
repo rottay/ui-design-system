@@ -3128,7 +3128,8 @@
             "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3152,7 +3153,8 @@
             "why": "debe reflejarse sin socket propio: tipografia de chrome no se fragmenta",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3238,7 +3240,8 @@
           }
         ],
         "remediatedFrom": "dedup2-grupoB",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

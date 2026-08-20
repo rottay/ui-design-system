@@ -2182,7 +2182,8 @@
             "noSocketReason": "lee la familia base compartida; sin canal de familia propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2698,7 +2699,8 @@
             "noSocketReason": "sin sombras propias en modern; separa por borde y fondo."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2912,7 +2914,8 @@
             "noSocketReason": "sin iconos con canal propio; los glifos heredan el eje global."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

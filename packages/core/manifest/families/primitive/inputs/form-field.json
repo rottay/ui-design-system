@@ -3077,7 +3077,8 @@
             ]
           }
         ],
-        "remediatedFrom": "multi-reader-owner-test"
+        "remediatedFrom": "multi-reader-owner-test",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3293,7 +3294,8 @@
             ]
           }
         ],
-        "remediatedFrom": "cola-32-revision"
+        "remediatedFrom": "cola-32-revision",
+        "migratedToInternalChannels": true
       }
     },
     {

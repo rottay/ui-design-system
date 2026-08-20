@@ -862,7 +862,8 @@
               "--ds-message-density-factor"
             ]
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

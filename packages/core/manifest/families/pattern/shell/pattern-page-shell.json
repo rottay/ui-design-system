@@ -5348,7 +5348,8 @@
             "--ds-type-supporting-letter-spacing"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -5383,7 +5384,8 @@
             "--ds-type-supporting-font-family"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -5425,7 +5427,8 @@
             "--ds-type-supporting-line-height"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

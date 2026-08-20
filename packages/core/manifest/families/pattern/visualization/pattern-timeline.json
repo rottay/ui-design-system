@@ -4829,7 +4829,8 @@
             "--ds-timeline-date-heading-letter-spacing",
             "--ds-timeline-timestamp-letter-spacing"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4864,7 +4865,8 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-font-family-mono"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4955,7 +4957,8 @@
             "--ds-radius-lg",
             "--ds-radius-sm"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -4985,7 +4988,8 @@
           }
         ],
         "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

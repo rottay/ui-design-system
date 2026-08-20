@@ -12594,7 +12594,8 @@
             ]
           }
         ],
-        "remediatedFrom": "multi-reader-owner-test"
+        "remediatedFrom": "multi-reader-owner-test",
+        "migratedToInternalChannels": true
       }
     },
     {

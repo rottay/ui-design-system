@@ -1361,7 +1361,8 @@
             "noSocketReason": "sin sesgo tipografico propio."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1389,7 +1390,8 @@
             "noSocketReason": "lee la base compartida."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1572,7 +1574,8 @@
             "noSocketReason": "sin sombras."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1672,7 +1675,8 @@
             "noSocketReason": "separa por relleno track/fill; los ticks son marcas de escala estructurales."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1773,7 +1777,8 @@
             "noSocketReason": "sin iconos."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

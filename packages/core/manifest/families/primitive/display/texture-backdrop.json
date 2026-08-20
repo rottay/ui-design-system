@@ -219,7 +219,8 @@
             "carrier": "shared-channel"
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -247,7 +248,8 @@
             "noSocketReason": "sin texto."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -275,7 +277,8 @@
             "noSocketReason": "sin texto."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -303,7 +306,8 @@
             "noSocketReason": "sin texto."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -331,7 +335,8 @@
             "noSocketReason": "cubre al contenedor anfitrion; el radio es del anfitrion."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -375,7 +380,8 @@
             "noSocketReason": "sin geometria autorable; el patron (data-pattern) es eleccion de API, no de tema."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -431,7 +437,8 @@
             "noSocketReason": "familia decorativa de dos partes (root/layer): la textura toma tinte y opacidad del sistema material/effect compartido; customizarla por familia romperia la coherencia del acabado (surface.finish)"
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -531,7 +538,8 @@
             "noSocketReason": "sin bordes."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -632,7 +640,8 @@
             "noSocketReason": "sin iconos."
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
