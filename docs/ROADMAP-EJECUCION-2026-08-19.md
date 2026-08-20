@@ -658,6 +658,21 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.2 — la saga completa (2 paradas del worker, ambas correctas).** La
+primera versión (lift) se auto-cancelaba: `domain` se regenera entero y solo
+`calibration`/`retiredAliases` sobreviven al `--sync`; y contradecía el ruling
+escrito `vocabularyDomicile`. La segunda (mis citas de fuente) salía al revés
+al leer las líneas: la constante dice `cardComponent`; `catalogLaw` ya había
+adjudicado motif (admitido ≠ expandido) y density (dueño: `density.mode`).
+**Adjudicaciones finales del coordinador:** (1) alias `card`↔`cardComponent`
+declarado UNA vez en la ley de paridad, nada se renombra; (2) motif 7 y
+density fuera del catalog: sostenido, cero cambios de datos; (3) paridad en
+versión IMPLICATIVA (todo valor que un root emite está admitido por un dueño
+gobernado) con el alias + la regla cross-owner density→density.mode.
+Entregado ya (2b): la validación FORMA en program-check (kind enum ⇒
+enumValues no vacío O catalog presente), 3 drills probados por MUTACIÓN
+(25/25). En vuelo (2c): la paridad implicativa. Lección de método para todos
+los briefs futuros: citar líneas de fuente solo verificadas en el acto.
 **Paso C2 ✅ `fd24be870`** — 16 sidecars a la forma de ley
 `<capability>.<sufijo>` (lectura medida contra el gate); baseline **20→4**
 (solo los 4 artefactos con nombre propio, razón re-escrita). Deuda anotada:
