@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "fc07b91abd641f911e69a107006b688e990c34bde7ee6b03b4d0823c4b91812a",
+    "authorityDigest": "f6ae9aa84256cb2ca0186fb7f8058e5fc29a27f71b1d80bba7d016144da46922",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -5117,8 +5117,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 18242,
-        "sha256": "83c0688cf0274e695c1e3607008b17e7b7bd51049bc422d2b82aaacb398a8247"
+        "bytes": 18290,
+        "sha256": "bb5f62ad560ed7a4f2c5fa3061365e19bebb31349b2619e837f1e0544d49fb8f"
       },
       {
         "path": "ui-design-system/packages/core/scripts/verticals/first-party-single-author-gate/index.mjs",
@@ -5157,8 +5157,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12505,
-        "sha256": "568f48d71850feb5e76a2918d5508cf03c48bee19a8c4f2ffb8bcdff836f712a"
+        "bytes": 12553,
+        "sha256": "f4dcfa315dea3616d6e99a3ed6587d727e5e7fd1605d934a3d69f054c73c4738"
       },
       {
         "path": "ui-design-system/packages/core/scripts/wiring-coverage-gate.mjs",
@@ -41803,24 +41803,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5380581,
-        "sha256": "72f312db35d1804fcafc555524084a39c3d6138d863261babdf59048782e5cb3"
+        "bytes": 5380605,
+        "sha256": "1662abf96af4415fee7151903606abf692f9587151f0b6c77d2a933be487d526"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5314276,
-        "sha256": "1de1d386c4818152a832bdd346db5a3aa92b75cd8f996514f66c920161ac88a8"
+        "bytes": 5314300,
+        "sha256": "79895e4545a61a34ac8123625252f008513bbd47b1225f312c4b1ff162eeda5d"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5504775,
-        "sha256": "afc3ff03836c28647bb06c1de1322e6972f2ca6473f3585484639b2e26e49c34"
+        "bytes": 5504799,
+        "sha256": "ab19c64425139eeb391c11ea3adad4e70118ae254c91504b732434d09c9771df"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -41843,8 +41843,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5375289,
-        "sha256": "ee3baaf504171bff13eb9247008a49f50cb6739e6a9ae714222be188e01be5c8"
+        "bytes": 5375313,
+        "sha256": "730b20ad85a1884d717acc25f4456548db1f5ca14111da6811e4265f4d504ecb"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "fc07b91abd641f911e69a107006b688e990c34bde7ee6b03b4d0823c4b91812a"
+    "digest": "f6ae9aa84256cb2ca0186fb7f8058e5fc29a27f71b1d80bba7d016144da46922"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "91a4cb79cdd2c4c0841cba832b14f33c1690a45ae11a97c33ccd207d82bf274c",
-      "91a4cb79cdd2c4c0841cba832b14f33c1690a45ae11a97c33ccd207d82bf274c"
+      "dae828efa292d51b43672d5fd49c31b93cba82ed1e3af7aca552c08c9993d676",
+      "dae828efa292d51b43672d5fd49c31b93cba82ed1e3af7aca552c08c9993d676"
     ],
     "agree": true
   }
