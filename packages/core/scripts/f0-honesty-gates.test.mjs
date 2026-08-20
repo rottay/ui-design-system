@@ -33,11 +33,13 @@ function run(script, cwd = CORE_ROOT) {
 }
 
 /** Plant a synthetic package tree and run a COPY of the gate against it. */
-function runOnSyntheticTree(scriptName, files) {
+function runOnSyntheticTree(scriptRelativePath, files) {
   const root = mkdtempSync(join(tmpdir(), 'f0-drill-'));
   const scriptsDir = join(root, 'packages/core/scripts');
-  mkdirSync(scriptsDir, { recursive: true });
-  cpSync(join(HERE, scriptName), join(scriptsDir, scriptName));
+  // The copy has to sit at the SAME depth the gate resolves its roots from,
+  // so a gate that lives in `<family>/<capability>/index.mjs` is planted there.
+  mkdirSync(dirname(join(scriptsDir, scriptRelativePath)), { recursive: true });
+  cpSync(join(HERE, scriptRelativePath), join(scriptsDir, scriptRelativePath));
   // The gates resolve their root through the shared helper, so the copy needs it too.
   mkdirSync(join(scriptsDir, 'lib/repo-root'), { recursive: true });
   cpSync(join(HERE, 'lib/repo-root/index.mjs'), join(scriptsDir, 'lib/repo-root/index.mjs'));
@@ -46,7 +48,7 @@ function runOnSyntheticTree(scriptName, files) {
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, content);
   }
-  return run(join(scriptsDir, scriptName), join(root, 'packages/core'));
+  return run(join(scriptsDir, scriptRelativePath), join(root, 'packages/core'));
 }
 
 /* ---------------- ds-underscore-prefix-gate ---------------- */
@@ -76,12 +78,12 @@ test('ds-underscore-prefix-gate ignores the private --_ds- namespace', () => {
 /* ---------------- exports-artifact-gate ---------------- */
 
 test('exports-artifact-gate passes on the built tree', () => {
-  const result = run(join(HERE, 'exports-artifact-gate.mjs'));
+  const result = run(join(HERE, 'packaging/exports-artifact-gate/index.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
 test('exports-artifact-gate FAILS on a missing exact target', () => {
-  const result = runOnSyntheticTree('exports-artifact-gate.mjs', {
+  const result = runOnSyntheticTree('packaging/exports-artifact-gate/index.mjs', {
     'package.json': JSON.stringify({
       name: '@rottay/design-system',
       exports: { './a': './dist/a.js' },
@@ -92,7 +94,7 @@ test('exports-artifact-gate FAILS on a missing exact target', () => {
 });
 
 test('exports-artifact-gate FAILS on a wildcard whose prefix dir is missing', () => {
-  const result = runOnSyntheticTree('exports-artifact-gate.mjs', {
+  const result = runOnSyntheticTree('packaging/exports-artifact-gate/index.mjs', {
     'package.json': JSON.stringify({
       name: '@rottay/design-system',
       exports: { './styles/*': './dist/*.css' },

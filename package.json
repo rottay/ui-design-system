@@ -62,7 +62,7 @@
     "roadmap:check": "pnpm roadmap:test && node scripts/roadmap/status/index.mjs check",
     "roadmap:commercial": "node scripts/roadmap/commercial-status/index.mjs status",
     "roadmap:commercial:check": "node scripts/roadmap/commercial-status/index.mjs check",
-    "cra12:check": "node packages/core/scripts/cra-12-motion-governance.mjs",
+    "cra12:check": "node packages/core/scripts/evidence/cra-12-motion-governance/index.mjs",
     "cra11:generate": "pnpm --filter @rottay/design-system run cra11:generate",
     "cra11:check": "pnpm --filter @rottay/design-system run cra11:check",
     "cra11:gate": "pnpm --filter @rottay/design-system run cra11:gate",

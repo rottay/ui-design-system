@@ -59,7 +59,7 @@ const SAME_CELL_STABILITY_CEILING = 0.0005;
 const MOBILE_TOUCH_TARGET_FLOOR = 44;
 
 const DIST_FRESHNESS_GATE = fileURLToPath(
-  new URL("../../../core/scripts/dist-freshness-gate.mjs", import.meta.url)
+  new URL("../../../core/scripts/packaging/dist-freshness-gate/index.mjs", import.meta.url)
 );
 
 const EXPECTED_COPY: Record<Fixture, Record<Locale, string>> = {

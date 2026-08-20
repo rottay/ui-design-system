@@ -59,9 +59,9 @@ export const CI_GATES = Object.freeze([
   // as `cra15:gate` (`--check --structural`) versus `cra15:gate:final`. When
   // WO-CRA-17 closes, this flag is what changes.
   //
-  // Its drill (`scripts/cra-17-integral-gate.test.mjs`) is reached by
+  // Its drill (`scripts/evidence/cra-17-integral-gate/index.test.mjs`) is reached by
   // `test:scripts`, which globs `scripts/**/*.test.mjs` recursively.
-  { id: 'cra-17-integral', run: ['node', 'scripts/cra-17-integral-gate.mjs', '--structural'], blocking: true },
+  { id: 'cra-17-integral', run: ['node', 'scripts/evidence/cra-17-integral-gate/index.mjs', '--structural'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
   { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/daisy-projection-contract.test.mjs'], blocking: true },
@@ -189,7 +189,7 @@ export const CI_GATES = Object.freeze([
   // `pnpm run gat07:check`, so a doc could contradict source with the whole
   // dashboard green. It sits AFTER the audit deliberately: when the audit is red
   // this gate is red for the same reason but far more slowly.
-  { id: 'gat-07-exact-proof', run: ['node', 'scripts/gat-07-exact-proof.mjs', '--check-artifact'], blocking: true },
+  { id: 'gat-07-exact-proof', run: ['node', 'scripts/evidence/gat-07-exact-proof/index.mjs', '--check-artifact'], blocking: true },
   { id: 'anatomy-variant-gate', run: ['node', 'scripts/anatomy-variant-gate.mjs', '--check'], blocking: true },
   { id: 'size-axis-law-gate', run: ['node', 'scripts/boundaries/size-axis-law-gate/index.mjs', '--check'], blocking: true },
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/boundaries/application-boundary-gate/index.test.mjs'], blocking: true },
@@ -325,13 +325,13 @@ export const CI_GATES = Object.freeze([
   // a5a4c3b4 reproduced every one of them, so the registry -- authored
   // 2026-07-17 -- had simply gone stale. The ui-design-system rows were
   // re-anchored to that commit ONCE, with provenance recorded in
-  // `cra-12-motion-governance.registry.json` under `reanchor`.
+  // `evidence/cra-12-motion-governance/cra-12-motion-governance.registry.json` under `reanchor`.
   //
   // The cross-repo slice stays out of this job: it audits four sibling
   // repositories and throws on a missing one. app-bithire and app-platform
   // carry their own motion debt and own their own rows.
-  { id: 'cra12-motion-governance', run: ['node', 'scripts/cra-12-motion-governance.mjs', '--repositories', 'ui-design-system'], blocking: true },
-  { id: 'cra12-motion-governance-drill', run: ['node', '--test', 'scripts/cra-12-motion-governance.reanchor.test.mjs'], blocking: true },
+  { id: 'cra12-motion-governance', run: ['node', 'scripts/evidence/cra-12-motion-governance/index.mjs', '--repositories', 'ui-design-system'], blocking: true },
+  { id: 'cra12-motion-governance-drill', run: ['node', '--test', 'scripts/evidence/cra-12-motion-governance/cra-12-motion-governance.reanchor.test.mjs'], blocking: true },
 
   // --- canonical taxonomy parity (WO-CRA-23 source-plumbing item 10) ---
   //

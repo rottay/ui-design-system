@@ -126,7 +126,7 @@ export default defineConfig({
         // catalog, so the root entry is not supplier-free either.
         //
         // The actual post-build count is enforced, not narrated: run
-        // `node scripts/icon-embed-inventory-gate.mjs` after `vite build` to
+        // `node scripts/packaging/icon-embed-inventory-gate/index.mjs` after `vite build` to
         // measure what shipped, checked against the reviewed, decrease-only
         // ceiling in scripts/icon-embed-inventory-gate.baseline.json.
         /^d3-.*/,

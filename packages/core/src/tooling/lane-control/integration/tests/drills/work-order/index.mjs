@@ -132,7 +132,7 @@ export function runDrills() {
     // one CI ENFORCES. A check that accepted any plausible `*-gate.mjs` path
     // passes the drill above and fails here, which is the difference between
     // reading the manifest and pattern-matching a filename.
-    const UNREGISTERED_GATE = 'packages/core/scripts/cra-14-public-barrel-gate.mjs';
+    const UNREGISTERED_GATE = 'packages/core/scripts/packaging/cra-14-public-barrel-gate/index.mjs';
     const registeredTokens = [...registeredAcceptanceGates().keys()];
     suite.expectFact({
       label: 'W4 SETUP — the script the next drill declares EXISTS and is not a blocking gate, so its refusal is about the register and not about a typo',

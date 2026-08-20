@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 // assertions measured so the post-run assembler
 // (cra-15-assemble.mjs) can fold them into
 // test-artifacts/craft/cra-15/browser-evidence.json in the schema
-// packages/core/scripts/cra-15-runtime-hardening-gate.mjs validates.
+// packages/core/scripts/evidence/cra-15-runtime-hardening-gate/index.mjs validates.
 //
 // Each focal test writes ONE distinct partial file (never a shared merge), so a
 // single-worker run accumulates a stable set with no read/modify/write race.

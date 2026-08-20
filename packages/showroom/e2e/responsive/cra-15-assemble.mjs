@@ -5,7 +5,7 @@
 //
 // Runs AFTER the production-build Playwright probes finish. It folds the
 // per-test measurements recorded under test-artifacts/craft/cra-15/.run/ into
-// the schema packages/core/scripts/cra-15-runtime-hardening-gate.mjs validates,
+// the schema packages/core/scripts/evidence/cra-15-runtime-hardening-gate/index.mjs validates,
 // measures the Particle/Spatial gzip closures from the SAME built core dist
 // (identical Vite-inline methodology as scripts/analyze-bundle.mjs), pins the
 // current source fingerprint via the gate itself, hashes the raw Playwright
@@ -24,7 +24,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
-import { auditCra15RuntimeHardening } from '../../../core/scripts/cra-15-runtime-hardening-gate.mjs';
+import { auditCra15RuntimeHardening } from '../../../core/scripts/evidence/cra-15-runtime-hardening-gate/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '../../../..');

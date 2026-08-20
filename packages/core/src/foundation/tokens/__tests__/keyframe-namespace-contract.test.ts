@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
  * identically-named keyframe defined anywhere else in the tree, with the
  * last-loaded definition winning outright rather than merging. Mirrors the
  * bare-keyframe-definition rule CRA12 motion governance enforces
- * workspace-wide (scripts/cra-12-motion-governance.mjs), scoped to this
+ * workspace-wide (scripts/evidence/cra-12-motion-governance/index.mjs), scoped to this
  * package's own foundation/tokens/css tree as a fast, standalone regression
  * gate. Originally scoped to foundation/animations/ only; W6-H widened the
  * scan to the full css tree after landing ds- renames across the 7

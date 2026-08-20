@@ -20,7 +20,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { auditPublicDeclarationClosures } from '../../../packages/core/scripts/cra-17-public-declaration-gate.mjs';
+import { auditPublicDeclarationClosures } from '../../../packages/core/scripts/packaging/cra-17-public-declaration-gate/index.mjs';
 
 // Ascending marker search, not a hardcoded `..` chain: this file is two
 // levels below scripts/ (scripts/boundaries/dependency-honesty/index.mjs),

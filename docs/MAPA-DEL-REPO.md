@@ -150,7 +150,7 @@ que sí corren en CI, más 17 codemods muertos de febrero de 2026.
 - `scripts/effect-registry-audit.mjs` + `.test.mjs` — (2 archivos) audita la procedencia de los efectos contra `packages/core/provenance/effects`; `pnpm effects:provenance`. VIVO. Importa `CI_GATES` desde `packages/core/scripts/ci-gates.manifest.mjs`.
 - `scripts/add-accent-bars.mjs`, `add-hover-transforms.mjs`, `add-style-memo.mjs`, `adopt-card-style.mjs`, `adopt-helpers.mjs`, `audit-helper-gaps.mjs`, `fix-focus-rings.mjs`, `fix-fontsize.mjs`, `fix-glass-adoption.mjs`, `fix-hardcoded-borders.mjs`, `fix-hover-transforms-v2.mjs`, `fix-null-array-guards.mjs`, `fix-rgba-overlays.mjs`, `fix-shadow-helpers.mjs`, `fix-transition-tokens.mjs`, `fix-usememo-v2.mjs`, `helper-gaps-report.json` — (17 archivos, 17 en git, ~110 KB) **[SIN CONSUMIDOR]** codemods de una sola pasada de las fases P0..P3E. Los 16 scripts escriben sobre `packages/core/src/components/custom/`, **una ruta que ya no existe** (`packages/core/src/components` fue borrado en la reorganización a `foundation/ infrastructure/ graphics/ ui/ tooling/`). Ninguno aparece en `package.json`, en `.github/workflows/ci.yml` ni en ningún `.md`; la única referencia cruzada es entre ellos mismos. Su último commit es del 2026-02-08 ("complete engine-awareness improvements across all 337 presets"). `helper-gaps-report.json` es la salida congelada de `audit-helper-gaps.mjs` y apunta a los mismos paths inexistentes.
 
-Sobre la comparación pedida `scripts/` vs `packages/core/scripts/` (632 archivos): **NO hay duplicación por nombre** — `comm -12` sobre las dos listas devuelve cero coincidencias. La división real es: la raíz guarda lo que cruza paquetes (roadmap, dependency-honesty, effect-registry, que necesitan ver `packages/core` y `packages/showroom` a la vez) y `packages/core/scripts/` guarda los ~600 gates internos del paquete core. La única grieta es que `packages/core/scripts/` contiene también gates que se invocan desde la raíz (`cra12:check` llama a `packages/core/scripts/cra-12-motion-governance.mjs` directamente por ruta), así que la frontera "cross-package vs interno" no se respeta al 100%.
+Sobre la comparación pedida `scripts/` vs `packages/core/scripts/` (632 archivos): **NO hay duplicación por nombre** — `comm -12` sobre las dos listas devuelve cero coincidencias. La división real es: la raíz guarda lo que cruza paquetes (roadmap, dependency-honesty, effect-registry, que necesitan ver `packages/core` y `packages/showroom` a la vez) y `packages/core/scripts/` guarda los ~600 gates internos del paquete core. La única grieta es que `packages/core/scripts/` contiene también gates que se invocan desde la raíz (`cra12:check` llama a `packages/core/scripts/evidence/cra-12-motion-governance/index.mjs` directamente por ruta), así que la frontera "cross-package vs interno" no se respeta al 100%.
 
 #### 1.2 `docs/` — (2 archivos, 2 en git, 44 KB)
 
@@ -2133,7 +2133,7 @@ alias en `package.json`.
   `.README.md`) — CI; frontera patternvssurface.
 - `taxonomy/taxonomy-parity-gate/index.mjs` (+ `index.test.mjs`) — CI; paridad entre taxonomía declarada e inventario real.
 - `boundaries/public-entrypoint-boundary-gate/index.mjs` (+ `index.test.mjs`) — `public-entrypoints:check`.
-- `cra-14-public-barrel-gate.mjs` — `cra14:check`. Sin autotest hermano.
+- `packaging/cra-14-public-barrel-gate/index.mjs` — `cra14:check`. Sin autotest hermano.
 - `boundaries/portal-substrate-gate/index.mjs` (+ `index.test.mjs`, `portal-substrate-gate.allowlist.json`) — CI; un solo substrato de portal.
 - `structure/import-binding-integrity-gate/index.mjs` (+ `index.test.mjs`) — CI, primero de la lista: import nombrado
   de un binding que el módulo destino nunca publica.
@@ -2203,7 +2203,7 @@ cinco corren solo por su drill y tres no corren nunca.
   `engine-token-audit.mjs` importa su `collectSourceFiles`.
 - `embedded-css-paint-census.mjs` (+ `embedded-css-paint-counter.test.mjs`) — CLI; solo lo
   ejecuta (spawn) el test de integración `engine-token-audit.runtime-svg.integration.test.mjs`.
-- `canvas-sink-census.mjs` (+ `.test.mjs`) — manifiesto de sumideros canvas; lo importa
+- `evidence/canvas-sink-census/index.mjs` (+ `.test.mjs`) — manifiesto de sumideros canvas; lo importa
   `cra-15-runtime-hardening-gate.mjs`, así que corre vía `cra15:gate`.
 - `skin-dead-part-audit.mjs` (+ `.test.mjs`) — dirección "selector de skin → ¿se estampa esa parte?";
   `engine-token-audit.mjs` importa `countDeadParts`.
@@ -2228,19 +2228,19 @@ Qué hace: prueba que lo que la documentación y los manifiestos AFIRMAN coincid
 exactamente con lo que la fuente hace. Es la familia de "un claim sin evidencia vale cero".
 Cómo se invoca: mitad CI, mitad `package.json`, dos huérfanos.
 
-- `gat-07-exact-proof.mjs` (+ `.test.mjs`, `gat-07-documentation-seal.json`,
+- `evidence/gat-07-exact-proof/index.mjs` (+ `.test.mjs`, `gat-07-documentation-seal.json`,
   `gat-07-doc-claim-allowlist.json`, `gat-07-public-claim-floor.json`,
   `gat-07-stale-corpus.json`) — CI `--check`; `gat07:write` regenera el sello.
-- `gat-09-full-claim-integrity.mjs` (+ `.test.mjs`, `gat-09-public-claim-evidence.json`) —
+- `evidence/gat-09-full-claim-integrity/index.mjs` (+ `.test.mjs`, `gat-09-public-claim-evidence.json`) —
   `gat09:structural` / `gat09:gate`; NO está en el manifiesto de CI.
-- `cra-11-adaptive-contract-census.mjs` (+ `.test.mjs`) — `cra11:generate|check|gate|test`; NO en CI.
-- `cra-12-motion-governance.mjs` (+ `.test.mjs`, `.reanchor.test.mjs`, `.registry.json`) — CI
+- `evidence/cra-11-adaptive-contract-census/index.mjs` (+ `.test.mjs`) — `cra11:generate|check|gate|test`; NO en CI.
+- `evidence/cra-12-motion-governance/index.mjs` (+ `.test.mjs`, `.reanchor.test.mjs`, `.registry.json`) — CI
   (`--repositories ui-design-system`) + drill de reancla.
-- `cra-15-runtime-hardening-gate.mjs` (+ `.test.mjs`) — `cra15:gate|write|gate:final`.
-- `cra-17-packaging-license-gate.mjs` (+ `.test.mjs`) — CI (`cra17:licenses`); lee
+- `evidence/cra-15-runtime-hardening-gate/index.mjs` (+ `.test.mjs`) — `cra15:gate|write|gate:final`.
+- `packaging/cra-17-packaging-license-gate/index.mjs` (+ `.test.mjs`) — CI (`cra17:licenses`); lee
   `provenance/graphics/pack-allowlist.json`.
-- `cra-17-public-declaration-gate.mjs` (+ `.test.mjs`) — `cra17:declarations`.
-- `cra-17-integral-gate.mjs` (+ `.test.mjs`, `cra-17-asset-entrypoints.test.mjs`) —
+- `packaging/cra-17-public-declaration-gate/index.mjs` (+ `.test.mjs`) — `cra17:declarations`.
+- `evidence/cra-17-integral-gate/index.mjs` (+ `.test.mjs`, `cra-17-asset-entrypoints.test.mjs`) —
   **[SOLO DRILL] + [DUPLICA]** de `cra-17-packaging-license-gate.mjs` y
   `cra-17-public-declaration-gate.mjs`: los IMPORTA a los dos (`auditGraphicsPackaging`, etc.)
   y los reejecuta como un agregado. Los dos componentes sí corren por separado; el agregado no
@@ -2248,8 +2248,8 @@ Cómo se invoca: mitad CI, mitad `package.json`, dos huérfanos.
 - `kimi-preservation-manifest.mjs` (+ `kimi-preservation-gate.test.mjs`) — CI `--check`;
   genera `KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json` (220 KB en la raíz).
 - `kimi-worklist-gate.mjs` (+ `.test.mjs`) — CI `--check`; valida `KIMI-VISUAL-WORKLIST.json` (749 KB).
-- `icon-embed-inventory-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — `iconembed:check|write`.
-- `pack-inventory-gate.mjs` (+ `.test.mjs`, `pack-inventory.baseline.json`,
+- `packaging/icon-embed-inventory-gate/index.mjs` (+ `.test.mjs`, `.baseline.json`) — `iconembed:check|write`.
+- `packaging/pack-inventory-gate/index.mjs` (+ `.test.mjs`, `pack-inventory.baseline.json`,
   `pack-inventory.additions.json`, `pack-inventory.lucide-allowlist.json`) — `packinv:check|write`.
 
 ---
@@ -2267,7 +2267,7 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
 - `builders/build-font-packs/index.mjs` — copia los font packs opt-in a `dist/fonts/` para que resuelvan los
   subpaths `./fonts/<id>.css`.
 - `generators/generate-semantic-icons/index.mjs` (+ `index.test.mjs`) — `icons:generate|check`; corpus semántico de 282 nombres.
-- `generate-supplier-contract.mjs` (+ `.test.mjs`) — `contract:generate|check` (este último SÍ en CI);
+- `packaging/generate-supplier-contract/index.mjs` (+ `.test.mjs`) — `contract:generate|check` (este último SÍ en CI);
   produce `supplier-contract.json` (185 KB) que consume `consumer/ds-supplier-honesty.mjs`.
 - `generators/generate-surface-capability-census/index.mjs` — **[SIN CONSUMIDOR]** CLI fino sobre
   `lib/surface-capability-census.mjs`. La librería sí se drilea (`surface-capability-census.test.mjs`),
@@ -2279,7 +2279,7 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
 
 Qué hace: impedir que se publique o se evalúe contra artefactos viejos.
 
-- `dist-freshness-gate.mjs` (+ `.test.mjs`) — `distfresh:check`, precondición de `prepack`;
+- `packaging/dist-freshness-gate/index.mjs` (+ `.test.mjs`) — `distfresh:check`, precondición de `prepack`;
   compara el hash de entrada de `lib/build-input-hash.mjs` contra el sello que dejó `builders/write-build-stamp/index.mjs`.
 - `verticals/vertical-css-staleness.gate/index.mjs` — en CI (`node --test`, es un archivo de test disfrazado de gate)
   y en `package.json` como `gate:styles-css`.
@@ -2331,7 +2331,7 @@ Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-pl
    `engine-token-audit.baseline.json` usando el inventario de renames de Git; nunca cambia un valor,
    dry-run por defecto. `engine-audit:relocate-paths`.
 7. `scripts/generators/generate-taxonomy/index.mjs` — camina `src/ui/` y emite `docs/TAXONOMY.generated.md`. `docs:taxonomy`.
-8. `scripts/tenant-theme-canary-fixtures.mjs` — publica los especímenes canary de tenant-theme como
+8. `scripts/packaging/tenant-theme-canary-fixtures/index.mjs` — publica los especímenes canary de tenant-theme como
    artefacto consumible (`tenant-theme-canary-fixtures.json` + `.d.ts` en la raíz del paquete).
    `tenant-theme-fixtures:generate|check`.
 
@@ -2547,8 +2547,8 @@ Dentro de `manifest/` (356 archivos):
 - `provenance/graphics/licenses/` — (2) licencias de los suppliers de glifos y marcas:
   `phosphor-icons-react-LICENSE`, `thesvg-LICENSE`.
 - `provenance/graphics/pack-allowlist.json` — (1) la allowlist de packs gráficos admitidos; la leen
-  `scripts/cra-17-packaging-license-gate.mjs` (gate bloqueante `cra17:licenses`) y
-  `scripts/cra-17-integral-gate.mjs`. `provenance/graphics/**` SÍ se publica (`files` lo incluye).
+  `scripts/packaging/cra-17-packaging-license-gate/index.mjs` (gate bloqueante `cra17:licenses`) y
+  `scripts/evidence/cra-17-integral-gate/index.mjs`. `provenance/graphics/**` SÍ se publica (`files` lo incluye).
 
 ---
 
@@ -2559,7 +2559,7 @@ Dentro de `manifest/` (356 archivos):
   y `app-evnto` verifiquen que no importan suppliers (Phosphor, Lucide, Ant icons) fuera del
   borde del adapter. Lleva un mapa `LEGACY_CONTRACTLESS_VERSIONS` con la última versión de cada app
   anterior al contrato. Lo alimenta `supplier-contract.json` (generado por
-  `scripts/generate-supplier-contract.mjs`), y `scripts/pack-inventory-gate.test.mjs` lo drillea.
+  `scripts/packaging/generate-supplier-contract/index.mjs`), y `scripts/packaging/pack-inventory-gate/index.test.mjs` lo drillea.
   Las copias comiteadas en los repos de app se verifican byte a byte contra esta.
 
 ---
@@ -2624,7 +2624,7 @@ Los 11 conjuntos:
    raíz (importados en sus líneas 76-84).
 3. `styles/platform.css` vs `styles/rottay.css` — byte-idénticos; `platform` ya no es un vertical del
    roster y ningún export lo referencia.
-4. `scripts/cra-17-integral-gate.mjs` importa y reejecuta `cra-17-packaging-license-gate.mjs` +
+4. `scripts/evidence/cra-17-integral-gate/index.mjs` importa y reejecuta `cra-17-packaging-license-gate.mjs` +
    `cra-17-public-declaration-gate.mjs`, que además corren por separado. El agregado no corre nunca.
 5. `parity:theme:check` == `theme-parity:check` en `package.json` — dos nombres, comando idéntico.
 6. Doble vía de invocación: `ci-gates.manifest.mjs` llama `node scripts/X.mjs` directo mientras
@@ -2663,7 +2663,7 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
 - `scripts/color-mix-argument-purity-gate.mjs`
 - `scripts/modern-bundle-framework-gate.mjs`
 - `scripts/chart-series-reserved-name-gate.mjs`
-- `scripts/cra-17-integral-gate.mjs`
+- `scripts/evidence/cra-17-integral-gate/index.mjs`
 - `scripts/embedded-css-paint-census.mjs` (solo lo spawnea un test de integración)
 
 #### Otros

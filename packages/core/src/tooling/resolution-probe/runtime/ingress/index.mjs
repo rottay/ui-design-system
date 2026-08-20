@@ -44,7 +44,7 @@ import { pathToFileURL } from 'node:url';
 
 import { CORE_ROOT, fromCoreRoot } from '../../foundation/paths/index.mjs';
 import { VERTICALS } from '../../foundation/scope/index.mjs';
-import { assertDistFresh } from '../../../../../scripts/dist-freshness-gate.mjs';
+import { assertDistFresh } from '../../../../../scripts/packaging/dist-freshness-gate/index.mjs';
 
 /**
  * The two doors, with where each one lands and which compiler owns it.
