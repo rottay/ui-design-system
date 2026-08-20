@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "922405edce1ae33d9bf03c0912f4e7db659d1a73dd5e2dd435ce360fb121021f",
+    "authorityDigest": "cfa7224ef7d1b64bf8447a41ef571d47baf334b32008b25dce741d3b28e99d42",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -2658,16 +2658,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 97018,
-        "sha256": "ff61505dbbe6b683091eb5dea3fd342e0115b6639f1eadb1893571a13854aef6"
+        "bytes": 97008,
+        "sha256": "ae76bde4a4a7a793736f45a10ca21c4e0d5cf13800c7fc907d2da1497714eccd"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 30388,
-        "sha256": "917297a177bd04af8c0ede7b205825dd814c270b5076ab746755cff3a890b9f3"
+        "bytes": 30368,
+        "sha256": "0b34f64be34aa34bb77a6b6cc75ab8034c66e88dc638f0f4643d80b958ea71e4"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
@@ -7507,8 +7507,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 89485,
-        "sha256": "8565493c4681427f901c3eff1e634029bbb2323a8423fcbaccaf9cdb2101e25d"
+        "bytes": 89479,
+        "sha256": "1916f2d4c19ab64d46ceaff58d5e45652082cb28d27ba56498ff499e729aae20"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -7517,8 +7517,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 30414,
-        "sha256": "ae6e4eb0775a4a0df0a94b3ee1a1c57d8079b0ac0a2a0281fea95474dacc79e7"
+        "bytes": 30401,
+        "sha256": "8424f566c1b9f6f793277641ba04c5ce703470b007155a93bbd214f154da626d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/index.ts",
@@ -36947,24 +36947,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5380575,
-        "sha256": "284c539952f3790acfbe8e1b2192931e82abb309c780dda73c385080901222d0"
+        "bytes": 5380565,
+        "sha256": "a0f7319e32e50158f7b1b43d3da6a8c16f8a76b8e720aab04022a10f577d210e"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5314291,
-        "sha256": "74e9f559301bd8c38fa0a255f6abf9aa0f757b2689b986df80851a4a2206f1c2"
+        "bytes": 5314271,
+        "sha256": "c19a60bd654a09cee53f6bad0805c1eb412c1e299a1264930662e7166cc014e8"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5504605,
-        "sha256": "ef1ddc35acab488048ee1a05d483eee204c8f7663cd6484e857522085e046597"
+        "bytes": 5504575,
+        "sha256": "9853a2902cc84bd5a5a9e0c795d2fb7079a3ee5d06ae1e8cdad0ebaa7047dd87"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "922405edce1ae33d9bf03c0912f4e7db659d1a73dd5e2dd435ce360fb121021f"
+    "digest": "cfa7224ef7d1b64bf8447a41ef571d47baf334b32008b25dce741d3b28e99d42"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "cd6ba2a8aca721867ebdd5c2b9a11f5da9ca31345e26472cd93a893d25cdb257",
-      "cd6ba2a8aca721867ebdd5c2b9a11f5da9ca31345e26472cd93a893d25cdb257"
+      "9374cb754f9c542f2ad8a3e2441d442d5acf6c0476bc1d1c3cdbe71f2e472e6a",
+      "9374cb754f9c542f2ad8a3e2441d442d5acf6c0476bc1d1c3cdbe71f2e472e6a"
     ],
     "agree": true
   }

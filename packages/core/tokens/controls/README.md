@@ -8,7 +8,7 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: e3168dae543ebfc3fc204335361c0f9baa4617e256c970fa9ac20e8dc977da4c
+digest: ef8210f65d08129e8c34f76b025a21afe5ad475936d28adc9e12ba61244c4ec8
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
@@ -25,7 +25,7 @@ digest: e3168dae543ebfc3fc204335361c0f9baa4617e256c970fa9ac20e8dc977da4c
 | `motion.dial` | Motion intensity and duration | scale | engine cadence unchanged | 2 ch | `motion.*` | `appearance.general.motion.{intensity,durationScale,ambient}` | 43 | `button.css` |
 | `surfaces.elevation-posture` | Elevation posture | enum | soft (DS shadow ramp untouched) | 3 ch | `surfaces.shadows.*` | `appearance.general.surfaces.elevation` | 174 | `card.css` |
 | `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | 1 ch | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | 62 | `overlay-modal.css` |
-| `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 2 ch | `chrome.sidebar.*` | `appearance.general.navigation.sidebarTone` | 6 | `menu.css` |
+| `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 2 ch | `chrome.sidebar.*` | `appearance.general.navigation.sidebarTone` | 7 | `menu.css` |
 | `experience.profile` | Experience profile | profile-id | baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel | 5 ch | `expressive.experienceProfile` | `appearance.general.experienceProfile` | 75 | `index.tsx` |
 
 ## PRO — 7 controles (familias y perfiles)
@@ -34,7 +34,7 @@ digest: e3168dae543ebfc3fc204335361c0f9baa4617e256c970fa9ac20e8dc977da4c
 |---|---|---|---|---|---|---|---|---|
 | `chrome.families` | Per-family chrome | chrome-map | family derivations over semantic channels decide | 3 ch | `chrome.*` | `visualFoundation.advanced.chrome.*` | 37 | `table.css` |
 | `chrome.anatomy` | Anatomy variants | enum | default anatomy; fails closed unless the vertical envelope opts in | data → compilador → familias | `chrome.{cardComponent,table,sidebar,layout}.anatomy` | `visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy` | vía compilador (evidence →) | `card.css` |
-| `token-overrides` | Bounded raw channel overrides | token-map | none; closed allowlist, max 200 entries, fails closed | 3 ch | `tokenOverrides` | `visualFoundation.advanced.tokenOverrides` | 826 | `index.ts` |
+| `token-overrides` | Bounded raw channel overrides | token-map | none; closed allowlist, max 200 entries, fails closed | 3 ch | `tokenOverrides` | `visualFoundation.advanced.tokenOverrides` | 827 | `index.ts` |
 | `recipe-profile` | Family recipe profile | profile-id | no profile: family recipe defaults apply | 1 ch | `recipeProfile` | `visualFoundation.recipeProfile` | 0 | `index.tsx` |
 | `profiles.expressive` | Explicit expressive axes | enum | each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline | 4 ch | `expressive.profiles.*` | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 15 | `index.tsx` |
 | `profiles.icon` | Icon posture profile | enum | baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design. | data → compilador → familias | `expressive.profiles.icon` | `visualFoundation.advanced.profiles.icon` | vía compilador (evidence →) | `index.tsx` |

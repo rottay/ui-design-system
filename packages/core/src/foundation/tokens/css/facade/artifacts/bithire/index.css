@@ -175,7 +175,7 @@
   --ds-button-xs-line-height: 16px;
   --ds-button-xs-padding-x: 8px;
   --ds-button-xs-radius: calc(7px / 1.25 * var(--ds-radius-scale, 1));
-  --ds-card-bg: #ffffff;
+  --ds-card-bg: var(--ds-surface-card);
   --ds-card-bg-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card));
   --ds-card-body-color: #14283B;
   --ds-card-body-padding: 14px;
@@ -1280,7 +1280,6 @@
   --ds-button-secondary-border: #253545;
   --ds-button-secondary-color: #9aacbf;
   --ds-button-secondary-hover-bg: #1b2535;
-  --ds-card-bg: #151d2b;
   --ds-card-bg-hover: #1b2535;
   --ds-card-body-color: var(--ds-color-text-primary);
   --ds-card-border: #253545;

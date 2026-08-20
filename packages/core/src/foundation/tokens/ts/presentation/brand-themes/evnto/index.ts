@@ -264,7 +264,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       bg: "#131210",
       headerBg: "rgba(19, 18, 16, 0.92)",
       headerBorder: "#2E2C24",
-      siderBg: "#0E0D0B",
       siderBorder: "#222018",
     },
     table: {
@@ -525,7 +524,7 @@ const CHROME: BrandChrome = {
     headerBg: 'rgba(255, 255, 255, 0.95)',
     headerBackdrop: 'blur(10px)',
     headerBorder: 'rgba(0, 0, 0, 0.06)',
-    siderBg: '#FAFAFA',
+    siderBg: 'var(--ds-sidebar-bg)',
     siderBorder: 'rgba(0, 0, 0, 0.06)',
   },
   shell: {

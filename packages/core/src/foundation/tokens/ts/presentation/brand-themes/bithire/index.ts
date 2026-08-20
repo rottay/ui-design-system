@@ -470,7 +470,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       popoverShadow: "var(--ds-shadow-md)",
     },
     cardComponent: {
-      bg: "#151d2b",
       bgHover: "#1b2535",
       border: "#253545",
       shadow: "0 4px 12px rgba(20, 40, 59, 0.16),\n    0 2px 4px rgba(20, 40, 59, 0.1)",
@@ -1769,7 +1768,7 @@ const CHROME: BrandChrome = {
     paddingMd: "1rem",
     paddingLg: "1.25rem",
     paddingXl: "1.5rem",
-    bg: "#ffffff",
+    bg: "var(--ds-surface-card)",
     bgHover: "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))",
     color: "#14283B",
     colorMuted: "#728398",

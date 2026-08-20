@@ -12,15 +12,15 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 97018,
-        "lines": 1735,
-        "sha256": "ff61505dbbe6b683091eb5dea3fd342e0115b6639f1eadb1893571a13854aef6"
+        "bytes": 97008,
+        "lines": 1734,
+        "sha256": "ae76bde4a4a7a793736f45a10ca21c4e0d5cf13800c7fc907d2da1497714eccd"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30388,
-        "lines": 587,
-        "sha256": "917297a177bd04af8c0ede7b205825dd814c270b5076ab746755cff3a890b9f3"
+        "bytes": 30368,
+        "lines": 586,
+        "sha256": "0b34f64be34aa34bb77a6b6cc75ab8034c66e88dc638f0f4643d80b958ea71e4"
       }
     ],
     "sources": [
@@ -32,15 +32,15 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 89485,
-        "lines": 2181,
-        "sha256": "8565493c4681427f901c3eff1e634029bbb2323a8423fcbaccaf9cdb2101e25d"
+        "bytes": 89479,
+        "lines": 2180,
+        "sha256": "1916f2d4c19ab64d46ceaff58d5e45652082cb28d27ba56498ff499e729aae20"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 30414,
-        "lines": 800,
-        "sha256": "ae6e4eb0775a4a0df0a94b3ee1a1c57d8079b0ac0a2a0281fea95474dacc79e7"
+        "bytes": 30401,
+        "lines": 799,
+        "sha256": "8424f566c1b9f6f793277641ba04c5ce703470b007155a93bbd214f154da626d"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
@@ -51,11 +51,11 @@
       "distinctChannels": 1211
     },
     "bithire": {
-      "occurrences": 1711,
+      "occurrences": 1710,
       "distinctChannels": 1234
     },
     "evnto": {
-      "occurrences": 565,
+      "occurrences": 564,
       "distinctChannels": 469
     }
   },
@@ -1870,8 +1870,8 @@
     "commonChannels": 431,
     "identicalValue": 156,
     "divergentValue": 275,
-    "identicalRoleShape": 290,
-    "divergentRoleShape": 141,
+    "identicalRoleShape": 289,
+    "divergentRoleShape": 142,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -1951,6 +1951,14 @@
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-card-bg",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
+          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -2550,7 +2558,7 @@
         "roles": {
           "rottay": "base",
           "bithire": "base,overlay-mode",
-          "evnto": "base,overlay-mode"
+          "evnto": "base"
         }
       },
       {
@@ -10623,8 +10631,8 @@
         },
         "rootFrozen": {
           "count": 4,
-          "readerEdges": 26,
-          "distinctReaders": 26,
+          "readerEdges": 27,
+          "distinctReaders": 27,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -10701,8 +10709,10 @@
                 "base=#fafafa",
                 "overlay-mode=#0E0D0B"
               ],
-              "readers": [],
-              "readerCount": 0,
+              "readers": [
+                "--ds-layout-sider-bg"
+              ],
+              "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 998,
@@ -11416,14 +11426,14 @@
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 477,
-        "allInDistinctRoles": 477,
+        "channelsDeclaredMoreThanOnce": 476,
+        "allInDistinctRoles": 476,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 96,
-        "allInDistinctRoles": 96,
+        "channelsDeclaredMoreThanOnce": 95,
+        "allInDistinctRoles": 95,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }
@@ -11434,36 +11444,36 @@
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
       "rottay": 1820,
-      "bithire": 1504,
-      "evnto": 398
+      "bithire": 1503,
+      "evnto": 397
     },
     "union": 2613,
-    "intersection": 346,
+    "intersection": 345,
     "intersectionPct": 13.2,
     "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 713,
+        "shared": 712,
         "union": 2611,
         "pctOfUnion": 27.3,
         "pctOfSmaller": 47.4
       },
       "rottay+evnto": {
         "shared": 392,
-        "union": 1826,
+        "union": 1825,
         "pctOfUnion": 21.5,
-        "pctOfSmaller": 98.5
+        "pctOfSmaller": 98.7
       },
       "bithire+evnto": {
-        "shared": 350,
+        "shared": 348,
         "union": 1552,
-        "pctOfUnion": 22.6,
-        "pctOfSmaller": 87.9
+        "pctOfUnion": 22.4,
+        "pctOfSmaller": 87.7
       }
     },
     "exclusive": {
       "rottay": 1061,
-      "bithire": 787,
+      "bithire": 788,
       "evnto": 2
     },
     "exclusiveSamples": {
