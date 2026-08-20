@@ -679,6 +679,7 @@
     "exports:artifact:check": "node scripts/packaging/exports-artifact-gate/index.mjs",
     "root-catalog:check": "node scripts/tokens/root-catalog-freshness-gate/index.mjs",
     "root-exposure:check": "node scripts/tokens/root-exposure-gate/index.mjs",
+    "cascade-ratchet:check": "node scripts/engine/cascade-wiring-ratchet/index.mjs",
     "daisy:generate": "node scripts/engine/daisy-painted-classes/index.mjs",
     "surface-census:generate": "node scripts/generators/generate-surface-capability-census/index.mjs",
     "quality-evidence:v2:inventory": "node scripts/quality-evidence/v2/cli.mjs inventory",

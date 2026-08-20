@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "law": "Deuda de cascada por NOMBRE (ARCHITECTURE §1.6): un canal de componente sin camino a raiz es deuda. Decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.",
+  "rules": {
+    "a": "las raices/rampas (destinos de fallback) quedan FUERA del denominador",
+    "b": "un fallback funcional que alcanza raiz -- incluso envuelto en color-mix() -- cuenta como cableado"
+  },
+  "producedOn": "F2.2",
+  "corpus": "lib/engine/skin-files/collectSkinFiles() -- un solo walker, importado",
+  "denominator": 4374,
+  "wired": 2203,
+  "debt": 2171,
+  "rootsExcluded": 768,
+  "skinFiles": 391
+}

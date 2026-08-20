@@ -188,6 +188,21 @@ export const CI_GATES = Object.freeze([
 
   // --- structural / ownership ---
   { id: 'engine-token-audit', run: ['node', 'scripts/engine/token-audit/index.mjs', '--check'], blocking: true },
+  // ARCHITECTURE §1.6: "a per-component channel with no path to any root is
+  // debt, and the orphan count is a decrease-only ratchet". Este es ese
+  // contador -- no existia. Drill primero, como en todo el archivo: el gate
+  // COMPUTA una clasificacion, y un clasificador que dejo de clasificar
+  // reporta un numero plausible y se ve igual que un arbol sano.
+  {
+    id: 'cascade-wiring-ratchet-drill',
+    run: ['node', '--test', 'scripts/engine/cascade-wiring-ratchet/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'cascade-wiring-ratchet',
+    run: ['node', 'scripts/engine/cascade-wiring-ratchet/index.mjs'],
+    blocking: true,
+  },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
   // the documentation, the code-derived vertical rows, the data-part corpus, and
