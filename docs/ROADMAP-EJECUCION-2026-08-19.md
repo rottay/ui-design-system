@@ -815,6 +815,23 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F4A-1 — diseño del DT ASENTADO (2026-08-20).** Dos documentos:
+`/tmp/f4a-1-adjudicaciones-definicionales.md` (las 5 definiciones que F4A-0
+probó no-medibles: metadato = LISTA enumerada de 36, denominador de pintura
+3.690; asignación = posición autorada EN FUENTE, el roster es output del
+esquema no herencia del catálogo; 2 var() fantasma rastreadas no bloqueantes;
+asimétricas = 16; tier.page.fg = 42) y `/tmp/f4a-1-esquema.md` (la decisión
+central: **la asignación vive en la fuente como tags JSDoc de vocabulario
+cerrado** — `@domicile` + `@governor` — que el harness parsea mecánicamente;
+ni metadata paralela ni prosa libre; artefacto compilado byte-idéntico, mismo
+export, mismo lowering, sin segunda foundation. Los 6 nudos adjudicados: K1
+descongelar primary con valor sin cambiar; K2 `--ds-color-border` raíz
+canónica del par, evnto invierte, R35 REDERIVED; K3 raíz NUEVA
+`--ds-color-text-secondary` #A0A0A5 tenant-dial, los 42 derivan en F4A-6; K4
+las 16 con valor = resolución de hoy; K5 tabla bithire baseline con razón,
+no se unifica; 10 por-crear seed, materialización a F2-asimétrico/F4B). En
+producción: roster borrador por worker (F4A-1b, 190 entradas esperadas;
+BLOCKED lo que no tenga domicilio evidente — lo decido yo).
 **F4A-0 ✅ (worker Opus, read-only, `/tmp/f4a-0-baseline.md` + datos en
 `/tmp/f4a-0/`).** Cero escrituras en el repo. **7 predicciones falsifican
 EXACTO**: hojas evaluadas 3.726 = 3.738 − 12 (el −12 son exactamente los 12
