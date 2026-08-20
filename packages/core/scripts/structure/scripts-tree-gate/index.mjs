@@ -30,6 +30,10 @@
  *   R6  The lib/ subfamily roster is exactly §2.9's.
  *   A1  quality-evidence/ is its own jurisdiction (v2/ + programs/) — the
  *       gate checks nothing inside it beyond its presence.
+ *   M1  packages/core/manifest/ (graduated in F0.5, capability form in F1
+ *       Paso C3): capability dirs at the root next to the declared data
+ *       owners (cascade/, controls/, families/, generated/, groups/ +
+ *       index.json, schema.json). Nothing else loose at that root.
  *
  * --check (default)  exit 1 listing every finding not in the baseline and
  *                    every stale baseline entry.
@@ -139,12 +143,31 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
     }
   }
 
+  // manifest/ — the graduated jurisdiction (Paso C3): capability dirs at the
+  // root next to declared data owners; no loose authored files. M1 catches
+  // anything else at that root; capabilities follow the same R3 law.
+  const manifestRoot = join(scriptsRoot, '..', 'manifest');
+  if (existsSync(manifestRoot)) {
+    const DATA_OWNERS = new Set(['cascade', 'controls', 'families', 'generated', 'groups']);
+    const DATA_FILES = new Set(['index.json', 'schema.json']);
+    for (const entry of readdirSync(manifestRoot, { withFileTypes: true })) {
+      const rel = `manifest/${entry.name}`;
+      if (!entry.isDirectory()) {
+        if (!DATA_FILES.has(entry.name)) add('M1-loose-manifest-file', rel);
+        continue;
+      }
+      if (DATA_OWNERS.has(entry.name)) continue;
+      walkCapability(join(manifestRoot, entry.name), rel);
+    }
+  }
+
   if (drill === 'R1') add('R1-loose-root-file', 'drill-loose-file.mjs');
   if (drill === 'R2') add('R2-loose-family-file', 'ci/drill-loose.mjs');
   if (drill === 'R3') add('R3-foreign-file', 'ci/runner/drill-foreign.json');
   if (drill === 'R4') add('R4-forbidden-segment', 'ci/utils');
   if (drill === 'R5') add('R5-family-prefix-repeat', 'ci/ci-drill');
   if (drill === 'R6') add('R6-undeclared-lib-subfamily', 'lib/drill-sub');
+  if (drill === 'M1') add('M1-loose-manifest-file', 'manifest/drill.mjs');
   if (drill === 'stale-baseline') { /* handled by caller mutating findings */ }
   return findings;
 }

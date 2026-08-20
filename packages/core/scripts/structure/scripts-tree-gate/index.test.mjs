@@ -39,7 +39,7 @@ test('baseline integrity: every entry carries rule, path and a non-empty reason'
   }
 });
 
-for (const rule of ['R1', 'R2', 'R3', 'R4', 'R5', 'R6']) {
+for (const rule of ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'M1']) {
   test(`drill ${rule}: an injected ${rule} violation is caught`, () => {
     const out = runGate([`--drill=${rule}`]);
     assert.equal(out.status, 0, out.stderr);
@@ -83,8 +83,13 @@ const FAMILIES = [
 const LIB_SUBS = ['build', 'engine', 'evidence', 'hooks', 'paint', 'source', 'taxonomy', 'tokens', 'verticals'];
 
 function buildSandbox(t) {
-  const root = mkdtempSync(join(tmpdir(), 'scripts-tree-sandbox-'));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  // Wrapper dir so a sibling `manifest/` (M1) also lands inside the sandbox —
+  // the M1 drill once leaked into the shared tmpdir parent and poisoned the
+  // clean-tree drill on the next run. Hermetic now: everything under wrapper/.
+  const wrapper = mkdtempSync(join(tmpdir(), 'scripts-tree-sandbox-'));
+  t.after(() => rmSync(wrapper, { recursive: true, force: true }));
+  const root = join(wrapper, 'scripts');
+  mkdirSync(root, { recursive: true });
   writeFileSync(join(root, 'vitest.scripts.config.ts'), '// toolchain\n');
   writeFileSync(join(root, 'tests-typecheck-ambient.d.ts'), '// toolchain\n');
   for (const family of FAMILIES) {
@@ -164,4 +169,15 @@ test('sandbox R5-lib: a subfamily-prefix child inside lib/ is detected on disk (
   mkdirSync(join(root, 'lib', 'paint', 'paint-probe'), { recursive: true });
   writeFileSync(join(root, 'lib', 'paint', 'paint-probe', 'index.mjs'), '// probe\n');
   assert.ok(rules(collectFindings(root)).includes('R5-family-prefix-repeat lib/paint/paint-probe'));
+});
+
+test('sandbox M1: a loose file at the manifest root is detected on disk', (t) => {
+  const root = buildSandbox(t);
+  mkdirSync(join(root, '..', 'manifest'), { recursive: true });
+  writeFileSync(join(root, '..', 'manifest', 'index.json'), '{}\n');
+  mkdirSync(join(root, '..', 'manifest', 'generator'));
+  writeFileSync(join(root, '..', 'manifest', 'generator', 'index.mjs'), '// gen\n');
+  assert.deepEqual(collectFindings(root), []);
+  writeFileSync(join(root, '..', 'manifest', 'stray.mjs'), '// planted\n');
+  assert.ok(rules(collectFindings(root)).includes('M1-loose-manifest-file manifest/stray.mjs'));
 });
