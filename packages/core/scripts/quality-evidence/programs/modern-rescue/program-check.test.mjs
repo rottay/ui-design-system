@@ -562,3 +562,157 @@ test("historical orchestration mechanics fail closed", () => {
     "longIterationLaw without MAIN must be rejected"
   );
 });
+
+/*
+ * FORMA drills. The rule says an enum must name its vocabulary in ONE of two
+ * governed domiciles. Three drills, because a one-sided drill would pass on a
+ * rule that only ever checked `enumValues`: the planted red for each domicile
+ * missing, and a planted GREEN proving the `calibration.catalog` branch is a
+ * real alternative and not decoration.
+ */
+test("planted enum with neither enumValues nor calibration.catalog fails closed", () => {
+  const target = join(manifestRoot, "controls/chrome.anatomy.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    delete doc.calibration.catalog;
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      "an enum must name its vocabulary in one of the two governed domiciles",
+      "an enum whose catalog is removed and whose enumValues are empty must fail"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("planted closed-enum emptied of enumValues, with no catalog, fails closed", () => {
+  const target = join(manifestRoot, "controls/density.mode.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.domain.enumValues = [];
+    delete doc.calibration?.catalog;
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      "an enum must name its vocabulary in one of the two governed domiciles",
+      "emptying a closed-enum without a catalog must fail"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("CONTROL: a catalog is a real alternative domicile, not decoration", () => {
+  const target = join(manifestRoot, "controls/density.mode.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.domain.enumValues = [];
+    doc.calibration = { ...(doc.calibration ?? {}), catalog: { mode: ["compact", "normal", "spacious"] } };
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    assert.equal(
+      errors.filter((error) => error.includes("two governed domiciles")).length,
+      0,
+      `a catalog must satisfy the rule on its own; got ${JSON.stringify(errors)}`
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+/*
+ * ADMISSION drills. The rule is an implication (emitted => admitted), so a
+ * drill that only proved the green path would pass on a rule that admitted
+ * everything. Each of the three adjudications gets a planted red of its own,
+ * plus the live tree as the standing positive.
+ */
+test("planted emitted value with no admission fails closed", () => {
+  const target = join(manifestRoot, "cascade/roots/chrome.anatomy.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.variants.push({
+      id: "card:invented",
+      value: "invented",
+      effects: { emits: "data-anatomy-card=invented" },
+      pinned: {},
+    });
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      'chrome.anatomy emits "card:invented"',
+      "a value the catalog does not admit must fail"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("the card <-> cardComponent alias is the resolution path, not decoration", () => {
+  const target = join(manifestRoot, "controls/chrome.anatomy.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    // The live tree is green while the root says `card` and the catalog says
+    // `cardComponent`: that IS the alias working. Removing the catalog axis
+    // proves the alias is where the lookup goes, and names it in the failure.
+    const doc = JSON.parse(original);
+    delete doc.calibration.catalog.cardComponent;
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      "calibration.catalog.cardComponent",
+      "the card axis must resolve through the cardComponent alias"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("the density axis is admitted by density.mode, not by the sibling catalog", () => {
+  const target = join(manifestRoot, "controls/density.mode.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.domain.enumValues = ["compact", "normal"];
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      'profiles.expressive emits "density:spacious" but controls/density.mode.json',
+      "the cross-owner exception must read density.mode"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("planted root axis with no mapped owner fails closed", () => {
+  const target = join(manifestRoot, "cascade/roots/profiles.expressive.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.variants.push({
+      id: "weather:sunny",
+      value: "sunny",
+      effects: { emits: "--ds-weather: sunny" },
+      pinned: {},
+    });
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      'emits axis "weather" but no governed owner admits it',
+      "an axis nobody owns must fail, never be skipped"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});

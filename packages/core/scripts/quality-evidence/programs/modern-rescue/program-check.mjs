@@ -344,8 +344,122 @@ function collectTextualFailures() {
           `manifest/controls/${entry} domain.kind ${JSON.stringify(kind ?? null)} is not a governed domain kind`,
         );
       }
+      // FORMA. A control that calls itself an enum has to SAY which values it
+      // admits, somewhere a reader can find them. Two domiciles are legal and
+      // only two: `domain.enumValues` for a flat single-axis vocabulary, and
+      // `calibration.catalog` for a per-axis map -- the domicile the owner
+      // ruled in `customization-model.json#vocabularyDomicile`, which exists
+      // because `TenantCapabilityDeclaration.enumValues` is a flat
+      // `readonly string[]` and cannot express a map. Declaring NEITHER is what
+      // this rule refuses: an enum whose vocabulary lives nowhere at all.
+      if (kind === 'enum' || kind === 'closed-enum') {
+        const enumValues = control?.domain?.enumValues;
+        const hasEnum = Array.isArray(enumValues) && enumValues.length > 0;
+        const catalog = control?.calibration?.catalog;
+        const hasCatalog = catalog !== undefined && catalog !== null;
+        if (!hasEnum && !hasCatalog) {
+          failures.push(
+            `manifest/controls/${entry} declares domain.kind ${JSON.stringify(kind)} with an empty ` +
+              'domain.enumValues and no calibration.catalog: an enum must name its vocabulary in one ' +
+              'of the two governed domiciles',
+          );
+        }
+      }
     }
   }
+
+  /*
+   * ADMISSION -- every value a cascade root EMITS must be ADMITTED by a
+   * governed owner. Three adjudications are baked in here on purpose; read
+   * them before changing a line, because each one is the answer to a real
+   * question that was asked and settled.
+   *
+   * 1. ADMITTED IS NOT EXPANDED. The check is an IMPLICATION, never an
+   *    equality. `calibration.catalog` is copied literally from the closed
+   *    vocabularies in `expressive-profiles/index.ts` -- what a tenant may
+   *    ASK FOR. A cascade root is derived from the `expansion/` tables -- what
+   *    the engine EMITS today. The two are deliberately different sizes:
+   *    `motif` admits 7 values and only 4 have expansion rows in v1 (`dots`,
+   *    `deco-fan`, `ambient-orbs` wait for the K-wave). Demanding set equality
+   *    would turn the tree red the day someone admits a value before wiring
+   *    its expansion -- punishing the normal order of work. Admitting without
+   *    emitting is legal; emitting without admitting is the defect.
+   *
+   * 2. THE card <-> cardComponent ALIAS, declared once, here. The runtime
+   *    authority `TENANT_THEME_ANATOMY_VARIANTS` (tenant-theme/index.ts:322)
+   *    names the slot `cardComponent`, and the control's catalog copies it
+   *    literally. The cascade root names the same axis `card`, because its
+   *    `effects.emits` is the DOM attribute `data-anatomy-card`. Both names
+   *    are right in their own domain, so NEITHER artifact is renamed: the
+   *    translation lives in this one map and nowhere else.
+   *
+   * 3. THE density CROSS-OWNER EXCEPTION. `profiles.expressive`'s catalogLaw
+   *    excludes `density` on purpose -- ExpressiveAxes reuses the existing
+   *    tenant vocabulary instead of minting a parallel profile enum, so the
+   *    domain belongs to the `density.mode` control. The root still emits a
+   *    `density` axis because it HAS an expansion table. So this axis is
+   *    admitted against `controls/density.mode.json` rather than against the
+   *    sibling catalog. It is an exception with a named owner, not a hole:
+   *    an axis with no mapped owner at all is a failure.
+   */
+  const ADMISSION_ROOTS = ['chrome.anatomy', 'profiles.expressive'];
+  /** Root axis name -> catalog axis name. See adjudication 2 above. */
+  const CATALOG_AXIS_ALIASES = { card: 'cardComponent' };
+  /** Root axis name -> the control that owns its vocabulary. See adjudication 3. */
+  const CROSS_OWNER_AXES = { density: 'density.mode' };
+
+  for (const rootId of ADMISSION_ROOTS) {
+    const rootRel = `${MANIFEST_DIR}/cascade/roots/${rootId}.json`;
+    const controlRel = `${MANIFEST_DIR}/controls/${rootId}.json`;
+    if (!existsSync(join(repoRoot, rootRel)) || !existsSync(join(repoRoot, controlRel))) {
+      failures.push(`admission: ${rootId} needs both its cascade root and its control to exist`);
+      continue;
+    }
+    const root = readJson(rootRel);
+    const control = readJson(controlRel);
+    const catalog = control?.calibration?.catalog;
+    if (!catalog || typeof catalog !== 'object') {
+      failures.push(`admission: manifest/controls/${rootId}.json has no calibration.catalog to admit against`);
+      continue;
+    }
+    for (const variant of root?.variants ?? []) {
+      const id = String(variant?.id ?? '');
+      const separator = id.indexOf(':');
+      if (separator <= 0) {
+        failures.push(`admission: ${rootId} variant id ${JSON.stringify(id)} is not <axis>:<value>`);
+        continue;
+      }
+      const axis = id.slice(0, separator);
+      const value = variant?.value;
+      let admitted;
+      let ownerLabel;
+      if (Object.prototype.hasOwnProperty.call(CROSS_OWNER_AXES, axis)) {
+        const ownerId = CROSS_OWNER_AXES[axis];
+        const ownerRel = `${MANIFEST_DIR}/controls/${ownerId}.json`;
+        const owner = existsSync(join(repoRoot, ownerRel)) ? readJson(ownerRel) : null;
+        admitted = owner?.domain?.enumValues;
+        ownerLabel = `controls/${ownerId}.json domain.enumValues`;
+      } else {
+        const catalogAxis = CATALOG_AXIS_ALIASES[axis] ?? axis;
+        admitted = catalog[catalogAxis];
+        ownerLabel = `controls/${rootId}.json calibration.catalog.${catalogAxis}`;
+      }
+      if (!Array.isArray(admitted)) {
+        failures.push(
+          `admission: ${rootId} emits axis ${JSON.stringify(axis)} but no governed owner admits it ` +
+            `(looked in ${ownerLabel})`,
+        );
+        continue;
+      }
+      if (!admitted.includes(value)) {
+        failures.push(
+          `admission: ${rootId} emits ${JSON.stringify(`${axis}:${value}`)} but ${ownerLabel} does not ` +
+            'admit that value -- emitting without admitting is the defect this rule refuses',
+        );
+      }
+    }
+  }
+
 
   return failures;
 }
