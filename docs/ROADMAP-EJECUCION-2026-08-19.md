@@ -658,6 +658,22 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2 — plan de ejecución (coordinador, 2026-08-20).** Lotes:
+- **F2.1** — materializar las 12 raíces `por-crear` (bautismo con nombre
+  derivado de la nota `derivation` de cada raíz + convenciones `--ds-state-*`/
+  `interaction-wash`; inerte para la pintura). En dos pasos: tabla de nombres
+  propuesta por el worker → mi aprobación → ejecución (declaración en CSS
+  autorado + channelStatus flips + re-sello/rebuild de la cadena).
+  `tier.accent.bg` (el gap con channel:null) entra acá.
+- **F2.2** — ratchet corregido: gate nuevo anclado en token-audit baseline con
+  las 2 reglas (raíces/rampas fuera del denominador; fallback funcional que
+  alcanza raíz SÍ cuenta). Baseline real ~2.055.
+- **F2.3** — regen + cableo del trío stale (fanout-facts, mirror-parity,
+  root-checklists) con --check al manifiesto — salda la deuda de la graduación.
+- **F2.4** — recableo raíz por raíz: primero las 41 simétricas con cero-delta
+  estricto; las 22 asimétricas esperan a F4 (o cero-delta estricto). La red
+  visual (462 PNG) cubre. Pendientes heredados: cra-15 browser evidence (vía
+  showroom), 2 sockets huérfanos del chrome chart.
 **Auditoría Fable de F1: APROBADO, 0 bloqueantes** (11 mutaciones con
 restauración byte-exacta; todos los números duros recomputados). Las 7
 correcciones aplicadas en `03ef51b54` (ADMISSION universal 10 raíces/74
