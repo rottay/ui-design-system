@@ -1,5 +1,5 @@
 {
-  "$generatedBy": "scripts/quality-evidence/programs/modern-rescue/manifest/mirror-parity.mjs",
+  "$generatedBy": "manifest/mirror-parity.mjs",
   "$regenerate": "node manifest/mirror-parity.mjs",
   "$warning": "Los artefactos `facade/artifacts/<tenant>/index.css` son SNAPSHOTS GENERADOS por `build:vertical-css`, no fuente. Las secciones `surface`, `valueParity` y `cascade` miden el artefacto en la revision indicada en `provenance`, no las fuentes `.ts`. La cifra de fuente vive aparte en `sourceSkeleton` y es de OTRA unidad: no se fusiona.",
   "provenance": {

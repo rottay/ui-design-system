@@ -44,10 +44,11 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from '../../../../lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../scripts/lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-export const PROGRAM_ROOT = path.resolve(HERE, '..');
+/** The programme folder stays under `scripts/`; only the manifest graduated. */
+export const PROGRAM_ROOT = path.resolve(HERE, '../scripts/quality-evidence/programs/modern-rescue');
 export const PACKAGE_ROOT = findPackageRoot(HERE);
 export const OUTPUT_PATH = path.join(HERE, 'generated', 'mirror-parity.json');
 
@@ -910,7 +911,7 @@ export function build() {
   const checklists = JSON.parse(readFileSync(path.join(HERE, 'generated', 'root-checklists.json'), 'utf8'));
 
   return {
-    $generatedBy: 'scripts/quality-evidence/programs/modern-rescue/manifest/mirror-parity.mjs',
+    $generatedBy: 'manifest/mirror-parity.mjs',
     $regenerate: 'node manifest/mirror-parity.mjs',
     $warning: [
       'Los artefactos `facade/artifacts/<tenant>/index.css` son SNAPSHOTS GENERADOS por',
@@ -952,6 +953,6 @@ if (invokedDirectly) {
     console.log('✓ mirror-parity: generated/mirror-parity.json al dia');
   } else {
     writeFileSync(OUTPUT_PATH, text);
-    console.log(`✓ mirror-parity: ${path.relative(PROGRAM_ROOT, OUTPUT_PATH)} escrito`);
+    console.log(`✓ mirror-parity: ${path.relative(PACKAGE_ROOT, OUTPUT_PATH)} escrito`);
   }
 }

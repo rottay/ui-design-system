@@ -28,7 +28,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 const CATALOG_PATH = join(
   CORE_ROOT,
-  'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json',
+  'manifest/cascade/root-catalog.json',
 );
 
 function* walkCss(dir) {

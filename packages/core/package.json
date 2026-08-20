@@ -661,7 +661,7 @@
     "gat07:write": "node scripts/evidence/gat-07-exact-proof/index.mjs --write",
     "gat09:structural": "node scripts/evidence/gat-09-full-claim-integrity/index.mjs --structural",
     "gat09:gate": "node scripts/evidence/gat-09-full-claim-integrity/index.mjs",
-    "test:scripts": "node --test \"scripts/**/*.test.mjs\" && node --test ../../scripts/provenance/effect-registry-audit/index.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\" \"manifest/**/*.test.mjs\" && node --test ../../scripts/provenance/effect-registry-audit/index.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
     "pretest": "pnpm run gates:ci",
     "build:vertical-artifacts": "node scripts/verticals/build-vertical-artifacts/index.mjs",
     "build:vertical-css": "node scripts/verticals/build-vertical-artifacts/index.mjs && node scripts/verticals/build-vertical-css/index.mjs",

@@ -39,8 +39,8 @@ node src/tooling/resolution-probe/public/cli/index.mjs dial \
 # the outside. Every --bind target must be a real "fixtureId/targetId" pair
 # from FIXTURE_IDS, enforced mechanically at parse time.
 node src/tooling/resolution-probe/public/cli/index.mjs causal \
-  --control-manifest scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json \
-  --family-manifest scripts/quality-evidence/programs/modern-rescue/manifest/families/primitive/layout/flex.json \
+  --control-manifest manifest/controls/spacing.rhythm.json \
+  --family-manifest manifest/families/primitive/layout/flex.json \
   --stop airy --vertical platform \
   --bind control-height-fixed=button-modern-md/hitbox --out causal.json
 

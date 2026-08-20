@@ -40,10 +40,13 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CONTROLS = join(HERE, "manifest/controls");
-const ROOTS = join(HERE, "manifest/cascade/roots");
-const EDGES_FILE = join(HERE, "manifest/cascade/extracted/css-edges.json");
-const OUT_DIR = join(HERE, "manifest/cascade/materialized");
+/** The manifest graduated out of the programme folder to the package root;
+ *  the programme still owns it, so it is addressed as its own anchor. */
+const MANIFEST = join(HERE, "../../../../manifest");
+const CONTROLS = join(MANIFEST, "controls");
+const ROOTS = join(MANIFEST, "cascade/roots");
+const EDGES_FILE = join(MANIFEST, "cascade/extracted/css-edges.json");
+const OUT_DIR = join(MANIFEST, "cascade/materialized");
 
 const controlIds = process.argv.slice(2).length
   ? process.argv.slice(2)

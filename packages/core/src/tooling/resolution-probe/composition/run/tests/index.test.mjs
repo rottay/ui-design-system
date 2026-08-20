@@ -35,7 +35,7 @@ import {
 const CONTROL_MANIFEST = readManifest(
   resolve(
     CORE_ROOT,
-    'scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json',
+    'manifest/controls/spacing.rhythm.json',
   ),
 );
 

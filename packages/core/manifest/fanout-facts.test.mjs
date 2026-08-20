@@ -5,7 +5,7 @@
  * owner antes de escribir el generador. Si uno de ellos se pone rojo, lo que
  * esta mal es el generador (o la fuente cambio), nunca el oraculo.
  *
- *   node --test scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.test.mjs
+ *   node --test manifest/fanout-facts.test.mjs
  */
 
 import test from 'node:test';

@@ -13,6 +13,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = findRepoRoot(__dirname);
 const programDir = "packages/core/scripts/quality-evidence/programs/modern-rescue";
 const programRoot = join(repoRoot, programDir);
+// The manifest graduated to the package root; the programme still owns it.
+const manifestRoot = join(repoRoot, 'packages/core/manifest');
 
 const baseline = readModernRescueContracts();
 
@@ -211,8 +213,8 @@ test("r7Enabled stays false across all contracts", () => {
 
 
 test("home law: pattern folds stay green, literal duplicates go red", () => {
-  const a = join(programRoot, "manifest/cascade/roots/surfaces.effect-intensity.json");
-  const b = join(programRoot, "manifest/cascade/roots/typography.scale.json");
+  const a = join(manifestRoot, "cascade/roots/surfaces.effect-intensity.json");
+  const b = join(manifestRoot, "cascade/roots/typography.scale.json");
   const origA = readFileSync(a, "utf8");
   const origB = readFileSync(b, "utf8");
   try {
@@ -239,7 +241,7 @@ test("home law: pattern folds stay green, literal duplicates go red", () => {
 });
 
 test("planted missing cascade root fails closed", () => {
-  const target = join(programRoot, "manifest/cascade/roots/density.mode.json");
+  const target = join(manifestRoot, "cascade/roots/density.mode.json");
   const backup = `${target}.t1-test-backup`;
   try {
     renameSync(target, backup);
@@ -250,7 +252,7 @@ test("planted missing cascade root fails closed", () => {
   }
 });
 test("planted cascade defects fail closed (kind, site, orphan terminalReach)", () => {
-  const target = join(programRoot, "manifest/cascade/roots/shape.radius-scale.json");
+  const target = join(manifestRoot, "cascade/roots/shape.radius-scale.json");
   const original = readFileSync(target, "utf8");
   const run = () => validateModernRescueContracts(baseline, { includeManifestGate: false });
   try {
@@ -275,7 +277,7 @@ test("planted cascade defects fail closed (kind, site, orphan terminalReach)", (
 });
 
 test("cabeza nula: sin razon citada va rojo, bien declarada va verde", () => {
-  const target = join(programRoot, "manifest/cascade/roots/responsive.posture.json");
+  const target = join(manifestRoot, "cascade/roots/responsive.posture.json");
   const original = readFileSync(target, "utf8");
   const run = () => validateModernRescueContracts(baseline, { includeManifestGate: false });
   try {
@@ -297,7 +299,7 @@ test("cabeza nula: sin razon citada va rojo, bien declarada va verde", () => {
 });
 
 test("planted invented domain.kind fails closed", () => {
-  const target = join(programRoot, "manifest/controls/density.mode.json");
+  const target = join(manifestRoot, "controls/density.mode.json");
   const original = readFileSync(target, "utf8");
   try {
     const doc = JSON.parse(original);
@@ -311,7 +313,7 @@ test("planted invented domain.kind fails closed", () => {
 });
 
 test("manifest deep regression fails closed", () => {
-  const target = join(programRoot, "manifest/families/primitive/inputs/button.json");
+  const target = join(manifestRoot, "families/primitive/inputs/button.json");
   const backup = `${target}.t1-test-backup`;
   let restored = false;
   try {

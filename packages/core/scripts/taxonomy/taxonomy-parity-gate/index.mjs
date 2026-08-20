@@ -102,6 +102,9 @@ const PROGRAM_ROOT = path.join(
   CORE_ROOT,
   'scripts/quality-evidence/programs/modern-rescue',
 );
+/** The manifest graduated out of the programme folder to the package root.
+ *  The programme still owns it, so it is a binding of its own. */
+const MANIFEST_ROOT = path.join(CORE_ROOT, 'manifest');
 const UI_ROOT_RELATIVE = 'packages/core/src/ui';
 const SHOWROOM_REGISTRY_ROOT = path.join(
   REPOSITORY_ROOT,
@@ -502,12 +505,13 @@ function hasRenderableComponent(dir) {
 }
 
 /**
- * The whole audit, as a pure function of the four bindings, so the drill can
+ * The whole audit, as a pure function of the bindings, so the drill can
  * run it against a planted fixture tree without touching the real repository.
  */
 export function auditTaxonomyParity({
   repositoryRoot = REPOSITORY_ROOT,
   programRoot = PROGRAM_ROOT,
+  manifestRoot = MANIFEST_ROOT,
   showroomRegistryRoot = SHOWROOM_REGISTRY_ROOT,
   // Narrowed only by the drills, so a fixture can model one tier without its
   // four stub registries reading as four empty-registry findings. The real run
@@ -635,7 +639,7 @@ export function auditTaxonomyParity({
   }
 
   // --- manifest parity ----------------------------------------------------
-  const manifestIndexPath = path.join(programRoot, 'manifest/index.json');
+  const manifestIndexPath = path.join(manifestRoot, 'index.json');
   const inventoryIds = new Set(rows.map((row) => row.id));
   if (fs.existsSync(manifestIndexPath)) {
     const manifestIndex = readJson(manifestIndexPath);
@@ -655,11 +659,11 @@ export function auditTaxonomyParity({
     add('manifest-parity', 'manifest/index.json is missing');
   }
 
-  const familyFiles = collectFamilyManifestFiles(path.join(programRoot, 'manifest/families'));
+  const familyFiles = collectFamilyManifestFiles(path.join(manifestRoot, 'families'));
   const familyFileIds = new Set(
     familyFiles.map((file) =>
       path
-        .relative(path.join(programRoot, 'manifest/families'), file)
+        .relative(path.join(manifestRoot, 'families'), file)
         .replaceAll('\\', '/')
         .replace(/\.json$/, ''),
     ),

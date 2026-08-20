@@ -18,8 +18,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProgramContracts } from '../../v2/contracts.mjs';
-import { validateCustomizationManifest } from './manifest/generator.mjs';
-import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from './manifest/rules.mjs';
+import { validateCustomizationManifest } from '../../../../manifest/generator.mjs';
+import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from '../../../../manifest/rules.mjs';
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -28,6 +28,9 @@ const repoRoot = findRepoRoot(__dirname);
 
 const PROGRAM_DIR = 'packages/core/scripts/quality-evidence/programs/modern-rescue';
 const PROGRAM_ROOT = join(repoRoot, PROGRAM_DIR);
+// The manifest graduated out of the programme folder to the package root; the
+// programme still owns it, so every manifest path is composed from here.
+const MANIFEST_DIR = 'packages/core/manifest';
 
 const FILES = {
   agents: 'AGENTS.md',
@@ -36,8 +39,8 @@ const FILES = {
   program: join(PROGRAM_DIR, 'program.json'),
   model: join(PROGRAM_DIR, 'customization-model.json'),
   orchestration: join(PROGRAM_DIR, 'agent-orchestration.json'),
-  schema: join(PROGRAM_DIR, 'manifest/schema.json'),
-  rules: join(PROGRAM_DIR, 'manifest/rules.mjs'),
+  schema: join(MANIFEST_DIR, 'schema.json'),
+  rules: join(MANIFEST_DIR, 'rules.mjs'),
 };
 
 // T-1 live implementer identity. The seat was transferred by explicit owner order
@@ -274,9 +277,9 @@ function collectTextualFailures() {
     }
   }
   // 6c. CASCADA (adjudicacion): validar manifest/cascade/roots/* con diente
-  const cascadeDir = join(repoRoot, PROGRAM_DIR, 'manifest/cascade/roots');
+  const cascadeDir = join(repoRoot, MANIFEST_DIR, 'cascade/roots');
   if (existsSync(cascadeDir)) {
-    const famDir = join(repoRoot, PROGRAM_DIR, 'manifest/families');
+    const famDir = join(repoRoot, MANIFEST_DIR, 'families');
     const famIds = new Set();
     const socketOwnership = new Map();
     const walkFam = (dir, prefix) => {
@@ -286,7 +289,7 @@ function collectTextualFailures() {
         else if (e.name.endsWith('.json')) {
           const famId = rel.replace(/\.json$/, '');
           famIds.add(famId);
-          const doc = readJson(join(PROGRAM_DIR, 'manifest/families', rel));
+          const doc = readJson(join(MANIFEST_DIR, 'families', rel));
           for (const cell of doc?.themeControls ?? []) {
             for (const edge of cell?.internalChannels ?? []) {
               if (!edge?.channelId || !String(edge.channelId).startsWith('--_ds-')) continue;
@@ -299,17 +302,17 @@ function collectTextualFailures() {
       }
     };
     if (existsSync(famDir)) walkFam(famDir, '');
-    const cascadeControlsDir = join(repoRoot, PROGRAM_DIR, 'manifest/controls');
+    const cascadeControlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
     const controlIdsForCascade = existsSync(cascadeControlsDir)
       ? readdirSync(cascadeControlsDir).filter((f) => f.endsWith('.json')).map((f) => f.slice(0, -5))
       : [];
     const docs = [];
     for (const entry of readdirSync(cascadeDir)) {
       if (!entry.endsWith('.json')) continue;
-      const doc = readJson(join(PROGRAM_DIR, 'manifest/cascade/roots', entry));
+      const doc = readJson(join(MANIFEST_DIR, 'cascade/roots', entry));
       if (!doc) { failures.push(`manifest/cascade/roots/${entry} is not valid JSON`); continue; }
       docs.push(doc);
-      const control = readJson(join(PROGRAM_DIR, 'manifest/controls', `${doc.rootId}.json`));
+      const control = readJson(join(MANIFEST_DIR, 'controls', `${doc.rootId}.json`));
       failures.push(
         ...validateCascadeRoot(doc, {
           label: `manifest/cascade/roots/${entry}`,
@@ -330,11 +333,11 @@ function collectTextualFailures() {
     }
   }
 
-  const controlsDir = join(repoRoot, PROGRAM_DIR, 'manifest/controls');
+  const controlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
   if (existsSync(controlsDir)) {
     for (const entry of readdirSync(controlsDir)) {
       if (!entry.endsWith('.json')) continue;
-      const control = readJson(join(PROGRAM_DIR, 'manifest/controls', entry));
+      const control = readJson(join(MANIFEST_DIR, 'controls', entry));
       const kind = control?.domain?.kind;
       if (!DOMAIN_KINDS.includes(kind)) {
         failures.push(

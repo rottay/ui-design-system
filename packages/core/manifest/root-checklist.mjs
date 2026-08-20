@@ -68,11 +68,12 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 import { OUTPUT_PATH as FACTS_PATH, PAINT_PLANES, INLINE_EXPR } from './fanout-facts.mjs';
-import { packageRoot as findPackageRoot } from '../../../../lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../scripts/lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
-export const PROGRAM_ROOT = path.resolve(HERE, '..');
+/** The programme folder stays under `scripts/`; only the manifest graduated. */
+export const PROGRAM_ROOT = path.resolve(HERE, '../scripts/quality-evidence/programs/modern-rescue');
 export const OUTPUT_PATH = path.join(HERE, 'generated', 'root-checklists.json');
 
 const PAINT_SET = new Set(PAINT_PLANES);
@@ -84,11 +85,11 @@ export const UNATTRIBUTED_PREFIX = 'unattributed';
 
 /** Manifiestos de raiz de cascada: la segunda fuente de raices. */
 export const CASCADE_ROOTS_DIR = path.join(HERE, 'cascade', 'roots');
-export const CASCADE_ROOTS_REL = 'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots';
+export const CASCADE_ROOTS_REL = 'manifest/cascade/roots';
 
 /** Snapshots generados que el corpus de hechos excluye (fanout-facts.mjs). */
 export const ARTIFACTS_REL = 'src/foundation/tokens/css/facade/artifacts';
-export const FACTS_GENERATOR_REL = 'scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs';
+export const FACTS_GENERATOR_REL = 'manifest/fanout-facts.mjs';
 
 /** Vocabulario cerrado de motivos de no-medibilidad. No se inventan motivos. */
 export const NOT_MEASURABLE_REASONS = [
@@ -170,7 +171,7 @@ export function loadCanon(programRoot = PROGRAM_ROOT, packageRoot = PACKAGE_ROOT
     .sort((a, b) => b.owner.length - a.owner.length || (a.id < b.id ? -1 : 1));
 
   const bindings = new Map();
-  const familyFiles = walk(path.join(programRoot, 'manifest', 'families'), (p) => p.endsWith('.json'));
+  const familyFiles = walk(path.join(packageRoot, 'manifest', 'families'), (p) => p.endsWith('.json'));
   for (const abs of familyFiles) {
     const doc = JSON.parse(readFileSync(abs, 'utf8'));
     collectBindings(doc, doc.familyId, bindings);
@@ -814,8 +815,8 @@ export function buildChecklists(
   for (const c of checklists) for (const f of c.families) if (f.manifestFamily) touched.add(f.family);
 
   return {
-    generator: 'scripts/quality-evidence/programs/modern-rescue/manifest/root-checklist.mjs',
-    source: 'scripts/quality-evidence/programs/modern-rescue/manifest/generated/fanout-facts.json',
+    generator: 'manifest/root-checklist.mjs',
+    source: 'manifest/generated/fanout-facts.json',
     familyCanon: 'scripts/quality-evidence/programs/modern-rescue/family-inventory.json',
     corpusProvenance: {
       revertWave: [

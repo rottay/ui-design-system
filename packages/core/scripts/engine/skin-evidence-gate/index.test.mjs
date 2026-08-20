@@ -16,7 +16,7 @@ const ENTRYPOINTS = [
 ];
 const FAMILIES = path.join(
   CORE_ROOT,
-  'scripts/quality-evidence/programs/modern-rescue/manifest/families',
+  'manifest/families',
 );
 
 /** A family's skin is evidence. If the file it lives in stops shipping, the

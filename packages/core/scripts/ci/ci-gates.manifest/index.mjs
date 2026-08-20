@@ -98,7 +98,7 @@ export const CI_GATES = Object.freeze([
       'node',
       '--test',
       'scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs',
-      'scripts/quality-evidence/programs/modern-rescue/manifest/generator.test.mjs',
+      'manifest/generator.test.mjs',
     ],
     blocking: true,
   },
@@ -363,7 +363,7 @@ export const CI_GATES = Object.freeze([
   // chain, are the CI-level contract -- a hidden side effect is not one.
   {
     id: 'modern-rescue-customization-manifest-freshness',
-    run: ['node', 'scripts/quality-evidence/programs/modern-rescue/manifest/generator.mjs', '--check'],
+    run: ['node', 'manifest/generator.mjs', '--check'],
     blocking: true,
   },
   // The drill runs on synthetic fixtures and fails if the gate stops detecting

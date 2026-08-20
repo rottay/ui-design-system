@@ -42,6 +42,9 @@ const UI_ROOT = 'packages/core/src/ui';
 function buildCleanFixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'taxonomy-parity-'));
   const programRoot = path.join(root, 'program');
+  // The manifest lives beside the programme, not inside it (it graduated to the
+  // package root), so the fixture models it as its own planted tree.
+  const manifestRoot = path.join(root, 'manifest');
   const registryRoot = path.join(root, 'registry');
 
   const rows = [
@@ -83,7 +86,10 @@ function buildCleanFixture() {
     rows.map((row) => `export * from '../../../${row.sourceOwner}';\n`).join(''),
   );
 
-  fs.mkdirSync(path.join(programRoot, 'manifest/families/primitive/display'), {
+  // Both roots are planted explicitly: the manifest no longer lives inside the
+  // programme folder, so creating one no longer creates the other.
+  fs.mkdirSync(programRoot, { recursive: true });
+  fs.mkdirSync(path.join(manifestRoot, 'families/primitive/display'), {
     recursive: true,
   });
   fs.writeFileSync(
@@ -91,7 +97,7 @@ function buildCleanFixture() {
     JSON.stringify({ denominator: rows.length, rows }, null, 2),
   );
   fs.writeFileSync(
-    path.join(programRoot, 'manifest/index.json'),
+    path.join(manifestRoot, 'index.json'),
     JSON.stringify(
       { families: rows.map((row) => ({ familyId: row.id, path: `manifest/families/${row.id}.json` })) },
       null,
@@ -100,7 +106,7 @@ function buildCleanFixture() {
   );
   for (const row of rows) {
     fs.writeFileSync(
-      path.join(programRoot, `manifest/families/${row.id}.json`),
+      path.join(manifestRoot, `families/${row.id}.json`),
       JSON.stringify({ familyId: row.id }, null, 2),
     );
   }
@@ -108,7 +114,7 @@ function buildCleanFixture() {
   fs.mkdirSync(registryRoot, { recursive: true });
   writeRegistry(registryRoot, ['avatar', 'badge']);
 
-  return { root, programRoot, registryRoot };
+  return { root, programRoot, manifestRoot, registryRoot };
 }
 
 /**
@@ -135,6 +141,7 @@ function audit(fixture) {
   return auditTaxonomyParity({
     repositoryRoot: fixture.root,
     programRoot: fixture.programRoot,
+    manifestRoot: fixture.manifestRoot,
     showroomRegistryRoot: fixture.registryRoot,
     // The fixture models one tier, so it declares one registry. The real run
     // takes the default and checks all five.
@@ -323,7 +330,7 @@ test('a sourceOwner outside the UI tree fails', () => {
 test('a manifest cell without an inventory row fails', () => {
   const fixture = buildCleanFixture();
   fs.writeFileSync(
-    path.join(fixture.programRoot, 'manifest/families/primitive/display/orphan.json'),
+    path.join(fixture.manifestRoot, 'families/primitive/display/orphan.json'),
     JSON.stringify({ familyId: 'primitive/display/orphan' }),
   );
   const result = audit(fixture);
@@ -333,7 +340,7 @@ test('a manifest cell without an inventory row fails', () => {
 
 test('an inventory row without a manifest cell fails', () => {
   const fixture = buildCleanFixture();
-  fs.rmSync(path.join(fixture.programRoot, 'manifest/families/primitive/display/badge.json'));
+  fs.rmSync(path.join(fixture.manifestRoot, 'families/primitive/display/badge.json'));
   const result = audit(fixture);
   assert.ok(
     result.violations.some((violation) => /has no manifest\/families cell/.test(violation.detail)),
@@ -342,7 +349,7 @@ test('an inventory row without a manifest cell fails', () => {
 
 test('a family missing from the manifest index fails', () => {
   const fixture = buildCleanFixture();
-  const indexPath = path.join(fixture.programRoot, 'manifest/index.json');
+  const indexPath = path.join(fixture.manifestRoot, 'index.json');
   const manifest = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
   manifest.families = manifest.families.slice(0, 1);
   fs.writeFileSync(indexPath, JSON.stringify(manifest, null, 2));

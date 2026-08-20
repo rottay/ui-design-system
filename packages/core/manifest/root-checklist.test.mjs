@@ -520,10 +520,18 @@ test('lineOfRootChannelKey no confunde "channels" con "channel"', () => {
 });
 
 test('citeLiteral resuelve rutas con y sin el prefijo packages/core', () => {
-  const conPrefijo = citeLiteral('packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs', 'EXCLUDED_PREFIXES = [');
-  const sinPrefijo = citeLiteral('scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs', 'EXCLUDED_PREFIXES = [');
+  const conPrefijo = citeLiteral('packages/core/manifest/fanout-facts.mjs', 'EXCLUDED_PREFIXES = [');
+  const sinPrefijo = citeLiteral('manifest/fanout-facts.mjs', 'EXCLUDED_PREFIXES = [');
   assert.equal(conPrefijo, sinPrefijo, 'el prefijo del paquete se normaliza');
-  assert.match(conPrefijo, /^scripts\/.+:\d+$/, 'la cita es relativa al paquete, nunca absoluta');
+  // La cita es relativa al PAQUETE. El prefijo concreto no era la ley: cuando el
+  // manifiesto vivia bajo `scripts/`, esta asercion pineaba ese segmento y se
+  // volvia falsa al mudarlo. Se exige lo que siempre quiso decir: ni ruta
+  // absoluta, ni el prefijo del paquete, y con cita `archivo:linea`.
+  assert.match(
+    conPrefijo,
+    /^(?!\/)(?!packages\/core\/).+:\d+$/,
+    'la cita es relativa al paquete, nunca absoluta ni con el prefijo del paquete',
+  );
   assert.equal(citeLiteral('src/no/existe.ts', 'x'), null, 'un archivo ausente no revienta');
 });
 

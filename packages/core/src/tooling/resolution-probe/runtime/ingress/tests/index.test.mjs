@@ -34,7 +34,7 @@ import {
 } from '../index.mjs';
 
 const CONTROL_MANIFEST = readManifest(
-  resolve(CORE_ROOT, 'scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json'),
+  resolve(CORE_ROOT, 'manifest/controls/spacing.rhythm.json'),
 );
 
 const PRODUCED_BY = {

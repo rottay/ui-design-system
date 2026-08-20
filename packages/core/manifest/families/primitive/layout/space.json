@@ -481,7 +481,7 @@
         "packages/core/src/ui/primitives/layout/Space/contracts/index.ts#SPACE_SIZE_MAP",
         "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx#safeGap",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-        "packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json"
+        "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
         "size=-8, NaN or Infinity becomes 0px",

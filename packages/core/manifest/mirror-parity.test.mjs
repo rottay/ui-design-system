@@ -51,7 +51,7 @@ const CHECKLISTS = JSON.parse(readFileSync(new URL('./generated/root-checklists.
 const ARTIFACT_DECLS = Object.fromEntries(
   TENANTS.map((t) => [
     t,
-    declarationsOf(readFileSync(new URL(`../../../../../${artifactPath(t)}`, import.meta.url), 'utf8')),
+    declarationsOf(readFileSync(new URL(`../${artifactPath(t)}`, import.meta.url), 'utf8')),
   ]),
 );
 
@@ -260,7 +260,7 @@ test('el sha256 registrado es el del artefacto en disco', () => {
   for (const t of TENANTS) {
     const rec = doc.provenance.artifacts.find((a) => a.file === artifactPath(t));
     const real = createHash('sha256')
-      .update(readFileSync(new URL(`../../../../../${artifactPath(t)}`, import.meta.url), 'utf8'))
+      .update(readFileSync(new URL(`../${artifactPath(t)}`, import.meta.url), 'utf8'))
       .digest('hex');
     assert.equal(rec.sha256, real, t);
   }

@@ -1,6 +1,6 @@
 {
-  "generator": "scripts/quality-evidence/programs/modern-rescue/manifest/root-checklist.mjs",
-  "source": "scripts/quality-evidence/programs/modern-rescue/manifest/generated/fanout-facts.json",
+  "generator": "manifest/root-checklist.mjs",
+  "source": "manifest/generated/fanout-facts.json",
   "familyCanon": "scripts/quality-evidence/programs/modern-rescue/family-inventory.json",
   "corpusProvenance": {
     "revertWave": "Ola de reversion del 2026-08-17 17:53: un escritor acotado, DESPACHADO POR EL COORDINADOR DEL PROGRAMA, revirtio 54 ediciones sobre 12 archivos de foundation/tokens/css/presentation/components/. No fue un actor desconocido. Verificado en disco: 12 archivos con mtime 17:53, todos bajo ese arbol, y tree.css quedo byte-identico a HEAD, que es la huella de una reversion.",
@@ -12,7 +12,7 @@
   "rootSources": {
     "law": "Dos fuentes, union sin duplicados, procedencia declarada por raiz. El patron mide DIALES NUMERICOS y solo esos; el manifiesto aporta los ejes autorados que ningun `-scale` alcanza (color, familias tipograficas, anatomia, elevacion, tono de sidebar). Ninguna raiz declarada se descarta en silencio: la que no tiene nodo en el grafo sale en `notMeasurableRoots` con motivo citado.",
     "pattern": "^--ds-[a-z0-9-]+-scale$",
-    "manifest": "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots",
+    "manifest": "manifest/cascade/roots",
     "provenanceVocabulary": [
       "pattern",
       "manifest",
@@ -29,35 +29,35 @@
     {
       "rootId": "chrome.anatomy",
       "rootChannel": "data-anatomy-card",
-      "declaredAt": "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/chrome.anatomy.json:6",
+      "declaredAt": "manifest/cascade/roots/chrome.anatomy.json:6",
       "reasonCode": "attribute-not-custom-property",
-      "notMeasurableReason": "La cabeza declarada \"data-anatomy-card\" es un ATRIBUTO de raiz, no una custom property: scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/chrome.anatomy.json:6. La emision real esta en src/infrastructure/compilers/composition/tenant-theme/index.ts:1300. El fan-out se mide sobre lecturas var(--*); un atributo no puede tener una sola arista de cascada, asi que medirlo daria 0 por construccion.",
+      "notMeasurableReason": "La cabeza declarada \"data-anatomy-card\" es un ATRIBUTO de raiz, no una custom property: manifest/cascade/roots/chrome.anatomy.json:6. La emision real esta en src/infrastructure/compilers/composition/tenant-theme/index.ts:1300. El fan-out se mide sobre lecturas var(--*); un atributo no puede tener una sola arista de cascada, asi que medirlo daria 0 por construccion.",
       "evidence": [
-        "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/chrome.anatomy.json:6",
+        "manifest/cascade/roots/chrome.anatomy.json:6",
         "src/infrastructure/compilers/composition/tenant-theme/index.ts:1300"
       ]
     },
     {
       "rootId": "experience.profile",
       "rootChannel": "--ds-experience-profile",
-      "declaredAt": "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/experience.profile.json:6",
+      "declaredAt": "manifest/cascade/roots/experience.profile.json:6",
       "reasonCode": "absent-from-fanout-facts",
-      "notMeasurableReason": "La cabeza --ds-experience-profile (scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/experience.profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs:93), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:353. Sin nodo en los hechos no hay cascada que medir.",
+      "notMeasurableReason": "La cabeza --ds-experience-profile (manifest/cascade/roots/experience.profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts.mjs:93), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:353. Sin nodo en los hechos no hay cascada que medir.",
       "evidence": [
-        "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/experience.profile.json:6",
-        "scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs:93",
+        "manifest/cascade/roots/experience.profile.json:6",
+        "manifest/fanout-facts.mjs:93",
         "src/foundation/tokens/css/facade/artifacts/bithire/index.css:353"
       ]
     },
     {
       "rootId": "recipe-profile",
       "rootChannel": "--ds-recipe-profile",
-      "declaredAt": "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/recipe-profile.json:6",
+      "declaredAt": "manifest/cascade/roots/recipe-profile.json:6",
       "reasonCode": "absent-from-fanout-facts",
-      "notMeasurableReason": "La cabeza --ds-recipe-profile (scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/recipe-profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs:93), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:690, src/foundation/tokens/css/facade/artifacts/rottay/index.css:400. Sin nodo en los hechos no hay cascada que medir.",
+      "notMeasurableReason": "La cabeza --ds-recipe-profile (manifest/cascade/roots/recipe-profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts.mjs:93), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:690, src/foundation/tokens/css/facade/artifacts/rottay/index.css:400. Sin nodo en los hechos no hay cascada que medir.",
       "evidence": [
-        "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/recipe-profile.json:6",
-        "scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs:93",
+        "manifest/cascade/roots/recipe-profile.json:6",
+        "manifest/fanout-facts.mjs:93",
         "src/foundation/tokens/css/facade/artifacts/bithire/index.css:690",
         "src/foundation/tokens/css/facade/artifacts/rottay/index.css:400"
       ]
@@ -65,12 +65,12 @@
     {
       "rootId": "responsive.posture",
       "rootChannel": null,
-      "declaredAt": "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/responsive.posture.json:6",
+      "declaredAt": "manifest/cascade/roots/responsive.posture.json:6",
       "reasonCode": "no-css-head",
-      "notMeasurableReason": "La raiz no declara cabeza CSS: rootChannel.channel es null en scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/responsive.posture.json:6. El manifiesto lo razona en headEmptyReason (scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/responsive.posture.json:7). La fuente lo dice literal en src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26: el eje viaja como DATO hasta el render, no como canal. Sin canal no hay nodo en el grafo de fan-out: no se mide, y no se emite como una cascada de 0 que pareceria un defecto.",
+      "notMeasurableReason": "La raiz no declara cabeza CSS: rootChannel.channel es null en manifest/cascade/roots/responsive.posture.json:6. El manifiesto lo razona en headEmptyReason (manifest/cascade/roots/responsive.posture.json:7). La fuente lo dice literal en src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26: el eje viaja como DATO hasta el render, no como canal. Sin canal no hay nodo en el grafo de fan-out: no se mide, y no se emite como una cascada de 0 que pareceria un defecto.",
       "evidence": [
-        "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/responsive.posture.json:6",
-        "scripts/quality-evidence/programs/modern-rescue/manifest/cascade/roots/responsive.posture.json:7",
+        "manifest/cascade/roots/responsive.posture.json:6",
+        "manifest/cascade/roots/responsive.posture.json:7",
         "src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26"
       ]
     }

@@ -4,7 +4,7 @@
  * Fail-closed contract gate for reads of the tenant rhythm channel.
  *
  * THE RULING THIS MECHANIZES (owner-decided; see
- * `scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json`,
+ * `manifest/controls/spacing.rhythm.json`,
  * fields `compatibility` and `calibration.openContractQuestions`):
  *
  *   Density sizes the CONTROL. Rhythm sizes the ROOM AROUND it.

@@ -49,9 +49,12 @@ import { fileURLToPath } from "node:url";
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOTS = join(HERE, "manifest/cascade/roots");
-const EDGES_FILE = join(HERE, "manifest/cascade/extracted/css-edges.json");
-const OUT_DIR = join(HERE, "manifest/cascade/backlog");
+/** The manifest graduated out of the programme folder to the package root;
+ *  the programme still owns it, so it is addressed as its own anchor. */
+const MANIFEST = join(HERE, "../../../../manifest");
+const ROOTS = join(MANIFEST, "cascade/roots");
+const EDGES_FILE = join(MANIFEST, "cascade/extracted/css-edges.json");
+const OUT_DIR = join(MANIFEST, "cascade/backlog");
 
 const HOMONYM_LAW =
   "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.";
@@ -334,7 +337,7 @@ const familyByFile = new Map();
     }
     return out;
   };
-  for (const f of walk(join(HERE, "manifest/families"))) {
+  for (const f of walk(join(MANIFEST, "families"))) {
     try {
       const d = JSON.parse(readFileSync(f, "utf8"));
       for (const b of d.anatomy?.sourceBindings ?? []) {

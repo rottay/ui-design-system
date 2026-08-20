@@ -28,7 +28,7 @@ import {
   resolveNegativeControls,
 } from '../index.mjs';
 
-const MANIFEST_ROOT = resolve(CORE_ROOT, 'scripts/quality-evidence/programs/modern-rescue/manifest');
+const MANIFEST_ROOT = resolve(CORE_ROOT, 'manifest');
 const CONTROL_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'controls/spacing.rhythm.json'));
 const FLEX_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'families/primitive/layout/flex.json'));
 

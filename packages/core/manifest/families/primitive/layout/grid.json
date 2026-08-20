@@ -490,7 +490,7 @@
         "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts#GridGapValue",
         "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx#GRID_GAP_RHYTHM_PRESETS",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-        "packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json"
+        "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
         "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",

@@ -43,7 +43,7 @@ import { buildSingleOwnerSet } from '../../runtime/shared-files/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
 
 export const DEFAULT_TARGET = 'packages/core/scripts/quality-evidence/programs/modern-rescue/README.md';
-export const MANIFEST_INDEX_PATH = 'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json';
+export const MANIFEST_INDEX_PATH = 'packages/core/manifest/index.json';
 export const FAMILY_INVENTORY_PATH = 'packages/core/scripts/quality-evidence/programs/modern-rescue/family-inventory.json';
 const SECTION_HEADING = '## Current checkpoint';
 const STAMP_OPEN = '<!-- lane-control:program-state v1';

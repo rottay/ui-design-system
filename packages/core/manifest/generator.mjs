@@ -11,8 +11,8 @@ import {
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { parseRegistry } from '../../../../tokens/customization-surface-census/index.mjs';
-import { loadProgramContracts } from '../../../v2/contracts.mjs';
+import { parseRegistry } from '../scripts/tokens/customization-surface-census/index.mjs';
+import { loadProgramContracts } from '../scripts/quality-evidence/v2/contracts.mjs';
 import {
   APPLICABLE_FAMILY_FIELDS,
   ASSESSMENT_STATE_RANK,
@@ -35,7 +35,7 @@ import {
   validateSection,
   validateSourceBindings,
 } from './rules.mjs';
-import { repoRoot as findRepoRoot } from '../../../../lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../scripts/lib/repo-root/index.mjs';
 
 export {
   APPLICABLE_FAMILY_FIELDS,
@@ -50,7 +50,11 @@ export {
 };
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PROGRAM_ROOT = resolve(HERE, '..');
+/** `packages/core/` -- the anchor every path inside `index.json` is relative to.
+ *  The manifest graduated to `packages/core/manifest/`, so HERE is that folder. */
+const PACKAGE_ROOT = findPackageRoot(HERE);
+/** The programme folder did NOT graduate: it stays under `scripts/`. */
+const PROGRAM_ROOT = resolve(PACKAGE_ROOT, 'scripts/quality-evidence/programs/modern-rescue');
 const REPOSITORY_ROOT = findRepoRoot(HERE);
 const INVENTORY_PATH = join(PROGRAM_ROOT, 'family-inventory.json');
 const PROGRAM_PATH = join(PROGRAM_ROOT, 'program.json');
@@ -133,7 +137,7 @@ function filesBelow(root) {
 }
 
 function relativeManifestPath(pathname) {
-  return relative(PROGRAM_ROOT, pathname).replaceAll('\\', '/');
+  return relative(PACKAGE_ROOT, pathname).replaceAll('\\', '/');
 }
 
 function familyPath(familyId) {
@@ -426,7 +430,7 @@ function buildIndex(inventory, controls, familyRecords, controlRecords, groups) 
 
   return {
     schemaVersion: 1,
-    generatedBy: 'node packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/generator.mjs --sync',
+    generatedBy: 'node packages/core/manifest/generator.mjs --sync',
     authorityLaw: 'Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.',
     inputsDigest,
     denominators: {

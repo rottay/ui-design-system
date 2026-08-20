@@ -122,7 +122,7 @@ test('root-catalog-freshness-gate FAILS on an existe root with no declaration', 
     ],
   };
   const result = runOnSyntheticTree('tokens/root-catalog-freshness-gate/index.mjs', {
-    'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json':
+    'manifest/cascade/root-catalog.json':
       JSON.stringify(catalog),
     'src/skin/whatever.css': '.x { color: red; }\n',
     'package.json': JSON.stringify({ name: '@rottay/design-system' }),
@@ -138,7 +138,7 @@ test('root-catalog-freshness-gate FAILS on a por-crear root that gained a declar
     ],
   };
   const result = runOnSyntheticTree('tokens/root-catalog-freshness-gate/index.mjs', {
-    'scripts/quality-evidence/programs/modern-rescue/manifest/cascade/root-catalog.json':
+    'manifest/cascade/root-catalog.json':
       JSON.stringify(catalog),
     'src/skin/whatever.css': '.x { --ds-fake-head: 1px; }\n',
     'package.json': JSON.stringify({ name: '@rottay/design-system' }),

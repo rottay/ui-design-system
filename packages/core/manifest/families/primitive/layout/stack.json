@@ -525,7 +525,7 @@
         "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
         "packages/core/src/ui/primitives/layout/Stack/runtime/responsive/index.tsx",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-        "packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json"
+        "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
         "spacing=none remains zero",

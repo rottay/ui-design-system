@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "node packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/generator.mjs --sync",
+  "generatedBy": "node packages/core/manifest/generator.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "8c44df8a775375c5c1de1cac8690621bbccbaf74ca1f2395464b21859b969b5f",
+  "inputsDigest": "34257a5da2a58ccdcb081ece322eff1093ab3ddbac57534fdfc10624a8158d69",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -2450,14 +2450,14 @@
     {
       "familyId": "primitive/layout/flex",
       "path": "manifest/families/primitive/layout/flex.json",
-      "digest": "b0f7909edc8fde6e9eeb37ed12c514e30c153d97173cf90cde5dca021c42a3ff",
+      "digest": "60823f5ca74d077d536179f37bf00c5d281d3f2ec1d92bc8a67a431395498f46",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/layout/grid",
       "path": "manifest/families/primitive/layout/grid.json",
-      "digest": "7a127f856395a41a3fce2c72e44063af1083daccbb993d726c59f768ceeb0b5e",
+      "digest": "864e9120717cd09399d4a914d9a1e399a9b6a4470c68a6e964593054ca43b57e",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2513,7 +2513,7 @@
     {
       "familyId": "primitive/layout/space",
       "path": "manifest/families/primitive/layout/space.json",
-      "digest": "60fadf067fb8adba412fce662f873c2eef15f6a8b7ed15c8df7c16d9921765e8",
+      "digest": "f3382a2e77a2427e2c6e560512196daa49ac68e6946830aaa6b32a4e8d0dafe4",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2527,7 +2527,7 @@
     {
       "familyId": "primitive/layout/stack",
       "path": "manifest/families/primitive/layout/stack.json",
-      "digest": "273b06cc076e3dc40e34d2329ff7a21bb9280a26ca99263be0740d74ddde4cf0",
+      "digest": "0f5ee2bf9c989cdc68e60969651205f6020063f88b6d5d16a715ec5927dc1ebb",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

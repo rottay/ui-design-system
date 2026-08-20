@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { computeSourceDigest } from '../../../v2/receipts.mjs';
+import { computeSourceDigest } from '../scripts/quality-evidence/v2/receipts.mjs';
 import {
   certifyCustomizationManifest,
   validateCustomizationManifest,
@@ -35,10 +35,10 @@ import {
   validateRedTestClassifications,
   validateSection,
 } from './rules.mjs';
-import { repoRoot as findRepoRoot } from '../../../../lib/repo-root/index.mjs';
+import { repoRoot as findRepoRoot } from '../scripts/lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PROGRAM_ROOT = join(HERE, '..');
+const PROGRAM_ROOT = join(HERE, '../scripts/quality-evidence/programs/modern-rescue');
 const REPOSITORY_ROOT = findRepoRoot(HERE);
 const INDEX = JSON.parse(readFileSync(join(HERE, 'index.json'), 'utf8'));
 const SCHEMA = JSON.parse(readFileSync(join(HERE, 'schema.json'), 'utf8'));
@@ -160,7 +160,7 @@ test('certification fails closed while cells or family reviews remain unknown', 
 test('bootstrap refuses to overwrite the existing manifest', () => {
   const result = spawnSync(
     process.execPath,
-    ['packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/generator.mjs', '--bootstrap'],
+    ['packages/core/manifest/generator.mjs', '--bootstrap'],
     { cwd: REPOSITORY_ROOT, encoding: 'utf8' },
   );
   assert.notEqual(result.status, 0);
@@ -959,7 +959,7 @@ test('schema.json, customization-model.json and the generator vocabularies agree
  * an explicit context object precisely so a fixture can be graded instead.
  */
 const CASCADE_FIXTURE_SITE =
-  'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/rules.mjs';
+  'packages/core/manifest/rules.mjs';
 
 const CASCADE_FIXTURE_CONTEXT = Object.freeze({
   label: 'fixture/cascade/roots/fixture.axis.json',
@@ -999,7 +999,7 @@ const NAMED_VARIANT = Object.freeze({
 });
 
 const VARIANTS_REASON =
-  'CERO variantes por diseno: el eje es un escape hatch, no un vocabulario cerrado. Declarado en fuente, no tapado: packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/rules.mjs:1.';
+  'CERO variantes por diseno: el eje es un escape hatch, no un vocabulario cerrado. Declarado en fuente, no tapado: packages/core/manifest/rules.mjs:1.';
 
 test('a cascade root with an empty vocabulary and no declared reason fails closed', () => {
   const errors = validateCascadeRoot(
@@ -1109,7 +1109,7 @@ const NAMED_DERIVATION = Object.freeze({
 });
 
 const DERIVATIONS_REASON =
-  'CERO derivaciones por diseno: el eje emite su canal cabeza y nadie deriva de el. Declarado en fuente, no tapado: packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/rules.mjs:1.';
+  'CERO derivaciones por diseno: el eje emite su canal cabeza y nadie deriva de el. Declarado en fuente, no tapado: packages/core/manifest/rules.mjs:1.';
 
 test('a cascade root with an empty derivation tail and no declared reason fails closed', () => {
   const empty = cascadeRootFixture({ derivations: [] });

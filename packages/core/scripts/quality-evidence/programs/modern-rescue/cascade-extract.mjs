@@ -41,10 +41,13 @@ import { fileURLToPath } from "node:url";
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+/** The manifest graduated out of the programme folder to the package root;
+ *  the programme still owns it, so it is addressed as its own anchor. */
+const MANIFEST = join(HERE, "../../../../manifest");
 const REPO_ABS = findRepoRoot(HERE);
 const CSS_ROOT = join(REPO_ABS, "packages/core/src/foundation/tokens/css");
 const CSS_ROOT_REL = "packages/core/src/foundation/tokens/css";
-const OUT = join(HERE, "manifest/cascade/extracted/css-edges.json");
+const OUT = join(MANIFEST, "cascade/extracted/css-edges.json");
 
 /**
  * The CLOSED plane vocabulary of the cascade evidence — four names, never two

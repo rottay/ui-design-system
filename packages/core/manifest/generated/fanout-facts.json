@@ -1,5 +1,5 @@
 {
-  "generator": "scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs",
+  "generator": "manifest/fanout-facts.mjs",
   "scanRoot": "src",
   "planes": [
     "modern-skin-css",

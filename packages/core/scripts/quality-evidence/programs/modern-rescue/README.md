@@ -275,10 +275,10 @@ absent: pinning them here would make this document stale the moment it was commi
 | Fact | Value | Derivation |
 |---|---|---|
 | `inventory.families` | 255 | packages/core/scripts/quality-evidence/programs/modern-rescue/family-inventory.json rows.length |
-| `manifest.controlFamilyCells` | 5100 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json denominators.controlFamilyCells |
-| `adjudication.accepted` | 0 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.accepted |
-| `adjudication.assessedNotElevated` | 0 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.assessedNotElevated |
-| `adjudication.unreviewed` | 255 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.unreviewed |
+| `manifest.controlFamilyCells` | 5100 | packages/core/manifest/index.json denominators.controlFamilyCells |
+| `adjudication.accepted` | 0 | packages/core/manifest/index.json rollups.familyReviews.accepted |
+| `adjudication.assessedNotElevated` | 0 | packages/core/manifest/index.json rollups.familyReviews.assessedNotElevated |
+| `adjudication.unreviewed` | 255 | packages/core/manifest/index.json rollups.familyReviews.unreviewed |
 
 
 ## Active packet: spacing.rhythm

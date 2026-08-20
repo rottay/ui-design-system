@@ -48,7 +48,7 @@ const RECEIPT_FIELDS = Object.freeze({
   exitCode: 0,
   measuredSourceFiles: [
     'packages/core/src/foundation/tokens/css/foundation/themes/default.css',
-    'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json',
+    'packages/core/manifest/controls/spacing.rhythm.json',
   ],
   negativeDrill: {
     violation: 'a moved negative control, a non-restoring variable, a zero-match selector',

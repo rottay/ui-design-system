@@ -13,14 +13,14 @@
  *   • que escalares multiplican en la misma declaracion (`scalars`)
  *
  * Uso:
- *   node scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs
- *   node scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs --check
+ *   node manifest/fanout-facts.mjs
+ *   node manifest/fanout-facts.mjs --check
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { packageRoot as findPackageRoot } from '../../../../lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../scripts/lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
@@ -690,7 +690,7 @@ export function buildFacts(packageRoot = PACKAGE_ROOT) {
   }
 
   return {
-    generator: 'scripts/quality-evidence/programs/modern-rescue/manifest/fanout-facts.mjs',
+    generator: 'manifest/fanout-facts.mjs',
     scanRoot: SCAN_ROOT,
     planes: PLANES,
     paintPlanes: PAINT_PLANES,
