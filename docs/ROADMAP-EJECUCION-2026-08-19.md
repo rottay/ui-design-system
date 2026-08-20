@@ -192,7 +192,42 @@ Correcciones de la segunda ronda integradas:
   (frescura; la paridad real es F4). La red visual (462 PNG, job `visual` de
   CI) cubre el recableo.
 
-## 6. F3 — La pintura vive en las skins
+**Enmienda de secuencia vinculante (dueño, 2026-08-20):** F2 se agota primero
+en todo lo que sea demostrablemente seguro. El lote F2.4 que ya está abierto
+**no se cancela ni se revierte** y puede continuar con todos los clusters que
+demuestren cero-delta computado contra los artefactos de las tres verticales;
+no se limita artificialmente al packet actual. «Misma pintura» significa
+igualdad de propiedades computadas tras resolver la raíz; no alcanza una
+sustitución textual plausible ni que el gate de frescura pase. Cada packet
+debe declarar la raíz, los canales drenados, los tres resultados verticales,
+el negativo y la restauración del artefacto.
+
+Se siguen abriendo clusters F2 seguros hasta agotar ese conjunto. No se abre
+un cluster si necesita inventar el valor de una raíz, si una
+vertical no tiene asignación, si el cambio elimina una restitución que hoy
+compensa una asimetría, o si el theme leaf todavía sombrea el control. Esos
+casos quedan bloqueados por **F4A + F4B**. Por lo tanto, al cerrar el packet
+F2 seguro exhaustivo, la secuencia operativa deja de ser `F2 → F3 → F4` y
+pasa a ser:
+
+```text
+F2 seguro exhaustivo → F4A canon estructural → F4B calibración de los 20 controles
+  → F2 diferido/asimétrico → F3 skins + craft → F4C art direction premium
+  → F5 → F6 → F7 → F8 → F9 cierre de certificación
+```
+
+La razón es evitar que F3 traslade hardcodes a skins o que F2 cablee miles de
+consumidores contra una autoridad de theme que F4 tendría que cambiar después.
+La enmienda no cambia la arquitectura decidida: ordena sus dependencias y hace
+explícitas dos puertas de aceptación que el plan anterior dejaba implícitas.
+
+## 6. F3 — La pintura vive en las skins (posterior a F4A + F4B)
+
+**Gate de entrada:** F4A cerrado, los 20 controles con F4B cerrado y los
+clusters F2 asimétricos que esas decisiones desbloqueen ya recableados. F3 no
+puede usarse para decidir la semántica de una raíz, reparar paridad de themes o
+ocultar un control que no baja por ambos transportes. Su trabajo es trasladar
+pintura ya gobernada y después elevar craft sobre una cascada estable.
 
 - Clasificación mecánica estable (confirmada): **17 dinámicas** (resolvers de
   eje en Button/Select/Input/Badge/Avatar — mecanismo legítimo) y **209
@@ -202,21 +237,90 @@ Correcciones de la segunda ronda integradas:
 - ~~Cerrar deuda chart-series~~ → se mueve a F5 (depende de la absorción de
   `appearance/`, no de skins).
 
-## 7. F4 — Los tres temas son espejos (scope honesto)
+## 7. F4 — Themes canónicos, controles causales y art direction premium
+
+F4 se divide en tres cierres distintos. «Theme espejo» describe **la misma
+superficie semántica**, no valores iguales ni tres archivos copiados. La
+estructura debe coincidir; la identidad de cada vertical debe seguir siendo
+propia.
+
+### F4A — Canon estructural de los tres themes
 
 - **Diseñar el esquema de asignación de variantes** (no existe: el catálogo
   tiene conteos, no nombres/valores de variante; 37 de 63 raíces —27
   internal-head + 10 gap— no reciben variantes de ningún control). Esto es
   diseño, no solo ejecución.
-- Reescritura de los 3 temas como ~263 asignaciones; aserción de paridad real
-  blocking (falla hoy: 19,34 %); regeneración de `styles/*.css`; colapso de
-  los ~3.275 canales derivables.
-- **Gates que el lote debe satisfacer** (enumerados por Fable):
-  `vertical-css-source-staleness`, `first-party-artifacts-source-staleness`,
-  los 4 checks de `customization-surface-census` (¡`dead-writers` puede
-  disparar), `theme-channel-parity --check` (decrease-only sobre
-  declared-but-unemitted — el ratchet real del colapso), regeneración de
-  `generated/mirror-parity.json` + `fanout-facts.json` en el mismo lote.
+- Rottay, BitHire y Evnto quedan con el mismo roster, orden, comentarios,
+  keypaths y disposición de capability. Una ausencia debe ser una invariancia
+  o gap escrita; nunca una omisión silenciosa ni un roster menor.
+- Cada valor autorado se adjudica en uno de cuatro domicilios existentes:
+  (a) seed/variante gobernada por un tenant-dial; (b) baseline o invariante
+  vertical con razón; (c) internal-head derivado por una función/raíz citada;
+  (d) Pro/Expert explícito y acotado. Si no entra en ninguno, no se conserva
+  por costumbre: queda bloqueado hasta adjudicación o retiro.
+- **Ley de hardcodes:** un literal es legítimo en el punto superior donde la
+  vertical elige su seed, variante o invariante. Un leaf que reexpresa esa
+  decisión debe derivar de la raíz/canal; no puede repetir un hex, sombra,
+  tamaño o mezcla que sombree la personalización. Tampoco se crea un segundo
+  `foundation` dentro de `brand-themes`: foundation, compiler y theme tienen
+  un dueño cada uno.
+- F4A reescribe los 3 themes como el roster mínimo de asignaciones gobernadas
+  (estimación vigente: ~263) y registra los ~3.275 canales derivables como
+  candidatos de colapso; **todavía no hace craft premium ni colapsa en masa**.
+- **Salida F4A:** paridad estructural blocking, cero keypaths sin domicilio,
+  cero leaf shadowing no justificado, mismo lowering y artefactos frescos. El
+  valor visual puede seguir siendo el baseline previo; la forma ya no.
+
+### F4B — Calibración causal de los 20 controles públicos
+
+El cierre de vocabulario de F1 y el cableado de F2 no prueban que un dial del
+usuario funcione. Antes de acreditar propagación mecánica, cada uno de los 13
+controles Standard y 7 Pro debe cerrar un receipt con:
+
+1. dominio y stops admitidos por la autoridad viva;
+2. path de ingreso estático `BrandTheme` y path DB `TenantThemeDocument`;
+3. normalización a un `Theme` total y entrada al mismo `compileTheme` — un
+   segundo emisor es STOP;
+4. salida normalizada equivalente para ambos transportes;
+5. canary representativo que cambia una propiedad computada observable;
+6. negativos que prueban qué propiedades/familias no deben cambiar;
+7. input inválido fail-closed y límites efectivos cuando correspondan;
+8. restauración exacta del default en salida normalizada, variables, atributos
+   de raíz y propiedad computada.
+
+Los controles cuyo terminal legítimo sea dato normalizado, no CSS, demuestran
+ese terminal y no inventan una variable para «cumplir». Ninguna fila gana
+`APPLICABLE`, `COMPUTED_VERIFIED` o equivalentes sólo porque existe un mapping,
+un `targetBinding` o una ley escrita. **Salida F4B:** matriz de calibración
+20/20, sin segundo lowering, con receipts reproducibles y challenge read-only.
+
+Con F4A + F4B cerrados se retoma F2 exclusivamente para las raíces/colas que
+estaban bloqueadas por asimetría. Recién cuando esas colas pasan sus pruebas de
+delta y restore se abre F3.
+
+### F4C — Art direction premium sobre controles estabilizados
+
+- Después de F3, los tres themes reciben una iteración de diseño diferencial:
+  Rottay, BitHire y Evnto deben comunicar su vertical, no ser recolores de una
+  misma composición. El vocabulario es el estabilizado en F4A/F4B; una idea de
+  diseño que requiere un eje nuevo vuelve a contrato y no se hardcodea en un
+  leaf.
+- El craft se expresa mediante seeds, variantes, roots, recetas, anatomía y
+  estados gobernados. Classic/Rustic reciben sólo compatibilidad necesaria;
+  la inversión de calidad se concentra en Modern.
+- La aceptación requiere challenge visual y técnico independiente. Quien actúa
+  como DT no se cuenta a la vez como auditor independiente. Se revisan light/
+  dark cuando aplique, estados interactivos, contraste, densidad, tipografía,
+  motion, superficies, navegación y coherencia entre familias.
+- **Gates del lote:** `vertical-css-source-staleness`,
+  `first-party-artifacts-source-staleness`, los 4 checks de
+  `customization-surface-census` (incluido `dead-writers`),
+  `theme-channel-parity --check`, regeneración de
+  `generated/mirror-parity.json` + `fanout-facts.json`, canaries F4B intactos y
+  revisión sighted de las tres verticales.
+- **Salida F4C:** paridad estructural blocking, valores verticales premium,
+  cero shadowing regresado y los artefactos generados como salida — nunca como
+  fuente editada.
 
 ## 8. F5 — Una capacidad, un dueño (lotes completos)
 
@@ -297,6 +401,34 @@ anotado.
   resuelve `../app-*`) + gate copiado en el CI de cada app (patrón
   `ds-supplier-honesty`). No es ejecutable desde el CI del DS.
 
+## 11-bis. F9 — Cierre final familia × control
+
+F1 hizo que cada celda tuviera ley; no la convirtió en evidencia. El estado
+vigente al adoptar esta enmienda sigue siendo **255 familias × 20 controles =
+5.100 celdas**, todas `UNKNOWN`, con cero `COMPUTED_VERIFIED` y cero
+`SIGHTED_ACCEPTED`. Esa verdad se lee de `manifest/index.json`; **252 permanece
+histórico y no reaparece**.
+
+- F9 corre después de estabilizar F5/F6 y migrar F8. Si una absorción de F5
+  cambia realmente el roster, el nuevo denominador se actualiza en un solo lote
+  atómico en `family-inventory`, `program.json`, segmentos del manifest,
+  generator/index y checks. Hasta que ese lote exista y pase, 255×20 sigue
+  siendo la única verdad operativa.
+- Se visita cada pareja familia/control y se adjudica exactamente como
+  `APPLICABLE`, `INVARIANT_WITH_REASON` o `NOT_APPLICABLE_WITH_REASON`.
+  `UNKNOWN` bloquea el cierre; ausencia nunca significa «no aplica».
+- Las aplicables citan partes/estados/grupos de propiedad, channels y bindings;
+  prueban deltas computados, negativos y restore. Las invariantes/no-aplicables
+  llevan razón falsable y prueba de no-alcance.
+- El mapping, `SOURCE_BOUND`, una fila vacía o una marca de adjudicación no son
+  quality points. La promoción a `COMPUTED_VERIFIED` y `SIGHTED_ACCEPTED`
+  conserva la escalera del programa y su autoridad de aceptación.
+- **Criterio de cierre:** `UNKNOWN = 0`, ninguna familia sin review, receipts
+  estático/DB y restore frescos, manifests/artefactos regenerados por su dueño,
+  `program-check` y gates blocking verdes, auditoría independiente final y
+  checkpoint de punto cero. Sólo entonces «Modern Rescue completo» es una
+  afirmación permitida.
+
 ## 12. Decisiones del dueño
 
 **Tomadas (2026-08-19):**
@@ -324,6 +456,21 @@ anotado.
 9. **Las 10 raíces `gap`:** **backlog aceptado**; se abren diales solo cuando
    un tema los necesite.
 
+**Tomadas (2026-08-20, enmienda de secuencia):**
+
+10. **F2 seguro se termina de forma exhaustiva:** el F2.4 en vuelo no se
+    revierte y puede encadenar todos los clusters con cero-delta computado en
+    las tres verticales. Sólo el residuo que necesita una decisión de theme se
+    difiere a F4A/F4B; no se inventa una asignación para declarar F2 cerrado.
+11. **F4 se divide y se adelanta en parte:** F4A y F4B preceden a F3; las colas
+    F2 asimétricas se cierran entre F4B y F3; F4C premium corre después de F3.
+12. **F9 es obligatorio:** gobernado no significa certificado; el programa no
+    cierra mientras `UNKNOWN` sea distinto de cero.
+13. **Autoridad de agentes:** esta enmienda no permite que un mismo actor sea DT
+    y auditor independiente. La identidad operativa vigente debe reconciliarse
+    atómicamente en `AGENTS.md` y las autoridades/checkers de Modern Rescue;
+    este Markdown no las sobreescribe por sí solo.
+
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
@@ -340,6 +487,16 @@ como heredado.*
 ---
 
 ## 13. Estado de ejecución (vivo — se actualiza con cada lote)
+
+**Enmienda de secuencia vigente (dueño, 2026-08-20).** El frente actual sigue
+siendo F2.4 y su packet abierto no se cancela. F2 continúa packet por packet
+hasta que no quede ningún cluster con cero-delta computado demostrable. Cerrado
+ese conjunto seguro y auditado, el próximo frente es **F4A**, no F3; el residuo
+F2 dependiente de theme queda explícitamente detrás de F4B. La cola vinculante es:
+`F4A → F4B → F2 asimétrico → F3 → F4C → F5 → F6 → F7 → F8 → F9`.
+F1 permanece correctamente «gobernado», pero no se reinterpretará como
+certificación: el rollup `UNKNOWN` sólo baja con evidencia causal y F9 lo lleva
+a cero.
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
@@ -658,6 +815,47 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**Enmienda de secuencia del dueño (2026-08-20) — ADOPTADA y registrada.**
+Reescribe §6/§7/§11-bis/§12 del roadmap: la cola vinculante pasa a ser
+`F2 seguro exhaustivo → F4A canon estructural → F4B calibración 20 controles →
+F2 asimétrico → F3 skins+craft → F4C premium → F5 → F6 → F7 → F8 → F9`
+(F9 nuevo: cierre de certificación familia×control, UNKNOWN=0 sobre 255×20).
+Compatibilidad con F2.4 en vuelo: el packet no se cancela; los requisitos
+nuevos de declaración (raíz, canales, 3 verticales, negativo, restauración del
+artefacto) ya están en el brief de la ola 2. Mis adjudicaciones W1 quedan
+consistentes con la enmienda: `tier.page.fg` y descongelar-primary son
+decisiones de theme → esperan F4A/F4B; W1 midió que el conjunto seguro se
+agota con la ola 2.
+**F2.4-batch W1 ✅ `8f58229e3`** — 2 raíces / 3 canales recableados
+(`tier.base.fg`→`--ds-color-text-primary` en bithire ×2 — raíz VIVA, no
+congelada; `tier.page.bg`→`--ds-sidebar-bg` en rottay ×1). Cero-delta probado:
+surface/valueParity/cascadePresence IDÉNTICAS; severance sin mover (solo
+readerEdges 30→31, mismo patrón del piloto); evnto byte-idéntico; diff del
+artefacto = 6 líneas exactas; suite 1683/13 estable por nombre; mirror-parity
+44/44; re-sello gat-07 (`91970333…`). Sin rosters T2/T3 (no hizo falta
+REDERIVED). **Medición que ordena el frente: dentro de los 150 severos quedan
+CERO candidatos inequívocos** — bajar `severs` más allá de 50/99/15 ya no es
+mecánico, es decisión semántica. Filtros medidos: (a) coincidencia de valor ≠
+derivación (5 raíces: `none`, `12px`, ratios — cero-delta hoy, delta garantizado
+mañana); (b) colisión semántica `tier.page.fg`; (c) comunes a los 3 temas
+(mueven role shape); (d) las ya conocidas del piloto.
+**Adjudicaciones del coordinador (W1 → ola 2):**
+(1) `valueParity.identicalRoleShape/divergentRoleShape` **ENTRA al permiso**
+"colapso de restitución redundante" — es censo de forma de scope, no pintura.
+Desbloquea `--ds-color-border-primary`→`--ds-color-border` y
+`--ds-layout-sider-bg`→`--ds-sidebar-bg` (rottay, comunes a los 3 temas) para la
+ola 2. (2) `tier.page.fg` (43 canales `#A0A0A5`, 4 destinos posibles, la
+correcta —tinta secundaria— NO es raíz del catálogo): **NO se recablea en F2**;
+promover una tinta secundaria a raíz es autoría de vocabulario = **F4**.
+(3) Descongelar `--ds-color-primary` en rottay (libera 6+15 canales): **F4**
+(valor de tema), anotado en las notas de F4, no se toca en F2.
+**Nota operativa (cierre W1):** el worker regeneró 4 de los 5 eslabones de la
+cadena y se saltó `controls` — gates:ci lo pescó rojo (controls-catalog STALE).
+El coordinador regeneró la vista (`tokens/controls/README.md`, digest
+dc813e5d→OK), gat-07 no se inmutó (el README no alimenta la prueba) y la huella
+en docs-engineering siguió siendo solo los 3 contadores del worker. Lección:
+la cadena completa es censo→reconciliation→kimi→**controls**→catalog y gates:ci
+es quien la audita — ya quedó explícita en el brief de la ola 2.
 **F2.4-piloto ✅ `14262d45c`** — sexteto recableado, cero-delta probado
 contra el artefacto (12 líneas exactas; bithire/evnto intactos; mirror-parity
 solo a la baja en lo permitido). Patrón REDERIVED preservó los rosters sin
