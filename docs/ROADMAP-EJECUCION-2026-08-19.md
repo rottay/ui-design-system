@@ -556,6 +556,22 @@ commitearon por adelantado dentro de `dfcae623f` — error del coordinador:
 los commits de docs del coordinador se hacen SIEMPRE con pathspec
 (`git commit <path> -m …`) mientras un worker esté en vuelo.
 
+**Lote F ✅ `4953e1c21`** — ci/ completa (14/14): runner, manifiesto, wiring,
+workflow-wiring, red-inventory, analyze-bundle, budgets, ratchet, f0-honesty.
+4 roturas no censadas arregladas por Opus (channel-liveness leía el manifiesto
+plano — un archivo del lote G roto HOY; fixtures a profundidad vieja ×2; HERE
+en f0-honesty). **`gates:ci` con worker en pausa: 78 blocking VERDES** — pero
+necesitó re-sellar la cadena de artefactos derivados que la migración
+repo-root de Fase 0 dejó stale: customization-surface-report (solo digest) →
+tokens-catalog (341 vistas + digest en la reconciliation curada) →
+reads-adjudication (solo digest; sets 2607=2607) → controls-catalog →
+**gat-07 siempre ÚLTIMO** (`a3e50930…`). Regla operativa nueva: los re-sellos
+de frescura van antes que gat-07 en cualquier cierre. Lección de fondo: las
+"23 estables" de la suite escondían gates BLOQUEANTES rojos (el positivo de
+customization-surface) — suite roja ≠ ignorable; en H/I el gates:ci de cierre
+puede descubrir más de estos (no quedan artefactos pineados conocidos stale:
+la cadena quedó completa).
+
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
 baseline del Paso B: **1618 tests / 24 fallas = 23 estables + 1 flaky**
