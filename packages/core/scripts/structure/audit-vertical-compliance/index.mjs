@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * audit-vertical-compliance.mjs
+ * audit-vertical-compliance — structure/ family
  *
  * World-class architecture compliance checks:
  *   Rule 1: vertical/manifest.ts must exist if vertical/ dir exists
@@ -16,14 +16,14 @@
  * Source of truth: world-class-app-architecture/00-final-decision.md
  *
  * Usage:
- *   node scripts/audit-vertical-compliance.mjs --app-dir /path/to/app/src
+ *   node scripts/structure/audit-vertical-compliance/index.mjs --app-dir /path/to/app/src
  */
 
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const args = process.argv.slice(2);
 const appDirIdx = args.indexOf('--app-dir');
@@ -37,7 +37,7 @@ if (appDirIdx === -1 || !args[appDirIdx + 1]) {
     .sort();
 
   if (appDirs.length === 0) {
-    console.error('Usage: node audit-vertical-compliance.mjs --app-dir <path-to-src>');
+    console.error('Usage: node scripts/structure/audit-vertical-compliance/index.mjs --app-dir <path-to-src>');
     console.error('No sibling app-* src directories were found for default auditing.');
     process.exit(2);
   }

@@ -707,7 +707,7 @@
     "structure:check": "node --test scripts/structure/core-owner-boundaries/index.test.mjs && node scripts/structure/core-structure-audit/index.mjs --check",
     "structure:report": "node scripts/structure/core-structure-audit/index.mjs --report",
     "lint:integration": "node scripts/structure/audit-integration/index.mjs",
-    "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
+    "lint:vertical": "node scripts/structure/audit-vertical-compliance/index.mjs",
     "docs:taxonomy": "node scripts/generators/generate-taxonomy/index.mjs",
     "build:fonts": "node scripts/builders/build-font-packs/index.mjs",
     "cra15:gate:final": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --check",
