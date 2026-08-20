@@ -503,7 +503,15 @@ computó (exactas, gate verde). Enmienda de punteros APROBADA y en el brief:
 archivos de corpus hasheado (`src/foundation/tokens/css/**` fuera de
 `facade/artifacts/`) NO se tocan en movidas — viajan con la re-derivación del
 piso. Deuda nueva: `styles/platform.css` huérfano (sello sin productor —
-adjudicar al cierre del frente).
+adjudicar al cierre del frente). **ADJUDICADO (2026-08-19, coordinador): se
+BORRA al cierre del frente.** Verificado: el productor actual
+(`build-vertical-css`) genera el roster `{index,modern,rottay,bithire,evnto}`
+— platform ya no es vertical (contradice platform-identity-zero); ningún
+script lo sella ni lo referencia; `dist/platform.css` no existe; el único
+"consumidor" es un import fantasma en `app-platform/globals.css:14`
+(`@import '@rottay/design-system/dist/platform.css'` — 404 hoy; deuda del
+vertical app-platform, fuera de alcance F0.5); la fila de PERFORMANCE_BUDGET
+muere con los presupuestos en F6. 5,3 MB de bundle zombie.
 **Lote C2 ✅ `27db84b0f`** — `platform-identity-zero-gate` a `verticals/` con
 la exención estrecha del propio nombre (constante + lookahead; exime un NOMBRE,
 no licencia archivos), dientes probados en dos planos (drill de 6 vecinos +
