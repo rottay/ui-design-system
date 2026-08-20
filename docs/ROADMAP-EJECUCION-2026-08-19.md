@@ -609,6 +609,11 @@ Lectores re-apuntados (HERE-relativo); 3 contratos modern-rescue editados con
 autorización expresa (CONSTITUTION_READY). Sello gat-07 intacto (esos
 artefactos no son input). **Raíz del paquete sin artefactos sueltos.**
 
+**Paso D ✅ `f4d20e30d`** (coordinador) — `scripts-tree-gate` bloqueante:
+la ley §1.2/§2.9 sobre scripts/ es mecánica (R1–R6 + A1, baseline
+decrease-only de 25 desviaciones adjudicadas con razón, 12/12 tests con 6
+drills). **gates:ci: 80 blocking VERDES.** Paso C (acortamiento de nombres
+pre-regla) DIFERIDO a F1 — el baseline del gate ya lo exige.
 **Lote J ✅ `ece0c92ca`** (coordinador) — `audit-vertical-compliance` a
 `structure/`: **scripts/ queda 100% folder/index** (0 producción suelta, 2
 excepciones toolchain A11). Hermanos editados sin commitear (Fable H3) —
