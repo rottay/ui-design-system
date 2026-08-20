@@ -602,11 +602,12 @@ regeneración sighted. 4to caso del patrón existsSync-traga-rutas-muertas
 (build-input-hash autonombrado). gates:ci **78 blocking VERDES**. Del
 inventario del Paso A (222 movibles): 221 movidos — queda 1 (lote J).
 
-**Lote G2 creado (pendiente, mío):** re-alojar los 4 artefactos de raíz de
-paquete en sus capabilities dueñas (`customization-surface-report.json` y
-KIMI manifest → tokens/; `customization-reconciliation.json` → tokens-catalog
-— su `generatedBy` nombra al gate). Los 3 contratos de modern-rescue que los
-leen se editan con autorización expresa (mismo criterio que C8).
+**Lote G2 ✅ `d0a1e8453`** (coordinador) — los 3 artefactos de raíz de
+paquete re-alojados en sus capabilities dueñas (report → census, KIMI →
+kimi-preservation, reconciliation → tokens-catalog por su `generatedBy`).
+Lectores re-apuntados (HERE-relativo); 3 contratos modern-rescue editados con
+autorización expresa (CONSTITUTION_READY). Sello gat-07 intacto (esos
+artefactos no son input). **Raíz del paquete sin artefactos sueltos.**
 
 **Lote J ✅ `ece0c92ca`** (coordinador) — `audit-vertical-compliance` a
 `structure/`: **scripts/ queda 100% folder/index** (0 producción suelta, 2
