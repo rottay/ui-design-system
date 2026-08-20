@@ -35,7 +35,7 @@ import {
   findDaisyClassesInText,
   listDaisyClassConsumers,
 } from '../../lib/engine/daisy-class-consumer-counter/index.mjs';
-import { isEngineSourceFile, modernEngineFiles } from '../../lib/engine/engine-corpus/index.mjs';
+import { isEngineSourceFile, modernEngineFiles } from '../../lib/engine/corpus/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageDir = dirname(dirname(dirname(scriptDir)));
@@ -298,7 +298,7 @@ test('a cyclic const chain terminates', () => {
 
 test('the audited tree has exactly the consumers the baseline pins', () => {
   const baseline = JSON.parse(
-    readFileSync(join(scriptDir, 'engine-token-audit.baseline.json'), 'utf8'),
+    readFileSync(join(scriptDir, 'token-audit.baseline.json'), 'utf8'),
   );
   const current = spawnSync(
     process.execPath,

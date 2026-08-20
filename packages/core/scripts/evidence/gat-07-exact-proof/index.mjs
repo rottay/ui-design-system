@@ -29,7 +29,7 @@ import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/inde
 import {
   ENGINE_TOKEN_EXACT,
   ENGINE_TOKEN_MINIMUM,
-} from '../../lib/engine/engine-token-governance/index.mjs';
+} from '../../lib/engine/token-governance/index.mjs';
 import { readFirstPartyRosterSource } from '../../lib/verticals/first-party-roster-source/index.mjs';
 import {
   analyzeClaimSourceRecords,
@@ -55,8 +55,8 @@ const CLAIM_FLOOR_PATH = join(HERE, 'gat-07-public-claim-floor.json');
 const CLAIM_DOC_ALLOWLIST_PATH = join(HERE, 'gat-07-doc-claim-allowlist.json');
 const DOCUMENTATION_SEAL_PATH = join(HERE, 'gat-07-documentation-seal.json');
 const STALE_CORPUS_PATH = join(HERE, 'gat-07-stale-corpus.json');
-const BASELINE_PATH = join(HERE, '..', '..', 'engine/engine-token-audit/engine-token-audit.baseline.json');
-const AUDIT_PATH = join(HERE, '..', '..', 'engine/engine-token-audit/index.mjs');
+const BASELINE_PATH = join(HERE, '..', '..', 'engine/token-audit/token-audit.baseline.json');
+const AUDIT_PATH = join(HERE, '..', '..', 'engine/token-audit/index.mjs');
 const DATA_PART_DOC = join(
   DOCS_ROOT,
   'engineering/design-system/runtime/skins/data-part-contracts/README.md',

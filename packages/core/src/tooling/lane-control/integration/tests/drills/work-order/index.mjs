@@ -114,7 +114,7 @@ export function runDrills() {
       result: check('build-bound', (wo) => {
         // A REGISTERED gate, so the build is the only thing wrong with it.
         wo.verificationCommands = [
-          'pnpm -C packages/core build && node packages/core/scripts/engine/engine-token-audit/index.mjs --check',
+          'pnpm -C packages/core build && node packages/core/scripts/engine/token-audit/index.mjs --check',
         ];
       }),
     });

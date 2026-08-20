@@ -440,7 +440,7 @@ export function lowerStop({
  * compiled output — which is exactly what `scripts/verticals/build-vertical-artifacts/index.mjs`
  * already does. `dist/` goes stale silently, so the returned provenance carries
  * `freshnessProven: false` and names the authority that answers the question
- * (`node --test scripts/verticals/vertical-css-staleness.gate/index.mjs` for the CSS,
+ * (`node --test scripts/verticals/css-staleness-gate/index.mjs` for the CSS,
  * `dist/build-stamp.json` for the compiled modules). A causal run pairs this
  * with the stale-source guard, which fails when the recorded digest no longer
  * describes the tree.

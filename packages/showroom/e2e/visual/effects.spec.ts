@@ -4,7 +4,7 @@ import { test, expect, type Page } from '@playwright/test';
 // WO-ENG-14 — the premium surface tint is measured in pixels, not counted in files.
 //
 // The counter this replaces (`effects.gradientConsumers` in
-// packages/core/scripts/engine/engine-token-audit/index.mjs) is a MIN floor over the number
+// packages/core/scripts/engine/token-audit/index.mjs) is a MIN floor over the number
 // of FILES that mention `var(--ds-gradient-surface)`. It was green while the
 // effect was pixel-invisible on every shipped tenant: rottay's card face
 // measured a luminance delta of exactly 0.000 from top to bottom.

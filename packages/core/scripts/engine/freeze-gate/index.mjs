@@ -40,9 +40,9 @@
  *     a build product is never evidence that its authored source may change.
  *
  * Usage:
- *   node scripts/engine/engine-freeze-gate/index.mjs            # print the report
- *   node scripts/engine/engine-freeze-gate/index.mjs --check    # exit 1 on any violation
- *   node scripts/engine/engine-freeze-gate/index.mjs --authorize <path...> --reason "<text>"
+ *   node scripts/engine/freeze-gate/index.mjs            # print the report
+ *   node scripts/engine/freeze-gate/index.mjs --check    # exit 1 on any violation
+ *   node scripts/engine/freeze-gate/index.mjs --authorize <path...> --reason "<text>"
  *
  * `ENGINE_FREEZE_BASE` may WIDEN the audit window (it must be an ancestor of the
  * sealed base); it can never narrow it. `--repo`/`--baseline` exist for the
@@ -89,7 +89,7 @@ function argValue(flag, fallback) {
 const REPO_OVERRIDE = argValue('--repo', null);
 const repoRoot = REPO_OVERRIDE ? resolve(REPO_OVERRIDE) : findRepoRoot(scriptDir);
 const BASELINE_PATH = resolve(
-  argValue('--baseline', join(scriptDir, 'engine-freeze-gate.baseline.json')),
+  argValue('--baseline', join(scriptDir, 'freeze-gate.baseline.json')),
 );
 /** Fixture mode: a self-test repo has its own history and cannot contain the
  *  sealed base, so the source-pinned equality check is replaced by "the
@@ -423,7 +423,7 @@ function main() {
         `    differs from the sealed base ${base.slice(0, 8)}${change.untracked ? ' (untracked)' : ''}.\n` +
         '    Classic/Rustic are read-only. If this is a minimal shared-contract compile fix, record a\n' +
         '    written exception:\n' +
-        `      node scripts/engine/engine-freeze-gate/index.mjs --authorize ${change.path} --reason "<why>"`,
+        `      node scripts/engine/freeze-gate/index.mjs --authorize ${change.path} --reason "<why>"`,
     );
   }
   for (const change of drifted) {

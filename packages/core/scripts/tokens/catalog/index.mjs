@@ -739,7 +739,7 @@ customization surface. THE AUTHORITY IS CODE — contracts, registries,
 compilers, manifests, recipes and ledgers; everything tabular here is a
 deterministic projection (\`pnpm tokens:catalog:write\`, checked by the
 \`tokens-catalog\` gate in \`pnpm gates:ci\` -- or directly, \`node
-scripts/tokens/tokens-catalog/index.mjs --check\`). The only hand-written files are the
+scripts/tokens/catalog/index.mjs --check\`). The only hand-written files are the
 two guides.
 
 ## The two trees

@@ -11,7 +11,7 @@ import {
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { auditGraphicsPackaging } from '../../packaging/cra-17-packaging-license-gate/index.mjs';
+import { auditGraphicsPackaging } from '../../packaging/cra-17-license-gate/index.mjs';
 import {
   auditPublicDeclarationClosures,
 } from '../../packaging/cra-17-public-declaration-gate/index.mjs';

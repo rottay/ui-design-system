@@ -48,7 +48,7 @@ if (!/^(?:[1-9]|[1-9]\d|100)%$/u.test(similarity)) {
 }
 const baselinePath = resolve(repositoryRoot, argument(
   '--baseline',
-  'packages/core/scripts/engine/engine-token-audit/engine-token-audit.baseline.json',
+  'packages/core/scripts/engine/token-audit/token-audit.baseline.json',
 ));
 const write = process.argv.includes('--write');
 const adoptNewZero = process.argv.includes('--adopt-new-zero');

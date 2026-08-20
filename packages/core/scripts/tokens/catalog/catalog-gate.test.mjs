@@ -19,7 +19,7 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const SCRIPT = join(ROOT, 'scripts/tokens/tokens-catalog/index.mjs');
+const SCRIPT = join(ROOT, 'scripts/tokens/catalog/index.mjs');
 const DOCS = resolve(ROOT, '../../../docs-engineering/engineering/design-system/tokens');
 
 function run(...args) {

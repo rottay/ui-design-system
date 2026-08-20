@@ -508,7 +508,7 @@ test('coverage boundary: the shared module a frozen stub delegates to is NOT fro
 
 test('the real baseline is schema v2, pinned to the sealed base, and every entry carries a reason', () => {
   const baseline = JSON.parse(
-    readFileSync(join(scriptDir, 'engine-freeze-gate.baseline.json'), 'utf8'),
+    readFileSync(join(scriptDir, 'freeze-gate.baseline.json'), 'utf8'),
   );
   assert.equal(baseline.schemaVersion, 2);
   assert.match(baseline.baseRevision, /^[0-9a-f]{40}$/);

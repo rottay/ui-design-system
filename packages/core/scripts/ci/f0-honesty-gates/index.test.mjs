@@ -179,7 +179,7 @@ function runWiringOnSyntheticTree(extraFiles) {
 }
 
 const WIRING_MANIFEST = `export const GATES = [
-  { id: 'runner', run: ['node', 'scripts/ci/run-ci-gates/index.mjs'] },
+  { id: 'runner', run: ['node', 'scripts/ci/runner/index.mjs'] },
   { id: 'wired', run: ['node', 'scripts/tokens/wired-gate/index.mjs'] },
   { id: 'wiring', run: ['node', 'scripts/ci/wiring-coverage-gate/index.mjs'] },
 ];
@@ -187,7 +187,7 @@ const WIRING_MANIFEST = `export const GATES = [
 
 /** The runner's import of the manifest is what wires the manifest itself
  *  (one-hop rule) — mirrors the real tree. */
-const WIRING_RUNNER = `import { GATES } from '../ci-gates.manifest/index.mjs';
+const WIRING_RUNNER = `import { GATES } from '../gates-manifest/index.mjs';
 export { GATES };
 `;
 
@@ -198,8 +198,8 @@ test('wiring-coverage-gate passes on the current tree', () => {
 
 test('wiring-coverage-gate passes with a wired capability at depth', () => {
   const result = runWiringOnSyntheticTree({
-    'scripts/ci/ci-gates.manifest/index.mjs': WIRING_MANIFEST,
-    'scripts/ci/run-ci-gates/index.mjs': WIRING_RUNNER,
+    'scripts/ci/gates-manifest/index.mjs': WIRING_MANIFEST,
+    'scripts/ci/runner/index.mjs': WIRING_RUNNER,
     'scripts/tokens/wired-gate/index.mjs': 'export {};\n',
   });
   assert.equal(result.code, 0, result.out);
@@ -207,8 +207,8 @@ test('wiring-coverage-gate passes with a wired capability at depth', () => {
 
 test('wiring-coverage-gate FAILS on an orphan planted at depth', () => {
   const result = runWiringOnSyntheticTree({
-    'scripts/ci/ci-gates.manifest/index.mjs': WIRING_MANIFEST,
-    'scripts/ci/run-ci-gates/index.mjs': WIRING_RUNNER,
+    'scripts/ci/gates-manifest/index.mjs': WIRING_MANIFEST,
+    'scripts/ci/runner/index.mjs': WIRING_RUNNER,
     'scripts/tokens/wired-gate/index.mjs': 'export {};\n',
     'scripts/tokens/orphan-gate/index.mjs': 'export {};\n',
   });
@@ -218,8 +218,8 @@ test('wiring-coverage-gate FAILS on an orphan planted at depth', () => {
 
 test('wiring-coverage-gate does not demand wiring for lib/, codemods/ or quality-evidence/ at depth', () => {
   const result = runWiringOnSyntheticTree({
-    'scripts/ci/ci-gates.manifest/index.mjs': WIRING_MANIFEST,
-    'scripts/ci/run-ci-gates/index.mjs': WIRING_RUNNER,
+    'scripts/ci/gates-manifest/index.mjs': WIRING_MANIFEST,
+    'scripts/ci/runner/index.mjs': WIRING_RUNNER,
     'scripts/tokens/wired-gate/index.mjs': 'export {};\n',
     'scripts/lib/paint/shared-counter/index.mjs': 'export {};\n',
     'scripts/codemods/app-side-thing.mjs': 'export {};\n',

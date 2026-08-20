@@ -44,7 +44,7 @@ const EXCLUDED_SEGMENT = new Set(['__tests__', 'tests', 'testing']);
 const BUILD_CONFIG_FILES = ['vite.config.ts', 'tsconfig.json', 'postcss.config.mjs'];
 const BUILD_INPUT_MANIFEST_SCHEMA_VERSION = 1;
 const STAMP_PRODUCER_FILES = [
-  'scripts/lib/build/build-input-hash/index.mjs',
+  'scripts/lib/build/input-hash/index.mjs',
   'scripts/builders/write-build-stamp/index.mjs',
 ];
 

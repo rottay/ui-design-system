@@ -10,7 +10,7 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptsDir);
-const baseline = JSON.parse(readFileSync(join(scriptsDir, 'engine-token-audit.baseline.json'), 'utf8'));
+const baseline = JSON.parse(readFileSync(join(scriptsDir, 'token-audit.baseline.json'), 'utf8'));
 const exemptions = JSON.parse(readFileSync(resolve(packageRoot, '../..', 'roadmap/skin-exemptions.json'), 'utf8'));
 
 function countersFromOutput(output) {

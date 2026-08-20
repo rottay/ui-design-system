@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import { auditEffectProvenance } from './index.mjs';
-import { CI_GATES } from '../../../packages/core/scripts/ci/ci-gates.manifest/index.mjs';
+import { CI_GATES } from '../../../packages/core/scripts/ci/gates-manifest/index.mjs';
 
 // Ascending marker search, not a hardcoded `..` chain: this file is two
 // levels below scripts/ (scripts/provenance/effect-registry-audit/index.test.mjs).
@@ -201,7 +201,7 @@ test('effect provenance remains a first-class local and CI release gate', () => 
   const workflow = readFileSync(ciPath, 'utf8');
 
   assert.equal(coreManifest.scripts.pretest, 'pnpm run gates:ci');
-  assert.equal(coreManifest.scripts['gates:ci'], 'node scripts/ci/run-ci-gates/index.mjs');
+  assert.equal(coreManifest.scripts['gates:ci'], 'node scripts/ci/runner/index.mjs');
   assertBlockingGate(
     CI_GATES,
     'effects:provenance',

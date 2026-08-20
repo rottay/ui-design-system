@@ -46,7 +46,7 @@ import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/repo
 // The CI manifest is the ONE inventory of gates CI runs. W4 reads the set of
 // admissible acceptance gates out of it rather than restating any of them here;
 // see CI_MANIFEST_PATH below for why that direction is the load-bearing one.
-import { blockingGates } from '../../../../../scripts/ci/ci-gates.manifest/index.mjs';
+import { blockingGates } from '../../../../../scripts/ci/gates-manifest/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SCHEMA_PATH = resolve(HERE, 'schema.json');
@@ -85,7 +85,7 @@ export const MANDATORY_SENTENCE =
  * Every gate in that manifest also runs BEFORE the build, which is what keeps
  * this half of W4 consistent with the build-free half above it.
  */
-export const CI_MANIFEST_PATH = 'packages/core/scripts/ci/ci-gates.manifest/index.mjs';
+export const CI_MANIFEST_PATH = 'packages/core/scripts/ci/gates-manifest/index.mjs';
 
 /**
  * The blocking gates of the CI manifest, keyed by the token a verification

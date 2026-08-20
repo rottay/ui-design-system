@@ -141,7 +141,7 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
 
   if (drill === 'R1') add('R1-loose-root-file', 'drill-loose-file.mjs');
   if (drill === 'R2') add('R2-loose-family-file', 'ci/drill-loose.mjs');
-  if (drill === 'R3') add('R3-foreign-file', 'ci/run-ci-gates/drill-foreign.json');
+  if (drill === 'R3') add('R3-foreign-file', 'ci/runner/drill-foreign.json');
   if (drill === 'R4') add('R4-forbidden-segment', 'ci/utils');
   if (drill === 'R5') add('R5-family-prefix-repeat', 'ci/ci-drill');
   if (drill === 'R6') add('R6-undeclared-lib-subfamily', 'lib/drill-sub');

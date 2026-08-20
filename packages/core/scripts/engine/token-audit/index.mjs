@@ -22,12 +22,12 @@
  * one-line summary appended to `--check`/report output.
  *
  * Usage:
- *   node scripts/engine/engine-token-audit/index.mjs            # print the current counts
- *   node scripts/engine/engine-token-audit/index.mjs --check    # exit 1 if any counter rose above baseline
- *   node scripts/engine/engine-token-audit/index.mjs --update-baseline   # tighten existing ceilings only
- *   node scripts/engine/engine-token-audit/index.mjs --coverage # write the token-coverage report (informational)
- *   node scripts/engine/engine-token-audit/index.mjs --current-json # emit current counters for reviewed tooling
- *   node scripts/engine/engine-token-audit/index.mjs --check --quiet     # concise CI output
+ *   node scripts/engine/token-audit/index.mjs            # print the current counts
+ *   node scripts/engine/token-audit/index.mjs --check    # exit 1 if any counter rose above baseline
+ *   node scripts/engine/token-audit/index.mjs --update-baseline   # tighten existing ceilings only
+ *   node scripts/engine/token-audit/index.mjs --coverage # write the token-coverage report (informational)
+ *   node scripts/engine/token-audit/index.mjs --current-json # emit current counters for reviewed tooling
+ *   node scripts/engine/token-audit/index.mjs --check --quiet     # concise CI output
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
 import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/index.mjs';
@@ -35,7 +35,7 @@ import {
   collectEngineFiles,
   modernEngineColorFiles,
   modernEngineFiles,
-} from '../../lib/engine/engine-corpus/index.mjs';
+} from '../../lib/engine/corpus/index.mjs';
 import {
   collectDaisyClassConsumers,
   countDaisyClassConsumers,
@@ -57,7 +57,7 @@ import {
 import {
   ENGINE_TOKEN_EXACT as EXACT,
   ENGINE_TOKEN_MINIMUM as MIN,
-} from '../../lib/engine/engine-token-governance/index.mjs';
+} from '../../lib/engine/token-governance/index.mjs';
 import postcss from 'postcss';
 import { resolve, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -72,7 +72,7 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 const here = dirname(fileURLToPath(import.meta.url));
 const root = findPackageRoot(here);
 const componentsDir = join(root, 'src/ui');
-const baselinePath = join(here, 'engine-token-audit.baseline.json');
+const baselinePath = join(here, 'token-audit.baseline.json');
 const quiet = process.argv.includes('--quiet');
 
 function argumentValue(name) {
@@ -84,7 +84,7 @@ function argumentValue(name) {
 }
 
 /**
- * The engine-source corpus lives in `lib/engine-corpus.mjs` so this script and
+ * The engine-source corpus lives in `lib/engine/corpus/index.mjs` so this script and
  * its guard test read the SAME walk. It is recursive (WO-GAT-02 generalized it
  * from the modern-only walk so the classic/rustic dead-selector counters build
  * their consumed-class sets from the same scan) and it excludes tests/stories
@@ -1581,7 +1581,7 @@ function renderCoverageMarkdown(coverage) {
   lines.push(`Generated: ${coverage.generatedAt}`);
   lines.push('');
   lines.push('Informational only -- this report is NOT a blocking gate. The blocking gates remain the');
-  lines.push('modern-scoped counters in `node scripts/engine/engine-token-audit/index.mjs --check` (motion/color/etc).');
+  lines.push('modern-scoped counters in `node scripts/engine/token-audit/index.mjs --check` (motion/color/etc).');
   lines.push('This report lists, per component source file across ALL engines, which `--ds-*` custom');
   lines.push('properties it consumes and how many hardcoded literals (motion/hex/rgba, using the exact');
   lines.push('same detection rules as the blocking counters) it still carries.');

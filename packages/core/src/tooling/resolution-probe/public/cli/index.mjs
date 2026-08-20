@@ -126,7 +126,7 @@ causal options
 Bundle modes
   fresh   recompose from src/foundation/tokens/css in memory (no build). Default,
           because it is the only mode whose freshness can be proven here.
-  dist    the shipped bundle. Currently STALE: scripts/verticals/vertical-css-staleness.gate/index.mjs
+  dist    the shipped bundle. Currently STALE: scripts/verticals/css-staleness-gate/index.mjs
           fails on all five committed bundles. Readings are labelled accordingly.
   styles  the committed mirror; verified byte-identical to dist.
 `;

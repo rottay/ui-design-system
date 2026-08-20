@@ -2,7 +2,7 @@
 // Build-freshness stamp writer (BLD dist-freshness precondition).
 //
 // Runs as the LAST step of `build`, after every dist artifact is written. It
-// records the build-input content hash (see scripts/lib/build/build-input-hash/index.mjs)
+// records the build-input content hash (see scripts/lib/build/input-hash/index.mjs)
 // and the producer version into `dist/build-stamp.json`. `prepack` then runs
 // `dist-freshness-gate.mjs`, which recomputes the same hash and refuses to pack
 // when it diverges from this stamp -- i.e. when `dist/` was built from a
@@ -25,7 +25,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { computeBuildInputHash } from '../../lib/build/build-input-hash/index.mjs';
+import { computeBuildInputHash } from '../../lib/build/input-hash/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));

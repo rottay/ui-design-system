@@ -63,8 +63,8 @@
       "writeSet": [
         "packages/core/scripts/**/*-gate.mjs",
         "packages/core/scripts/**/*-gate.test.mjs",
-        "packages/core/scripts/ci/ci-gates.manifest/index.mjs",
-        "packages/core/scripts/ci/run-ci-gates/index.mjs"
+        "packages/core/scripts/ci/gates-manifest/index.mjs",
+        "packages/core/scripts/ci/runner/index.mjs"
       ],
       "writeExcludes": [
         "packages/core/scripts/**/build-*.mjs",
@@ -96,7 +96,7 @@
         "packages/core/scripts/**/generate-*.mjs",
         "packages/core/scripts/**/build-*.mjs",
         "packages/core/scripts/codemods/**",
-        "packages/core/scripts/tokens/tokens-catalog/index.mjs"
+        "packages/core/scripts/tokens/catalog/index.mjs"
       ],
       "writeExcludes": [
         "packages/core/scripts/**/*-gate.mjs",

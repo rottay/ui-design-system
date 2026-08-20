@@ -44,9 +44,9 @@
  * target locale cannot be rendered, so it counts as missing, not as present.
  *
  * Usage:
- *   node scripts/i18n/i18n-key-parity-gate/index.mjs           # print the census
- *   node scripts/i18n/i18n-key-parity-gate/index.mjs --check   # exit 1 on any violation
- *   node scripts/i18n/i18n-key-parity-gate/index.mjs --seed    # (re)author the baseline
+ *   node scripts/i18n/key-parity-gate/index.mjs           # print the census
+ *   node scripts/i18n/key-parity-gate/index.mjs --check   # exit 1 on any violation
+ *   node scripts/i18n/key-parity-gate/index.mjs --seed    # (re)author the baseline
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -66,7 +66,7 @@ function argValue(flag, fallback) {
   return index >= 0 && process.argv[index + 1] ? process.argv[index + 1] : fallback;
 }
 
-const BASELINE_PATH = argValue('--baseline', join(HERE, 'i18n-key-parity-gate.baseline.json'));
+const BASELINE_PATH = argValue('--baseline', join(HERE, 'key-parity-gate.baseline.json'));
 /** Overridable so a reviewer can reproduce a failure against a scratch copy of the catalog. */
 const LOCALES_PATH = resolve(argValue('--locales-root', LOCALES_ROOT));
 
@@ -392,7 +392,7 @@ function main() {
     }
     console.error(
       '\n  Fix by translating the listed keys into the failing locale, or — for a\n' +
-      '  deliberate partial locale — classify it in i18n-key-parity-gate.baseline.json\n' +
+      '  deliberate partial locale — classify it in key-parity-gate.baseline.json\n' +
       '  with a written reason. A mandatory locale has no baseline escape.'
     );
     if (mode === 'check') process.exit(1);

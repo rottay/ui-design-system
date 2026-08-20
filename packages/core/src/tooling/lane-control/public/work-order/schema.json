@@ -155,7 +155,7 @@
       "type": "array",
       "minItems": 1,
       "items": { "type": "string" },
-      "description": "Build-free commands the lane runs itself. Must include the lane's acceptance gate: one registered as blocking in packages/core/scripts/ci/ci-gates.manifest/index.mjs. A command needing dist/ is rejected: the build has been red, and a verification nobody can run is not one."
+      "description": "Build-free commands the lane runs itself. Must include the lane's acceptance gate: one registered as blocking in packages/core/scripts/ci/gates-manifest/index.mjs. A command needing dist/ is rejected: the build has been red, and a verification nobody can run is not one."
     },
     "findingsFile": {
       "type": "string",

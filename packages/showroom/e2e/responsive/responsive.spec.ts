@@ -17,7 +17,7 @@ import { test, expect, type Page } from '@playwright/test';
 //
 // Both lists live in overflow-baseline.json and are DECREASE-ONLY: a run fails
 // on any cell the baseline does not already list. `node
-// packages/core/scripts/engine/engine-token-audit/index.mjs --check` reads the length of
+// packages/core/scripts/engine/token-audit/index.mjs --check` reads the length of
 // `overflowing` as the `responsive.overflowCells` ratchet, so the number cannot
 // grow unnoticed even if this spec is skipped.
 //

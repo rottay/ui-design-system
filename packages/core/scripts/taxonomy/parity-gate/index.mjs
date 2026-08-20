@@ -84,7 +84,7 @@
  *
  * WHAT IT DOES NOT DO. It moves no file and rewrites no manifest.
  *
- * Usage: node scripts/taxonomy/taxonomy-parity-gate/index.mjs [--json]
+ * Usage: node scripts/taxonomy/parity-gate/index.mjs [--json]
  */
 
 import fs from 'node:fs';

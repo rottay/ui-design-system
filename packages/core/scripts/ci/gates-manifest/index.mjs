@@ -156,7 +156,7 @@ export const CI_GATES = Object.freeze([
   // can also compare committed output against a stale local build.
   { id: 'first-party-roster-source-drill', run: ['node', '--test', 'scripts/lib/verticals/first-party-roster-source/index.test.mjs'], blocking: true },
   { id: 'first-party-artifacts-source-staleness', run: ['pnpm', 'exec', 'vitest', 'run', 'src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts'], blocking: true },
-  { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/verticals/vertical-css-staleness.gate/index.mjs'], blocking: true },
+  { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/verticals/css-staleness-gate/index.mjs'], blocking: true },
   // Single-author law, replacing the retired artifact-provenance trio. That
   // gate BOUNDED a second author (the hand-written `_source/extension.css`)
   // by reading the compiled block back out of the committed artifact; the
@@ -186,7 +186,7 @@ export const CI_GATES = Object.freeze([
   { id: 'red-inventory', run: ['node', 'scripts/ci/red-inventory-gate/index.mjs', '--check', '--quiet'], blocking: true },
 
   // --- structural / ownership ---
-  { id: 'engine-token-audit', run: ['node', 'scripts/engine/engine-token-audit/index.mjs', '--check'], blocking: true },
+  { id: 'engine-token-audit', run: ['node', 'scripts/engine/token-audit/index.mjs', '--check'], blocking: true },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
   // the documentation, the code-derived vertical rows, the data-part corpus, and
@@ -200,7 +200,7 @@ export const CI_GATES = Object.freeze([
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/boundaries/application-boundary-gate/index.test.mjs'], blocking: true },
   { id: 'application-boundary-gate', run: ['node', 'scripts/boundaries/application-boundary-gate/index.mjs', '--check'], blocking: true },
   { id: 'pattern-surface-ownership', run: ['node', 'scripts/boundaries/pattern-surface-ownership-gate/index.mjs', '--check'], blocking: true },
-  { id: 'engine-freeze-gate', run: ['node', 'scripts/engine/engine-freeze-gate/index.mjs', '--check'], blocking: true },
+  { id: 'engine-freeze-gate', run: ['node', 'scripts/engine/freeze-gate/index.mjs', '--check'], blocking: true },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/boundaries/portal-substrate-gate/index.mjs', '--check'], blocking: true },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
   // row in `foundation/tokens/prototype-ledger.json`. It ships with NO
@@ -256,8 +256,8 @@ export const CI_GATES = Object.freeze([
   // Official tokens documentation is a deterministic projection; stale docs,
   // derivation cycles, undocumented public hooks, unknown capability
   // channels and unadjudicated dual authorities all block here.
-  { id: 'tokens-catalog-drill', run: ['node', '--test', 'scripts/tokens/tokens-catalog/tokens-catalog-gate.test.mjs'], blocking: true },
-  { id: 'tokens-catalog', run: ['node', 'scripts/tokens/tokens-catalog/index.mjs', '--check'], blocking: true },
+  { id: 'tokens-catalog-drill', run: ['node', '--test', 'scripts/tokens/catalog/catalog-gate.test.mjs'], blocking: true },
+  { id: 'tokens-catalog', run: ['node', 'scripts/tokens/catalog/index.mjs', '--check'], blocking: true },
   // Binding preservation correction: premium depth is preserved, never
   // cleaned away — 80/80 protos decided, dead writers classified by
   // provenance, Kimi-premium RETIRE unrepresentable.
@@ -294,7 +294,7 @@ export const CI_GATES = Object.freeze([
   { id: 'theme-channel-parity', run: ['node', 'scripts/tokens/theme-channel-parity-gate/index.mjs', '--check', '--quiet'], blocking: true },
   { id: 'tenant-channel-consumer', run: ['node', 'scripts/tokens/tenant-channel-consumer-gate/index.mjs', '--check'], blocking: true },
   { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/tokens/tenant-channel-consumer-gate/index.mjs', '--modern-check'], blocking: true },
-  { id: 'i18n-key-parity', run: ['node', 'scripts/i18n/i18n-key-parity-gate/index.mjs', '--check'], blocking: true },
+  { id: 'i18n-key-parity', run: ['node', 'scripts/i18n/key-parity-gate/index.mjs', '--check'], blocking: true },
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
   // and the manifest validator forbids downgrading a blocking gate.
@@ -371,7 +371,7 @@ export const CI_GATES = Object.freeze([
   // keeps the gate from decaying into a file nobody has run.
   {
     id: 'taxonomy-parity-drill',
-    run: ['node', '--test', 'scripts/taxonomy/taxonomy-parity-gate/index.test.mjs'],
+    run: ['node', '--test', 'scripts/taxonomy/parity-gate/index.test.mjs'],
     blocking: true,
   },
   // A nested sourceOwner is not a style question: the inner family's folder sits
@@ -396,7 +396,7 @@ export const CI_GATES = Object.freeze([
   },
   {
     id: 'taxonomy-parity',
-    run: ['node', 'scripts/taxonomy/taxonomy-parity-gate/index.mjs'],
+    run: ['node', 'scripts/taxonomy/parity-gate/index.mjs'],
     blocking: true,
   },
   // The lane-control drill runner runs all five suites and goes red on any

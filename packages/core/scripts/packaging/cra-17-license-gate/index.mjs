@@ -321,7 +321,7 @@ export function auditGraphicsPackaging(options = {}) {
     errors.push('package files must include provenance/graphics/**');
   }
   const scripts = packageManifest.scripts ?? {};
-  if (!/cra-17-packaging-license-gate\/index\.mjs/u.test(scripts['cra17:licenses'] ?? '')) {
+  if (!/cra-17-license-gate\/index\.mjs/u.test(scripts['cra17:licenses'] ?? '')) {
     errors.push('scripts.cra17:licenses must invoke the CRA17 packaging license gate');
   }
   for (const lifecycle of ['prepack', 'prebuild', 'lint']) {

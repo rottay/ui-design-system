@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
 // The a11y specs (e2e/a11y/) drive the WO-ENG-02 flagship galleries at
 // /probe/engine-modern under the modern engine and assert accessibility on
 // three axes: axe (axe.spec.ts) and focus-visible (focus.spec.ts). The APCA
-// axis lives in the node ratchet (scripts/engine/engine-token-audit/index.mjs), not here.
+// axis lives in the node ratchet (scripts/engine/token-audit/index.mjs), not here.
 //
 // webServer runs the showroom dev server on port 7001 (matching package.json
 // `dev`). Locally an already-running server is reused; in CI Playwright starts

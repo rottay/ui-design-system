@@ -102,7 +102,7 @@ Exit codes: `0` ran clean; `1` a fixture no longer matches the CSS, a dial run's
 own controls did not move, or a causal run did not pass its verdict; `2` bad
 invocation.
 
-Nothing here is registered in `scripts/ci/ci-gates.manifest/index.mjs`, and every test
+Nothing here is registered in `scripts/ci/gates-manifest/index.mjs`, and every test
 file is `.test.mjs` so the vitest project (`src/**/*.test.{ts,tsx}`) cannot
 sweep it into the suite. That is deliberate for two different reasons: the
 browser drills need a browser, and the causal-mechanics drills are fast enough
@@ -127,7 +127,7 @@ to measure. Three facts complicate that:
 
 1. **`dist/` goes stale, and nothing warns you when it has.** It is regenerated
    by a build, so between a compiler change and the next build the shipped
-   bundle describes the previous tree. `node --test scripts/verticals/vertical-css-staleness.gate/index.mjs`
+   bundle describes the previous tree. `node --test scripts/verticals/css-staleness-gate/index.mjs`
    is the authority on which regime you are in: it recomposes the five committed
    bundles from source and names the first diverging line of each. It has been
    red on all five (platform first diverging at line 77); at HEAD 6a4a78b29 it
@@ -481,7 +481,7 @@ position they were written, so "the design system ignored this input" is never
 confused with "the input never landed".
 
 **The composition formula is checked against the repository's own.** The
-formula drill runs `scripts/verticals/vertical-css-staleness.gate/index.mjs` as a subprocess and
+formula drill runs `scripts/verticals/css-staleness-gate/index.mjs` as a subprocess and
 compares first-divergence lines. Writing that drill surfaced a second false
 green worth knowing about: `node --test` sets `NODE_TEST_CONTEXT` on its
 children, a nested runner that sees it stops emitting TAP, and the scan matched

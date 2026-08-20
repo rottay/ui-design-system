@@ -38,7 +38,7 @@ function collectWiredPaths() {
   // Channel 1: the CI gates manifest. Resolved from the package root (not
   // from HERE) so the gate keeps working from any depth; Paso B lot F updates
   // this path when the manifest itself graduates to its capability folder.
-  addMatches(readFileSync(join(CORE_ROOT, 'scripts/ci/ci-gates.manifest/index.mjs'), 'utf8'));
+  addMatches(readFileSync(join(CORE_ROOT, 'scripts/ci/gates-manifest/index.mjs'), 'utf8'));
 
   // Channel 2: package.json lifecycle chains (aliases expanded transitively).
   const pkg = JSON.parse(readFileSync(join(CORE_ROOT, 'package.json'), 'utf8'));
