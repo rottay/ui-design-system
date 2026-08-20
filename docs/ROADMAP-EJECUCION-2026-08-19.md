@@ -639,11 +639,19 @@ gat-07 (`a0f35f34…`).
 contra el árbol: solo 2 enums vacíos (`chrome.anatomy`, `profiles.expressive`)
 — los otros 10 dominios sin `enumValues` son kinds no-enum legítimos (scale/
 bounded/profile-id/…). Lotes:
-- **F1.2** — lift de vocabulario: `controls/<x>.domain.enumValues` desde
-  `cascade/roots/<x>.variants[].value` (14 + 34), `kind` → `closed-enum`, y
-  `program-check` gana: (a) enum nunca vacío, (b) paridad exacta
-  controls↔roots (la autoridad de runtime ya la pinea el canon). Sin vocabulario
-  nuevo (prohibido divergir).
+- **F1.2** — vocabulario cerrado **SIN lift** (corregido por el worker con
+  evidencia, adoptado por el coordinador): el ruling escrito
+  `vocabularyDomicile` (customization-model.json) ya adjudicó el domicilio —
+  `calibration.catalog` con su `*Law` hermana; el `domain` se regenera entero
+  y el lift se auto-cancela. La condición de disparo del ruling NO se cumple
+  (el consumidor runtime sigue satisfecho sin el registro). F1.2 es entonces:
+  (a) **paridad `calibration.catalog` ↔ `cascade/roots` variants** por eje,
+  bloqueante en program-check; (b) ley de forma: `kind enum/closed-enum ⇒
+  enumValues no vacío O calibration.catalog presente`; (c) las 3 divergencias
+  de datos resueltas contra runtime: `cardComponent`→`card` (la constante
+  runtime dice card), `motif` se recorta a los 4 valores runtime (none,
+  micro-grid, pinstripe, contour — los otros 3 no existen en fuente),
+  `density` entra al catálogo (eje de ExpressiveAxes con 3 valores).
 - **F1.3** — exposure gate: lee `cascade/root-catalog.json` (frescura +
   `exposure`): 26 tenant-dial / 27 internal-head / 10 gap gobernados.
 - **F1.4** — `internalChannels`: primero las 444 con `targetBinding`
