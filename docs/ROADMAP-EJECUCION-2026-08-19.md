@@ -635,6 +635,12 @@ phase-a no se reescribe (1082 citas selladas; scope `:!**/phase-a/**`); hueco
 de wiring-coverage y forma capability de manifest/ (9 planos) anotados para
 F1/Paso C; zombi de 12h/100% CPU eliminado. gates:ci **80 VERDES** + sello
 gat-07 (`a0f35f34…`).
+**Paso C1 ✅ `7df088fdf`** — los 13 renombres de capabilities ejecutados
+con la maquinaria path-keyed (nunca a mano); baseline del scripts-tree-gate
+**29→20** (decrease-only en acción). Cero sellos rotos (ninguno vivía en las
+carpetas tocadas). gates:ci **80 VERDES**. Nota operativa: editar un
+comentario en cualquier `.ts` de src/ dispara la cadena del censo (inputsDigest)
+— vale para todos los lotes de F1+.
 **F1 — arranque (lote heredado del cierre F0.5).** H2 ✅: los drills del
 scripts-tree-gate ahora plantan archivos reales en un sandbox tmpdir (8 drills
 de detección en disco + los de reporte). H1 ✅: R5 extendido a subfamilias de
