@@ -5,7 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
-import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const designSystemRoot = findRepoRoot(scriptDirectory);

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedBy": "scripts/app-ds-hook-contract-gate.mjs --manifest-write",
+  "generatedBy": "scripts/boundaries/app-ds-hook-contract-gate/index.mjs --manifest-write",
   "generatedFrom": [
     {
       "id": "tenant-channel",

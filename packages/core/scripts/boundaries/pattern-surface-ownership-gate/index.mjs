@@ -26,10 +26,10 @@
  * is for legitimate permanent ownership only and requires a written reason.
  *
  * Usage:
- *   node scripts/pattern-surface-ownership-gate.mjs --check
- *   node scripts/pattern-surface-ownership-gate.mjs --report --details=100
- *   node scripts/pattern-surface-ownership-gate.mjs --write-baseline
- *   node scripts/pattern-surface-ownership-gate.mjs --write-baseline --allow-increase
+ *   node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --check
+ *   node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --report --details=100
+ *   node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --write-baseline
+ *   node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --write-baseline --allow-increase
  */
 
 import { createHash } from 'node:crypto';
@@ -43,7 +43,7 @@ import {
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIR = dirname(SCRIPT_PATH);

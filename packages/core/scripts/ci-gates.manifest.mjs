@@ -191,12 +191,12 @@ export const CI_GATES = Object.freeze([
   // this gate is red for the same reason but far more slowly.
   { id: 'gat-07-exact-proof', run: ['node', 'scripts/gat-07-exact-proof.mjs', '--check-artifact'], blocking: true },
   { id: 'anatomy-variant-gate', run: ['node', 'scripts/anatomy-variant-gate.mjs', '--check'], blocking: true },
-  { id: 'size-axis-law-gate', run: ['node', 'scripts/size-axis-law-gate.mjs', '--check'], blocking: true },
-  { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/application-boundary-gate.test.mjs'], blocking: true },
-  { id: 'application-boundary-gate', run: ['node', 'scripts/application-boundary-gate.mjs', '--check'], blocking: true },
-  { id: 'pattern-surface-ownership', run: ['node', 'scripts/pattern-surface-ownership-gate.mjs', '--check'], blocking: true },
+  { id: 'size-axis-law-gate', run: ['node', 'scripts/boundaries/size-axis-law-gate/index.mjs', '--check'], blocking: true },
+  { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/boundaries/application-boundary-gate/index.test.mjs'], blocking: true },
+  { id: 'application-boundary-gate', run: ['node', 'scripts/boundaries/application-boundary-gate/index.mjs', '--check'], blocking: true },
+  { id: 'pattern-surface-ownership', run: ['node', 'scripts/boundaries/pattern-surface-ownership-gate/index.mjs', '--check'], blocking: true },
   { id: 'engine-freeze-gate', run: ['node', 'scripts/engine-freeze-gate.mjs', '--check'], blocking: true },
-  { id: 'portal-substrate-gate', run: ['node', 'scripts/portal-substrate-gate.mjs', '--check'], blocking: true },
+  { id: 'portal-substrate-gate', run: ['node', 'scripts/boundaries/portal-substrate-gate/index.mjs', '--check'], blocking: true },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
   // row in `foundation/tokens/prototype-ledger.json`. It ships with NO
   // baseline, so the drill carries the whole burden of proving the scan can
@@ -293,30 +293,30 @@ export const CI_GATES = Object.freeze([
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
   // and the manifest validator forbids downgrading a blocking gate.
-  { id: 'app-ds-boundary', run: ['node', 'scripts/app-ds-boundary-gate.mjs', '--check'], blocking: true },
-  { id: 'app-ds-boundary-drill', run: ['node', '--test', 'scripts/app-ds-boundary-gate.test.mjs'], blocking: true },
+  { id: 'app-ds-boundary', run: ['node', 'scripts/boundaries/app-ds-boundary-gate/index.mjs', '--check'], blocking: true },
+  { id: 'app-ds-boundary-drill', run: ['node', '--test', 'scripts/boundaries/app-ds-boundary-gate/index.test.mjs'], blocking: true },
   // Answers the question the boundary gate above does not: WHICH `--ds-*`
   // properties an app may assign, and under what scope (audit 2026-07-26,
   // Codex C3). Its allowlist is derived from DS source, so the drill runs
   // first: an anchor that has drifted must surface as a drill failure, not as
   // a corpus verdict computed from a degraded allowlist.
-  { id: 'app-ds-hook-contract-drill', run: ['node', '--test', 'scripts/app-ds-hook-contract-gate.test.mjs'], blocking: true },
-  { id: 'app-ds-hook-contract', run: ['node', 'scripts/app-ds-hook-contract-gate.mjs', '--check'], blocking: true },
+  { id: 'app-ds-hook-contract-drill', run: ['node', '--test', 'scripts/boundaries/app-ds-hook-contract-gate/index.test.mjs'], blocking: true },
+  { id: 'app-ds-hook-contract', run: ['node', 'scripts/boundaries/app-ds-hook-contract-gate/index.mjs', '--check'], blocking: true },
   // The contract is only "exported and consumed" (Codex C6.6) if the artifact an
   // app resolves matches the DS it was derived from. This gate fails on a stale
   // hooks-manifest.json, on a missing package export, and on an export that
   // resolves in-repo but would 404 for an installed consumer. Without it the
   // published contract can drift silently, which is worse than not publishing:
   // apps would consume a hook list the DS no longer honours.
-  { id: 'app-ds-hook-manifest-freshness', run: ['node', 'scripts/app-ds-hook-contract-gate.mjs', '--manifest-check'], blocking: true },
+  { id: 'app-ds-hook-manifest-freshness', run: ['node', 'scripts/boundaries/app-ds-hook-contract-gate/index.mjs', '--manifest-check'], blocking: true },
   // The same boundary at the DOM instead of the stylesheet (audit 2026-07-26,
   // Codex C6.7): governed root channels have one SSR projection and one
   // hydrated owner, so an application holds no raw `<html>` writer. It ships
   // with no baseline, so the drill carries the whole burden of proving the
   // scan can fail -- including on the computed attribute names the writer this
   // gate was built for actually used.
-  { id: 'app-root-writer-drill', run: ['node', '--test', 'scripts/app-root-writer-gate.test.mjs'], blocking: true },
-  { id: 'app-root-writer', run: ['node', 'scripts/app-root-writer-gate.mjs', '--check'], blocking: true },
+  { id: 'app-root-writer-drill', run: ['node', '--test', 'scripts/boundaries/app-root-writer-gate/index.test.mjs'], blocking: true },
+  { id: 'app-root-writer', run: ['node', 'scripts/boundaries/app-root-writer-gate/index.mjs', '--check'], blocking: true },
 
   // --- motion governance, DS slice ---
   //

@@ -15,10 +15,10 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import { runSizeAxisLawGate } from './size-axis-law-gate.mjs';
+import { runSizeAxisLawGate } from './index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const gate = join(scriptDir, 'size-axis-law-gate.mjs');
+const gate = join(scriptDir, 'index.mjs');
 
 test('size-axis-law-gate: allowed vocabulary is exactly Size | LegacySizeAlias | ModalSize', () => {
   const result = runSizeAxisLawGate();

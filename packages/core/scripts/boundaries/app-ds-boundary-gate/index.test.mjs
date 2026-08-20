@@ -17,11 +17,11 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);
-const gate = resolve(HERE, 'app-ds-boundary-gate.mjs');
+const gate = resolve(HERE, 'index.mjs');
 const realWorkspace = resolve(packageRoot, '../../..');
 const APP_CSS = 'app-bithire/src/styles/foundation.css';
 

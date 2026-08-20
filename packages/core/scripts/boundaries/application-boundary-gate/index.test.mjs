@@ -11,7 +11,7 @@ import {
   censusUndocumentedDsWrites,
   stripCssComments,
   stripTsComments,
-} from "./application-boundary-gate.mjs";
+} from "./index.mjs";
 
 const baseline = JSON.parse(
   readFileSync(

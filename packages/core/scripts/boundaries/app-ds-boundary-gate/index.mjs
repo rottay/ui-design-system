@@ -34,14 +34,14 @@
  * mechanical one.
  *
  * Usage:
- *   node scripts/app-ds-boundary-gate.mjs            # report
- *   node scripts/app-ds-boundary-gate.mjs --check    # enforce baseline
+ *   node scripts/boundaries/app-ds-boundary-gate/index.mjs            # report
+ *   node scripts/boundaries/app-ds-boundary-gate/index.mjs --check    # enforce baseline
  */
 
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);

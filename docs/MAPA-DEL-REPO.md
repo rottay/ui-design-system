@@ -2121,20 +2121,20 @@ y qué puede escribir una app consumidora.
 Cómo se invoca: casi todos desde `ci-gates.manifest.mjs` (bloqueantes) y además con
 alias en `package.json`.
 
-- `application-boundary-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI, bloqueante.
-- `app-ds-boundary-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI, bloqueante; alias `appboundary:check`.
-- `app-ds-hook-contract-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI (3 modos: `--check`,
+- `boundaries/application-boundary-gate/index.mjs` (+ `index.test.mjs`, `application-boundary-gate.baseline.json`) — CI, bloqueante.
+- `boundaries/app-ds-boundary-gate/index.mjs` (+ `index.test.mjs`, `app-ds-boundary-gate.baseline.json`) — CI, bloqueante; alias `appboundary:check`.
+- `boundaries/app-ds-hook-contract-gate/index.mjs` (+ `index.test.mjs`, `app-ds-hook-contract-gate.baseline.json`) — CI (3 modos: `--check`,
   `--manifest-check`, `--manifest-write`); genera/valida `hooks-manifest.json` de la raíz del paquete.
-- `app-root-writer-gate.mjs` (+ `.test.mjs`) — CI; qué app puede escribir `--ds-*` en su propia raíz.
+- `boundaries/app-root-writer-gate/index.mjs` (+ `index.test.mjs`) — CI; qué app puede escribir `--ds-*` en su propia raíz.
 - `structure/core-structure-audit/index.mjs` (+ `index.test.mjs`, `core-structure-audit.baseline.json`) — el ratchet decrease-only del árbol
   de `src/`; `structure:check`, `structure:report`, `lint:folders`.
 - `structure/lint-folder-index/index.mjs` (+ `index.test.mjs`) — naming + `folder/index` + propiedad; `lint:folders`.
-- `pattern-surface-ownership-gate.mjs` (+ `.test.mjs`, `.baseline.json`, `.allowlist.json`,
+- `boundaries/pattern-surface-ownership-gate/index.mjs` (+ `index.test.mjs`, `.baseline.json`, `.allowlist.json`,
   `.README.md`) — CI; frontera patternvssurface.
 - `taxonomy/taxonomy-parity-gate/index.mjs` (+ `index.test.mjs`) — CI; paridad entre taxonomía declarada e inventario real.
-- `public-entrypoint-boundary-gate.mjs` (+ `.test.mjs`) — `public-entrypoints:check`.
+- `boundaries/public-entrypoint-boundary-gate/index.mjs` (+ `index.test.mjs`) — `public-entrypoints:check`.
 - `cra-14-public-barrel-gate.mjs` — `cra14:check`. Sin autotest hermano.
-- `portal-substrate-gate.mjs` (+ `.test.mjs`, `.allowlist.json`) — CI; un solo substrato de portal.
+- `boundaries/portal-substrate-gate/index.mjs` (+ `index.test.mjs`, `portal-substrate-gate.allowlist.json`) — CI; un solo substrato de portal.
 - `structure/import-binding-integrity-gate/index.mjs` (+ `index.test.mjs`) — CI, primero de la lista: import nombrado
   de un binding que el módulo destino nunca publica.
 - `verticals/platform-identity-zero-gate/index.mjs` (+ `index.test.mjs`) — CI; `platform` ya no es un vertical, cero residuos.
@@ -2185,7 +2185,7 @@ cinco corren solo por su drill y tres no corren nunca.
   mecánico del carril; calcula su censo en tiempo de import (por eso los corpus viven en `lib/`).
 - `engine-freeze-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI.
 - `anatomy-variant-gate.mjs` (+ `.test.mjs`) — CI.
-- `size-axis-law-gate.mjs` (+ `.test.mjs`) — CI.
+- `boundaries/size-axis-law-gate/index.mjs` (+ `index.test.mjs`) — CI.
 - `spacing-rhythm-contract-gate.mjs` (+ `.test.mjs`) — CI; sin baseline y sin lista de archivos,
   camina el corpus desde la fuente.
 - `css-layer-paint-gate.mjs` (+ `.test.mjs`) — `csspaint:check` en `package.json`, no en el manifiesto de CI.
@@ -2295,7 +2295,7 @@ Cómo se invoca: dos de los tres, nadie.
   sobre el canon `--ds-motion-*`. Solo aparece citado en `roadmap/registry.json`.
 - `codemod-motion-durations.mjs` — **[SIN CONSUMIDOR]** WO-ENG-01 pase 2: tokeniza literales de
   duración de transition/animation. Ídem.
-- `migrate-public-entrypoints.mjs` (+ `.test.mjs`) — `public-entrypoints:codemod`; reescribe imports
+- `boundaries/migrate-public-entrypoints/index.mjs` (+ `index.test.mjs`) — `public-entrypoints:codemod`; reescribe imports
   contra `public-entrypoints.manifest.json`.
 
 **[DUPLICA] de ubicación (no de código):** existe `scripts/codemods/` como carpeta dedicada a

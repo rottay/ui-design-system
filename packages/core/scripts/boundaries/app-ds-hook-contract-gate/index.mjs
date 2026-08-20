@@ -62,8 +62,8 @@ import {
   PROMOTED_HOOK_VALUE_CONSTRAINT,
   resolveNestedSelectors,
   serializeHookManifest,
-} from './lib/ds-hook-manifest.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+} from '../../lib/ds-hook-manifest.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);

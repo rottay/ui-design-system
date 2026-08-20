@@ -33,7 +33,7 @@ import {
   formatReport,
   runGate,
   serializeBaseline,
-} from './app-ds-hook-contract-gate.mjs';
+} from './index.mjs';
 import {
   ANCHORS,
   componentSourceReads,
@@ -44,7 +44,7 @@ import {
   resolveNestedSelectors,
   serializeHookManifest,
   splitSelectorList,
-} from './lib/ds-hook-manifest.mjs';
+} from '../../lib/ds-hook-manifest.mjs';
 
 const postcss = postcssModule.default ?? postcssModule;
 

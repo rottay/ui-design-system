@@ -1575,7 +1575,7 @@ export function serializeHookManifest(manifest) {
   return `${JSON.stringify(
     {
       schemaVersion: manifest.schemaVersion,
-      generatedBy: 'scripts/app-ds-hook-contract-gate.mjs --manifest-write',
+      generatedBy: 'scripts/boundaries/app-ds-hook-contract-gate/index.mjs --manifest-write',
       generatedFrom: Object.values(ANCHORS).map((anchor) => ({
         id: anchor.id,
         path: anchor.path,

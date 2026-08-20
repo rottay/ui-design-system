@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { runPublicEntrypointGate } from './public-entrypoint-boundary-gate.mjs';
+import { runPublicEntrypointGate } from './index.mjs';
 
 function write(root, relativePath, source) {
   const filePath = path.join(root, relativePath);

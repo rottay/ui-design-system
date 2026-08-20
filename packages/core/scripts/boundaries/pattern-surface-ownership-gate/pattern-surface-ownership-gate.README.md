@@ -6,8 +6,8 @@ local SVG, Tailwind-like presentation utilities, stable inline chrome literals,
 and semantic reconstruction of existing primitives.
 
 ```sh
-node scripts/pattern-surface-ownership-gate.mjs --check
-node scripts/pattern-surface-ownership-gate.mjs --report --details=100
+node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --check
+node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --report --details=100
 ```
 
 The checked-in baseline records existing debt as a path-keyed multiset. Removing
@@ -15,7 +15,7 @@ debt is always green; a new site or a duplicated site fails `--check`. Tighten t
 baseline after removals with:
 
 ```sh
-node scripts/pattern-surface-ownership-gate.mjs --write-baseline
+node scripts/boundaries/pattern-surface-ownership-gate/index.mjs --write-baseline
 ```
 
 Raising the baseline requires both review and the explicit

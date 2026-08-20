@@ -28,14 +28,14 @@
  * blanket exemption for a whole file.
  *
  * Usage:
- *   node scripts/portal-substrate-gate.mjs           # print the census
- *   node scripts/portal-substrate-gate.mjs --check   # exit 1 on any violation
+ *   node scripts/boundaries/portal-substrate-gate/index.mjs           # print the census
+ *   node scripts/boundaries/portal-substrate-gate/index.mjs --check   # exit 1 on any violation
  */
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const ts = require('typescript');

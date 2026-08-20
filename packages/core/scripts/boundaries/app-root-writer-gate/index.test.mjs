@@ -26,7 +26,7 @@ import {
   resolveCorpusRoot,
   runGate,
   scanSource,
-} from './app-root-writer-gate.mjs';
+} from './index.mjs';
 
 function tempDirectory(prefix) {
   const directory = mkdtempSync(join(tmpdir(), `${prefix}-`));

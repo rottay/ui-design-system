@@ -19,10 +19,10 @@ import {
   evaluatePortalCensus,
   loadAllowlist,
   runPortalSubstrateGate,
-} from './portal-substrate-gate.mjs';
+} from './index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const gate = join(scriptDir, 'portal-substrate-gate.mjs');
+const gate = join(scriptDir, 'index.mjs');
 
 const EMPTY_ALLOWLIST = { entries: [] };
 

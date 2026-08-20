@@ -22,14 +22,14 @@
  * a parallel spelling.
  *
  * Usage:
- *   node scripts/size-axis-law-gate.mjs           # print the census
- *   node scripts/size-axis-law-gate.mjs --check   # exit 1 on any violation
+ *   node scripts/boundaries/size-axis-law-gate/index.mjs           # print the census
+ *   node scripts/boundaries/size-axis-law-gate/index.mjs --check   # exit 1 on any violation
  */
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);
 const ts = require('typescript');

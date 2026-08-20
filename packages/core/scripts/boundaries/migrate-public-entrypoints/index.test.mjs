@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { transformPublicImports } from './migrate-public-entrypoints.mjs';
+import { transformPublicImports } from './index.mjs';
 
 const manifest = {
   package: '@rottay/design-system',
@@ -61,7 +61,7 @@ test('CLI accepts one file operand without writing it', () => {
   const sourcePath = path.join(directory, 'consumer.tsx');
   fs.writeFileSync(manifestPath, JSON.stringify(manifest));
   fs.writeFileSync(sourcePath, `import { Box } from '@rottay/design-system';\n`);
-  const scriptPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'migrate-public-entrypoints.mjs');
+  const scriptPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'index.mjs');
   const result = spawnSync(process.execPath, [scriptPath, '--manifest', manifestPath, sourcePath], {
     encoding: 'utf8',
   });

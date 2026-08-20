@@ -3,7 +3,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 /**
  * Private-runtime boundary drill.

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f6ae9aa84256cb2ca0186fb7f8058e5fc29a27f71b1d80bba7d016144da46922",
+    "authorityDigest": "ce1b2b85fb61eb923013f2ac6499dab550184196f4324c4bbafdca3b6154b8e6",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 48401,
-        "sha256": "2634ea27af06c0f73fef5584380546b0cf1d3a89cb944de4b662adb0f60c4e5e"
+        "bytes": 48503,
+        "sha256": "b5b4d079fcdf02aa3431ef3080cb5357dcf1427e2abeadfaef26892a4e9c671a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/analyze-bundle.mjs",
@@ -293,7 +293,15 @@
         "sha256": "38da8039f4519b3fe77f28c7bd9baf0fbd2c96c8ad5e87388182368ef92649ee"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-ds-boundary-gate.baseline.json",
+        "path": "ui-design-system/packages/core/scripts/audit-vertical-compliance.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 14932,
+        "sha256": "cfc4fa704007d059aed4e3b013e5897a83eb9c4d618a615ac4265072efe84c99"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-ds-boundary-gate/app-ds-boundary-gate.baseline.json",
         "roles": [
           "audit-machinery"
         ],
@@ -301,23 +309,23 @@
         "sha256": "ff481dad782616ea68b790b22f64af6025c0d3016cefdcc40da9a217849ab4f0"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-ds-boundary-gate.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-ds-boundary-gate/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 11199,
-        "sha256": "c2e609a1bd5c6d19dcb8d25ce8419894d16a1ab6bcf599a613eb99de36834cf4"
+        "bytes": 11237,
+        "sha256": "3f520a832b0eb2c982db2cf9652ef7087f5b0bee4edaf1cd0b414a16883205d2"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-ds-boundary-gate.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-ds-boundary-gate/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6886,
-        "sha256": "e45f1a336d156f40b2933dc712b0bec89f6604e7cc6f47fa154ef3e9642350a2"
+        "bytes": 6875,
+        "sha256": "74f69dd3d4557b7b2ea67f1dc46726a62a0bfaf64b602b6a5f9c6a53f3ed5529"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-ds-hook-contract-gate.baseline.json",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-ds-hook-contract-gate/app-ds-hook-contract-gate.baseline.json",
         "roles": [
           "audit-machinery"
         ],
@@ -325,47 +333,47 @@
         "sha256": "5d32d61eeeb91aacd8fc3a36b264d9f9441f3c5c26343214cecec37206a54882"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-ds-hook-contract-gate.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-ds-hook-contract-gate/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 28175,
-        "sha256": "06a46b51415d93f8a593c7f7fe2ac57dc665ca023a36cc3287d12822a0b0dbc7"
+        "bytes": 28183,
+        "sha256": "62b6090e5bb40016e02cfdff15f67c2fb27ef868efb63d56c9324a0f954647c1"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-ds-hook-contract-gate.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-ds-hook-contract-gate/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 41226,
-        "sha256": "690ce89c95e927b236ac71f67ecf0e69d59be818520fbddc722bb5f6ab09bd39"
+        "bytes": 41210,
+        "sha256": "64be40466c3e0b08c706326a0740792f5b32e905fff7c9ea642fa44ac36c0452"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-root-writer-gate.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-root-writer-gate/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 21389,
-        "sha256": "afb5b5a704b4ecfba81f35ce220369a5f1d0148426357a2c1356e8b080287da0"
+        "bytes": 21393,
+        "sha256": "64b576cfb7ae483d396ff33b650d82339b046a6e8d0f5d0659466fa3544185b1"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-root-writer-gate.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-root-writer-gate/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 11078,
-        "sha256": "15a85a52590d96b9c0fad6e8ad861d54d68e77f8df971c62f70ee8b6e7bbbd51"
+        "bytes": 11063,
+        "sha256": "2426b7d0cf9c989ecd304729fddf31f0d17fc61269ddc8951cfc60a576959dcf"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/app-surface-factory-drain.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/app-surface-factory-drain/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10030,
-        "sha256": "e3aa3bbcb596bc3b8c11623deddf564c2358df063540855baba5cbfc64e70ccd"
+        "bytes": 10034,
+        "sha256": "287ce77fec908c5986da2bfa4a005dbd87e05638f719fea4b82591d409307dba"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/application-boundary-gate.baseline.json",
+        "path": "ui-design-system/packages/core/scripts/boundaries/application-boundary-gate/application-boundary-gate.baseline.json",
         "roles": [
           "audit-machinery"
         ],
@@ -373,28 +381,140 @@
         "sha256": "7a72bfd234528f0279267cce931c70b8d43c27fa024eec072ddbf22a1ae88041"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/application-boundary-gate.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/application-boundary-gate/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 16667,
-        "sha256": "503252895541adff00018ad6d4c2b770b288b0ac14ada1f2316f0c848995149c"
+        "bytes": 16671,
+        "sha256": "84bc93030e110dc6131261a6cf354ae338c8f9bb020152f7ae4156527fca5cc8"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/application-boundary-gate.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/application-boundary-gate/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 3952,
-        "sha256": "2119dab3a76f6f39c13c8de05f04f970fdccbc0cf8f2fb8383d9646bf1279884"
+        "bytes": 3932,
+        "sha256": "86f849a903ebf3c1b20f92d68a6f2276ccb0e518796f51020cab997be6d7884d"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/audit-vertical-compliance.mjs",
+        "path": "ui-design-system/packages/core/scripts/boundaries/migrate-public-entrypoints/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 14932,
-        "sha256": "cfc4fa704007d059aed4e3b013e5897a83eb9c4d618a615ac4265072efe84c99"
+        "bytes": 5409,
+        "sha256": "b3d1e495112696f14a1d2c98c9bc5270f4b96f17bcf93bf055e42737ce5b2360"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/migrate-public-entrypoints/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 3340,
+        "sha256": "02e4ab880caee5ae27bd0672e09056a2e33cb56c3fb5832679077dcee1ad2190"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/pattern-surface-ownership-gate/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 34707,
+        "sha256": "09d5fcc70144c425a2d575149cec1c49c34807c13f16e92f56f460efb49df946"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/pattern-surface-ownership-gate/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 8726,
+        "sha256": "8b245b37e3e7659f78f4690ebac3f025fe2814a25d23d343719a6b4a224b514c"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/pattern-surface-ownership-gate/pattern-surface-ownership-gate.allowlist.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 938,
+        "sha256": "1971f56aa6a51eaa68c542921eedeb98ba7d17b90ef72a1a283de4f72a48e273"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/pattern-surface-ownership-gate/pattern-surface-ownership-gate.baseline.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 320823,
+        "sha256": "f5b96743997303d4fc7efbe458dbecbffab4f5c9aa4ba2c904925d8f76db7aba"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/portal-substrate-gate/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 10334,
+        "sha256": "3ebe9de81d212ed025aadc7f60f1dd4afbfcd8193d9e2267e40f6e6158eefd68"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/portal-substrate-gate/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 7485,
+        "sha256": "12a9814ad59cf81bdf1f62ad0fd11074b3c200a4a8be58e03c0c3a8b1baf8906"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/portal-substrate-gate/portal-substrate-gate.allowlist.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 2000,
+        "sha256": "86207f540d90bafd04a8f86c3c2de445edf9534a5eac80115c066795e7f7b087"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/private-runtime-boundary/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 12671,
+        "sha256": "fbc63420d4caf3d3837e497d64f639171a41ea99c7528a68550c0f8509fb1ccb"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/public-entrypoint-boundary-gate/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 12329,
+        "sha256": "54bd449dd94a1619d3a7e778e5177347aee5faa6fdc7639c35cca21990a0e93f"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/public-entrypoint-boundary-gate/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 5196,
+        "sha256": "2ffc3cd01b5fdf1753035ca6c125aa48df4232abea18a2fdbcfcc2a8937e10d8"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/size-axis-law-gate/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 9929,
+        "sha256": "0db1baabf4d7d08a98af95ba5b811d4bbf9b067b31bc3deaf74521aaed98f19a"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/size-axis-law-gate/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 3987,
+        "sha256": "adb75c2c1fbc1465a4067243ac9dd7a0070c4f17626cec26fcfd1f411b832ccb"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/boundaries/surface-presentation-boundary/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 13763,
+        "sha256": "af8a151c82e5a518356cd32773a708901e028f9d61a057e33c5b0f5d723b3674"
       },
       {
         "path": "ui-design-system/packages/core/scripts/builders/build-font-packs/index.mjs",
@@ -489,8 +609,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 31814,
-        "sha256": "79d377070de2102af06291a34707f3d9b0da5efdf570386f5233f1679a306801"
+        "bytes": 32018,
+        "sha256": "ab72e3d3db019a54d84f781f1d55b281204bddb1b3ce8b89c327aa6d7eadfe67"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-e-migration-certification.test.mjs",
@@ -1205,8 +1325,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 66129,
-        "sha256": "7592712e6f4b61bdde5a38a8d5576e05956638399c87cbfbcc76ae8f8f4fd357"
+        "bytes": 66146,
+        "sha256": "e65782c5eda478cf74426a535f601acea738f2f07f78c5bf1de2ea44bb8b61a6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/effect-consumer-counter.mjs",
@@ -1433,22 +1553,6 @@
         "sha256": "1b7ef14e0a928025169b393c541c858f84829a654a008425f5291d48190603d1"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/migrate-public-entrypoints.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 5405,
-        "sha256": "02db198d6c259aab2d17b800a21ceea63b8f3659eee281e758f274756d355972"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/migrate-public-entrypoints.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 3382,
-        "sha256": "83acfd98db953070eed223ac738b52e0c9e5d4ee49efbd902a33c96c6c73ef4a"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/modern-bundle-framework-gate.mjs",
         "roles": [
           "audit-machinery"
@@ -1521,70 +1625,6 @@
         "sha256": "162a1ffdac58cedb027d92d76338343f0085d091c4684e7500af7d0ca3dcc584"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/pattern-surface-ownership-gate.allowlist.json",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 938,
-        "sha256": "1971f56aa6a51eaa68c542921eedeb98ba7d17b90ef72a1a283de4f72a48e273"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/pattern-surface-ownership-gate.baseline.json",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 320823,
-        "sha256": "f5b96743997303d4fc7efbe458dbecbffab4f5c9aa4ba2c904925d8f76db7aba"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/pattern-surface-ownership-gate.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 34635,
-        "sha256": "4a38b77ae7e4aa1effc1dc243c8e7fae01308797ff8b2f3d377aa5cb581110b2"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/pattern-surface-ownership-gate.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 8739,
-        "sha256": "96b48f6e75c4472d0f2f0e3219ad2f30364892f134c20f4b59a04ecc2abd94fd"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/portal-substrate-gate.allowlist.json",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 2000,
-        "sha256": "86207f540d90bafd04a8f86c3c2de445edf9534a5eac80115c066795e7f7b087"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/portal-substrate-gate.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 10296,
-        "sha256": "3e2daa8dc528260815f1f6454f31752e7acddfeacdb267069c5e7245a3c8a33e"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/portal-substrate-gate.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 7517,
-        "sha256": "feef61e57e4f8b0a458f0a58cf3a10ecca02eecbe065196bcfe8e1ef2070fc38"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/private-runtime-boundary.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 12667,
-        "sha256": "68d7d7173cfa6e8707b8a091b2a7bf6da982c90d45f55903d750ac92f6640681"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/prototype-ledger-gate.mjs",
         "roles": [
           "audit-machinery"
@@ -1599,22 +1639,6 @@
         ],
         "bytes": 11658,
         "sha256": "9b6025b171b56c89e87558d414aa5f76b2352f3a96eb857a24d6b5d4d0f37204"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/public-entrypoint-boundary-gate.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 12325,
-        "sha256": "3c4fbc5a072709fe649608efe1e652405c41088c9b0d3d8c6a9d2b046d77a660"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/public-entrypoint-boundary-gate.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 5222,
-        "sha256": "89b29923ce59b24a370586525eb2f460be4176410e37362ef5b227a4c40583ef"
       },
       {
         "path": "ui-design-system/packages/core/scripts/quality-evidence/programs/modern-rescue/agent-orchestration.json",
@@ -4825,22 +4849,6 @@
         "sha256": "bf28e688608c80e223fa9d2a97da08879e7a82e4408bc1877eb4c6fa74a32440"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/size-axis-law-gate.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 9891,
-        "sha256": "23f92df031f90d63e748a0a2ad4ed3719e5228a1699c00598622083f17398e88"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/size-axis-law-gate.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 4013,
-        "sha256": "b17781728ef940da72ec8b5065a90ffca5c63668cbe064bbaddcca47d4fb13a3"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/skin-dead-part-audit.mjs",
         "roles": [
           "audit-machinery"
@@ -4959,14 +4967,6 @@
         ],
         "bytes": 3279,
         "sha256": "ea5c9e30a1e702103b0992271daad69c888cabe393d903e3320ab91d93a964ae"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/surface-presentation-boundary.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 13759,
-        "sha256": "5da7fab2a782da30d69281afcb4386f331f8ffeff15ee3b3aaf4cf08d3e0b64e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/surface-profile-overrides.test.mjs",
@@ -6347,8 +6347,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 14192,
-        "sha256": "a2f8e3308ee3d32cf096ad74f6339d1dfa2ea2bebe098d03cea06e374e3a1ccc"
+        "bytes": 14209,
+        "sha256": "e6037d97ae51addc66d4253d1942b38285bb33284c43954da97ae625e305266d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/kernel/common/tests/ToneAxis.contract.test.ts",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "f6ae9aa84256cb2ca0186fb7f8058e5fc29a27f71b1d80bba7d016144da46922"
+    "digest": "ce1b2b85fb61eb923013f2ac6499dab550184196f4324c4bbafdca3b6154b8e6"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "dae828efa292d51b43672d5fd49c31b93cba82ed1e3af7aca552c08c9993d676",
-      "dae828efa292d51b43672d5fd49c31b93cba82ed1e3af7aca552c08c9993d676"
+      "fe21d0364a4ae2c22c4167662e62199d155f2df59e03d58519e74fbf80412c4f",
+      "fe21d0364a4ae2c22c4167662e62199d155f2df59e03d58519e74fbf80412c4f"
     ],
     "agree": true
   }

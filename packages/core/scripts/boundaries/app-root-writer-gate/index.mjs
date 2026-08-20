@@ -53,7 +53,7 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import ts from 'typescript';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);

@@ -651,8 +651,8 @@
     "cra17:declarations": "node scripts/cra-17-public-declaration-gate.mjs",
     "contract:check": "node scripts/generate-supplier-contract.mjs --check",
     "contract:generate": "node scripts/generate-supplier-contract.mjs --write",
-    "hooks:check": "node scripts/app-ds-hook-contract-gate.mjs --manifest-check",
-    "hooks:generate": "node scripts/app-ds-hook-contract-gate.mjs --manifest-write",
+    "hooks:check": "node scripts/boundaries/app-ds-hook-contract-gate/index.mjs --manifest-check",
+    "hooks:generate": "node scripts/boundaries/app-ds-hook-contract-gate/index.mjs --manifest-write",
     "cra11:generate": "node scripts/cra-11-adaptive-contract-census.mjs",
     "cra11:check": "node scripts/cra-11-adaptive-contract-census.mjs --check",
     "cra11:gate": "node scripts/cra-11-adaptive-contract-census.mjs --check --require-clean",
@@ -717,9 +717,9 @@
     "tokens:catalog:write": "node scripts/tokens-catalog.mjs --write",
     "tenant-theme-fixtures:generate": "node scripts/tenant-theme-canary-fixtures.mjs --write",
     "tenant-theme-fixtures:check": "node scripts/tenant-theme-canary-fixtures.mjs --check",
-    "public-entrypoints:check": "node scripts/public-entrypoint-boundary-gate.mjs",
-    "public-entrypoints:test": "node --test scripts/public-entrypoint-boundary-gate.test.mjs scripts/migrate-public-entrypoints.test.mjs",
-    "public-entrypoints:codemod": "node scripts/migrate-public-entrypoints.mjs"
+    "public-entrypoints:check": "node scripts/boundaries/public-entrypoint-boundary-gate/index.mjs",
+    "public-entrypoints:test": "node --test scripts/boundaries/public-entrypoint-boundary-gate/index.test.mjs scripts/boundaries/migrate-public-entrypoints/index.test.mjs",
+    "public-entrypoints:codemod": "node scripts/boundaries/migrate-public-entrypoints/index.mjs"
   },
   "releaseSync": {
     "sourceEntrypoints": {

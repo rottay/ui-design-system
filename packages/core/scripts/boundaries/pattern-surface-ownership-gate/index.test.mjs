@@ -14,7 +14,7 @@ import {
   runOwnershipGate,
   validateAllowlist,
   validateBaseline,
-} from './pattern-surface-ownership-gate.mjs';
+} from './index.mjs';
 
 const path = 'src/ui/patterns/example/engines/modern/index.tsx';
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
@@ -148,7 +148,7 @@ test('baseline is a path-stable multiset and only additional copies regress', ()
  */
 test('gate reddens when a new native button appears in the widget-board engine', () => {
   const realSource = readFileSync(
-    resolve(SCRIPT_DIR, '..', 'src', WIDGET_BOARD_FOUNDATION),
+    resolve(SCRIPT_DIR, '..', '..', '..', 'src', WIDGET_BOARD_FOUNDATION),
     'utf8',
   );
   const sourceRoot = mkdtempSync(resolve(tmpdir(), 'ds-a002-drill-'));
