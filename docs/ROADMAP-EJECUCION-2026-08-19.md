@@ -451,11 +451,21 @@ tenga trabajo sin commitear en el árbol.
    Incluye guarda anti-vacío y un-salto por profundidad real (el resolver con
    `resolve()` absolutizaba y flaggeó 3 huérfanos reales al probarlo —
    fail-path ejercido en vivo; fix a `posix.normalize`). 4 drills (13/13).
-3. Fase 0-bis (Sonnet f02, EN VUELO — brief `/tmp/f05-fase0bis-brief.md`).
+3. ~~Fase 0-bis~~ ✅ `f310d7d07` (Sonnet): cuarto idioma migrado en 4 scripts
+   de producción + 4 cadenas en 3 tests. **`lint-folder-index` excluido a
+   propósito** (decisión del coordinador): su self-test lo copia como archivo
+   único a un tmpdir pelado — la portabilidad single-file es un invariante
+   testeado; excepción declarada, sus 2 sitios se recalculan a mano en el
+   lote C del Paso B (callout en el brief).
 4. Paso B lotes A–I (Opus, brief `/tmp/f05-pasoB-brief.md` YA corregido con
    la auditoría de Fable): A i18n · B builders+generators+taxonomy ·
    C structure+verticals (SIN audit-vertical-compliance) · D boundaries ·
    E packaging+evidence (C2 atómico) · F ci · G tokens · H engine · I lib.
+
+**Deuda anotada (no bloquea):** `packages/core/docs/TAXONOMY.generated.md` y
+`test-artifacts/craft/cra-17/bundle-retention.json` estaban desactualizados
+respecto al árbol ANTES de la 0-bis (la regeneración queda para el cierre de
+F0.5 o F1, cuando el árbol deje de moverse).
 5. Lote J (coordinador): `audit-vertical-compliance` a `structure/` + edición
    de `lint:vertical` en los 3 repos hermanos (SIN commitear allá — las revisa
    el dueño). Diferido por Fable H3 (cross-repo no atómico).
