@@ -462,6 +462,17 @@ tenga trabajo sin commitear en el árbol.
    C structure+verticals (SIN audit-vertical-compliance) · D boundaries ·
    E packaging+evidence (C2 atómico) · F ci · G tokens · H engine · I lib.
 
+**Paso B — ritmo de verificación por lote (regla operativa, 2026-08-19):**
+`gates:ci` completo NO corre por lote — corre al cierre de los lotes F, H, I y
+al final del frente (mínimo de Fable), con el worker EN PAUSA entre lotes (una
+corrida concurrente con el lote siguiente lee el árbol a medio mover: falso
+rojo garantizado en gat-07 — verificado empíricamente dos veces). En los lotes
+intermedios alcanza: batería del worker (3 piernas de suite + gates:ci:list +
+wiring + gat07:check + greps) + mi verificación (expectativa exacta + gate del
+lote corrido a mano) + re-sello mío al commitear. **Lote A ✅ `7346f6028`**
+(calibración del patrón: 3 archivos, 23/23 estables idénticas, wiring 78 OK,
+delta de sello = exactamente las 3 rutas del lote).
+
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
 baseline del Paso B: **1618 tests / 24 fallas = 23 estables + 1 flaky**
