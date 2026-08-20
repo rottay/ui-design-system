@@ -36,7 +36,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { collectReachable } from '../../css-layer-paint-gate.mjs';
+import { collectReachable } from '../../engine/css-layer-paint-gate/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

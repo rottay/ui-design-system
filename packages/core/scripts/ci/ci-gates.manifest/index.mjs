@@ -64,7 +64,7 @@ export const CI_GATES = Object.freeze([
   { id: 'cra-17-integral', run: ['node', 'scripts/evidence/cra-17-integral-gate/index.mjs', '--structural'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
-  { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/daisy-projection-contract.test.mjs'], blocking: true },
+  { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/engine/daisy-painted-classes/daisy-projection-contract.test.mjs'], blocking: true },
   // WO-CRA-23 quality tooling. These live under `scripts/quality-evidence/v2/`
   // and `scripts/quality-evidence/programs/modern-rescue/`. `test:scripts` now
   // globs `scripts/**/*.test.mjs` (recursive), which DOES reach every test
@@ -181,7 +181,7 @@ export const CI_GATES = Object.freeze([
   { id: 'red-inventory', run: ['node', 'scripts/ci/red-inventory-gate/index.mjs', '--check', '--quiet'], blocking: true },
 
   // --- structural / ownership ---
-  { id: 'engine-token-audit', run: ['node', 'scripts/engine-token-audit.mjs', '--check'], blocking: true },
+  { id: 'engine-token-audit', run: ['node', 'scripts/engine/engine-token-audit/index.mjs', '--check'], blocking: true },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
   // the documentation, the code-derived vertical rows, the data-part corpus, and
@@ -190,12 +190,12 @@ export const CI_GATES = Object.freeze([
   // dashboard green. It sits AFTER the audit deliberately: when the audit is red
   // this gate is red for the same reason but far more slowly.
   { id: 'gat-07-exact-proof', run: ['node', 'scripts/evidence/gat-07-exact-proof/index.mjs', '--check-artifact'], blocking: true },
-  { id: 'anatomy-variant-gate', run: ['node', 'scripts/anatomy-variant-gate.mjs', '--check'], blocking: true },
+  { id: 'anatomy-variant-gate', run: ['node', 'scripts/engine/anatomy-variant-gate/index.mjs', '--check'], blocking: true },
   { id: 'size-axis-law-gate', run: ['node', 'scripts/boundaries/size-axis-law-gate/index.mjs', '--check'], blocking: true },
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/boundaries/application-boundary-gate/index.test.mjs'], blocking: true },
   { id: 'application-boundary-gate', run: ['node', 'scripts/boundaries/application-boundary-gate/index.mjs', '--check'], blocking: true },
   { id: 'pattern-surface-ownership', run: ['node', 'scripts/boundaries/pattern-surface-ownership-gate/index.mjs', '--check'], blocking: true },
-  { id: 'engine-freeze-gate', run: ['node', 'scripts/engine-freeze-gate.mjs', '--check'], blocking: true },
+  { id: 'engine-freeze-gate', run: ['node', 'scripts/engine/engine-freeze-gate/index.mjs', '--check'], blocking: true },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/boundaries/portal-substrate-gate/index.mjs', '--check'], blocking: true },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
   // row in `foundation/tokens/prototype-ledger.json`. It ships with NO
@@ -225,8 +225,8 @@ export const CI_GATES = Object.freeze([
   // Build: the five committed `styles/*.css` mirrors are required and the
   // `dist/*` copies are audited only when present, so a clean clone certifies
   // the same law without a build step.
-  { id: 'modern-bundle-framework-drill', run: ['node', '--test', 'scripts/modern-bundle-framework-gate.test.mjs'], blocking: true },
-  { id: 'modern-bundle-framework', run: ['node', 'scripts/modern-bundle-framework-gate.mjs'], blocking: true },
+  { id: 'modern-bundle-framework-drill', run: ['node', '--test', 'scripts/engine/modern-bundle-framework-gate/index.test.mjs'], blocking: true },
+  { id: 'modern-bundle-framework', run: ['node', 'scripts/engine/modern-bundle-framework-gate/index.mjs'], blocking: true },
   // The palette seam: `--ds-chart-series-1..10` may be DEFINED only by a
   // tenant-scope compiler, never by anything closer to the marks. It was
   // orphaned and red on 2026-08-19 -- not because a component had defined the
@@ -275,8 +275,8 @@ export const CI_GATES = Object.freeze([
   // Codex blocker 4B: every counted Modern font-size literal carries an
   // adjudicated ownership row — a sold typography.scale control may not fail
   // silently behind an unowned literal.
-  { id: 'literal-ownership-drill', run: ['node', '--test', 'scripts/literal-ownership-gate.test.mjs'], blocking: true },
-  { id: 'literal-ownership', run: ['node', 'scripts/literal-ownership-gate.mjs'], blocking: true },
+  { id: 'literal-ownership-drill', run: ['node', '--test', 'scripts/engine/literal-ownership-gate/index.test.mjs'], blocking: true },
+  { id: 'literal-ownership', run: ['node', 'scripts/engine/literal-ownership-gate/index.mjs'], blocking: true },
 
   // FASE 4 (normalización integral 2026-08-02): la tabla de controles Standard/Pro/Expert
   // es API de producto generada de los contratos reales — fresca y completa o roja.

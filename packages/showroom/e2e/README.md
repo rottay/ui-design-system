@@ -27,7 +27,7 @@ defect are indistinguishable there.
 `overflow-baseline.json` carries two decrease-only lists — `overflowing` (one
 entry per capture cell whose document scrolls horizontally at 360px) and
 `touchTargets` (one per interactive part under 44x44 on a coarse pointer).
-`node packages/core/scripts/engine-token-audit.mjs --check` reads the length of
+`node packages/core/scripts/engine/engine-token-audit/index.mjs --check` reads the length of
 `overflowing` as its `responsive.overflowCells` ratchet, so the count cannot
 grow even if this spec is skipped. Regenerate with
 `RESPONSIVE_UPDATE_BASELINE=1`, which rewrites the file to the intersection with

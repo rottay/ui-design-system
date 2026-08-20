@@ -19,7 +19,7 @@ import {
 import {
   collectSourceFiles,
   isProductionSourceFile,
-} from "./runtime-svg-paint-census.mjs";
+} from "./engine/runtime-svg-paint-census/index.mjs";
 
 test("counts D3 paint setters but not one-argument getters", () => {
   const result = analyzeRuntimeSvgPaint(`

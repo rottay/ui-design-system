@@ -2,7 +2,7 @@ import { readFileSync, statSync } from 'node:fs';
 import { dirname, extname, isAbsolute, join, resolve, sep } from 'node:path';
 import ts from 'typescript';
 
-import { paintedClassNames, readManifest } from '../daisy-painted-classes.mjs';
+import { paintedClassNames, readManifest } from '../engine/daisy-painted-classes/index.mjs';
 
 /**
  * `daisy.classConsumers` -- count the modern-engine files that actually RENDER a
@@ -82,7 +82,7 @@ import { paintedClassNames, readManifest } from '../daisy-painted-classes.mjs';
 
 /**
  * Class names DaisyUI actually paints, DERIVED from the pinned package by
- * `../daisy-painted-classes.mjs` and stored in `daisy-painted-classes.json`.
+ * `../engine/daisy-painted-classes/index.mjs` and stored in `daisy-painted-classes.json`.
  *
  * This used to be a hand-written array of 25 names annotated "verified against
  * the `daisyui@5.5.19` package source". It was not verified, and could not be:

@@ -183,7 +183,7 @@ export { contrastRatio };
  * dependency-free implementation of the published APCA-W3 0.1.9 constants and
  * formula (https://github.com/Myndex/apca-w3) -- reproduced as literals rather
  * than importing the `apca-w3` package, which is a repo-root dev-only tool
- * dependency (used by `scripts/engine-token-audit.mjs`), not a dependency of
+ * dependency (used by `scripts/engine/engine-token-audit/index.mjs`), not a dependency of
  * this published package. Adding it here would make every consumer of
  * `@rottay/design-system` require it at runtime.
  *

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "0ac05b22a28e43c2c5c0aa2f88217a663cfa9ca574f1636b80595e0b3a0b329d",
+    "authorityDigest": "4a08e1929a968d20e9ef508341a3dce259e8d0b00f623fac1ffececadafcf648",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 49042,
-        "sha256": "c6537aac2ccc15cb5352e5bee6a534d895bf2e03e110b01e48c6cf466addff25"
+        "bytes": 49133,
+        "sha256": "7b128d4b1d9067a12ae7d64139de7943689af1100b6ca275398333ad2d5cd341"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-doc-claim-allowlist.json",
@@ -309,16 +309,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 62943,
-        "sha256": "9274c6a1bdfe019170e44821473a90e8d0089d7f00515b8c26ecccab4e116549"
+        "bytes": 62889,
+        "sha256": "6a42de5e8720b3e21fd5a516cf6bc6d1ce163bf51e9cc3b2ef65734b242d87f7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 99532,
-        "sha256": "494b2cba6f4b256aad82e2eb78d73cc617e911c2bb3aa714983dba9e01e07877"
+        "bytes": 99545,
+        "sha256": "6a2ff0bf0f0ff5214dab934a40394999792d4d148c20a21d53608054e7309623"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs",
@@ -2121,16 +2121,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 15896,
-        "sha256": "98d97d053da1a01aae2772c2950bb2ef6aa69da3779f8efe8a2609e0b18d19b4"
+        "bytes": 15909,
+        "sha256": "7d7c586635c413db609295775b4318eeccc1a466db1a7b3e594b7dba32bbf0ea"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/kernel/accessibility/branding-contrast/tests/apca-oracle.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2339,
-        "sha256": "4615f01a0c49c160950192dc3312c08e74442d33d7a41f46807404a94fe843a7"
+        "bytes": 2352,
+        "sha256": "66b974b3c7787d05518fe60a4560a903e1600cc03109ba0b6bf137b333dc0123"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts",
@@ -11762,8 +11762,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6015,
-        "sha256": "2f0aa6797d4a10b95d5891040acafbb11b1b2a20d19b0e6fc4ce84ff0ef053bf"
+        "bytes": 6028,
+        "sha256": "00a0a1072b9c6cc7b9e28959582a66858488915f95546d2f3fd3f4bd908548b4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/flip-layout/tests/use-flip-layout.test.tsx",
@@ -15439,8 +15439,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 3389,
-        "sha256": "4897c1a5e8b0385a207cf654a414d4b0bd49289335bb6b27da602a512c70fdd5"
+        "bytes": 3402,
+        "sha256": "c851657680fc030a58b9dfb6f6cf177e7d7158afc2be62f05b612562b0cc8803"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/lane-control/public/work-order/schema.json",
@@ -37067,8 +37067,8 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 7083,
-        "sha256": "7a251eba498763eea294208f1a33dab6ee91a5142235808bc9fbd3bc684f14c6"
+        "bytes": 7096,
+        "sha256": "e82d5a9ae45bdb4e9b70c437c3f9530cfad458e8e53982379f6b2cc4af078af1"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/field-filters.spec.ts",
@@ -40479,12 +40479,12 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "0ac05b22a28e43c2c5c0aa2f88217a663cfa9ca574f1636b80595e0b3a0b329d"
+    "digest": "4a08e1929a968d20e9ef508341a3dce259e8d0b00f623fac1ffececadafcf648"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
-      "path": "ui-design-system/packages/core/scripts/engine-token-audit.baseline.json",
+      "path": "ui-design-system/packages/core/scripts/engine/engine-token-audit/engine-token-audit.baseline.json",
       "sha256": "567c4e4ebc429e526b252b0c56b2427832709466d89ca76b684c0b78bd67d242",
       "ok": true,
       "errors": [],
@@ -113860,8 +113860,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b0b87c6182a97a29f08ffd4afb9ad0dec403542003023b65d586594aa53e296f",
-      "b0b87c6182a97a29f08ffd4afb9ad0dec403542003023b65d586594aa53e296f"
+      "565eb6e7e7428a90194e866d283aab9f06ee0ebd6f970201a0f075663f572188",
+      "565eb6e7e7428a90194e866d283aab9f06ee0ebd6f970201a0f075663f572188"
     ],
     "agree": true
   }

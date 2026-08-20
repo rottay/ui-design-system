@@ -48,7 +48,7 @@
   ],
   "mandatorySentence": "Make only the edits enumerated in the substitution table. Never declare a token name that is not in your table — above all, never declare a name that currently appears only inside `var()` fallbacks. Do not reorder, reformat, dedupe, rename, or fix anything adjacent; every out-of-scope observation is a written finding, not an edit.",
   "verificationCommands": [
-    "node packages/core/scripts/engine-token-audit.mjs --check",
+    "node packages/core/scripts/engine/engine-token-audit/index.mjs --check",
     "node packages/core/src/tooling/lane-control/public/containment/index.mjs --plan packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json --lane F1 --expect-changes",
     "git diff -- packages/core/src/ui/primitives/display/Avatar | grep -c '^[+-]' "
   ],

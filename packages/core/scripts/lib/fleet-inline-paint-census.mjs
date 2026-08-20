@@ -1,6 +1,6 @@
 import { existsSync, realpathSync } from "node:fs";
 import { join, relative, sep } from "node:path";
-import { collectSourceFiles } from "../runtime-svg-paint-census.mjs";
+import { collectSourceFiles } from "../engine/runtime-svg-paint-census/index.mjs";
 
 /** The ARC-09 lane owns these paths completely; fleet must never duplicate them. */
 export const ARC09_INLINE_PAINT_FILES = Object.freeze([

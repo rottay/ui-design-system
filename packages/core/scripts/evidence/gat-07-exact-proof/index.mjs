@@ -55,9 +55,8 @@ const CLAIM_FLOOR_PATH = join(HERE, 'gat-07-public-claim-floor.json');
 const CLAIM_DOC_ALLOWLIST_PATH = join(HERE, 'gat-07-doc-claim-allowlist.json');
 const DOCUMENTATION_SEAL_PATH = join(HERE, 'gat-07-documentation-seal.json');
 const STALE_CORPUS_PATH = join(HERE, 'gat-07-stale-corpus.json');
-// engine-token-audit sigue plano en scripts/ hasta el lote H (engine/) — por eso '../..'.
-const BASELINE_PATH = join(HERE, '..', '..', 'engine-token-audit.baseline.json');
-const AUDIT_PATH = join(HERE, '..', '..', 'engine-token-audit.mjs');
+const BASELINE_PATH = join(HERE, '..', '..', 'engine/engine-token-audit/engine-token-audit.baseline.json');
+const AUDIT_PATH = join(HERE, '..', '..', 'engine/engine-token-audit/index.mjs');
 const DATA_PART_DOC = join(
   DOCS_ROOT,
   'engineering/design-system/runtime/skins/data-part-contracts/README.md',

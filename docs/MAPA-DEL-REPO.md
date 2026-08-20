@@ -2156,7 +2156,7 @@ Cómo se invoca: mayormente `ci-gates.manifest.mjs`; tres no llegan a CI.
 - `tokens/channel-liveness-gate/index.mjs` (+ `.test.mjs`) — CI; productor canónico de `channel-liveness.json`.
 - `channel-wiring-zero-delta-gate.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** prueba que un canal
   recién cableado es zero-delta cuando está sin setear. Ni CI ni `package.json`.
-- `literal-ownership-gate.mjs` (+ `.test.mjs`) — CI; alimenta `LITERAL-OWNERSHIP-MATRIX.json` de la raíz.
+- `engine/literal-ownership-gate/index.mjs` (+ `.test.mjs`) — CI; alimenta `LITERAL-OWNERSHIP-MATRIX.json` de la raíz.
 - `tokens/reads-adjudication-gate/index.mjs` — CI; toda lectura `--ds-*` no adjudicada tiene exactamente un dueño.
 - `tokens/prototype-ledger-gate/index.mjs` (+ `.test.mjs`) — CI; todo `--_ds-proto-*` está gobernado o no existe.
 - `red-inventory-gate.mjs` (+ `.test.mjs`, `red-inventory.json`) — CI; inventario sellado de rojos.
@@ -2180,32 +2180,32 @@ en ceilings decrease-only.
 Cómo se invoca: mezcla. Cuatro están enchufados en CI, tres son librerías importadas,
 cinco corren solo por su drill y tres no corren nunca.
 
-- `engine-token-audit.mjs` (+ `.baseline.json` + 5 autotests: `.daisy`, `.effects`,
+- `engine/engine-token-audit/index.mjs` (+ `.baseline.json` + 5 autotests: `.daisy`, `.effects`,
   `.exemptions`, `.motion-recipes`, `.runtime-svg.integration`) — CI, `--check`. El gate
   mecánico del carril; calcula su censo en tiempo de import (por eso los corpus viven en `lib/`).
-- `engine-freeze-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI.
-- `anatomy-variant-gate.mjs` (+ `.test.mjs`) — CI.
+- `engine/engine-freeze-gate/index.mjs` (+ `.test.mjs`, `.baseline.json`) — CI.
+- `engine/anatomy-variant-gate/index.mjs` (+ `.test.mjs`) — CI.
 - `boundaries/size-axis-law-gate/index.mjs` (+ `index.test.mjs`) — CI.
 - `tokens/spacing-rhythm-contract-gate/index.mjs` (+ `.test.mjs`) — CI; sin baseline y sin lista de archivos,
   camina el corpus desde la fuente.
-- `css-layer-paint-gate.mjs` (+ `.test.mjs`) — `csspaint:check` en `package.json`, no en el manifiesto de CI.
-- `css-source-integrity-gate.mjs` — `csssource:check`; detecta residuo de parche y marcadores de conflicto en CSS.
-- `container-query-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — `containerquery:check` / `:seed`.
+- `engine/css-layer-paint-gate/index.mjs` (+ `.test.mjs`) — `csspaint:check` en `package.json`, no en el manifiesto de CI.
+- `engine/css-source-integrity-gate/index.mjs` — `csssource:check`; detecta residuo de parche y marcadores de conflicto en CSS.
+- `engine/container-query-gate/index.mjs` (+ `.test.mjs`, `.baseline.json`) — `containerquery:check` / `:seed`.
 - `tokens/color-mix-argument-purity-gate/index.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** todo argumento de
   `color-mix()` debe resolver a `<color>` bajo cualquier tenant.
-- `modern-bundle-framework-gate.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** el bundle modern no puede
+- `engine/modern-bundle-framework-gate/index.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** el bundle modern no puede
   filtrar capas de Tailwind/DaisyUI fuera de `rottay-framework`.
 - `tokens/chart-series-reserved-name-gate/index.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** ley de la costura de
   paleta `--ds-chart-series-1..10`.
-- `daisy-painted-classes.mjs` (+ `.test.mjs`) — genera y verifica `lib/daisy-painted-classes.json`
+- `engine/daisy-painted-classes/index.mjs` (+ `.test.mjs`) — genera y verifica `lib/daisy-painted-classes.json`
   desde el paquete DaisyUI instalado. No está en CI ni en `package.json`, pero `lib/daisy-class-consumer-counter.mjs` lo importa, así que sí tiene consumidor.
-- `runtime-svg-paint-census.mjs` (+ `runtime-svg-paint-counter.test.mjs`) — CLI + librería;
+- `engine/runtime-svg-paint-census/index.mjs` (+ `runtime-svg-paint-counter.test.mjs`) — CLI + librería;
   `engine-token-audit.mjs` importa su `collectSourceFiles`.
 - `embedded-css-paint-census.mjs` (+ `embedded-css-paint-counter.test.mjs`) — CLI; solo lo
   ejecuta (spawn) el test de integración `engine-token-audit.runtime-svg.integration.test.mjs`.
 - `evidence/canvas-sink-census/index.mjs` (+ `.test.mjs`) — manifiesto de sumideros canvas; lo importa
   `cra-15-runtime-hardening-gate.mjs`, así que corre vía `cra15:gate`.
-- `skin-dead-part-audit.mjs` (+ `.test.mjs`) — dirección "selector de skin → ¿se estampa esa parte?";
+- `engine/skin-dead-part-audit/index.mjs` (+ `.test.mjs`) — dirección "selector de skin → ¿se estampa esa parte?";
   `engine-token-audit.mjs` importa `countDeadParts`.
 - `skin-orphan-scope-audit.mjs` (+ `.baseline.json`) — **[SIN CONSUMIDOR]** la dirección OPUESTA a
   la anterior (clase de scope huérfana). No es duplicado: es el reverso deliberado. Pero nadie lo corre,
@@ -2327,7 +2327,7 @@ Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-pl
    `tsconfig.tests.json` / `tsconfig.tests.baseline.json` de la raíz del paquete.
 5. `scripts/builders/write-build-stamp/index.mjs` — último paso de `build`: escribe el hash de entrada que
    después lee `dist-freshness-gate.mjs`.
-6. `scripts/relocate-engine-token-baseline.mjs` — reubica SOLO las claves path-keyed de
+6. `scripts/engine/relocate-engine-token-baseline/index.mjs` — reubica SOLO las claves path-keyed de
    `engine-token-audit.baseline.json` usando el inventario de renames de Git; nunca cambia un valor,
    dry-run por defecto. `engine-audit:relocate-paths`.
 7. `scripts/generators/generate-taxonomy/index.mjs` — camina `src/ui/` y emite `docs/TAXONOMY.generated.md`. `docs:taxonomy`.
@@ -2661,7 +2661,7 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
 
 - `scripts/channel-wiring-zero-delta-gate.mjs`
 - `scripts/tokens/color-mix-argument-purity-gate/index.mjs`
-- `scripts/modern-bundle-framework-gate.mjs`
+- `scripts/engine/modern-bundle-framework-gate/index.mjs`
 - `scripts/tokens/chart-series-reserved-name-gate/index.mjs`
 - `scripts/evidence/cra-17-integral-gate/index.mjs`
 - `scripts/embedded-css-paint-census.mjs` (solo lo spawnea un test de integración)

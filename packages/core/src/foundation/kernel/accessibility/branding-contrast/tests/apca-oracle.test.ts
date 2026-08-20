@@ -3,7 +3,7 @@
  * `apca-w3` reference implementation as a test-only oracle.
  *
  * `apca-w3` is a repo-root dev dependency used by
- * `scripts/engine-token-audit.mjs` (a build-time script, not part of the
+ * `scripts/engine/engine-token-audit/index.mjs` (a build-time script, not part of the
  * published package). `foundation/kernel/accessibility/branding-contrast` ships inside
  * `@rottay/design-system`, so it hand-implements the APCA 0.1.9 formula
  * instead of depending on `apca-w3` at runtime (WO-TOK-02 fence: no new
