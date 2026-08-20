@@ -471,7 +471,16 @@ intermedios alcanza: batería del worker (3 piernas de suite + gates:ci:list +
 wiring + gat07:check + greps) + mi verificación (expectativa exacta + gate del
 lote corrido a mano) + re-sello mío al commitear. **Lote A ✅ `7346f6028`**
 (calibración del patrón: 3 archivos, 23/23 estables idénticas, wiring 78 OK,
-delta de sello = exactamente las 3 rutas del lote).
+delta de sello = exactamente las 3 rutas del lote). **Lote B ✅ `9b1eeb16a`**
+(9 de 11: builders/+generators/+taxonomy/; parada estructural correcta en
+`generate-semantic-icons` — estampa su ruta en 293 generados byte-comparados;
+va en lote B2 propio). Reglas nuevas que salieron del lote B: (1) puntero vivo
+en fuente publicada = instrucción de ejecución → se actualiza (canónica desde
+el caso `charts/index.ts`); (2) generadores que estampan su propia ruta:
+constante se actualiza en el lote, el artefacto se regenera en lote propio al
+cierre (TAXONOMY.generated.md con drift medido: 94→98 primitivas, 122→133
+familias); (3) `distfresh:check` ya venía rojo (dist stale desde Fase 0) —
+rebuild al cierre del frente, junto con la cadena de regeneración.
 
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
