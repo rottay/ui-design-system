@@ -20,3 +20,12 @@ detalle detrás de cada asentamiento.
   entradas, schemaVersion 3, BLOCKED 0. Entrada de trabajo de F4A-2…F4A-15.
 
 Origen: `/tmp/f4a-1-*.md`, `/tmp/f4a-1c-roster-draft.*` (2026-08-20).
+
+## medicion-f4a0/
+
+Datos crudos de la medición F4A-0 (worker Opus, read-only, 2026-08-20):
+`baseline.md` (el reporte), `walk.mjs` (el walker usado), censos por tema
+(exclusive-*.txt), chrome-matrix.md, asignaciones-delta.json,
+internal-head-sin-gobierno.json, literal-vs-derivado.json, tier-page-fg-43.txt.
+Son el insumo medido de las adjudicaciones de F4A-1 y de las reescritas
+F4A-5…15. Copiados desde `/tmp/f4a-0*` (2026-08-20).

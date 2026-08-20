@@ -1,0 +1,2 @@
+CAPABILITIES.recipes.note
+CAPABILITIES.recipes.reason

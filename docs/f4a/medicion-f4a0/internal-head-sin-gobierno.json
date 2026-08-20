@@ -1,0 +1,587 @@
+[
+ {
+  "rootId": "tier.control.fg",
+  "exposure": "internal-head",
+  "channel": "--ds-color-text-primary",
+  "status": "existe",
+  "radio": 267,
+  "valores": {
+   "rottay": {
+    "base": "#F0F0F0",
+    "overlay": "#1A1A1A"
+   },
+   "bithire": {
+    "base": "#14283B",
+    "overlay": "#e4e8ed"
+   },
+   "evnto": {
+    "base": "#111111",
+    "overlay": "#E8E8E0"
+   }
+  }
+ },
+ {
+  "rootId": "state.delta.hover",
+  "exposure": "internal-head",
+  "channel": "--ds-state-hover-shift",
+  "status": "existe",
+  "radio": 241,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.control.border",
+  "exposure": "internal-head",
+  "channel": "--ds-color-border",
+  "status": "existe",
+  "radio": 165,
+  "valores": {
+   "rottay": {
+    "base": "#28282C",
+    "overlay": "#E5E5E3"
+   },
+   "bithire": {
+    "base": "#d4e0ea",
+    "overlay": "#253545"
+   },
+   "evnto": {
+    "base": "var(--ds-color-border-primary)"
+   }
+  }
+ },
+ {
+  "rootId": "ramp.seed.neutral",
+  "exposure": "gap",
+  "channel": "--ds-color-neutral-500",
+  "status": "existe",
+  "radio": 132,
+  "valores": {
+   "rottay": {
+    "base": "#A0A0A5",
+    "overlay": "#6B6B6B"
+   },
+   "bithire": {
+    "base": "#888d9e",
+    "overlay": "#3a4a5a"
+   },
+   "evnto": {
+    "base": "#737373",
+    "overlay": "#64748b"
+   }
+  }
+ },
+ {
+  "rootId": "state.delta.active",
+  "exposure": "internal-head",
+  "channel": "--ds-state-active-shift",
+  "status": "por-crear",
+  "radio": 118,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.raised.fg",
+  "exposure": "internal-head",
+  "channel": "--ds-color-text-primary",
+  "status": "existe",
+  "radio": 93,
+  "valores": {
+   "rottay": {
+    "base": "#F0F0F0",
+    "overlay": "#1A1A1A"
+   },
+   "bithire": {
+    "base": "#14283B",
+    "overlay": "#e4e8ed"
+   },
+   "evnto": {
+    "base": "#111111",
+    "overlay": "#E8E8E0"
+   }
+  }
+ },
+ {
+  "rootId": "tier.accent.fg",
+  "exposure": "internal-head",
+  "channel": "--ds-color-info-ink",
+  "status": "existe",
+  "radio": 74,
+  "valores": {
+   "rottay": null,
+   "bithire": {
+    "overlay": "var(--ds-color-info-300)"
+   },
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.overlay.fg",
+  "exposure": "internal-head",
+  "channel": "--ds-color-text-primary",
+  "status": "existe",
+  "radio": 72,
+  "valores": {
+   "rottay": {
+    "base": "#F0F0F0",
+    "overlay": "#1A1A1A"
+   },
+   "bithire": {
+    "base": "#14283B",
+    "overlay": "#e4e8ed"
+   },
+   "evnto": {
+    "base": "#111111",
+    "overlay": "#E8E8E0"
+   }
+  }
+ },
+ {
+  "rootId": "tier.accent.bg",
+  "exposure": "gap",
+  "channel": "--ds-surface-accent",
+  "status": "por-crear",
+  "radio": 63,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.raised.border",
+  "exposure": "gap",
+  "channel": "--ds-color-border",
+  "status": "existe",
+  "radio": 56,
+  "valores": {
+   "rottay": {
+    "base": "#28282C",
+    "overlay": "#E5E5E3"
+   },
+   "bithire": {
+    "base": "#d4e0ea",
+    "overlay": "#253545"
+   },
+   "evnto": {
+    "base": "var(--ds-color-border-primary)"
+   }
+  }
+ },
+ {
+  "rootId": "state.delta.focus",
+  "exposure": "internal-head",
+  "channel": "--ds-focus-ring",
+  "status": "existe",
+  "radio": 53,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.base.border",
+  "exposure": "internal-head",
+  "channel": "--ds-color-border",
+  "status": "existe",
+  "radio": 51,
+  "valores": {
+   "rottay": {
+    "base": "#28282C",
+    "overlay": "#E5E5E3"
+   },
+   "bithire": {
+    "base": "#d4e0ea",
+    "overlay": "#253545"
+   },
+   "evnto": {
+    "base": "var(--ds-color-border-primary)"
+   }
+  }
+ },
+ {
+  "rootId": "ramp.seed.info",
+  "exposure": "gap",
+  "channel": "--ds-color-info",
+  "status": "existe",
+  "radio": 50,
+  "valores": {
+   "rottay": {
+    "base": "#60A5FA",
+    "overlay": "#2563EB"
+   },
+   "bithire": {
+    "base": "#3A6FB0",
+    "overlay": "#1a7fe0"
+   },
+   "evnto": {
+    "base": "#475569"
+   }
+  }
+ },
+ {
+  "rootId": "tier.page.border",
+  "exposure": "gap",
+  "channel": "--ds-color-border-subtle",
+  "status": "existe",
+  "radio": 50,
+  "valores": {
+   "rottay": {
+    "base": "#161619",
+    "overlay": "#EDEDEC"
+   },
+   "bithire": {
+    "base": "#e4e5ed",
+    "overlay": "#132032"
+   },
+   "evnto": {
+    "base": "color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent)"
+   }
+  }
+ },
+ {
+  "rootId": "ramp.seed.success",
+  "exposure": "gap",
+  "channel": "--ds-color-success",
+  "status": "existe",
+  "radio": 47,
+  "valores": {
+   "rottay": {
+    "base": "#22C55E",
+    "overlay": "#16A34A"
+   },
+   "bithire": {
+    "base": "#327CA8",
+    "overlay": "#5ca6cf"
+   },
+   "evnto": {
+    "base": "#15803D"
+   }
+  }
+ },
+ {
+  "rootId": "ramp.seed.error",
+  "exposure": "gap",
+  "channel": "--ds-color-error",
+  "status": "existe",
+  "radio": 47,
+  "valores": {
+   "rottay": {
+    "base": "#F87171",
+    "overlay": "#DC2626"
+   },
+   "bithire": {
+    "base": "#C5504C",
+    "overlay": "#e04848"
+   },
+   "evnto": {
+    "base": "#B91C1C"
+   }
+  }
+ },
+ {
+  "rootId": "ramp.seed.warning",
+  "exposure": "gap",
+  "channel": "--ds-color-warning",
+  "status": "existe",
+  "radio": 45,
+  "valores": {
+   "rottay": {
+    "base": "#F59E0B",
+    "overlay": "#D97706"
+   },
+   "bithire": {
+    "base": "#D6A04E",
+    "overlay": "#d4943a"
+   },
+   "evnto": {
+    "base": "#A16207"
+   }
+  }
+ },
+ {
+  "rootId": "state.delta.disabled",
+  "exposure": "internal-head",
+  "channel": "--ds-state-disabled-opacity",
+  "status": "existe",
+  "radio": 43,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.accent.border",
+  "exposure": "internal-head",
+  "channel": "--ds-color-border-accent",
+  "status": "por-crear",
+  "radio": 38,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "control.ratio.padding",
+  "exposure": "internal-head",
+  "channel": "--ds-control-padding-ratio-label",
+  "status": "por-crear",
+  "radio": 33,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "scrim.opacity",
+  "exposure": "internal-head",
+  "channel": "--ds-overlay-scrim",
+  "status": "existe",
+  "radio": 29,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.overlay.border",
+  "exposure": "internal-head",
+  "channel": "--ds-color-border",
+  "status": "existe",
+  "radio": 28,
+  "valores": {
+   "rottay": {
+    "base": "#28282C",
+    "overlay": "#E5E5E3"
+   },
+   "bithire": {
+    "base": "#d4e0ea",
+    "overlay": "#253545"
+   },
+   "evnto": {
+    "base": "var(--ds-color-border-primary)"
+   }
+  }
+ },
+ {
+  "rootId": "state.delta.selected",
+  "exposure": "internal-head",
+  "channel": "--ds-state-selected-shift",
+  "status": "por-crear",
+  "radio": 26,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "control.ratio.fontSize",
+  "exposure": "internal-head",
+  "channel": "--ds-input-md-font-size",
+  "status": "existe",
+  "radio": 23,
+  "valores": {
+   "rottay": {
+    "base": "var(--ds-font-size-sm)"
+   },
+   "bithire": {
+    "base": "13px"
+   },
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "control.ratio.lineHeight",
+  "exposure": "internal-head",
+  "channel": "--ds-input-md-line-height",
+  "status": "existe",
+  "radio": 23,
+  "valores": {
+   "rottay": {
+    "base": "var(--ds-line-height-tight)"
+   },
+   "bithire": {
+    "base": "20px"
+   },
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "control.ratio.iconSize",
+  "exposure": "internal-head",
+  "channel": "--ds-icon-md-size",
+  "status": "existe",
+  "radio": 23,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "tier.base.fg",
+  "exposure": "internal-head",
+  "channel": "--ds-color-text-primary",
+  "status": "existe",
+  "radio": 19,
+  "valores": {
+   "rottay": {
+    "base": "#F0F0F0",
+    "overlay": "#1A1A1A"
+   },
+   "bithire": {
+    "base": "#14283B",
+    "overlay": "#e4e8ed"
+   },
+   "evnto": {
+    "base": "#111111",
+    "overlay": "#E8E8E0"
+   }
+  }
+ },
+ {
+  "rootId": "type.leading",
+  "exposure": "internal-head",
+  "channel": "--ds-line-height-normal",
+  "status": "existe",
+  "radio": 16,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "gradient.recipe",
+  "exposure": "internal-head",
+  "channel": "--ds-gradient-primary",
+  "status": "existe",
+  "radio": 14,
+  "valores": {
+   "rottay": null,
+   "bithire": {
+    "base": "linear-gradient(135deg, #244D79 0%, #3A6FB0 54%, #86A6C2 100%)"
+   },
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "control.ratio.gap",
+  "exposure": "internal-head",
+  "channel": "--ds-control-gap-ratio",
+  "status": "por-crear",
+  "radio": 13,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "type.weight",
+  "exposure": "internal-head",
+  "channel": "--ds-font-weight-medium",
+  "status": "existe",
+  "radio": 6,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "type.family.mono",
+  "exposure": "gap",
+  "channel": "--ds-font-family-mono",
+  "status": "existe",
+  "radio": 3,
+  "valores": {
+   "rottay": {
+    "base": "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)"
+   },
+   "bithire": {
+    "base": "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)"
+   },
+   "evnto": {
+    "base": "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)"
+   }
+  }
+ },
+ {
+  "rootId": "type.family.display",
+  "exposure": "gap",
+  "channel": "--ds-font-family-display",
+  "status": "existe",
+  "radio": 3,
+  "valores": {
+   "rottay": {
+    "base": "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+   },
+   "bithire": {
+    "base": "var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+   },
+   "evnto": {
+    "base": "var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+   }
+  }
+ },
+ {
+  "rootId": "state.delta.pressed",
+  "exposure": "internal-head",
+  "channel": "--ds-state-pressed-shift",
+  "status": "por-crear",
+  "radio": 3,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "alpha.ladder",
+  "exposure": "internal-head",
+  "channel": "--ds-alpha-8",
+  "status": "por-crear",
+  "radio": 2,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "state.delta.checked",
+  "exposure": "internal-head",
+  "channel": "--ds-state-checked-shift",
+  "status": "por-crear",
+  "radio": 2,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ },
+ {
+  "rootId": "state.delta.expanded",
+  "exposure": "internal-head",
+  "channel": "--ds-state-expanded-shift",
+  "status": "por-crear",
+  "radio": 2,
+  "valores": {
+   "rottay": null,
+   "bithire": null,
+   "evnto": null
+  }
+ }
+]
