@@ -658,6 +658,14 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2.1 bautismo — tabla aprobada con adjudicaciones (coordinador):** 2
+ADOPCIONES (state.delta.hover → `--ds-state-hover-shift` y state.delta.disabled
+→ `--ds-state-disabled-opacity` — ya existían; el catálogo buscó otros nombres)
++ 10 bautismos nuevos siguiendo las convenciones medidas. Decisiones:
+control.ratio.padding = trío (`-label` 0.42 cabeza / `-value` 0.35 / `-block`
+0.20 — la fuente ya razona el split); alpha.ladder = `--ds-alpha-<pp>`;
+tier.accent.bg queda gap tras bautizarla (el snapshot no se mueve). Propuesta
+completa en /tmp/f2-1-bautismo.md (medida contra el árbol).
 **F2 — plan de ejecución (coordinador, 2026-08-20).** Lotes:
 - **F2.1** — materializar las 12 raíces `por-crear` (bautismo con nombre
   derivado de la nota `derivation` de cada raíz + convenciones `--ds-state-*`/
