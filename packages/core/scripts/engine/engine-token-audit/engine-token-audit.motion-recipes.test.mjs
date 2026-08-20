@@ -16,8 +16,8 @@ import {
   MOTION_RECIPE_CONSUMER_RE,
   componentOwnerOf,
   countMotionRecipeConsumers,
-} from '../../lib/motion-recipe-consumer-counter.mjs';
-import { ENGINE_TOKEN_MINIMUM } from '../../lib/engine-token-governance.mjs';
+} from '../../lib/engine/motion-recipe-consumer-counter/index.mjs';
+import { ENGINE_TOKEN_MINIMUM } from '../../lib/engine/engine-token-governance/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));

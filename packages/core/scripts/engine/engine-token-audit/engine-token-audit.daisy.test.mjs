@@ -34,8 +34,8 @@ import {
   createModuleGraph,
   findDaisyClassesInText,
   listDaisyClassConsumers,
-} from '../../lib/daisy-class-consumer-counter.mjs';
-import { isEngineSourceFile, modernEngineFiles } from '../../lib/engine-corpus.mjs';
+} from '../../lib/engine/daisy-class-consumer-counter/index.mjs';
+import { isEngineSourceFile, modernEngineFiles } from '../../lib/engine/engine-corpus/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageDir = dirname(dirname(dirname(scriptDir)));

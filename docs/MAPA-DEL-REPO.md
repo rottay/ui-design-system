@@ -1842,7 +1842,7 @@ provablemente disjuntos" era prosa. Expone 4 comandos.
 
   **[SIN CONSUMIDOR] desde `package.json`**: ninguno de los scripts npm del paquete
   invoca `lane-control`. Se referencia desde `scripts/structure/core-structure-audit/index.test.mjs`,
-  `scripts/lib/owner-nesting.mjs` y la documentación del programa modern-rescue; se
+  `scripts/lib/taxonomy/owner-nesting/index.mjs` y la documentación del programa modern-rescue; se
   corre a mano.
 
 ##### tooling/quality/ (total=8)
@@ -2198,7 +2198,7 @@ cinco corren solo por su drill y tres no corren nunca.
 - `tokens/chart-series-reserved-name-gate/index.mjs` (+ `.test.mjs`) — **[SOLO DRILL]** ley de la costura de
   paleta `--ds-chart-series-1..10`.
 - `engine/daisy-painted-classes/index.mjs` (+ `.test.mjs`) — genera y verifica `lib/daisy-painted-classes.json`
-  desde el paquete DaisyUI instalado. No está en CI ni en `package.json`, pero `lib/daisy-class-consumer-counter.mjs` lo importa, así que sí tiene consumidor.
+  desde el paquete DaisyUI instalado. No está en CI ni en `package.json`, pero `lib/engine/daisy-class-consumer-counter/index.mjs` lo importa, así que sí tiene consumidor.
 - `engine/runtime-svg-paint-census/index.mjs` (+ `runtime-svg-paint-counter.test.mjs`) — CLI + librería;
   `engine-token-audit.mjs` importa su `collectSourceFiles`.
 - `embedded-css-paint-census.mjs` (+ `embedded-css-paint-counter.test.mjs`) — CLI; solo lo
@@ -2270,7 +2270,7 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
 - `packaging/generate-supplier-contract/index.mjs` (+ `.test.mjs`) — `contract:generate|check` (este último SÍ en CI);
   produce `supplier-contract.json` (185 KB) que consume `consumer/ds-supplier-honesty.mjs`.
 - `generators/generate-surface-capability-census/index.mjs` — **[SIN CONSUMIDOR]** CLI fino sobre
-  `lib/surface-capability-census.mjs`. La librería sí se drilea (`surface-capability-census.test.mjs`),
+  `lib/taxonomy/surface-capability-census/index.mjs`. La librería sí se drilea (`surface-capability-census.test.mjs`),
   el CLI no lo llama nadie.
 
 ---
@@ -2280,7 +2280,7 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
 Qué hace: impedir que se publique o se evalúe contra artefactos viejos.
 
 - `packaging/dist-freshness-gate/index.mjs` (+ `.test.mjs`) — `distfresh:check`, precondición de `prepack`;
-  compara el hash de entrada de `lib/build-input-hash.mjs` contra el sello que dejó `builders/write-build-stamp/index.mjs`.
+  compara el hash de entrada de `lib/build/build-input-hash/index.mjs` contra el sello que dejó `builders/write-build-stamp/index.mjs`.
 - `verticals/vertical-css-staleness.gate/index.mjs` — en CI (`node --test`, es un archivo de test disfrazado de gate)
   y en `package.json` como `gate:styles-css`.
 
@@ -2360,43 +2360,43 @@ un archivo: `certified-data-css-producers.vitest.test.ts`).
 Librerías compartidas. Regla implícita del árbol: una medición vive acá una sola vez y
 todos los gates la importan, para que nunca haya dos censos del mismo hecho.
 
-- `lib/build-input-hash.mjs` — hash de contenido de las entradas de `build`; base del gate de frescura de `dist/`.
-- `lib/counter-presence-audit.mjs` — mitad inversa de los ratchets: detecta la clave de baseline
+- `lib/build/build-input-hash/index.mjs` — hash de contenido de las entradas de `build`; base del gate de frescura de `dist/`.
+- `lib/paint/counter-presence-audit/index.mjs` — mitad inversa de los ratchets: detecta la clave de baseline
   que desapareció junto con su archivo o su colector.
-- `lib/cra-11-adaptive-contract-census.mjs` — censo AST de factories `create*Config` adaptativas.
-- `lib/daisy-class-consumer-counter.mjs` — cuenta archivos del motor modern que RENDERIZAN una clase DaisyUI.
+- `lib/evidence/cra-11-adaptive-contract-census/index.mjs` — censo AST de factories `create*Config` adaptativas.
+- `lib/engine/daisy-class-consumer-counter/index.mjs` — cuenta archivos del motor modern que RENDERIZAN una clase DaisyUI.
 - `lib/daisy-painted-classes.json` — el vocabulario de clases generado por `../daisy-painted-classes.mjs`.
-- `lib/ds-hook-manifest.mjs` — deriva (no lista a mano) el manifiesto público de hooks de aplicación.
-- `lib/effect-consumer-counter.mjs` — cuenta consumidores vivos de las familias de tokens de efecto premium.
-- `lib/embedded-css-paint-counter.mjs` — cuenta propiedades de paint en CSS embebido (postcss + ts).
-- `lib/engine-corpus.mjs` — define QUÉ archivos de `src/ui` audita un ratchet de motor; vive acá
+- `lib/hooks/ds-hook-manifest/index.mjs` — deriva (no lista a mano) el manifiesto público de hooks de aplicación.
+- `lib/engine/effect-consumer-counter/index.mjs` — cuenta consumidores vivos de las familias de tokens de efecto premium.
+- `lib/paint/embedded-css-paint-counter/index.mjs` — cuenta propiedades de paint en CSS embebido (postcss + ts).
+- `lib/engine/engine-corpus/index.mjs` — define QUÉ archivos de `src/ui` audita un ratchet de motor; vive acá
   porque el audit computa todo al importarse y no se le puede preguntar su corpus.
-- `lib/engine-token-governance.mjs` — clases de gobernanza compartidas entre el audit y su evidencia semántica.
-- `lib/first-party-roster-source.mjs` (+ `.test.mjs`, drill en CI) — lee el roster de verticales
+- `lib/engine/engine-token-governance/index.mjs` — clases de gobernanza compartidas entre el audit y su evidencia semántica.
+- `lib/verticals/first-party-roster-source/index.mjs` (+ `.test.mjs`, drill en CI) — lee el roster de verticales
   first-party desde la FUENTE, no desde `dist/`.
-- `lib/fleet-inline-paint-census.mjs` — censo de paint inline de flota; declara los archivos que
+- `lib/paint/fleet-inline-paint-census/index.mjs` — censo de paint inline de flota; declara los archivos que
   el carril ARC-09 posee en exclusiva para no duplicarlos.
-- `lib/gat-07-static-analysis.mjs` — análisis estático (postcss + typescript + sha256) que sostiene el sello GAT-07.
-- `lib/inline-paint-counter.mjs` — el contador de paint inline (`style={{...}}`) de referencia.
-- `lib/modern-framework-layer.mjs` (+ `.test.mjs`) — envuelve las capas generadas de Tailwind/DaisyUI
+- `lib/evidence/gat-07-static-analysis/index.mjs` — análisis estático (postcss + typescript + sha256) que sostiene el sello GAT-07.
+- `lib/paint/inline-paint-counter/index.mjs` — el contador de paint inline (`style={{...}}`) de referencia.
+- `lib/engine/modern-framework-layer/index.mjs` (+ `.test.mjs`) — envuelve las capas generadas de Tailwind/DaisyUI
   bajo `rottay-framework` para que el token first-party gane por propiedad de capa.
-- `lib/motion-recipe-consumer-counter.mjs` — cuenta llamadas reales (no re-exports ni menciones) a la costura de recetas de motion.
-- `lib/owner-nesting.mjs` (+ `.test.mjs`, drill en CI) — detecta filas del family-inventory cuyo
+- `lib/engine/motion-recipe-consumer-counter/index.mjs` — cuenta llamadas reales (no re-exports ni menciones) a la costura de recetas de motion.
+- `lib/taxonomy/owner-nesting/index.mjs` (+ `.test.mjs`, drill en CI) — detecta filas del family-inventory cuyo
   `sourceOwner` anida físicamente dentro del de otra fila.
-- `lib/path-keyed-baseline-relocation.mjs` — la lógica pura de reubicación de contadores path-keyed
+- `lib/build/path-keyed-baseline-relocation/index.mjs` — la lógica pura de reubicación de contadores path-keyed
   (`arc09.inlinePaint.`, `fleet.inlinePaint.`, `runtimeSvgPaint.`, `embeddedCssPaint.`).
-- `lib/root-public-resolver.mjs` (+ `.test.mjs`, drill en CI) — calcula desde la fuente qué exporta
+- `lib/taxonomy/root-public-resolver/index.mjs` (+ `.test.mjs`, drill en CI) — calcula desde la fuente qué exporta
   realmente `@rottay/design-system`; es lo único que un inventario incorrecto no puede falsear.
-- `lib/runtime-svg-paint-counter.mjs` — cuenta paint SVG escrito en runtime (setters D3, `setAttribute`,
+- `lib/paint/runtime-svg-paint-counter/index.mjs` — cuenta paint SVG escrito en runtime (setters D3, `setAttribute`,
   atributos de presentación en JSX), canal invisible para un lexer de texto.
-- `lib/script-source-comment-stripper.mjs` — quita comentarios vía AST de TypeScript
+- `lib/source/script-source-comment-stripper/index.mjs` — quita comentarios vía AST de TypeScript
   (drilleado por `../script-source-comment-stripper.test.mjs`).
-- `lib/skin-exemption-audit.mjs` — audita las exenciones de skin cruzando los tres contadores de paint.
-- `lib/skin-files.mjs` — el ÚNICO walker de archivos de skin, extraído de `engine-token-audit.mjs`
+- `lib/engine/skin-exemption-audit/index.mjs` — audita las exenciones de skin cruzando los tres contadores de paint.
+- `lib/engine/skin-files/index.mjs` — el ÚNICO walker de archivos de skin, extraído de `engine-token-audit.mjs`
   para poder importarlo sin ejecutar el censo.
-- `lib/surface-capability-census.mjs` — censo determinista de registraciones de capacidad de surface.
-- `lib/theme-channel-parity-graph.mjs` — grafo estático de canales de BrandTheme (declaración → emisión → lectura).
-- `lib/zero-lock-policy.mjs` — política de baseline total y fail-closed para `engine-token-audit`.
+- `lib/taxonomy/surface-capability-census/index.mjs` — censo determinista de registraciones de capacidad de surface.
+- `lib/tokens/theme-channel-parity-graph/index.mjs` — grafo estático de canales de BrandTheme (declaración → emisión → lectura).
+- `lib/engine/zero-lock-policy/index.mjs` — política de baseline total y fail-closed para `engine-token-audit`.
 
 ---
 
@@ -2515,7 +2515,7 @@ Dentro de `manifest/` (356 archivos):
 - `styles/bithire.css` — (125.604 líneas) bundle del vertical bithire.
 - `styles/evnto.css` — (123.905 líneas) bundle del vertical evnto.
 - `styles/modern.css` — (954 líneas) bundle SOLO-motor: Tailwind v4.2.4 + DaisyUI envueltos en
-  `@layer rottay-framework` por `scripts/lib/modern-framework-layer.mjs`, más el guard de
+  `@layer rottay-framework` por `scripts/lib/engine/modern-framework-layer/index.mjs`, más el guard de
   reduced-motion. Es lo que se publica como `dist/modern-engine.css` (export `./styles/modern`).
 
 ---

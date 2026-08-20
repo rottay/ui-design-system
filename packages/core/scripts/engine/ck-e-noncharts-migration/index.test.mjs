@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import ts from 'typescript';
 
-import { countArc09PaintInFile } from '../../lib/inline-paint-counter.mjs';
+import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

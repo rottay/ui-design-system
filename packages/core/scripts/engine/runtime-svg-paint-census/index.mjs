@@ -10,7 +10,7 @@ import {
   sep,
 } from "node:path";
 import { fileURLToPath } from "node:url";
-import { countRuntimeSvgPaintByFile } from "../../lib/runtime-svg-paint-counter.mjs";
+import { countRuntimeSvgPaintByFile } from "../../lib/paint/runtime-svg-paint-counter/index.mjs";
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 /**

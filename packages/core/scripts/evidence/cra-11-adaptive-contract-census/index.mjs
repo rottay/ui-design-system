@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import {
   buildCra11Census,
   serializeCra11Census,
-} from '../../lib/cra-11-adaptive-contract-census.mjs';
+} from '../../lib/evidence/cra-11-adaptive-contract-census/index.mjs';
 import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));

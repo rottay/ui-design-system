@@ -149,7 +149,7 @@ export const CI_GATES = Object.freeze([
   // These gates execute the authored TypeScript roster and compile CSS from
   // source in memory. A dist/-backed check here is invalid on a clean clone and
   // can also compare committed output against a stale local build.
-  { id: 'first-party-roster-source-drill', run: ['node', '--test', 'scripts/lib/first-party-roster-source.test.mjs'], blocking: true },
+  { id: 'first-party-roster-source-drill', run: ['node', '--test', 'scripts/lib/verticals/first-party-roster-source/index.test.mjs'], blocking: true },
   { id: 'first-party-artifacts-source-staleness', run: ['pnpm', 'exec', 'vitest', 'run', 'src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts'], blocking: true },
   { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/verticals/vertical-css-staleness.gate/index.mjs'], blocking: true },
   // Single-author law, replacing the retired artifact-provenance trio. That
@@ -377,7 +377,7 @@ export const CI_GATES = Object.freeze([
   // against, so a regression to `return []` fails rather than reporting clean.
   {
     id: 'owner-nesting-drill',
-    run: ['node', '--test', 'scripts/lib/owner-nesting.test.mjs'],
+    run: ['node', '--test', 'scripts/lib/taxonomy/owner-nesting/index.test.mjs'],
     blocking: true,
   },
   // The resolver is the taxonomy gate's only binding an incorrect inventory
@@ -386,7 +386,7 @@ export const CI_GATES = Object.freeze([
   // not exist, and `Object.assign` compounds read as plain values.
   {
     id: 'root-public-resolver-drill',
-    run: ['node', '--test', 'scripts/lib/root-public-resolver.test.mjs'],
+    run: ['node', '--test', 'scripts/lib/taxonomy/root-public-resolver/index.test.mjs'],
     blocking: true,
   },
   {

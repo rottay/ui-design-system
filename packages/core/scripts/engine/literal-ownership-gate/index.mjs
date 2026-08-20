@@ -27,7 +27,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { collectSkinFiles } from '../../lib/skin-files.mjs';
+import { collectSkinFiles } from '../../lib/engine/skin-files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

@@ -44,7 +44,7 @@ import {
   resolveNestedSelectors,
   serializeHookManifest,
   splitSelectorList,
-} from '../../lib/ds-hook-manifest.mjs';
+} from '../../lib/hooks/ds-hook-manifest/index.mjs';
 
 const postcss = postcssModule.default ?? postcssModule;
 

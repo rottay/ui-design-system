@@ -39,7 +39,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { wrapModernFrameworkLayer } from "../../lib/modern-framework-layer.mjs";
+import { wrapModernFrameworkLayer } from "../../lib/engine/modern-framework-layer/index.mjs";
 
 // Spring precompute inputs (TASK S item 2). Imported from dist, like
 // build-vertical-artifacts.mjs, so this script runs after `tsc && vite build`

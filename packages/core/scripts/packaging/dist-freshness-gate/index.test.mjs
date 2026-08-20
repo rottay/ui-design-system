@@ -14,7 +14,7 @@ import test from 'node:test';
 
 import { assertDistFresh } from './index.mjs';
 import { writeBuildStamp } from '../../builders/write-build-stamp/index.mjs';
-import { computeBuildInputHash } from '../../lib/build-input-hash.mjs';
+import { computeBuildInputHash } from '../../lib/build/build-input-hash/index.mjs';
 
 function scaffold({ version = '2.19.34', withDist = true } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'dist-freshness-'));
@@ -29,7 +29,7 @@ function scaffold({ version = '2.19.34', withDist = true } = {}) {
   write('vite.config.ts', 'export default {};\n');
   write('tsconfig.json', '{}\n');
   write('postcss.config.mjs', 'export default {};\n');
-  write('scripts/lib/build-input-hash.mjs', '// fingerprint producer\n');
+  write('scripts/lib/build/build-input-hash/index.mjs', '// fingerprint producer\n');
   write('scripts/builders/write-build-stamp/index.mjs', '// stamp producer\n');
   write('src/index.ts', 'export const answer = 42;\n');
   write('src/ui/button/index.tsx', 'export const Button = () => null;\n');

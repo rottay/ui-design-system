@@ -32,7 +32,7 @@
 
 import { resolve } from 'node:path';
 
-import { readFirstPartyRosterSource } from '../../../../../scripts/lib/first-party-roster-source.mjs';
+import { readFirstPartyRosterSource } from '../../../../../scripts/lib/verticals/first-party-roster-source/index.mjs';
 import { CORE_ROOT } from '../paths/index.mjs';
 
 const rosterPath = resolve(

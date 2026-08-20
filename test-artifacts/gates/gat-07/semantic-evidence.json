@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "4a08e1929a968d20e9ef508341a3dce259e8d0b00f623fac1ffececadafcf648",
+    "authorityDigest": "bb80a032d3212790d0206ca29b751f7b560e9b8ac69e4af4f02034d566971a07",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -309,24 +309,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 62889,
-        "sha256": "6a42de5e8720b3e21fd5a516cf6bc6d1ce163bf51e9cc3b2ef65734b242d87f7"
+        "bytes": 62958,
+        "sha256": "9c272eb1180631969cd03364fff1609521c282365b27502720792e193fbe2d38"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 99545,
-        "sha256": "6a2ff0bf0f0ff5214dab934a40394999792d4d148c20a21d53608054e7309623"
+        "bytes": 99597,
+        "sha256": "91bea14b7d2ddcd97eb59b9d6d6c26210dfb46f0914fedd9de76607955b7a9ac"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12283,
-        "sha256": "861dce5d213ac4b46ed37bd947f6331334e762b51db126932af765abd1e44649"
+        "bytes": 12298,
+        "sha256": "9268884d007c1abad3dff29032f80ef9a24d34f3014e96f1ed1125642a21f543"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/charts/access/index.ts",
@@ -40479,7 +40479,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "4a08e1929a968d20e9ef508341a3dce259e8d0b00f623fac1ffececadafcf648"
+    "digest": "bb80a032d3212790d0206ca29b751f7b560e9b8ac69e4af4f02034d566971a07"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113860,8 +113860,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "565eb6e7e7428a90194e866d283aab9f06ee0ebd6f970201a0f075663f572188",
-      "565eb6e7e7428a90194e866d283aab9f06ee0ebd6f970201a0f075663f572188"
+      "4e5b6ac8eae2e3d8454b374ad1e35782229440ba3d3daf59a569fa0a3f88ca33",
+      "4e5b6ac8eae2e3d8454b374ad1e35782229440ba3d3daf59a569fa0a3f88ca33"
     ],
     "agree": true
   }

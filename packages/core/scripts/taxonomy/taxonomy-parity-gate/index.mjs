@@ -91,7 +91,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { createRootPublicResolver } from '../../lib/root-public-resolver.mjs';
+import { createRootPublicResolver } from '../../lib/taxonomy/root-public-resolver/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));

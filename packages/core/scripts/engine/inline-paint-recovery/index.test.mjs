@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { countArc09PaintInFile } from '../../lib/inline-paint-counter.mjs';
-import { analyzeRuntimeSvgPaint } from '../../lib/runtime-svg-paint-counter.mjs';
+import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/index.mjs';
+import { analyzeRuntimeSvgPaint } from '../../lib/paint/runtime-svg-paint-counter/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

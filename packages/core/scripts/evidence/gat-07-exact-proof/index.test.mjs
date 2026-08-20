@@ -10,9 +10,9 @@ import {
   evaluateBaselineTightening,
   evaluateZeroLockCheck,
   summarizeZeroLocks,
-} from '../../lib/zero-lock-policy.mjs';
-import { countArc09PaintInFile } from '../../lib/inline-paint-counter.mjs';
-import { analyzeEmbeddedCssPaint } from '../../lib/embedded-css-paint-counter.mjs';
+} from '../../lib/engine/zero-lock-policy/index.mjs';
+import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/index.mjs';
+import { analyzeEmbeddedCssPaint } from '../../lib/paint/embedded-css-paint-counter/index.mjs';
 import {
   analyzeClaimSourceRecords,
   analyzeTenantFloorCssRecords,
@@ -21,7 +21,7 @@ import {
   extractRegistryFactsFromText,
   findStaleClaimsInRecords,
   validateClaimDocumentationInventory,
-} from '../../lib/gat-07-static-analysis.mjs';
+} from '../../lib/evidence/gat-07-static-analysis/index.mjs';
 import {
   DOCS_ROOT,
   SEALED_REFERENCE_DOCS,

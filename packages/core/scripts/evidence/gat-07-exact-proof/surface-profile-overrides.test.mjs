@@ -23,7 +23,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { analyzeClaimSourceRecords } from '../../lib/gat-07-static-analysis.mjs';
+import { analyzeClaimSourceRecords } from '../../lib/evidence/gat-07-static-analysis/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

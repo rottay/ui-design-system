@@ -49,7 +49,7 @@
  * legitimate is the precise failure C3 documented, and this gate must not
  * repeat it in its own output.
  *
- * The allowlist is DERIVED, never hand-listed — see scripts/lib/ds-hook-manifest.mjs.
+ * The allowlist is DERIVED, never hand-listed — see scripts/lib/hooks/ds-hook-manifest/index.mjs.
  */
 
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -62,7 +62,7 @@ import {
   PROMOTED_HOOK_VALUE_CONSTRAINT,
   resolveNestedSelectors,
   serializeHookManifest,
-} from '../../lib/ds-hook-manifest.mjs';
+} from '../../lib/hooks/ds-hook-manifest/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);

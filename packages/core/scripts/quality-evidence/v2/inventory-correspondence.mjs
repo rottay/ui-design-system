@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import ts from 'typescript';
 
-import { createRootPublicResolver } from '../../lib/root-public-resolver.mjs';
+import { createRootPublicResolver } from '../../lib/taxonomy/root-public-resolver/index.mjs';
 import { REPOSITORY_ROOT, loadProgramContracts } from './contracts.mjs';
 
 const CORE_ROOT = 'packages/core';

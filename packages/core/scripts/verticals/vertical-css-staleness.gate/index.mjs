@@ -34,8 +34,8 @@ import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { wrapModernFrameworkLayer } from "../../lib/modern-framework-layer.mjs";
-import { readFirstPartyRosterSource } from "../../lib/first-party-roster-source.mjs";
+import { wrapModernFrameworkLayer } from "../../lib/engine/modern-framework-layer/index.mjs";
+import { readFirstPartyRosterSource } from "../../lib/verticals/first-party-roster-source/index.mjs";
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const require = createRequire(import.meta.url);

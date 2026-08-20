@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
-import { collectSkinExemptionFailures, countSkinExemptionBreaches } from '../../lib/skin-exemption-audit.mjs';
+import { collectSkinExemptionFailures, countSkinExemptionBreaches } from '../../lib/engine/skin-exemption-audit/index.mjs';
 
 function fixture() {
   const dir = mkdtempSync(join(tmpdir(), 'skin-exemption-audit-'));

@@ -6,7 +6,7 @@ import test from "node:test";
 import {
   collectBelowFloorFailures,
   countPremiumEffectConsumers,
-} from "../../lib/effect-consumer-counter.mjs";
+} from "../../lib/engine/effect-consumer-counter/index.mjs";
 
 function fixtureFiles() {
   const dir = mkdtempSync(join(tmpdir(), "engine-effect-consumers-"));

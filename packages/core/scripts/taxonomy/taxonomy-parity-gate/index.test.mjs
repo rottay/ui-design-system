@@ -24,7 +24,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { createRootPublicResolver } from '../../lib/root-public-resolver.mjs';
+import { createRootPublicResolver } from '../../lib/taxonomy/root-public-resolver/index.mjs';
 import {
   auditTaxonomyParity,
   normalizeFamilySlug,

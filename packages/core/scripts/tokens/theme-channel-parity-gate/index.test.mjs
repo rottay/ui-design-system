@@ -12,7 +12,7 @@ import {
   extractStringArrayExport,
   parseEmitterMappings,
   parseTypeRegistry,
-} from "../../lib/theme-channel-parity-graph.mjs";
+} from "../../lib/tokens/theme-channel-parity-graph/index.mjs";
 
 const contract = `
 export interface BrandTheme {

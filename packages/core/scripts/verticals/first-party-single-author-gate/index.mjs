@@ -95,7 +95,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { readFirstPartyRosterSource } from '../../lib/first-party-roster-source.mjs';
+import { readFirstPartyRosterSource } from '../../lib/verticals/first-party-roster-source/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

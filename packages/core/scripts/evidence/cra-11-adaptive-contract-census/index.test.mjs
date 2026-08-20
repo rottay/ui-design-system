@@ -8,7 +8,7 @@ import {
   buildCra11Census,
   serializeCra11Census,
   stringLiteralContentSpan,
-} from '../../lib/cra-11-adaptive-contract-census.mjs';
+} from '../../lib/evidence/cra-11-adaptive-contract-census/index.mjs';
 
 const TSCONFIG = `${JSON.stringify({
   compilerOptions: {

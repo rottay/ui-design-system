@@ -4,8 +4,8 @@ import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { collectMissingPrefixedCounters } from '../../lib/counter-presence-audit.mjs';
-import { ARC09_INLINE_PAINT_FILES } from '../../lib/fleet-inline-paint-census.mjs';
+import { collectMissingPrefixedCounters } from '../../lib/paint/counter-presence-audit/index.mjs';
+import { ARC09_INLINE_PAINT_FILES } from '../../lib/paint/fleet-inline-paint-census/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));

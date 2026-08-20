@@ -49,7 +49,7 @@ import {
   extractStringArrayExport,
   parseEmitterMappings,
   parseTypeRegistry,
-} from '../../lib/theme-channel-parity-graph.mjs';
+} from '../../lib/tokens/theme-channel-parity-graph/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));

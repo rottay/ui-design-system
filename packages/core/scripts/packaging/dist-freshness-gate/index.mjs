@@ -26,7 +26,7 @@ import { fileURLToPath } from 'node:url';
 import {
   computeBuildInputHash,
   fingerprintBuildInputManifest,
-} from '../../lib/build-input-hash.mjs';
+} from '../../lib/build/build-input-hash/index.mjs';
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));

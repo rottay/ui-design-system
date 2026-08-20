@@ -24,13 +24,13 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import ts from 'typescript';
 
-import { summarizeZeroLocks } from '../../lib/zero-lock-policy.mjs';
-import { countArc09PaintInFile } from '../../lib/inline-paint-counter.mjs';
+import { summarizeZeroLocks } from '../../lib/engine/zero-lock-policy/index.mjs';
+import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/index.mjs';
 import {
   ENGINE_TOKEN_EXACT,
   ENGINE_TOKEN_MINIMUM,
-} from '../../lib/engine-token-governance.mjs';
-import { readFirstPartyRosterSource } from '../../lib/first-party-roster-source.mjs';
+} from '../../lib/engine/engine-token-governance/index.mjs';
+import { readFirstPartyRosterSource } from '../../lib/verticals/first-party-roster-source/index.mjs';
 import {
   analyzeClaimSourceRecords,
   analyzeTenantFloorCssRecords,
@@ -40,7 +40,7 @@ import {
   extractRosterProjectedRegistryFacts,
   findStaleClaimsInRecords,
   validateClaimDocumentationInventory,
-} from '../../lib/gat-07-static-analysis.mjs';
+} from '../../lib/evidence/gat-07-static-analysis/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));

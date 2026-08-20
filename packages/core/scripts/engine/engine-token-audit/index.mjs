@@ -30,34 +30,34 @@
  *   node scripts/engine/engine-token-audit/index.mjs --check --quiet     # concise CI output
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
-import { countArc09PaintInFile } from '../../lib/inline-paint-counter.mjs';
+import { countArc09PaintInFile } from '../../lib/paint/inline-paint-counter/index.mjs';
 import {
   collectEngineFiles,
   modernEngineColorFiles,
   modernEngineFiles,
-} from '../../lib/engine-corpus.mjs';
+} from '../../lib/engine/engine-corpus/index.mjs';
 import {
   collectDaisyClassConsumers,
   countDaisyClassConsumers,
-} from '../../lib/daisy-class-consumer-counter.mjs';
-import { countPremiumEffectConsumers } from '../../lib/effect-consumer-counter.mjs';
-import { countMotionRecipeConsumers } from '../../lib/motion-recipe-consumer-counter.mjs';
-import { countSkinExemptionBreaches } from '../../lib/skin-exemption-audit.mjs';
-import { countRuntimeSvgPaintByFile } from '../../lib/runtime-svg-paint-counter.mjs';
-import { countEmbeddedCssPaintByFile, countEmbeddedCssPaintInFile } from '../../lib/embedded-css-paint-counter.mjs';
-import { stripScriptComments } from '../../lib/script-source-comment-stripper.mjs';
-import { ARC09_INLINE_PAINT_FILES, collectFleetInlinePaintSourceFiles } from '../../lib/fleet-inline-paint-census.mjs';
+} from '../../lib/engine/daisy-class-consumer-counter/index.mjs';
+import { countPremiumEffectConsumers } from '../../lib/engine/effect-consumer-counter/index.mjs';
+import { countMotionRecipeConsumers } from '../../lib/engine/motion-recipe-consumer-counter/index.mjs';
+import { countSkinExemptionBreaches } from '../../lib/engine/skin-exemption-audit/index.mjs';
+import { countRuntimeSvgPaintByFile } from '../../lib/paint/runtime-svg-paint-counter/index.mjs';
+import { countEmbeddedCssPaintByFile, countEmbeddedCssPaintInFile } from '../../lib/paint/embedded-css-paint-counter/index.mjs';
+import { stripScriptComments } from '../../lib/source/script-source-comment-stripper/index.mjs';
+import { ARC09_INLINE_PAINT_FILES, collectFleetInlinePaintSourceFiles } from '../../lib/paint/fleet-inline-paint-census/index.mjs';
 import { collectSourceFiles as collectRuntimeSvgSourceFiles } from '../runtime-svg-paint-census/index.mjs';
 import { countDeadParts } from '../skin-dead-part-audit/index.mjs';
 import {
   evaluateBaselineTightening,
   evaluateZeroLockCheck,
   summarizeZeroLocks,
-} from '../../lib/zero-lock-policy.mjs';
+} from '../../lib/engine/zero-lock-policy/index.mjs';
 import {
   ENGINE_TOKEN_EXACT as EXACT,
   ENGINE_TOKEN_MINIMUM as MIN,
-} from '../../lib/engine-token-governance.mjs';
+} from '../../lib/engine/engine-token-governance/index.mjs';
 import postcss from 'postcss';
 import { resolve, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -2662,7 +2662,7 @@ function countUnwiredSkins() {
 
 // collectSkinFiles lives in ./lib/skin-files.mjs (one walker, importable
 // without executing this module's top-level census). Re-exported for compat.
-import { collectSkinFiles } from '../../lib/skin-files.mjs';
+import { collectSkinFiles } from '../../lib/engine/skin-files/index.mjs';
 export { collectSkinFiles };
 
 function countViewportMediaQueriesInSkins() {

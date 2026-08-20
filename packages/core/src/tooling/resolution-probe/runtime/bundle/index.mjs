@@ -37,7 +37,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 
-import { wrapModernFrameworkLayer } from '../../../../../scripts/lib/modern-framework-layer.mjs';
+import { wrapModernFrameworkLayer } from '../../../../../scripts/lib/engine/modern-framework-layer/index.mjs';
 import { DIST, fromCoreRoot, SRC_CSS, STYLES } from '../../foundation/paths/index.mjs';
 import { VERTICALS } from '../../foundation/scope/index.mjs';
 

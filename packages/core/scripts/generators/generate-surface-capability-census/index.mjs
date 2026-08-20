@@ -7,7 +7,7 @@ import {
   buildSurfaceCapabilityCensus,
   serializeSurfaceCapabilityCensus,
   SURFACE_CAPABILITY_KINDS,
-} from '../../lib/surface-capability-census.mjs';
+} from '../../lib/taxonomy/surface-capability-census/index.mjs';
 import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));

@@ -19,7 +19,7 @@ import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '../../../src/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { isEmbeddedCssPaintProperty } from '../../lib/embedded-css-paint-counter.mjs';
+import { isEmbeddedCssPaintProperty } from '../../lib/paint/embedded-css-paint-counter/index.mjs';
 import { collectSourceFiles } from '../runtime-svg-paint-census/index.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
