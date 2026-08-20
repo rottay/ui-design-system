@@ -481,6 +481,17 @@ constante se actualiza en el lote, el artefacto se regenera en lote propio al
 cierre (TAXONOMY.generated.md con drift medido: 94→98 primitivas, 122→133
 familias); (3) `distfresh:check` ya venía rojo (dist stale desde Fase 0) —
 rebuild al cierre del frente, junto con la cadena de regeneración.
+**Lote B2 ✅ `0f6790dd3`** (generate-semantic-icons a generators/; 293 iconos
+regenerados con diff PROBADO header-only — 293+/293−, filtro exhaustivo vacío;
+icons:check verde; la roja estable del test intacta). Deja **1 rojo nuevo de
+suite, declarado**: `customization-surface-gate` stale (su inputsDigest cubre
+los .ts de iconos). NO es de manifiesto (gates:ci sigue 78 verdes). Se cierra
+en el **lote R (mío, DESPUÉS del lote G)**: la cadena C3 entera
+(census → reconciliation → preservation manifest → tokens-catalog → vistas) en
+un solo acto — antes de G sería doble trabajo porque los 4 owners se mueven en
+G y los artefactos estampan la ruta del generador. Inventario de flakies: 2
+(channel-liveness + skin-evidence, misma familia de carreras por fixtures en
+src/ — el fix tmpdir es deuda post-Paso B).
 
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
