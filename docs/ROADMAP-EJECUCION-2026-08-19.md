@@ -584,6 +584,17 @@ reconciliation → kimi-preservation → controls → tokens-catalog → gat-07
 la auditoría Fable de F0: dist fresco tras los toques de src de F0.10/F0.13)
 + TAXONOMY re-derivado (98 prim/133 fam). Cadena C3 + distfresh + gat-07
 verdes.
+**Lote H ✅ `b554bdccc`** — engine/ completa (39/39, 12 capabilities + 8
+tests-ley + baseline de 6 lectores reubicado con el audit). 9 clusters no
+censados arreglados (imports cruzados engine↔engine que wiring-coverage
+declaró huérfanos; vitest «no tests» silencioso recuperado; libs que importan
+engine/). Constantes transitorias de E re-apuntadas (comentario borrado). C1
+aplicado por idioma. Opus detectó y revirtió solo un reemplazo amplio (11
+archivos restaurados). Coordinador: cadena tokens + **rebuild dist** (los
+productores movidos invalidaban el stamp) + gat-07 último (`565eb6e7…`).
+**gates:ci: 78 blocking VERDES**. Plano en scripts/: 1 producción
+(audit-vertical-compliance, lote J) + 6 tests.
+
 **Lote G2 creado (pendiente, mío):** re-alojar los 4 artefactos de raíz de
 paquete en sus capabilities dueñas (`customization-surface-report.json` y
 KIMI manifest → tokens/; `customization-reconciliation.json` → tokens-catalog
