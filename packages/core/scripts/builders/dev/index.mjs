@@ -13,7 +13,7 @@ import { spawn } from 'node:child_process';
 import { watch } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = findPackageRoot(__dirname);

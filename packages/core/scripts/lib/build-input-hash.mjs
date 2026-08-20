@@ -45,7 +45,7 @@ const BUILD_CONFIG_FILES = ['vite.config.ts', 'tsconfig.json', 'postcss.config.m
 const BUILD_INPUT_MANIFEST_SCHEMA_VERSION = 1;
 const STAMP_PRODUCER_FILES = [
   'scripts/lib/build-input-hash.mjs',
-  'scripts/write-build-stamp.mjs',
+  'scripts/builders/write-build-stamp/index.mjs',
 ];
 
 function portable(path) {

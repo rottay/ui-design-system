@@ -13,7 +13,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 import { assertDistFresh } from './dist-freshness-gate.mjs';
-import { writeBuildStamp } from './write-build-stamp.mjs';
+import { writeBuildStamp } from './builders/write-build-stamp/index.mjs';
 import { computeBuildInputHash } from './lib/build-input-hash.mjs';
 
 function scaffold({ version = '2.19.34', withDist = true } = {}) {
@@ -30,7 +30,7 @@ function scaffold({ version = '2.19.34', withDist = true } = {}) {
   write('tsconfig.json', '{}\n');
   write('postcss.config.mjs', 'export default {};\n');
   write('scripts/lib/build-input-hash.mjs', '// fingerprint producer\n');
-  write('scripts/write-build-stamp.mjs', '// stamp producer\n');
+  write('scripts/builders/write-build-stamp/index.mjs', '// stamp producer\n');
   write('src/index.ts', 'export const answer = 42;\n');
   write('src/ui/button/index.tsx', 'export const Button = () => null;\n');
   // Non-shipping inputs that must NOT influence the hash.
@@ -166,7 +166,7 @@ test('editing a producer script invalidates the build-input fingerprint', () => 
   const f = scaffold();
   try {
     writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
-    f.write('scripts/write-build-stamp.mjs', '// changed stamp producer\n');
+    f.write('scripts/builders/write-build-stamp/index.mjs', '// changed stamp producer\n');
     const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
     assert.equal(ok, false);
     assert.match(failures.join('\n'), /build inputs changed/);

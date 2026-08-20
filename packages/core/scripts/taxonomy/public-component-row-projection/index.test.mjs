@@ -78,8 +78,8 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { createRootPublicResolver } from './lib/root-public-resolver.mjs';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { createRootPublicResolver } from '../../lib/root-public-resolver.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 /** `packages/core`. */

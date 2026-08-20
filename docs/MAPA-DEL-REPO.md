@@ -2131,7 +2131,7 @@ alias en `package.json`.
 - `lint-folder-index.mjs` (+ `.test.mjs`) — naming + `folder/index` + propiedad; `lint:folders`.
 - `pattern-surface-ownership-gate.mjs` (+ `.test.mjs`, `.baseline.json`, `.allowlist.json`,
   `.README.md`) — CI; frontera patternvssurface.
-- `taxonomy-parity-gate.mjs` (+ `.test.mjs`) — CI; paridad entre taxonomía declarada e inventario real.
+- `taxonomy/taxonomy-parity-gate/index.mjs` (+ `index.test.mjs`) — CI; paridad entre taxonomía declarada e inventario real.
 - `public-entrypoint-boundary-gate.mjs` (+ `.test.mjs`) — `public-entrypoints:check`.
 - `cra-14-public-barrel-gate.mjs` — `cra14:check`. Sin autotest hermano.
 - `portal-substrate-gate.mjs` (+ `.test.mjs`, `.allowlist.json`) — CI; un solo substrato de portal.
@@ -2264,12 +2264,12 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
   copias en `dist/`; `--check` falla si algún `styles/*.css` está stale. Es el ÚNICO generador de `styles/`.
 - `build-vertical-artifacts.mjs` (+ `.apca-baseline.json`) — regenera
   `src/foundation/tokens/css/facade/artifacts/<slug>/index.css` desde la fuente autorizada; `lint:artifacts`.
-- `build-font-packs.mjs` — copia los font packs opt-in a `dist/fonts/` para que resuelvan los
+- `builders/build-font-packs/index.mjs` — copia los font packs opt-in a `dist/fonts/` para que resuelvan los
   subpaths `./fonts/<id>.css`.
 - `generate-semantic-icons.mjs` (+ `.test.mjs`) — `icons:generate|check`; corpus semántico de 282 nombres.
 - `generate-supplier-contract.mjs` (+ `.test.mjs`) — `contract:generate|check` (este último SÍ en CI);
   produce `supplier-contract.json` (185 KB) que consume `consumer/ds-supplier-honesty.mjs`.
-- `generate-surface-capability-census.mjs` — **[SIN CONSUMIDOR]** CLI fino sobre
+- `generators/generate-surface-capability-census/index.mjs` — **[SIN CONSUMIDOR]** CLI fino sobre
   `lib/surface-capability-census.mjs`. La librería sí se drilea (`surface-capability-census.test.mjs`),
   el CLI no lo llama nadie.
 
@@ -2280,7 +2280,7 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
 Qué hace: impedir que se publique o se evalúe contra artefactos viejos.
 
 - `dist-freshness-gate.mjs` (+ `.test.mjs`) — `distfresh:check`, precondición de `prepack`;
-  compara el hash de entrada de `lib/build-input-hash.mjs` contra el sello que dejó `write-build-stamp.mjs`.
+  compara el hash de entrada de `lib/build-input-hash.mjs` contra el sello que dejó `builders/write-build-stamp/index.mjs`.
 - `vertical-css-staleness.gate.mjs` — en CI (`node --test`, es un archivo de test disfrazado de gate)
   y en `package.json` como `gate:styles-css`.
 
@@ -2316,7 +2316,7 @@ Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-pl
 
 #### 1.2 Los 8 scripts de la raíz que no entran en ninguna familia
 
-1. `scripts/dev.mjs` — orquestador de desarrollo local: mantiene el bundle JS en watch y además
+1. `scripts/builders/dev/index.mjs` — orquestador de desarrollo local: mantiene el bundle JS en watch y además
    refresca los artefactos CSS que el watch de Vite no toca. `pnpm dev`.
 2. `scripts/analyze-bundle.mjs` — construye con Vite y mide cada entrypoint de `dist/`; 7 alias
    (`analyze`, `analyze:components`, `analyze:effects`, `analyze:chart-access`, ...), ninguno en CI.
@@ -2325,12 +2325,12 @@ Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-pl
 4. `scripts/typecheck-tests-ratchet.mjs` — ratchet de cantidad de errores de `tsc` sobre los
    archivos de test, que ningún tsconfig de producción incluye. `typecheck:tests`, con
    `tsconfig.tests.json` / `tsconfig.tests.baseline.json` de la raíz del paquete.
-5. `scripts/write-build-stamp.mjs` — último paso de `build`: escribe el hash de entrada que
+5. `scripts/builders/write-build-stamp/index.mjs` — último paso de `build`: escribe el hash de entrada que
    después lee `dist-freshness-gate.mjs`.
 6. `scripts/relocate-engine-token-baseline.mjs` — reubica SOLO las claves path-keyed de
    `engine-token-audit.baseline.json` usando el inventario de renames de Git; nunca cambia un valor,
    dry-run por defecto. `engine-audit:relocate-paths`.
-7. `scripts/generate-taxonomy.mjs` — camina `src/ui/` y emite `docs/TAXONOMY.generated.md`. `docs:taxonomy`.
+7. `scripts/generators/generate-taxonomy/index.mjs` — camina `src/ui/` y emite `docs/TAXONOMY.generated.md`. `docs:taxonomy`.
 8. `scripts/tenant-theme-canary-fixtures.mjs` — publica los especímenes canary de tenant-theme como
    artefacto consumible (`tenant-theme-canary-fixtures.json` + `.d.ts` en la raíz del paquete).
    `tenant-theme-fixtures:generate|check`.
@@ -2571,7 +2571,7 @@ Documentación local del paquete. Ojo: `CLAUDE.md` del monorepo dice que la docu
 
 Archivos sueltos:
 
-- `docs/TAXONOMY.generated.md` — (1) generado por `scripts/generate-taxonomy.mjs` (`docs:taxonomy`);
+- `docs/TAXONOMY.generated.md` — (1) generado por `scripts/generators/generate-taxonomy/index.mjs` (`docs:taxonomy`);
   lista todo tier y toda familia caminando `src/ui/`.
 - `docs/TENANT_MODEL.md` — (1) el modelo de tenancy escrito a mano.
 - `docs/structures-tier.md` — (1) nota sobre el tier `structures/`.
@@ -2642,7 +2642,7 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
 - `scripts/tenant-reach-census.mjs`
 - `scripts/skin-census.mjs`
 - `scripts/skin-orphan-scope-audit.mjs` (+ su `.baseline.json` congelado)
-- `scripts/generate-surface-capability-census.mjs`
+- `scripts/generators/generate-surface-capability-census/index.mjs`
 - `scripts/codemod-motion-tokens.mjs`
 - `scripts/codemod-motion-durations.mjs`
 - `scripts/codemods/sizetype-to-size.mjs` y `scripts/codemods/variant-tone-split.mjs`

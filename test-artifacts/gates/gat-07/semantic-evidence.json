@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "fb4caaaed59e905da73b05ed4baf38eca659030000b15e7d8340ff86aff587ba",
+    "authorityDigest": "0ecb5bc0adb24fa9c86f42976227863cb5c468cb1f1a2c5e1dae7e4d1eb35671",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 48096,
-        "sha256": "edec409c123e60f61d8f4b35b08832534c75ae2c172278c94a0746a9351a18df"
+        "bytes": 48175,
+        "sha256": "e6461da3343fd2357d23086ee2c0e5767e8130ead74eb19381c39ae480016ed4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/analyze-bundle.mjs",
@@ -405,14 +405,6 @@
         "sha256": "cfc4fa704007d059aed4e3b013e5897a83eb9c4d618a615ac4265072efe84c99"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/build-font-packs.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 2302,
-        "sha256": "146c28e8f9042775ff40a24fc122395dd605676b5581d0f830db4096d20d25a3"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/build-vertical-artifacts.apca-baseline.json",
         "roles": [
           "audit-machinery"
@@ -435,6 +427,30 @@
         ],
         "bytes": 18190,
         "sha256": "e918f328a2565bbcbc37ca9dc7fcf0c605799e02610b699986cadb77472816f2"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/builders/build-font-packs/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 2306,
+        "sha256": "17e5b04d2a9ebb04098263917e6a8e2492b4ccf621c9e3cba24c07df665bebeb"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/builders/dev/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 4177,
+        "sha256": "3fac539bdb94b19558e17b05f01931c421c555180ca141369e6c33b15b485ed6"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/builders/write-build-stamp/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 4648,
+        "sha256": "1e3591739d5f16c90aacbf24635f3223951d8c99fe3c3c2027e3e4cf1553791b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/canvas-sink-census.mjs",
@@ -467,14 +483,6 @@
         ],
         "bytes": 50465,
         "sha256": "5507586fb684020c91c3c92720e68e8d4c04c7e2b06ee4bb6048d8fed331be23"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/chart-facade-parity.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 16373,
-        "sha256": "3a98c2fee4f5e7b1f9c2be4f2829832202245072c5edda1001cc55f264615681"
       },
       {
         "path": "ui-design-system/packages/core/scripts/chart-series-reserved-name-gate.mjs",
@@ -513,8 +521,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 31672,
-        "sha256": "36c64724a9ec3ac47c696dc56f771f45ae621aefe5794c42c11d10420592c3bc"
+        "bytes": 31702,
+        "sha256": "e5607659ad87ce890a3d55cb02a05aef99fc843f150e9e4a4b7723e456b9a8e7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-e-migration-certification.test.mjs",
@@ -869,14 +877,6 @@
         "sha256": "cf453da95e73470b91061bb3dbea228038d3fa18ba05d44ee93593288840665a"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/dev.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 4173,
-        "sha256": "920eaff419f231daa4ce8b130dca20704b6f299968dc0bac2b1d4232d7669f0f"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/dist-freshness-gate.mjs",
         "roles": [
           "audit-machinery"
@@ -889,8 +889,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 8377,
-        "sha256": "7dd462f88b78bf3ea51e149fa01e0fe983240732c7fba97b27bc574f19b7c473"
+        "bytes": 8422,
+        "sha256": "1bcb405f13fbdb1ed8927a522804c7641ae919b51c0bdf001a50a8f326c3fbdc"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ds-underscore-prefix-gate.mjs",
@@ -1137,20 +1137,20 @@
         "sha256": "22464595fdb42b2c0959453cabeb7e6a07db6c676af4e8a58af687f3fdc1b78f"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/generate-surface-capability-census.mjs",
+        "path": "ui-design-system/packages/core/scripts/generators/generate-surface-capability-census/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1768,
-        "sha256": "a47a39972a020f4a2b740c59b490b0e63e67d826dd4f4b65fa94887280eee636"
+        "bytes": 1776,
+        "sha256": "000042d4cd8dfb039065256b37e3005046e83611d324bf458c3d69ab05c7442b"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/generate-taxonomy.mjs",
+        "path": "ui-design-system/packages/core/scripts/generators/generate-taxonomy/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10614,
-        "sha256": "e0639b634aa8b892966fb1a3f87c3abe37f2e55d68611adcc92cf329dd4176b8"
+        "bytes": 10635,
+        "sha256": "a9d08851ed9e279662d6779f15bc6abbe87be73466dbd35ae6df023fb6f0a9c9"
       },
       {
         "path": "ui-design-system/packages/core/scripts/i18n/i18n-key-parity-gate/i18n-key-parity-gate.baseline.json",
@@ -1261,8 +1261,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9742,
-        "sha256": "2b659e7fdbdce8a99f71ca5da03c64c05beb6c0d93ed5dd93321087e90dae5e7"
+        "bytes": 9757,
+        "sha256": "14e29dcba51237edf9670b2306497dd9c2f1abb64efac5ed16c83d8d7cf21c4e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/counter-presence-audit.mjs",
@@ -1727,14 +1727,6 @@
         ],
         "bytes": 11658,
         "sha256": "9b6025b171b56c89e87558d414aa5f76b2352f3a96eb857a24d6b5d4d0f37204"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/public-component-row-projection.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 20674,
-        "sha256": "bf7c4743eeec24c4070c632d982dd82b746657c29c150dea89877597eabef2c0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/public-entrypoint-boundary-gate.mjs",
@@ -5041,20 +5033,36 @@
         "sha256": "c7e284f8168420e15591f93bc5209008c963bba3c8ed7a795d059edc93e3702d"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/taxonomy-parity-gate.mjs",
+        "path": "ui-design-system/packages/core/scripts/taxonomy/chart-facade-parity/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 38170,
-        "sha256": "97efb0b41aa305ec683c47cf245fce28558678871518ce5cef7770e6e77f7c43"
+        "bytes": 16381,
+        "sha256": "6bcfe7da515e6e0d667f1138e35e6f94b07790deae27b3c9c2372d7547c93479"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/taxonomy-parity-gate.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/taxonomy/public-component-row-projection/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 31946,
-        "sha256": "d046705a8058acb66eb479651dc60a1b538401424b3307503764615f88484e28"
+        "bytes": 20682,
+        "sha256": "baf461a3414198f6baf6f2ec367e1a44bb242aa77b3c60bd533fdd0fba84f08b"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/taxonomy/taxonomy-parity-gate/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 38193,
+        "sha256": "5c2b6def873f831ee6dbb7f4dce709b2a2bbab41284769510a5bf38919725b39"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/taxonomy/taxonomy-parity-gate/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 31935,
+        "sha256": "6245d7ce5dbbd99b7852e4e8bf4bb1de500e5b6fdfeea45b1bffba9d60cb7e95"
       },
       {
         "path": "ui-design-system/packages/core/scripts/tenant-channel-consumer-gate.baseline.json",
@@ -5175,14 +5183,6 @@
         ],
         "bytes": 7565,
         "sha256": "5a0ea05cd007e1ad8fb836c37800706e48127014cacaf734f221b3cb4a24074a"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/write-build-stamp.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 4610,
-        "sha256": "f01c622068de46c80b83c9344c161831d1713ebc3d4da210562023500b206af9"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/charts/access/index.ts",
@@ -5491,8 +5491,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1342,
-        "sha256": "75f38e347a2012b5cd3980d2c1fbc94c83145749e62d7ca86dc953f94f09dc90"
+        "bytes": 1357,
+        "sha256": "116633eca22a907832162610b3964cd112ee96fcea35c2ae034bb7632260c2f6"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/public/patterns/command-palette/index.ts",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "fb4caaaed59e905da73b05ed4baf38eca659030000b15e7d8340ff86aff587ba"
+    "digest": "0ecb5bc0adb24fa9c86f42976227863cb5c468cb1f1a2c5e1dae7e4d1eb35671"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "cd11ec6f370aef1b54f99cb5d6842e3b4177c67eb0243523727c6e09188870bd",
-      "cd11ec6f370aef1b54f99cb5d6842e3b4177c67eb0243523727c6e09188870bd"
+      "e1b979f6ecec156359f1da545570992208ac8d5ad21f161c78e0e40ca057cf72",
+      "e1b979f6ecec156359f1da545570992208ac8d5ad21f161c78e0e40ca057cf72"
     ],
     "agree": true
   }

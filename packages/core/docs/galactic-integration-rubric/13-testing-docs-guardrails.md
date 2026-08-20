@@ -26,7 +26,7 @@ The problem is not absence of scaffolding. It is synchronization drift.
 ### Taxonomy generation
 
 - `ui-design-system/packages/core/docs/TAXONOMY.generated.md`
-- `ui-design-system/packages/core/scripts/generate-taxonomy.mjs`
+- `ui-design-system/packages/core/scripts/generators/generate-taxonomy/index.mjs`
 
 ### Runtime appearance tests
 

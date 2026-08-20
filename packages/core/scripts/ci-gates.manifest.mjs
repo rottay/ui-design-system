@@ -366,7 +366,7 @@ export const CI_GATES = Object.freeze([
   // keeps the gate from decaying into a file nobody has run.
   {
     id: 'taxonomy-parity-drill',
-    run: ['node', '--test', 'scripts/taxonomy-parity-gate.test.mjs'],
+    run: ['node', '--test', 'scripts/taxonomy/taxonomy-parity-gate/index.test.mjs'],
     blocking: true,
   },
   // A nested sourceOwner is not a style question: the inner family's folder sits
@@ -391,7 +391,7 @@ export const CI_GATES = Object.freeze([
   },
   {
     id: 'taxonomy-parity',
-    run: ['node', 'scripts/taxonomy-parity-gate.mjs'],
+    run: ['node', 'scripts/taxonomy/taxonomy-parity-gate/index.mjs'],
     blocking: true,
   },
   // The lane-control drill runner runs all five suites and goes red on any

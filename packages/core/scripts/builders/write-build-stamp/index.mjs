@@ -18,15 +18,15 @@
 // or partial build.
 //
 // Usage:
-//   node scripts/write-build-stamp.mjs            (writes dist/build-stamp.json)
-//   node scripts/write-build-stamp.mjs --dist <dir> --package-root <dir>
+//   node scripts/builders/write-build-stamp/index.mjs            (writes dist/build-stamp.json)
+//   node scripts/builders/write-build-stamp/index.mjs --dist <dir> --package-root <dir>
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { computeBuildInputHash } from './lib/build-input-hash.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { computeBuildInputHash } from '../../lib/build-input-hash.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRootDefault = findPackageRoot(scriptDir);

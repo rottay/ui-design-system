@@ -24,13 +24,13 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { createRootPublicResolver } from './lib/root-public-resolver.mjs';
+import { createRootPublicResolver } from '../../lib/root-public-resolver.mjs';
 import {
   auditTaxonomyParity,
   normalizeFamilySlug,
   parseShowroomRegistry,
   CANONICAL_LAYERS,
-} from './taxonomy-parity-gate.mjs';
+} from './index.mjs';
 
 const UI_ROOT = 'packages/core/src/ui';
 

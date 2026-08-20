@@ -7,8 +7,8 @@ import {
   buildSurfaceCapabilityCensus,
   serializeSurfaceCapabilityCensus,
   SURFACE_CAPABILITY_KINDS,
-} from './lib/surface-capability-census.mjs';
-import { repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+} from '../../lib/surface-capability-census.mjs';
+import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const designSystemRoot = findRepoRoot(scriptDirectory);

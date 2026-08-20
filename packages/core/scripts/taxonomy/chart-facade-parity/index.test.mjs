@@ -47,8 +47,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import { loadTypeScript } from './lib/root-public-resolver.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { loadTypeScript } from '../../lib/root-public-resolver.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptDir);

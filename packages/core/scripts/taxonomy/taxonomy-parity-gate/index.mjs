@@ -84,15 +84,15 @@
  *
  * WHAT IT DOES NOT DO. It moves no file and rewrites no manifest.
  *
- * Usage: node scripts/taxonomy-parity-gate.mjs [--json]
+ * Usage: node scripts/taxonomy/taxonomy-parity-gate/index.mjs [--json]
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { createRootPublicResolver } from './lib/root-public-resolver.mjs';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { createRootPublicResolver } from '../../lib/root-public-resolver.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
