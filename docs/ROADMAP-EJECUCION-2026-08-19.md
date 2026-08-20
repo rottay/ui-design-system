@@ -609,6 +609,15 @@ Lectores re-apuntados (HERE-relativo); 3 contratos modern-rescue editados con
 autorización expresa (CONSTITUTION_READY). Sello gat-07 intacto (esos
 artefactos no son input). **Raíz del paquete sin artefactos sueltos.**
 
+**Cierre de deudas del frente:** cra-11 ✅ `9f066d38c` (regen sighted
+79→74: salen 6 campos de las surfaces remediadas en el Modern Rescue, entra
+adaptivePacking — evolución intencional de `a9264be14`/`dcadb8474`). Drill
+cra-12 → **diferido con análisis afilado**: la inyección en el árbol real es
+de diseño (el gate digiere el árbol entero; una copia parcial ahoga la señal);
+el fix honesto es espejo completo vía `--workspace-root` o una exclusión de
+nombres `__drill__` en la re-derivación del hooks-manifest — ambos tocan
+artefactos sellados, y la carrera hoy NO se manifiesta (suite 23/23). No es
+bloqueante; queda para F1 con su lote propio.
 **Deuda nueva descubierta en el cierre (NO del frente):** (a) el
 `dependency-honesty` de raíz en modos `static`/`check` reporta un unresolved
 runtime module edge en `recipes/profiles/index.ts:76` — preexistente a F0.5
