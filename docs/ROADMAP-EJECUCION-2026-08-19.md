@@ -618,6 +618,16 @@ el fix honesto es espejo completo vía `--workspace-root` o una exclusión de
 nombres `__drill__` en la re-derivación del hooks-manifest — ambos tocan
 artefactos sellados, y la carrera hoy NO se manifiesta (suite 23/23). No es
 bloqueante; queda para F1 con su lote propio.
+**Graduación del manifest ✅ `a739b988e`** — `packages/core/manifest/`
+(families/ intacto, 356 movidos). Censo fresco: 23 externos + 17 internos (5
+que el censo viejo no tenía — trio cascade-*, taxonomy-parity — habrían roto
+en silencio). Cirugía `..` medida; 5100 paths de index.json byte-idénticos.
+Los 3 artefactos stale en HEAD (fanout-facts, mirror-parity, root-checklists)
+NO se regeneraron — su regen es de **F2** (su dueño natural). Adjudicaciones:
+phase-a no se reescribe (1082 citas selladas; scope `:!**/phase-a/**`); hueco
+de wiring-coverage y forma capability de manifest/ (9 planos) anotados para
+F1/Paso C; zombi de 12h/100% CPU eliminado. gates:ci **80 VERDES** + sello
+gat-07 (`a0f35f34…`).
 **Deuda nueva descubierta en el cierre (NO del frente):** (a) el
 `dependency-honesty` de raíz en modos `static`/`check` reporta un unresolved
 runtime module edge en `recipes/profiles/index.ts:76` — preexistente a F0.5
