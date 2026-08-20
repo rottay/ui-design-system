@@ -658,6 +658,17 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.4b structure+final ✅ `a43ad6550` + `c45e96d69` — F1.4b COMPLETO:**
+10 celdas migradas con fila (6 piloto + 4 pattern) + **354 marcas** unificadas
+(marca = celda adjudicada). El trabajo real fue ~2% de las candidatas; el
+resto eran adjudicaciones escritas esperando lectura (FAM-CHART3, Grupo A,
+dedup Grupo B, FAM-20). Adjudicación nueva del coordinador: `semanticOwner` =
+el control que la evidencia declara `ownedBy` (en el caso coincidente, el de
+la celda) — la ley de cardinalidad lo exigió en primitive. Anotado para F2/
+fase 3: `--_ds-page-rule-style` y `--_ds-page-panel-radius` tienen 4+2 familias
+consumidoras declaradas y 0 declarantes en CSS; y 7 celdas de structure/record
+citan el canal público donde el dueño declara el privado (evidencia con nombre
+equivocado, sin veredicto cambiado).
 **F1.4b-chart ✅ (sin cambios — `0` filas, verificado contra el árbol).** La
 clase ya estaba resuelta por dos adjudicaciones escritas: FAM-CHART3 (54
 celdas, premisa "cero lecturas" re-medida y cierta) y Grupo A (36,
