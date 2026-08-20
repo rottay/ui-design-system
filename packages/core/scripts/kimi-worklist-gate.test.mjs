@@ -18,7 +18,7 @@ import {
   resolveRepoRoots,
   validateWorklistAuthority,
 } from './kimi-worklist-gate.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'kimi-worklist-gate.mjs');
@@ -336,7 +336,7 @@ test('env ausente por own-key, no por falsy: `undefined` explícito NO es ausenc
 test('env EXPLÍCITO y válido gana al decoy sibling', () => {
   // A real git checkout that is NOT the sibling. If the resolver ignored the
   // explicit value it would silently verify the wrong tree.
-  const explicit = resolve(CORE_ROOT, '../..');
+  const explicit = findRepoRoot(HERE);
   const roots = resolveRepoRoots({ APP_BITHIRE_ROOT: explicit });
   assert.equal(roots.get('app-bithire'), explicit);
   assert.notEqual(roots.get('app-bithire'), SIBLING_APP_BITHIRE);
@@ -344,7 +344,7 @@ test('env EXPLÍCITO y válido gana al decoy sibling', () => {
 
 test('el resolver mueve SOLO app-bithire; los demás repos quedan intactos', () => {
   const base = resolveRepoRoots({});
-  const moved = resolveRepoRoots({ APP_BITHIRE_ROOT: resolve(CORE_ROOT, '../..') });
+  const moved = resolveRepoRoots({ APP_BITHIRE_ROOT: findRepoRoot(HERE) });
   assert.notEqual(moved.get('app-bithire'), base.get('app-bithire'));
   for (const repo of ['app-evnto', 'app-platform', 'showroom']) {
     assert.equal(moved.get(repo), base.get(repo), `${repo} no debe moverse`);

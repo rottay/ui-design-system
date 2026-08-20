@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "63cdae449dd336b1fd72f038689342759d8c695f4707ba03279d6ae632c0524a",
+    "authorityDigest": "c3e7ab6e20a36eb268b9af1ac2efbabaaf1161e9d778f5d5cdf7803a2fb13655",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -273,8 +273,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 123369,
-        "sha256": "f76e9a0bfd7003dc3cf5123b470acd49fa398a9a055a16332902220ef10f3f42"
+        "bytes": 123456,
+        "sha256": "dd7799f82034c78e4a584c6b5b81b4060446d95e0ebb9f2e41b8e65bee183c86"
       },
       {
         "path": "ui-design-system/packages/core/scripts/anatomy-variant-gate.mjs",
@@ -393,8 +393,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 26164,
-        "sha256": "5dcfc9b123c69632e95509268f2cca300ab53394ed89496d39298af05e173cf6"
+        "bytes": 26284,
+        "sha256": "3b395e511b97ca99e5ea7ef4cdd428a96f28c89bb17e6715556a39564da2d4b8"
       },
       {
         "path": "ui-design-system/packages/core/scripts/audit-vertical-compliance.mjs",
@@ -497,8 +497,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 5608,
-        "sha256": "b2b55d8715421266278807f561fd6794686c0ceb7162f1d92a5a7e724f5d4f10"
+        "bytes": 5683,
+        "sha256": "6936e4ef04d5bf10d1d43db394cc116c1433add1b76cdd77dedfe7a28922c3ef"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ci-gates-manifest-flags.test.mjs",
@@ -1149,8 +1149,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10521,
-        "sha256": "a8d0687863a1329ce319537726431395dd32a0b3ee635a71cbb3745f7d93b600"
+        "bytes": 10614,
+        "sha256": "e0639b634aa8b892966fb1a3f87c3abe37f2e55d68611adcc92cf329dd4176b8"
       },
       {
         "path": "ui-design-system/packages/core/scripts/i18n-key-parity-gate.baseline.json",
@@ -1253,8 +1253,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 20223,
-        "sha256": "acf3592b939c73096a4064f7297c8887589723177e431be9d31ceedbc2ea9663"
+        "bytes": 20231,
+        "sha256": "25502483a46b445fcb2725ef9a43996cd1c79d0c0710721c0642c36d00604ae9"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/build-input-hash.mjs",
@@ -1733,8 +1733,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 20665,
-        "sha256": "547a083653b3917652575d2cd80e76c3c08a432308269e3020097e1473cf72d4"
+        "bytes": 20674,
+        "sha256": "bf7c4743eeec24c4070c632d982dd82b746657c29c150dea89877597eabef2c0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/public-entrypoint-boundary-gate.mjs",
@@ -4997,8 +4997,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 9364,
-        "sha256": "6d73f13d03e219d2b03743ccc48607f5de27881e5af544b7621bce1e15603af2"
+        "bytes": 9376,
+        "sha256": "6bb5b7f9251708bed68409ad675b56f39232cb659615adb4418ea8aefeef290a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/spacing-rhythm-contract-gate.mjs",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "63cdae449dd336b1fd72f038689342759d8c695f4707ba03279d6ae632c0524a"
+    "digest": "c3e7ab6e20a36eb268b9af1ac2efbabaaf1161e9d778f5d5cdf7803a2fb13655"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ea9ecb12618a5871c4985124e0e524e5ef5281d6c3103204629ceddb11881ab3",
-      "ea9ecb12618a5871c4985124e0e524e5ef5281d6c3103204629ceddb11881ab3"
+      "4e75fec816c4a4169cadee5b7bf42218b0ca65098de51813702478a97fa9dbe5",
+      "4e75fec816c4a4169cadee5b7bf42218b0ca65098de51813702478a97fa9dbe5"
     ],
     "agree": true
   }

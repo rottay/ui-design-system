@@ -20,8 +20,9 @@
  */
 
 import { readdirSync, statSync, existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -37,8 +38,8 @@ const CHUNK_BUDGET = 3 * 1024 * 1024; // 3 MB
 // Helpers
 // ---------------------------------------------------------------------------
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const ROOT = join(__dirname, '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;

@@ -13,12 +13,13 @@
  */
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const UI_ROOT = resolve(__dirname, '../src/ui');
-const OUTPUT_PATH = resolve(__dirname, '../docs/TAXONOMY.generated.md');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const UI_ROOT = resolve(findPackageRoot(HERE), 'src/ui');
+const OUTPUT_PATH = resolve(findPackageRoot(HERE), 'docs/TAXONOMY.generated.md');
 const AUXILIARY_DIRECTORIES = new Set([
   '__tests__',
   'architecture',

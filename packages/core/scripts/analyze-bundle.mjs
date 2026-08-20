@@ -30,6 +30,7 @@ import { createGzip, gzipSync } from 'node:zlib';
 import { createReadStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { Writable } from 'node:stream';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
 // ---------------------------------------------------------------------------
 // Configuration -- keep in sync with PERFORMANCE_BUDGET.md
@@ -143,8 +144,8 @@ const CSS_BUDGET = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const ROOT = join(__dirname, '..');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = findPackageRoot(HERE);
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -542,10 +543,8 @@ const ASSET_RETENTION_FIXTURES = Object.freeze({
   }),
 });
 
-const ASSET_RETENTION_ARTIFACT = resolve(
-  ROOT,
-  '..',
-  '..',
+const ASSET_RETENTION_ARTIFACT = join(
+  findRepoRoot(HERE),
   'test-artifacts',
   'craft',
   'cra-17',

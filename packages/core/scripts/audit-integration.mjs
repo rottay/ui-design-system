@@ -18,11 +18,12 @@
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const SRC_ROOT = resolve(__dirname, '../src');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const SRC_ROOT = join(findPackageRoot(HERE), 'src');
 
 const violations = [];
 
@@ -452,7 +453,7 @@ if (!readSafe(PERSONALITY_CANONICAL_PATH)) {
 // (wiring a variable up, or deleting its emission) is always welcome and
 // never required to keep the audit green; growing it is a change a
 // reviewer should see and question, the same as any other exemption list.
-const PERSONALITY_SHOWROOM_ROOT = resolve(__dirname, '../../showroom/src');
+const PERSONALITY_SHOWROOM_ROOT = join(findRepoRoot(HERE), 'packages/showroom/src');
 
 const PRE_EXISTING_PERSONALITY_ORPHANS = new Set([
   '--ds-personality-animation-intensity',
@@ -510,7 +511,7 @@ if (emittedPersonalityVars.size > 0) {
   // as orphans. Same corpus-widening the boundary/hook gates already use;
   // absence of the sibling checkout keeps the census DS-only rather than failing.
   const PERSONALITY_APP_ROOT =
-    process.env.APP_BITHIRE_ROOT ?? resolve(SRC_ROOT, '../../../../app-bithire/src');
+    process.env.APP_BITHIRE_ROOT ?? resolve(findRepoRoot(HERE), '..', 'app-bithire/src');
   const personalityConsumerFiles = [
     ...walkFiles(SRC_ROOT, /\.(css|tsx?)$/),
     ...walkFiles(PERSONALITY_SHOWROOM_ROOT, /\.(css|tsx?)$/),
