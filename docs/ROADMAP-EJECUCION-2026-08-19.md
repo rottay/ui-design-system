@@ -635,6 +635,21 @@ phase-a no se reescribe (1082 citas selladas; scope `:!**/phase-a/**`); hueco
 de wiring-coverage y forma capability de manifest/ (9 planos) anotados para
 F1/Paso C; zombi de 12h/100% CPU eliminado. gates:ci **80 VERDES** + sello
 gat-07 (`a0f35f34…`).
+**F1 §4 — plan de ejecución (coordinador, 2026-08-20).** Alcance medido
+contra el árbol: solo 2 enums vacíos (`chrome.anatomy`, `profiles.expressive`)
+— los otros 10 dominios sin `enumValues` son kinds no-enum legítimos (scale/
+bounded/profile-id/…). Lotes:
+- **F1.2** — lift de vocabulario: `controls/<x>.domain.enumValues` desde
+  `cascade/roots/<x>.variants[].value` (14 + 34), `kind` → `closed-enum`, y
+  `program-check` gana: (a) enum nunca vacío, (b) paridad exacta
+  controls↔roots (la autoridad de runtime ya la pinea el canon). Sin vocabulario
+  nuevo (prohibido divergir).
+- **F1.3** — exposure gate: lee `cascade/root-catalog.json` (frescura +
+  `exposure`): 26 tenant-dial / 27 internal-head / 10 gap gobernados.
+- **F1.4** — `internalChannels`: primero las 444 con `targetBinding`
+  (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
+- **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
+  medias) + cierre con auditoría Fable del frente.
 **Paso C2 ✅ `fd24be870`** — 16 sidecars a la forma de ley
 `<capability>.<sufijo>` (lectura medida contra el gate); baseline **20→4**
 (solo los 4 artefactos con nombre propio, razón re-escrita). Deuda anotada:
