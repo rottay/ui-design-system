@@ -815,6 +815,12 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**Veredicto de cierre Fable: CIERRE ACEPTADO, cero discrepancias**
+(`/tmp/fable-f2-cierre-verdict.md` — verificación corta sobre `4606444d5`:
+ola 3 diffs exactos + negativo a nivel de campo, mass-c3 135/135 standalone,
+gat-07 `9374cb75` recomputado OK, deuda channel-liveness idéntica re-medida
+por el auditor, gates:ci propio 87 verdes con los textos nuevos visibles).
+**F2 CERRADO con conformidad del auditor; F4A procede.**
 **F2 — CERRADO (2026-08-20) tras veredicto Fable + condiciones implementadas.**
 Auditoría del frente (`/tmp/fable-frente-f2-verdict.md`, primera mano:
 gates:ci propio 87 verdes, restauración del packet W2 ejecutada por el
