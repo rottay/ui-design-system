@@ -499,7 +499,11 @@ la exención estrecha del propio nombre (constante + lookahead; exime un NOMBRE,
 no licencia archivos), dientes probados en dos planos (drill de 6 vecinos +
 mutación real revertida), test de exclusión reescrito para no pasar por vacío.
 `verticals/` completa 5/5; suite 1619 (el drill nuevo), 24 = 23 estables +
-deuda C3. **Lote C3 EN VUELO** (sello `build-vertical-css` ×3 + regeneración)..
+deuda C3. **Lote C3 ✅ `9a7241252`** — sello `build-vertical-css` unificado en
+los 5 sitios (3 archivos) + 4 bundles regenerados con diff probado de 1 línea;
+bonus: 2 tests del resolution-probe pasaron a verde (la regeneración refrescó
+dist/ y styles/ vuelve a coincidir con dist/ byte a byte; el rebuild completo
+sigue en el lote R). **Lote D EN VUELO** (boundaries/, 28 archivos)..
 `lint-folder-index` migró con su excepción declarada (2 sitios a mano +
 self-test replantado a la profundidad nueva, 8/8). 4 referencias funcionales
 no censadas arregladas — 2 fallaban EN SILENCIO (`filter(existsSync)` traga
