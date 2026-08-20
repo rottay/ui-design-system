@@ -635,6 +635,14 @@ phase-a no se reescribe (1082 citas selladas; scope `:!**/phase-a/**`); hueco
 de wiring-coverage y forma capability de manifest/ (9 planos) anotados para
 F1/Paso C; zombi de 12h/100% CPU eliminado. gates:ci **80 VERDES** + sello
 gat-07 (`a0f35f34…`).
+**Paso C2 ✅ `fd24be870`** — 16 sidecars a la forma de ley
+`<capability>.<sufijo>` (lectura medida contra el gate); baseline **20→4**
+(solo los 4 artefactos con nombre propio, razón re-escrita). Deuda anotada:
+packinv:check (no CI) rojo por crecimiento de dist preexistente → F7.
+**Paso C3 ✅ `8ab678dc1` + `82b800f94`** — manifest/ en forma capability (5
+capabilities + 7 owners de datos, cero sueltos) y el scripts-tree-gate lo
+cubre (M1): el doble hueco declarado por Fable (H8) queda cerrado. Con esto
+**el Paso C queda COMPLETO** y la worklist cerrada de §13 ejecutada entera.
 **Paso C1 ✅ `7df088fdf`** — los 13 renombres de capabilities ejecutados
 con la maquinaria path-keyed (nunca a mano); baseline del scripts-tree-gate
 **29→20** (decrease-only en acción). Cero sellos rotos (ninguno vivía en las
