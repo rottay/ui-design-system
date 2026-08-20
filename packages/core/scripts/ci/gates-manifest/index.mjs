@@ -134,20 +134,25 @@ export const CI_GATES = Object.freeze([
   // live/protected verdict for everything would report zero findings and
   // look exactly like a clean tree.
   { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/tokens/channel-liveness-gate/index.test.mjs'], blocking: true },
-  // Excluded from blocking until F2 (cascade wiring) adjudicates the channel
-  // debt it measures: 24 AUTHORABLE_UNPROVEN_EFFECT + 3 READ_NO_PRODUCTIVE_TERMINAL
+  // Excluded from blocking: the channel debt this gate measures is
+  // authorship/theme-value work, not zero-delta rewiring — proven empirically
+  // on 2026-08-20 when the 12 zero-delta recables of F2.4 drained ZERO
+  // findings (24 AUTHORABLE_UNPROVEN_EFFECT + 3 READ_NO_PRODUCTIVE_TERMINAL
   // + 1 READ_UNPROVEN + 4 UNREAD_EMITTED_NO_KNOWN_ROUTE + 52 unknown-family
-  // consumer sites (census of 2026-08-19). The drill stays blocking so the
-  // classifier itself cannot rot. F2's acceptance includes returning this gate
-  // to blocking with its findings drained by the rewiring, not by re-baseline.
+  // consumer sites; census identical to 2026-08-19). Drain ownership per the
+  // sequence amendment (2026-08-20): accent/tints/overlays/glass ladders are
+  // theme-value decisions -> F4A/F4B; the remainder + unknown-family ->
+  // F2-asymmetric (post-F4B). The drill stays blocking so the classifier
+  // itself cannot rot. Return to blocking = findings drained, not
+  // re-baselined.
   {
     id: 'channel-liveness',
     run: ['node', 'scripts/tokens/channel-liveness-gate/index.mjs', '--check'],
     blocking: false,
     excluded: {
-      reason: 'Real channel debt slated for F2 (cascade): unproven/unread channels are adjudicated by the rewiring fronts, not in F0. Drill remains blocking.',
-      owner: 'F2 cascade front (roadmap §5)',
-      trackedSince: '2026-08-19',  // declarada en c8063fdb9
+      reason: 'Channel debt is authorship/theme-value work, not zero-delta rewiring (proven 2026-08-20: 12 recables drained 0 findings). Ladders accent/tints/overlays/glass drain in F4A/F4B; the rest + 52 unknown-family in F2-asymmetric. Drill remains blocking.',
+      owner: 'F4A/F4B + F2-asymmetric (sequence amendment 2026-08-20, roadmap §5/§12)',
+      trackedSince: '2026-08-20',  // re-adjudicada en el cierre de F2-seguro (antes: c8063fdb9, F2 monolítico)
     },
   },
 
@@ -430,17 +435,19 @@ export const CI_GATES = Object.freeze([
   // checkpoint: three interpolated emitters (`--ds-button-${x}-hover-bg`,
   // `--ds-chart-series-${i}`, `--ds-chart-category-${i}`) have no enumerator,
   // and the checker is fail-closed about reporting a number it cannot
-  // enumerate. Wiring it EXCLUDED makes the red visible in every CI summary
-  // while F2 (the cascade front) supplies the missing enumerators; it returns
-  // to blocking there.
+  // enumerate. Wiring it EXCLUDED makes the red visible in every CI summary.
+  // Supplying the enumerators is AUTHORSHIP, not zero-delta rewiring — it
+  // belongs to the F2-asymmetric phase (post-F4B, sequence amendment
+  // 2026-08-20); it returns to blocking when the enumerators exist
+  // (findings drained, not re-baselined).
   {
     id: 'lane-control-drills',
     run: ['node', 'src/tooling/lane-control/integration/tests/drills/index.mjs'],
     blocking: false,
     excluded: {
-      reason: 'tenant-reachability is red 10/13 (three interpolated emitters without enumerators; union 606 vs rottay 625). The other four suites pass. F2 supplies the enumerators and this returns to blocking.',
-      owner: 'F2 cascade front (roadmap §5)',
-      trackedSince: '2026-08-19',  // declarada en 14dee7dc3
+      reason: 'tenant-reachability is red 10/13 (three interpolated emitters without enumerators; union 606 vs rottay 625). The other four suites pass. The enumerators are authorship — F2-asymmetric (post-F4B) supplies them and this returns to blocking.',
+      owner: 'F2-asymmetric phase (sequence amendment 2026-08-20, roadmap §5/§12)',
+      trackedSince: '2026-08-20',  // re-adjudicada en el cierre de F2-seguro (antes: 14dee7dc3, F2 monolítico)
     },
   },
   // The --ds_ experimentation space never reaches shipped CSS (canon: --ds-).

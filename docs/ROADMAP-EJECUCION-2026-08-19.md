@@ -815,6 +815,54 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2 — CERRADO (2026-08-20) tras veredicto Fable + condiciones implementadas.**
+Auditoría del frente (`/tmp/fable-frente-f2-verdict.md`, primera mano:
+gates:ci propio 87 verdes, restauración del packet W2 ejecutada por el
+auditor ida y vuelta byte-idéntica, ratchet mutado en las dos direcciones y
+restaurado, suite 1683/13 = subconjunto estricto de la baseline histórica de
+25, sha256 firmados T2/T3 idénticos pre/post frente): **los 4 lotes
+APROBADOS**; la declaración "F2-seguro AGOTADO" fue **devuelta con hallazgos**
+y así se resolvió:
+- **H1+H2 ejecutados en la ola 3 `cf61da8bb`**: evnto
+  `--ds-layout-sider-bg`→`--ds-sidebar-bg` (gemelo literal de W2) y bithire
+  `--ds-card-bg`→`--ds-surface-card` (paridad computada sin ciclo; el propio
+  tema ya ata ese patrón en otra sección). Con W3 el frente recablea 12
+  canales, todos con cero-delta computado + restauración probada.
+- **Residuo COMPLETO y domiciliado** (las 4 colas del auditor integradas):
+  par border/border-primary (hermanos; R35 firmado digiere valor crudo),
+  H3 evnto `--ds-card-border[-color]` (mismo nudo del par), H4 bithire
+  `--ds-table-bg`/`--ds-table-row-bg`→tier.control.bg (atribución semántica no
+  pre-adjudicada), `tier.page.fg` (43 canales #A0A0A5), descongelar
+  `--ds-color-primary` (6+15), las 22 asimétricas → **todo F4A/F4B o
+  F2-asimétrico**; las 10 raíces `por-crear` (0 declaraciones, 0 lectores,
+  adjudicación B) → **materialización re-domiciliada a F2-asimétrico/F4B**
+  cuando nazcan valores/consumidores; ratchet 2171 → F3 (plano skins).
+- **Universo re-enunciado con honestidad** (corrección del auditor): el
+  universo del frente fue "canales literales del artefacto con paridad
+  computada contra una raíz derivationDebt", NO "los 150 severos" — el
+  conteo real es 164 (50+99+15) y W2 drenó fuera de severs
+  (`--ds-layout-sider-bg` nunca estuvo ahí; lo que se movió fue
+  rootFrozen.readerEdges).
+- **Excluded re-adjudicados en este cierre** (P1 del auditor, condición de
+  aceptación): channel-liveness y lane-control-drills pasan de dueño "F2
+  cascade front" (frente hoy cerrado — una exclusión con dueño muerto es el
+  anti-patrón que la ley de exclusión visible prohíbe) a "F4A/F4B +
+  F2-asimétrico" con trackedSince 2026-08-20 y razón por clase de fila. El
+  retorno a blocking sigue siendo "findings drained, not re-baselined".
+  Prueba empírica: los 12 recables del frente drenaron CERO hallazgos de
+  channel-liveness (medido por el auditor a los 10 y re-verificado por el
+  coordinador a los 12, censo idéntico) — la deuda nunca fue drenable por
+  el conjunto seguro.
+- **Red visual (462 PNG)**: la cobertura del recableo fue byte/computada
+  (más fuerte que screenshot para cero-delta); el job `visual` no se
+  ejercitó durante F2.4 — corre en el próximo push de CI, y su primera
+  corrida real con peso es la de F4A (reescritura de themes).
+- **Template de packet corregido** (adoptado en W3): `sourceSkeleton.*` se
+  enumera como sección esperada-móvil (el negativo sigue falsable) y el
+  permiso de role shape se declara como compromiso a futuro ("cero-delta hoy
+  → sigue a la raíz mañana").
+**gates:ci final del frente: 87 blocking + 2 excluded (re-adjudicados) verdes
+en este commit.** Próximo frente según la enmienda: **F4A**.
 **Enmienda de secuencia del dueño (2026-08-20) — ADOPTADA y registrada.**
 Reescribe §6/§7/§11-bis/§12 del roadmap: la cola vinculante pasa a ser
 `F2 seguro exhaustivo → F4A canon estructural → F4B calibración 20 controles →
