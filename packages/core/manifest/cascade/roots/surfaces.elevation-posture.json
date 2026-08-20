@@ -560,6 +560,11 @@
       "state": "PRESCRIPCION"
     },
     {
+      "channelId": "--_ds-sidebar-surface-elevation",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
       "channelId": "--_ds-surface-chrome-elevation",
       "familyId": "structure/shell/surface-chrome",
       "state": "PRESCRIPCION"

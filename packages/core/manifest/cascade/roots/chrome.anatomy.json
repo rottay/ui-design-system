@@ -1884,6 +1884,11 @@
       "channelId": "--_ds-workspace-switcher-focus-ring-color",
       "familyId": "pattern/navigation/workspace-switcher",
       "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-rule-style",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
     }
   ],
   "variantDisposition": "by-pack-enum",

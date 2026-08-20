@@ -1248,6 +1248,11 @@
       "state": "PRESCRIPCION"
     },
     {
+      "channelId": "--_ds-sidebar-surface-transition-duration",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
       "channelId": "--_ds-surface-chrome-transition-duration",
       "familyId": "structure/shell/surface-chrome",
       "state": "PRESCRIPCION"

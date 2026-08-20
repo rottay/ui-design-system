@@ -1144,6 +1144,11 @@
       "state": "PRESCRIPCION"
     },
     {
+      "channelId": "--_ds-page-panel-radius",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
       "channelId": "--_ds-action-dock-panel-radius",
       "familyId": "structure/workspace/action-dock",
       "state": "PRESCRIPCION"

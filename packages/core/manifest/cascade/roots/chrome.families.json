@@ -290,6 +290,11 @@
       "channelId": "--_ds-workspace-shell-z-index",
       "familyId": "structure/shell/workspace-shell",
       "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-surface-z-index",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
     }
   ],
   "variantDisposition": "escape-hatch",

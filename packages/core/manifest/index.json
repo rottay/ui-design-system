@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "cd6f8948c5e84b5775e861dc81bd94238c0dc921cbef0fc9e189376f0bb1a0f5",
+  "inputsDigest": "807dd5cb9d229c9901013e103d254518a7f4f6082bb0a9c35520d26704c18244",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -2849,7 +2849,7 @@
     {
       "familyId": "structure/shell/sidebar-surface",
       "path": "manifest/families/structure/shell/sidebar-surface.json",
-      "digest": "6e57924ac72b1631b86bef7f1b4767fec007bf9105ce0dbb53289f5aa00c4741",
+      "digest": "e725d384ef12bfe9e36c26d61f7d2cc0709df8365c10481df64655a60c854724",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

@@ -280,6 +280,11 @@
       "state": "PRESCRIPCION"
     },
     {
+      "channelId": "--_ds-sidebar-surface-section-gap",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
       "channelId": "--_ds-surface-chrome-section-gap",
       "familyId": "structure/shell/surface-chrome",
       "state": "PRESCRIPCION"

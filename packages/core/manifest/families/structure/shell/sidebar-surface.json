@@ -513,7 +513,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -576,7 +594,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-section-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -609,7 +645,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -641,7 +695,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -758,7 +830,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -789,7 +879,25 @@
           ]
         },
         "migratedToInternalChannels": true
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
