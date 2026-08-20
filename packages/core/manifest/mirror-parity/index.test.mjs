@@ -281,7 +281,7 @@ test('control: las nueve cifras de superficie del artefacto', () => {
 });
 
 test('control: la trampa de ocurrencias queda a la vista en los tres', () => {
-  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1938, distinctChannels: 1211 });
+  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1937, distinctChannels: 1211 });
   for (const t of TENANTS) {
     assert.ok(
       doc.occurrenceTrap[t].occurrences > doc.occurrenceTrap[t].distinctChannels,
@@ -903,8 +903,8 @@ test('control: un testigo por clase de raiz, con la cita del piso', () => {
 test('control: raices congeladas y lectores arrastrados, por tenant', () => {
   const P = doc.cascadeSeverance.perTenant;
   assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.count), [4, 5, 4]);
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.readerEdges), [31, 108, 26]);
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.distinctReaders), [31, 108, 26]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.readerEdges), [32, 108, 26]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.distinctReaders), [32, 108, 26]);
 
   // Los nombres, no solo el conteo: seis de las diez raices no-dial aparecen
   // congeladas en algun tema, y las tres literales del piso en ninguno.
@@ -1120,11 +1120,11 @@ test('todo canal que corta viene con su valor, y todo el que re-deriva con lo qu
 test('declaracion multiple es variante de modo, NO duplicacion', () => {
   const m = doc.multiDeclaration;
   assert.match(m.notDuplication, /NO duplicacion|no duplicacion/i);
-  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 727);
+  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 726);
   assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 477);
   assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 96);
   // Casi todas caen en roles distintos: es el bloque claro y el oscuro.
-  assert.equal(m.perTenant.rottay.allInDistinctRoles, 727);
+  assert.equal(m.perTenant.rottay.allInDistinctRoles, 726);
   assert.equal(m.perTenant.bithire.allInDistinctRoles, 477);
   assert.equal(m.perTenant.evnto.sameRoleTwice, 0);
   // Ya NO hay ningun caso de mismo-rol-dos-veces en ningun tema: los tres

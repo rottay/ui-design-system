@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "cac851958eb6ff42f5d9ff1650763a05d7948155bdc92a168a19c50e71239a2c",
+    "authorityDigest": "922405edce1ae33d9bf03c0912f4e7db659d1a73dd5e2dd435ce360fb121021f",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -2674,8 +2674,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 92002,
-        "sha256": "55856cfc465d2795800c297d9fe2831e70a7a4d26a5c35d0f0898994a374101b"
+        "bytes": 91982,
+        "sha256": "c6f581ff2ad382b947f6bfbd626c84eac2965965cc018bd69b4e5159210b25bc"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
@@ -7538,8 +7538,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 87791,
-        "sha256": "9b83a5cadad245e7c80bac5dc47b86a1a339d1e5ed64cf13b1d4b236c28ba533"
+        "bytes": 87778,
+        "sha256": "9a504fe631ff9b91689a106837f24f8b0a67b322bfcfd3a081fb091f668aeae7"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/emphasis/index.ts",
@@ -36963,8 +36963,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5504625,
-        "sha256": "e092f970ac4706d85545e0df896213567530b176b9467b24fdb245c243931289"
+        "bytes": 5504605,
+        "sha256": "ef1ddc35acab488048ee1a05d483eee204c8f7663cd6484e857522085e046597"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -36979,8 +36979,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5375160,
-        "sha256": "aa5ffce8888239f8ca73b8bfa5be4d710e2281e531f95c18c3a4e8756b85aa91"
+        "bytes": 5375140,
+        "sha256": "bd3d13e5e245f037034e35c89eb0580f8e647d173c647ee32bd696d62d81f633"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "cac851958eb6ff42f5d9ff1650763a05d7948155bdc92a168a19c50e71239a2c"
+    "digest": "922405edce1ae33d9bf03c0912f4e7db659d1a73dd5e2dd435ce360fb121021f"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "919703331337bf6f4dd54aad321db6971c22b37eba688f97d7d8f8d1742d3ccf",
-      "919703331337bf6f4dd54aad321db6971c22b37eba688f97d7d8f8d1742d3ccf"
+      "cd6ba2a8aca721867ebdd5c2b9a11f5da9ca31345e26472cd93a893d25cdb257",
+      "cd6ba2a8aca721867ebdd5c2b9a11f5da9ca31345e26472cd93a893d25cdb257"
     ],
     "agree": true
   }

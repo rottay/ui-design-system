@@ -6,9 +6,9 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 92002,
-        "lines": 1960,
-        "sha256": "55856cfc465d2795800c297d9fe2831e70a7a4d26a5c35d0f0898994a374101b"
+        "bytes": 91982,
+        "lines": 1959,
+        "sha256": "c6f581ff2ad382b947f6bfbd626c84eac2965965cc018bd69b4e5159210b25bc"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
@@ -26,9 +26,9 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 87791,
-        "lines": 2523,
-        "sha256": "9b83a5cadad245e7c80bac5dc47b86a1a339d1e5ed64cf13b1d4b236c28ba533"
+        "bytes": 87778,
+        "lines": 2522,
+        "sha256": "9a504fe631ff9b91689a106837f24f8b0a67b322bfcfd3a081fb091f668aeae7"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
@@ -47,7 +47,7 @@
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1938,
+      "occurrences": 1937,
       "distinctChannels": 1211
     },
     "bithire": {
@@ -1870,8 +1870,8 @@
     "commonChannels": 431,
     "identicalValue": 156,
     "divergentValue": 275,
-    "identicalRoleShape": 291,
-    "divergentRoleShape": 140,
+    "identicalRoleShape": 290,
+    "divergentRoleShape": 141,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -2543,6 +2543,14 @@
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-layout-sider-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -6615,8 +6623,8 @@
         },
         "rootFrozen": {
           "count": 4,
-          "readerEdges": 31,
-          "distinctReaders": 31,
+          "readerEdges": 32,
+          "distinctReaders": 32,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -6699,9 +6707,10 @@
                 "overlay-mode=#F4F4F3"
               ],
               "readers": [
+                "--ds-layout-sider-bg",
                 "--ds-sidebar-footer-bg"
               ],
-              "readerCount": 1,
+              "readerCount": 2,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 998,
@@ -11401,8 +11410,8 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 727,
-        "allInDistinctRoles": 727,
+        "channelsDeclaredMoreThanOnce": 726,
+        "allInDistinctRoles": 726,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11424,26 +11433,26 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1821,
+      "rottay": 1820,
       "bithire": 1504,
       "evnto": 398
     },
     "union": 2613,
-    "intersection": 347,
-    "intersectionPct": 13.3,
-    "intersectionPctOfSmallest": 87.2,
+    "intersection": 346,
+    "intersectionPct": 13.2,
+    "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 714,
+        "shared": 713,
         "union": 2611,
         "pctOfUnion": 27.3,
-        "pctOfSmaller": 47.5
+        "pctOfSmaller": 47.4
       },
       "rottay+evnto": {
-        "shared": 393,
+        "shared": 392,
         "union": 1826,
         "pctOfUnion": 21.5,
-        "pctOfSmaller": 98.7
+        "pctOfSmaller": 98.5
       },
       "bithire+evnto": {
         "shared": 350,
