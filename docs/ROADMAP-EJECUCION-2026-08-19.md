@@ -826,6 +826,19 @@ artefacto) ya están en el brief de la ola 2. Mis adjudicaciones W1 quedan
 consistentes con la enmienda: `tier.page.fg` y descongelar-primary son
 decisiones de theme → esperan F4A/F4B; W1 midió que el conjunto seguro se
 agota con la ola 2.
+**Verificación independiente de la enmienda (agente explore, 2026-08-20):
+8/8 afirmaciones VERIFICADAS contra el árbol** — 13 Standard + 7 Pro
+(controls/README + manifest `activePublicControls: 20`); 255×20=5.100 celdas
+todas UNKNOWN y 252 histórico (manifest rollups + family-inventory);
+**263 asignaciones y 3.275 canales derivables EXACTOS** (root-catalog.json,
+Σassignments/Σcollapses); 37 de 63 raíces sin `governedBy` (27 internal-head +
+10 gap); 606 vs 625 (gates-manifest:441); `BrandTheme`/`TenantThemeDocument`/
+`compileTheme` existen y **no hay segundo emisor hoy** ("un segundo emisor es
+STOP" es exigible desde ya); 462 PNG + job `visual` (ci.yml:387). Cero
+contradicciones duras; única deriva: el rótulo genérico "F4" en notas
+pre-enmienda (líneas 188, 192, 535, 886-888, 900, 959). **Regla de lectura
+adoptada: todo "F4" genérico anterior a la enmienda se lee como F4A/F4B (o
+F4C cuando el contexto es craft premium), sin reescribir el log histórico.**
 **F2.4-batch W2 ✅ `a7929df5a` + F2-SEGURO AGOTADO (declaración del
 coordinador).** 1 de 2 canales ejecutado: `--ds-layout-sider-bg`→
 `--ds-sidebar-bg` (rottay). Declaración de packet completa (enmienda del
