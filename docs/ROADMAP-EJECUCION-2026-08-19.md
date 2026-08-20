@@ -462,6 +462,28 @@ tenga trabajo sin commitear en el árbol.
    C structure+verticals (SIN audit-vertical-compliance) · D boundaries ·
    E packaging+evidence (C2 atómico) · F ci · G tokens · H engine · I lib.
 
+**Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
+confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
+baseline del Paso B: **1618 tests / 24 fallas = 23 estables + 1 flaky**
+(channel-liveness: carrera entre el fixture de `cra-12-motion-governance.
+reanchor.test.mjs` que escribe en `src/` y la enumeración CSS del gate;
+aislado da 85/85). Adjudicaciones del coordinador sobre sus 7 hallazgos:
+(3.1) la flaky se reporta APARTE; el fix real (fixture del drill a tmpdir) es
+**deuda nueva post-Paso B**; (3.2) el worker corre `gat07:check` por lote y
+reporta — el re-sello sigue siendo mío al commitear; (3.3) la atribución de
+idiomas de Fable en F11-H estaba INVERTIDA — se sigue el árbol
+(gat-07:58 es HERE-relativo, literal-ownership:37 es ROOT-relativo);
+(3.4) 4 referencias vivas más integradas: `work-order/schema.json:158` (F),
+`wiring-coverage-gate.mjs:41` ya sabía — se actualiza en F, docs internos del
+paquete (B/C/H) con la regla "solo instrucciones de ejecución, no citas
+narrativas"; (3.5) receipts sellados bajo test-artifacts/ se pudren sin
+romperse — los adjudica F7; (3.6) lote J = 1 archivo. Baselines extra que
+capturó: `lane-control-drills` (10/13 rojos fijos: E0-unattributed-emitter,
+TOTALITY, PLANT/POSITIVE CONTROL, union 606 vs 625) y `gat07:check` verde
+(4e75fec8). Nota operativa: `test:scripts` encadena 3 piernas con `&&` — con
+la pierna 1 roja las otras no corren; el worker las corre por separado por
+lote.
+
 **Deuda anotada (no bloquea):** `packages/core/docs/TAXONOMY.generated.md` y
 `test-artifacts/craft/cra-17/bundle-retention.json` estaban desactualizados
 respecto al árbol ANTES de la 0-bis (la regeneración queda para el cierre de
