@@ -494,6 +494,12 @@ G y los artefactos estampan la ruta del generador. Inventario de flakies: 2
 src/ — el fix tmpdir es deuda post-Paso B).
 
 **Lote C ✅ `37dd92d52`** (15 de 17: structure/ 9 + verticals/ 6).
+**Lote C2 ✅ `27db84b0f`** — `platform-identity-zero-gate` a `verticals/` con
+la exención estrecha del propio nombre (constante + lookahead; exime un NOMBRE,
+no licencia archivos), dientes probados en dos planos (drill de 6 vecinos +
+mutación real revertida), test de exclusión reescrito para no pasar por vacío.
+`verticals/` completa 5/5; suite 1619 (el drill nuevo), 24 = 23 estables +
+deuda C3. **Lote C3 EN VUELO** (sello `build-vertical-css` ×3 + regeneración)..
 `lint-folder-index` migró con su excepción declarada (2 sitios a mano +
 self-test replantado a la profundidad nueva, 8/8). 4 referencias funcionales
 no censadas arregladas — 2 fallaban EN SILENCIO (`filter(existsSync)` traga
