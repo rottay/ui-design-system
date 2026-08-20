@@ -658,6 +658,16 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.4b-chart ✅ (sin cambios — `0` filas, verificado contra el árbol).** La
+clase ya estaba resuelta por dos adjudicaciones escritas: FAM-CHART3 (54
+celdas, premisa "cero lecturas" re-medida y cierta) y Grupo A (36,
+chart-foundation.css sin dueño deliberado). Se resta del plan: quedan ~354 en
+4 clases. Adjudicaciones del coordinador: (a) `channelId` = **el socket** (el
+piloto manda; mi nota anterior era un residuo); (b) la marca
+`migratedToInternalChannels` pasa a significar "celda adjudicada" — se unifica
+en el lote structure; (c) 2 sockets huérfanos del chrome chart
+(legend-tracking, legend-text-transform: leídos, nunca declarados) anotados
+para F2/fase 3.
 **F1.4 — descomposición medida (coordinador, contra el árbol):** las 5.100
 celdas = 1.462 migradas + 449 MUST_REACH (444 con bindings + 1 vacío) + 629
 uncoveredByDesign + 2.424 MUST_NOT_REACH + 255×3 (ESCAPE_HATCH/
