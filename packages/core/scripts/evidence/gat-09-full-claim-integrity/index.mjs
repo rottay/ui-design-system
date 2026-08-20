@@ -32,7 +32,7 @@ const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const HERE = dirname(SCRIPT_PATH);
 const DEFAULT_REPO_ROOT = findRepoRoot(HERE);
 const EVIDENCE_MAP_PATH =
-  "packages/core/scripts/evidence/gat-09-full-claim-integrity/gat-09-public-claim-evidence.json";
+  "packages/core/scripts/evidence/gat-09-full-claim-integrity/gat-09-full-claim-integrity.public-claim-evidence.json";
 const ROADMAP_REGISTRY_PATH = "roadmap/registry.json";
 const GAT07_ARTIFACT_PATH =
   "test-artifacts/gates/gat-07/semantic-evidence.json";

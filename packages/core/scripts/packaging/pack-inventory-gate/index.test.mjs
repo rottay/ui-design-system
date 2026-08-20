@@ -160,7 +160,7 @@ test('forbidden tokens are derived from the real torture fixtures', () => {
 });
 
 test('the shipped lucide allowlist covers the ban-rule subtree and the honesty contract', () => {
-  const allow = loadLucideAllowlist(resolve(scriptDir, 'pack-inventory.lucide-allowlist.json'));
+  const allow = loadLucideAllowlist(resolve(scriptDir, 'pack-inventory-gate.lucide-allowlist.json'));
   assert.ok(allow.prefixes.includes('dist/tooling/eslint/'));
   assert.ok(allow.exacts.has('supplier-contract.json'));
   // The consumer CLI must NOT be allowlisted: since the ./icons wildcard became

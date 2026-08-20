@@ -78,7 +78,7 @@
         "src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx"
       ],
       "executableAssertions": [
-        "scripts/evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs",
+        "scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.surface-profile-overrides.test.mjs",
         "src/ui/surfaces/tests/SurfacesLongTailBatch.contract.test.tsx"
       ],
       "deferredOwner": {

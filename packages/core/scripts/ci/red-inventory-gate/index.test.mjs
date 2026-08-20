@@ -267,7 +267,7 @@ test('an adversarial observation set cannot pass as reconciled', () => {
 });
 
 test('the shipped ledger satisfies every law it is sealed by', () => {
-  const { rows, errors } = parseRedInventory(readFileSync(join(here, 'red-inventory.json'), 'utf8'));
+  const { rows, errors } = parseRedInventory(readFileSync(join(here, 'red-inventory-gate.inventory.json'), 'utf8'));
   assert.deepEqual(errors, []);
   assert.equal(rows.length, 15, 'the measured checkpoint inventory is exactly 15 rows');
   assert.equal(rows.length, SEALED_RED_IDENTITIES.length);
@@ -286,7 +286,7 @@ test('the shipped ledger satisfies every law it is sealed by', () => {
 });
 
 test('the shipped ledger only uses declared classes and surfaces', () => {
-  const { rows } = parseRedInventory(readFileSync(join(here, 'red-inventory.json'), 'utf8'));
+  const { rows } = parseRedInventory(readFileSync(join(here, 'red-inventory-gate.inventory.json'), 'utf8'));
   for (const row of rows) {
     assert.ok(Object.hasOwn(RED_CLASSES, row.class), row.class);
     assert.ok(Object.hasOwn(RED_SURFACES, row.surface), row.surface);

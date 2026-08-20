@@ -36,7 +36,7 @@ import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const AUDIT = join(HERE, '..', '..', 'engine/token-audit/index.mjs');
-const CLAIM_FLOOR = join(HERE, 'gat-07-public-claim-floor.json');
+const CLAIM_FLOOR = join(HERE, 'gat-07-exact-proof.public-claim-floor.json');
 const REGISTRY = join(findRepoRoot(HERE), 'roadmap/registry.json');
 
 test('zero-lock policy rejects slack, laundering, deletion and exact/floor drift', () => {

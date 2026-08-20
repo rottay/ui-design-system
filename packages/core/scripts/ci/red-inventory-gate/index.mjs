@@ -53,7 +53,7 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const coreRoot = findPackageRoot(here);
-const inventoryPath = join(here, 'red-inventory.json');
+const inventoryPath = join(here, 'red-inventory-gate.inventory.json');
 
 /** The closed class vocabulary. A class names WHY the red is not executable here. */
 export const RED_CLASSES = Object.freeze({
@@ -153,7 +153,7 @@ export function staticTitleTail(titleSource) {
  * 2 in 2, the staleness gate reported 4 of 5 — and no row was authored by hand:
  * the ledger was produced from those reports and every declared failure shape
  * was verified to be a substring of the observed message. This table and
- * red-inventory.json must be edited together.
+ * red-inventory-gate.inventory.json must be edited together.
  */
 export const SEALED_RED_IDENTITIES = Object.freeze([
   {

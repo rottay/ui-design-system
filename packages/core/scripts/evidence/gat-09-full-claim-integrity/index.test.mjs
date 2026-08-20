@@ -326,7 +326,7 @@ test("structural mode proves the contract while final mode cannot bypass live ex
       "export const widgetsReady = true;\n"
     );
     writeJson(
-      resolve(root, "packages/core/scripts/evidence/gat-09-full-claim-integrity/gat-09-public-claim-evidence.json"),
+      resolve(root, "packages/core/scripts/evidence/gat-09-full-claim-integrity/gat-09-full-claim-integrity.public-claim-evidence.json"),
       evidenceMap([
         {
           claimId: inventory.claims[0].id,

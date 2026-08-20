@@ -1,6 +1,6 @@
 /**
  * Registered executable evidence for the surface-profile-overrides claim
- * (gat-07-public-claim-floor.json).
+ * (gat-07-exact-proof.public-claim-floor.json).
  *
  * The ACTUAL censuses come from `analyzeClaimSourceRecords` -- the same
  * checker-backed analyzer the GAT-07 gate uses -- never from the claim floor
@@ -28,7 +28,7 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
-const FLOOR = JSON.parse(readFileSync(join(CORE_ROOT, 'scripts/evidence/gat-07-exact-proof/gat-07-public-claim-floor.json'), 'utf8'));
+const FLOOR = JSON.parse(readFileSync(join(CORE_ROOT, 'scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.public-claim-floor.json'), 'utf8'));
 const CLAIM = FLOOR.claims.find((claim) => claim.id === 'surface-profile-overrides');
 
 const SOURCE_EXCLUDE_RE = /(?:^|\/)(?:tests?|__tests__|stories)(?:\/|$)|\.(?:test|spec|stories)\./;

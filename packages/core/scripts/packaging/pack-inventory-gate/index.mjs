@@ -10,10 +10,10 @@
 // lucide-tainted icon code -- with every other gate green.
 //
 // This gate snapshots the exact `npm pack --dry-run --json` file list + total
-// size into a committed baseline (pack-inventory.baseline.json) and enforces:
+// size into a committed baseline (pack-inventory-gate.baseline.json) and enforces:
 //
 //   1. Additions: a packed path that is neither in the baseline nor in the
-//      explicit-review pack-inventory.additions.json fails. New published
+//      explicit-review pack-inventory-gate.additions.json fails. New published
 //      surface must be a deliberate, reviewed act.
 //   2. Size ratchet (decrease-only): the total unpacked size and entry count
 //      may only shrink relative to the baseline. Growth fails; a genuine
@@ -47,9 +47,9 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRootDefault = findPackageRoot(scriptDir);
-const BASELINE_PATH = resolve(scriptDir, 'pack-inventory.baseline.json');
-const ADDITIONS_PATH = resolve(scriptDir, 'pack-inventory.additions.json');
-const LUCIDE_ALLOWLIST_PATH = resolve(scriptDir, 'pack-inventory.lucide-allowlist.json');
+const BASELINE_PATH = resolve(scriptDir, 'pack-inventory-gate.baseline.json');
+const ADDITIONS_PATH = resolve(scriptDir, 'pack-inventory-gate.additions.json');
+const LUCIDE_ALLOWLIST_PATH = resolve(scriptDir, 'pack-inventory-gate.lucide-allowlist.json');
 const FIXTURES_DIR_REL = 'src/tooling/testing/fixtures/brand-themes';
 const SEED_HINT =
   'Seed it after a clean build: pnpm --filter @rottay/design-system build && ' +
@@ -219,7 +219,7 @@ export function auditPackInventory({
     for (const { path } of pack.files) {
       if (!baselinePaths.has(path) && !additionsSet.has(path)) {
         failures.push(
-          `unexpected new packed entry (not in baseline, not in pack-inventory.additions.json): ${path}`,
+          `unexpected new packed entry (not in baseline, not in pack-inventory-gate.additions.json): ${path}`,
         );
       }
     }

@@ -69,7 +69,7 @@ export const CI_GATES = Object.freeze([
   { id: 'cra-17-integral', run: ['node', 'scripts/evidence/cra-17-integral-gate/index.mjs', '--structural'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
-  { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/engine/daisy-painted-classes/daisy-projection-contract.test.mjs'], blocking: true },
+  { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/engine/daisy-painted-classes/daisy-painted-classes.projection-contract.test.mjs'], blocking: true },
   // WO-CRA-23 quality tooling. These live under `scripts/quality-evidence/v2/`
   // and `scripts/quality-evidence/programs/modern-rescue/`. `test:scripts` now
   // globs `scripts/**/*.test.mjs` (recursive), which DOES reach every test
@@ -248,7 +248,7 @@ export const CI_GATES = Object.freeze([
   // manifest, capability registry, raw allowlist, expressive lists) plus a
   // PostCSS/TS-AST consumption scan; these gates keep it fresh, fully
   // classified, evidence-backed and decrease-only on dead writers.
-  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/tokens/customization-surface-census/customization-surface-gate.test.mjs', 'scripts/tokens/customization-surface-census/customization-census-classifier.test.mjs'], blocking: true },
+  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/tokens/customization-surface-census/customization-surface-census.surface-gate.test.mjs', 'scripts/tokens/customization-surface-census/customization-surface-census.classifier.test.mjs'], blocking: true },
   { id: 'customization-surface-freshness', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=freshness'], blocking: true },
   { id: 'customization-surface-classification', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=classification'], blocking: true },
   { id: 'customization-capability-consumers', run: ['node', 'scripts/tokens/customization-surface-census/index.mjs', '--check=capabilities'], blocking: true },
@@ -261,7 +261,7 @@ export const CI_GATES = Object.freeze([
   // Binding preservation correction: premium depth is preserved, never
   // cleaned away — 80/80 protos decided, dead writers classified by
   // provenance, Kimi-premium RETIRE unrepresentable.
-  { id: 'kimi-preservation-drill', run: ['node', '--test', 'scripts/tokens/kimi-preservation-manifest/kimi-preservation-gate.test.mjs'], blocking: true },
+  { id: 'kimi-preservation-drill', run: ['node', '--test', 'scripts/tokens/kimi-preservation-manifest/kimi-preservation-manifest.preservation-gate.test.mjs'], blocking: true },
   { id: 'kimi-preservation', run: ['node', 'scripts/tokens/kimi-preservation-manifest/index.mjs', '--check'], blocking: true },
 
   // FASE K (Codex 2026-08-02): every read the hook contract fences as

@@ -17,7 +17,7 @@
  *
  * The structural half of the projection is DaisyUI 5's own vocabulary
  * (`--radius-*`, `--size-*`, `--border`, `--depth`, `--noise`). The node gate
- * `scripts/daisy-projection-contract.test.mjs` enforces the same single-owner
+ * `scripts/engine/daisy-painted-classes/daisy-painted-classes.projection-contract.test.mjs` enforces the same single-owner
  * law across the whole source tree and pins the installed DaisyUI version;
  * the two must be changed together.
  */

@@ -51,10 +51,10 @@ export const DOCS_ROOT = resolve(
   process.env.DOCS_ENGINEERING_ROOT || join(WORKSPACE_ROOT, 'docs-engineering'),
 );
 const COMPONENTS = join(CORE_ROOT, 'src/ui');
-const CLAIM_FLOOR_PATH = join(HERE, 'gat-07-public-claim-floor.json');
-const CLAIM_DOC_ALLOWLIST_PATH = join(HERE, 'gat-07-doc-claim-allowlist.json');
-const DOCUMENTATION_SEAL_PATH = join(HERE, 'gat-07-documentation-seal.json');
-const STALE_CORPUS_PATH = join(HERE, 'gat-07-stale-corpus.json');
+const CLAIM_FLOOR_PATH = join(HERE, 'gat-07-exact-proof.public-claim-floor.json');
+const CLAIM_DOC_ALLOWLIST_PATH = join(HERE, 'gat-07-exact-proof.doc-claim-allowlist.json');
+const DOCUMENTATION_SEAL_PATH = join(HERE, 'gat-07-exact-proof.documentation-seal.json');
+const STALE_CORPUS_PATH = join(HERE, 'gat-07-exact-proof.stale-corpus.json');
 const BASELINE_PATH = join(HERE, '..', '..', 'engine/token-audit/token-audit.baseline.json');
 const AUDIT_PATH = join(HERE, '..', '..', 'engine/token-audit/index.mjs');
 const DATA_PART_DOC = join(
@@ -188,7 +188,7 @@ const SURFACE_PROFILE_OVERRIDE_CONSUMERS = Object.freeze([
   'src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx',
 ]);
 const SURFACE_PROFILE_OVERRIDE_ASSERTIONS = Object.freeze([
-  'scripts/evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs',
+  'scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.surface-profile-overrides.test.mjs',
   'src/ui/surfaces/tests/SurfacesLongTailBatch.contract.test.tsx',
 ]);
 /**

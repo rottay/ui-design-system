@@ -13,7 +13,7 @@
  * scoring as clean. A hand-list cannot be verified by reading it; the only
  * defence is to derive it, and to fail when the derivation stops matching.
  *
- * This is the same discipline `daisy-projection-contract.test.mjs` applies to
+ * This is the same discipline `daisy-painted-classes.projection-contract.test.mjs` applies to
  * the theme-variable contract: pin the version, derive the truth from the
  * package, and refuse to run when the version moves.
  *
@@ -86,7 +86,7 @@ export const MANIFEST_PATH = join(here, 'daisy-painted-classes.json');
  * the version it came from: moving the dependency without regenerating would
  * leave the ratchet measuring a vocabulary that no longer ships.
  *
- * Kept identical to `daisy-projection-contract.test.mjs`'s pin on purpose --
+ * Kept identical to `daisy-painted-classes.projection-contract.test.mjs`'s pin on purpose --
  * both contracts describe the same installed package, and one moving without
  * the other is itself a defect.
  */

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "ba6422524fdb023624ed1abca801e6e59fe15b7c28289bd1d692573bf0dd4bac",
+    "authorityDigest": "7e3bab14c79893a00014a629c7ab27b10d76bc901725105bc8654f5297b26383",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -100,7 +100,7 @@
     "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
   },
   "documentationAuthority": {
-    "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-documentation-seal.json",
+    "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.documentation-seal.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
     "documentationRevision": "d7203c08eb76f1011e1771a0088c07b50ed21569",
     "inspectedDocsMatchRevision": true,
@@ -269,7 +269,7 @@
         "sha256": "6280c459b549a8f45b2fa2e75c1b5682b69760f68bb2abe7b2623e2303671d7f"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-doc-claim-allowlist.json",
+        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.doc-claim-allowlist.json",
         "roles": [
           "audit-machinery",
           "claim-census"
@@ -278,7 +278,7 @@
         "sha256": "f972dde174d646212ec5b1f0b5316c6e7f641e0f582e875bb2d0317ac3988711"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-documentation-seal.json",
+        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.documentation-seal.json",
         "roles": [
           "audit-machinery",
           "documentation-seal"
@@ -287,16 +287,16 @@
         "sha256": "3a593c167fb99c1e3e4f849d8654cc6aa50006c662ccda5294cc73c682b97a31"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-public-claim-floor.json",
+        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.public-claim-floor.json",
         "roles": [
           "audit-machinery",
           "claim-census"
         ],
-        "bytes": 5955,
-        "sha256": "cd1317b3cfacde67bd88423d6c44b58a2c7451c3305eecd9d369a30e36b27cd0"
+        "bytes": 5974,
+        "sha256": "113372f36d2a26b67932c51a9ef159027e0bcb15fd55374867b08f9d45b8c19b"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-stale-corpus.json",
+        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.stale-corpus.json",
         "roles": [
           "audit-machinery",
           "stale-claim-corpus"
@@ -305,28 +305,28 @@
         "sha256": "59c72628db4776cd3b43820e25ddfe4cffcfa1e4f614b0ac04c554b509206373"
       },
       {
+        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.surface-profile-overrides.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 12322,
+        "sha256": "2c1554b2e25f2ec48d9b31cbae7aad066f282f6f7e1a67d418ca2a7b6677c6e1"
+      },
+      {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 62930,
-        "sha256": "9e71ba6fe0ea101d44ea6474c6da44ca17c4802ccf3ed168a5ce669c49fe3e55"
+        "bytes": 62997,
+        "sha256": "23fca51a5b03d090b8e4cc131f3e5266d7a7e0308d610c968f401b9a1fb34b9b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 99590,
-        "sha256": "fd72966d9f06dcdfb2e3e550a41f30df430130844c14908adb18052f322d1df6"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 12298,
-        "sha256": "9268884d007c1abad3dff29032f80ef9a24d34f3014e96f1ed1125642a21f543"
+        "bytes": 99602,
+        "sha256": "e4c0932d4121cc42450bccd3dfa00dea589806309dd8e84035834e213714a523"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/charts/access/index.ts",
@@ -16031,8 +16031,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 8432,
-        "sha256": "512e7f36e11712edaa58edd6745f273ea02f6eb3142d54147f59bc0f767694d4"
+        "bytes": 8477,
+        "sha256": "a49c8d39acd417db23741ffa7e7e5671f17077f74637ce7116010d5fadac0983"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/testing/tests/public-api.contract.test.ts",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "ba6422524fdb023624ed1abca801e6e59fe15b7c28289bd1d692573bf0dd4bac"
+    "digest": "7e3bab14c79893a00014a629c7ab27b10d76bc901725105bc8654f5297b26383"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -40602,7 +40602,7 @@
             "src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx"
           ],
           "executableAssertions": [
-            "scripts/evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs",
+            "scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.surface-profile-overrides.test.mjs",
             "src/ui/surfaces/tests/SurfacesLongTailBatch.contract.test.tsx"
           ],
           "deferredOwner": {
@@ -41728,7 +41728,7 @@
     },
     "documentation": {
       "allowlist": {
-        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-doc-claim-allowlist.json",
+        "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.doc-claim-allowlist.json",
         "sha256": "f972dde174d646212ec5b1f0b5316c6e7f641e0f582e875bb2d0317ac3988711"
       },
       "documents": {
@@ -113817,7 +113817,7 @@
   },
   "staleClaimGates": {
     "corpus": {
-      "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-stale-corpus.json",
+      "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.stale-corpus.json",
       "sha256": "59c72628db4776cd3b43820e25ddfe4cffcfa1e4f614b0ac04c554b509206373",
       "typescriptRoots": [
         {
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b8dac44f74d02221792385489f821e106ef6de4a01c5e50ce91c3582ca41b071",
-      "b8dac44f74d02221792385489f821e106ef6de4a01c5e50ce91c3582ca41b071"
+      "7d719968e9f7291086daa35ae2cc0e3d93e81c18a4268aa0c3616b7009907855",
+      "7d719968e9f7291086daa35ae2cc0e3d93e81c18a4268aa0c3616b7009907855"
     ],
     "agree": true
   }

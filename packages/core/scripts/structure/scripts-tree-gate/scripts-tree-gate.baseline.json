@@ -1,107 +1,27 @@
 {
   "schemaVersion": 1,
-  "law": "ARCHITECTURE §1.2/§2.9 — todo el arbol scripts/ es <familia>/<capability>/index.mjs; sidecars con el basename del dueño",
-  "policy": "decrease-only: una entrada nueva exige adjudicacion con razon; una entrada stale rompe el gate hasta que el baseline se achica (§1.2)",
+  "law": "ARCHITECTURE \u00a71.2/\u00a72.9 \u2014 todo el arbol scripts/ es <familia>/<capability>/index.mjs; sidecars con el basename del due\u00f1o",
+  "policy": "decrease-only: una entrada nueva exige adjudicacion con razon; una entrada stale rompe el gate hasta que el baseline se achica (\u00a71.2)",
   "entries": [
     {
       "rule": "R3-foreign-file",
-      "path": "ci/gates-manifest/ci-gates-manifest-flags.test.mjs",
-      "reason": "test del drill de flags del manifiesto; nombre historico — Paso C alinea nombres de tests satellite"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "ci/red-inventory-gate/red-inventory.json",
-      "reason": "inventario de gates rojos del gate; nombre corto historico sellado — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "engine/daisy-painted-classes/daisy-projection-contract.test.mjs",
-      "reason": "test-ley del contrato de proyeccion daisy; nombre historico — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "evidence/gat-07-exact-proof/gat-07-doc-claim-allowlist.json",
-      "reason": "allowlist sellada de GAT-07; hash seals leen ese path — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "evidence/gat-07-exact-proof/gat-07-documentation-seal.json",
-      "reason": "sello documental de GAT-07 — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "evidence/gat-07-exact-proof/gat-07-public-claim-floor.json",
-      "reason": "piso de claims publicos sellado — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "evidence/gat-07-exact-proof/gat-07-stale-corpus.json",
-      "reason": "corpus stale sellado — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "evidence/gat-07-exact-proof/surface-profile-overrides.test.mjs",
-      "reason": "suite de overrides de surface profile, nombre historico — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "evidence/gat-09-full-claim-integrity/gat-09-public-claim-evidence.json",
-      "reason": "evidencia sellada de GAT-09 — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "packaging/pack-inventory-gate/pack-inventory.additions.json",
-      "reason": "adiciones selladas del pack inventory — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "packaging/pack-inventory-gate/pack-inventory.baseline.json",
-      "reason": "baseline sellado del pack inventory — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "packaging/pack-inventory-gate/pack-inventory.lucide-allowlist.json",
-      "reason": "allowlist lucide sellada — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "tokens/customization-surface-census/customization-census-classifier.test.mjs",
-      "reason": "suite del clasificador del censo, nombre historico — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "tokens/customization-surface-census/customization-dead-writers.baseline.json",
-      "reason": "baseline dead-writers (decrease-only) — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "tokens/customization-surface-census/customization-surface-gate.test.mjs",
-      "reason": "suite del gate de superficie, nombre historico — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
       "path": "tokens/customization-surface-census/customization-surface-report.json",
-      "reason": "artefacto nombrado del censo (reporte derivado pineado por digest); re-alojado en G2 con su nombre registrado — Paso C decide la forma corta"
+      "reason": "artefacto con nombre propio registrado; no se acorta (adjudicado C2)"
     },
     {
       "rule": "R3-foreign-file",
       "path": "tokens/kimi-preservation-manifest/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json",
-      "reason": "manifiesto de preservacion KIMI, artefacto nombrado (G2); lo leen 3 contratos de modern-rescue — Paso C"
-    },
-    {
-      "rule": "R3-foreign-file",
-      "path": "tokens/kimi-preservation-manifest/kimi-preservation-gate.test.mjs",
-      "reason": "suite del gate de preservacion, nombre historico — Paso C"
+      "reason": "artefacto con nombre propio registrado; no se acorta (adjudicado C2)"
     },
     {
       "rule": "R3-foreign-file",
       "path": "tokens/kimi-worklist-gate/KIMI-VISUAL-WORKLIST.json",
-      "reason": "worklist visual KIMI, artefacto nombrado re-alojado desde la raiz del paquete en el cierre de F0.5 (Fable H3) — Paso C decide la forma corta"
+      "reason": "artefacto con nombre propio registrado; no se acorta (adjudicado C2)"
     },
     {
       "rule": "R3-foreign-file",
       "path": "tokens/catalog/customization-reconciliation.json",
-      "reason": "proyeccion versionada curada a mano (su generatedBy nombra a tokens-catalog); re-alojada en G2 — Paso C"
+      "reason": "artefacto con nombre propio registrado; no se acorta (adjudicado C2)"
     }
   ]
 }

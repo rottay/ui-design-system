@@ -45,7 +45,7 @@
 // it must keep working after the npm dependency is eventually dropped -- which
 // is precisely when a silent reintroduction would be hardest to notice. The
 // vocabulary below was DERIVED from daisyui@5.5.19 (the version pinned by
-// `daisy-painted-classes.mjs` and `daisy-projection-contract.test.mjs`) by
+// `daisy-painted-classes.mjs` and `daisy-painted-classes.projection-contract.test.mjs`) by
 // harvesting every custom property declared under the package's `components/`,
 // `utilities/` and `base/` trees, then subtracting names that Tailwind or
 // first-party DS CSS also declares.
@@ -141,7 +141,7 @@ const DAISY_PRIVATE_VARIABLES = [
 /**
  * The framework theme vocabulary the DS projects from canonical `--ds-*`
  * tokens. Identical to `SUPPORTED_THEME_VARIABLES` in
- * `daisy-projection-contract.test.mjs`, which asserts the same rule over the
+ * `daisy-painted-classes.projection-contract.test.mjs`, which asserts the same rule over the
  * SOURCE; this gate asserts it over the shipped bytes.
  */
 const PROJECTED_THEME_VARIABLES = [
