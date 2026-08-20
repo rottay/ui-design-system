@@ -1095,7 +1095,8 @@
             "--ds-surface-card"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1125,7 +1126,8 @@
             "--ds-type-numeric-font-variant-numeric"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1155,7 +1157,8 @@
             "--ds-font-family-mono"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1323,7 +1326,8 @@
           }
         ],
         "remediatedFrom": "dedup2-grupoB",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

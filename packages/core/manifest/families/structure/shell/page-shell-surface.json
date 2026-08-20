@@ -147,7 +147,8 @@
             "VERIFICADO SIN PINTURA PROPIA (FAM-16, punto 3): el tsx pinta solo ds-engine-modern (sello de engine, global) y ds-vt-page-body (clase de view-transition); ningun css de ninguno de los dos arboles la estiliza como skin dedicado - superficie de composicion pura"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -171,7 +172,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -195,7 +197,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -219,7 +222,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {

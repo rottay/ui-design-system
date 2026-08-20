@@ -8643,7 +8643,8 @@
             "--ds-type-numeric-font-variant-numeric"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -8865,7 +8866,8 @@
           }
         ],
         "remediatedFrom": "dedup2-grupoB",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

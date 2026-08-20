@@ -625,7 +625,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -655,7 +656,8 @@
             "--ds-font-size-sm"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -690,7 +692,8 @@
             ]
           }
         ],
-        "remediatedFrom": "dedup2-grupoB"
+        "remediatedFrom": "dedup2-grupoB",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -888,7 +891,8 @@
           }
         ],
         "remediatedFrom": "dedup2-grupoB",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

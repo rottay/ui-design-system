@@ -5487,7 +5487,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -5511,7 +5512,8 @@
             "why": "debe reflejarse sin socket propio",
             "noSocketReason": "via canales compartidos, sin socket de familia"
           }
-        ]
+        ],
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -5543,7 +5545,8 @@
             "--ds-font-size-xs"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {

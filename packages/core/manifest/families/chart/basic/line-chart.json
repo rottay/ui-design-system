@@ -2697,7 +2697,8 @@
           ]
         },
         "reviewedFrom": "anatomy",
-        "remediatedFrom": "grupoA-charts"
+        "remediatedFrom": "grupoA-charts",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2929,7 +2930,8 @@
           }
         ],
         "remediatedFrom": "grupoA-charts",
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
