@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "0ecb5bc0adb24fa9c86f42976227863cb5c468cb1f1a2c5e1dae7e4d1eb35671",
+    "authorityDigest": "bb0f107f8e71ed8ad89655874764e177b082a77955cf06a7f6cf3b9e92c08f6b",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 48175,
-        "sha256": "e6461da3343fd2357d23086ee2c0e5767e8130ead74eb19381c39ae480016ed4"
+        "bytes": 48209,
+        "sha256": "1b9d3544181b5a45936c7ddb7ab02ca5bdb1c00c87742a6457754cd48f54ec83"
       },
       {
         "path": "ui-design-system/packages/core/scripts/analyze-bundle.mjs",
@@ -1105,22 +1105,6 @@
         "sha256": "fe5fbbf2408698112f3114a3b3001f786fcda0692f7658afa35c7761a51fff87"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/generate-semantic-icons.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 33633,
-        "sha256": "c46ae19da0cf3c21235a1821a4e62dc4bd7cc47a8c3f0256d81b735a200e352d"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/generate-semantic-icons.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 15291,
-        "sha256": "835714dfcfa69679fdf376010126893fb62c73e19f7b04a1255512df2e8295c5"
-      },
-      {
         "path": "ui-design-system/packages/core/scripts/generate-supplier-contract.mjs",
         "roles": [
           "audit-machinery"
@@ -1135,6 +1119,22 @@
         ],
         "bytes": 9390,
         "sha256": "22464595fdb42b2c0959453cabeb7e6a07db6c676af4e8a58af687f3fdc1b78f"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/generators/generate-semantic-icons/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 33671,
+        "sha256": "883460a0035c659278c2bd480644f7e9415bc55b9acab95f8ee99acf9cba3ef1"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/generators/generate-semantic-icons/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 15277,
+        "sha256": "62df9b465b42d6e7eb74e795873101c509d69090631ec16d1f1684a19b137845"
       },
       {
         "path": "ui-design-system/packages/core/scripts/generators/generate-surface-capability-census/index.mjs",
@@ -12992,8 +12992,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 78358,
-        "sha256": "c2bcfeac27f15dc53c6c7ca62ecbc9bc4ef23f12a60c60601799a5a7b4d5fe54"
+        "bytes": 78375,
+        "sha256": "fe36439869c33264f79e6a8c4e5237652a1e90d991afb085873b6420ed4f920d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/foundation/semantic/corpus/manifest.json",
@@ -13230,8 +13230,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1224,
-        "sha256": "67c6f606986a67d3a522ee05769f60ac53b5c0703a6c0f55ed32b66a3bc5f020"
+        "bytes": 1241,
+        "sha256": "b0d21d2b7e0d5a03be3514e0eb6ba34fddef627c6843c61b9af4e7dc3b43739a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/index.ts",
@@ -13240,8 +13240,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 155,
-        "sha256": "d4a94661f97564179148bec434e55fe2b9bfecb8101e84162a2f41b68d1caa4a"
+        "bytes": 172,
+        "sha256": "f1e63f66d53fe0fa902f647685030efe7d4a182815f3095aa1704c9aa2316a16"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/packs/bithire.tsx",
@@ -13250,8 +13250,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1921,
-        "sha256": "20107b195f5a22edf750a6505be3f4f1829420a395d5ef9ed7cffbaced23d27a"
+        "bytes": 1938,
+        "sha256": "bfd729ef9cba1448a2fbdb043adec2693e4cc8982e69297dc197746f2710a839"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/packs/foundation.tsx",
@@ -13260,8 +13260,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17930,
-        "sha256": "2dc8737272ca3dc77837c3597cb8d9295013bfbdcd581c6a24ed8504d57b2cf2"
+        "bytes": 17947,
+        "sha256": "5e6d806bb3f8653d6a48ad1ca9221bfcf56aae0960037fda0c5f45c2becdda72"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/packs/identity.tsx",
@@ -13270,8 +13270,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7436,
-        "sha256": "cb568b724f99603e5076df0096fbbee0eaffdb17beb605504afaf36d546fc44f"
+        "bytes": 7453,
+        "sha256": "027aceff0efd7306a1c395bd02ddc66ff479df7498d0a8d4e3115d8e59ae4f69"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/packs/index.ts",
@@ -13280,8 +13280,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 214,
-        "sha256": "e628654ce6b686c9e32e30f544f3c83b9c0781fb6af2e938236531d4a7015cb9"
+        "bytes": 231,
+        "sha256": "a2f9d1891070095ede778bfae320e6b10f5c908f02ef1ee31035bad1fedba644"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/packs/intelligence.tsx",
@@ -13290,8 +13290,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6666,
-        "sha256": "8fd23ca564ea27d1ecc7814da817c98796dbcfadac781375bcc8ff9ed0c78479"
+        "bytes": 6683,
+        "sha256": "a95dde685d2caaa14bc3d201fa3d898333e90d74c87bf0316539d0ca7d4da4f7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/packs/operations.tsx",
@@ -13300,8 +13300,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7212,
-        "sha256": "5449b285e84c8e4caf07b7ac5c84a57e463dbf50e1d8f34a5f37bbf86e445bca"
+        "bytes": 7229,
+        "sha256": "b961360a14f47280a64b42407ea0826869412d9198dcc2261ca30194cf9538a2"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/presets/bithire/index.tsx",
@@ -13310,8 +13310,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 14319,
-        "sha256": "df50bbda29197214ac737a727adb2ebc2eb02c58dda398299a01f787df22fc9d"
+        "bytes": 14336,
+        "sha256": "a0000e21b7bf3c00763f39e0faf90d5825239feeb79c498d1b49572903bf0156"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-admin.ts",
@@ -13320,8 +13320,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 506,
-        "sha256": "a2e11d46381aede119507c6f853fd67d5d2b61f324024a45d5008a30b6abcd63"
+        "bytes": 523,
+        "sha256": "7f49ee68e480cabac1353530305b87eadcb791ea32f5dd68675b6980e3f9ca03"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-api-key.ts",
@@ -13330,8 +13330,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 479,
-        "sha256": "7d86a5947c0e25598a544f1c6c7ac3b0163f4f9f886c430f3d497cc4763ba260"
+        "bytes": 496,
+        "sha256": "b21d4bddf09c8251470e2ab90efbde07a9e3f3dfd8f44f14ceae800e583f3619"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-denied.ts",
@@ -13340,8 +13340,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 529,
-        "sha256": "e8cc24938c5062d96dbef0fe0a77f6b037eead8600fbbe9ae30490a65cd63b76"
+        "bytes": 546,
+        "sha256": "6dd72f135af16f6674e077c2a86ae8af33ffc7934a22769486fa6513753b4a85"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-granted.ts",
@@ -13350,8 +13350,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 514,
-        "sha256": "a4a3c7ed23983ffec1e740706284e27a520a7e91cf5cad8f7c7547def87a4a48"
+        "bytes": 531,
+        "sha256": "d9d0a10f4d9cd3ec3578892b204f3df684746690f5ffb1342d227719fe566319"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-key.ts",
@@ -13360,8 +13360,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 471,
-        "sha256": "2d8f104c794a877d4c24a7c8f7ce19a80202fbff9828c427a01d3247902e3bdc"
+        "bytes": 488,
+        "sha256": "2bc34f02916d51232933651d60a208e73d44fa2761eafdb4bd26df79632aae88"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-login.ts",
@@ -13370,8 +13370,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "fd9f0620ffabc5422de4aaae09f1faffa45e10de48ce8adea8e7269e303726d2"
+        "bytes": 498,
+        "sha256": "3a06c792295d693994b413f71b0fec80cb4a56d62059cd74b2fc70741c33b9c2"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-logout.ts",
@@ -13380,8 +13380,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "41b154ce6ea428738ddce6c7ec460cb96c0a48752b0d028111f15ac635967033"
+        "bytes": 513,
+        "sha256": "d8f719220bfbf54a27f84655f16e07d097d2fc90e9498a5fdc062fa804cea824"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-permission.ts",
@@ -13390,8 +13390,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 503,
-        "sha256": "7df9ef6ac1a426effc3a4f79c7e75302d677c05fc8659dc39a2b6ec6f80b345e"
+        "bytes": 520,
+        "sha256": "1522c2be13afd5f9680e5147729b129e0a858d0d21fa4a3fb4ef79156e68a6a3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-policy.ts",
@@ -13400,8 +13400,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 479,
-        "sha256": "096e14c8aff495d0838423e40c49532e0fef25f9abdcd25ab48622f7b1393140"
+        "bytes": 496,
+        "sha256": "2e089a814180ed3bb7bb7751724b0757c7f3ae3bb0039c91977bff2f70b36bd7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/access-role.ts",
@@ -13410,8 +13410,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "1652ca4e835925742380cf9e576650bd740baeb7e5f762121ddf2098df696a40"
+        "bytes": 506,
+        "sha256": "9f75d950a1a0ffcb99fe8443c33465b79af9bb6df44e5a67f416ea9cd086b11b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-add.ts",
@@ -13420,8 +13420,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 455,
-        "sha256": "a105a64f8b70f25c4124d1713a8e3cf4c6424ca106de0593dbf0e5d5b0a33cdc"
+        "bytes": 472,
+        "sha256": "9296f58f8a332e35f6e719bb989ebfb9c3ad23096b635afb229b772f0e814abf"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-archive.ts",
@@ -13430,8 +13430,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "da1b34b2e601cef309be128b588aee7e78234d45320c43b67437e9ac67fbe9f2"
+        "bytes": 521,
+        "sha256": "61650bde663b9d08a15bdb7ee233f52dc676b066fd8d764136aa6e85ffd49dcc"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-attach.ts",
@@ -13440,8 +13440,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 475,
-        "sha256": "55085ce017d382c1e676d355f86d6e41f0fca3eebe4ca6690a5f62d03ecaaee7"
+        "bytes": 492,
+        "sha256": "78d3290f53d2cd9eef521ce62c6e3269057c3d19a91fb4d087f67ed7bdcbc633"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-close.ts",
@@ -13450,8 +13450,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 486,
-        "sha256": "24a4c532acbb442522e86a68624549704325b146e51ade6f2953c8d5f7005a79"
+        "bytes": 503,
+        "sha256": "87cedd39c840029df43059131f01da54aa7820259fa94370fe8458a658e48795"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-conceal.ts",
@@ -13460,8 +13460,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 501,
-        "sha256": "e00910ec11aa0d206ba1999ebd5161f07fcf67f5997d87910c9a983d29acf602"
+        "bytes": 518,
+        "sha256": "65798fe7ed8eda0c71cb900a2aea187088c605c5170f0238614bbdb42e89685c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-confirm.ts",
@@ -13470,8 +13470,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "ee4eda4a9f6036689530d79b6386f25af913e36494d15385e58eaa59019b1941"
+        "bytes": 498,
+        "sha256": "8765ee5b08407bf5ebfa250e332e209e88f466e59ca57b891923420c7b12b516"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-copy.ts",
@@ -13480,8 +13480,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "072fd7a369235f378a09769bf9a7a43c542da296e1094a8bb6cb699f037ae943"
+        "bytes": 498,
+        "sha256": "ffa2b5b6460d0e1fbe33d8bd4a50770d9b53baa4886747ff8570ce636079fbbf"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-delete.ts",
@@ -13490,8 +13490,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 468,
-        "sha256": "3ebb57966b366bd00716626ada44a322b62472ad02f13647969a3bc990c3f0e7"
+        "bytes": 485,
+        "sha256": "16f865ef1eda8da5cbd57c4078b950528914142572aa9e74f87fc1b6c3fd8eb3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-download.ts",
@@ -13500,8 +13500,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "7b100d51f9f7138a80a15866c88b56cbd6c16cb17345f5ce35e42869e8e137b3"
+        "bytes": 521,
+        "sha256": "a7d95e690a25fc89bf6eeae791ffc0ae81709b11dad951a0dd789b5e9f87ff8a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-edit.ts",
@@ -13510,8 +13510,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 471,
-        "sha256": "ab6c3a10498afcc60db43728cfa35d4dcd79c56f623f4293c2e1399d3317f9ac"
+        "bytes": 488,
+        "sha256": "edcaa533c9fe31c88fa5dc51682fdc146560d8d980fb665d329b09135502d0ad"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-filter.ts",
@@ -13520,8 +13520,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "8a2013aebecf838ebbf7f404cadd6fb9b32ea70d00d750f9a808e6e3755b972c"
+        "bytes": 498,
+        "sha256": "ca62366fcb025df441ff700435cc306979b0a15f8f5a0d9b0d41e371c487d00c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-focus.ts",
@@ -13530,8 +13530,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 515,
-        "sha256": "18ca17f3e6f55e600e92ef759ab0d6d945d25613fb580152c574618951573d22"
+        "bytes": 532,
+        "sha256": "8a9d8fe91d9886f02d171b555488c79f0c56ea6cbd0adaa7aea35bc4be9effa8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-open-external.ts",
@@ -13540,8 +13540,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 544,
-        "sha256": "b4580ca673f7f3f2e99f45cbd960f272a0a68347d51825972f33ee22ca7c6978"
+        "bytes": 561,
+        "sha256": "a3b9df106fdc712d103d96ae90eee740f2fcf59c89a3557244c988f349007bba"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-pause.ts",
@@ -13550,8 +13550,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 475,
-        "sha256": "49fe98ae22c4ee1dac6b601b1894a4aac0b4da969e8b2d7be2b193a1631b5717"
+        "bytes": 492,
+        "sha256": "e6925078a139e079bfdf09d44a5749df2527274d18a0f676dc99b7d6bfb55ad0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-play.ts",
@@ -13560,8 +13560,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 475,
-        "sha256": "5560d16558633c974c6d3957fbfd9e20cda14a2d87976fee7e22623657934579"
+        "bytes": 492,
+        "sha256": "90b36c853e3da00742b9a0b87dbcbf4a28c08806c30c0a4bc445e59e9ea2b584"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-print.ts",
@@ -13570,8 +13570,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 465,
-        "sha256": "0bf05a542bbc3d5773c990a4cd0bb5749fd48e8d0a24e2c8d57e3b2447fd60a1"
+        "bytes": 482,
+        "sha256": "862d0e1d800b5b1370376289be1f8aaa904ed82619043072bcb6c0baa6f97e75"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-redo.ts",
@@ -13580,8 +13580,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "62b8756756fb3b015b9a54d718100771f14410becf78fa71ea4a88819a018c5d"
+        "bytes": 505,
+        "sha256": "390ccc28bd36894962ab093d5917f41478147887b5ad63beb177f2db74fcdc64"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-refresh.ts",
@@ -13590,8 +13590,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "b212f71c1cbfa0213d08fbbfe35fc92ee89ba824514e91987e27c8b9b99f2e23"
+        "bytes": 521,
+        "sha256": "c7b6c680a553435266517c246df030387d42e2f5ca78d991bb21e81e70f529f8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-reorder.ts",
@@ -13600,8 +13600,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 517,
-        "sha256": "4ca96e434b43a29f115da0ca7e1c96b0e40fba90982792b0a9bba3640148667e"
+        "bytes": 534,
+        "sha256": "9c051eb8243339207e69d694f1d1ea86c2904f837dfdd0c3a33953dd23feb5e9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-retry.ts",
@@ -13610,8 +13610,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 484,
-        "sha256": "ba920a7e2a50a87c47ce28cb503d89553bb964234af9a01b9668870161f1f622"
+        "bytes": 501,
+        "sha256": "233d20d589c5d7cf8af19af14fa7f5a62107165b2a580cdc6a91a61150e27b6d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-reveal.ts",
@@ -13620,8 +13620,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "e3babda890453133504f228842b4cfcc420720fd30efc310d62adc73b5b1a268"
+        "bytes": 505,
+        "sha256": "a7bf75691d8eb5f151b8b50bcee1ad1a81a22661b740126fccdc4b08bf78aa1f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-save.ts",
@@ -13630,8 +13630,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 471,
-        "sha256": "cc81a8e149a1e935f39006f4d289acc50536534832bc709f80d82ea4f4f0b5d6"
+        "bytes": 488,
+        "sha256": "b32b33433df6ce799884b528cc6741c14e3608771e4a2b57fa6d459558669268"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-search.ts",
@@ -13640,8 +13640,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "e05d3b56f080a5f6f45d154f185927125e987131d3e8c2503dc4c76aea6d6a19"
+        "bytes": 505,
+        "sha256": "fab1ba2f8ea2f4a872e549d5cc4a839cc10a6e0657dbfa7bc51b3a986a5050f0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-share.ts",
@@ -13650,8 +13650,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "a14a6d86030f183ab3e71e3ee3d8e20f24a58bb849c016bbdf1fef13654b4aa1"
+        "bytes": 513,
+        "sha256": "f6441ae2cf75d6f0f2b9fc47721203573380adb9fcbdffe48927f182ae35b864"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-sort.ts",
@@ -13660,8 +13660,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "794ca0afe2c73df14993dbb8bf315eb2e83e084ef0046f607e8172df4eebbf36"
+        "bytes": 522,
+        "sha256": "d97824c78ad4791269fc87bcba596da413da6b69a53cc55d5d1fcdf1c659d767"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-stop.ts",
@@ -13670,8 +13670,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 478,
-        "sha256": "b69dfa0d7ba010b61d9e8a202614ee25df06ef42074e8515dc6492c9305b3d3d"
+        "bytes": 495,
+        "sha256": "14ba250bf6681f8140353b7a977f573c3011e56eea15bc1f0f325fda64e59d4b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-undo.ts",
@@ -13680,8 +13680,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "73a4c655f990ed534bdca2a2746435fa41da57d14a3c8857532e14ae43ddc62d"
+        "bytes": 505,
+        "sha256": "a7a5c1cd3f8f45821f137f8a3b8a746e82b231c5649fe6c462d21272988d718a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-upload.ts",
@@ -13690,8 +13690,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 499,
-        "sha256": "337051abb68646535b37f3a37bb74d28e62792c5f64ddbbdd4f4306a6d437f60"
+        "bytes": 516,
+        "sha256": "731d098996cce3b28f9dc9666a6b44ebf31dd8d0d7256017628541a4198bbc6e"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-vote.ts",
@@ -13700,8 +13700,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 476,
-        "sha256": "4d23fc849f5d2293c08f446d8ad0384394b5b94dd3af98bc821069d054917977"
+        "bytes": 493,
+        "sha256": "f526f2c903f722c34db19294f0f7b7c7fdd64a9e45e4a08b2eac4b44422fb8b9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-zoom-in.ts",
@@ -13710,8 +13710,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "3292d0783b9f701f185af688842daa2295ff3f4f3e55ab7b1a9436e893ad305a"
+        "bytes": 535,
+        "sha256": "a32f4a3707f23c81a51164d8766cd2364782f50ca3caaad35f7916911f35c072"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/action-zoom-out.ts",
@@ -13720,8 +13720,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 524,
-        "sha256": "7fd7c34ad6e7450fbb4255aa4bc8ef8819590e4b80dbd32fe6b2ae51143176e5"
+        "bytes": 541,
+        "sha256": "df1fbd8e0e621c6020539e6ccbd79088db6e2225fb4a7e13254a528f64fc562d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-agent.ts",
@@ -13730,8 +13730,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 486,
-        "sha256": "bc1dd2c24cce97cae2bd089b6b0b8f8ac872d2ec723d00de5f4fad4bc113e373"
+        "bytes": 503,
+        "sha256": "473221f70f147de27b668b3c026d249bfbbe359ee1fb71012ff8f2d10cc28583"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-anomaly.ts",
@@ -13740,8 +13740,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 508,
-        "sha256": "a9cbc02dcd1490c5ae47c0229a80b9933af431d9a11e4a7c319b167b2c6ade5d"
+        "bytes": 525,
+        "sha256": "9761be45124eceb52a0e48326e438f0f0a88e3e66fb28c728cb50eed832d0d9f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-assistant.ts",
@@ -13750,8 +13750,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 472,
-        "sha256": "81de5265768ed3956c9f7b66de60577c08231a3415d5b3cc355263f1851f3b99"
+        "bytes": 489,
+        "sha256": "c13c60f9ffd67f75a834a3c7548d1ca7982e30c51dd0a21a53b0dbaeaf25dfd3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-compute.ts",
@@ -13760,8 +13760,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 482,
-        "sha256": "1bcb7b23f59d9faec23c55c5e7cc979943bfb6bbd5f31923b1602219d37c24dc"
+        "bytes": 499,
+        "sha256": "bc5255a48b26e8e9a0e89030d64335b226e9ccaad4b895f91bf02d3f0c451415"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-embedding.ts",
@@ -13770,8 +13770,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 500,
-        "sha256": "d6570c76edd7d4a3b1d522cc278739119419e8857502c5a410493dc591c65b97"
+        "bytes": 517,
+        "sha256": "5f6016f241fdc4b11dc0a5fe3b3d6309197ad00e36cbb4e03aac0ce6fda551b6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-evaluation.ts",
@@ -13780,8 +13780,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 494,
-        "sha256": "c423e67a439ea47224ad8410345a8f7511b85483f753d1ca9b51169ae1b28423"
+        "bytes": 511,
+        "sha256": "a4633bfed86d24642a57365e0090991b1862949a781859aa8fa67f5350551e51"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-experiment.ts",
@@ -13790,8 +13790,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 483,
-        "sha256": "152d9803656781739f8b12421c739a60c71a55d99e17b590478935d9ef2172f8"
+        "bytes": 500,
+        "sha256": "ab2ef3d3d32b6038168c7579c7476b63d72deec3094e4d6a473520593cbca43f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-feedback.ts",
@@ -13800,8 +13800,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "07f921a8af096e379283c8ec25c593b7fddecd87a681704888bb1bb5d4566151"
+        "bytes": 506,
+        "sha256": "13353c69ab1f8d27e10b3b53411f20983d8a513009872a8e6910b813883f279a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-generate.ts",
@@ -13810,8 +13810,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "11cbb74fb2d5581f4f21b992a5419e01e5b05b66a42d1e1ee00dacfd460d5540"
+        "bytes": 498,
+        "sha256": "6e3d785f8be582b5bb1fb45fabc91ae7d847cc3de23e57b61b739a3c99d3a369"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-guardrail.ts",
@@ -13820,8 +13820,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 516,
-        "sha256": "1c987155463b5ad5b63cd618fdaaba5807a09a9916f8d06943d22fd0adbd7d4c"
+        "bytes": 533,
+        "sha256": "75d13d1d0b559cf6f7074988c4b7216e68b80ac341a217e2f7cb34bea8de06c9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-model.ts",
@@ -13830,8 +13830,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 468,
-        "sha256": "f3eac57ce2eaa76d4480d580b19e30a58fe6a72ce4a8767e4f24e77aaf5efa0a"
+        "bytes": 485,
+        "sha256": "db838615523261e602b7ee3cc48bdf5f047bd6867812bf771c5a224cb323a11d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-prediction.ts",
@@ -13840,8 +13840,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "fb22f629a6db3e4ffa5218e48222d514705fd656e1692897801722b4f63a29ba"
+        "bytes": 513,
+        "sha256": "fd907b9fd8a0c2f2330d4f75de794a8408ba6abf6859cde0c4495283ad87ad7b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-prompt.ts",
@@ -13850,8 +13850,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 476,
-        "sha256": "6f0fd9e2f6c97b31cbedcf18708744913bf52bdb893a7890c81b7ab76e03fab3"
+        "bytes": 493,
+        "sha256": "617d7c7f5e43d9ee4934ed9c43afc38d39e39bd9d92abe058cb8fe721fff6667"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-reasoning.ts",
@@ -13860,8 +13860,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 473,
-        "sha256": "680a5e040b08e7915eb361526bec46f82841516c97ab914a4d090add9ddd5895"
+        "bytes": 490,
+        "sha256": "4be3474ce4144058b8ce40802465e5cb650420f54b95e6785a7714488cdf5b5a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-recommendation.ts",
@@ -13870,8 +13870,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 545,
-        "sha256": "2fd7f7e7b509d946f17da4fffd574ced3fb8c92f15c539cda937cb1beea5160c"
+        "bytes": 562,
+        "sha256": "65d111a019e54084829b1bd39831b634a849531221fb6403c878cafd5b546348"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-response.ts",
@@ -13880,8 +13880,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 502,
-        "sha256": "f3c6ba543e883d575f56df45cc03851adfc0fc1e23798846d9465991255c7f71"
+        "bytes": 519,
+        "sha256": "cce7bce86dd2d9369e7589ae154a90c98c79ad049726c45158c4f8af0c7c26d4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-sparkles.ts",
@@ -13890,8 +13890,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 476,
-        "sha256": "613aab53819389fda9a98fea1bb4bd841f85a6b24b37b4b61c1e96fe79dbf27b"
+        "bytes": 493,
+        "sha256": "e37a01d33b4a0de38c396c9a77000dccf2bbea1359dc2db2fa3c3b5d8becad5c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-speech.ts",
@@ -13900,8 +13900,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "ddff9c13b8a80bb5a6c6fc30681a8bffe416e8fe2681c18e6c000a1420737c5e"
+        "bytes": 510,
+        "sha256": "27e68c0a60bafb337035e28b2882c33fb5c9755def496d7564ab6097749a9afa"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-tool.ts",
@@ -13910,8 +13910,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 462,
-        "sha256": "82362a2e5f29ae2350cf310eb191e45aeececb3da2c78853f1300faffa069a4e"
+        "bytes": 479,
+        "sha256": "59d045167b0d186dcef2f7827a85c3c639d9501cef60397ac390d50e1b17ccf1"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-training.ts",
@@ -13920,8 +13920,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "3f851270d1a16fd7aa4956539d4144f54370a4766d4d5e905526fa6a3591d3a5"
+        "bytes": 506,
+        "sha256": "50edddb65071e5ce89e9cbbb5f0b4e10659384cdd9bc048fdb44901ecd1cc8dd"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/ai-vision.ts",
@@ -13930,8 +13930,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 473,
-        "sha256": "efcbebba1f7c90f213fc261f96281417044e6047d80c38eadca1949b4af36e8f"
+        "bytes": 490,
+        "sha256": "acea4a8898c6fe5e7c4a0730a8fc561ab5a02ac035f63301567c83b325c6f06c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-activity.ts",
@@ -13940,8 +13940,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 524,
-        "sha256": "7d19a349cff9aa17198806fdfb1e3a14eca24e06feddb6087ef9c97070d595ad"
+        "bytes": 541,
+        "sha256": "b512b20526997fee0cae02ae791b24f81a5b93a052fda21d6c036762f71eb70a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-area.ts",
@@ -13950,8 +13950,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "7c09bbced011d538b015ffb4a740127bc3607608c050fe4dc9edac7a8201381b"
+        "bytes": 510,
+        "sha256": "c0d4108b0caec2a59bfb4aeca4fb93e5b5df1577c80737ff5aa46d61493220cb"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-balance.ts",
@@ -13960,8 +13960,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 513,
-        "sha256": "74dabdd9c90248c7ca41f9927c8dcc80fa78e12ed5d99b4a7d277576c76e66e6"
+        "bytes": 530,
+        "sha256": "4532354aadfe3ecddb850dfc2336415992e99b56c36e9080de6adaa9e21c9ee5"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-bar.ts",
@@ -13970,8 +13970,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 519,
-        "sha256": "fc82df3acdf45781e10a2f8a42079681eb094f40a625f80d0e68ae316faa3045"
+        "bytes": 536,
+        "sha256": "7249553be637289f6f9cabebcd421ef63635d3bee14ab4f7c4b1b2425370de7f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-cohort.ts",
@@ -13980,8 +13980,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 514,
-        "sha256": "02fe806a1368475bd045ad9614feade3fc71e705ea82f5e107f590b34bf4a17d"
+        "bytes": 531,
+        "sha256": "7e1eabd95a7fab52eec9f573c949b856516cbdd1843346c5e565de6ffa5d7bb0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-compare.ts",
@@ -13990,8 +13990,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 521,
-        "sha256": "15a3fc7493b65ba72744304489a1a6515d341b109f4c79279d1c8bd9a6d44cb9"
+        "bytes": 538,
+        "sha256": "ca29adcd5622390490f2a55f0d8ba83567a172a81654fb55777ce65f672726f6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-dashboard.ts",
@@ -14000,8 +14000,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 522,
-        "sha256": "6c22a3a4578dc77cbde37a26c67de136e9a4c18c9759d732fc175d4bef90acd1"
+        "bytes": 539,
+        "sha256": "8e588f31e2ad885d4fea2d74ae965b7a061051e80d8522c2ba8c43d7864bd9e7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-forecast.ts",
@@ -14010,8 +14010,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 524,
-        "sha256": "5e42771c72b49e11e26356bf5080d6192ecbdd5330730272cf5149ae68eea785"
+        "bytes": 541,
+        "sha256": "e7e0edf9fd5f66d6b5c1993fd17c185efd67c09e73efba99d4535fb7bf996ac1"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-funnel.ts",
@@ -14020,8 +14020,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 506,
-        "sha256": "a195a73a841000f1bc7a44ee844357fd1500f21a87fbbae05ce1f400fa611d31"
+        "bytes": 523,
+        "sha256": "43d51aa065b016b5a5cd4c0f5f95789dd8c613290bb0bbbcdbce74aa666c2466"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-heatmap.ts",
@@ -14030,8 +14030,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 501,
-        "sha256": "c6080eb7c3801faa5f4f6b2f03ff1c343b5033a4580434dd55a42e2bffbf7fe4"
+        "bytes": 518,
+        "sha256": "0b0e77daff152cb0b6225121c727ea57bef7dc40751a229366243bbd6a4a21ee"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-kpi.ts",
@@ -14040,8 +14040,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 491,
-        "sha256": "8087ab3e012e20c06fe33b7d2d6d8e09bfbe5a5c10791617205b745a5d1cbb32"
+        "bytes": 508,
+        "sha256": "60a823a624dcfa0d37d4bc9c5c0fa1b695438c6031dbc4ea95b456e9f377c5b8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-radar.ts",
@@ -14050,8 +14050,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 511,
-        "sha256": "7419228c7b23ce4e1d7023decf8fce3e28c28dd5bfc3e4d9cb7e28f9f0051239"
+        "bytes": 528,
+        "sha256": "10457f30cbb1665cf962812f6b77e005ff8bb0f29c8b29906220bf2d071fcc86"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-realtime.ts",
@@ -14060,8 +14060,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 535,
-        "sha256": "90046bdc6f9efa8412abfe1de31aeaaa326bf98c5d2e88860a1292bc4f4e6e93"
+        "bytes": 552,
+        "sha256": "215712c654e34f68d3cf5e3bdd186c1373c772093bba5344d93364317cef5981"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-segment.ts",
@@ -14070,8 +14070,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "c13a6a207e6622b0b4c8c9428f5184b664bc53c0a6ff7ccf40158ebffe31a0ac"
+        "bytes": 522,
+        "sha256": "1dc3a983dca181bc4e8e762206fed7e0c3075871223b0907994432922242e776"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-timeline.ts",
@@ -14080,8 +14080,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 545,
-        "sha256": "d728a8280a0b61b8edc325a0f1eb7eb9643fd65d111650dbead1ea18a651d812"
+        "bytes": 562,
+        "sha256": "f48f44d3071e477e3d00c23eca31c39b9d1551c7e2cd89dd16aa6a3486aeabb4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/analytics-waterfall.ts",
@@ -14090,8 +14090,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 527,
-        "sha256": "a9dc089589197af681894f6ec61a5cafcb2e3f322aa0d3e6e0918d830df632d4"
+        "bytes": 544,
+        "sha256": "d9938529859851b1d2db0ad023dc55ef4ebf332f2e98fa6a21fd1505be6da380"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/appearance-theme.ts",
@@ -14100,8 +14100,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 527,
-        "sha256": "e42ceda21643eef94a871a97fa9cdbecede6a6424e874353ee26bdf729901847"
+        "bytes": 544,
+        "sha256": "bdd243dd775aff1fd6e8329e09edf0c71e14ed15551d326cd1215d006e6c3b23"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/auth-passkey.ts",
@@ -14110,8 +14110,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 502,
-        "sha256": "921eeb19b7e37d4f63ec8371d6764f5fd4d46523a3a04e99d8a5ccb5eab6727b"
+        "bytes": 519,
+        "sha256": "99d3de9c9a443180bd0db0a7026cfafeaca52efe93861e18d9c3d847f8f2cb66"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/auth-password.ts",
@@ -14120,8 +14120,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 479,
-        "sha256": "940c12721d9d38418f11f1f807e9b109a7b8c09106076d688875b6d92aec9e38"
+        "bytes": 496,
+        "sha256": "61adab233ad0e5129aee49a80fa90437bfbc7a4a73219738a491abe59c9503cb"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/auth-sso.ts",
@@ -14130,8 +14130,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 464,
-        "sha256": "cf4e6c4d2727835f8a637e38c3068b62a426a259b670b6eb8ba7802a1a2b7ded"
+        "bytes": 481,
+        "sha256": "a351bbdd1149a217e09ed8a33c0dda5dfbe51a991615baae6ae1bd4bb794ab9b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-credit-card.ts",
@@ -14140,8 +14140,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "1a428689cce736258704b3a538b668bee83c06d3fd09fe61005e206cbdefde05"
+        "bytes": 529,
+        "sha256": "7bff0298d2baecff14c83e2ce1c2d038ac94bcc79257e9d5c8860b7251c15c8d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-currency.ts",
@@ -14150,8 +14150,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 541,
-        "sha256": "d5900026d45dde518bd2d7a7177682b623561bbba859246f96a81f0ef69b697d"
+        "bytes": 558,
+        "sha256": "b16a0b6a8f262d316c7aa95c429e325a43191cd2b0d30f385a3e6f15ab8bf7d1"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-discount.ts",
@@ -14160,8 +14160,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "28d320a559a105440b4456a1d569ae3535bf9b76ccc1a66e1881b3444173be81"
+        "bytes": 535,
+        "sha256": "f0a728cfecf55a02b1e897198e9663c88d4013cc2d11ab4fdb7cfa46fecec26a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-invoice.ts",
@@ -14170,8 +14170,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "0b8755a9435fa0ff8bea5b9609aee0db3407f0af479858250031bc77c565c54a"
+        "bytes": 498,
+        "sha256": "9504a5637e447fdab5765c2ca22df3eadb2ce227573b09a9e291a22871dec5f8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-payment.ts",
@@ -14180,8 +14180,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 500,
-        "sha256": "86d08b2505fcfb14cc17c2498cb8f3dd4e6f307dd2c912ba66ab7c50bb7f8346"
+        "bytes": 517,
+        "sha256": "8be46aeba4a0a9b3ab1dbe934c9372474c33c0c2d322534331c11e035a4a2e3b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-receipt.ts",
@@ -14190,8 +14190,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "4ca78ca6662e724a2b97dcb219c6812b9f14deb941352051ab03cfb3640e563e"
+        "bytes": 498,
+        "sha256": "f38b1967fb161fc03c63c2b606960e35bc6061cfeb764e9863b91c9c645778ba"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-refund.ts",
@@ -14200,8 +14200,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "cbceec4e7b5fdd0b14ead4c997ffe2e60413d548a76869131014b4612ab50ab8"
+        "bytes": 513,
+        "sha256": "49721fe521a46c74d731453352960a2758cabc922cda0767505dcf0dcae5a8f2"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-subscription.ts",
@@ -14210,8 +14210,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 514,
-        "sha256": "2dfe3aa4ec8748fce3a93935d12993e6b236b69b2a0ddeca701afda28086ef91"
+        "bytes": 531,
+        "sha256": "0042f90d471085ca8e7f24187a3bbea7775c62a6e4b67c0ec48ecaef78c04715"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-tax.ts",
@@ -14220,8 +14220,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "b29e618badd54c8b38aa957bae7a37a0c5bd2280cb6d44ec51e1c3bd7b5bc068"
+        "bytes": 510,
+        "sha256": "ed2334ad0fef13ee08dd299c483023fc5b017f5e1ca57e5bb1ce799ffd7daf70"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/billing-wallet.ts",
@@ -14230,8 +14230,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 490,
-        "sha256": "c848777ea2ef45492180e2adfbc443cfd0a9d3074bad0e5168ea74f5cc2a0bd1"
+        "bytes": 507,
+        "sha256": "e29ef1589dbb89fef7ae0fb381188bb4d7d10543c6959d4d5849b10214761286"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/bithire-candidate.ts",
@@ -14240,8 +14240,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 514,
-        "sha256": "55b782ec7946361a8accf93e075be9e71b236ea3814ed91dc6790f82a4a874bd"
+        "bytes": 531,
+        "sha256": "8250ba7032fbf94d39d015ebb72494d954ef9f265ef54e5680a2c8f17ffaf837"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/bithire-evidence.ts",
@@ -14250,8 +14250,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 534,
-        "sha256": "d43972cd742f875e51d7f20ce93ade8637755e0ab50190f47128b6c9bc69e453"
+        "bytes": 551,
+        "sha256": "34c807fb4096c6f0a65a40e622677dcc28ff3290ab5f89ab79018874b4ee8fd9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/bithire-interview.ts",
@@ -14260,8 +14260,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 503,
-        "sha256": "35cf2733b09feffb2a0f51af5b0eaf0c9377396629a1cafbc9745a82e752e6b3"
+        "bytes": 520,
+        "sha256": "7826cbd7e698a9b78917ead2ed3d4d6841ecc5a5c2e9f20929f6bcccc945f0a7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/bithire-job.ts",
@@ -14270,8 +14270,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 480,
-        "sha256": "1de477dc4a4d66b20cef412808329879666f85c51b8a3c4f608dc7f6b9a0fc55"
+        "bytes": 497,
+        "sha256": "5518607579d3f8c4714c0a18abc71ac428a260b148b2ea9b668e85b624231560"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/bithire-offer.ts",
@@ -14280,8 +14280,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 499,
-        "sha256": "9c32b6db3cfc70831ed29c689a1390932e5ef2a535ac6095aee690c07320a8a6"
+        "bytes": 516,
+        "sha256": "c0c92fb03ee27855f047c683fd14c9b3acde189de7a69f55c089dd6fcfcdce1d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/bithire-pipeline.ts",
@@ -14290,8 +14290,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 497,
-        "sha256": "fd23b00248b68c84eebcd285d8f4aaadd7f9d2539e2a46c37fde196d49e619d6"
+        "bytes": 514,
+        "sha256": "d3687ce8346f17c64438025ecf0d72038c0426a59ee638e1f5a46cceebe6b828"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-cart.ts",
@@ -14300,8 +14300,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 481,
-        "sha256": "341cbb46998adf39f5962e99119f811f629a7773dd29b8ca8cba8dd511e4967a"
+        "bytes": 498,
+        "sha256": "bc3b121936976dad4a11e7de8330d18b5932fd861ae31e9de9ea3335b260a739"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-catalog.ts",
@@ -14310,8 +14310,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "2c0a4c70d32a616bc836eb3baa72717e4c22a26c02b92fe515a0ebe0982ff188"
+        "bytes": 521,
+        "sha256": "b19f748725ce24bfd950eb4a248eadce3c64ea125e699792df2eaade08c515fa"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-checkout.ts",
@@ -14320,8 +14320,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 515,
-        "sha256": "05cdc316190ac66b1b820dc364aee84518efe0561109fbff376468004b9329cd"
+        "bytes": 532,
+        "sha256": "181e338f9c57f85d79c0f69d28bc46dd6fa139ab28b35cef0a347724a4f73995"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-delivery.ts",
@@ -14330,8 +14330,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "8f7972a564ddcb95bcf87bd5d565fe244dabd63377f46d7d1b54ce8f6aa43f41"
+        "bytes": 510,
+        "sha256": "1d7d63ac7a89d5f9ceeb20ecb17242e7d412581392b0c3d973a916826a7d7394"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-inventory.ts",
@@ -14340,8 +14340,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 511,
-        "sha256": "6295b23fbfa620e3168264b41075e3bbc71c511937eb30a2811c47c7ff8b47be"
+        "bytes": 528,
+        "sha256": "f2e21faed5dea539e258932c3eed7caf65b15b29b6ee822164134c8aa4fdc028"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-order.ts",
@@ -14350,8 +14350,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 509,
-        "sha256": "f3cc3738e30ce166b8b936e954191602f5f99fedbaf39db41ea5a38fb7ba2cfb"
+        "bytes": 526,
+        "sha256": "2e48ee5b8c91b26d81f6a858931a6d5a2e09fccf385c903df451dfbfd2c7c720"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-pricing.ts",
@@ -14360,8 +14360,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 503,
-        "sha256": "49860dcd142101dc23a55e7f3a43093f51623ba85ebfd67cd2c06bdf1878d775"
+        "bytes": 520,
+        "sha256": "ddbbbe26fc4ef92f9958548b876ed8a14a6e9c26e0a0152dcae281cada254e59"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-product.ts",
@@ -14370,8 +14370,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "55448478bb96c7f3871d050e59f30e3ff7476f97aa1dbd455547a94f24e0f078"
+        "bytes": 522,
+        "sha256": "0a140c34e51e746c6b40e1fac6fba1e3111dd5fa4516937dcdebc02e2f60501f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-shipping.ts",
@@ -14380,8 +14380,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 487,
-        "sha256": "042f20f06afef37da1ad46c75f084b911e89ee7d25bba60c59a37ecfea5c7144"
+        "bytes": 504,
+        "sha256": "ca090286e999f9d0b0c3f5d4084770e0e6348d8deff58b5109706f10ffac7bb1"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/commerce-storefront.ts",
@@ -14390,8 +14390,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 507,
-        "sha256": "cae984a01fa2889ae0038a2a8aba1ce805f75f155ad03bac705ceba2e0964b64"
+        "bytes": 524,
+        "sha256": "cc27bdfc2d1dfafb4b00961998775188c5480bb27157f405ce646b06522976c0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-call.ts",
@@ -14400,8 +14400,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "fed888f0e4457539c23a0e6dc1c392a3bbe7309f21db5bd0cad0d1256745fb20"
+        "bytes": 522,
+        "sha256": "687fc149480cd41bb01f32b84b8b0007b7e079c03608121d4d039896fe4b2771"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-email.ts",
@@ -14410,8 +14410,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 513,
-        "sha256": "f01bf1180d5597910ffb82990f5c0125b5ecb14479c60351cc97f42b1785af35"
+        "bytes": 530,
+        "sha256": "d071e5e88808ff1d98bc52e73690d38f69295adc3344ce5010c318eb041c05d8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-inbox.ts",
@@ -14420,8 +14420,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "009cc6b87c6e90624e98ad5f2bfb7ad8c24bac0c89eacba56c51f8318766293a"
+        "bytes": 522,
+        "sha256": "0d2abd0db4c4f16ae3661785f33800555f3233596b029036c103637d1bcc7c50"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-message.ts",
@@ -14430,8 +14430,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 526,
-        "sha256": "944f1c9b78e5b9b926e8b1a1e04d3db82efb892140762ac442d6188cd5944aa4"
+        "bytes": 543,
+        "sha256": "a2b45920c68162e053a1786ec95600f9627c4b638adc4763816b21885212217d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-mute.ts",
@@ -14440,8 +14440,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 527,
-        "sha256": "c9ba5f0e9cc62d35e0924bee50aaf57d73b42f1ea4b2840ceef60964f0ebb326"
+        "bytes": 544,
+        "sha256": "a7d1b3323e8b8d458cd420156447d42c1a1c88fc8e20f8aab8b7c68045d64d87"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-notification.ts",
@@ -14450,8 +14450,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 537,
-        "sha256": "853281a4e9cff206d5998f309add511d497cc15d225e1265294f1cfcb5d5d77d"
+        "bytes": 554,
+        "sha256": "1a51eabf04d4c1cfb4551a1558bb69b351e43bb8c19734b3afaa46cfd706c01c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-reply.ts",
@@ -14460,8 +14460,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 520,
-        "sha256": "219c3b3e999b1fc3f205fb5babb898774242d28987a534af954f53b4aa8cd93c"
+        "bytes": 537,
+        "sha256": "1b15d1457dac169ec9d8582c620113a5471a97fcb955559a85545ed6a8f58202"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-send.ts",
@@ -14470,8 +14470,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 531,
-        "sha256": "3d6737a2ad271c83aacb50a13671e77480ead432c36b1745e1e112f03e12bed8"
+        "bytes": 548,
+        "sha256": "7159c001eef5c7c4bfa6f09fa5ff143b766a4bce170f8bbae761698cebca1ef3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/communication-voice.ts",
@@ -14480,8 +14480,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 519,
-        "sha256": "ea076e909b377742fe38c09b670c0e60bd5e4687cf028860e508fc651dc31a4e"
+        "bytes": 536,
+        "sha256": "ecd7b53eb8424478e819905e01a241089c1be0fa7bce217856b35b0f40d35e2c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-audit.ts",
@@ -14490,8 +14490,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 506,
-        "sha256": "b0c5e743ef2dbb2d32a85e0c5d5bf8b35267c8289bc70b583e9eada6ec269886"
+        "bytes": 523,
+        "sha256": "222b1d258ba71a2ae3b89b14a76b8b02a42b0fb41bd7aaa635948639ae09fc15"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-breach.ts",
@@ -14500,8 +14500,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 532,
-        "sha256": "f42dc7ea6c1614ca1c54613d4babf5eb4047f50341e9130ac546d65e3bed03ec"
+        "bytes": 549,
+        "sha256": "414d802bed4bd159621422e5db3820f8f5c45716e057f916d74d7d40ebacc91e"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-case.ts",
@@ -14510,8 +14510,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 502,
-        "sha256": "73d363c419b029dca43a3ab0c160a5532cf33a33e654ea84c623df26a1445c4a"
+        "bytes": 519,
+        "sha256": "205c6f4c9261bf6a1873bd94c032629b6c5815d4183a8364439e41591336dce0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-certification.ts",
@@ -14520,8 +14520,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 560,
-        "sha256": "a0ad35288793be707b5954788579b463f87c83c0c4b82b1c75bba9663aadfe96"
+        "bytes": 577,
+        "sha256": "f9ad47d1ae59a3cb26dba8ec4ec48802fa64c3bf84d94b371b4d8ba2e9f0dd6a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-consent.ts",
@@ -14530,8 +14530,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 521,
-        "sha256": "39c2c9a3ce2a95e50429c97a2e57081beda4bd4c17ba55c6c19eb137deae95f0"
+        "bytes": 538,
+        "sha256": "fbbf1b5894ad91443a1578e72cb1d2ba63c6b23f37cdf28b08191e6e26406976"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-control.ts",
@@ -14540,8 +14540,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 529,
-        "sha256": "dbcc51e4fd0878c88d7a7849fe831588204924fa292192ae60e972486d20cfe0"
+        "bytes": 546,
+        "sha256": "993dfda7de47cbf1e63f347fa22a9f4c57bc44cfe4ffab3c89273780b29ef0e3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-evidence.ts",
@@ -14550,8 +14550,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 532,
-        "sha256": "c86cf50c9c68a4f3450ac2f5690e6145ba62dae4d77107622487bf6116f911ca"
+        "bytes": 549,
+        "sha256": "643b8c7d5e82e17c928921f4f053c5af8db49e62a85800416834df8afc75da55"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-regulation.ts",
@@ -14560,8 +14560,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 528,
-        "sha256": "10d5c0bf5b857993da47bb514dcc79e337ca23b75a833515dc550e0b8712de82"
+        "bytes": 545,
+        "sha256": "029768a56bcd7c4dfafa06c406c49f0b15f5f154cfeccd5d04dbf3e6e31cd0da"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-retention.ts",
@@ -14570,8 +14570,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "ca6db5039b3c3ca11245735aadc513b90df2366a41578f8abbaf05c4c4ff4d17"
+        "bytes": 535,
+        "sha256": "7aab753565511c5d58b81c073fe1c9e987c43d54109b362be6c06a9c6143ad15"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/compliance-review.ts",
@@ -14580,8 +14580,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 513,
-        "sha256": "4dea312a3951c76667dd75153b21844beb0ef6b56697689277ddbe6126b6009e"
+        "bytes": 530,
+        "sha256": "4eff40e8371dad5139a39b8b65e721dc70c61486258264528a68ab02f549d59b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/connectivity-network.ts",
@@ -14590,8 +14590,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "c325ca033d29f90d08a04c6412271517fa406538654b30fc6ca5b75ce05c9208"
+        "bytes": 529,
+        "sha256": "6529e4d71badc3b2a6bb6e0df2533b2c524526e56bac20f34d8834988f06f5de"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/connectivity-web.ts",
@@ -14600,8 +14600,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 520,
-        "sha256": "2aeab99aebbcbef889dc6a4375c0e70bc74d93052260f5e8d0ffc990ad27da76"
+        "bytes": 537,
+        "sha256": "8cde788fa9eecd7d8a061ab60b5cffe53b654d12a61d3e586a0638a10977d0c7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-bookmark.ts",
@@ -14610,8 +14610,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "05e63e3fde83b01af9765f99e77c53f0d6d6c800b340ff1855741b18a2001fb6"
+        "bytes": 529,
+        "sha256": "2f5f379d0053ad7261dcfca9007a608b6eaaf9047c160620947b79a454694188"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-code.ts",
@@ -14620,8 +14620,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 498,
-        "sha256": "1082940a1b4a9d102477e5f552ccc747c106575fb077be6f5c65b7f869fa5513"
+        "bytes": 515,
+        "sha256": "f1d2d2a9c9a6017d97785aa9d6ba306ed4229cee9fc8e942bd5fb3621d90dcb6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-document.ts",
@@ -14630,8 +14630,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 494,
-        "sha256": "b9e63d8635b2ca89ce53a8c391dce599df14fae648b81eabc97c72bb68db8388"
+        "bytes": 511,
+        "sha256": "faeba26924043c8d950623bb9ed8f7c14196ae344a03d29c2c21bf8bc848769a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-file.ts",
@@ -14640,8 +14640,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "50668844aa724d2fdd0b726e265fc84e0cf2699bdbdedd018a72b249d1fa882a"
+        "bytes": 505,
+        "sha256": "28464936e401924fee4212e6cf4204490de59edbedb8e7ff80fd3b2597606a48"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-folder.ts",
@@ -14650,8 +14650,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 491,
-        "sha256": "34ec3a10807547d528fb2ce2f2084a34bb9a167e05a7f95c94396aeea7ba599e"
+        "bytes": 508,
+        "sha256": "8270ea2a7b962ffaf6680aaaeaef50e2768f7d4a9b1696baaae4041ae5b956ef"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-image.ts",
@@ -14660,8 +14660,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 471,
-        "sha256": "d46a35ceca415cd2950779b8394cf00c699015dab07afd9fc10447e4d50b0fd2"
+        "bytes": 488,
+        "sha256": "22c9b06ce308a8537fafa40e5c0722a1998bf2c42c0d69f04c9dbbda33607d88"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-link.ts",
@@ -14670,8 +14670,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 476,
-        "sha256": "a0a69b19cd176d02478381978dbd9fbd297d2d498e4a301f436b7e280c309833"
+        "bytes": 493,
+        "sha256": "da4635b9b2e1aad6adf593f7e17e35e7a514df96119e03ee94366c1856702463"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-note.ts",
@@ -14680,8 +14680,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 473,
-        "sha256": "fa13c146030abf3d989911309ace55773c0b2ccef2279c168de94f94e0c5ec15"
+        "bytes": 490,
+        "sha256": "32089409a18f76f9010598176cbd217ccaf9d9b494c8b29a30c5689f53db5546"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-quote.ts",
@@ -14690,8 +14690,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "0135c6b6006b6faa9c47939d8efb7b2cebae38399c4b6eaee5d7c41f539ed55d"
+        "bytes": 513,
+        "sha256": "03b51f884bc6ae7c24769c9e95b271cc3791e013c10d1f17b67a0eaa0e50df73"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-translation.ts",
@@ -14700,8 +14700,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 522,
-        "sha256": "b21bda648c566b120e169e475b1dd3a604426b7efe80d3812ff2efe28e01b056"
+        "bytes": 539,
+        "sha256": "7cbfb8ad92f932053daf3816f4f04117676778a7b7132d32e6186b2eb34b5296"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/content-video.ts",
@@ -14710,8 +14710,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 498,
-        "sha256": "bba11d219cd02f3871e4ada0e551b91ee56069b848152b8a4805616159f1edbd"
+        "bytes": 515,
+        "sha256": "ad046faecabb792868287f15b05f28a03b4c11c312575f0596d43dbc0f55c831"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-chart.ts",
@@ -14720,8 +14720,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "584e5ca40851479c4b39947a9ca6b2562b10dbe38c0de4a624d11f0eb5fdcdc7"
+        "bytes": 506,
+        "sha256": "ba46ae698a23bcf356a071128a9fd4a70aff0a75e07677e3aded07a580452485"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-cluster.ts",
@@ -14730,8 +14730,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 500,
-        "sha256": "d1ed00824a7df5ba7dc46a154ae9da57c5b928daf20db2799968e4391c30ce3d"
+        "bytes": 517,
+        "sha256": "d78987c7b9f5bbd6ff7e918890a0d1cedf95075a962adccad678ce64427353cc"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-database.ts",
@@ -14740,8 +14740,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 491,
-        "sha256": "13875d3b19579443723f44a8c7ac3524135f9803a328e281a998b0a344665b3e"
+        "bytes": 508,
+        "sha256": "65febe6cbe6971e70db51f91c9403e57a28469c7750d5db3f642fe1e142c3ee4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-export.ts",
@@ -14750,8 +14750,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 479,
-        "sha256": "d1876490d3c8adb9047565e9c229c2ba18b3e3d564355ff216cba7a9fb8aac84"
+        "bytes": 496,
+        "sha256": "caaab8c6f4f651e8e01e1e2d7efeeaf559ced26f220cd8515779d1d44475bd2c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-gauge.ts",
@@ -14760,8 +14760,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 465,
-        "sha256": "1c42efae7771578f572c81c48afce3db94118e8d406a83364dbc89c80682d9d1"
+        "bytes": 482,
+        "sha256": "5f1edccece97e349718747d6537ec85310e629c5ec48111411de0c893b207da8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-import.ts",
@@ -14770,8 +14770,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 483,
-        "sha256": "f686f67fc7e7b367cf01e8686ba7bda9d966554f0bf6c914bf9a9070e8ecfe49"
+        "bytes": 500,
+        "sha256": "3234d2626f64768fbd8611c4393f1283c165cd7caed5309e61e31a7a3a147c95"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-line-chart.ts",
@@ -14780,8 +14780,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "e4911eca6d1918867e204b855b583f8c8e81a88fc7cd544e1270dfb27e35a305"
+        "bytes": 510,
+        "sha256": "9a1e5f700b6b40fd126d408e92764a1828a6e047d5179dcaecedbb5a1898822a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-lineage.ts",
@@ -14790,8 +14790,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 501,
-        "sha256": "b26d2c8dda0bbce5071be6faa0f6ba14096cf4c8c0505310153826009db791d1"
+        "bytes": 518,
+        "sha256": "40dd438381e7aae5aef5839d55427494826a4be6581902e96b6f4a2de9905f2a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-model.ts",
@@ -14800,8 +14800,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 461,
-        "sha256": "49bd6436da55c8340c21d9391f6acee066ff66050c6574a110fc4dd04a25dd3f"
+        "bytes": 478,
+        "sha256": "0b6488e0b0a4c8a4da0a8d35aaa835001e09e77288d3920d82a7a7c2998acad5"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-observability.ts",
@@ -14810,8 +14810,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 523,
-        "sha256": "04a6ca2dcf741950caab0d4bc3480bd79f3bd179ec487e775d57d7e0dc9ef919"
+        "bytes": 540,
+        "sha256": "462484c0e0cc37ebb7687c38a46e62fb45135ec53e034841e4cf541eb2e63330"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-pie-chart.ts",
@@ -14820,8 +14820,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 506,
-        "sha256": "3333a9feada788933779475a2c0a31baab4916d7b24c8c8e17a4851e3d25dbe6"
+        "bytes": 523,
+        "sha256": "13d81a1b1aed91121d33663b1bcc6ddeeb865ccbcd1d2d3e9cd8e2efe93d9ab6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-pipeline.ts",
@@ -14830,8 +14830,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "f9a5d39ebb8c22a747606cf0bc03f711a4de845cb56f918253312f6bb16ce44c"
+        "bytes": 506,
+        "sha256": "6c089472df63c4facfafd557739f17ebc8d4feb393c15e1ae1cfc2c676c8f3e3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-quality.ts",
@@ -14840,8 +14840,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 513,
-        "sha256": "fe2276d381fccb127fe77dec992ac0c0cbc6668be5a911cccb8947a56638076b"
+        "bytes": 530,
+        "sha256": "b5b5416d8ea30bda16db0223109731399742fe2151010f1e892b151c32189f7d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-query.ts",
@@ -14850,8 +14850,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 509,
-        "sha256": "3c527c140b36a300fb8d54e04a37325d766c8ba0ceb49f006eddd28f7fba4e39"
+        "bytes": 526,
+        "sha256": "f205cce6152a79b118f5a7d135067545cddb69e2ee3ca31e12a970eb69456b12"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-relationship.ts",
@@ -14860,8 +14860,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 526,
-        "sha256": "95ecdc1079a2542d3492fca5167fe448dbfbdbaa987eb103c947669e3aaabe5f"
+        "bytes": 543,
+        "sha256": "18151d78df9d6f80b95645baaa8032964c9537f9eed30cf2bd1cb7a45c8d4d83"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-report.ts",
@@ -14870,8 +14870,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "3e028717fe22e075c9d1bbc67b6602f45e7a164e604b9619448129c1b6616191"
+        "bytes": 521,
+        "sha256": "a3bcec1f3a7fb82e87ddad539f727cf7493158b9cdc0f234bfe84c38a48b5da0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-scatter-plot.ts",
@@ -14880,8 +14880,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "723a611bb33d80b930635ed28d47d6c21fe6419bc1486f31d96a4ae202d9174a"
+        "bytes": 535,
+        "sha256": "fda19e784bf7d54ccdec3e6c3b9794cd2f4488e7010e4f5386906c0d60543255"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-schema.ts",
@@ -14890,8 +14890,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 492,
-        "sha256": "69aa2909f14b47459d396e90a808b97adf7a8994946023a18153a8a87a0bb957"
+        "bytes": 509,
+        "sha256": "30f1e05c33bdf05dac73fccd65c65843ec23d1bc5ac8728a311564a95abc96fb"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-stream.ts",
@@ -14900,8 +14900,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 484,
-        "sha256": "b5afae172dc96e08928f7eed322dfcb32d83328ebdec96a5f8c33ca5da92fd25"
+        "bytes": 501,
+        "sha256": "a0bbce0ec6560068cd5575d8e7a8a895e741ebaa4de7f17c6ad672573abebb38"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-sync.ts",
@@ -14910,8 +14910,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "d700ab6db9548a7882fa19817c493fe8880ccff8d067c47e5ffa7afe308ff5da"
+        "bytes": 506,
+        "sha256": "51ca4e6e90d2a71a4ee01b0743dc7892fb68c647b66af63cb759095b2ee1c8eb"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-table.ts",
@@ -14920,8 +14920,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 452,
-        "sha256": "bfb438677a2a30270ebc66843f80f5d33911a3763302ef57966c94bcb6904c68"
+        "bytes": 469,
+        "sha256": "8c0acf3f18edcf50fa0e3e5bf8780440516966bc38130b4de27f2ba092d73875"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-transform.ts",
@@ -14930,8 +14930,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "d7d22d852ee34b947d619396d129b2f0e22ecb4015c7776f1b6e449ea6a17cef"
+        "bytes": 521,
+        "sha256": "3e247aa9eae4b37ea091845dd16fab4187b5421a64953c03fea737129553df9b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-trend-down.ts",
@@ -14940,8 +14940,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "846b2be3d1e01911edeb5b9391a29c3d7152badef870e68caa48d3b86f91cfde"
+        "bytes": 505,
+        "sha256": "0e886bbec275b4e32522a5ca3073e05599f8dda76bd3386f9e1e4b4c792bf2bf"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-trend.ts",
@@ -14950,8 +14950,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 467,
-        "sha256": "7166625d390c3bd39f10ee10f0deddd3c5c32ee2b49f7a2f8670187ba33f3552"
+        "bytes": 484,
+        "sha256": "ae8d4bf62df3311b00fac0d8b7e3771d9314ceae0a786ad539a1b1902fbaf757"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/data-warehouse.ts",
@@ -14960,8 +14960,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 510,
-        "sha256": "8e1fc8d78fac49b6637fd63c1839be9c0ddd374c0b4acbf9a39b252207a8f686"
+        "bytes": 527,
+        "sha256": "71ed62bf844fd79ecd32585986c381cf61957dfa96ce3efab50f8b6dc3835bf8"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/device-camera.ts",
@@ -14970,8 +14970,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 486,
-        "sha256": "f01132282b52ebcbdb9f110d9ac497e96f14a3aede8d69512e06c88c3af4a811"
+        "bytes": 503,
+        "sha256": "d20b8f95e579d6d40bac390228d1111896ea4c467c07e15b8a3bde1dc7d6d163"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/device-desktop.ts",
@@ -14980,8 +14980,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 490,
-        "sha256": "12a38794958131b5998c3dfafc24d11c4479feef781eb4fdf1fb22e831beb508"
+        "bytes": 507,
+        "sha256": "7e5f6da79aefd17777765a15951c614a014e968771a6f888152be39a7312a98a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/device-microphone.ts",
@@ -14990,8 +14990,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 499,
-        "sha256": "55a57152f831b96a0b8cad496f7f2ce50d9762628d1b1fafe7fab78e940168e6"
+        "bytes": 516,
+        "sha256": "ec85b6bac9bca433944ea9751062349f29b65659ff99df9d7d2d6273dbb735b7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/device-mobile.ts",
@@ -15000,8 +15000,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 492,
-        "sha256": "74155d6df4b3454cf44ae85fb8918763ac9414f66ff79f6aa5b52fc1151d7070"
+        "bytes": 509,
+        "sha256": "64cb2c216a8a5e820f679917e55ae277d25188e0f500735a40b63ec97df1b48c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/device-tablet.ts",
@@ -15010,8 +15010,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 486,
-        "sha256": "780c0a2b41490a83f15e4f1bab2bac811b49a0dfc316548591d5b55797320a1b"
+        "bytes": 503,
+        "sha256": "66ee114004983382ca4d128a8de534d9e7931e1dc2fca3cece000f739e54b875"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-education.ts",
@@ -15020,8 +15020,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 506,
-        "sha256": "8d864d9b02a7ff6cbdc1457dfa170340ce7b7a8a6ceabac5aa629b901423babf"
+        "bytes": 523,
+        "sha256": "8c3a109ad23fd75d69fb7d10a64e185d8080e671f23b0ac7647cd3a76a1bda7f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-group.ts",
@@ -15030,8 +15030,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 473,
-        "sha256": "c5a44c28acff0941d554952db40ddfe9c2b9f350b3e291f94f0eb047ce505bee"
+        "bytes": 490,
+        "sha256": "fa01d0f8e80dd9dd4379ddeae686088d5d1d0b6a80a1c670a53511c9d82b5af5"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-organization.ts",
@@ -15040,8 +15040,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 510,
-        "sha256": "c22e5c8559eef7570c1ce9656f7ded5319109abed345f4119349f405b52c3e78"
+        "bytes": 527,
+        "sha256": "4a97284e3adf67cfba3157294aeb8445f496acdbda65ad292e0b66c2cdc53624"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-person.ts",
@@ -15050,8 +15050,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 487,
-        "sha256": "8780bed64c7072bb6435cc9cd7e511f9b28707594216a308e10300948e393b7d"
+        "bytes": 504,
+        "sha256": "ef833523e5724265900b78c8beaf3cad76761ccb9a31b009311159dd46baf63b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-persona.ts",
@@ -15060,8 +15060,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "df4baefc80dae5e33a4fd2ad7ccd555166ad73751b90a28f3ad3c733154f949a"
+        "bytes": 522,
+        "sha256": "0622ff9d0ac5a3bf6602e82fd5f902d66889f74e10442a7dc7d6d325f3097c84"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-tag.ts",
@@ -15070,8 +15070,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 465,
-        "sha256": "70e8e5720e6687af93a1a3ae09090cb6e0a8d85a198d2286f0272bae7361b430"
+        "bytes": 482,
+        "sha256": "9936092be3336629b5c598698049ec6f184736d479ab6d88224f4654bc6484cc"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/entity-task.ts",
@@ -15080,8 +15080,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 475,
-        "sha256": "306c027683d4ce8d89e14b7ee7c3dc9ff18bbf3de69179ce83dc39457a458970"
+        "bytes": 492,
+        "sha256": "041d2ee935ef867eb5a17b4ce3da38ff67d4765919f74d065cf41fbb60c373af"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/feedback-empty.ts",
@@ -15090,8 +15090,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "1c54f444aeacc9036ab52a00f0642a2712a0f8cd6daa3e1599e46538e3e558b9"
+        "bytes": 529,
+        "sha256": "a768a1566ce12ac5e4b0e9babc7701007a557b83b772f157fc5f0e911685f7da"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/feedback-help.ts",
@@ -15100,8 +15100,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 503,
-        "sha256": "ca990815f7862b3a2a75eefc5ee01d116772009ca11279de674a303f49cb0bbf"
+        "bytes": 520,
+        "sha256": "4c03ee400db9d14136ea0e88fb5b3a98665c40e2e2a19bd920be1354b562c67c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/feedback-tip.ts",
@@ -15110,8 +15110,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 520,
-        "sha256": "29b48eacb2cb719c8a35b5fcf58bbf1a39c3fad0cecba3c40efd55e45d28646c"
+        "bytes": 537,
+        "sha256": "34819a0ce20ed0226db064d34d8be0e6269260d475fd54599f629aafcb10018c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-badge.ts",
@@ -15120,8 +15120,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 513,
-        "sha256": "3a9cb82aadc660c2ee588324b1ab03bef21f99f989350732727f7d5c9921a2ed"
+        "bytes": 530,
+        "sha256": "bb0caa5a2a64bc01256ea248a14c92049f61af297f3290ea3b8cd770f68fedc4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-credential-rotation.ts",
@@ -15130,8 +15130,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 578,
-        "sha256": "6919a97b137502449192ebad8957bd7bc36795b4e9b8b6fe0eeba69e9eca05d1"
+        "bytes": 595,
+        "sha256": "01df6a6ade41e814c68a5f30238a6c13bc7697b92f1d48ad0e72d9ebf11d0791"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-deactivated.ts",
@@ -15140,8 +15140,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 541,
-        "sha256": "b5a7577936b99e0dbb25516bc02805985ce0562e9ebaa1518402e03b89e5b0ac"
+        "bytes": 558,
+        "sha256": "416d31408e8141f9af29a70979ced4759c84754bf01da7a01b5bf7f94344faf9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-directory.ts",
@@ -15150,8 +15150,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 521,
-        "sha256": "53fa80b42e9ca74de141cb89b1782940d2c218c24b9e48e6891fbf191e0c0830"
+        "bytes": 538,
+        "sha256": "00e2047f8502ced94348bd500a0b0b0dd7283b195616f6dc2e80f3aeb3cf7fec"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-federation.ts",
@@ -15160,8 +15160,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 538,
-        "sha256": "c24cef25187220213cf5bb9af3a2c33dad72724c59fa89ac2fdaeb5f7faa8fe0"
+        "bytes": 555,
+        "sha256": "9e5cc4279f6aea833f4ba10f8dd5f4fe1dd0e7552e66cdec090895dd2e232428"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-impersonation.ts",
@@ -15170,8 +15170,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 564,
-        "sha256": "eeb97119bf8f78a75ea693d0e801eb0e972262a7596079be16ad4a368e1ed15b"
+        "bytes": 581,
+        "sha256": "fd453ac1b730c860e1c208c5ff15a4ec75cac60917df8a67863b68eabd1094ae"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-organization-switch.ts",
@@ -15180,8 +15180,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 573,
-        "sha256": "d0f198d87e16d99e70dd9060a32f86809f245a33db3a5d885380c4f9806f3a5d"
+        "bytes": 590,
+        "sha256": "91cc4b5a5b8b64c7dfc8f34df567a38737e9215fae8b394011295cc07c107ac7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-provisioning.ts",
@@ -15190,8 +15190,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 543,
-        "sha256": "6a7b36e64680f0d69fc1e393cb3392b8806f5472ab40c7d5e21acef252f14e13"
+        "bytes": 560,
+        "sha256": "8d548f1d6b166d2ca1d089dcaccbfbae4a5f3642cf3946e2d317ba7340a3b3d3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-service-account.ts",
@@ -15200,8 +15200,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 527,
-        "sha256": "b42ce74e23fb7c729d4290635935507baa192ad98d81cdd3da807cc486b2e6ec"
+        "bytes": 544,
+        "sha256": "e23ddf1e5d53a4930478c48747b49399ec1fcd1958c89688ac1b60cbe5916ec4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-session.ts",
@@ -15210,8 +15210,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 500,
-        "sha256": "d1a8507c5c896ffdff902bde3a911b1ff5f1b79d2cef709dacb092a92df069bb"
+        "bytes": 517,
+        "sha256": "2111d98652d56245afaad0e2f0957f06d0e2e53c67d63473352b4ae4700bfb61"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/identity-trust.ts",
@@ -15220,8 +15220,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 560,
-        "sha256": "2a5f2c99a28f8c8e85dc8b9ff41feb6bea73f9f57d9088a1437ea390023374aa"
+        "bytes": 577,
+        "sha256": "8c8e78c8d0c57fef42881a7795c56d841227622192ecb503bb8d13f7c28d8b8d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-cards.ts",
@@ -15230,8 +15230,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 467,
-        "sha256": "bcd459bab64856a50a6ddb6cbe26bac67d210cba79443aa52624efe158abb5d4"
+        "bytes": 484,
+        "sha256": "3793c610c86e23ffed37009f743aac76626b3e04cbed1ee32d77ee15e2026f0f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-columns.ts",
@@ -15240,8 +15240,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 484,
-        "sha256": "0fd62b3297432a4f0d0b71d0fd6b912fb173c1c435646e0a4c1f75e539e88a41"
+        "bytes": 501,
+        "sha256": "98fe55e538d94d264fa1f7eb10f7b65eeeaf4ce5caf46e73cb54773303eccc90"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-grid.ts",
@@ -15250,8 +15250,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 473,
-        "sha256": "ac9dee4422427aba9e872eb09b6207608455df2e3c7886b77515f3d3ab8b5b52"
+        "bytes": 490,
+        "sha256": "38d1dc9099d60ba6d721c31118d37d4d2e6da4447376d7e38dfbc11c54d8eab2"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-hierarchy.ts",
@@ -15260,8 +15260,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "e52592576048698b0335df768a88e789ecc78caf3a4a6f35ff8fc5a11794d0c7"
+        "bytes": 521,
+        "sha256": "b08a09526d93c76a4ad55f1f5d248cffc87152f0ee646f09d101fc0d8bd8961b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-list.ts",
@@ -15270,8 +15270,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 483,
-        "sha256": "921888f966442669cf0aae34db0c47daef901b61fb8abecdd1ae758baad01d38"
+        "bytes": 500,
+        "sha256": "2431ddd1f8b32e8debf04971f45709843aa29f83a29f133fca7c94afbac8aa4a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-sidebar-start.ts",
@@ -15280,8 +15280,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 527,
-        "sha256": "c1c0594030a4def4fce53a1cc65198baccd9a15847b6989687671cc8f671fcc7"
+        "bytes": 544,
+        "sha256": "5818ff4b0fd7a56eefd300350e962b118b5410e4d16621ccc5555120fcc2e21c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/layout-tabs.ts",
@@ -15290,8 +15290,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 471,
-        "sha256": "ce2f9c8dfcb5b13c91a1a6dc1d33c3d4480d375b2706a4cd937339fea991cbef"
+        "bytes": 488,
+        "sha256": "e6bae3d4979fb928eb5217e78c3ca92c8c8b092f67d073694d1f21a4994feb45"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/location-global.ts",
@@ -15300,8 +15300,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 485,
-        "sha256": "b3e034f396a58e8ce69d82c3f08fba887138f5a3ff56ddaa0963667240173460"
+        "bytes": 502,
+        "sha256": "10ce0c1f10b1508abeb6f8feb6c2615cee04cd68151294867c52567024e593fd"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/location-place.ts",
@@ -15310,8 +15310,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 484,
-        "sha256": "8fe61fb1036515490741689ee706f409f0ed291bea2bf2f60a3a883594b2bdd8"
+        "bytes": 501,
+        "sha256": "90f23fd29d2ce32e5b01baceb7e6e349b61711b7febbe646f138f2906c5c79dd"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-back.ts",
@@ -15320,8 +15320,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 506,
-        "sha256": "aae4db5768e466107650d7e26db8317c8d701187e107a719f93baee1f9b2c548"
+        "bytes": 523,
+        "sha256": "51f613c563ed0e748a42b44551161dd1a7c334d728d966f70aeb6061c5373e79"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-collapse.ts",
@@ -15330,8 +15330,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 536,
-        "sha256": "a0aee2bcf82687a56870b2e4747d79280c01277b22217aba8cc60626ba66bc08"
+        "bytes": 553,
+        "sha256": "35613151f3309ff7e72ae79b2cf5cabd83431da6bdad824bdce1bb4fcb9ac9aa"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-down.ts",
@@ -15340,8 +15340,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 511,
-        "sha256": "a5da05dbc50f7af27eae5dde2d8c9a26529ecefba53512565f214f002f649e78"
+        "bytes": 528,
+        "sha256": "c597b985b5ee3ff072aae3666f675ac2d6366fd93b163658a5ebf47a19e8e1a5"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-expand.ts",
@@ -15350,8 +15350,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 528,
-        "sha256": "bb0756483261745fcb5ef8a5794fd22c0a668ffe5867a1f55933156d7d6262ef"
+        "bytes": 545,
+        "sha256": "c602b5c821b51a4901697e53278721072bc4e31d2dbc109b7887c33c937ba0db"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-forward.ts",
@@ -15360,8 +15360,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 516,
-        "sha256": "0d4344f6c17cf1bdf86783634eb230bc07a9f70d5cc92da88f7d7fdb1b785a71"
+        "bytes": 533,
+        "sha256": "91ba50e3f54126200db2b8d17a010db8127bd906d9a86225ec8c74d961497d7a"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-home.ts",
@@ -15370,8 +15370,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "85c4e9b7c58ec14a78a4cff4929d71c8866185e38b3e0ca6b4c4dddadd88e93b"
+        "bytes": 510,
+        "sha256": "c88534e78a65702476cdd73f02a8948fc3e86e7866860af6b8be7e214bffa853"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-menu.ts",
@@ -15380,8 +15380,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 489,
-        "sha256": "02f4939cfbd22cd1cc1896788036fa9e8fabee13a654d756f0533cb1f24d6faf"
+        "bytes": 506,
+        "sha256": "68c3aea9fe169c8006bea0d4b8d54f933cad53f2a558582181e1a2d1c5843cb9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-more.ts",
@@ -15390,8 +15390,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 502,
-        "sha256": "9fd594964244d13cdedbfed2528fa12edc5b2b87149cbcbd59151bef0632d951"
+        "bytes": 519,
+        "sha256": "28559afa80047b739e8ef9a2930f59fb4d3d1940be5a843db63d7c678d9537c9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-profile.ts",
@@ -15400,8 +15400,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 524,
-        "sha256": "eb54496bc0cbd2923b8f0946df2ab5b82f23d3046d63f437cd18afb350a42e34"
+        "bytes": 541,
+        "sha256": "d299faba9a0351e305f5c13e544b5d702d274858b10fa2c1d906de59e64fb33d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-route.ts",
@@ -15410,8 +15410,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "afbeab1731befbd58694230526e87c31d1d12d1a1bed37d3a5053bea9bd45364"
+        "bytes": 529,
+        "sha256": "2af269172598c751498c083461b6f67a22ee900d7ae3df4a0e1768138b7c8ac6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-settings.ts",
@@ -15420,8 +15420,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "e89791b2ea4459b1ae2bd191018cc15ff7a3761acff6d159ad8c88fd80110ea6"
+        "bytes": 521,
+        "sha256": "264461adb97b74acec95f5cb6d516a51086cc6704ee900a2c8d3a7dc5f95db93"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/navigation-up.ts",
@@ -15430,8 +15430,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 500,
-        "sha256": "72ba94da09ec60105c2b64d9b75e9c776d854d4d403c828fad5efce54781e281"
+        "bytes": 517,
+        "sha256": "7ef095ef759f75463f48066fa4e5c31354cfcb8cfb3c458baf54d0c75a4102c3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-cloud.ts",
@@ -15440,8 +15440,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 503,
-        "sha256": "dc2415675e7e857176ae43b32cc530fa05d954a5be2287dfaaa6ae54322fce3e"
+        "bytes": 520,
+        "sha256": "a1aca62d9dd67ea667b5052361c27bccb91a5a388450e173a3a832e96b34f496"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-dashboard.ts",
@@ -15450,8 +15450,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 520,
-        "sha256": "ada1a678ec34767a4132c6a83d138af381561f20b6e0f6eb789b059e10755b6a"
+        "bytes": 537,
+        "sha256": "5b4db4ead527b8f6738568fb3dd718068d310b057c4097bf8f42aee68372d4a1"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-deployment.ts",
@@ -15460,8 +15460,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 530,
-        "sha256": "b2b7bbbed0cc028c6d3523d1cac90a120ac38d4490ca6e558197d9bd22fbfb7c"
+        "bytes": 547,
+        "sha256": "23b86e533bcc320548c4a50c38be6482cdc2d426126c32d30cf754b25f5706e7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-health.ts",
@@ -15470,8 +15470,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 539,
-        "sha256": "661a839c943876d7247fb56d58404e87a2a4e971e06ce2ce12f6fe0efd24210b"
+        "bytes": 556,
+        "sha256": "10fee4c7f0da7af061f4d14c39915341e285c9a2764e7a20dc32e7f56585306b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-incident.ts",
@@ -15480,8 +15480,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 550,
-        "sha256": "9b7e0065e78795d9f1f0dd1aa53266c3bab40bed6a4fc55a9d6a2380fef35b21"
+        "bytes": 567,
+        "sha256": "db86d2222a791dd973408562bd45aded654c485279b445e94cfade05bc03c563"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-maintenance.ts",
@@ -15490,8 +15490,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 528,
-        "sha256": "4ffa13aa8d687f2e80c0c32495eb68aebcbb3847a4a171132fe3c0c9820fba58"
+        "bytes": 545,
+        "sha256": "f10452bb3e9f266dbf75bf7228ca8cbde0788d2665c61f7ad7a2f9d9e1818229"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-monitoring.ts",
@@ -15500,8 +15500,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 535,
-        "sha256": "95e8377a9e429da40456eb765e93af6f540d85c22b3bfde3ebb390a8655aff19"
+        "bytes": 552,
+        "sha256": "139efb2f459aa3f84a074c4ef47a8f784b9f9d5576f5db624a98608f996ce223"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-server.ts",
@@ -15510,8 +15510,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 500,
-        "sha256": "cde448fbf536884fb4e0c212718352cda14c8b6efde2b0c02ce3c52265d363aa"
+        "bytes": 517,
+        "sha256": "9cd7cb915cdf7a30812f4acac0adb98f311dc699d707d7a3e6a3d35b7b4e2e29"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-support.ts",
@@ -15520,8 +15520,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 517,
-        "sha256": "05e44a84133aa8b08189da48198c90fc08951245cad52f28edfc26cf4db266f9"
+        "bytes": 534,
+        "sha256": "2a8ba63d981b73af8840ea6dfe53aada6b7450359e41ad963ae05b96c797f44f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/operations-target.ts",
@@ -15530,8 +15530,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "af645d0f779af3b7f83adef164530dcad2d846b9c24de2d72308fcaf8e14dd87"
+        "bytes": 529,
+        "sha256": "0bafad6b02c4c61bede8b08447eeba5f64f587cde41cde2df244d686511895a4"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/privacy-data.ts",
@@ -15540,8 +15540,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "9f760b701fe57db7ba487884f452cfc0f60e1b07eb98b49ac08acb3a0d45debd"
+        "bytes": 505,
+        "sha256": "d02d89ff5eb435f470b15ba77d907638608d722b62cea3b5d042195e3aa04cfd"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/privacy-delete-request.ts",
@@ -15550,8 +15550,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 561,
-        "sha256": "e1903cf7fd8d33f0c492cdf983064e19d13228340dba585db17f40b5a4bf1d6a"
+        "bytes": 578,
+        "sha256": "0b6f9791f2b9dcbe0104a3916f6a87f58375ed294804ca10a68f6d559b812539"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/privacy-masked.ts",
@@ -15560,8 +15560,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 526,
-        "sha256": "acf01df3fff1fb0b0ac822c4578c81a25a6ba80dcc3c01ad39ad8b1b27756e23"
+        "bytes": 543,
+        "sha256": "f511ab974a41f9ff86797a5aedf478b48167122560bb13dd890e16b7c0faf9e7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/privacy-request.ts",
@@ -15570,8 +15570,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "e79702b6c468129147803e807efdf4fbe76e7e9558dfef22a0dd461bf293fad1"
+        "bytes": 513,
+        "sha256": "de7be8050ee61b0e4613fe1fda63304da4d119147d253796b0932bf9bd7fc463"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/privacy-visibility.ts",
@@ -15580,8 +15580,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 522,
-        "sha256": "9d0923efe69fab2b5f9528299ffc59d84004fdcd2e399778bb80e7a062c21d40"
+        "bytes": 539,
+        "sha256": "dd40bbef35cc75ac928b719c613c042f6294feee0c00a084133d43837b23bd54"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-alert.ts",
@@ -15590,8 +15590,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 536,
-        "sha256": "c851c18921a8b7ce8451a79354095f56fb6466d5729c1037d8a2d58ec78c20fe"
+        "bytes": 553,
+        "sha256": "4177d93b1c1d955da78b2ee541288cfad320149c7762803063adb7a241403bcc"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-disabled.ts",
@@ -15600,8 +15600,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 537,
-        "sha256": "be58d172a1f52bdfd33d5615891c562018016f6f331128914d242f80c9ebaf19"
+        "bytes": 554,
+        "sha256": "cbf8adfecc65ea75f8b0d763e93da1e21dd7eadb43385a4b6675859454e31945"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-encryption.ts",
@@ -15610,8 +15610,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 512,
-        "sha256": "bc71b86066445e5685934c42e5c15ae5b352646c6158bfc5e919b10d1caff02a"
+        "bytes": 529,
+        "sha256": "da6d593e55a95ae199a1f868ae6d28278c10102f7626807c9c4ddc6e362a3bab"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-incident.ts",
@@ -15620,8 +15620,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "dbbbc636fde0dc8c20725d3494e62e375feebe86da7e2100e61a03f108e40245"
+        "bytes": 535,
+        "sha256": "7d597587f8d310ff327a0e69e0458420189e0609db8adb573f4810c479bdbdf9"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-monitoring.ts",
@@ -15630,8 +15630,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "77c5328dbc8d4cf109615b55bcfea5a0854177337cebc52937ecbb33c725abf7"
+        "bytes": 535,
+        "sha256": "36c7debd569143b855e3aaf630b9d092dd1e6075a677624568f631bc3d4d9f72"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-perimeter.ts",
@@ -15640,8 +15640,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 530,
-        "sha256": "6faf4b18954c077f48b8309f4bd74ca31f5239644da0702162362e34a3fee714"
+        "bytes": 547,
+        "sha256": "ac17dcb42f30402a14558fd3198e3c3ce3dc9f0a22c2c0c4aad96708cc8201c5"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-protection.ts",
@@ -15650,8 +15650,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 508,
-        "sha256": "25ea713a304009c83b144792635224865e4782713599bcab8b2e70c7d09710b2"
+        "bytes": 525,
+        "sha256": "6353a59a4068a2507d62a34636101d041d4ca3e39811c9234b36df73c6d9240f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-scan.ts",
@@ -15660,8 +15660,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 479,
-        "sha256": "361f7a50b33fb2645fb92f07ef092f7b70dd1abdaa69636d90eb78298888f122"
+        "bytes": 496,
+        "sha256": "14f820051638fa4cd2afc228374ab501d6794fb0e802b413cb31742009be2f61"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-secret.ts",
@@ -15670,8 +15670,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 503,
-        "sha256": "9b1dad4e3350024a206c7b775f89603dbe4cff17ce42ae74da8e5c0f9d264590"
+        "bytes": 520,
+        "sha256": "c2b7a2d1311854f801fbc42ac3c6bb854cba4a4b4ad151e36241fdfbbef6e322"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/security-threat.ts",
@@ -15680,8 +15680,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 534,
-        "sha256": "94887d41274ed96d7c6229272bab9b3090f98bc952dedadb7e868bb747a8d45c"
+        "bytes": 551,
+        "sha256": "0e323d91f97e318094799a8c1fb99415deaf255bd7908afa8077683b64f86d99"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-achievement.ts",
@@ -15690,8 +15690,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 517,
-        "sha256": "60f15a4b1e69bc43f63f7b842c4af0a8874b7d6174ef3b1fc9d780ac85e08530"
+        "bytes": 534,
+        "sha256": "ad3e4c3d86674660e64c3563879a2c1d71160fbf32f665cf9aad526bc231e87d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-blocked.ts",
@@ -15700,8 +15700,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 541,
-        "sha256": "62a9641c03c6da5cf80b9c4941bdd5fcfff7587dcbcbfe9057101ae567bca799"
+        "bytes": 558,
+        "sha256": "8824f104abbaf386d72347d4784359ff740ff9143686fc5d68459c59ce4fc377"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-draft.ts",
@@ -15710,8 +15710,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 530,
-        "sha256": "30d2c7f6571d9c5b7f5dfcdccae09c9e528c62e6a4d7ce323240d2878f170574"
+        "bytes": 547,
+        "sha256": "464ecf4ecdb2ee964b029aaafccc85759a12b75ada382dc0be7349801db75e36"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-error.ts",
@@ -15720,8 +15720,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "19984e37a855dc091ebaf85493b7f466fce6eb7c8cfe5f0e662dd82c3f2e35b6"
+        "bytes": 522,
+        "sha256": "2c9ecc4cdfecfe8cd3c8ce9a0107848961ea24ecfe008415e6b8f7f9edf1fc7c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-featured.ts",
@@ -15730,8 +15730,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "b4d3f1f1be88c32a3f4f50770a404c52dc7d0d6cb2c1969a2703373aeb5312bc"
+        "bytes": 522,
+        "sha256": "ce62cb23aa34ef501eca7b8bc24a47bb989f4fdaec81c121dd6f6d21caffa940"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-info.ts",
@@ -15740,8 +15740,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 497,
-        "sha256": "448da07fb558aa645b155b52a26ed7b379aa896a5cb685365d31a5ca0084df29"
+        "bytes": 514,
+        "sha256": "a2aa60ed620f03f93e0ed393d9d34c133f60dd96040cd141a8699194c9a912f6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-instant.ts",
@@ -15750,8 +15750,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 498,
-        "sha256": "9ccb560f04370e664ca7c65821b36bea77f694a14f0263fe20f31a391ef996ea"
+        "bytes": 515,
+        "sha256": "b5c87b7dba01987f83ece04a5fa0fc247f6a422ca1fa1cfe730c0ce7ce0ccc00"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-live.ts",
@@ -15760,8 +15760,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 464,
-        "sha256": "98b5c426bb5b4505c11d142b267bcbac67595fc6657020e8f92916ae99b6977f"
+        "bytes": 481,
+        "sha256": "e5a0692e342030a22e4744537ede42ba92be813068c7acfa83be9932c797e7c3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-loading.ts",
@@ -15770,8 +15770,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 496,
-        "sha256": "ed23c7802acaa82d466c964119cf014312290a69a66b31c6eb86b1f9d0d94e3b"
+        "bytes": 513,
+        "sha256": "ecdc128a89e6a0b7b04184ea299bf4d88ccf97267907eb4635415f55c1d94fe1"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-neutral.ts",
@@ -15780,8 +15780,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 499,
-        "sha256": "9f009841f1c25479bd669e6ed05a9174a55fbe17231f8d33c485334953fa0f8f"
+        "bytes": 516,
+        "sha256": "9b2b223820dcf6e5182fd092e13dea931808847343cdd57042078787a6da1a0d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-offline.ts",
@@ -15790,8 +15790,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 526,
-        "sha256": "70dec200a617ec7f1e68be03e67cf26094d13f99f41da4f21b882075c0e60800"
+        "bytes": 543,
+        "sha256": "084c52450a88c0b13833c7b6fcdba6cee5d8a42a4255b19d97359a8aca7b4e71"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-paused.ts",
@@ -15800,8 +15800,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 493,
-        "sha256": "33db8baf3927a01718af920a625dcf6a6745e50121536c19485d98c3322dedcf"
+        "bytes": 510,
+        "sha256": "4cc32fa7a2e036fbd5d20a5547d681c48399d3b92cc2c0a405ac3edf7cc0e492"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-pending.ts",
@@ -15810,8 +15810,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 518,
-        "sha256": "b6ba8d50f9ddb7a8ecc8a72c1788104ea93c715c6b49cee476dec06e0d94ba6f"
+        "bytes": 535,
+        "sha256": "5792e366119dd856ff19368e46aea71467a511566ee1c586c7e32f5819c829d0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-premium.ts",
@@ -15820,8 +15820,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 515,
-        "sha256": "74868254badec9e1d29e3bcefa61024fccc535554e045cc74ad471888e78c7b2"
+        "bytes": 532,
+        "sha256": "5ee509a6f13e3185c3fd185aa4d33ae261e7637fc311813edb0fbc006da976de"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-priority.ts",
@@ -15830,8 +15830,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 507,
-        "sha256": "12ac2539db0e7010bb355ef126486be40e7aae3cf3ee0e9264cb7519454a1c67"
+        "bytes": 524,
+        "sha256": "904f6b9964d8715184e17c2ee50f14853c5cc099161cace3030acc6781dda47b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-scheduled.ts",
@@ -15840,8 +15840,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 509,
-        "sha256": "daa82632eca63c841835486e3121d4610df7b74d2859d3660c429c03f2802df8"
+        "bytes": 526,
+        "sha256": "7458a5b16b91154a025918f3576460d2f5665c9674d8dd3ee75d5d6d682a7f12"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-secure.ts",
@@ -15850,8 +15850,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 525,
-        "sha256": "b78da9eb99fe84b81968e98a50653a7b9859a373189bcc3c5523e4efd04164a4"
+        "bytes": 542,
+        "sha256": "16b1d70880cb607b18a238fc93c4c844f5d2f090abe86b03e777110e80573230"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-success.ts",
@@ -15860,8 +15860,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 513,
-        "sha256": "7f9bde11a723f884feb461c5a176eac466e61ee60314cfd99ce3fc738e5be049"
+        "bytes": 530,
+        "sha256": "b37c3cec8169c348ec05b5a6da8289ae55642b8d923a415a7a403a101ff64542"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-synced.ts",
@@ -15870,8 +15870,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 521,
-        "sha256": "c2f61d690a23e99dbe7e8097f495deadd08725a9699cbad858a68fed5598be17"
+        "bytes": 538,
+        "sha256": "3c9a1ccef68270a0de7e42bc1c011d9877f3d07e78d9b9e2baa5b68ab0c4a422"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-verified.ts",
@@ -15880,8 +15880,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 545,
-        "sha256": "ba6d33b923ec6ea7b4e76ed3cabc9b99ff327549f260a17d69943c96e5fca4e4"
+        "bytes": 562,
+        "sha256": "a38a1c7a8943097acc1b79f0c4adb9b2ba908fc3901a7dcb97ba4e396f5ab737"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/status-warning.ts",
@@ -15890,8 +15890,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 522,
-        "sha256": "57d8246e2a6d973a927526c196a4d8848814fdef9bc45d6a813788b4692a0a57"
+        "bytes": 539,
+        "sha256": "60f4d270a545731262bab1e3d93d27f7753414b7c2a6c739ddbc8fa15de21668"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/system-automation.ts",
@@ -15900,8 +15900,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 508,
-        "sha256": "a3d5b343061e25967ca42a7422f365fcee28cc8dc587db60cd087e0aa1fc85d4"
+        "bytes": 525,
+        "sha256": "a0a21fc3b8744dee57382c1c6214b04277ff91b011e78f628f99051c4f31acd0"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/system-command.ts",
@@ -15910,8 +15910,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 509,
-        "sha256": "3c6ba3ec3d837b3cd4b706f38e1edee3bc01d78099b0b50770d195572eaf29f6"
+        "bytes": 526,
+        "sha256": "f91797749991969d614cc832379947167a766425265c90d4ef1b6856b7bca4e3"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/system-integration.ts",
@@ -15920,8 +15920,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 534,
-        "sha256": "7d91c89aa809f02da73c89e2fa2d2205b1a8287d164d9520a9e0972a3180fd9c"
+        "bytes": 551,
+        "sha256": "471320434e51e5158efbe0a21f1db77b20e8e507e1b6fb764475384013588f29"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/system-workflow.ts",
@@ -15930,8 +15930,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 501,
-        "sha256": "c53e23813281b928f1ef4ca4d3ffd0572688c9b53655f765567ffb3dc870d226"
+        "bytes": 518,
+        "sha256": "6a529aef0a790ac02af8b69d003462f2c7b048aa3dd1c0f98369d8711a78e4af"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/time-date.ts",
@@ -15940,8 +15940,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 491,
-        "sha256": "1f694008b7d40ec2f3de16ec660716b01f20a05295b490238e11860249104332"
+        "bytes": 508,
+        "sha256": "f42989e8996b4cbe63530d0a14c25fc6b33cfee9f3ac8469d01f258ef300a1a2"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/time-deadline.ts",
@@ -15950,8 +15950,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 492,
-        "sha256": "c47477f9656d7d4015deb5be6ea6decaf4ba296ee4ded4e501af0e3e5e46e7ab"
+        "bytes": 509,
+        "sha256": "39e6155906072d3d3d42cf7719c58ac0904e134efe69f344f6de180e60c90e00"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/time-leave.ts",
@@ -15960,8 +15960,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 475,
-        "sha256": "79d9575a92b4b5e3a8900d7d32bc8acb4072628e6892ecab9c0d18f246f40bc2"
+        "bytes": 492,
+        "sha256": "8cb8bac85d8f9e602f80d9bf55cd3f2bdc601c9c305d0b5fe1a2d6d7113edfb6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/time-schedule.ts",
@@ -15970,8 +15970,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "315a8c896278511f40e492ece49f7482e7781e3d2994cc53e865e0f4a903f522"
+        "bytes": 522,
+        "sha256": "6b21bb6429366f09e93c53f429f970d85eaddc6b505d0411b3ced40d38146647"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/time-timestamp.ts",
@@ -15980,8 +15980,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 480,
-        "sha256": "c34e085ca2dbcd1afd52b17ae38b7628d5163cce426fa7599cab5ae85141324e"
+        "bytes": 497,
+        "sha256": "afbbf9dc3f059b3369ec6ffe9e62eddc2864df8d739e8eba162627a51be89198"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-approval.ts",
@@ -15990,8 +15990,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 525,
-        "sha256": "ba1c98e8f26ac9c34e28f17a0dd841d24f228cdbce784311de83cab8666b4726"
+        "bytes": 542,
+        "sha256": "6c8c7f7ead501c00a44d426a7c58f4f1bbbb5b7aa4b653935e778292521304a7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-assignment.ts",
@@ -16000,8 +16000,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 533,
-        "sha256": "619d842a5225e725ae7265d1ee87da3e45de7e596eb555bf232f9ba359a03a34"
+        "bytes": 550,
+        "sha256": "9f55afb85da58fbcc27b65fd3316ea58e4f826f51d503927d6822351c279523d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-branch.ts",
@@ -16010,8 +16010,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 508,
-        "sha256": "2874fb5e5129e7aebb753e69dd2f72dea4dd8ae562219051c43706bcde059636"
+        "bytes": 525,
+        "sha256": "c7e8a65468eaf02f7837739e9e725c347a2eb5d621256a11a06ad670e3d165b6"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-condition.ts",
@@ -16020,8 +16020,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 509,
-        "sha256": "d777d9d1dba1331f82438e3aa82a35a2315a08643644589ed01304d94ca7339a"
+        "bytes": 526,
+        "sha256": "3f09f60217a825fa83febba9a55291b00a5189f482c77646f375408de4d8475f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-delay.ts",
@@ -16030,8 +16030,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 491,
-        "sha256": "3098ae1ce15e973958d7b24f91b9f748181e7892f4cefba106a1be002b7094a6"
+        "bytes": 508,
+        "sha256": "12df724347b9b3a7538096f8069440fcbe92ac9e2d4d20a4e98528b063724820"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-loop.ts",
@@ -16040,8 +16040,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 494,
-        "sha256": "c8b408613a3a6f5a40d82c250d9c9f695a03147efb1a8c11b5bf91b7f88a750f"
+        "bytes": 511,
+        "sha256": "a2850761f1c5b06fee9fe4ff8aedb79c47309101d9791597e79de5eb2fbcba1e"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-merge.ts",
@@ -16050,8 +16050,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 501,
-        "sha256": "7be11cebb3624ec0d282ad2ec37dbf41da0a33f2b6bc8848bcf0db95feb7d0ef"
+        "bytes": 518,
+        "sha256": "c74269b34f3b971db22b0c2936c7be462980ca023c026c27818274aa41df1707"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-queue.ts",
@@ -16060,8 +16060,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 488,
-        "sha256": "2868cf4dbfcaecb98c4df3ae82748bc447ad825e25c67d4352091549043a7102"
+        "bytes": 505,
+        "sha256": "a32c27d3a58df35c9fb9f728ac62fa0d4327c3bef385b715a80860f3e41b372e"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-rejection.ts",
@@ -16070,8 +16070,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 527,
-        "sha256": "3acda3fb39ffeedd103ec63a7afee1c546df5bfae67a22a71d44a258e8e7d8c7"
+        "bytes": 544,
+        "sha256": "77634ea87f61e01a500d0d52cbc75ff73bef4fd7a771912b7a6084332bd6c300"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-rollout.ts",
@@ -16080,8 +16080,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 522,
-        "sha256": "00060597aa996d53cbc4a5a47862a967217c58bbac73befa56d398cfa2a1fdaf"
+        "bytes": 539,
+        "sha256": "386fc7c3f8da7525424b93bfaa1f43ed4a82df245e254ce7a2388ae1d4d37ff7"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-step.ts",
@@ -16090,8 +16090,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 484,
-        "sha256": "8c8bcfe1d8f4d1d3c85caf4800cd0d9de0bd4941b2b622b0aa94927587462730"
+        "bytes": 501,
+        "sha256": "0dd9ef4fc2657dd78eebe21b8a5b04b144c2c979889ee4704532b17976cf599c"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-template.ts",
@@ -16100,8 +16100,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 504,
-        "sha256": "ccb8c4ea2b5efb4bab48a54be9c0e214a9800d400770912d88ee358bbd820e6c"
+        "bytes": 521,
+        "sha256": "4e83c620a00354f775ad4620e38c0ec960de879373021ead18f95bac64a8efc2"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-trigger.ts",
@@ -16110,8 +16110,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "8eb0093044ef110ab7a16b528069aadcd7e1693d5e0d962aee5dc758aa0695c7"
+        "bytes": 522,
+        "sha256": "3142bb4e5b1864e0e01d46686b950c543c403927f0e2e86c1ccf4f95df81efba"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-version.ts",
@@ -16120,8 +16120,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 505,
-        "sha256": "b0dfabab30a8cb1a25e3394e02877909bbf4a9f4b89678bda5a5aa27f76e9fb5"
+        "bytes": 522,
+        "sha256": "037e881a0752f664b3b0f793c79aed344a3db83304f0e7dac47ea7e27b4f50fd"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/roles/workflow-webhook.ts",
@@ -16130,8 +16130,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 508,
-        "sha256": "7ae4cfa3072534309774355a0657fb9b68bc3aebd9ed09262222421bcdd1115e"
+        "bytes": 525,
+        "sha256": "90f1b51d0b5af2065ea067f4d19c7cd1bea7ffae9f04976dda325620ed129894"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/runtime/factory/index.tsx",
@@ -16194,8 +16194,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 32145,
-        "sha256": "9e501076bc071b7801648697d1cfdf596ca201d554b055466a183fb1e7ac2553"
+        "bytes": 32162,
+        "sha256": "1937e6cfb0ba358ed24af6bd5a0ad63d9b97704b217d695110ce1b947c74d592"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/foundation/contracts/index.ts",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "0ecb5bc0adb24fa9c86f42976227863cb5c468cb1f1a2c5e1dae7e4d1eb35671"
+    "digest": "bb0f107f8e71ed8ad89655874764e177b082a77955cf06a7f6cf3b9e92c08f6b"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "e1b979f6ecec156359f1da545570992208ac8d5ad21f161c78e0e40ca057cf72",
-      "e1b979f6ecec156359f1da545570992208ac8d5ad21f161c78e0e40ca057cf72"
+      "75bfd99b144d80b696d14aaddb3e9ceb2bd3cba3d0925eab845074f87d679f85",
+      "75bfd99b144d80b696d14aaddb3e9ceb2bd3cba3d0925eab845074f87d679f85"
     ],
     "agree": true
   }

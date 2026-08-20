@@ -633,8 +633,8 @@
   ],
   "scripts": {
     "dev": "node scripts/builders/dev/index.mjs",
-    "icons:generate": "node scripts/generate-semantic-icons.mjs",
-    "icons:check": "node scripts/generate-semantic-icons.mjs --check",
+    "icons:generate": "node scripts/generators/generate-semantic-icons/index.mjs",
+    "icons:check": "node scripts/generators/generate-semantic-icons/index.mjs --check",
     "prebuild": "pnpm run public-entrypoints:check && pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
     "prepack": "pnpm run public-entrypoints:check && pnpm run distfresh:check && pnpm run exports:artifact:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",

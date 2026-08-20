@@ -18,8 +18,8 @@ import {
   validateCorpusManifest,
   validateIconPresetManifest,
   validateLocalPhosphor,
-} from './generate-semantic-icons.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+} from './index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);

@@ -1334,7 +1334,7 @@ base y sólo dos componentes legacy (`AlertIcon`, `LoaderIcon`).
       `.../semantic/corpus/` — (2) `manifest.json` (el corpus gobernado, editable a
       mano) y su schema.
         `.../semantic/corpus/generated/` — (1) salida de
-        `scripts/generate-semantic-icons.mjs`: `GENERATED_ICON_NAMES`, metadatos,
+        `scripts/generators/generate-semantic-icons/index.mjs`: `GENERATED_ICON_NAMES`, metadatos,
         y las listas por pack (FOUNDATION/BITHIRE/IDENTITY/INTELLIGENCE/OPERATIONS).
         Corpus version 6.
       `.../semantic/presets/` — (0) agrupador de presets por aplicación.
@@ -2266,7 +2266,7 @@ Cómo se invoca: `package.json` (`build:*`, `lint:*`, `icons:*`, `contract:*`).
   `src/foundation/tokens/css/facade/artifacts/<slug>/index.css` desde la fuente autorizada; `lint:artifacts`.
 - `builders/build-font-packs/index.mjs` — copia los font packs opt-in a `dist/fonts/` para que resuelvan los
   subpaths `./fonts/<id>.css`.
-- `generate-semantic-icons.mjs` (+ `.test.mjs`) — `icons:generate|check`; corpus semántico de 282 nombres.
+- `generators/generate-semantic-icons/index.mjs` (+ `index.test.mjs`) — `icons:generate|check`; corpus semántico de 282 nombres.
 - `generate-supplier-contract.mjs` (+ `.test.mjs`) — `contract:generate|check` (este último SÍ en CI);
   produce `supplier-contract.json` (185 KB) que consume `consumer/ds-supplier-honesty.mjs`.
 - `generators/generate-surface-capability-census/index.mjs` — **[SIN CONSUMIDOR]** CLI fino sobre
