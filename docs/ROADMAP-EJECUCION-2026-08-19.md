@@ -826,6 +826,43 @@ artefacto) ya están en el brief de la ola 2. Mis adjudicaciones W1 quedan
 consistentes con la enmienda: `tier.page.fg` y descongelar-primary son
 decisiones de theme → esperan F4A/F4B; W1 midió que el conjunto seguro se
 agota con la ola 2.
+**F2.4-batch W2 ✅ `a7929df5a` + F2-SEGURO AGOTADO (declaración del
+coordinador).** 1 de 2 canales ejecutado: `--ds-layout-sider-bg`→
+`--ds-sidebar-bg` (rottay). Declaración de packet completa (enmienda del
+dueño): rottay 3 líneas exactas (l.626 sustitución, l.1627 colapso), bithire y
+evnto byte-idénticos; negativo nombrado y medido (surface/cascadePresence/
+valueParity-common/identical/divergent/severs/severedTotal/floorCorpus
+IDÉNTICOS); restauración probada (revert→rebuild→byte-idéntico ×3). Se
+movieron solo los campos del permiso enmendado: identicalRoleShape 291→290,
+divergentRoleShape 140→141 (entra exactamente `--ds-layout-sider-bg`),
+occurrenceTrap 1938→1937, multiDeclaration 727→726, readerEdges 31→32 (la
+raíz sigue congelada, patrón del piloto). Bonus gobernanza:
+`navigation.sidebar-tone` gana su 6.º consumidor alcanzable — el leaf que
+esquivaba la perilla ahora la obedece. Suite 1683/13 por nombre ×2;
+mirror-parity 44/44; lane-control 10/13 sin crecer; re-sello gat-07
+(`cd6ba2a8…`). Huella docs-engineering: 1 contador (`sidebar.md`).
+**El canal 2 (`--ds-color-border-primary`→`--ds-color-border`) se bloqueó y
+revirtió:** enrojecía `brand-authored-residue-retirement` (R35 firmado —
+el hash digiere valor CRUDO, no resuelto) y tres evidencias dicen que el par
+border/border-primary son HERMANOS, no padre-hijo: el piso los declara en
+paralelo desde el mismo ancestro, divergen en otro scope del piso, y evnto
+los ata AL REVÉS (`--ds-color-border: var(--ds-color-border-primary)`). No
+hay raíz única en las tres verticales = la condición de bloqueo de la
+enmienda en su forma real. **Adjudicación del coordinador: ADOPTADA — el par
+va a F4A/F4B (autoría de vocabulario), como `tier.page.fg`.** Aislamiento:
+con el canal 1 fuera, el test firmado vuelve a 72/72.
+**Corrección del worker sobre W1 (aceptada):** el rojo intermitente de
+`brand-authored-residue-retirement` en la ola 1 pudo ser este mecanismo
+asomando, no contaminación cruzada — queda registrado como mecanismo, no
+como ruido.
+**F2-seguro queda EXHAUSTO:** piloto (sexteto) + W1 (3 canales) + W2 (1
+canal) = 10 canales recableados, todos con cero-delta computado; el barrido
+de las 41 derivationDebt + los 150 severos no deja ningún candidato
+inequívoco. Residuo declarado y domiciliado: par border/border-primary,
+`tier.page.fg` (43 canales), descongelar `--ds-color-primary` (6+15), las 22
+asimétricas → todos F4A/F4B o la fase F2-asimétrico posterior. Ratchet 2171
+sin mover (plano skins, F3). Próximo paso: auditoría Fable del frente F2
+completo, y si aprueba, F4A según la enmienda de secuencia.
 **F2.4-batch W1 ✅ `8f58229e3`** — 2 raíces / 3 canales recableados
 (`tier.base.fg`→`--ds-color-text-primary` en bithire ×2 — raíz VIVA, no
 congelada; `tier.page.bg`→`--ds-sidebar-bg` en rottay ×1). Cero-delta probado:
