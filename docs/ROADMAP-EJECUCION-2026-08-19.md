@@ -815,6 +815,31 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F4A — plan de ejecución ADOPTADO (coordinador, 2026-08-20; plan completo
+medido contra el árbol por subagente plan).** Fases: **F4A-0** medición
+pre-rewrite (worker, read-only: reproduce el walk evaluado sobre el árbol de
+hoy — denominador ~3693 ±12 recables F2, 263 asignaciones, sourceSkeleton
+1820/1503/397 con ∩345, matriz familia×subfamilia completa, exclusivos por
+tema); **F4A-1** esquema de asignación de variantes + adjudicación escrita de
+los 6 nudos (**MÍO, el DT — lote de diseño irreemplazable**: 63 raíces × 3
+temas a 4 domicilios, registro de los 3.275 candidatos de colapso SIN
+colapsar, orden/comentario/placeholder canónicos, nudos: par border,
+tier.page.fg, descongelar-primary, 22 asimétricas, H4, domicilios de las 10
+por-crear); **F4A-2** harness de paridad estructural blocking (worker;
+87→88 gates, ratchet decrease-only desde ~2.268 slots divergentes a
+tolerancia cero al cierre); **F4A-3** canon de comentarios (byte-idéntico);
+**F4A-4** alineación de roster por placeholders (byte-idéntico: evnto +34,
+bithire +17, rottay +10); **F4A-5…15** reescritas por familia ejecutando el
+esquema (K1/K2→5 palette, K3→6 typography, K4→14 asimétricas, K5→15 tabla
+bithire; REDERIVED para firmados); **F4A-close** mío: ratchet a tolerancia
+cero + gates:ci final + **auditoría Fable del frente**. Restricciones duras
+registradas: F4A-0 antes que todo; F4A-1 antes que cualquier reescritura;
+F4A-2 antes que F4A-4+; la cadena censo→reconciliation→kimi→controls→catalog
+con gat-07 ÚLTIMO mío en cada lote; suite 1683/13 por nombre; lane-control
+10/13 no crece; docs-engineering solo contadores. Riesgos con mitigación en
+el plan (dead-writers 266 decrease-only, firmados T1/T2/T3/c3/evnto-t2/R35,
+deriva de contadores mirror-parity, red visual 462 PNG primera corrida con
+peso = F4A, denominador stale si alguien cita 263/3275 sin F4A-0).
 **Veredicto de cierre Fable: CIERRE ACEPTADO, cero discrepancias**
 (`/tmp/fable-f2-cierre-verdict.md` — verificación corta sobre `4606444d5`:
 ola 3 diffs exactos + negativo a nivel de campo, mass-c3 135/135 standalone,
