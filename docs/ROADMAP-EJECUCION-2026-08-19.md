@@ -380,7 +380,14 @@ docs-engineering (cita `gate:styles-css`; su commit/push es de ese repo).
 **Auditoría de hito:** al cerrar F0, Fable audita antes de abrir F0.5. ✅
 Aprobado; hallazgos integrados en F0.14.
 
-**F0.5 — en curso.** Fase 0 CERRADA (`5ab118884`): helper `repo-root`
+**F0.5 — CERRADO (2026-08-20).** La ley folder/index gobierna todo el repo:
+scripts/ 100% `<familia>/<capability>/index.mjs` con el `scripts-tree-gate`
+bloqueante (Paso D), manifest graduado a `packages/core/manifest/`, raíces de
+paquete sin artefactos sueltos, `styles/platform.css` borrado, sellos frescos
+y **gates:ci 80 blocking + 2 excluded verdes** en HEAD. Auditoría Fable del
+frente: **APROBADO, 0 bloqueantes**; condiciones implementadas en `652cf285e`.
+Paso C (renombres) y los H1/H2 del auditor abren F1. Detalle lote por lote
+abajo. Fase 0 CERRADA (`5ab118884`): helper `repo-root`
 (`lib/repo-root/index.mjs`, doble predicado, 5/5 drills, `b222ff311`) y
 migración de las resoluciones manuales ejecutada por terminal Opus —
 147 archivos usaban idiomas de auto-ubicación, **131 migrados**
