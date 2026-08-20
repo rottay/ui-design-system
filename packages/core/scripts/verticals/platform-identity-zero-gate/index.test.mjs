@@ -136,6 +136,22 @@ test('excludes only the gate files at their exact repository paths, not matching
   assert.equal(isExcludedPlatformZeroPath(join(core, 'src/index.mjs')), false);
 });
 
+test('the named dated artifact exemption is exact-path: the worklist is exempt, a neighbour is not', () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const core = findPackageRoot(here);
+  const worklist = join(core, 'scripts/tokens/kimi-worklist-gate/KIMI-VISUAL-WORKLIST.json');
+  assert.equal(isExcludedPlatformZeroPath(worklist), true);
+  // Same basename elsewhere, or a sibling name in the same folder: NOT excluded.
+  assert.equal(
+    isExcludedPlatformZeroPath(join(core, 'scripts/tokens/kimi-preservation-manifest/KIMI-VISUAL-WORKLIST.json')),
+    false,
+  );
+  assert.equal(
+    isExcludedPlatformZeroPath(join(core, 'scripts/tokens/kimi-worklist-gate/KIMI-VISUAL-WORKLIST-2.json')),
+    false,
+  );
+});
+
 test('rejects identity modifiers in fields and every root identity attribute', () => {
   const findings = findSemanticPlatformIdentity([
     `tenantSlug: 'platform-preview'`,

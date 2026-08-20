@@ -41,7 +41,7 @@ import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const WORKLIST = join(ROOT, 'KIMI-VISUAL-WORKLIST.json');
+const WORKLIST = join(HERE, 'KIMI-VISUAL-WORKLIST.json');
 const CSS_ROOT = join(ROOT, 'src/foundation/tokens/css');
 const ENTRY_DIR = join(CSS_ROOT, 'facade/entrypoints');
 const TOMBSTONE = 'patterns-paint.css';

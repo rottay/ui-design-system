@@ -44,6 +44,15 @@ const OWN_CAPABILITY_SUFFIX = '-identity-zero-gate';
  */
 const HISTORICAL_SNAPSHOT = /(?:^|\/)(?:[^/]+\.baseline\.json|[^/]+-adjudication\.json)$/u;
 
+// Named dated artifacts whose "platform" mentions are historical measurements,
+// not live identity (exemption by EXACT NAME — a neighbour still fails; C2).
+const NAMED_DATED_ARTIFACTS = new Set([
+  // KIMI-VISUAL-WORKLIST.json: dated premium-era visual worklist; its matches are
+  // per-vertical measurement records (incl. the deleted styles/platform.css path),
+  // not live identity. Adjudicated at the F0.5 close (Fable H3/H4).
+  'packages/core/scripts/tokens/kimi-worklist-gate/KIMI-VISUAL-WORKLIST.json',
+]);
+
 const CONTENT_RULES = Object.freeze([
   ['style-export', new RegExp(`(?:\\./)?styles[/\\\\]${RETIRED}(?:\\.css)?\\b`, 'gi')],
   ['bundle-path', new RegExp(`\\bdist[/\\\\]${RETIRED}\\.css\\b|\\b${RETIRED}\\.css\\b`, 'gi')],
@@ -98,6 +107,7 @@ export function isExcludedPlatformZeroPath(path) {
   const base = basename(path);
 
   if (OWN_FILES.has(rel)) return true;
+  if (NAMED_DATED_ARTIFACTS.has(rel)) return true;
   if (extname(base) === '.md') return true;
   if (HISTORICAL_SNAPSHOT.test(rel)) return true;
   if (isTestSource(rel)) return true;

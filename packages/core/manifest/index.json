@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "34257a5da2a58ccdcb081ece322eff1093ab3ddbac57534fdfc10624a8158d69",
+  "inputsDigest": "cd6f8948c5e84b5775e861dc81bd94238c0dc921cbef0fc9e189376f0bb1a0f5",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1344,7 +1344,7 @@
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "3e3cee78d409bcbb4c6b7f6ecde54310fe85c570f77c561ff0251f9d5ab32676"
+      "digest": "f47f2bb46d55d0341d74e23b5f0aec7b136d022bcad8908fb64ea61079733c1d"
     },
     {
       "controlId": "motion.dial",

@@ -13,70 +13,70 @@
    "name": "cubic-bezier literals in modern components",
    "baseline": "43 (33 + 10)",
    "target": "0",
-   "measure": "node scripts/engine-token-audit.mjs (cubic-bezier counter)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (cubic-bezier counter)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Raw duration literals in modern components",
    "baseline": "39",
    "target": "0",
-   "measure": "node scripts/engine-token-audit.mjs (raw-duration counter)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (raw-duration counter)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Consumed-but-undefined motion tokens",
    "baseline": "6 names",
    "target": "0",
-   "measure": "node scripts/engine-token-audit.mjs (undefined-motion-name counter)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (undefined-motion-name counter)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Hardcoded hex / rgba in modern components",
    "baseline": "78 / 30 (31 rgba on 2026-07-06 re-measure; WO-ENG-01 pins the counting method and re-baselines in engine-token-audit.baseline.json)",
    "target": "0 / 0",
-   "measure": "node scripts/engine-token-audit.mjs (hex + rgba counters)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (hex + rgba counters)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Shadow scales",
    "baseline": "2 (parallel)",
    "target": "1 (dark-aware)",
-   "measure": "node scripts/engine-token-audit.mjs (shadow-scale counter)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (shadow-scale counter)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Files consuming --ds-gradient-* / --ds-glass-* / --ds-shadow-glow-*",
    "baseline": "1 / 0 / 0",
    "target": "sanctioned-role consumers only, > 0",
-   "measure": "node scripts/engine-token-audit.mjs (effect-consumer counters)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (effect-consumer counters)",
    "asOf": "2026-07-06"
   },
   {
    "name": "modern/theme.css lines",
    "baseline": "4563",
    "target": "< 800, all selectors consumer-proven",
-   "measure": "wc -l packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css; node scripts/engine-token-audit.mjs (selector-consumer gate)",
+   "measure": "wc -l packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css; node scripts/engine/engine-token-audit/index.mjs (selector-consumer gate)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Radius scale declarations",
    "baseline": "2",
    "target": "1",
-   "measure": "node scripts/engine-token-audit.mjs (radius-declaration counter)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (radius-declaration counter)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Cross-engine layout divergences (unintended)",
    "baseline": ">= 1 (StatsGrid)",
    "target": "0",
-   "measure": "node scripts/engine-token-audit.mjs (cross-engine-layout counter)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs (cross-engine-layout counter)",
    "asOf": "2026-07-06"
   },
   {
    "name": "Responsive counters (fixed-width literals / 360px overflow probes)",
    "baseline": "to-measure (WO-ENG-12 step 5)",
    "target": "0 above allowlist / 0",
-   "measure": "node scripts/engine-token-audit.mjs --check (responsive counters, added by WO-ENG-12)",
+   "measure": "node scripts/engine/engine-token-audit/index.mjs --check (responsive counters, added by WO-ENG-12)",
    "asOf": "2026-07-07"
   }
  ],

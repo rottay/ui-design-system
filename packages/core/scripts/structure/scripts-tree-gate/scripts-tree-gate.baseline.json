@@ -28,6 +28,7 @@
     { "rule": "R3-foreign-file", "path": "tokens/customization-surface-census/customization-surface-report.json", "reason": "artefacto nombrado del censo (reporte derivado pineado por digest); re-alojado en G2 con su nombre registrado — Paso C decide la forma corta" },
     { "rule": "R3-foreign-file", "path": "tokens/kimi-preservation-manifest/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json", "reason": "manifiesto de preservacion KIMI, artefacto nombrado (G2); lo leen 3 contratos de modern-rescue — Paso C" },
     { "rule": "R3-foreign-file", "path": "tokens/kimi-preservation-manifest/kimi-preservation-gate.test.mjs", "reason": "suite del gate de preservacion, nombre historico — Paso C" },
+    { "rule": "R3-foreign-file", "path": "tokens/kimi-worklist-gate/KIMI-VISUAL-WORKLIST.json", "reason": "worklist visual KIMI, artefacto nombrado re-alojado desde la raiz del paquete en el cierre de F0.5 (Fable H3) — Paso C decide la forma corta" },
     { "rule": "R3-foreign-file", "path": "tokens/tokens-catalog/customization-reconciliation.json", "reason": "proyeccion versionada curada a mano (su generatedBy nombra a tokens-catalog); re-alojada en G2 — Paso C" }
   ]
 }

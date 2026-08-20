@@ -25,7 +25,7 @@ const SCRIPT = join(HERE, 'index.mjs');
 const run = (name) => spawnSync('node', [SCRIPT, `--drill=${name}`], { encoding: 'utf8' });
 
 const CORE_ROOT = findPackageRoot(HERE);
-const WORKLIST = join(CORE_ROOT, 'KIMI-VISUAL-WORKLIST.json');
+const WORKLIST = join(HERE, 'KIMI-VISUAL-WORKLIST.json');
 const UPSTREAM = join(CORE_ROOT, 'src/foundation/tokens/premium-dead-adjudication.json');
 const WORKFLOW = resolve(CORE_ROOT, '../../.github/workflows/ci.yml');
 const SIBLING_APP_BITHIRE = resolve(CORE_ROOT, '../../..', 'app-bithire');

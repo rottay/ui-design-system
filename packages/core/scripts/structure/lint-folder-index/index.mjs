@@ -27,6 +27,10 @@ import { join, basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
+// EXCEPCIÓN DECLARADA (F0.5 lote C): este gate NO usa el helper repo-root a
+// propósito — su self-test lo copia como archivo único a un tmpdir pelado, sin
+// lib/ al lado. Los 2 sitios a mano (`../../../src/ui` aquí y `../../../src`
+// en la regla 4) deben seguir resolviendo por profundidad relativa. No migrar.
 const COMPONENTS_ROOT = resolve(__dirname, '../../../src/ui');
 
 const CATEGORY_ROOTS = [
