@@ -658,6 +658,14 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2.4-piloto ✅ `14262d45c`** — sexteto recableado, cero-delta probado
+contra el artefacto (12 líneas exactas; bithire/evnto intactos; mirror-parity
+solo a la baja en lo permitido). Patrón REDERIVED preservó los rosters sin
+tocar hashes firmados. Enseñanzas para el batch (registradas): descongelar
+`--ds-color-primary` en rottay libera 21 canales (es decisión de F4 — tema);
+el ratchet no baja con trabajo de tema (otro plano); cero-delta estricto por
+literal es raro (20/150) — el criterio operativo del batch es "misma pintura
+computada tras resolver la raiz" con revisión sighted por lote.
 **F2.4 — correcciones del piloto (parada medida del worker, adoptadas):**
 (a) el conjunto batch es `derivationDebt` (41) — mi lectura "simetría de modos"
 era otro eje; la intersección segura (4 raíces) no tiene trabajo recableable
