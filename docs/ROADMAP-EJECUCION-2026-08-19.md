@@ -658,6 +658,21 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.4 — descomposición medida (coordinador, contra el árbol):** las 5.100
+celdas = 1.462 migradas + 449 MUST_REACH (444 con bindings + 1 vacío) + 629
+uncoveredByDesign + 2.424 MUST_NOT_REACH + 255×3 (ESCAPE_HATCH/
+OVERLAY_OF_ROOTS/NO_CSS_CHANNEL — leyes, no huecos). Ejecución:
+- **F1.4a-piloto (mío):** una familia (chart/basic/area-chart) autorada a mano
+  como ejemplar — el mapeo binding→fila internalChannels NO es mecánico
+  (channelId = el canal gobernado al que debe resolver el socket, no el socket;
+  eso es juicio por fila).
+- **F1.4b (worker):** réplica del patrón por clases de familia (primitive
+  1.532, pattern 787, surface 523, structure 454, chart 342), program-check de
+  red, en lotes con commit por clase.
+- **F1.4c:** los 629 uncoveredByDesign (prescripciones "fase 3 decide") se
+  adjudican con la puerta que F1.5 abre; `targetBinding` solo se borra cuando
+  cada celda tiene su ley re-expresada (nunca en masa — las 3.189 con status
+  son adjudicaciones, no deuda).
 **F1.3 ✅ `5c260b3a0`** — `root-exposure-gate` bloqueante (82 gates en CI).
 La exposición de las 63 raíces queda gobernada: 26 tenant-dial con `governedBy`
 real, 27 internal-head protegidas de ganar perilla en silencio, 10 gap
