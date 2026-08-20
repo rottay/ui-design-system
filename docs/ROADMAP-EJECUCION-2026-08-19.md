@@ -572,6 +572,24 @@ customization-surface) — suite roja ≠ ignorable; en H/I el gates:ci de cierr
 puede descubrir más de estos (no quedan artefactos pineados conocidos stale:
 la cadena quedó completa).
 
+**Lote G ✅ `1e4770463`** — tokens/ completa (32/32, 15 capabilities). 7
+roturas no censadas arregladas (engine-freeze importaba del lote H; 2da
+edición en quality-evidence declarada; self-spawn por basename ×4). Suite
+**23/23 exactas, 0 nuevas, 0 ausentes** — el sello de F absorbió la deuda C3
+y la víctima de la carrera cra-12 dejó de manifestarse. Coordinador: 4 sellos
+`generatedBy` actualizados + cadena re-sellada en orden (census →
+reconciliation → kimi-preservation → controls → tokens-catalog → gat-07
+último `b0b87c61…`).
+**Lote R ✅ `1156d1fb3`** (coordinador) — rebuild dist completo (salda H3 de
+la auditoría Fable de F0: dist fresco tras los toques de src de F0.10/F0.13)
++ TAXONOMY re-derivado (98 prim/133 fam). Cadena C3 + distfresh + gat-07
+verdes.
+**Lote G2 creado (pendiente, mío):** re-alojar los 4 artefactos de raíz de
+paquete en sus capabilities dueñas (`customization-surface-report.json` y
+KIMI manifest → tokens/; `customization-reconciliation.json` → tokens-catalog
+— su `generatedBy` nombra al gate). Los 3 contratos de modern-rescue que los
+leen se editan con autorización expresa (mismo criterio que C8).
+
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
 baseline del Paso B: **1618 tests / 24 fallas = 23 estables + 1 flaky**
