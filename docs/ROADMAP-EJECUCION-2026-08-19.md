@@ -547,6 +547,13 @@ sale 1 («stale census») con cifras nominales y su test verde — no está en e
 manifiesto CI; Opus no lo verificó contra HEAD; la constante que lo explicaría
 (`lib/cra-11-adaptive-contract-census.mjs:1375`, `generatedBy`) es del lote I.
 
+**Nota de índice (procedimiento):** 14 renombres puros del lote F (ci/) se
+commitearon por adelantado dentro de `dfcae623f` — error del coordinador:
+`git commit` pelado con el índice del worker cargado. Sin daño (renombres
+100%, el resto del lote cierra en su propio commit). **Regla dura nueva:**
+los commits de docs del coordinador se hacen SIEMPRE con pathspec
+(`git commit <path> -m …`) mientras un worker esté en vuelo.
+
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
 baseline del Paso B: **1618 tests / 24 fallas = 23 estables + 1 flaky**
