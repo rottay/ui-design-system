@@ -351,7 +351,7 @@ retirarlo en el mismo lote.
 
 Regla transversal: cada ola termina con `pnpm --filter @rottay/design-system
 gates:ci` verde y el registro del roadmap actualizado solo vía
-`scripts/roadmap-status.mjs`. Los criterios de aceptación son comandos de este
+`scripts/roadmap/status/index.mjs`. Los criterios de aceptación son comandos de este
 repo; donde el comando todavía no existe, **crearlo es parte de la ola** y el
 criterio es que falle antes del trabajo y pase después.
 

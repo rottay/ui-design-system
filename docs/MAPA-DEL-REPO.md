@@ -92,8 +92,8 @@ Resumen; el detalle está en cada sección.
    único importador de producción.
 8. **Dos árboles `test-artifacts/`**, en la raíz y dentro de `packages/core/`, los
    dos con subcarpetas `release/` y `rottay-design-platform/`.
-9. **Dos motores de roadmap.** `roadmap-status.mjs` (3.177 líneas) y
-   `roadmap-commercial-status.mjs` (304). No se importan entre sí, pero sí comparten
+9. **Dos motores de roadmap.** `scripts/roadmap/status/index.mjs` (3.177 líneas) y
+   `scripts/roadmap/commercial-status/index.mjs` (304). No se importan entre sí, pero sí comparten
    código: la cabecera del comercial dice "Copied from scripts/roadmap-status.mjs
    (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences" y
    `comm -12` da 191 líneas idénticas. Es una copia divergida. El aislamiento fue
@@ -143,11 +143,11 @@ Los conteos excluyen `node_modules/`. "git" = `git ls-files`, "disco" = `find -t
 Mezcla dos cosas distintas: la maquinaria viva de los roadmaps y tres auditorías
 que sí corren en CI, más 17 codemods muertos de febrero de 2026.
 
-- `scripts/roadmap-status.mjs` — (1 archivo, 3.177 líneas) motor de estado del roadmap principal; único camino legal para cambiar el estado de un WO (`pnpm roadmap:status` / `roadmap:check`). VIVO.
-- `scripts/roadmap-status.test.mjs` — (1 archivo, 82 KB) tests del motor anterior, `pnpm roadmap:test`. VIVO.
-- `scripts/roadmap-commercial-status.mjs` — (1 archivo, 304 líneas) el mismo trabajo que `roadmap-status.mjs` pero para el programa comercial aislado; `pnpm roadmap:commercial`. **[DUPLICA]** a `scripts/roadmap-status.mjs`: son dos implementaciones separadas del mismo modelo de estado (registry.json + STATUS.md generado). No se importan entre sí, pero no es reimplementación: la cabecera del comercial declara "Copied from scripts/roadmap-status.mjs (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences" y `comm -12` da 191 líneas idénticas. Es una copia divergida. La duplicación es una decisión explícita del dueño (aislamiento 2026-07-07), no un accidente, pero es duplicación de maquinaria igual.
-- `scripts/dependency-honesty.mjs` + `.test.mjs` — (2 archivos, 259 KB) el gate de honestidad de dependencias; `pnpm dependency:honesty`, referenciado por `.github/workflows/ci.yml`. VIVO y es el archivo más grande de la carpeta.
-- `scripts/effect-registry-audit.mjs` + `.test.mjs` — (2 archivos) audita la procedencia de los efectos contra `packages/core/provenance/effects`; `pnpm effects:provenance`. VIVO. Importa `CI_GATES` desde `packages/core/scripts/ci-gates.manifest.mjs`.
+- `scripts/roadmap/status/index.mjs` — (1 archivo, 3.177 líneas) motor de estado del roadmap principal; único camino legal para cambiar el estado de un WO (`pnpm roadmap:status` / `roadmap:check`). VIVO.
+- `scripts/roadmap/status/index.test.mjs` — (1 archivo, 82 KB) tests del motor anterior, `pnpm roadmap:test`. VIVO.
+- `scripts/roadmap/commercial-status/index.mjs` — (1 archivo, 304 líneas) el mismo trabajo que `roadmap/status/index.mjs` pero para el programa comercial aislado; `pnpm roadmap:commercial`. **[DUPLICA]** a `scripts/roadmap/status/index.mjs`: son dos implementaciones separadas del mismo modelo de estado (registry.json + STATUS.md generado). No se importan entre sí, pero no es reimplementación: la cabecera del comercial declara "Copied from scripts/roadmap-status.mjs (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences" y `comm -12` da 191 líneas idénticas. Es una copia divergida. La duplicación es una decisión explícita del dueño (aislamiento 2026-07-07), no un accidente, pero es duplicación de maquinaria igual.
+- `scripts/boundaries/dependency-honesty/index.mjs` + `index.test.mjs` — (2 archivos, 259 KB) el gate de honestidad de dependencias; `pnpm dependency:honesty`, referenciado por `.github/workflows/ci.yml`. VIVO y es el archivo más grande de la carpeta.
+- `scripts/provenance/effect-registry-audit/index.mjs` + `index.test.mjs` — (2 archivos) audita la procedencia de los efectos contra `packages/core/provenance/effects`; `pnpm effects:provenance`. VIVO. Importa `CI_GATES` desde `packages/core/scripts/ci-gates.manifest.mjs`.
 - `scripts/add-accent-bars.mjs`, `add-hover-transforms.mjs`, `add-style-memo.mjs`, `adopt-card-style.mjs`, `adopt-helpers.mjs`, `audit-helper-gaps.mjs`, `fix-focus-rings.mjs`, `fix-fontsize.mjs`, `fix-glass-adoption.mjs`, `fix-hardcoded-borders.mjs`, `fix-hover-transforms-v2.mjs`, `fix-null-array-guards.mjs`, `fix-rgba-overlays.mjs`, `fix-shadow-helpers.mjs`, `fix-transition-tokens.mjs`, `fix-usememo-v2.mjs`, `helper-gaps-report.json` — (17 archivos, 17 en git, ~110 KB) **[SIN CONSUMIDOR]** codemods de una sola pasada de las fases P0..P3E. Los 16 scripts escriben sobre `packages/core/src/components/custom/`, **una ruta que ya no existe** (`packages/core/src/components` fue borrado en la reorganización a `foundation/ infrastructure/ graphics/ ui/ tooling/`). Ninguno aparece en `package.json`, en `.github/workflows/ci.yml` ni en ningún `.md`; la única referencia cruzada es entre ellos mismos. Su último commit es del 2026-02-08 ("complete engine-awareness improvements across all 337 presets"). `helper-gaps-report.json` es la salida congelada de `audit-helper-gaps.mjs` y apunta a los mismos paths inexistentes.
 
 Sobre la comparación pedida `scripts/` vs `packages/core/scripts/` (632 archivos): **NO hay duplicación por nombre** — `comm -12` sobre las dos listas devuelve cero coincidencias. La división real es: la raíz guarda lo que cruza paquetes (roadmap, dependency-honesty, effect-registry, que necesitan ver `packages/core` y `packages/showroom` a la vez) y `packages/core/scripts/` guarda los ~600 gates internos del paquete core. La única grieta es que `packages/core/scripts/` contiene también gates que se invocan desde la raíz (`cra12:check` llama a `packages/core/scripts/evidence/cra-12-motion-governance/index.mjs` directamente por ruta), así que la frontera "cross-package vs interno" no se respeta al 100%.
@@ -167,7 +167,7 @@ Además, `docs/ARCHITECTURE.md` está semi-huérfano: los únicos archivos que l
 
 El backlog operativo canónico del programa "Modern Engine Premium Uplift": 99 work orders en 6 lanes, con estado en un único registry.
 
-- `roadmap/README.md` — (31 KB) la ley del proceso: orden de arranque, protocolo de handoff, "diecisiete reglas aprendidas a golpes", y la regla de que el estado solo cambia vía `scripts/roadmap-status.mjs`.
+- `roadmap/README.md` — (31 KB) la ley del proceso: orden de arranque, protocolo de handoff, "diecisiete reglas aprendidas a golpes", y la regla de que el estado solo cambia vía `scripts/roadmap/status/index.mjs`.
 - `roadmap/registry.json` — (457 KB, el archivo más grande del repo fuera de `pnpm-lock.yaml`) el único lugar donde vive el estado de cada WO.
 - `roadmap/STATUS.md` — (148 KB) el tablero generado a partir del registry; no se edita a mano.
 - `roadmap/engine-modern.md` (138 KB), `craft.md` (130 KB), `architecture.md` (112 KB), `tokens.md` (69 KB), `gates.md` (60 KB), `skin-adoption.md` (17 KB) — las 6 lanes con las WO detalladas paso a paso.
@@ -185,11 +185,11 @@ El mismo modelo que `roadmap/` pero para un solo programa: relanzar `showroom.ro
 - `roadmap-commercial/registry.json` — el estado.
 - `roadmap-commercial/STATUS.md` — el tablero generado.
 
-**[DUPLICA]** a `roadmap/` en forma, no en contenido. Duplica: la estructura de carpeta (README + lane + registry + STATUS generado), el modelo de estado, el vocabulario de WO y la maquinaria (`scripts/roadmap-commercial-status.mjs` es una copia declarada de `scripts/roadmap-status.mjs`, 191 líneas idénticas). No duplica: el alcance (uno es el engine modern, el otro es la superficie comercial). El aislamiento es una decisión firmada del dueño con fecha 2026-07-07, así que esto es duplicación deliberada; el costo es que cualquier mejora al motor de roadmap hay que hacerla dos veces, y el motor comercial es 10 veces más chico (304 vs 3.177 líneas), o sea que ya divergieron en capacidad.
+**[DUPLICA]** a `roadmap/` en forma, no en contenido. Duplica: la estructura de carpeta (README + lane + registry + STATUS generado), el modelo de estado, el vocabulario de WO y la maquinaria (`scripts/roadmap/commercial-status/index.mjs` es una copia declarada de `scripts/roadmap/status/index.mjs`, 191 líneas idénticas). No duplica: el alcance (uno es el engine modern, el otro es la superficie comercial). El aislamiento es una decisión firmada del dueño con fecha 2026-07-07, así que esto es duplicación deliberada; el costo es que cualquier mejora al motor de roadmap hay que hacerla dos veces, y el motor comercial es 10 veces más chico (304 vs 3.177 líneas), o sea que ya divergieron en capacidad.
 
 #### 1.5 `.github/` — (1 archivo, 1 en git, 28 KB)
 
-- `.github/workflows/ci.yml` — (607 líneas) el único workflow. Detecta qué paquete cambió (core / showroom / gates) y de ahí dispara los jobs. Su filtro de "core cambió" incluye a mano rutas de fuera de `packages/core/`: `scripts/dependency-honesty*`, `scripts/effect-registry-audit*`, `packages/showroom/e2e/responsive/overflow-baseline.json` y `roadmap/skin-{exemptions,census}.json`. Corre en `self-hosted`.
+- `.github/workflows/ci.yml` — (607 líneas) el único workflow. Detecta qué paquete cambió (core / showroom / gates) y de ahí dispara los jobs. Su filtro de "core cambió" incluye a mano rutas de fuera de `packages/core/`: `scripts/boundaries/dependency-honesty/index*`, `scripts/provenance/effect-registry-audit/index*`, `packages/showroom/e2e/responsive/overflow-baseline.json` y `roadmap/skin-{exemptions,census}.json`. Corre en `self-hosted`.
 
 #### 1.6 `.claude/` — (4 archivos, 3 en git, 32 KB)
 
@@ -292,7 +292,7 @@ Al buscar quién escribe en `test-artifacts/`, la ruta más citada del repo (247
 ### Resumen de marcas
 
 **[DUPLICA]**
-- `scripts/roadmap-commercial-status.mjs` vs `scripts/roadmap-status.mjs` (copia declarada y divergida, 191 líneas idénticas; 304 vs 3.177 líneas).
+- `scripts/roadmap/commercial-status/index.mjs` vs `scripts/roadmap/status/index.mjs` (copia declarada y divergida, 191 líneas idénticas; 304 vs 3.177 líneas).
 - `roadmap-commercial/` vs `roadmap/` (misma estructura y modelo de estado, alcance distinto, aislamiento deliberado 2026-07-07).
 - `docs/ARCHITECTURE.md` vs `docs-engineering/engineering/design-system/architecture/README.md` (solapan cuatro secciones, cada uno tiene tres o cuatro exclusivas, ninguno enlaza al otro).
 - `test-artifacts/releases/` vs `test-artifacts/release/` (dos carpetas para tarballs publicados, nombres a una letra de distancia).
@@ -2068,7 +2068,7 @@ Antes del árbol, porque todo lo demás se lee contra esto:
    `node --test scripts/quality-evidence/v2/*.test.mjs`
    `&& node --test scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs scripts/quality-evidence/programs/modern-rescue/manifest/generator.test.mjs`
    `&& node --test scripts/*.test.mjs` (NO recursivo)
-   `&& node --test ../../scripts/effect-registry-audit.test.mjs`
+   `&& node --test ../../scripts/provenance/effect-registry-audit/index.test.mjs`
    `&& vitest run --config scripts/vitest.scripts.config.ts` (patrón `scripts/**/*.vitest.test.ts`).
 4. Import/spawn desde otro script (las librerías de `lib/` y algunos censos de raíz).
 
@@ -2539,7 +2539,7 @@ Dentro de `manifest/` (356 archivos):
 
 - `provenance/effects/README.md` — (1) documenta la procedencia de los efectos premium portados.
 - `provenance/effects/sources.json` — (1) el registro máquina de qué efecto vino de qué proyecto y
-  bajo qué licencia. Lo lee `scripts/effect-registry-audit.mjs` de la RAÍZ DEL MONOREPO
+  bajo qué licencia. Lo lee `scripts/provenance/effect-registry-audit/index.mjs` de la RAÍZ DEL MONOREPO
   (`../../scripts/`), no un script de este paquete; corre en CI como gate `effects:provenance`.
 - `provenance/effects/licenses/` — (5) los textos de licencia originales: `cult-ui-LICENSE.md`,
   `magicui-LICENSE.md`, `motion-primitives-LICENCE.md`, `react-bits-LICENSE.md`,
@@ -2668,7 +2668,7 @@ los contadores de `lib/`, que es donde vive la medición una sola vez.
 
 #### Otros
 
-- `package.json` referencia `scripts/effect-registry-audit.mjs` y su test, pero ese script NO existe
+- `package.json` referencia `scripts/provenance/effect-registry-audit/index.mjs` y su test, pero ese script NO existe
   en `packages/core/scripts/`: vive en `../../scripts/` (raíz del monorepo). Ni `effects:provenance`
   ni `test:scripts` están rotos — las rutas apuntan hacia afuera del paquete — pero es el único caso
   en el que un gate bloqueante de CI de este paquete se resuelve fuera de él.

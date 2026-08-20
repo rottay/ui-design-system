@@ -214,9 +214,9 @@ Desapareció en la reorganización del árbol. Son transformaciones de un solo u
 se corrieron una vez en febrero, se commitearon y nunca se retiraron. Correr
 cualquiera de ellos hoy no hace nada o falla.
 
-**se quedan** los 7 que sí tienen trabajo: `dependency-honesty.mjs` (+ test),
-`effect-registry-audit.mjs` (+ test, y este sí corre en CI), `roadmap-status.mjs`
-(+ test), `roadmap-commercial-status.mjs`.
+**se quedan** los 7 que sí tienen trabajo: `scripts/boundaries/dependency-honesty/index.mjs` (+ test),
+`scripts/provenance/effect-registry-audit/index.mjs` (+ test, y este sí corre en CI), `scripts/roadmap/status/index.mjs`
+(+ test), `scripts/roadmap/commercial-status/index.mjs`.
 
 **riesgo:** ninguno. Ningún `package.json` los nombra.
 
@@ -786,7 +786,7 @@ la otra.
 
 ## U8 — Dos motores de roadmap
 
-`roadmap-status.mjs` (3.177 líneas) y `roadmap-commercial-status.mjs` (304).
+`scripts/roadmap/status/index.mjs` (3.177 líneas) y `scripts/roadmap/commercial-status/index.mjs` (304).
 Corrección respecto de la primera versión de este documento: **sí comparten
 código**. La cabecera del comercial dice *"Copied from scripts/roadmap-status.mjs
 (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences"* y
@@ -933,7 +933,7 @@ cualquier chequeo de enlaces. La pregunta correcta es si algo **de afuera** lo c
 
 **5. La copia declarada que después diverge.**
 → Copiar está permitido si el aislamiento es una decisión firmada, pero la copia
-declara qué diverge y un test lo verifica. `roadmap-commercial-status.mjs` declaró
+declara qué diverge y un test lo verifica. `scripts/roadmap/commercial-status/index.mjs` declaró
 "dos divergencias funcionales" y hoy es el 10 % del original.
 
 **Y la que las cubre a todas:** un documento que describe algo que ya no existe se

@@ -408,7 +408,7 @@ fuerte de lo que el plan declara.
 | 23 carpetas vacías bajo `src` (35 en repo) | `find packages/core/src -type d -empty \| wc -l` → **23**; repo (sin `node_modules`/`.git`) → **35**. CONFIRMADO exacto |
 | 8 carpetas vacías `entrypoints/public/**` | `{primitives,patterns,structures,surfaces} × {contracts,runtime}` = **8**, todas en la lista de vacías. CONFIRMADO |
 | «17 codemods de febrero» | 16 `.mjs` + `helper-gaps-report.json`, todos con `git log -1` en 2026-02-08 salvo `fix-null-array-guards.mjs` (2026-02-17). **0 referencias externas** (las 3 coincidencias son autorreferencias). CONFIRMADO (con la precisión de que uno es un reporte, no un codemod) |
-| «7 scripts vivos de la raíz» | `dependency-honesty.mjs` + su test, `effect-registry-audit.mjs` + su test, `roadmap-status.mjs` + su test, `roadmap-commercial-status.mjs` = **7**, todos de julio. CONFIRMADO |
+| «7 scripts vivos de la raíz» | `scripts/boundaries/dependency-honesty/index.mjs` + su test, `scripts/provenance/effect-registry-audit/index.mjs` + su test, `scripts/roadmap/status/index.mjs` + su test, `scripts/roadmap/commercial-status/index.mjs` = **7**, todos de julio. CONFIRMADO |
 | Monolito `probe/cascade-probe.mjs` + test | Hay **dos** `cascade-probe.mjs`. El vivo es el de la raíz del programa (31.712 B), que importa `./probe/css-parse.mjs` y `./probe/leg1-symbolic.mjs`. El monolito es `probe/cascade-probe.mjs` (**94.953 B**), con **0 importadores**; su test (28.154 B) sólo lo menciona en un comentario de uso. CONFIRMADO |
 | «5 módulos vivos de la sonda» (§4) | `css-model.mjs`, `css-parse.mjs`, `leg1-symbolic.mjs`, `leg2-chromium.mjs`, `value-eval.mjs` = **5**. CONFIRMADO |
 | `.claude/agents/` | 2 archivos: `componentes-agent.md`, `storybook-agent.md`. CONFIRMADO |
@@ -718,7 +718,7 @@ gates fail-closed todavía exigen y el build ya no emite.**
 
 ```
 packages/core/scripts/pack-inventory.baseline.json:13770  "path": "dist/platform.css", size 2528869
-scripts/dependency-honesty.mjs:3194                        exige el alias dist/platform.css
+scripts/boundaries/dependency-honesty/index.mjs:3210        exige el alias dist/platform.css
 packages/core/PERFORMANCE_BUDGET.md:56                     presupuesto para dist/platform.css
 packages/core/dist/tooling/quality/no-loss/index.d.ts:4    platform: "styles/platform.css"
    ↳ la FUENTE (src/tooling/quality/no-loss/index.ts:68-70) ya sólo declara bithire/rottay/evnto
