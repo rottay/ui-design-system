@@ -521,9 +521,23 @@ regenerado en el commit** (1 línea, generatedBy): diferirlo dejaba un gate
 BLOQUEANTE rojo (manifest-freshness) + 3 de suite — la recomendación del
 worker era correcta porque esta regeneración NO cascada, a diferencia de la
 C3.
-**Lote E EN VUELO** (packaging/+evidence/, 42 archivos, trinidad CRA-17
-atómica). Ojo al sellar E: `gat-07-exact-proof` se mueve a `evidence/` —
-el comando de re-sello cambia a `scripts/evidence/gat-07-exact-proof/index.mjs`.
+**Lote E ✅ `8ecdbbb1a`** — `packaging/` (10) + `evidence/` (7) completas,
+42/42; trinidad CRA-17 atómica (import cruzado resuelto dentro del commit).
+**9 roturas no censadas** arregladas por Opus (auto-chequeo del license-gate
+re-anclado al directorio —segundo gate que se atrapa solo—, floor sellado de
+gat-07, `await import()` de cra-12, `new URL` como raíz a mano, spawn por
+basename en generate-supplier-contract). Fix del coordinador al sellar:
+`BASELINE_PATH`/`AUDIT_PATH` de gat-07 apuntaban dentro del capability —
+corregidas a `'../..'` transitorio **hasta el lote H** (engine-token-audit se
+mueve ahí; su F11 debe re-apuntarlas). Re-sello gat-07 con Node 22: write+check
+verdes, hash determinista `66000795…a71e`. Suite: 1619 tests, 25 fallas =
+23 estables + deuda C3 + **1 víctima nueva DETERMINISTA** de la carrera del
+drill cra-12 (`hook-contract` MANIFEST_STALE; 60/60 aislado; misma deuda de
+fixtures a tmpdir — cuando se arregle el drill caen las dos). lane-control
+sin crecimiento (10/13). **Observación abierta para lote I:** `cra11:check`
+sale 1 («stale census») con cifras nominales y su test verde — no está en el
+manifiesto CI; Opus no lo verificó contra HEAD; la constante que lo explicaría
+(`lib/cra-11-adaptive-contract-census.mjs:1375`, `generatedBy`) es del lote I.
 
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
