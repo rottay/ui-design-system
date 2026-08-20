@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "c3e7ab6e20a36eb268b9af1ac2efbabaaf1161e9d778f5d5cdf7803a2fb13655",
+    "authorityDigest": "fb4caaaed59e905da73b05ed4baf38eca659030000b15e7d8340ff86aff587ba",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -513,8 +513,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 31661,
-        "sha256": "46cda4f93e46b28dcc481c03b734167072cdbea11265db5878bd6a3b6ceac3ee"
+        "bytes": 31672,
+        "sha256": "36c64724a9ec3ac47c696dc56f771f45ae621aefe5794c42c11d10420592c3bc"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-e-migration-certification.test.mjs",
@@ -1153,7 +1153,7 @@
         "sha256": "e0639b634aa8b892966fb1a3f87c3abe37f2e55d68611adcc92cf329dd4176b8"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/i18n-key-parity-gate.baseline.json",
+        "path": "ui-design-system/packages/core/scripts/i18n/i18n-key-parity-gate/i18n-key-parity-gate.baseline.json",
         "roles": [
           "audit-machinery"
         ],
@@ -1161,20 +1161,20 @@
         "sha256": "295d7ec99629b47c5ac0fc2a61c3a1841be4524676a0ab809c149beac0e26d7a"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/i18n-key-parity-gate.mjs",
+        "path": "ui-design-system/packages/core/scripts/i18n/i18n-key-parity-gate/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 16766,
-        "sha256": "1e0a5189a94312f769d8b033bec3093906b5f23ca9530b39217c929ee0717a00"
+        "bytes": 16803,
+        "sha256": "e0b4df5f5b12118919ece1d8fb131a8096a87ff1890c7fdaad42a25a073ed38d"
       },
       {
-        "path": "ui-design-system/packages/core/scripts/i18n-key-parity-gate.test.mjs",
+        "path": "ui-design-system/packages/core/scripts/i18n/i18n-key-parity-gate/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 6802,
-        "sha256": "ec5c8bbf3a026523cd0dfef62c7a53412997ce6821e02123350c0d3306a1cdb3"
+        "bytes": 6787,
+        "sha256": "f41e2719df25d8b29c5dcf877989763075d6ee903a4cdd3626db598b31c61230"
       },
       {
         "path": "ui-design-system/packages/core/scripts/icon-embed-inventory-gate.baseline.json",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "c3e7ab6e20a36eb268b9af1ac2efbabaaf1161e9d778f5d5cdf7803a2fb13655"
+    "digest": "fb4caaaed59e905da73b05ed4baf38eca659030000b15e7d8340ff86aff587ba"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "4e75fec816c4a4169cadee5b7bf42218b0ca65098de51813702478a97fa9dbe5",
-      "4e75fec816c4a4169cadee5b7bf42218b0ca65098de51813702478a97fa9dbe5"
+      "cd11ec6f370aef1b54f99cb5d6842e3b4177c67eb0243523727c6e09188870bd",
+      "cd11ec6f370aef1b54f99cb5d6842e3b4177c67eb0243523727c6e09188870bd"
     ],
     "agree": true
   }

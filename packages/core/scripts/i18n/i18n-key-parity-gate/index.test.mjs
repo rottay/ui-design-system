@@ -6,7 +6,7 @@ import {
   loadLocaleKeys,
   readSupportedLocales,
   runI18nKeyParityGate,
-} from './i18n-key-parity-gate.mjs';
+} from './index.mjs';
 
 /** Builds the `localeKeys` shape `evaluateParity` consumes from plain key lists. */
 function catalog(entries) {

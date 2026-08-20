@@ -289,7 +289,7 @@ export const CI_GATES = Object.freeze([
   { id: 'theme-channel-parity', run: ['node', 'scripts/theme-channel-parity-gate.mjs', '--check', '--quiet'], blocking: true },
   { id: 'tenant-channel-consumer', run: ['node', 'scripts/tenant-channel-consumer-gate.mjs', '--check'], blocking: true },
   { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/tenant-channel-consumer-gate.mjs', '--modern-check'], blocking: true },
-  { id: 'i18n-key-parity', run: ['node', 'scripts/i18n-key-parity-gate.mjs', '--check'], blocking: true },
+  { id: 'i18n-key-parity', run: ['node', 'scripts/i18n/i18n-key-parity-gate/index.mjs', '--check'], blocking: true },
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
   // and the manifest validator forbids downgrading a blocking gate.

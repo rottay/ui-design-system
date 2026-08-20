@@ -2310,7 +2310,7 @@ Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-pl
 
 - `audit-integration.mjs` — `lint:integration`; guardrail de integración del DS.
 - `audit-vertical-compliance.mjs` — `lint:vertical`; chequeos de arquitectura world-class por vertical.
-- `i18n-key-parity-gate.mjs` (+ `.test.mjs`, `.baseline.json`) — CI `--check`; paridad de claves i18n.
+- `i18n/i18n-key-parity-gate/index.mjs` (+ `index.test.mjs`, `i18n-key-parity-gate.baseline.json`) — CI `--check`; paridad de claves i18n.
 
 ---
 

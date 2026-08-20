@@ -44,14 +44,14 @@
  * target locale cannot be rendered, so it counts as missing, not as present.
  *
  * Usage:
- *   node scripts/i18n-key-parity-gate.mjs           # print the census
- *   node scripts/i18n-key-parity-gate.mjs --check   # exit 1 on any violation
- *   node scripts/i18n-key-parity-gate.mjs --seed    # (re)author the baseline
+ *   node scripts/i18n/i18n-key-parity-gate/index.mjs           # print the census
+ *   node scripts/i18n/i18n-key-parity-gate/index.mjs --check   # exit 1 on any violation
+ *   node scripts/i18n/i18n-key-parity-gate/index.mjs --seed    # (re)author the baseline
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
