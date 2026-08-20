@@ -366,7 +366,8 @@ operative:
 - The `scripts/` tree enforces its own §2.9 law mechanically: declared family
   roster, no loose authored files at any root (the two toolchain files
   excepted), sidecars carry the owner's full basename, no generic ownership
-  segments — materializes in F0.5 Paso D.
+  segments — **materialized in F0.5 Paso D (`scripts-tree-gate`, blocking,
+  decrease-only baseline)**.
 
 ---
 

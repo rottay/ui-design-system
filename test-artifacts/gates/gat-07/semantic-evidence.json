@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "501fc6b2d7ddfa6715f619091dd7c6099bcd692d97b71727a0a18c5e1fceb62f",
+    "authorityDigest": "ca08c9fa606a19ad8dd9dcbc34a6dee2d7fc237509ab246c33a8c060062b3ba7",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -36975,14 +36975,6 @@
         "sha256": "5be17aad426fa4f6b9b1f0724c52bec43c04d48c4a5f094f0d143b916582fcff"
       },
       {
-        "path": "ui-design-system/packages/core/styles/platform.css",
-        "roles": [
-          "audit-input"
-        ],
-        "bytes": 5342714,
-        "sha256": "1bb8d0bac0d05291e45c1cef125c7a01ea3c11b2a473c604532c8203b9247e95"
-      },
-      {
         "path": "ui-design-system/packages/core/styles/rottay.css",
         "roles": [
           "audit-input"
@@ -40479,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "501fc6b2d7ddfa6715f619091dd7c6099bcd692d97b71727a0a18c5e1fceb62f"
+    "digest": "ca08c9fa606a19ad8dd9dcbc34a6dee2d7fc237509ab246c33a8c060062b3ba7"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113860,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ccc1538c9deb1a39571caec05d59dd8ca7fcf3de07324eca2b7917b5b153661d",
-      "ccc1538c9deb1a39571caec05d59dd8ca7fcf3de07324eca2b7917b5b153661d"
+      "97dd9b1276eff1332681acedae18ddb7c81f2dd2900881c02cbbe83db5ba38a9",
+      "97dd9b1276eff1332681acedae18ddb7c81f2dd2900881c02cbbe83db5ba38a9"
     ],
     "agree": true
   }

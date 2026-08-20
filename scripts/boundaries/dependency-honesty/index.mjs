@@ -3207,7 +3207,6 @@ export function validatePlatformLocalBoundary({ packageManifest, verifierSource,
     [`${DESIGN_SYSTEM_PACKAGE}/icons`, 'dist/icons.js'],
     [`${DESIGN_SYSTEM_PACKAGE}/commercial`, 'dist/commercial.js'],
     [`${DESIGN_SYSTEM_PACKAGE}/commercial.css`, 'dist/commercial.css'],
-    [`${DESIGN_SYSTEM_PACKAGE}/dist/platform.css`, 'dist/platform.css'],
   ]);
   for (const [specifier, target] of expectedPackageAliases) {
     const actual = aliasEvidence.packageAliases.aliases.get(specifier);
