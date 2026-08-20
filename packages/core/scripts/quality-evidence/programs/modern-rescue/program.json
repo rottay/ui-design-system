@@ -42,14 +42,14 @@
   },
   "inventoryAuthorities": {
     "controls": "packages/core/tokens/controls/README.md",
-    "tokenCensus": "packages/core/customization-surface-report.json",
+    "tokenCensus": "packages/core/scripts/tokens/customization-surface-census/customization-surface-report.json",
     "appHooks": "packages/core/hooks-manifest.json",
     "capabilities": "packages/core/src/foundation/contracts/composition/tenants/capabilities",
     "themeContracts": "packages/core/src/foundation/contracts/composition/tenants/themes",
     "staticBrandThemes": "packages/core/src/foundation/tokens/ts/presentation/brand-themes",
     "dbFixtures": "packages/core/src/tooling/testing/fixtures/tenants",
     "prototypeLedger": "packages/core/src/foundation/tokens/prototype-ledger.json",
-    "kimiPreservation": "packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
+    "kimiPreservation": "packages/core/scripts/tokens/kimi-preservation-manifest/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
   },
   "denominators": {
     "visibleFamilies": 255,

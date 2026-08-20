@@ -58,7 +58,7 @@ const postcss = require('postcss');
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
 const DOCS_TOKENS_DIR = resolve(ROOT, '../../../docs-engineering/engineering/design-system/tokens');
-const REPORT_PATH = join(ROOT, 'customization-surface-report.json');
+const REPORT_PATH = join(HERE, '..', 'customization-surface-census', 'customization-surface-report.json');
 const MANIFEST_PATH = join(ROOT, 'hooks-manifest.json');
 const LEDGER_PATH = join(ROOT, 'src/foundation/tokens/prototype-ledger.json');
 const EXPRESSIVE_PATH = join(ROOT, 'src/foundation/tokens/ts/presentation/expressive-profiles/index.ts');
@@ -1177,7 +1177,7 @@ function runChecks(inputs, edges, built, context, { drill } = {}) {
   }
 
   // 6. reconciliation projection must match the report it derives from
-  const RECON_PATH = join(ROOT, 'customization-reconciliation.json');
+  const RECON_PATH = join(HERE, 'customization-reconciliation.json');
   if (existsSync(RECON_PATH)) {
     const recon = JSON.parse(readFileSync(RECON_PATH, 'utf8'));
     const reportDigest = createHash('sha256')

@@ -204,8 +204,8 @@
             "domainId": "manifests",
             "globs": [
               "packages/core/hooks-manifest.json",
-              "packages/core/customization-surface-report.json",
-              "packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
+              "packages/core/scripts/tokens/customization-surface-census/customization-surface-report.json",
+              "packages/core/scripts/tokens/kimi-preservation-manifest/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
             ],
             "ownerLaneClass": "architecture-integrator",
             "why": "laneTypes architecture-integrator responsibilities name shared barrels and manifests"

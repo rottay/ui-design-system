@@ -54,7 +54,7 @@ const ts = require('typescript');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const REPORT_PATH = join(ROOT, 'customization-surface-report.json');
+const REPORT_PATH = join(HERE, 'customization-surface-report.json');
 const DEAD_BASELINE_PATH = join(ROOT, 'scripts/tokens/customization-surface-census/customization-dead-writers.baseline.json');
 const MANIFEST_PATH = join(ROOT, 'hooks-manifest.json');
 const REGISTRY_PATH = join(ROOT, 'src/foundation/contracts/composition/tenants/capabilities/index.ts');

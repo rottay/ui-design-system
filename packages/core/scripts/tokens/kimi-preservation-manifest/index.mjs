@@ -25,8 +25,8 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
 const LEDGER = join(ROOT, 'src/foundation/tokens/prototype-ledger.json');
-const REPORT = join(ROOT, 'customization-surface-report.json');
-const OUT = join(ROOT, 'KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json');
+const REPORT = join(HERE, '..', 'customization-surface-census', 'customization-surface-report.json');
+const OUT = join(HERE, 'KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json');
 
 const args = process.argv.slice(2);
 const flag = (name) => args.find((a) => a === name || a.startsWith(`${name}=`));

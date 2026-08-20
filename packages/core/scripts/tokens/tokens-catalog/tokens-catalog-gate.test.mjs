@@ -50,7 +50,7 @@ test('positive: the catalog check passes on the real tree', () => {
 });
 
 test('positive: the two trees cover the census exactly once, and never mix', () => {
-  const report = JSON.parse(readFileSync(join(ROOT, 'customization-surface-report.json'), 'utf8'));
+  const report = JSON.parse(readFileSync(join(ROOT, 'scripts/tokens/customization-surface-census/customization-surface-report.json'), 'utf8'));
   const operational = new Set(['active', 'app-slot', 'adjudicated-live']);
   const emitted = [...pageNames('catalog'), ...pageNames('governance')];
 

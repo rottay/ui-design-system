@@ -36,7 +36,7 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const REPORT = join(ROOT, 'customization-surface-report.json');
+const REPORT = join(HERE, '..', 'customization-surface-census', 'customization-surface-report.json');
 const OUT_DIR = join(ROOT, 'tokens/controls');
 const OUT = join(OUT_DIR, 'README.md');
 
