@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "639b4dfa03ff5741ebf08b608f2b042592e467265168bfee7381e26a30299e0f",
+    "authorityDigest": "6a533e277edc96ecaa9034a71105dfb5d2fd03c75fa8dc35c547fc5b9d626383",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -2594,16 +2594,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 93106,
-        "sha256": "c6e4d3af26af17931168a656ff8d12a048008e2e8e2d1bf3adbcb314ffffbf4d"
+        "bytes": 94352,
+        "sha256": "940fa45ce8efe077030bf03c6001b4f167834cb3fd2d67593d5d16e2d8f73eb2"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/rottay-t3-mass-drain.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 86553,
-        "sha256": "53dda3c984140a1f32429cc8b92f308cff0a7a554be9d868bbaffca7f25cb110"
+        "bytes": 89625,
+        "sha256": "fcea2e4d033f662dbbf79dbbaf0bc086ba5bf9fd8d46af22d610a2557c6137be"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/spring-precompute.test.ts",
@@ -2674,8 +2674,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 92146,
-        "sha256": "d32ae9696ec6b4bb068c578024bf48f9b4a14828a821b2bb0a2d373928cb92da"
+        "bytes": 92024,
+        "sha256": "c8d73734c95eadaac42feaf840172063b24f7760fca55b37177c5e9accc20a3b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
@@ -7538,8 +7538,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 87883,
-        "sha256": "c745a108971a81db3be3a7770914742d16f82c16cbb429b81b99f70556f17a71"
+        "bytes": 87805,
+        "sha256": "6dac1fbcd158dba9356bd774a7be088d25b709ca26b66eed8fdb721b0d0aacec"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/emphasis/index.ts",
@@ -36963,8 +36963,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5504790,
-        "sha256": "36efee9ee1684ceec0db28b467fde452cd85c924920a36d5b999b651eac348ab"
+        "bytes": 5504668,
+        "sha256": "d82718258544314c85e076aa13630e648bfb7be0b465a5b96bd75ff3f6f0f4c9"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -36979,8 +36979,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5375304,
-        "sha256": "1743f5b4fa21f05053bc8adb7bd7546617c16dce2ba5f89eec3429032f264765"
+        "bytes": 5375182,
+        "sha256": "f96193f29191261d637a20421ac71e3b76e09808bdbbcc3b1f9fe33fa3fc600c"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "639b4dfa03ff5741ebf08b608f2b042592e467265168bfee7381e26a30299e0f"
+    "digest": "6a533e277edc96ecaa9034a71105dfb5d2fd03c75fa8dc35c547fc5b9d626383"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b2b0c7587aa89231ca9814743fe357f6e50616ef168c0cc813d8b5a65e70d232",
-      "b2b0c7587aa89231ca9814743fe357f6e50616ef168c0cc813d8b5a65e70d232"
+      "9e7efb092587d80cbe0bcc15669f9368ef4af4e2a01f1b9a24c090ab41a6dac0",
+      "9e7efb092587d80cbe0bcc15669f9368ef4af4e2a01f1b9a24c090ab41a6dac0"
     ],
     "agree": true
   }

@@ -125135,7 +125135,7 @@ html[lang]:lang(ar) {
   --ds-floatbutton-default-bg: #222226;
   --ds-floatbutton-default-color: #A0A0A5;
   --ds-floatbutton-description-color: #A0A0A5;
-  --ds-floatbutton-primary-bg: #FFFFFF;
+  --ds-floatbutton-primary-bg: var(--ds-color-primary);
   --ds-floatbutton-primary-color: #0C0C0E;
   --ds-focus-ring-color: var(--ds-color-primary);
   --ds-font-family-base: var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
@@ -125260,7 +125260,7 @@ html[lang]:lang(ar) {
   --ds-list-skeleton-bg: #2A2A2F;
   --ds-list-split-color: #222226;
   --ds-list-text-color: #ECECEC;
-  --ds-live-feed-badge-bg: #FFFFFF;
+  --ds-live-feed-badge-bg: var(--ds-color-primary);
   --ds-live-feed-badge-color: #0C0C0E;
   --ds-live-feed-bg: #18181B;
   --ds-live-feed-border: #2A2A2F;
@@ -125275,7 +125275,7 @@ html[lang]:lang(ar) {
   --ds-menu-dark-bg: #0C0C0E;
   --ds-menu-dark-item-color: #A0A0A5;
   --ds-menu-divider-color: #2A2A2F;
-  --ds-menu-focus-ring-color: #FFFFFF;
+  --ds-menu-focus-ring-color: var(--ds-color-primary);
   --ds-menu-group-title-color: #6B6B72;
   --ds-menu-item-bg-active: #2A2A2F;
   --ds-menu-item-bg-hover: rgba(255, 255, 255, 0.04);
@@ -125482,7 +125482,7 @@ html[lang]:lang(ar) {
   --ds-slider-rail-color: rgba(255, 255, 255, 0.10);
   --ds-slider-track-color: #FFFFFF;
   --ds-slider-track-color-disabled: #4A4A4F;
-  --ds-spinner-color: #FFFFFF;
+  --ds-spinner-color: var(--ds-color-primary);
   --ds-spinner-track: #2A2A2F;
   --ds-statistic-prefix-color: #A0A0A5;
   --ds-statistic-suffix-color: #A0A0A5;
@@ -125531,7 +125531,7 @@ html[lang]:lang(ar) {
   --ds-switch-thumb-bg: #0C0C0E;
   --ds-switch-thumb-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
   --ds-tab-bg-hover: rgba(255, 255, 255, 0.03);
-  --ds-tab-border-active: #FFFFFF;
+  --ds-tab-border-active: var(--ds-color-primary);
   --ds-tab-color: #6B6B72;
   --ds-tab-color-active: #ECECEC;
   --ds-tab-color-hover: #ECECEC;
@@ -125816,7 +125816,7 @@ html[lang]:lang(ar) {
   --ds-upload-file-remove-color: #EF4444;
   --ds-upload-preview-backdrop: rgba(0, 0, 0, 0.70);
   --ds-upload-preview-overlay: rgba(0, 0, 0, 0.50);
-  --ds-upload-progress-bar: #FFFFFF;
+  --ds-upload-progress-bar: var(--ds-color-primary);
   --ds-upload-progress-track: #222226;
   --ds-watermark-color: #222226;
 }
@@ -126186,7 +126186,6 @@ html[lang]:lang(ar) {
   --ds-floatbutton-default-bg: #FFFFFF;
   --ds-floatbutton-default-color: #6B6B6B;
   --ds-floatbutton-description-color: #6B6B6B;
-  --ds-floatbutton-primary-bg: #0A0A0A;
   --ds-floatbutton-primary-color: #FFFFFF;
   --ds-form-error-color: #DC2626;
   --ds-form-extra-color: #9C9C9C;
@@ -126253,7 +126252,6 @@ html[lang]:lang(ar) {
   --ds-list-skeleton-bg: var(--ds-color-bg-tertiary);
   --ds-list-split-color: #EDEDEC;
   --ds-list-text-color: #1A1A1A;
-  --ds-live-feed-badge-bg: #0A0A0A;
   --ds-live-feed-badge-color: #FFFFFF;
   --ds-live-feed-bg: #FFFFFF;
   --ds-live-feed-border: #E5E5E3;
@@ -126268,7 +126266,6 @@ html[lang]:lang(ar) {
   --ds-menu-dark-bg: #0A0A0A;
   --ds-menu-dark-item-color: #A3A3A1;
   --ds-menu-divider-color: #E5E5E3;
-  --ds-menu-focus-ring-color: #0A0A0A;
   --ds-menu-group-title-color: #9C9C9C;
   --ds-menu-item-bg-active: rgba(0, 0, 0, 0.06);
   --ds-menu-item-bg-hover: rgba(0, 0, 0, 0.03);
@@ -126420,7 +126417,6 @@ html[lang]:lang(ar) {
   --ds-slider-rail-color: #E5E5E3;
   --ds-slider-track-color: #0A0A0A;
   --ds-slider-track-color-disabled: #C4C4C2;
-  --ds-spinner-color: #0A0A0A;
   --ds-spinner-track: #EDEDEC;
   --ds-statistic-prefix-color: #6B6B6B;
   --ds-statistic-suffix-color: #6B6B6B;
@@ -126459,7 +126455,6 @@ html[lang]:lang(ar) {
   --ds-switch-thumb-bg: #FFFFFF;
   --ds-switch-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
   --ds-tab-bg-hover: rgba(0, 0, 0, 0.02);
-  --ds-tab-border-active: #0A0A0A;
   --ds-tab-color: #9C9C9C;
   --ds-tab-color-active: #1A1A1A;
   --ds-tab-color-hover: #1A1A1A;
@@ -126575,7 +126570,6 @@ html[lang]:lang(ar) {
   --ds-upload-file-remove-color: #DC2626;
   --ds-upload-preview-backdrop: rgba(0, 0, 0, 0.60);
   --ds-upload-preview-overlay: rgba(0, 0, 0, 0.40);
-  --ds-upload-progress-bar: #0A0A0A;
   --ds-upload-progress-track: #EDEDEC;
   --ds-watermark-color: #EDEDEC;
 }

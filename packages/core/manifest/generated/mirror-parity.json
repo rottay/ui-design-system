@@ -6,9 +6,9 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 92146,
-        "lines": 1967,
-        "sha256": "d32ae9696ec6b4bb068c578024bf48f9b4a14828a821b2bb0a2d373928cb92da"
+        "bytes": 92024,
+        "lines": 1961,
+        "sha256": "c8d73734c95eadaac42feaf840172063b24f7760fca55b37177c5e9accc20a3b"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
@@ -26,9 +26,9 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 87883,
-        "lines": 2530,
-        "sha256": "c745a108971a81db3be3a7770914742d16f82c16cbb429b81b99f70556f17a71"
+        "bytes": 87805,
+        "lines": 2524,
+        "sha256": "6dac1fbcd158dba9356bd774a7be088d25b709ca26b66eed8fdb721b0d0aacec"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
@@ -47,7 +47,7 @@
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1945,
+      "occurrences": 1939,
       "distinctChannels": 1211
     },
     "bithire": {
@@ -6544,7 +6544,7 @@
     "perTenant": {
       "rottay": {
         "declaredInCascade": 154,
-        "severedTotal": 60,
+        "severedTotal": 54,
         "rootPinned": {
           "count": 7,
           "byReason": {
@@ -6615,8 +6615,8 @@
         },
         "rootFrozen": {
           "count": 4,
-          "readerEdges": 24,
-          "distinctReaders": 24,
+          "readerEdges": 30,
+          "distinctReaders": 30,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -6664,22 +6664,28 @@
                 "--ds-control-brand-tint-hover",
                 "--ds-elevation-4",
                 "--ds-elevation-5",
+                "--ds-floatbutton-primary-bg",
                 "--ds-focus-ring-color",
+                "--ds-live-feed-badge-bg",
+                "--ds-menu-focus-ring-color",
                 "--ds-premium-card-border",
                 "--ds-premium-card-border-hover",
                 "--ds-premium-card-selected-border",
                 "--ds-premium-card-selected-ring",
+                "--ds-spinner-color",
                 "--ds-surface-card-grid-line",
                 "--ds-surface-chip-bg",
                 "--ds-surface-icon-bg",
                 "--ds-surface-icon-border",
+                "--ds-tab-border-active",
                 "--ds-tint-12",
                 "--ds-tint-16",
                 "--ds-tint-24",
                 "--ds-tint-4",
-                "--ds-tint-8"
+                "--ds-tint-8",
+                "--ds-upload-progress-bar"
               ],
-              "readerCount": 19,
+              "readerCount": 25,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 156,
@@ -6703,7 +6709,7 @@
           ]
         },
         "severs": {
-          "count": 56,
+          "count": 50,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
@@ -6870,13 +6876,6 @@
               ]
             },
             {
-              "channel": "--ds-floatbutton-primary-bg",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
-              ]
-            },
-            {
               "channel": "--ds-input-border-focus",
               "values": [
                 "base=rgba(255, 255, 255, 0.36)",
@@ -6884,24 +6883,10 @@
               ]
             },
             {
-              "channel": "--ds-live-feed-badge-bg",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
-              ]
-            },
-            {
               "channel": "--ds-live-feed-load-more-color",
               "values": [
                 "base=#ECECEC",
                 "overlay-mode=#1A1A1A"
-              ]
-            },
-            {
-              "channel": "--ds-menu-focus-ring-color",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
               ]
             },
             {
@@ -7024,13 +7009,6 @@
               ]
             },
             {
-              "channel": "--ds-spinner-color",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
-              ]
-            },
-            {
               "channel": "--ds-stats-grid-trend-negative",
               "values": [
                 "base=#EF4444",
@@ -7042,13 +7020,6 @@
               "values": [
                 "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
                 "overlay-mode=0 0 0 2px rgba(10, 10, 10, 0.12)"
-              ]
-            },
-            {
-              "channel": "--ds-tab-border-active",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
               ]
             },
             {
@@ -7084,22 +7055,15 @@
                 "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
-            },
-            {
-              "channel": "--ds-upload-progress-bar",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
-              ]
             }
           ]
         },
         "reDerives": {
-          "count": 87,
-          "reachingRoot": 39,
+          "count": 93,
+          "reachingRoot": 45,
           "reachingLiveRoot": 26,
           "mixedRoleValues": 12,
-          "blockedUpstream": 0,
+          "blockedUpstream": 6,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -7387,6 +7351,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-floatbutton-primary-bg",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
               "channel": "--ds-font-family-display",
               "reads": [
                 "--ds-font-pack-humanist-text"
@@ -7505,6 +7479,26 @@
               "mixed": false,
               "reachesLiveRoot": false,
               "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-live-feed-badge-bg",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-menu-focus-ring-color",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
             },
             {
               "channel": "--ds-motion-attention",
@@ -7702,6 +7696,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-spinner-color",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
               "channel": "--ds-surface-card-grid-bg",
               "reads": [
                 "--ds-surface-card-grid-line"
@@ -7755,6 +7759,16 @@
               "mixed": false,
               "reachesLiveRoot": false,
               "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-tab-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
             },
             {
               "channel": "--ds-type-body",
@@ -8033,6 +8047,16 @@
               "mixed": false,
               "reachesLiveRoot": true,
               "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-upload-progress-bar",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
             }
           ]
         }
@@ -11375,8 +11399,8 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 734,
-        "allInDistinctRoles": 734,
+        "channelsDeclaredMoreThanOnce": 728,
+        "allInDistinctRoles": 728,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11398,25 +11422,25 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1828,
+      "rottay": 1822,
       "bithire": 1506,
       "evnto": 398
     },
-    "union": 2619,
+    "union": 2613,
     "intersection": 347,
-    "intersectionPct": 13.2,
+    "intersectionPct": 13.3,
     "intersectionPctOfSmallest": 87.2,
     "pairwise": {
       "rottay+bithire": {
         "shared": 717,
-        "union": 2617,
-        "pctOfUnion": 27.4,
+        "union": 2611,
+        "pctOfUnion": 27.5,
         "pctOfSmaller": 47.6
       },
       "rottay+evnto": {
         "shared": 393,
-        "union": 1833,
-        "pctOfUnion": 21.4,
+        "union": 1827,
+        "pctOfUnion": 21.5,
         "pctOfSmaller": 98.7
       },
       "bithire+evnto": {
@@ -11427,7 +11451,7 @@
       }
     },
     "exclusive": {
-      "rottay": 1065,
+      "rottay": 1059,
       "bithire": 786,
       "evnto": 2
     },

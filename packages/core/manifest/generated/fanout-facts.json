@@ -48,7 +48,7 @@
     "channelsWithoutReaders": 179,
     "channelsPaintsFalse": 912,
     "channelsPaintsInModernFalse": 1962,
-    "readers": 36883,
+    "readers": 36889,
     "readersByPlane": {
       "modern-skin-css": 14731,
       "presentation-css": 10653,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 2642
+      "ts-other": 2648
     },
     "channelsByPlane": {
       "modern-skin-css": 3840,
@@ -28771,14 +28771,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1685,
+          "line": 1679,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1686,
+          "line": 1680,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -31276,14 +31276,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1703,
+          "line": 1697,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1704,
+          "line": 1698,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -32250,14 +32250,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1734,
+          "line": 1728,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1735,
+          "line": 1729,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -33319,14 +33319,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1718,
+          "line": 1712,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1719,
+          "line": 1713,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -37004,14 +37004,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1722,
+          "line": 1716,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1723,
+          "line": 1717,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -37645,14 +37645,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1712,
+          "line": 1706,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1713,
+          "line": 1707,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -38450,14 +38450,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1726,
+          "line": 1720,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1727,
+          "line": 1721,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -41501,21 +41501,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2050,
+          "line": 2044,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2052,
+          "line": 2046,
           "prop": "sheen",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2056,
+          "line": 2050,
           "prop": "footerBg",
           "scalars": []
         },
@@ -42481,21 +42481,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2058,
+          "line": 2052,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2060,
+          "line": 2054,
           "prop": "borderHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2062,
+          "line": 2056,
           "prop": "selectedBorder",
           "scalars": []
         },
@@ -67773,7 +67773,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 757,
+          "line": 755,
           "prop": "bg",
           "scalars": []
         },
@@ -68187,14 +68187,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1815,
+          "line": 1809,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1816,
+          "line": 1810,
           "prop": "bgFocus",
           "scalars": []
         },
@@ -71783,7 +71783,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2056,
+          "line": 2050,
           "prop": "footerBg",
           "scalars": []
         },
@@ -72623,7 +72623,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 729,
+          "line": 727,
           "prop": "skeletonBg",
           "scalars": []
         },
@@ -76515,21 +76515,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 758,
+          "line": 756,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 762,
+          "line": 760,
           "prop": "shortcutBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1555,
+          "line": 1549,
           "prop": "brandBorder",
           "scalars": []
         },
@@ -91127,14 +91127,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 724,
+          "line": 722,
           "prop": "borderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1823,
+          "line": 1817,
           "prop": "dropdownBorderColor",
           "scalars": []
         },
@@ -91588,7 +91588,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1819,
+          "line": 1813,
           "prop": "borderColor",
           "scalars": []
         },
@@ -92056,7 +92056,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1820,
+          "line": 1814,
           "prop": "borderColorHover",
           "scalars": []
         },
@@ -92496,7 +92496,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 732,
+          "line": 730,
           "prop": "itemHoverBackgroundColor",
           "scalars": []
         },
@@ -92842,14 +92842,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 726,
+          "line": 724,
           "prop": "secondaryTextColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 727,
+          "line": 725,
           "prop": "metaDescriptionColor",
           "scalars": []
         },
@@ -94224,7 +94224,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1827,
+          "line": 1821,
           "prop": "optionColor",
           "scalars": []
         },
@@ -104506,99 +104506,141 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1327,
+          "line": 1321,
           "prop": "level4",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1329,
+          "line": 1323,
           "prop": "level5",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1551,
+          "line": 1545,
           "prop": "brandTint",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1553,
+          "line": 1547,
           "prop": "brandTintHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1555,
+          "line": 1549,
           "prop": "brandBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1744,
+          "line": 1738,
           "prop": "focusRingColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2032,
+          "line": 2000,
+          "prop": "progressBar",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 2026,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2034,
+          "line": 2028,
           "prop": "iconBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2035,
+          "line": 2029,
           "prop": "chipBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2039,
+          "line": 2033,
           "prop": "cardGridLine",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2058,
+          "line": 2052,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2060,
+          "line": 2054,
           "prop": "borderHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2062,
+          "line": 2056,
           "prop": "selectedBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2064,
+          "line": 2058,
           "prop": "selectedRing",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 2152,
+          "prop": "borderActive",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 2287,
+          "prop": "primaryBg",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 2291,
+          "prop": "badgeBg",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 2308,
+          "prop": "focusRingColor",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 2361,
+          "prop": "color",
           "scalars": []
         },
         {
@@ -107623,7 +107665,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1821,
+          "line": 1815,
           "prop": "borderColorFocus",
           "scalars": []
         },
@@ -109308,7 +109350,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2032,
+          "line": 2026,
           "prop": "iconBg",
           "scalars": []
         },
@@ -114771,7 +114813,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1546,
+          "line": 1540,
           "prop": "onBrand",
           "scalars": []
         },
@@ -117856,21 +117898,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 760,
+          "line": 758,
           "prop": "groupColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 761,
+          "line": 759,
           "prop": "emptyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1673,
+          "line": 1667,
           "prop": "itemColor",
           "scalars": []
         },
@@ -119343,7 +119385,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1546,
+          "line": 1540,
           "prop": "onBrand",
           "scalars": []
         },
@@ -125204,7 +125246,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1543,
+          "line": 1537,
           "prop": "ink",
           "scalars": []
         },
@@ -129236,14 +129278,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 719,
+          "line": 717,
           "prop": "pageShellSubtitleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1544,
+          "line": 1538,
           "prop": "inkMuted",
           "scalars": []
         },
@@ -133769,28 +133811,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 706,
+          "line": 704,
           "prop": "primaryColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 723,
+          "line": 721,
           "prop": "backgroundColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1815,
+          "line": 1809,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1816,
+          "line": 1810,
           "prop": "bgFocus",
           "scalars": []
         },
@@ -140147,21 +140189,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1549,
+          "line": 1543,
           "prop": "surfaceRaised",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1551,
+          "line": 1545,
           "prop": "brandTint",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1553,
+          "line": 1547,
           "prop": "brandTintHover",
           "scalars": []
         }
@@ -156260,21 +156302,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1301,
+          "line": 1295,
           "prop": "sm",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1305,
+          "line": 1299,
           "prop": "xs",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2120,
+          "line": 2114,
           "prop": "shadow",
           "scalars": []
         },
@@ -156720,14 +156762,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1302,
+          "line": 1296,
           "prop": "md",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2121,
+          "line": 2115,
           "prop": "shadowHover",
           "scalars": []
         },
@@ -156992,14 +157034,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1303,
+          "line": 1297,
           "prop": "lg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2122,
+          "line": 2116,
           "prop": "shadowElevated",
           "scalars": []
         },
@@ -157139,7 +157181,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1304,
+          "line": 1298,
           "prop": "xl",
           "scalars": []
         },
@@ -157212,7 +157254,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1307,
+          "line": 1301,
           "prop": "xxl",
           "scalars": []
         },
@@ -162199,7 +162241,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1737,
+          "line": 1731,
           "prop": "focusRing",
           "scalars": []
         }
@@ -167245,21 +167287,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1271,
+          "line": 1265,
           "prop": "fontFamilyBase",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1273,
+          "line": 1267,
           "prop": "fontFamilyHeading",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1277,
+          "line": 1271,
           "prop": "fontFamilyDisplay",
           "scalars": []
         },
@@ -167301,7 +167343,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1275,
+          "line": 1269,
           "prop": "fontFamilyMono",
           "scalars": []
         },
@@ -168858,14 +168900,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1596,
+          "line": 1590,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1648,
+          "line": 1642,
           "prop": "fontSize",
           "scalars": []
         },
@@ -169707,14 +169749,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1604,
+          "line": 1598,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1656,
+          "line": 1650,
           "prop": "fontSize",
           "scalars": []
         },
@@ -171511,21 +171553,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1588,
+          "line": 1582,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1640,
+          "line": 1634,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2112,
+          "line": 2106,
           "prop": "titleFontSize",
           "scalars": []
         },
@@ -174571,28 +174613,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1562,
+          "line": 1556,
           "prop": "labelFontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1564,
+          "line": 1558,
           "prop": "helperFontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1572,
+          "line": 1566,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1624,
+          "line": 1618,
           "prop": "fontSize",
           "scalars": []
         },
@@ -176332,35 +176374,35 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1378,
+          "line": 1372,
           "prop": "fontWeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1563,
+          "line": 1557,
           "prop": "labelFontWeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1617,
+          "line": 1611,
           "prop": "fontWeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1783,
+          "line": 1777,
           "prop": "errorFontWeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2113,
+          "line": 2107,
           "prop": "titleFontWeight",
           "scalars": []
         },
@@ -176545,7 +176587,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1560,
+          "line": 1554,
           "prop": "fontWeight",
           "scalars": []
         }
@@ -181272,14 +181314,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1606,
+          "line": 1600,
           "prop": "iconSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1658,
+          "line": 1652,
           "prop": "iconSize",
           "scalars": []
         },
@@ -181487,7 +181529,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1582,
+          "line": 1576,
           "prop": "iconSize",
           "decl": "calc(var(--ds-icon-sm-size) - 2px)",
           "scalars": []
@@ -181495,14 +181537,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1590,
+          "line": 1584,
           "prop": "iconSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1598,
+          "line": 1592,
           "prop": "iconSize",
           "decl": "calc(var(--ds-icon-sm-size) + 2px)",
           "scalars": []
@@ -181510,7 +181552,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1634,
+          "line": 1628,
           "prop": "iconSize",
           "decl": "calc(var(--ds-icon-sm-size) - 2px)",
           "scalars": []
@@ -181518,14 +181560,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1642,
+          "line": 1636,
           "prop": "iconSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1650,
+          "line": 1644,
           "prop": "iconSize",
           "decl": "calc(var(--ds-icon-sm-size) + 2px)",
           "scalars": []
@@ -181862,14 +181904,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1574,
+          "line": 1568,
           "prop": "iconSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1626,
+          "line": 1620,
           "prop": "iconSize",
           "scalars": []
         },
@@ -189295,7 +189337,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1594,
+          "line": 1588,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-lg-height) * 0.35)",
           "scalars": []
@@ -189303,7 +189345,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1595,
+          "line": 1589,
           "prop": "paddingY",
           "decl": "calc(var(--ds-input-lg-height) * 0.2)",
           "scalars": []
@@ -189311,14 +189353,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1645,
+          "line": 1639,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1646,
+          "line": 1640,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-lg-height) * 0.42)",
           "scalars": []
@@ -189326,7 +189368,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1647,
+          "line": 1641,
           "prop": "gap",
           "decl": "calc(var(--ds-input-lg-height) * 0.18)",
           "scalars": []
@@ -190216,7 +190258,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1569,
+          "line": 1563,
           "prop": "height",
           "decl": "calc(var(--ds-input-md-height) - 0.5rem)",
           "scalars": []
@@ -190224,7 +190266,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1577,
+          "line": 1571,
           "prop": "height",
           "decl": "calc(var(--ds-input-md-height) - 0.25rem)",
           "scalars": []
@@ -190232,7 +190274,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1586,
+          "line": 1580,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-md-height) * 0.35)",
           "scalars": []
@@ -190240,7 +190282,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1587,
+          "line": 1581,
           "prop": "paddingY",
           "decl": "calc(var(--ds-input-md-height) * 0.2)",
           "scalars": []
@@ -190248,7 +190290,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1593,
+          "line": 1587,
           "prop": "height",
           "decl": "calc(var(--ds-input-md-height) + 0.375rem)",
           "scalars": []
@@ -190256,7 +190298,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1601,
+          "line": 1595,
           "prop": "height",
           "decl": "calc(var(--ds-input-md-height) + 0.875rem)",
           "scalars": []
@@ -190264,7 +190306,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1619,
+          "line": 1613,
           "prop": "gap",
           "decl": "calc(var(--ds-input-md-height) * 0.18)",
           "scalars": []
@@ -190272,14 +190314,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1637,
+          "line": 1631,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1638,
+          "line": 1632,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-md-height) * 0.42)",
           "scalars": []
@@ -190287,7 +190329,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1639,
+          "line": 1633,
           "prop": "gap",
           "decl": "calc(var(--ds-input-md-height) * 0.18)",
           "scalars": []
@@ -190295,7 +190337,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2086,
+          "line": 2080,
           "prop": "headerBlockSize",
           "decl": "calc(var(--ds-input-md-height) - 0.25rem)",
           "scalars": []
@@ -192921,7 +192963,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1578,
+          "line": 1572,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-sm-height) * 0.35)",
           "scalars": []
@@ -192929,7 +192971,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1579,
+          "line": 1573,
           "prop": "paddingY",
           "decl": "calc(var(--ds-input-sm-height) * 0.2)",
           "scalars": []
@@ -192937,14 +192979,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1629,
+          "line": 1623,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1630,
+          "line": 1624,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-sm-height) * 0.42)",
           "scalars": []
@@ -192952,7 +192994,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1631,
+          "line": 1625,
           "prop": "gap",
           "decl": "calc(var(--ds-input-sm-height) * 0.18)",
           "scalars": []
@@ -195280,7 +195322,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1602,
+          "line": 1596,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-xl-height) * 0.35)",
           "scalars": []
@@ -195288,7 +195330,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1603,
+          "line": 1597,
           "prop": "paddingY",
           "decl": "calc(var(--ds-input-xl-height) * 0.2)",
           "scalars": []
@@ -195296,14 +195338,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1653,
+          "line": 1647,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1654,
+          "line": 1648,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-xl-height) * 0.42)",
           "scalars": []
@@ -195311,7 +195353,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1655,
+          "line": 1649,
           "prop": "gap",
           "decl": "calc(var(--ds-input-xl-height) * 0.18)",
           "scalars": []
@@ -195702,7 +195744,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1570,
+          "line": 1564,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-xs-height) * 0.35)",
           "scalars": []
@@ -195710,7 +195752,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1571,
+          "line": 1565,
           "prop": "paddingY",
           "decl": "calc(var(--ds-input-xs-height) * 0.2)",
           "scalars": []
@@ -195718,14 +195760,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1621,
+          "line": 1615,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1622,
+          "line": 1616,
           "prop": "paddingX",
           "decl": "calc(var(--ds-input-xs-height) * 0.42)",
           "scalars": []
@@ -195733,7 +195775,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1623,
+          "line": 1617,
           "prop": "gap",
           "decl": "calc(var(--ds-input-xs-height) * 0.18)",
           "scalars": []
@@ -198150,14 +198192,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1561,
+          "line": 1555,
           "prop": "letterSpacing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1618,
+          "line": 1612,
           "prop": "letterSpacing",
           "scalars": []
         },
@@ -199639,7 +199681,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1379,
+          "line": 1373,
           "prop": "lineHeight",
           "scalars": []
         },
@@ -200752,70 +200794,70 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1573,
+          "line": 1567,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1581,
+          "line": 1575,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1589,
+          "line": 1583,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1597,
+          "line": 1591,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1605,
+          "line": 1599,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1625,
+          "line": 1619,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1633,
+          "line": 1627,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1641,
+          "line": 1635,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1649,
+          "line": 1643,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1657,
+          "line": 1651,
           "prop": "lineHeight",
           "scalars": []
         },
@@ -205771,7 +205813,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2050,
+          "line": 2044,
           "prop": "bg",
           "scalars": []
         }
@@ -206016,7 +206058,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2058,
+          "line": 2052,
           "prop": "border",
           "scalars": []
         },
@@ -206130,7 +206172,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2060,
+          "line": 2054,
           "prop": "borderHover",
           "scalars": []
         }
@@ -206173,7 +206215,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2062,
+          "line": 2056,
           "prop": "selectedBorder",
           "scalars": []
         }
@@ -206237,14 +206279,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2060,
+          "line": 2054,
           "prop": "borderHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2062,
+          "line": 2056,
           "prop": "selectedBorder",
           "scalars": []
         },
@@ -206309,7 +206351,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2064,
+          "line": 2058,
           "prop": "selectedRing",
           "scalars": []
         }
@@ -229834,7 +229876,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1567,
+          "line": 1561,
           "prop": "transitionTiming",
           "scalars": []
         },
@@ -235240,7 +235282,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1566,
+          "line": 1560,
           "prop": "transitionDuration",
           "scalars": []
         },
@@ -241726,7 +241768,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 713,
+          "line": 711,
           "prop": "overlayBg",
           "scalars": []
         }
@@ -249190,7 +249232,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2037,
+          "line": 2031,
           "prop": "cardGridSize",
           "scalars": []
         }
@@ -261315,7 +261357,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2028,
+          "line": 2022,
           "prop": "radiusMd",
           "scalars": []
         },
@@ -263346,7 +263388,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1376,
+          "line": 1370,
           "prop": "radius",
           "scalars": []
         },
@@ -267519,7 +267561,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2053,
+          "line": 2047,
           "prop": "headerBg",
           "scalars": []
         }
@@ -267580,7 +267622,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2055,
+          "line": 2049,
           "prop": "sectionAltBg",
           "scalars": []
         }
@@ -267630,7 +267672,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2054,
+          "line": 2048,
           "prop": "sectionBg",
           "scalars": []
         }
@@ -276105,7 +276147,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1026,
+          "line": 1020,
           "prop": "level1",
           "decl": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -276113,7 +276155,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1028,
+          "line": 1022,
           "prop": "level2",
           "decl": "0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -276121,7 +276163,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1030,
+          "line": 1024,
           "prop": "level3",
           "decl": "0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -276129,7 +276171,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1032,
+          "line": 1026,
           "prop": "level4",
           "decl": "0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -276137,7 +276179,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1034,
+          "line": 1028,
           "prop": "level5",
           "decl": "0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -276215,21 +276257,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1680,
+          "line": 1674,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1692,
+          "line": 1686,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1696,
+          "line": 1690,
           "prop": "shadowHover",
           "scalars": []
         }
@@ -276313,14 +276355,35 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1679,
+          "line": 1673,
           "prop": "shadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1681,
+          "line": 1675,
+          "prop": "shadowActive",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 1683,
+          "prop": "shadowActive",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 1685,
+          "prop": "shadow",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+          "line": 1687,
           "prop": "shadowActive",
           "scalars": []
         },
@@ -276328,13 +276391,6 @@
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
           "line": 1689,
-          "prop": "shadowActive",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1691,
           "prop": "shadow",
           "scalars": []
         },
@@ -276348,21 +276404,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1695,
-          "prop": "shadow",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1699,
-          "prop": "shadowActive",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1733,
+          "line": 1727,
           "prop": "shadow",
           "scalars": []
         }
@@ -276627,21 +276669,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1729,
+          "line": 1723,
           "prop": "shadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1730,
+          "line": 1724,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1731,
+          "line": 1725,
           "prop": "shadowActive",
           "scalars": []
         }
@@ -277385,7 +277427,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1026,
+          "line": 1020,
           "prop": "level1",
           "decl": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -277393,7 +277435,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1028,
+          "line": 1022,
           "prop": "level2",
           "decl": "0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -277401,7 +277443,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1030,
+          "line": 1024,
           "prop": "level3",
           "decl": "0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -277409,7 +277451,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1032,
+          "line": 1026,
           "prop": "level4",
           "decl": "0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -277417,7 +277459,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1034,
+          "line": 1028,
           "prop": "level5",
           "decl": "0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -277904,14 +277946,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2030,
+          "line": 2024,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2042,
+          "line": 2036,
           "prop": "popoverShadow",
           "scalars": []
         },
@@ -278522,7 +278564,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2029,
+          "line": 2023,
           "prop": "shadow",
           "scalars": []
         },
@@ -278606,7 +278648,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1721,
+          "line": 1715,
           "prop": "shadow",
           "scalars": []
         }
@@ -278677,7 +278719,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1026,
+          "line": 1020,
           "prop": "level1",
           "decl": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -278685,7 +278727,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1028,
+          "line": 1022,
           "prop": "level2",
           "decl": "0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -278693,7 +278735,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1030,
+          "line": 1024,
           "prop": "level3",
           "decl": "0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -278701,7 +278743,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1032,
+          "line": 1026,
           "prop": "level4",
           "decl": "0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -278709,7 +278751,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1034,
+          "line": 1028,
           "prop": "level5",
           "decl": "0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent)",
           "scalars": []
@@ -278787,7 +278829,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1725,
+          "line": 1719,
           "prop": "shadow",
           "scalars": []
         }
@@ -282896,7 +282938,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2039,
+          "line": 2033,
           "prop": "cardGridLine",
           "scalars": []
         },
@@ -288732,7 +288774,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1377,
+          "line": 1371,
           "prop": "gap",
           "scalars": []
         },
@@ -293180,7 +293222,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1559,
+          "line": 1553,
           "prop": "gap",
           "scalars": []
         },
@@ -296124,21 +296166,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2104,
+          "line": 2098,
           "prop": "paddingSm",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2108,
+          "line": 2102,
           "prop": "headerPadding",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2110,
+          "line": 2104,
           "prop": "footerPadding",
           "scalars": []
         },
@@ -298403,28 +298445,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2105,
+          "line": 2099,
           "prop": "paddingMd",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2108,
+          "line": 2102,
           "prop": "headerPadding",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2109,
+          "line": 2103,
           "prop": "bodyPadding",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2110,
+          "line": 2104,
           "prop": "footerPadding",
           "scalars": []
         },
@@ -299252,7 +299294,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2106,
+          "line": 2100,
           "prop": "paddingLg",
           "scalars": []
         },
@@ -300186,7 +300228,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2107,
+          "line": 2101,
           "prop": "paddingXl",
           "scalars": []
         },
@@ -313660,21 +313702,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1547,
+          "line": 1541,
           "prop": "surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2032,
+          "line": 2026,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2035,
+          "line": 2029,
           "prop": "chipBg",
           "scalars": []
         }
@@ -314186,7 +314228,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2034,
+          "line": 2028,
           "prop": "iconBorder",
           "scalars": []
         }
@@ -314469,7 +314511,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2041,
+          "line": 2035,
           "prop": "cardGridBg",
           "scalars": []
         }
@@ -315369,14 +315411,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1815,
+          "line": 1809,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1816,
+          "line": 1810,
           "prop": "bgFocus",
           "scalars": []
         },
@@ -316372,7 +316414,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1556,
+          "line": 1550,
           "prop": "iconTileBorder",
           "scalars": []
         }
@@ -319068,7 +319110,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1549,
+          "line": 1543,
           "prop": "surfaceRaised",
           "scalars": []
         }
@@ -333137,7 +333179,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 2092,
+          "line": 2086,
           "prop": "headerLetterSpacing",
           "decl": "calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * 0.75)",
           "scalars": []
@@ -357437,7 +357479,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1580,
+          "line": 1574,
           "prop": "fontSize",
           "decl": "calc(0.8125rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -357447,7 +357489,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-          "line": 1632,
+          "line": 1626,
           "prop": "fontSize",
           "decl": "calc(0.8125rem * var(--ds-type-scale, 1))",
           "scalars": [

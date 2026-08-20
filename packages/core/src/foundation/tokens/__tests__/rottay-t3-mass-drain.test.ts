@@ -56,8 +56,19 @@
  *   --ds-pagination-item-border
  *   --ds-steps-wait-bg
  *
- * 190 body leaves + 186 light leaves is the whole typed shape this tranche
+ * 190 body leaves + 182 light leaves is the whole typed shape this tranche
  * adds. There is no third authority.
+ *
+ * F2.4 PILOTO (2026-08-20): cuatro canales mas se sumaron a esa lista de
+ * identicos -- `--ds-spinner-color`, `--ds-menu-focus-ring-color`,
+ * `--ds-floatbutton-primary-bg` y `--ds-live-feed-badge-bg` -- al re-cablear
+ * el cuerpo a `var(--ds-color-primary)`. El VALOR computado no se movio en
+ * ningun modo (`--ds-color-primary` ya valia `#FFFFFF` en el cuerpo y
+ * `#0A0A0A` en el bloque claro); cambio la FORMA, de literal a lectura de
+ * raiz. La procedencia del drenaje se conserva: el roster sigue nombrando los
+ * mismos 190 canales, en los mismos dos modos, con las mismas disposiciones.
+ * Por eso `t3Roster` y `t3Membership` no se movieron y solo `t3Tuple` -- que
+ * es el unico que digiere el VALOR -- se re-anclo. 186 light leaves -> 182.
  *
  * -- The census convention, restated ------------------------------------------
  *
@@ -144,6 +155,37 @@ const sha256 = (text: string): string =>
 const lines = (rows: readonly string[]): string =>
   [...rows].sort().join("\n") + "\n";
 const letter = (mode: Mode): string => (mode === "dark" ? "D" : "L");
+
+/**
+ * F2.4 PILOTO (2026-08-20) -- canales cuyo CUERPO se re-cablo a una raiz
+ * DESPUES de este drenaje.
+ *
+ * El roster NO se toca: es un registro de PRE-IMAGEN y el bloque
+ * "the pre-image is literal" de mas abajo exige que no cargue ni un `var()`.
+ * Meter la forma nueva ahi convertiria un registro historico en una expectativa
+ * viva y borraria la procedencia del drenaje. Por eso los tres hashes firmados
+ * -- `t3Roster`, `t3Tuple`, `t3Membership` -- siguen EXACTAMENTE donde estaban.
+ *
+ * Lo que cambia es solo lo que el arbol emite HOY, y no cambia la PINTURA:
+ * `--ds-color-primary` ya valia `#FFFFFF` en el cuerpo y `#0A0A0A` en el bloque
+ * claro, asi que cada canal de aqui resuelve al mismo color que su literal de
+ * pre-imagen, en los dos modos. Cambio la FORMA, no el color.
+ *
+ * Consecuencia buscada: con cuerpo y claro valiendo lo mismo, el delta claro se
+ * queda sin nada que decir y estos cuatro entran en la lista de "identicos"
+ * (186 -> 182 hojas light).
+ */
+const REDERIVED: Readonly<Record<string, string>> = {
+  "--ds-floatbutton-primary-bg": "var(--ds-color-primary)",
+  "--ds-live-feed-badge-bg": "var(--ds-color-primary)",
+  "--ds-menu-focus-ring-color": "var(--ds-color-primary)",
+  "--ds-spinner-color": "var(--ds-color-primary)",
+};
+
+/** Lo que el arbol emite hoy para esa fila: la re-derivacion si la hay, y si no
+ *  el valor de pre-imagen, que sigue siendo el vigente para las otras 186. */
+const emittedToday = (row: Declaration): string =>
+  REDERIVED[row.name] ?? row.value;
 const rosterHash = (rows: readonly Declaration[]): string =>
   sha256(lines([...new Set(rows.map((row) => row.name))]));
 const tupleHash = (rows: readonly Declaration[]): string =>
@@ -185,8 +227,8 @@ const CENSUS = {
   holdTuples: 0,
   families: 26,
   bodyLeaves: 190,
-  lightLeaves: 186,
-  identicalChannels: 4,
+  lightLeaves: 182,
+  identicalChannels: 8,
   gradientValues: 6,
   maxShadowLayers: 2,
 } as const;
@@ -1619,7 +1661,7 @@ describe("ROTTAY-T3 MASS - the paint did not move", () => {
   it("emits each channel exactly once, at the compiled value", () => {
     for (const row of T3_ROSTER) {
       expect(EMITTED[row.mode][row.name], `${row.mode} ${row.name}`).toBe(
-        row.value
+        emittedToday(row)
       );
     }
   });
@@ -1738,7 +1780,7 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
         row.mode === "dark"
           ? bodyChrome[prop]?.[field]
           : lightChrome[prop]?.[field] ?? bodyChrome[prop]?.[field];
-      expect(authored, `${row.mode} ${row.name}`).toBe(row.value);
+      expect(authored, `${row.mode} ${row.name}`).toBe(emittedToday(row));
       expect(authored).not.toBe("initial");
     }
   });
@@ -1748,13 +1790,28 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
       .filter((name) => {
         const dark = darkRows.find((row) => row.name === name);
         const light = lightRows.find((row) => row.name === name);
-        return bare(dark?.value ?? "") === bare(light?.value ?? "");
+        // Con el valor de HOY: la pregunta es si el claro sigue teniendo algo
+        // distinto que decir, y eso lo decide la forma vigente, no la historica.
+        return (
+          bare(dark ? emittedToday(dark) : "") ===
+          bare(light ? emittedToday(light) : "")
+        );
       })
       .sort();
+    // F2.4 PILOTO: cuatro se sumaron a los cuatro originales. No cambiaron de
+    // pintura -- cambiaron de FORMA: el cuerpo pasa de un literal a
+    // `var(--ds-color-primary)`, que ya resolvia a ese mismo literal en cada
+    // modo, y con eso el delta claro dejo de tener nada que decir. La ley de
+    // este bloque -- "identico en ambos modos => no se restata en light" -- es
+    // exactamente la que los admite.
     expect(identical).toEqual([
       "--ds-floatbutton-badge-color",
+      "--ds-floatbutton-primary-bg",
+      "--ds-live-feed-badge-bg",
+      "--ds-menu-focus-ring-color",
       "--ds-pagination-item-bg",
       "--ds-pagination-item-border",
+      "--ds-spinner-color",
       "--ds-steps-wait-bg",
     ]);
     expect(identical).toHaveLength(CENSUS.identicalChannels);

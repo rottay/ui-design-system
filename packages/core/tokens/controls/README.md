@@ -8,13 +8,13 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: f8af8fcb12296c9632cd4e23fe164d71e2078ccdc6adb83517e35aaa74d2cf75
+digest: dc813e5d73a7cd2f359068770bd310a7f40d3987a3efc1971efe9aac7eb9340c
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
 | id | control | dominio/tipo | default | canal | static path (BrandTheme) | DB path (TenantThemeDocument) | lecturas vivas | consumer probado |
 |---|---|---|---|---|---|---|---|---|
-| `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1887 | `button.css` |
+| `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1893 | `button.css` |
 | `typography.pairing` | Type pairing personality | enum | vertical baseline families | 2 ch | `typography.{fontFamilyBase,fontFamilyHeading}` | `appearance.general.typography.typePairing` | 218 | `typography.css` |
 | `typography.families` | Explicit font stacks | font-stack | pairing (or vertical baseline) decides | 2 ch | `typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}` | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 218 | `default.css` |
 | `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography (ramp channels)` | `appearance.general.typography.scale` | 44 | `index.ts` |

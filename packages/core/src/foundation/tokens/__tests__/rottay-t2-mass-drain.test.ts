@@ -162,6 +162,22 @@ const sha256 = (text: string): string =>
 const lines = (rows: readonly string[]): string =>
   [...rows].sort().join("\n") + "\n";
 const letter = (mode: Mode): string => (mode === "dark" ? "D" : "L");
+
+/**
+ * F2.4 PILOTO (2026-08-20) -- el unico canal de este tramo cuyo cuerpo se
+ * re-cablo a una raiz DESPUES del drenaje. Misma ley que en T3: el roster es
+ * PRE-IMAGEN y no se toca, asi que `t2Roster`, `t2Tuple` y las dos membresias
+ * firmadas siguen exactamente donde estaban. Lo que cambia es la FORMA que el
+ * arbol emite hoy, no el color: `--ds-color-primary` ya valia `#FFFFFF` en el
+ * cuerpo y `#0A0A0A` en el bloque claro.
+ */
+const REDERIVED: Readonly<Record<string, string>> = {
+  "--ds-upload-progress-bar": "var(--ds-color-primary)",
+};
+
+/** Lo que el arbol emite hoy para esa fila; para las demas, su valor de siempre. */
+const emittedToday = (row: Declaration): string =>
+  REDERIVED[row.name] ?? row.value;
 const rosterHash = (rows: readonly Declaration[]): string =>
   sha256(lines([...new Set(rows.map((row) => row.name))]));
 const tupleHash = (rows: readonly Declaration[]): string =>
@@ -1254,7 +1270,7 @@ describe("ROTTAY-T2 MASS - the 41 deletes were derivations, not paint", () => {
     );
     expect(restated).toHaveLength(27);
     for (const row of restated) {
-      expect(bare(EMITTED.light[row.name] as string)).toBe(bare(row.value));
+      expect(bare(EMITTED.light[row.name] as string)).toBe(bare(emittedToday(row)));
     }
   });
 
@@ -1533,7 +1549,7 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         (total, leaves) => total + Object.keys(leaves).length,
         0
       )
-    ).toBe(141);
+    ).toBe(140);
   });
 
   it("compiles the dark document to a ZERO delta -- byte-identical, not merely close", () => {
@@ -1552,17 +1568,17 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
     expect(delta).toEqual({ "--ds-upload-dragger-bg-hover": "#123456" });
   });
 
-  it("compiles the light document to 141 entries, each byte-equal to the static light artifact", () => {
+  it("compiles the light document to 140 entries, each byte-equal to the static light artifact", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const names = Object.keys(delta).sort();
-    expect(names).toHaveLength(141);
+    expect(names).toHaveLength(140);
     for (const name of names) {
       expect(t2Names).toContain(name);
       expect(delta[name]).toBe(EMITTED.light[name]);
     }
   });
 
-  it("omits exactly the seven channels whose light paint equals its dark paint", () => {
+  it("omits exactly the eight channels whose light paint equals its dark paint", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const channels = FAMILIES.flatMap((family) =>
       family.fields.map(([, channel]) => channel)
@@ -1576,14 +1592,20 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         const light = T2_ROSTER.find(
           (row) => row.mode === "light" && row.name === name
         );
+        // Con el valor de HOY, no con el de pre-imagen: la pregunta es si el
+        // bloque claro sigue teniendo algo distinto que decir. Y la exigencia de
+        // que AMBAS filas sean `migrate` se relaja solo para los re-cableados:
+        // `--ds-upload-progress-bar` tenia su fila clara adjudicada `delete`
+        // (era un eco del piso), y ahora que el cuerpo lee la raiz el claro se
+        // queda sin delta por la misma razon que los otros siete.
         return (
           dark?.disposition === "migrate" &&
-          light?.disposition === "migrate" &&
-          bare(dark.value) === bare(light?.value ?? "")
+          (light?.disposition === "migrate" || name in REDERIVED) &&
+          bare(emittedToday(dark)) === bare(light ? emittedToday(light) : "")
         );
       })
       .sort();
-    expect(identical).toHaveLength(7);
+    expect(identical).toHaveLength(8);
     expect(omitted).toEqual(identical);
   });
 });
