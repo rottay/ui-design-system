@@ -66,6 +66,8 @@ const INDEX_PATH = join(MANIFEST_ROOT, 'index.json');
 const CONTROLS_ROOT = join(MANIFEST_ROOT, 'controls');
 const GROUPS_ROOT = join(MANIFEST_ROOT, 'groups');
 const FAMILIES_ROOT = join(MANIFEST_ROOT, 'families');
+const CASCADE_ROOTS_DIR = join(MANIFEST_ROOT, 'cascade', 'roots');
+const CATALOG_PATH = join(MANIFEST_ROOT, 'cascade', 'root-catalog.json');
 const REGISTRY_SOURCE = join(
   REPOSITORY_ROOT,
   'packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts',
@@ -157,11 +159,31 @@ function activePublicControls() {
   );
 }
 
+/**
+ * The cascade catalog and its roots enter the digest net (correccion F2 de la
+ * auditoria Fable). Antes quedaban fuera: una edicion manual del catalogo -- o
+ * intercambiar el `channel` de dos raices, que deja verdes a freshness y a
+ * exposure a la vez -- salia CONSTITUTION_READY. Controles y familias ya
+ * estaban pineados; la asimetria no tenia razon escrita, y ahora no existe.
+ */
+function cascadeInputsDigest() {
+  const entries = {};
+  if (existsSync(CATALOG_PATH)) entries['root-catalog.json'] = sha256(readFileSync(CATALOG_PATH));
+  if (existsSync(CASCADE_ROOTS_DIR)) {
+    for (const name of readdirSync(CASCADE_ROOTS_DIR).sort()) {
+      if (!name.endsWith('.json')) continue;
+      entries[`roots/${name}`] = sha256(readFileSync(join(CASCADE_ROOTS_DIR, name)));
+    }
+  }
+  return jsonDigest(entries);
+}
+
 function sourceInputsDigest() {
   return jsonDigest({
     inventory: sha256(readFileSync(INVENTORY_PATH)),
     registry: sha256(readFileSync(REGISTRY_SOURCE)),
     schema: sha256(readFileSync(SCHEMA_PATH)),
+    cascade: cascadeInputsDigest(),
   });
 }
 

@@ -18,7 +18,11 @@ import { CI_GATES, blockingGates, validateManifest } from '../gates-manifest/ind
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
-const runner = resolve(scriptsDir, 'run-ci-gates.mjs');
+// El runner ES `index.mjs` desde el lote F del Paso B; C1 actualizo el import
+// de arriba pero no este spawn, y los dos tests que lo usan ya estaban rojos
+// por otra causa, asi que la ruta muerta quedo invisible dentro del "conjunto
+// identico" de fallas (hallazgo F4 de la auditoria Fable).
+const runner = resolve(scriptsDir, 'index.mjs');
 
 test('the manifest shipped in the repo is structurally valid', () => {
   assert.deepEqual(validateManifest(), []);
@@ -76,30 +80,38 @@ test('DRILL: a malformed run argv is rejected', () => {
   assert.ok(problems.some((p) => p.includes('non-empty argv')));
 });
 
-test('the real manifest excludes nothing today', () => {
-  // This replaced a `for (const gate of CI_GATES.filter(g => !g.blocking))` loop
-  // that asserted each exclusion named an owner and a reason. Once
-  // `taxonomy-parity` -- the last non-blocking gate -- was enforced, that loop
-  // iterated zero times and asserted nothing while still reading as coverage.
-  //
-  // The current state is the stronger claim, so assert it directly: every gate
-  // in the shipped inventory is enforced. If a future gate is excluded, this
-  // fails loudly and names it, which is the moment to reinstate a per-exclusion
-  // owner/reason check rather than let one land unnoticed.
+test('every excluded gate names its reason and its owner', () => {
+  // Re-adjudicado (hallazgo F4 de la auditoria Fable). Este test asertaba CERO
+  // exclusiones y su propio comentario decia que, el dia que alguna aterrizara,
+  // ese era el momento de reinstaurar el chequeo por exclusion. Aterrizaron dos
+  // -- `channel-liveness` y `lane-control-drills`, ambas adjudicadas a F2 -- y
+  // el test quedo rojo, escondiendo ademas un spawn muerto durante seis lotes.
+  // Asi que se hace lo que el propio comentario prescribia: la lista exacta, y
+  // razon + dueno por cada una.
   const excluded = CI_GATES.filter((g) => !g.blocking);
   assert.deepEqual(
-    excluded.map((g) => g.id),
-    [],
-    'a gate was excluded from CI; restore the per-exclusion owner/reason check alongside it',
+    excluded.map((g) => g.id).sort(),
+    ['channel-liveness', 'lane-control-drills'],
+    'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
+  for (const gate of excluded) {
+    assert.ok(
+      typeof gate.excluded?.reason === 'string' && gate.excluded.reason.trim().length > 0,
+      `${gate.id} is excluded without a written reason`,
+    );
+    assert.ok(
+      typeof gate.excluded?.owner === 'string' && gate.excluded.owner.trim().length > 0,
+      `${gate.id} is excluded without an owner`,
+    );
+  }
 
   // Non-vacuity: the emptiness above must come from an enforced inventory, not
   // from `CI_GATES` being empty or from `blocking` having stopped being a boolean.
   assert.ok(CI_GATES.length >= 15, 'expected the real inventory, not a stub');
   assert.equal(
-    CI_GATES.filter((g) => g.blocking === true).length,
+    CI_GATES.filter((g) => g.blocking === true).length + excluded.length,
     CI_GATES.length,
-    'every gate must be explicitly blocking: true, not merely truthy or undefined-and-filtered',
+    'every gate must be explicitly blocking: true or explicitly excluded, never merely truthy',
   );
 });
 
@@ -131,12 +143,15 @@ test('the runner --list plan matches the manifest and runs nothing', () => {
   for (const gate of blockingGates()) {
     assert.ok(result.stdout.includes(gate.id), `--list omitted ${gate.id}`);
   }
-  // Same vacuity repair as above: this was a loop over the (now empty) exclusion
-  // set asserting `[excluded]` was visible in the plan. Assert the current state
-  // instead -- the rendered plan must advertise no exclusion at all, so a gate
-  // quietly downgraded in the manifest changes this output and fails here.
+  // El plan tiene que anunciar exactamente las exclusiones que el manifiesto
+  // declara -- ni una de mas (un gate degradado en silencio) ni una de menos
+  // (una exclusion que el runner no muestra y por tanto nadie revisa).
   const excludedMarkers = result.stdout.split('[excluded]').length - 1;
-  assert.equal(excludedMarkers, 0, 'the plan advertises an exclusion; the manifest declares none');
+  assert.equal(
+    excludedMarkers,
+    CI_GATES.filter((g) => !g.blocking).length,
+    'the rendered plan does not advertise exactly the exclusions the manifest declares',
+  );
 
   // Non-vacuity for that count: the plan really was rendered and really does
   // annotate enforcement, so a zero above cannot come from empty stdout.

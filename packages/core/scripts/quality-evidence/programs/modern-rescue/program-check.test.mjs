@@ -849,3 +849,114 @@ test("a walk that misses cells fails, instead of reporting zero bare ones", () =
       )
   );
 });
+
+/*
+ * ADMISSION universal (correccion F1 de la auditoria). La lista de raices se
+ * deriva del arbol, asi que el drill que importa es el que Fable uso para
+ * probar el agujero: una raiz que ANTES no estaba cubierta.
+ */
+test("F1: an invented variant in a newly covered root fails closed", () => {
+  const target = join(manifestRoot, "cascade/roots/density.mode.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.variants.push({
+      id: "ultra",
+      value: 0.7,
+      effects: { emits: "--ds-density-effective-scale: 0.7" },
+      pinned: {},
+    });
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      'admission: density.mode emits "ultra"',
+      "density.mode no estaba en la lista pineada; derivada del arbol, si esta"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("F1: a flat root reads its token from the id, not from the emitted value", () => {
+  // density.mode escribe id `compact` con value 0.85. Si la ley comparara
+  // `value` contra enumValues, el arbol vivo daria rojo sin que nadie tocara
+  // nada. Este control lo fija: hoy pasa, y si alguien invierte el criterio
+  // el arbol REAL se cae.
+  const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+  assert.equal(
+    errors.filter((e) => e.includes("admission: density.mode")).length,
+    0,
+    `density.mode debe pasar leyendo el id; got ${JSON.stringify(errors)}`
+  );
+});
+
+test("F1: a root that emits variants with no sibling control fails closed", () => {
+  const target = join(manifestRoot, "controls/profiles.icon.json");
+  const backup = `${target}.f1-drill-backup`;
+  try {
+    renameSync(target, backup);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      "profiles.icon emits 4 variants but has no sibling control",
+      "una raiz que emite sin control hermano es un hueco de gobierno, no una exencion"
+    );
+  } finally {
+    renameSync(backup, target);
+  }
+});
+
+test("F3: an invented targetBinding.status is a typo, not a new law", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => {
+      // La celda vive por (a) -- tiene filas -- asi que este drill prueba que el
+      // vocabulario se revisa SIEMPRE, no solo cuando la celda depende de (b).
+      const cell = doc.themeControls.find((c) => c.controlId === "density.mode");
+      cell.targetBinding = { ...(cell.targetBinding ?? {}), status: "MUST_NOT_REACHX" };
+    },
+    (errors) =>
+      expectError(
+        errors,
+        'declares targetBinding.status "MUST_NOT_REACHX", which is not one of',
+        "un status inventado saca la celda de todas las particiones en silencio"
+      )
+  );
+});
+
+test("F5: an empty catalog is not a domicile", () => {
+  const target = join(manifestRoot, "controls/chrome.anatomy.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.calibration.catalog = {};
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      "an enum must name its vocabulary in one of the two governed domiciles",
+      "un catalogo vacio declara vocabulario vacio: FORMA debe rechazarlo"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("F6: a missing controlFamilyCells denominator fails closed", () => {
+  const target = join(manifestRoot, "index.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    delete doc.denominators.controlFamilyCells;
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(
+      errors,
+      "does not publish a numeric denominators.controlFamilyCells",
+      "un piso que se apaga desde el productor que vigila no es un piso"
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});

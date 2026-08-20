@@ -228,7 +228,9 @@ export function validateCascadeRoot(doc, { label, repositoryRoot, activeControlI
    * exigir mas prueba que la ley que dice replicar; endurecer las tres es una enmienda
    * aparte y coordinada.
    *
-   * `variantsLaw` es OPCIONAL y sigue siendolo: solo tres raices lo llevan. Se valida su
+   * `variantsLaw` es OPCIONAL y sigue siendolo: hoy lo llevan seis raices
+   * (chrome.anatomy, experience.profile, profiles.expressive, recipe-profile,
+   * responsive.posture, typography.families). Se valida su
    * forma cuando esta, nunca su presencia.
    */
   const variants = doc.variants;

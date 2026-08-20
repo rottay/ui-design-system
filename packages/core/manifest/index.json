@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "4b52e49294c37e13a9568d2348e015f696063041ee004dbc8cb670be7706d297",
+  "inputsDigest": "b510fca960650ef1925abbfedf2e7610a739cde4be6c317d3e360384d358b35a",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1319,7 +1319,7 @@
     {
       "controlId": "typography.families",
       "path": "manifest/controls/typography.families.json",
-      "digest": "2604d0c0d8f4d1ae065818a15bbb2e25d2852b6a19bbacec985b7734593965b8"
+      "digest": "0c9e66cb0161e5c2574b62a5a466d2b1c302d7fd1cb45c344492ab27193e48e0"
     },
     {
       "controlId": "typography.scale",
@@ -1349,7 +1349,7 @@
     {
       "controlId": "motion.dial",
       "path": "manifest/controls/motion.dial.json",
-      "digest": "3bf12d166b3b4ec320072ddec3697a2d3bc5aed0fa01fd2650e59d84717d2d59"
+      "digest": "fcd1c63633ed331f60c3fcccb8a1c8b7aa96b94ae760eed72fb4a958847fba57"
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -1379,7 +1379,7 @@
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "f930c271fa9f136b5837ebfe7a2377e7a4bd3a6025755f0883534922eaa0904a"
+      "digest": "e452213e08ca24647974d43838609140ab8418db30896f96e143e14590474c1e"
     },
     {
       "controlId": "token-overrides",
@@ -1394,7 +1394,7 @@
     {
       "controlId": "profiles.expressive",
       "path": "manifest/controls/profiles.expressive.json",
-      "digest": "b190fb2e305a9e8243eae198c8bba381446cfe3cb1211db4b636ff723caeb0b5"
+      "digest": "88da1b0e4754fdbdbedee438f09bd77a239c74ab01578094f3588429d45ad334"
     },
     {
       "controlId": "profiles.icon",

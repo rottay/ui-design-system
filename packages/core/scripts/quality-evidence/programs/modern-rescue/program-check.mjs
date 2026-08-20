@@ -356,7 +356,17 @@ function collectTextualFailures() {
         const enumValues = control?.domain?.enumValues;
         const hasEnum = Array.isArray(enumValues) && enumValues.length > 0;
         const catalog = control?.calibration?.catalog;
-        const hasCatalog = catalog !== undefined && catalog !== null;
+        // Endurecido (correccion F5 de la auditoria Fable): antes bastaba con que
+        // `catalog` no fuera null. Un `{}` -- o un no-objeto -- satisfacia FORMA
+        // declarando vocabulario VACIO. Hoy es inexplotable porque los dos unicos
+        // controles con domicilio catalogo entran a ADMISSION, pero eso es una
+        // coincidencia de alcance, no una ley. Un catalogo es un mapa con al
+        // menos un eje que admita algo.
+        const hasCatalog =
+          !!catalog &&
+          typeof catalog === 'object' &&
+          !Array.isArray(catalog) &&
+          Object.values(catalog).some((axis) => Array.isArray(axis) && axis.length > 0);
         if (!hasEnum && !hasCatalog) {
           failures.push(
             `manifest/controls/${entry} declares domain.kind ${JSON.stringify(kind)} with an empty ` +
@@ -402,59 +412,101 @@ function collectTextualFailures() {
    *    sibling catalog. It is an exception with a named owner, not a hole:
    *    an axis with no mapped owner at all is a failure.
    */
-  const ADMISSION_ROOTS = ['chrome.anatomy', 'profiles.expressive'];
+  /*
+   * ADMISSION_ROOTS se DERIVA DEL ARBOL, no se pinea (correccion F1 de la
+   * auditoria Fable). La lista fija de dos cubria 48 variantes de 17 raices que
+   * emiten; el resto podia inventar un valor y salir CONSTITUTION_READY, como
+   * Fable probo agregando `ultra` a density.mode. La regla ahora es: TODA raiz
+   * de cascada con variantes cuyo control hermano sea enum/closed-enum entra.
+   *
+   * MAPEO RAIZ -> CONTROL: por id, medido. Los 17 rootId con variantes tienen
+   * hoy un control homonimo en manifest/controls/. (El `type.pairing` que se
+   * parece a `typography.pairing` es el campo `bindings[].root` de las
+   * familias, que nombra la RAIZ DE CANAL, no el archivo de cascada: son
+   * espacios de nombres distintos y no se cruzan aqui.)
+   *
+   * QUE QUEDA FUERA, Y POR QUE. Siete raices tienen control con dominio no
+   * enumerado -- `profile-id` (experience.profile, recipe-profile), `scale`
+   * (motion.dial), `bounded` (shape.radius-scale, surfaces.effect-intensity,
+   * typography.scale) y `font-stack` (typography.families). No hay contra que
+   * comparar: un dominio acotado o un stack de fuentes no publica una lista
+   * cerrada de tokens. No es una exencion: es que la pregunta "¿esta admitido
+   * este valor?" solo tiene respuesta donde hay vocabulario. El dia que uno de
+   * esos controles pase a enum, entra solo, sin tocar esta ley.
+   *
+   * DONDE VIVE EL TOKEN, tambien medido. Las raices con eje escriben
+   * `id: "<eje>:<valor>"` y el token es `value`; las planas escriben
+   * `id: "<token>"` y `value` es el EFECTO emitido, no el vocabulario
+   * (density.mode: id `compact`, value `0.85`). Comparar `value` en las planas
+   * habria dado seis rojos falsos el primer dia.
+   */
+  const admissionRoots = [];
+  const cascadeRootsDir = join(repoRoot, MANIFEST_DIR, 'cascade/roots');
+  const outsideAdmission = [];
+  if (existsSync(cascadeRootsDir)) {
+    for (const entry of readdirSync(cascadeRootsDir).sort()) {
+      if (!entry.endsWith('.json')) continue;
+      const rootDoc = readJson(join(MANIFEST_DIR, 'cascade/roots', entry));
+      if (!Array.isArray(rootDoc?.variants) || rootDoc.variants.length === 0) continue;
+      const rootId = rootDoc.rootId ?? entry.replace(/\.json$/u, '');
+      const controlRel = `${MANIFEST_DIR}/controls/${rootId}.json`;
+      if (!existsSync(join(repoRoot, controlRel))) {
+        // Fail-closed: una raiz que emite variantes y no tiene control hermano
+        // no es "fuera de alcance", es un hueco de gobierno.
+        failures.push(
+          `admission: ${rootId} emits ${rootDoc.variants.length} variants but has no sibling control in ` +
+            'manifest/controls/ to admit them',
+        );
+        continue;
+      }
+      const controlDoc = readJson(controlRel);
+      const kind = controlDoc?.domain?.kind;
+      if (kind === 'enum' || kind === 'closed-enum') admissionRoots.push({ rootId, rootDoc, controlDoc });
+      else outsideAdmission.push(`${rootId} (${kind})`);
+    }
+  }
   /** Root axis name -> catalog axis name. See adjudication 2 above. */
   const CATALOG_AXIS_ALIASES = { card: 'cardComponent' };
   /** Root axis name -> the control that owns its vocabulary. See adjudication 3. */
   const CROSS_OWNER_AXES = { density: 'density.mode' };
 
-  for (const rootId of ADMISSION_ROOTS) {
-    const rootRel = `${MANIFEST_DIR}/cascade/roots/${rootId}.json`;
-    const controlRel = `${MANIFEST_DIR}/controls/${rootId}.json`;
-    if (!existsSync(join(repoRoot, rootRel)) || !existsSync(join(repoRoot, controlRel))) {
-      failures.push(`admission: ${rootId} needs both its cascade root and its control to exist`);
-      continue;
-    }
-    const root = readJson(rootRel);
-    const control = readJson(controlRel);
-    const catalog = control?.calibration?.catalog;
-    if (!catalog || typeof catalog !== 'object') {
-      failures.push(`admission: manifest/controls/${rootId}.json has no calibration.catalog to admit against`);
-      continue;
-    }
-    for (const variant of root?.variants ?? []) {
+  for (const { rootId, rootDoc, controlDoc } of admissionRoots) {
+    const catalog = controlDoc?.calibration?.catalog;
+    const enumValues = controlDoc?.domain?.enumValues;
+    for (const variant of rootDoc.variants ?? []) {
       const id = String(variant?.id ?? '');
       const separator = id.indexOf(':');
-      if (separator <= 0) {
-        failures.push(`admission: ${rootId} variant id ${JSON.stringify(id)} is not <axis>:<value>`);
-        continue;
-      }
-      const axis = id.slice(0, separator);
-      const value = variant?.value;
+      const axis = separator > 0 ? id.slice(0, separator) : null;
+      // Con eje, el vocabulario es `value`; sin eje, es el propio `id`.
+      const token = axis === null ? id : variant?.value;
       let admitted;
       let ownerLabel;
-      if (Object.prototype.hasOwnProperty.call(CROSS_OWNER_AXES, axis)) {
+      if (axis !== null && Object.prototype.hasOwnProperty.call(CROSS_OWNER_AXES, axis)) {
         const ownerId = CROSS_OWNER_AXES[axis];
         const ownerRel = `${MANIFEST_DIR}/controls/${ownerId}.json`;
         const owner = existsSync(join(repoRoot, ownerRel)) ? readJson(ownerRel) : null;
         admitted = owner?.domain?.enumValues;
         ownerLabel = `controls/${ownerId}.json domain.enumValues`;
-      } else {
+      } else if (axis !== null) {
         const catalogAxis = CATALOG_AXIS_ALIASES[axis] ?? axis;
-        admitted = catalog[catalogAxis];
+        admitted = catalog?.[catalogAxis];
         ownerLabel = `controls/${rootId}.json calibration.catalog.${catalogAxis}`;
+      } else {
+        admitted = Array.isArray(enumValues) && enumValues.length > 0 ? enumValues : null;
+        ownerLabel = `controls/${rootId}.json domain.enumValues`;
       }
       if (!Array.isArray(admitted)) {
         failures.push(
-          `admission: ${rootId} emits axis ${JSON.stringify(axis)} but no governed owner admits it ` +
-            `(looked in ${ownerLabel})`,
+          `admission: ${rootId} emits ${axis === null ? 'variant' : `axis ${JSON.stringify(axis)}`} but no ` +
+            `governed owner admits it (looked in ${ownerLabel})`,
         );
         continue;
       }
-      if (!admitted.includes(value)) {
+      if (!admitted.includes(token)) {
         failures.push(
-          `admission: ${rootId} emits ${JSON.stringify(`${axis}:${value}`)} but ${ownerLabel} does not ` +
-            'admit that value -- emitting without admitting is the defect this rule refuses',
+          `admission: ${rootId} emits ${JSON.stringify(axis === null ? token : `${axis}:${token}`)} but ` +
+            `${ownerLabel} does not admit that value -- emitting without admitting is the defect this ` +
+            'rule refuses',
         );
       }
     }
@@ -1622,6 +1674,14 @@ export function validateModernRescueContracts(
    * una celda el dia que su ley este re-expresada en otro portador; nunca
    * antes, y nunca en masa.
    */
+  /** Vocabulario cerrado de `targetBinding.status`, medido sobre el arbol. */
+  const GOVERNED_CELL_STATUSES = [
+    'MUST_REACH',
+    'MUST_NOT_REACH',
+    'ESCAPE_HATCH',
+    'OVERLAY_OF_ROOTS',
+    'NO_CSS_CHANNEL',
+  ];
   const familiesRoot = join(repoRoot, MANIFEST_DIR, 'families');
   if (existsSync(familiesRoot)) {
     const bare = [];
@@ -1640,8 +1700,22 @@ export function validateModernRescueContracts(
           cellsSeen += 1;
           const binding = cell?.targetBinding;
           const hasRows = Array.isArray(cell?.internalChannels) && cell.internalChannels.length > 0;
+          const status = binding?.status;
+          const hasStatus = status !== undefined && status !== null;
+          // El vocabulario de `status` es cerrado (correccion F3 de la auditoria
+          // Fable). Antes cualquier cadena no-nula contaba como ley escrita, asi
+          // que un typo -- `MUST_NOT_REACHX` -- sacaba la celda de todas las
+          // particiones por status EN SILENCIO, y solo lo frenaba la frescura del
+          // indice hasta la siguiente regeneracion legitima. Los cinco valores
+          // son el vocabulario vivo medido: 449 / 2424 / 255 / 255 / 255.
+          if (hasStatus && !GOVERNED_CELL_STATUSES.includes(status)) {
+            failures.push(
+              `governed-cell: ${familyId}#${cell?.controlId ?? '<unnamed>'} declares targetBinding.status ` +
+                `${JSON.stringify(status)}, which is not one of ${GOVERNED_CELL_STATUSES.join(' | ')}`,
+            );
+          }
           const hasWrittenLaw =
-            !!binding && (binding.status !== undefined && binding.status !== null
+            !!binding && (hasStatus && GOVERNED_CELL_STATUSES.includes(status)
               ? true
               : binding.uncoveredByDesign !== undefined && binding.uncoveredByDesign !== null);
           const isAdjudicated = binding?.migratedToInternalChannels === true;
@@ -1657,7 +1731,17 @@ export function validateModernRescueContracts(
     // arbol sano. El denominador lo publica el propio indice, asi que la guarda
     // se mide contra la fuente y no contra un numero pegado aqui.
     const declaredCells = readJson(join(MANIFEST_DIR, 'index.json'))?.denominators?.controlFamilyCells;
-    if (typeof declaredCells === 'number' && cellsSeen !== declaredCells) {
+    // Fail-closed (correccion F6 de la auditoria Fable): antes, si el generador
+    // dejaba de emitir `controlFamilyCells` -- o lo emitia como cadena -- el piso
+    // se apagaba EN SILENCIO con el indice fresco. Un piso que se puede desactivar
+    // desde el productor que vigila no es un piso.
+    if (typeof declaredCells !== 'number') {
+      failures.push(
+        'governed-cell: manifest/index.json does not publish a numeric ' +
+          `denominators.controlFamilyCells (got ${JSON.stringify(declaredCells ?? null)}); the walk floor ` +
+          'cannot be checked and must not be skipped',
+      );
+    } else if (cellsSeen !== declaredCells) {
       failures.push(
         `governed-cell: the walk saw ${cellsSeen} cells but manifest/index.json declares ` +
           `${declaredCells}: a walk that misses cells reports zero bare ones exactly like a clean tree`,

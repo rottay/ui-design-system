@@ -147,6 +147,7 @@ export const CI_GATES = Object.freeze([
     excluded: {
       reason: 'Real channel debt slated for F2 (cascade): unproven/unread channels are adjudicated by the rewiring fronts, not in F0. Drill remains blocking.',
       owner: 'F2 cascade front (roadmap §5)',
+      trackedSince: '2026-08-19',  // declarada en c8063fdb9
     },
   },
 
@@ -414,6 +415,7 @@ export const CI_GATES = Object.freeze([
     excluded: {
       reason: 'tenant-reachability is red 10/13 (three interpolated emitters without enumerators; union 606 vs rottay 625). The other four suites pass. F2 supplies the enumerators and this returns to blocking.',
       owner: 'F2 cascade front (roadmap §5)',
+      trackedSince: '2026-08-19',  // declarada en 14dee7dc3
     },
   },
   // The --ds_ experimentation space never reaches shipped CSS (canon: --ds-).
