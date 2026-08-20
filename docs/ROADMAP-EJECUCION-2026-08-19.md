@@ -862,8 +862,9 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
-**F4A-1 ✅ CERRADO (2026-08-20, tarde).** Roster final `/tmp/f4a-1c-roster-draft.json`
-(schemaVersion 3) + `.md` (729 líneas): **66 raíces × 3 temas = 198 entradas**,
+**F4A-1 ✅ CERRADO (2026-08-20, tarde).** Roster final `docs/f4a/roster-variantes.json`
+(schemaVersion 3; copia duradera de `/tmp/f4a-1c-roster-draft.json` — los
+insumos de F4A viven en `docs/f4a/`, ver su README): **66 raíces × 3 temas = 198 entradas**,
 universo limpio (fila agregada retirada), **BLOCKED 0 · MISSING-CITATION 0**.
 Descomposición: 63 raíces catálogo + color.border (autora #2, fuera del eje de
 tiers) + text-secondary (seed existente, intacta) + text-page (NUEVA). Por

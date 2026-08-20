@@ -106,11 +106,12 @@ es el modelo más avanzado de Claude; se usa SOLO para auditar.
   vocabulario cerrado `@domicile seed|baseline|derived|pro-expert|unassigned`
   + `@governor <dial|función|razón>` (parseable por harness; artefacto
   compilado byte-idéntico; mismo export; sin segunda foundation). Roster
-  final: `/tmp/f4a-1c-roster-draft.json` (schemaVersion 3) + `.md` — **66
+  final: `docs/f4a/roster-variantes.json` (schemaVersion 3) + `.md` — **66
   raíces × 3 temas = 198 entradas**, BLOCKED 0, seed 85 / derived 33 /
-  baseline 0 (a nivel raíz, por diseño) / unassigned 80. Documentos de
-  diseño: `/tmp/f4a-1-adjudicaciones-definicionales.md`, `/tmp/f4a-1-esquema.md`,
-  `/tmp/f4a-1-parte3-adjudicaciones.md`.
+  baseline 0 (a nivel raíz, por diseño) / unassigned 80. TODOS los insumos de
+  F4A viven commiteados en `docs/f4a/` (ver su README): el roster + los 3
+  documentos de diseño del DT (adjudicaciones definicionales, esquema, parte
+  3). Los originales en `/tmp/f4a-1*` son copias de trabajo — el repo manda.
 - **Reconciliación de identidad ✅** commit `85d0583b9` (incluye MI fix a
   `manifest/generator/index.test.mjs`: el drill producer=approver usa la
   constante `SIGHTED_APPROVER`; moraleja: el gate `modern-rescue-tooling-drills`
@@ -199,7 +200,7 @@ git log --oneline -8                  # último conocido: el de este prompt o po
 git status --short                    # limpio salvo trabajo de worker en vuelo
 tmux ls                               # terminales vivas (ver §2)
 ls /tmp/*listo* 2>/dev/null           # flags de lotes terminados sin procesar
-ls /tmp/f4a-1c-roster-draft.json      # roster F4A-1 (schemaVersion 3, 198 entradas)
+ls docs/f4a/                          # insumos F4A commiteados (roster 198 + diseño)
 tail -80 docs/ROADMAP-EJECUCION-2026-08-19.md   # §13, la verdad viva
 ```
 

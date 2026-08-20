@@ -1,0 +1,1716 @@
+{
+  "schemaVersion": 3,
+  "producedBy": "F4A-1c v3 (worker Opus, read-only)",
+  "tree": "c20e16a35",
+  "postureMethod": "compileBrandTheme sobre la FUENTE del tema (A.2): la raiz esta authored si su canal cabeza aparece en cssVariables del cuerpo o de algun modeBlock. NO es la lectura del artefacto (esa dio 159 y es chequeo derivado).",
+  "universe": {
+    "catalogRoots": 63,
+    "authoredRoots": 3,
+    "roots": 66,
+    "themes": 3,
+    "aggregateRows": 0,
+    "entries": 198
+  },
+  "levelNote": "baseline y pro-expert son 0 A NIVEL RAIZ por diseno (parte 3 §1): viven a nivel hoja/familia en los tags de fuente. K5 se etiqueta baseline en F4A-15; pro-expert se ancla a la capability activa del tema.",
+  "capabilities": {
+    "motion": [
+      "rottay",
+      "bithire",
+      "evnto"
+    ],
+    "recipes": [
+      "rottay",
+      "bithire"
+    ],
+    "expressive": [
+      "bithire"
+    ],
+    "responsive": [],
+    "engineBridge": []
+  },
+  "entries": [
+    {
+      "root": "tier.control.fg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-text-on-primary",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.control.fg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-text-on-primary",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.control.fg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-text-on-primary",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "state.delta.hover",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-wash-band, --ds-color-primary",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "state.delta.hover",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-wash-band, --ds-color-primary",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "state.delta.hover",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-wash-band, --ds-color-primary",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.control.bg",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: chrome.families",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.control.bg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: chrome.families",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.control.bg",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: chrome.families",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "elevation.ladder",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: surfaces.elevation-posture",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "elevation.ladder",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: surfaces.elevation-posture",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "elevation.ladder",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.elevation-posture",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.control.border",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.control.border",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.control.border",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "ramp.seed.neutral",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.neutral",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.neutral",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "state.delta.active",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "state.delta.active",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "state.delta.active",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "tier.raised.fg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: calc",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=#F0F0F0 | overlay=#1A1A1A); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.raised.fg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: calc",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=#14283B | overlay=#e4e8ed); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.raised.fg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: calc",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=#111111 | overlay=#E8E8E0); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.base.bg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.base.bg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.base.bg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.page.bg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: navigation.sidebar-tone",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.page.bg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: navigation.sidebar-tone",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.page.bg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: navigation.sidebar-tone",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.raised.bg",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: token-overrides",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.raised.bg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: token-overrides",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.raised.bg",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: token-overrides",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.page.fg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta)",
+      "ruleSource": "nudo K3",
+      "note": "K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en rottay: base=#A0A0A5 | overlay=#6B6B6B."
+    },
+    {
+      "root": "tier.page.fg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta)",
+      "ruleSource": "nudo K3",
+      "note": "K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en bithire: base=#53697E | overlay=#9aacbf."
+    },
+    {
+      "root": "tier.page.fg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta)",
+      "ruleSource": "nudo K3",
+      "note": "K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en evnto: base=#3d3d3d."
+    },
+    {
+      "root": "tier.accent.fg",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-color-neutral-900",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.accent.fg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-color-neutral-900",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.accent.fg",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-color-neutral-900",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "spacing.step",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: spacing.rhythm",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "spacing.step",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: dial: spacing.rhythm",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "spacing.step",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: spacing.rhythm",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.overlay.fg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
+      "ruleSource": "exposure",
+      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#F0F0F0 | overlay=#1A1A1A); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.overlay.fg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
+      "ruleSource": "exposure",
+      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#14283B | overlay=#e4e8ed); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.overlay.fg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
+      "ruleSource": "exposure",
+      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#111111 | overlay=#E8E8E0); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "type.scale",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.scale",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.scale",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.scale",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.scale",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.scale",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "control.height",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: density.mode",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "control.height",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: density.mode",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "control.height",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: density.mode",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.accent.bg",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.accent.bg",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.accent.bg",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "ramp.seed.primary",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds — K1 descongelada",
+      "ruleSource": "nudo K1",
+      "note": "K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
+    },
+    {
+      "root": "ramp.seed.primary",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds — K1 descongelada",
+      "ruleSource": "nudo K1",
+      "note": "K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
+    },
+    {
+      "root": "ramp.seed.primary",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds — K1 descongelada",
+      "ruleSource": "nudo K1",
+      "note": "K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
+    },
+    {
+      "root": "ramp.seed.secondary",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.secondary",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.secondary",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.raised.border",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.raised.border",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.raised.border",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.overlay.bg",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: token-overrides",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.overlay.bg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: token-overrides",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=#ffffff | overlay=var(--ds-color-bg-elevated)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.overlay.bg",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: token-overrides",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.focus",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-focus-ring-width, --ds-focus-ring-color",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "state.delta.focus",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-focus-ring-width, --ds-focus-ring-color",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "state.delta.focus",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-focus-ring-width, --ds-focus-ring-color",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.base.border",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.base.border",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "tier.base.border",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella."
+    },
+    {
+      "root": "ramp.seed.info",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.info",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.info",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.page.border",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.page.border",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.page.border",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.accent",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.accent",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.accent",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.success",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.success",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.success",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.error",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.error",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.error",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.warning",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.warning",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "ramp.seed.warning",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "state.delta.disabled",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: el reposo de su control padre (una parada: opacidad + desaturacion sobre el)",
+      "ruleSource": "posture",
+      "note": "Citacion anclada por el DT (parte 3 §4)."
+    },
+    {
+      "root": "state.delta.disabled",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: el reposo de su control padre (una parada: opacidad + desaturacion sobre el)",
+      "ruleSource": "posture",
+      "note": "Citacion anclada por el DT (parte 3 §4)."
+    },
+    {
+      "root": "state.delta.disabled",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: el reposo de su control padre (una parada: opacidad + desaturacion sobre el)",
+      "ruleSource": "posture",
+      "note": "Citacion anclada por el DT (parte 3 §4)."
+    },
+    {
+      "root": "tier.accent.border",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "tier.accent.border",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "tier.accent.border",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "radius.base",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: shape.radius-scale",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "radius.base",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: dial: shape.radius-scale",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "radius.base",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: shape.radius-scale",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "motion.intensity",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: motion.dial",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "motion.intensity",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: motion.dial",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "motion.intensity",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: motion.dial",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "control.ratio.padding",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.padding",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.padding",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "scrim.opacity",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-color-bg-overlay",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "scrim.opacity",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-color-bg-overlay",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "scrim.opacity",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-color-bg-overlay",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.overlay.border",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella. K4: valor = resolucion computada de hoy (base=#28282C | overlay=#E5E5E3); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.overlay.border",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella. K4: valor = resolucion computada de hoy (base=#d4e0ea | overlay=#253545); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "tier.overlay.border",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: raiz color.border + la logica de nivel del tier",
+      "ruleSource": "nudo K2",
+      "note": "K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella. K4: valor = resolucion computada de hoy (base=var(--ds-color-border-primary)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.selected",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "state.delta.selected",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "state.delta.selected",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada."
+    },
+    {
+      "root": "control.ratio.fontSize",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-input-md-font-size, --ds-font-size-md",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=var(--ds-font-size-sm)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.fontSize",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-input-md-font-size, --ds-font-size-md",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=13px); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.fontSize",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-input-md-font-size, --ds-font-size-md",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.lineHeight",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-line-height-tight",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=var(--ds-line-height-tight)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.lineHeight",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-line-height-tight",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=20px); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.lineHeight",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-line-height-tight",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.iconSize",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.iconSize",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.iconSize",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "motion.duration",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: motion.dial",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "motion.duration",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: dial: motion.dial",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "motion.duration",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: motion.dial",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "tier.base.fg",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.base.fg",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "tier.base.fg",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.leading",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: packages/core/src/foundation/tokens/css/foundation/themes/default.css:631",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "type.leading",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: packages/core/src/foundation/tokens/css/foundation/themes/default.css:631",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "type.leading",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: packages/core/src/foundation/tokens/css/foundation/themes/default.css:631",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "experience.profile",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: experience.profile",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "experience.profile",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: experience.profile",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "experience.profile",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: experience.profile",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "gradient.recipe",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-gradient-surface",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "gradient.recipe",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-gradient-surface",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "gradient.recipe",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-gradient-surface",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "control.ratio.gap",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.gap",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.gap",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.radius",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: shape.button-style",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.radius",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: shape.button-style",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=calc(9px / 1.25 * var(--ds-radius-scale, 1))); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "control.ratio.radius",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: shape.button-style",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "glass.recipe",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.effect-intensity",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "glass.recipe",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: surfaces.effect-intensity",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "glass.recipe",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.effect-intensity",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "motion.spring",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: motion.dial",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "motion.spring",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: dial: motion.dial",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "motion.spring",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: motion.dial",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "type.tracking",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: experience.profile",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.tracking",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: experience.profile",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.tracking",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: experience.profile",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.weight",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: packages/core/src/foundation/tokens/css/foundation/themes/default.css:624",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "type.weight",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: packages/core/src/foundation/tokens/css/foundation/themes/default.css:624",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "type.weight",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: packages/core/src/foundation/tokens/css/foundation/themes/default.css:624",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "chart.palette",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "chart.palette",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "chart.palette",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: palette.seeds",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.base",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.families",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.base",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.families",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.base",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.families",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.heading",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.pairing",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.heading",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.pairing",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.heading",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: typography.pairing",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.mono",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.mono",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.mono",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.display",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.display",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "type.family.display",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "unassigned",
+      "governor": "none — gap aceptado (decision 9, 2026-08-19)",
+      "ruleSource": "exposure"
+    },
+    {
+      "root": "density.scale",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: density.mode",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "density.scale",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: dial: density.mode",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "density.scale",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: density.mode",
+      "ruleSource": "posture"
+    },
+    {
+      "root": "state.delta.pressed",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.pressed",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.pressed",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "alpha.ladder",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "alpha.ladder",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "alpha.ladder",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.checked",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.checked",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.checked",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.expanded",
+      "theme": "rottay",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.expanded",
+      "theme": "bithire",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "state.delta.expanded",
+      "theme": "evnto",
+      "posture": "unassigned",
+      "domicile": "seed",
+      "governor": "seed sin dial — materializacion pendiente",
+      "ruleSource": "nudo por-crear",
+      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en evnto, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "effect.intensity",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: surfaces.effect-intensity",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=1); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "effect.intensity",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: surfaces.effect-intensity",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=0.58); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "effect.intensity",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: surfaces.effect-intensity",
+      "ruleSource": "exposure",
+      "note": "K4: valor = resolucion computada de hoy (base=1); raiz por raiz en F4A-14."
+    },
+    {
+      "root": "color.border",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "note": "RAIZ AUTORA #2 (parte 3 §3). El par sale del eje de tiers: la colision a 4 bandas era la prueba de que es su propia entidad. seed = --ds-color-border; --ds-color-border-primary = derived de ella. K2 se ejecuta en F4A-5 sobre esta raiz (evnto invierte su atadura al canon; pintura computada identica; R35 patron REDERIVED)."
+    },
+    {
+      "root": "color.border",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "note": "RAIZ AUTORA #2 (parte 3 §3). El par sale del eje de tiers: la colision a 4 bandas era la prueba de que es su propia entidad. seed = --ds-color-border; --ds-color-border-primary = derived de ella. K2 se ejecuta en F4A-5 sobre esta raiz (evnto invierte su atadura al canon; pintura computada identica; R35 patron REDERIVED)."
+    },
+    {
+      "root": "color.border",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "note": "RAIZ AUTORA #2 (parte 3 §3). El par sale del eje de tiers: la colision a 4 bandas era la prueba de que es su propia entidad. seed = --ds-color-border; --ds-color-border-primary = derived de ella. K2 se ejecuta en F4A-5 sobre esta raiz (evnto invierte su atadura al canon; pintura computada identica; R35 patron REDERIVED)."
+    },
+    {
+      "root": "--ds-color-text-secondary",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "note": "Raiz seed EXISTENTE, gobernada por el campo autorado textSecondaryColor. INTACTA: ni valor ni lectores se tocan (262 archivos de src/ la leen). Dial tenant en F4B."
+    },
+    {
+      "root": "--ds-color-text-secondary",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "note": "Raiz seed EXISTENTE, gobernada por el campo autorado textSecondaryColor. INTACTA: ni valor ni lectores se tocan (262 archivos de src/ la leen). Dial tenant en F4B."
+    },
+    {
+      "root": "--ds-color-text-secondary",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "note": "Raiz seed EXISTENTE, gobernada por el campo autorado textSecondaryColor. INTACTA: ni valor ni lectores se tocan (262 archivos de src/ la leen). Dial tenant en F4B."
+    },
+    {
+      "root": "--ds-color-text-page",
+      "theme": "rottay",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "materializesIn": "F4A-6",
+      "postureToday": "unassigned (el canal aun no existe; se materializa en F4A-6)",
+      "note": "RAIZ NUEVA. Cabeza de la cadena de tinta de tiers; los 42 canales de tier.page.fg cuelgan de ella. Colision verificada por grep: text-page / textPage NO existen en src/. Materializacion en F4A-6 con packet REDERIVED (sha256 identicos). Valor por tema = el computado de hoy (cero-delta por construccion). Dial tenant en F4B. Valor medido en rottay: #A0A0A5 (base) / #6B6B6B (light)."
+    },
+    {
+      "root": "--ds-color-text-page",
+      "theme": "bithire",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "materializesIn": "F4A-6",
+      "postureToday": "unassigned (el canal aun no existe; se materializa en F4A-6)",
+      "note": "RAIZ NUEVA. Cabeza de la cadena de tinta de tiers; los 42 canales de tier.page.fg cuelgan de ella. Colision verificada por grep: text-page / textPage NO existen en src/. Materializacion en F4A-6 con packet REDERIVED (sha256 identicos). Valor por tema = el computado de hoy (cero-delta por construccion). Dial tenant en F4B. Valor medido en bithire: #53697E (base) / #9aacbf (dark)."
+    },
+    {
+      "root": "--ds-color-text-page",
+      "theme": "evnto",
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "dial: (raiz autora — dial en F4B)",
+      "ruleSource": "exposure",
+      "authored": true,
+      "materializesIn": "F4A-6",
+      "postureToday": "unassigned (el canal aun no existe; se materializa en F4A-6)",
+      "note": "RAIZ NUEVA. Cabeza de la cadena de tinta de tiers; los 42 canales de tier.page.fg cuelgan de ella. Colision verificada por grep: text-page / textPage NO existen en src/. Materializacion en F4A-6 con packet REDERIVED (sha256 identicos). Valor por tema = el computado de hoy (cero-delta por construccion). Dial tenant en F4B. Valor medido en evnto: #3d3d3d (base, sin dark)."
+    }
+  ]
+}
