@@ -7,14 +7,14 @@
  * and compares against the performance budget defined in PERFORMANCE_BUDGET.md.
  *
  * Usage:
- *   node scripts/analyze-bundle.mjs            # build + analyze
- *   node scripts/analyze-bundle.mjs --skip-build  # analyze existing dist/
- *   node scripts/analyze-bundle.mjs --chart-renderers  # isolated named-export budgets only
- *   node scripts/analyze-bundle.mjs --chart-access  # bounded data-access facade budgets only
- *   node scripts/analyze-bundle.mjs --chart-spec  # server-safe chart contract purity/budget only
- *   node scripts/analyze-bundle.mjs --effects  # EffectRegistry purity/budget only
- *   node scripts/analyze-bundle.mjs --spatial  # Spatial spec/host purity and isolation only
- *   node scripts/analyze-bundle.mjs --asset-retention  # semantic asset closure budgets only
+ *   node scripts/ci/analyze-bundle/index.mjs            # build + analyze
+ *   node scripts/ci/analyze-bundle/index.mjs --skip-build  # analyze existing dist/
+ *   node scripts/ci/analyze-bundle/index.mjs --chart-renderers  # isolated named-export budgets only
+ *   node scripts/ci/analyze-bundle/index.mjs --chart-access  # bounded data-access facade budgets only
+ *   node scripts/ci/analyze-bundle/index.mjs --chart-spec  # server-safe chart contract purity/budget only
+ *   node scripts/ci/analyze-bundle/index.mjs --effects  # EffectRegistry purity/budget only
+ *   node scripts/ci/analyze-bundle/index.mjs --spatial  # Spatial spec/host purity and isolation only
+ *   node scripts/ci/analyze-bundle/index.mjs --asset-retention  # semantic asset closure budgets only
  *
  * Exit codes:
  *   0 - all files within budget
@@ -30,7 +30,7 @@ import { createGzip, gzipSync } from 'node:zlib';
 import { createReadStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { Writable } from 'node:stream';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 // ---------------------------------------------------------------------------
 // Configuration -- keep in sync with PERFORMANCE_BUDGET.md
@@ -233,7 +233,7 @@ const COMPONENT_ENTRIES = {
  * way it can drop genuinely-unreachable code; measuring the worst case -- all engines present
  * -- is the honest per-component weight a budget should track).
  *
- * Measured 2026-07-09 (WO-GAT-02) with `DS_KEEP_BUNDLE_ANALYSIS=1 node scripts/analyze-bundle.mjs
+ * Measured 2026-07-09 (WO-GAT-02) with `DS_KEEP_BUNDLE_ANALYSIS=1 node scripts/ci/analyze-bundle/index.mjs
  * --components` (keeps the throwaway `.bundle-analysis-components/` output instead of deleting
  * it) and exact-byte `gzip -9 -c <bundle> | wc -c` on each `bundle.js` (the printed table only
  * shows KB rounded to 1 decimal, too imprecise to derive a byte budget from). Exact measured

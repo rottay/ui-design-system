@@ -40,16 +40,16 @@
  * the census rows), and this gate bounds what they are allowed to report.
  *
  * Usage:
- *   node scripts/red-inventory-gate.mjs
- *   node scripts/red-inventory-gate.mjs --check [--quiet]
- *   node scripts/red-inventory-gate.mjs --reconcile <observation.json>
+ *   node scripts/ci/red-inventory-gate/index.mjs
+ *   node scripts/ci/red-inventory-gate/index.mjs --check [--quiet]
+ *   node scripts/ci/red-inventory-gate/index.mjs --reconcile <observation.json>
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const coreRoot = findPackageRoot(here);

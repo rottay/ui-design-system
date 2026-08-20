@@ -90,7 +90,7 @@ node packages/core/src/tooling/lane-control/public/work-order/index.mjs \
 | `W1-model-reason` | a padded or boilerplate reason; a `sonnet` lane with no pre-pass, or one whose cited evidence is not on disk |
 | `W2-edit-class` | a substitution table on a lane not allowed to substitute; a deletion with no death proof |
 | `W3-mandatory-sentence` | a paraphrase of the verbatim sentence — **and a sentence that has drifted out of the Modern Rescue README**, so the gate cannot quietly enforce a retired law |
-| `W4-build-free` | a verification needing the build; a work order that names no acceptance gate — the admissible set is READ from `scripts/ci-gates.manifest.mjs`, so a gate CI retires stops being quotable here in the same commit |
+| `W4-build-free` | a verification needing the build; a work order that names no acceptance gate — the admissible set is READ from `scripts/ci/ci-gates.manifest/index.mjs`, so a gate CI retires stops being quotable here in the same commit |
 | `W5-commit-pathspec` | `.` or `-A`; a pathspec outside the write set; a pathspec **containing an excluded region**, because `git commit -- <path>` stages the working tree under that path |
 | `W6-findings-file` | a findings destination with no directory to land in |
 | `W7-bound` | a write set escaping its row — checked by the *same* machinery the plan checker uses |

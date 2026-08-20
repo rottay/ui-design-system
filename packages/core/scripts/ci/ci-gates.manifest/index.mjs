@@ -26,7 +26,7 @@ export const CI_GATES = Object.freeze([
   // --- contract + provenance (cheap, fail fast) ---
   // First: a workflow that references a script which does not exist cannot be
   // trusted to run anything below.
-  { id: 'workflow-script-wiring', run: ['node', 'scripts/workflow-script-wiring-gate.mjs'], blocking: true },
+  { id: 'workflow-script-wiring', run: ['node', 'scripts/ci/workflow-script-wiring-gate/index.mjs'], blocking: true },
   // A named import of a binding the target module never publishes is `undefined`
   // at runtime and renders an invalid element. A deep-path import rewrite landed
   // 22 of them at once because the short alias for a compound primitive lives in
@@ -178,7 +178,7 @@ export const CI_GATES = Object.freeze([
   // re-point is red until both sides are edited together. It deliberately does
   // NOT execute the censuses (that is `--reconcile <observation.json>`), so it
   // stays cheap enough to run before the expensive gates below.
-  { id: 'red-inventory', run: ['node', 'scripts/red-inventory-gate.mjs', '--check', '--quiet'], blocking: true },
+  { id: 'red-inventory', run: ['node', 'scripts/ci/red-inventory-gate/index.mjs', '--check', '--quiet'], blocking: true },
 
   // --- structural / ownership ---
   { id: 'engine-token-audit', run: ['node', 'scripts/engine-token-audit.mjs', '--check'], blocking: true },
@@ -429,14 +429,14 @@ export const CI_GATES = Object.freeze([
   // §1.10's "the wiring gate counts all three channels" true.
   {
     id: 'wiring-coverage',
-    run: ['node', 'scripts/wiring-coverage-gate.mjs'],
+    run: ['node', 'scripts/ci/wiring-coverage-gate/index.mjs'],
     blocking: true,
   },
   // Drills for the three F0 honesty gates: a gate that cannot fail is not a
   // gate.
   {
     id: 'f0-honesty-gates-drill',
-    run: ['node', '--test', 'scripts/f0-honesty-gates.test.mjs'],
+    run: ['node', '--test', 'scripts/ci/f0-honesty-gates/index.test.mjs'],
     blocking: true,
   },
 ]);

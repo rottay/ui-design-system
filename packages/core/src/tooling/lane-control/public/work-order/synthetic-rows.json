@@ -63,8 +63,8 @@
       "writeSet": [
         "packages/core/scripts/**/*-gate.mjs",
         "packages/core/scripts/**/*-gate.test.mjs",
-        "packages/core/scripts/ci-gates.manifest.mjs",
-        "packages/core/scripts/run-ci-gates.mjs"
+        "packages/core/scripts/ci/ci-gates.manifest/index.mjs",
+        "packages/core/scripts/ci/run-ci-gates/index.mjs"
       ],
       "writeExcludes": [
         "packages/core/scripts/**/build-*.mjs",

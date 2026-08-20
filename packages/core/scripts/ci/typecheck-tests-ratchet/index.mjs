@@ -16,8 +16,8 @@
 // batch of errors to tighten the ceiling).
 //
 // Usage (run from the package dir; each package points at its own baseline):
-//   node scripts/typecheck-tests-ratchet.mjs --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json
-//   node scripts/typecheck-tests-ratchet.mjs --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json --write
+//   node scripts/ci/typecheck-tests-ratchet/index.mjs --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json
+//   node scripts/ci/typecheck-tests-ratchet/index.mjs --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json --write
 
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';

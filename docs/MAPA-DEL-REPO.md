@@ -147,7 +147,7 @@ que sí corren en CI, más 17 codemods muertos de febrero de 2026.
 - `scripts/roadmap/status/index.test.mjs` — (1 archivo, 82 KB) tests del motor anterior, `pnpm roadmap:test`. VIVO.
 - `scripts/roadmap/commercial-status/index.mjs` — (1 archivo, 304 líneas) el mismo trabajo que `roadmap/status/index.mjs` pero para el programa comercial aislado; `pnpm roadmap:commercial`. **[DUPLICA]** a `scripts/roadmap/status/index.mjs`: son dos implementaciones separadas del mismo modelo de estado (registry.json + STATUS.md generado). No se importan entre sí, pero no es reimplementación: la cabecera del comercial declara "Copied from scripts/roadmap-status.mjs (2026-07-07) ... Byte-identical EXCEPT for exactly TWO functional divergences" y `comm -12` da 191 líneas idénticas. Es una copia divergida. La duplicación es una decisión explícita del dueño (aislamiento 2026-07-07), no un accidente, pero es duplicación de maquinaria igual.
 - `scripts/boundaries/dependency-honesty/index.mjs` + `index.test.mjs` — (2 archivos, 259 KB) el gate de honestidad de dependencias; `pnpm dependency:honesty`, referenciado por `.github/workflows/ci.yml`. VIVO y es el archivo más grande de la carpeta.
-- `scripts/provenance/effect-registry-audit/index.mjs` + `index.test.mjs` — (2 archivos) audita la procedencia de los efectos contra `packages/core/provenance/effects`; `pnpm effects:provenance`. VIVO. Importa `CI_GATES` desde `packages/core/scripts/ci-gates.manifest.mjs`.
+- `scripts/provenance/effect-registry-audit/index.mjs` + `index.test.mjs` — (2 archivos) audita la procedencia de los efectos contra `packages/core/provenance/effects`; `pnpm effects:provenance`. VIVO. Importa `CI_GATES` desde `packages/core/scripts/ci/ci-gates.manifest/index.mjs`.
 - `scripts/add-accent-bars.mjs`, `add-hover-transforms.mjs`, `add-style-memo.mjs`, `adopt-card-style.mjs`, `adopt-helpers.mjs`, `audit-helper-gaps.mjs`, `fix-focus-rings.mjs`, `fix-fontsize.mjs`, `fix-glass-adoption.mjs`, `fix-hardcoded-borders.mjs`, `fix-hover-transforms-v2.mjs`, `fix-null-array-guards.mjs`, `fix-rgba-overlays.mjs`, `fix-shadow-helpers.mjs`, `fix-transition-tokens.mjs`, `fix-usememo-v2.mjs`, `helper-gaps-report.json` — (17 archivos, 17 en git, ~110 KB) **[SIN CONSUMIDOR]** codemods de una sola pasada de las fases P0..P3E. Los 16 scripts escriben sobre `packages/core/src/components/custom/`, **una ruta que ya no existe** (`packages/core/src/components` fue borrado en la reorganización a `foundation/ infrastructure/ graphics/ ui/ tooling/`). Ninguno aparece en `package.json`, en `.github/workflows/ci.yml` ni en ningún `.md`; la única referencia cruzada es entre ellos mismos. Su último commit es del 2026-02-08 ("complete engine-awareness improvements across all 337 presets"). `helper-gaps-report.json` es la salida congelada de `audit-helper-gaps.mjs` y apunta a los mismos paths inexistentes.
 
 Sobre la comparación pedida `scripts/` vs `packages/core/scripts/` (632 archivos): **NO hay duplicación por nombre** — `comm -12` sobre las dos listas devuelve cero coincidencias. La división real es: la raíz guarda lo que cruza paquetes (roadmap, dependency-honesty, effect-registry, que necesitan ver `packages/core` y `packages/showroom` a la vez) y `packages/core/scripts/` guarda los ~600 gates internos del paquete core. La única grieta es que `packages/core/scripts/` contiene también gates que se invocan desde la raíz (`cra12:check` llama a `packages/core/scripts/evidence/cra-12-motion-governance/index.mjs` directamente por ruta), así que la frontera "cross-package vs interno" no se respeta al 100%.
@@ -2060,7 +2060,7 @@ Convenciones:
 
 Antes del árbol, porque todo lo demás se lee contra esto:
 
-1. `scripts/ci-gates.manifest.mjs` — el inventario único de gates bloqueantes.
+1. `scripts/ci/ci-gates.manifest/index.mjs` — el inventario único de gates bloqueantes.
    `pnpm gates:ci` (`run-ci-gates.mjs`) lo recorre en orden, fail-fast. `pretest`
    y el job de CI lo llaman. Contiene 71 entradas.
 2. `package.json` → 98 scripts npm, que referencian 62 rutas distintas de `scripts/`.
@@ -2104,11 +2104,11 @@ Qué hace: define y ejecuta el inventario único de gates bloqueantes, y verific
 que los workflows de CI no apunten a scripts inexistentes.
 Cómo se invoca: `package.json` (`gates:ci`, `wiring:check`) + `pretest` + CI.
 
-- `scripts/ci-gates.manifest.mjs` — (363 líneas) el inventario; `blocking:false` obliga a
+- `scripts/ci/ci-gates.manifest/index.mjs` — (363 líneas) el inventario; `blocking:false` obliga a
   declarar `excluded` con razón y dueño, así que "gate declarado que no puede bloquear"
   es irrepresentable.
-- `scripts/run-ci-gates.mjs` — recorre el manifiesto en orden, fail-fast, e imprime cada exclusión.
-- `scripts/workflow-script-wiring-gate.mjs` — primer gate del manifiesto: un workflow que
+- `scripts/ci/run-ci-gates/index.mjs` — recorre el manifiesto en orden, fail-fast, e imprime cada exclusión.
+- `scripts/ci/workflow-script-wiring-gate/index.mjs` — primer gate del manifiesto: un workflow que
   referencia un script inexistente invalida todo lo de abajo.
 
 ---
@@ -2318,11 +2318,11 @@ Qué hace: correr fuera del paquete, sobre `app-bithire` / `app-evnto` / `app-pl
 
 1. `scripts/builders/dev/index.mjs` — orquestador de desarrollo local: mantiene el bundle JS en watch y además
    refresca los artefactos CSS que el watch de Vite no toca. `pnpm dev`.
-2. `scripts/analyze-bundle.mjs` — construye con Vite y mide cada entrypoint de `dist/`; 7 alias
+2. `scripts/ci/analyze-bundle/index.mjs` — construye con Vite y mide cada entrypoint de `dist/`; 7 alias
    (`analyze`, `analyze:components`, `analyze:effects`, `analyze:chart-access`, ...), ninguno en CI.
-3. `scripts/check-storybook-budget.mjs` — presupuesto de tamaño de `storybook-static/`;
+3. `scripts/ci/check-storybook-budget/index.mjs` — presupuesto de tamaño de `storybook-static/`;
    se ejecuta dentro de `build-storybook`.
-4. `scripts/typecheck-tests-ratchet.mjs` — ratchet de cantidad de errores de `tsc` sobre los
+4. `scripts/ci/typecheck-tests-ratchet/index.mjs` — ratchet de cantidad de errores de `tsc` sobre los
    archivos de test, que ningún tsconfig de producción incluye. `typecheck:tests`, con
    `tsconfig.tests.json` / `tsconfig.tests.baseline.json` de la raíz del paquete.
 5. `scripts/builders/write-build-stamp/index.mjs` — último paso de `build`: escribe el hash de entrada que

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "ffdfb59a41dd774593ad35896361e7705a02f595b89e2bb5450be6b0125df07f",
+    "authorityDigest": "e2b21d25b7fe9182fac63013e7738ca62400bc640ae84b7eefec3721b05e3a86",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -222,8 +222,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 26225,
-        "sha256": "cb2ca38a76556eade5d25da4455d30089b5eb36581d86a3c45187444f1a85abb"
+        "bytes": 26234,
+        "sha256": "f5362667bc7e2da0eb2d7eda63821c6bad8475499a6bd8e78c4c3df68444ad14"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -265,8 +265,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 48891,
-        "sha256": "38c22bca0a7a652f55f512f2822d8bb7ea46f5c7b8f9cc9d5a77803a4f312c22"
+        "bytes": 48990,
+        "sha256": "83288ec086221e0e05854852767ad2b42aaf29bd4718c5a92b984a801d0c2a30"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-doc-claim-allowlist.json",
@@ -2418,8 +2418,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 79468,
-        "sha256": "04c3fc5b5e6201ed4b19be88defdc7069326e27ae5335f0fa00c28b65c9b8c1e"
+        "bytes": 79477,
+        "sha256": "688dd2f55064817e3976a1dfe72edbeee35f71781615657e224e1d2bd6c79665"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/brand-themes-ownership.test.ts",
@@ -7390,7 +7390,7 @@
           "audit-input"
         ],
         "bytes": 1456766,
-        "sha256": "986c7bc3bc8be540835c2dcfa2d82b0389cc62b425d9dfc6e01f5b4c15c3c5dc"
+        "sha256": "abd667e081d2495be6ad179c4cf48a431f0a5446bfda96185e5d68abed2392bb"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/residual-adjudication.json",
@@ -13408,8 +13408,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 14923,
-        "sha256": "2886e8ff5dcf3dc9a9ae250ff4e96ac0c5e73b247cceabfcd3bed5ade8e9d96a"
+        "bytes": 14932,
+        "sha256": "4e2f1fec5d51f10c49f0de293f7ab8bf0b5ccff54c04f5a775774d9e22b0ae8b"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/effects/runtime/registry/resolution/index.ts",
@@ -15447,16 +15447,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 9589,
-        "sha256": "1721767bcb5c6dc9048c324d1aedb7cdc9b5269353d12020d4d899d2777e7c54"
+        "bytes": 9598,
+        "sha256": "19391616b15a147f403aa10dd72cc3b200c505b134791ff08b81fad496c48077"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/lane-control/public/work-order/synthetic-rows.json",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7045,
-        "sha256": "92a9a810c280a1d58effb29fbc3f4257e9502e588161ecb6123a981935433edb"
+        "bytes": 7063,
+        "sha256": "3933cbbffb95884ea6f1fa441e9a4bcd90f5c707932ab1a058d1b12dbf001ceb"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/quality/no-loss/index.ts",
@@ -40479,7 +40479,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "ffdfb59a41dd774593ad35896361e7705a02f595b89e2bb5450be6b0125df07f"
+    "digest": "e2b21d25b7fe9182fac63013e7738ca62400bc640ae84b7eefec3721b05e3a86"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113860,8 +113860,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "6600079599748bc0a7994039822ae1f5426a74bfa500136c656efb93a909a71e",
-      "6600079599748bc0a7994039822ae1f5426a74bfa500136c656efb93a909a71e"
+      "a3e50930ea14d19401003cfe0c2c98281ad848abdb7271cfedc12dab6a12f0f6",
+      "a3e50930ea14d19401003cfe0c2c98281ad848abdb7271cfedc12dab6a12f0f6"
     ],
     "agree": true
   }

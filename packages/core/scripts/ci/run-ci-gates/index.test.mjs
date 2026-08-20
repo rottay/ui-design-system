@@ -14,8 +14,8 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import { CI_GATES, blockingGates, validateManifest } from './ci-gates.manifest.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { CI_GATES, blockingGates, validateManifest } from '../ci-gates.manifest/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const runner = resolve(scriptsDir, 'run-ci-gates.mjs');

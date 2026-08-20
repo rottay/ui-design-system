@@ -18,13 +18,13 @@
  *     default, or the repository root).
  *
  * Usage:
- *   node scripts/workflow-script-wiring-gate.mjs [--check]
+ *   node scripts/ci/workflow-script-wiring-gate/index.mjs [--check]
  */
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);

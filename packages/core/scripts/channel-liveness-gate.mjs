@@ -181,7 +181,7 @@ export const DEFAULT_EVIDENCE_CONTRACT = resolve(
   CORE_ROOT,
   'scripts/quality-evidence/programs/modern-rescue/evidence-contract.json',
 );
-export const DEFAULT_CI_GATES_MANIFEST = resolve(CORE_ROOT, 'scripts/ci-gates.manifest.mjs');
+export const DEFAULT_CI_GATES_MANIFEST = resolve(CORE_ROOT, 'scripts/ci/ci-gates.manifest/index.mjs');
 export const DEFAULT_PACKAGE_JSON = resolve(CORE_ROOT, 'package.json');
 export const DEFAULT_CSS_ROOTS = Object.freeze([
   resolve(CORE_ROOT, 'src/foundation/tokens/css'),

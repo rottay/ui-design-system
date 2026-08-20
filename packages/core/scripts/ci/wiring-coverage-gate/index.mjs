@@ -14,7 +14,7 @@
  * nobody runs. A census that finds ZERO production scripts is itself a
  * failure — a vacuous pass is not a pass.
  *
- * Usage: node scripts/wiring-coverage-gate.mjs
+ * Usage: node scripts/ci/wiring-coverage-gate/index.mjs
  * Exit 0 = full coverage. Exit 1 = orphan scripts, each reported, or an empty
  * census.
  */
@@ -22,7 +22,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -38,7 +38,7 @@ function collectWiredPaths() {
   // Channel 1: the CI gates manifest. Resolved from the package root (not
   // from HERE) so the gate keeps working from any depth; Paso B lot F updates
   // this path when the manifest itself graduates to its capability folder.
-  addMatches(readFileSync(join(CORE_ROOT, 'scripts/ci-gates.manifest.mjs'), 'utf8'));
+  addMatches(readFileSync(join(CORE_ROOT, 'scripts/ci/ci-gates.manifest/index.mjs'), 'utf8'));
 
   // Channel 2: package.json lifecycle chains (aliases expanded transitively).
   const pkg = JSON.parse(readFileSync(join(CORE_ROOT, 'package.json'), 'utf8'));

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
-  "basedOnManifestDigest": "afb8aebc1340b4617d4106a6f84ab94c4ec649fd48c31d50ef775919bdc4229e",
+  "basedOnManifestDigest": "bd216531c71248d1a888a17db31c2d7fa0f2be1f78b188ee2e582e6880cebf68",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",

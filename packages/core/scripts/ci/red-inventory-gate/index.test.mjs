@@ -3,7 +3,7 @@
  * the live ledger, so a drill can never rewrite the sealed inventory. The final
  * drills read the shipped ledger read-only and prove it satisfies every law.
  *
- * Run: node --test scripts/red-inventory-gate.test.mjs
+ * Run: node --test scripts/ci/red-inventory-gate/index.test.mjs
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -23,8 +23,8 @@ import {
   RED_SURFACES,
   SEALED_RED_IDENTITIES,
   staticTitleTail,
-} from './red-inventory-gate.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+} from './index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const coreRoot = findPackageRoot(here);

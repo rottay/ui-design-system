@@ -162,7 +162,7 @@ jobs:
       # CI runs `test:ci`, and npm fires `pre<name>` only for the EXACT script
       # `test` -- so the `pretest` chain never executed here and sixteen gates
       # that looked enforced were not. `gates:ci` is the single inventory
-      # (scripts/ci-gates.manifest.mjs), consumed by both `pretest` and this
+      # (scripts/ci/ci-gates.manifest/index.mjs), consumed by both `pretest` and this
       # step, so the two cannot drift apart again. It fails fast, prints a
       # per-gate summary, and refuses to run a gate that is declared
       # non-blocking without a recorded owner and reason.

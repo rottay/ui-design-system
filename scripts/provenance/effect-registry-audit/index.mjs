@@ -116,7 +116,7 @@ const AUTHORIZED_CERTIFICATION = Object.freeze({
     bundleBudgetGzipBytes: 16_384,
     maxLayers: 1,
     maxContinuousLoops: 1,
-    evidence: 'packages/core/scripts/analyze-bundle.mjs --effects',
+    evidence: 'packages/core/scripts/ci/analyze-bundle/index.mjs --effects',
   }),
 });
 

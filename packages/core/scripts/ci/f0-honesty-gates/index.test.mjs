@@ -14,9 +14,12 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+/** `scripts/`, from this capability's own folder. Every gate this suite drills
+ *  is addressed from there, so a gate that moves family changes ONE segment. */
+const SCRIPTS_ROOT = join(HERE, '..', '..');
 const CORE_ROOT = findPackageRoot(HERE);
 
 function run(script, cwd = CORE_ROOT) {
@@ -39,10 +42,10 @@ function runOnSyntheticTree(scriptRelativePath, files) {
   // The copy has to sit at the SAME depth the gate resolves its roots from,
   // so a gate that lives in `<family>/<capability>/index.mjs` is planted there.
   mkdirSync(dirname(join(scriptsDir, scriptRelativePath)), { recursive: true });
-  cpSync(join(HERE, scriptRelativePath), join(scriptsDir, scriptRelativePath));
+  cpSync(join(SCRIPTS_ROOT, scriptRelativePath), join(scriptsDir, scriptRelativePath));
   // The gates resolve their root through the shared helper, so the copy needs it too.
   mkdirSync(join(scriptsDir, 'lib/repo-root'), { recursive: true });
-  cpSync(join(HERE, 'lib/repo-root/index.mjs'), join(scriptsDir, 'lib/repo-root/index.mjs'));
+  cpSync(join(SCRIPTS_ROOT, 'lib/repo-root/index.mjs'), join(scriptsDir, 'lib/repo-root/index.mjs'));
   for (const [path, content] of Object.entries(files)) {
     const target = join(root, 'packages/core', path);
     mkdirSync(dirname(target), { recursive: true });
@@ -54,7 +57,7 @@ function runOnSyntheticTree(scriptRelativePath, files) {
 /* ---------------- ds-underscore-prefix-gate ---------------- */
 
 test('ds-underscore-prefix-gate passes on the current tree', () => {
-  const result = run(join(HERE, 'ds-underscore-prefix-gate.mjs'));
+  const result = run(join(SCRIPTS_ROOT, 'ds-underscore-prefix-gate.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
@@ -78,7 +81,7 @@ test('ds-underscore-prefix-gate ignores the private --_ds- namespace', () => {
 /* ---------------- exports-artifact-gate ---------------- */
 
 test('exports-artifact-gate passes on the built tree', () => {
-  const result = run(join(HERE, 'packaging/exports-artifact-gate/index.mjs'));
+  const result = run(join(SCRIPTS_ROOT, 'packaging/exports-artifact-gate/index.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
@@ -108,7 +111,7 @@ test('exports-artifact-gate FAILS on a wildcard whose prefix dir is missing', ()
 /* ---------------- root-catalog-freshness-gate ---------------- */
 
 test('root-catalog-freshness-gate passes on the current tree', () => {
-  const result = run(join(HERE, 'root-catalog-freshness-gate.mjs'));
+  const result = run(join(SCRIPTS_ROOT, 'root-catalog-freshness-gate.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
@@ -150,15 +153,18 @@ test('root-catalog-freshness-gate FAILS on a por-crear root that gained a declar
  * The wiring gate resolves BOTH roots (package + repo) and reads a manifest,
  * so its synthetic tree needs pnpm-workspace.yaml at the repo root and a
  * planted manifest. The gate copy itself lands in the synthetic census, so
- * the planted manifest must wire `scripts/wiring-coverage-gate.mjs` too.
+ * the planted manifest must wire the gate's own path too. Both the gate and
+ * the manifest are planted at the depth the real tree uses, because the gate
+ * reads the manifest by that exact path.
  */
 function runWiringOnSyntheticTree(extraFiles) {
   const root = mkdtempSync(join(tmpdir(), 'f0-wiring-drill-'));
   const scriptsDir = join(root, 'packages/core/scripts');
   mkdirSync(scriptsDir, { recursive: true });
-  cpSync(join(HERE, 'wiring-coverage-gate.mjs'), join(scriptsDir, 'wiring-coverage-gate.mjs'));
+  mkdirSync(join(scriptsDir, 'ci/wiring-coverage-gate'), { recursive: true });
+  cpSync(join(HERE, '..', 'wiring-coverage-gate/index.mjs'), join(scriptsDir, 'ci/wiring-coverage-gate/index.mjs'));
   mkdirSync(join(scriptsDir, 'lib/repo-root'), { recursive: true });
-  cpSync(join(HERE, 'lib/repo-root/index.mjs'), join(scriptsDir, 'lib/repo-root/index.mjs'));
+  cpSync(join(SCRIPTS_ROOT, 'lib/repo-root/index.mjs'), join(scriptsDir, 'lib/repo-root/index.mjs'));
   writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - packages/*\n');
   const files = {
     'package.json': JSON.stringify({ name: '@rottay/design-system', scripts: {} }),
@@ -169,31 +175,31 @@ function runWiringOnSyntheticTree(extraFiles) {
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, content);
   }
-  return run(join(scriptsDir, 'wiring-coverage-gate.mjs'), join(root, 'packages/core'));
+  return run(join(scriptsDir, 'ci/wiring-coverage-gate/index.mjs'), join(root, 'packages/core'));
 }
 
 const WIRING_MANIFEST = `export const GATES = [
-  { id: 'runner', run: ['node', 'scripts/run-ci-gates.mjs'] },
+  { id: 'runner', run: ['node', 'scripts/ci/run-ci-gates/index.mjs'] },
   { id: 'wired', run: ['node', 'scripts/tokens/wired-gate/index.mjs'] },
-  { id: 'wiring', run: ['node', 'scripts/wiring-coverage-gate.mjs'] },
+  { id: 'wiring', run: ['node', 'scripts/ci/wiring-coverage-gate/index.mjs'] },
 ];
 `;
 
 /** The runner's import of the manifest is what wires the manifest itself
  *  (one-hop rule) — mirrors the real tree. */
-const WIRING_RUNNER = `import { GATES } from './ci-gates.manifest.mjs';
+const WIRING_RUNNER = `import { GATES } from '../ci-gates.manifest/index.mjs';
 export { GATES };
 `;
 
 test('wiring-coverage-gate passes on the current tree', () => {
-  const result = run(join(HERE, 'wiring-coverage-gate.mjs'));
+  const result = run(join(HERE, '..', 'wiring-coverage-gate/index.mjs'));
   assert.equal(result.code, 0, result.out);
 });
 
 test('wiring-coverage-gate passes with a wired capability at depth', () => {
   const result = runWiringOnSyntheticTree({
-    'scripts/ci-gates.manifest.mjs': WIRING_MANIFEST,
-    'scripts/run-ci-gates.mjs': WIRING_RUNNER,
+    'scripts/ci/ci-gates.manifest/index.mjs': WIRING_MANIFEST,
+    'scripts/ci/run-ci-gates/index.mjs': WIRING_RUNNER,
     'scripts/tokens/wired-gate/index.mjs': 'export {};\n',
   });
   assert.equal(result.code, 0, result.out);
@@ -201,8 +207,8 @@ test('wiring-coverage-gate passes with a wired capability at depth', () => {
 
 test('wiring-coverage-gate FAILS on an orphan planted at depth', () => {
   const result = runWiringOnSyntheticTree({
-    'scripts/ci-gates.manifest.mjs': WIRING_MANIFEST,
-    'scripts/run-ci-gates.mjs': WIRING_RUNNER,
+    'scripts/ci/ci-gates.manifest/index.mjs': WIRING_MANIFEST,
+    'scripts/ci/run-ci-gates/index.mjs': WIRING_RUNNER,
     'scripts/tokens/wired-gate/index.mjs': 'export {};\n',
     'scripts/tokens/orphan-gate/index.mjs': 'export {};\n',
   });
@@ -212,8 +218,8 @@ test('wiring-coverage-gate FAILS on an orphan planted at depth', () => {
 
 test('wiring-coverage-gate does not demand wiring for lib/, codemods/ or quality-evidence/ at depth', () => {
   const result = runWiringOnSyntheticTree({
-    'scripts/ci-gates.manifest.mjs': WIRING_MANIFEST,
-    'scripts/run-ci-gates.mjs': WIRING_RUNNER,
+    'scripts/ci/ci-gates.manifest/index.mjs': WIRING_MANIFEST,
+    'scripts/ci/run-ci-gates/index.mjs': WIRING_RUNNER,
     'scripts/tokens/wired-gate/index.mjs': 'export {};\n',
     'scripts/lib/paint/shared-counter/index.mjs': 'export {};\n',
     'scripts/codemods/app-side-thing.mjs': 'export {};\n',

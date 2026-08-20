@@ -12,16 +12,16 @@
  * time while pretending to protect something.
  *
  * Usage:
- *   node scripts/run-ci-gates.mjs            # run every blocking gate
- *   node scripts/run-ci-gates.mjs --list     # print the plan, run nothing
+ *   node scripts/ci/run-ci-gates/index.mjs            # run every blocking gate
+ *   node scripts/ci/run-ci-gates/index.mjs --list     # print the plan, run nothing
  */
 
 import { spawnSync } from 'node:child_process';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CI_GATES, validateManifest } from './ci-gates.manifest.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { CI_GATES, validateManifest } from '../ci-gates.manifest/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);

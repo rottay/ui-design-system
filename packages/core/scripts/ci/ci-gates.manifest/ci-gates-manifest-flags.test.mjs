@@ -20,8 +20,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CI_GATES } from './ci-gates.manifest.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { CI_GATES } from '../ci-gates.manifest/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);

@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const gate = resolve(HERE, 'workflow-script-wiring-gate.mjs');
+const gate = resolve(HERE, 'index.mjs');
 
 /**
  * Builds a throwaway repository with the same shape the gate expects
@@ -45,10 +45,13 @@ function withRepo({ rootScripts = {}, coreScripts = {}, workflow }) {
   writeFileSync(join(repo, 'pnpm-workspace.yaml'), "packages:\n  - 'packages/*'\n", 'utf8');
 
   // The gate locates the repo from its own path, so it must run from the copy.
-  const copied = join(core, 'workflow-script-wiring-gate.mjs');
+  // The copy must sit at the SAME depth as the real capability: that is what its
+  // relative import of the root helper resolves against.
+  const copied = join(core, 'ci/workflow-script-wiring-gate/index.mjs');
+  mkdirSync(dirname(copied), { recursive: true });
   writeFileSync(copied, readGate(), 'utf8');
   mkdirSync(join(core, 'lib/repo-root'), { recursive: true });
-  cpSync(resolve(HERE, 'lib/repo-root/index.mjs'), join(core, 'lib/repo-root/index.mjs'));
+  cpSync(resolve(HERE, '../../lib/repo-root/index.mjs'), join(core, 'lib/repo-root/index.mjs'));
 
   return {
     repo,

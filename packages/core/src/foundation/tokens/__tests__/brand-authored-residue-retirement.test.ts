@@ -1151,7 +1151,7 @@ describe("compileBrandTheme full roster parity (channel=value hash)", () => {
 // `scripts/verticals/first-party-single-author-gate/index.mjs` (G1 roster exactness, G2
 // resurrection scan, G3 API/marker scan, G4 delegated ink causality), drilled
 // by `scripts/verticals/first-party-single-author-gate/index.test.mjs` and wired blocking in
-// `scripts/ci-gates.manifest.mjs`.
+// `scripts/ci/ci-gates.manifest/index.mjs`.
 
 // ── productive-consumer scan ───────────────────────────────────────────────
 

@@ -11,8 +11,8 @@
  *   - Largest single chunk: < 3 MB
  *
  * Usage:
- *   node scripts/check-storybook-budget.mjs
- *   node scripts/check-storybook-budget.mjs --output-dir ./custom-storybook-static
+ *   node scripts/ci/check-storybook-budget/index.mjs
+ *   node scripts/ci/check-storybook-budget/index.mjs --output-dir ./custom-storybook-static
  *
  * Exit codes:
  *   0 - within budget
@@ -22,7 +22,7 @@
 import { readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 // ---------------------------------------------------------------------------
 // Configuration

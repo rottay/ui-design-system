@@ -7,7 +7,7 @@
 // per-test measurements recorded under test-artifacts/craft/cra-15/.run/ into
 // the schema packages/core/scripts/evidence/cra-15-runtime-hardening-gate/index.mjs validates,
 // measures the Particle/Spatial gzip closures from the SAME built core dist
-// (identical Vite-inline methodology as scripts/analyze-bundle.mjs), pins the
+// (identical Vite-inline methodology as scripts/ci/analyze-bundle/index.mjs), pins the
 // current source fingerprint via the gate itself, hashes the raw Playwright
 // report, and writes test-artifacts/craft/cra-15/browser-evidence.json.
 //
@@ -35,7 +35,7 @@ const REPORT_RELATIVE = 'test-artifacts/craft/cra-15/playwright-report.json';
 const REPORT_PATH = join(REPO_ROOT, REPORT_RELATIVE);
 const EVIDENCE_PATH = join(CRA15_DIR, 'browser-evidence.json');
 
-// Same governed peer set scripts/analyze-bundle.mjs externalizes, so the
+// Same governed peer set scripts/ci/analyze-bundle/index.mjs externalizes, so the
 // measured gzip closures match the package's own budget gate.
 const EFFECTS_EXTERNALS = [
   'react', /^react\//,

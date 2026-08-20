@@ -102,7 +102,7 @@ Exit codes: `0` ran clean; `1` a fixture no longer matches the CSS, a dial run's
 own controls did not move, or a causal run did not pass its verdict; `2` bad
 invocation.
 
-Nothing here is registered in `scripts/ci-gates.manifest.mjs`, and every test
+Nothing here is registered in `scripts/ci/ci-gates.manifest/index.mjs`, and every test
 file is `.test.mjs` so the vitest project (`src/**/*.test.{ts,tsx}`) cannot
 sweep it into the suite. That is deliberate for two different reasons: the
 browser drills need a browser, and the causal-mechanics drills are fast enough

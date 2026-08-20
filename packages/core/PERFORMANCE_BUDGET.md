@@ -1,6 +1,6 @@
 # Performance Budget - Rottay Design System
 
-Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
+Enforced in CI via `scripts/ci/analyze-bundle/index.mjs`. Any violation fails the build.
 
 ## JavaScript Budget
 
@@ -8,7 +8,7 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 |--------|-------|
 | Main bundle (`dist/index.js`) | < 150 KB gzipped |
 | Main CJS bundle (`dist/index.cjs`) | < 150 KB gzipped |
-| Flagship component bundle | Component-specific gzip ceilings in `scripts/analyze-bundle.mjs`; each fixture deliberately inlines all three physical engines |
+| Flagship component bundle | Component-specific gzip ceilings in `scripts/ci/analyze-bundle/index.mjs`; each fixture deliberately inlines all three physical engines |
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
 | Named semantic role consumer closure | < 40 KB gzipped in ESM and CJS; renderer supplier included, React external |
@@ -117,20 +117,20 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    deduplicated and bounded instead of charging four isolated costs to a multi-chart route.
 3. The semantic motion gate bundles the pure policy and `MotionProvider` separately through the
    public facade. Pure resolution must retain neither React nor Motion; the provider must keep both
-   peers external. `node scripts/analyze-bundle.mjs --motion` runs only this focused gate.
+   peers external. `node scripts/ci/analyze-bundle/index.mjs --motion` runs only this focused gate.
 4. The EffectRegistry gate bundles all nine runtime exports from `./effects`, rejects suppliers,
    dynamic imports, emitted assets and visual/client modules, then independently walks the CJS
-   `require()` closure and `.d.ts` graph. `node scripts/analyze-bundle.mjs --effects` runs only
+   `require()` closure and `.d.ts` graph. `node scripts/ci/analyze-bundle/index.mjs --effects` runs only
    this focused gate.
 5. The VIZ-03A chart-spec gate bundles every runtime export from `./charts/spec`, rejects React,
    D3, other suppliers, browser/client runtime, dynamic imports and emitted assets, then walks the
-   CJS `require()` closure and `.d.ts` graph. `node scripts/analyze-bundle.mjs --chart-spec` runs
+   CJS `require()` closure and `.d.ts` graph. `node scripts/ci/analyze-bundle/index.mjs --chart-spec` runs
    only this focused gate and also enforces both raw facade ceilings.
 6. The VIZ-03C chart-access gate bundles the complete `./charts/access` runtime inventory and an
    independent pure-CSV slice. The complete fixture permits external React only; the CSV slice must
    retain no imports or client component. It also walks CJS and declaration closures and enforces
-   both raw facade ceilings. `node scripts/analyze-bundle.mjs --chart-access` runs only this gate.
-7. `node scripts/analyze-bundle.mjs --chart-renderers` runs only that focused renderer gate;
+   both raw facade ceilings. `node scripts/ci/analyze-bundle/index.mjs --chart-access` runs only this gate.
+7. `node scripts/ci/analyze-bundle/index.mjs --chart-renderers` runs only that focused renderer gate;
    it does not build the full package or write artifacts.
 8. The SPATIAL-01 gate uses `export *` fixtures and compares both the built-facade and bundled
    runtime export inventories with the supplier contract, so a stale hand-written list cannot
@@ -141,7 +141,7 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    inlining is disabled and both emitted assets and asset module IDs are denied. Both facades
    independently walk their CJS and declaration closures, including triple-slash path/type/lib
    references; the spec denies DOM, WebWorker and ScriptHost declaration libraries. The gate
-   also enforces the four raw facade ceilings. `node scripts/analyze-bundle.mjs --spatial` runs
+   also enforces the four raw facade ceilings. `node scripts/ci/analyze-bundle/index.mjs --spatial` runs
    only this focused gate.
 9. The WO-CRA-17 semantic-asset retention gate selects a generated role subpath, the exact
    104-role BitHire preset, the explicit full-corpus compatibility facade, focused `BrandMark` and
@@ -151,7 +151,7 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    the existing 40/30/4 KB ceilings; the complete 263-role facade has a separate measured +10%
    compatibility ratchet. Raw, gzip, retained-module IDs and group counts are written
    deterministically to `test-artifacts/craft/cra-17/bundle-retention.json`.
-   `node scripts/analyze-bundle.mjs --asset-retention` runs only this focused gate.
+   `node scripts/ci/analyze-bundle/index.mjs --asset-retention` runs only this focused gate.
 10. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
 11. The report is printed as a table in the console.
 
@@ -200,6 +200,6 @@ never replace exact baselines with rounded limits.
 
 If a budget increase is genuinely needed:
 
-1. Update the limits in both this document and `scripts/analyze-bundle.mjs`.
+1. Update the limits in both this document and `scripts/ci/analyze-bundle/index.mjs`.
 2. Open a PR with a justification for the increase.
 3. Tag `@rottay/design-system-reviewers` for approval.
