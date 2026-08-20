@@ -608,6 +608,12 @@ KIMI manifest → tokens/; `customization-reconciliation.json` → tokens-catalo
 — su `generatedBy` nombra al gate). Los 3 contratos de modern-rescue que los
 leen se editan con autorización expresa (mismo criterio que C8).
 
+**Lote J ✅ `ece0c92ca`** (coordinador) — `audit-vertical-compliance` a
+`structure/`: **scripts/ queda 100% folder/index** (0 producción suelta, 2
+excepciones toolchain A11). Hermanos editados sin commitear (Fable H3) —
+app-bithire:46, app-evnto:16, app-platform:58 los revisa su dueño. wiring
+78/78, re-sello gat-07 (`211d64b6…`).
+
 **Paso B — arranque confirmado y lote A habilitado (2026-08-19).** La
 confirmación de Opus verificó todo contra el árbol (no de palabra) y midió la
 baseline del Paso B: **1618 tests / 24 fallas = 23 estables + 1 flaky**
