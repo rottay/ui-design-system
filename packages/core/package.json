@@ -703,7 +703,7 @@
     "effects:provenance": "node ../../scripts/provenance/effect-registry-audit/index.mjs",
     "lint": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/verticals/build-vertical-css/index.mjs --check",
     "lint:artifacts": "node scripts/verticals/build-vertical-artifacts/index.mjs --check",
-    "lint:folders": "node scripts/structure/lint-folder-index/index.mjs && node --test scripts/structure/core-owner-boundaries/index.test.mjs && node scripts/structure/core-structure-audit/index.mjs --check",
+    "lint:folders": "node scripts/structure/lint-folder-index/index.mjs && node --test scripts/structure/core-owner-boundaries/index.test.mjs && node scripts/structure/core-structure-audit/index.mjs --check && node scripts/structure/scripts-tree-gate/index.mjs",
     "structure:check": "node --test scripts/structure/core-owner-boundaries/index.test.mjs && node scripts/structure/core-structure-audit/index.mjs --check",
     "structure:report": "node scripts/structure/core-structure-audit/index.mjs --report",
     "lint:integration": "node scripts/structure/audit-integration/index.mjs",

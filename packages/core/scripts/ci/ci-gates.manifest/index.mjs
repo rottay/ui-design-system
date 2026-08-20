@@ -33,6 +33,11 @@ export const CI_GATES = Object.freeze([
   // the parent barrel; no other gate in this list can see that edge.
   { id: 'import-binding-integrity-drill', run: ['node', '--test', 'scripts/structure/import-binding-integrity-gate/index.test.mjs'], blocking: true },
   { id: 'import-binding-integrity', run: ['node', 'scripts/structure/import-binding-integrity-gate/index.mjs'], blocking: true },
+  // The §1.2/§2.9 law on the scripts/ tree itself, with a decrease-only
+  // hand-adjudicated baseline (F0.5 Paso D). Without it the tree re-flattens
+  // at the first new file.
+  { id: 'scripts-tree-drill', run: ['node', '--test', 'scripts/structure/scripts-tree-gate/index.test.mjs'], blocking: true },
+  { id: 'scripts-tree', run: ['node', 'scripts/structure/scripts-tree-gate/index.mjs'], blocking: true },
   { id: 'platform-identity-zero-drill', run: ['node', '--test', 'scripts/verticals/platform-identity-zero-gate/index.test.mjs'], blocking: true },
   { id: 'platform-identity-zero', run: ['node', 'scripts/verticals/platform-identity-zero-gate/index.mjs'], blocking: true },
   { id: 'cra17:licenses', run: ['pnpm', 'run', 'cra17:licenses'], blocking: true },
