@@ -595,6 +595,13 @@ productores movidos invalidaban el stamp) + gat-07 último (`565eb6e7…`).
 **gates:ci: 78 blocking VERDES**. Plano en scripts/: 1 producción
 (audit-vertical-compliance, lote J) + 6 tests.
 
+**Lote I ✅ `45e46d778` — PASO B COMPLETO.** lib/ en sus 10 subfamilias §2.9
+(repo-root/ intacto). cra11:check **cerrado**: ya venía stale (drift real
+79→74 campos adaptativos, predata el Paso B) → deuda de cierre con
+regeneración sighted. 4to caso del patrón existsSync-traga-rutas-muertas
+(build-input-hash autonombrado). gates:ci **78 blocking VERDES**. Del
+inventario del Paso A (222 movibles): 221 movidos — queda 1 (lote J).
+
 **Lote G2 creado (pendiente, mío):** re-alojar los 4 artefactos de raíz de
 paquete en sus capabilities dueñas (`customization-surface-report.json` y
 KIMI manifest → tokens/; `customization-reconciliation.json` → tokens-catalog
