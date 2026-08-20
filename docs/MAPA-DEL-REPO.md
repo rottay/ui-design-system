@@ -2137,7 +2137,7 @@ alias en `package.json`.
 - `portal-substrate-gate.mjs` (+ `.test.mjs`, `.allowlist.json`) — CI; un solo substrato de portal.
 - `structure/import-binding-integrity-gate/index.mjs` (+ `index.test.mjs`) — CI, primero de la lista: import nombrado
   de un binding que el módulo destino nunca publica.
-- `platform-identity-zero-gate.mjs` (+ `.test.mjs`) — CI; `platform` ya no es un vertical, cero residuos.
+- `verticals/platform-identity-zero-gate/index.mjs` (+ `index.test.mjs`) — CI; `platform` ya no es un vertical, cero residuos.
 - `verticals/first-party-single-author-gate/index.mjs` (+ `index.test.mjs`) — CI; un solo autor por artefacto first-party.
 
 ---

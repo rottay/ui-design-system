@@ -9,8 +9,8 @@ import {
   collectPlatformIdentityFindings,
   findSemanticPlatformIdentity,
   isExcludedPlatformZeroPath,
-} from './platform-identity-zero-gate.mjs';
-import { packageRoot as findPackageRoot } from './lib/repo-root/index.mjs';
+} from './index.mjs';
+import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 test('rejects each retired identity carrier', () => {
   const retired = ['plat', 'form'].join('');
@@ -94,17 +94,46 @@ test('JSON quoted registry keys are semantic identities, not invisible text', ()
   assert.equal(findings.some(({ rule }) => rule === 'registry-key'), true);
 });
 
-test('excludes only the gate files at their exact repository paths, not matching basenames', () => {
-  const scripts = dirname(fileURLToPath(import.meta.url));
-  const core = findPackageRoot(scripts);
-  assert.equal(
-    isExcludedPlatformZeroPath(join(scripts, 'platform-identity-zero-gate.mjs')),
-    true,
+test('the own-name exemption is a NAME, not a licence: neighbours under verticals/ still fail', () => {
+  const retired = ['plat', 'form'].join('');
+  // The exempted string: this gate's own capability directory, exactly as the CI
+  // manifest and OWN_FILES quote it. A gate that proves the identity is gone has
+  // to be able to say its own name.
+  assert.deepEqual(
+    findSemanticPlatformIdentity(
+      `run: ['node', 'scripts/verticals/${retired}-identity-zero-gate/index.mjs'],`,
+      'ci-gates.manifest.mjs',
+    ).filter(({ rule }) => rule === 'source-route'),
+    [],
   );
+
+  // Everything else under the same parents is still a vertical id and still fails.
+  for (const planted of [
+    `verticals/${retired}`,
+    `verticals/${retired}/overview`,
+    `verticals/${retired}-dark`,
+    `verticals/${retired}-identity`,
+    `brand-themes/${retired}/index.ts`,
+    `demos/${retired}`,
+  ]) {
+    assert.ok(
+      findSemanticPlatformIdentity(planted, 'planted.ts').some(({ rule }) => rule === 'source-route'),
+      `the exemption must not shelter ${planted}`,
+    );
+  }
+});
+
+test('excludes only the gate files at their exact repository paths, not matching basenames', () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const core = findPackageRoot(here);
+  assert.equal(isExcludedPlatformZeroPath(join(here, 'index.mjs')), true);
+  // A same-named file anywhere else is NOT excluded: the exclusion is the exact
+  // repository path of this capability, never a basename.
   assert.equal(
-    isExcludedPlatformZeroPath(join(core, 'src/platform-identity-zero-gate.mjs')),
+    isExcludedPlatformZeroPath(join(core, 'src/platform-identity-zero-gate/index.mjs')),
     false,
   );
+  assert.equal(isExcludedPlatformZeroPath(join(core, 'src/index.mjs')), false);
 });
 
 test('rejects identity modifiers in fields and every root identity attribute', () => {

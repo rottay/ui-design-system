@@ -33,8 +33,8 @@ export const CI_GATES = Object.freeze([
   // the parent barrel; no other gate in this list can see that edge.
   { id: 'import-binding-integrity-drill', run: ['node', '--test', 'scripts/structure/import-binding-integrity-gate/index.test.mjs'], blocking: true },
   { id: 'import-binding-integrity', run: ['node', 'scripts/structure/import-binding-integrity-gate/index.mjs'], blocking: true },
-  { id: 'platform-identity-zero-drill', run: ['node', '--test', 'scripts/platform-identity-zero-gate.test.mjs'], blocking: true },
-  { id: 'platform-identity-zero', run: ['node', 'scripts/platform-identity-zero-gate.mjs'], blocking: true },
+  { id: 'platform-identity-zero-drill', run: ['node', '--test', 'scripts/verticals/platform-identity-zero-gate/index.test.mjs'], blocking: true },
+  { id: 'platform-identity-zero', run: ['node', 'scripts/verticals/platform-identity-zero-gate/index.mjs'], blocking: true },
   { id: 'cra17:licenses', run: ['pnpm', 'run', 'cra17:licenses'], blocking: true },
   // The NAMED acceptance instrument of WO-CRA-17, wired here by owner decision
   // (2026-08-19, `docs/ROADMAP-EJECUCION-2026-08-19.md` §12.2). It was the

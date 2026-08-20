@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from './lib/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
@@ -12,10 +12,29 @@ const UI_ROOT = findRepoRoot(HERE);
 const SOURCE_EXTENSIONS = new Set(['.cjs', '.css', '.js', '.jsx', '.json', '.mjs', '.ts', '.tsx']);
 const RETIRED = ['plat', 'form'].join('');
 const OWN_FILES = new Set([
-  'packages/core/scripts/platform-identity-zero-gate.mjs',
-  'packages/core/scripts/platform-identity-zero-gate.test.mjs',
+  'packages/core/scripts/verticals/platform-identity-zero-gate/index.mjs',
+  'packages/core/scripts/verticals/platform-identity-zero-gate/index.test.mjs',
 ]);
 const IDENTITY_VALUE = `${RETIRED}(?:[-.:/][a-z0-9-]+)?`;
+
+/**
+ * This gate's own capability name, and the ONE string `source-route` does not
+ * read as a vertical id.
+ *
+ * The retired identity is the segment `${RETIRED}` standing alone: a directory
+ * under `verticals/`, `demos/` or `brand-themes/` that IS the vertical. This
+ * capability lives at `scripts/verticals/${RETIRED}-identity-zero-gate/`, so its own
+ * path — quoted by the CI manifest and by OWN_FILES below — contains that
+ * prefix while naming a gate, not a vertical. A gate that exists to prove the
+ * identity is gone has to be able to say its own name.
+ *
+ * The exemption is this exact suffix and nothing else: `verticals/${RETIRED}`,
+ * `verticals/${RETIRED}-dark`, `verticals/${RETIRED}/overview` and every other
+ * neighbour still fail. It exempts a NAME, it does not license a file — that is
+ * why it lives in the pattern and not in OWN_FILES, whose entries would blind
+ * the scanner to a real residue elsewhere in the same file.
+ */
+const OWN_CAPABILITY_SUFFIX = '-identity-zero-gate';
 
 /**
  * Historical measurements retain the vocabulary of the tree they measured so
@@ -47,7 +66,10 @@ const CONTENT_RULES = Object.freeze([
   ['theme-symbol', new RegExp(`\\b${RETIRED}BrandTheme\\b`, 'gi')],
   [
     'source-route',
-    new RegExp(`(?:brand-themes|demos|verticals)[/\\\\]${RETIRED}\\b`, 'gi'),
+    new RegExp(
+      `(?:brand-themes|demos|verticals)[/\\\\]${RETIRED}(?!${OWN_CAPABILITY_SUFFIX}\\b)\\b`,
+      'gi',
+    ),
   ],
   ['registry-key', new RegExp(`^\\s*['"]?${RETIRED}['"]?\\s*:`, 'gmi')],
   [

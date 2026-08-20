@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "4ab1674409efdad462ba66bbfdd81fd2f5af55850a6d0af415906cc370b28449",
+    "authorityDigest": "fc07b91abd641f911e69a107006b688e990c34bde7ee6b03b4d0823c4b91812a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -489,8 +489,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 31782,
-        "sha256": "62c7798f0a3f07091faf62296c951b8decd7e2e8b832011fdf87c4e83a047dea"
+        "bytes": 31814,
+        "sha256": "79d377070de2102af06291a34707f3d9b0da5efdf570386f5233f1679a306801"
       },
       {
         "path": "ui-design-system/packages/core/scripts/ck-e-migration-certification.test.mjs",
@@ -1551,22 +1551,6 @@
         ],
         "bytes": 8739,
         "sha256": "96b48f6e75c4472d0f2f0e3219ad2f30364892f134c20f4b59a04ecc2abd94fd"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/platform-identity-zero-gate.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 6324,
-        "sha256": "2b34ba49e2062626f51b4e7dc8fb19546b5fae658378b1858bf01ffbcb9f1d70"
-      },
-      {
-        "path": "ui-design-system/packages/core/scripts/platform-identity-zero-gate.test.mjs",
-        "roles": [
-          "audit-machinery"
-        ],
-        "bytes": 4245,
-        "sha256": "852cb934f3104bc731008c746c7eef01b6ceacbd56257ffd3250f27c06036b5f"
       },
       {
         "path": "ui-design-system/packages/core/scripts/portal-substrate-gate.allowlist.json",
@@ -5151,6 +5135,22 @@
         ],
         "bytes": 14169,
         "sha256": "a20935dba9ff24a330d09f3b40494097b1d6fa95cfeb210e5bacc505d217028f"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/verticals/platform-identity-zero-gate/index.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 7424,
+        "sha256": "6610c6e0c630ab50f73521792a08b08352ae5072c56c0b851253a94bfb7d5d86"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/verticals/platform-identity-zero-gate/index.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 5497,
+        "sha256": "5e614678215b5047aca15b83e8cf64143d98d3364cd36de592386b37713ac3ef"
       },
       {
         "path": "ui-design-system/packages/core/scripts/verticals/vertical-css-staleness.gate/index.mjs",
@@ -45335,7 +45335,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "4ab1674409efdad462ba66bbfdd81fd2f5af55850a6d0af415906cc370b28449"
+    "digest": "fc07b91abd641f911e69a107006b688e990c34bde7ee6b03b4d0823c4b91812a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -118716,8 +118716,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "d09435a633e45dfb4e340c2181b802fd05b4fc3a0d1ce2fa5d47b4598697ac0c",
-      "d09435a633e45dfb4e340c2181b802fd05b4fc3a0d1ce2fa5d47b4598697ac0c"
+      "91a4cb79cdd2c4c0841cba832b14f33c1690a45ae11a97c33ccd207d82bf274c",
+      "91a4cb79cdd2c4c0841cba832b14f33c1690a45ae11a97c33ccd207d82bf274c"
     ],
     "agree": true
   }
