@@ -609,6 +609,13 @@ Lectores re-apuntados (HERE-relativo); 3 contratos modern-rescue editados con
 autorización expresa (CONSTITUTION_READY). Sello gat-07 intacto (esos
 artefactos no son input). **Raíz del paquete sin artefactos sueltos.**
 
+**Deuda nueva descubierta en el cierre (NO del frente):** (a) el
+`dependency-honesty` de raíz en modos `static`/`check` reporta un unresolved
+runtime module edge en `recipes/profiles/index.ts:76` — preexistente a F0.5
+(último toque `26299ebff`), adjudicar en F1; (b) la evidencia browser de
+cra-15 quedó stale desde el lote F (edit inerte de 9 bytes en
+`registry/index.ts`) — cra-15 no está en el manifiesto CI por decisión
+documentada; su re-sello corre por la vía de showroom en F1.
 **Paso D ✅ `f4d20e30d`** (coordinador) — `scripts-tree-gate` bloqueante:
 la ley §1.2/§2.9 sobre scripts/ es mecánica (R1–R6 + A1, baseline
 decrease-only de 25 desviaciones adjudicadas con razón, 12/12 tests con 6
