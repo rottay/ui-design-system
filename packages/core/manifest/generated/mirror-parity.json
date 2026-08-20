@@ -6,21 +6,21 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 114223,
-        "lines": 2889,
-        "sha256": "9da236288d8f65bcf97020fb108fcbd962e8521f7e8b841a84071871db631e99"
+        "bytes": 92146,
+        "lines": 1967,
+        "sha256": "d32ae9696ec6b4bb068c578024bf48f9b4a14828a821b2bb0a2d373928cb92da"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 109142,
-        "lines": 2202,
-        "sha256": "27066a99b35388a2c97226adb07b3bbc3f569ed4bae63023afce127d1c8e22c2"
+        "bytes": 97039,
+        "lines": 1737,
+        "sha256": "8a76f5095f263482944b3ab57cc344abf92e33ec6bcd2e8a7adb268645c2909a"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 27669,
-        "lines": 576,
-        "sha256": "339dd31089993673dc8ccafac91bb0fb2300d34c23d70ceab78d473d6221c0e1"
+        "bytes": 30388,
+        "lines": 587,
+        "sha256": "917297a177bd04af8c0ede7b205825dd814c270b5076ab746755cff3a890b9f3"
       }
     ],
     "sources": [
@@ -47,46 +47,46 @@
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 2073,
-      "distinctChannels": 1237
+      "occurrences": 1945,
+      "distinctChannels": 1211
     },
     "bithire": {
-      "occurrences": 1731,
-      "distinctChannels": 1282
+      "occurrences": 1713,
+      "distinctChannels": 1234
     },
     "evnto": {
-      "occurrences": 483,
-      "distinctChannels": 430
+      "occurrences": 565,
+      "distinctChannels": 469
     }
   },
   "surface": {
     "declares": {
-      "rottay": 1237,
-      "bithire": 1282,
-      "evnto": 430
+      "rottay": 1211,
+      "bithire": 1234,
+      "evnto": 469
     },
-    "union": 1908,
-    "intersection": 369,
-    "intersectionPct": 19.3,
-    "intersectionPctOfSmallest": 85.8,
+    "union": 1761,
+    "intersection": 431,
+    "intersectionPct": 24.5,
+    "intersectionPctOfSmallest": 91.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 630,
-        "union": 1889,
-        "pctOfUnion": 33.4,
-        "pctOfSmaller": 50.9
+        "shared": 684,
+        "union": 1761,
+        "pctOfUnion": 38.8,
+        "pctOfSmaller": 56.5
       },
       "rottay+evnto": {
-        "shared": 407,
-        "union": 1260,
-        "pctOfUnion": 32.3,
-        "pctOfSmaller": 94.7
+        "shared": 467,
+        "union": 1213,
+        "pctOfUnion": 38.5,
+        "pctOfSmaller": 99.6
       },
       "bithire+evnto": {
-        "shared": 373,
-        "union": 1339,
-        "pctOfUnion": 27.9,
-        "pctOfSmaller": 86.7
+        "shared": 433,
+        "union": 1270,
+        "pctOfUnion": 34.1,
+        "pctOfSmaller": 92.3
       }
     },
     "venn": {
@@ -107,7 +107,6 @@
         "--ds-alert-warning-border",
         "--ds-alert-warning-color",
         "--ds-alert-warning-icon",
-        "--ds-anchor-border-color",
         "--ds-anchor-ink-color",
         "--ds-anchor-link-color",
         "--ds-anchor-link-color-active",
@@ -120,53 +119,34 @@
         "--ds-autocomplete-empty-color",
         "--ds-autocomplete-error-border",
         "--ds-autocomplete-option-bg-hover",
-        "--ds-autocomplete-option-bg-selected",
         "--ds-autocomplete-warning-border",
-        "--ds-avatar-bg",
         "--ds-avatar-border-color",
-        "--ds-avatar-color",
         "--ds-avatar-default-bg",
-        "--ds-avatar-default-border",
         "--ds-avatar-default-color",
         "--ds-avatar-error-bg",
-        "--ds-avatar-error-border",
         "--ds-avatar-error-color",
         "--ds-avatar-gradient-bg",
-        "--ds-avatar-gradient-border",
         "--ds-avatar-gradient-color",
         "--ds-avatar-group-border",
-        "--ds-avatar-group-border-color",
         "--ds-avatar-group-overflow-bg",
         "--ds-avatar-group-overflow-color",
         "--ds-avatar-primary-bg",
-        "--ds-avatar-primary-border",
         "--ds-avatar-primary-color",
         "--ds-avatar-ring-color",
         "--ds-avatar-secondary-bg",
-        "--ds-avatar-secondary-border",
         "--ds-avatar-secondary-color",
         "--ds-avatar-status-border",
         "--ds-avatar-success-bg",
-        "--ds-avatar-success-border",
         "--ds-avatar-success-color",
         "--ds-avatar-warning-bg",
-        "--ds-avatar-warning-border",
         "--ds-avatar-warning-color",
         "--ds-backtop-bg",
-        "--ds-backtop-bg-hover",
         "--ds-backtop-color",
         "--ds-backtop-shadow",
         "--ds-badge-border-color",
         "--ds-badge-text-color",
-        "--ds-bg-active",
-        "--ds-bg-disabled",
-        "--ds-bg-hover",
-        "--ds-bg-primary",
-        "--ds-bg-secondary",
-        "--ds-bg-tertiary",
         "--ds-border-color",
         "--ds-border-color-default",
-        "--ds-border-color-disabled",
         "--ds-border-color-focus",
         "--ds-border-color-hover",
         "--ds-border-color-muted",
@@ -193,12 +173,7 @@
         "--ds-button-warning-border",
         "--ds-calendar-bg",
         "--ds-calendar-border",
-        "--ds-calendar-day-bg-hover",
-        "--ds-calendar-day-bg-selected",
-        "--ds-calendar-day-bg-today",
-        "--ds-calendar-day-color",
         "--ds-calendar-day-color-other",
-        "--ds-calendar-day-color-selected",
         "--ds-calendar-header-color",
         "--ds-card-border-accent-hover",
         "--ds-card-cover-overlay-bg",
@@ -209,7 +184,6 @@
         "--ds-checkbox-bg",
         "--ds-checkbox-bg-disabled",
         "--ds-checkbox-border",
-        "--ds-checkbox-border-disabled",
         "--ds-checkbox-border-hover",
         "--ds-checkbox-checked-bg",
         "--ds-checkbox-checked-border",
@@ -223,20 +197,14 @@
         "--ds-collapse-bg",
         "--ds-collapse-border",
         "--ds-collapse-content-bg",
-        "--ds-collapse-content-color",
         "--ds-collapse-header-bg",
         "--ds-collapse-header-bg-hover",
         "--ds-collapse-header-color",
         "--ds-color-alpha-black-100",
-        "--ds-color-alpha-black-200",
-        "--ds-color-alpha-black-300",
-        "--ds-color-alpha-black-400",
         "--ds-color-alpha-black-50",
-        "--ds-color-alpha-black-500",
         "--ds-color-alpha-error-10",
         "--ds-color-alpha-error-20",
         "--ds-color-alpha-info-10",
-        "--ds-color-alpha-info-20",
         "--ds-color-alpha-primary-10",
         "--ds-color-alpha-primary-20",
         "--ds-color-alpha-secondary-10",
@@ -245,21 +213,12 @@
         "--ds-color-alpha-success-20",
         "--ds-color-alpha-warning-10",
         "--ds-color-alpha-warning-20",
-        "--ds-color-alpha-white-100",
-        "--ds-color-alpha-white-200",
-        "--ds-color-alpha-white-300",
-        "--ds-color-alpha-white-400",
         "--ds-color-alpha-white-50",
-        "--ds-color-alpha-white-500",
-        "--ds-color-bg-canvas",
         "--ds-color-bg-hover",
         "--ds-color-bg-info",
         "--ds-color-bg-subtle",
-        "--ds-color-danger",
         "--ds-color-neutral-0",
-        "--ds-color-primary-rgb",
         "--ds-color-primary-subtle",
-        "--ds-color-secondary-rgb",
         "--ds-color-shadow",
         "--ds-color-surface",
         "--ds-color-surface-muted",
@@ -279,9 +238,7 @@
         "--ds-datepicker-border-focus",
         "--ds-datepicker-border-hover",
         "--ds-datepicker-clear-color",
-        "--ds-datepicker-clear-color-hover",
         "--ds-datepicker-color",
-        "--ds-datepicker-color-placeholder",
         "--ds-datepicker-error-border",
         "--ds-datepicker-icon-color",
         "--ds-datepicker-separator-color",
@@ -300,7 +257,6 @@
         "--ds-drawer-shadow",
         "--ds-drawer-title-color",
         "--ds-dropdown-bg",
-        "--ds-dropdown-border",
         "--ds-dropdown-item-bg-active",
         "--ds-dropdown-item-bg-hover",
         "--ds-dropdown-item-color",
@@ -312,7 +268,6 @@
         "--ds-elevation-5",
         "--ds-empty-description-color",
         "--ds-empty-icon-color",
-        "--ds-empty-title-color",
         "--ds-floatbutton-badge-bg",
         "--ds-floatbutton-badge-color",
         "--ds-floatbutton-default-bg",
@@ -329,8 +284,6 @@
         "--ds-form-success-color",
         "--ds-form-warning-color",
         "--ds-gradient-dark",
-        "--ds-image-bg",
-        "--ds-image-border",
         "--ds-image-overlay-bg",
         "--ds-input-error-shadow-focus",
         "--ds-input-success-shadow-focus",
@@ -343,11 +296,8 @@
         "--ds-inputnumber-bg-disabled",
         "--ds-inputnumber-border",
         "--ds-inputnumber-border-focus",
-        "--ds-inputnumber-border-hover",
         "--ds-inputnumber-color",
-        "--ds-inputnumber-control-bg",
         "--ds-inputnumber-control-color",
-        "--ds-inputnumber-control-color-hover",
         "--ds-inputnumber-error-border",
         "--ds-inputnumber-shadow-focus",
         "--ds-inputnumber-warning-border",
@@ -356,7 +306,6 @@
         "--ds-list-border-color",
         "--ds-list-item-background-color",
         "--ds-list-item-bg-hover",
-        "--ds-list-item-border",
         "--ds-list-item-hover-background-color",
         "--ds-list-meta-description-color",
         "--ds-list-secondary-text-color",
@@ -395,8 +344,6 @@
         "--ds-message-close-color-hover",
         "--ds-message-shadow",
         "--ds-notification-bg",
-        "--ds-notification-border",
-        "--ds-notification-content-color",
         "--ds-notification-shadow",
         "--ds-notification-title-color",
         "--ds-overlay-bg",
@@ -407,7 +354,6 @@
         "--ds-pagination-item-bg-active",
         "--ds-pagination-item-bg-hover",
         "--ds-pagination-item-border",
-        "--ds-pagination-item-border-active",
         "--ds-pagination-item-color",
         "--ds-pagination-item-color-active",
         "--ds-pagination-item-color-hover",
@@ -425,12 +371,7 @@
         "--ds-radio-bg",
         "--ds-radio-bg-disabled",
         "--ds-radio-border",
-        "--ds-radio-border-disabled",
         "--ds-radio-border-hover",
-        "--ds-radio-button-bg",
-        "--ds-radio-button-bg-checked",
-        "--ds-radio-button-border",
-        "--ds-radio-button-color-checked",
         "--ds-radio-checked-bg",
         "--ds-radio-checked-border",
         "--ds-radio-checked-dot",
@@ -442,8 +383,6 @@
         "--ds-radio-label-color",
         "--ds-radio-label-color-disabled",
         "--ds-rate-color",
-        "--ds-rate-color-active",
-        "--ds-rate-color-hover",
         "--ds-result-icon-color",
         "--ds-result-subtitle-color",
         "--ds-result-title-color",
@@ -466,17 +405,12 @@
         "--ds-select-tag-color",
         "--ds-select-warning-border",
         "--ds-shadow-2xl",
-        "--ds-shadow-error",
         "--ds-shadow-focus-ring",
         "--ds-shadow-focus-ring-error",
         "--ds-shadow-inner",
-        "--ds-shadow-primary",
-        "--ds-shadow-success",
-        "--ds-shadow-warning",
         "--ds-shadow-xs",
         "--ds-shell-sidebar-header-block-size",
         "--ds-sidebar-child-padding-inline",
-        "--ds-sidebar-collapsed-width",
         "--ds-sidebar-header-height",
         "--ds-sidebar-icon-column-size",
         "--ds-sidebar-item-child-height",
@@ -486,7 +420,6 @@
         "--ds-sidebar-item-padding-inline",
         "--ds-sidebar-shell-padding-collapsed",
         "--ds-sidebar-shell-padding-inline",
-        "--ds-sidebar-width",
         "--ds-skeleton-bg",
         "--ds-skeleton-highlight",
         "--ds-skeleton-wave-gradient",
@@ -495,11 +428,8 @@
         "--ds-slider-handle-bg-disabled",
         "--ds-slider-handle-border",
         "--ds-slider-handle-shadow",
-        "--ds-slider-handle-shadow-hover",
         "--ds-slider-mark-color",
         "--ds-slider-rail-color",
-        "--ds-slider-tooltip-bg",
-        "--ds-slider-tooltip-color",
         "--ds-slider-track-color",
         "--ds-slider-track-color-disabled",
         "--ds-spinner-color",
@@ -514,7 +444,6 @@
         "--ds-stats-grid-card-glass-bg",
         "--ds-stats-grid-card-glass-border",
         "--ds-stats-grid-description-color",
-        "--ds-stats-grid-hover-shadow",
         "--ds-stats-grid-label-color",
         "--ds-stats-grid-skeleton-bg",
         "--ds-stats-grid-skeleton-wave-gradient",
@@ -528,7 +457,6 @@
         "--ds-steps-finish-border",
         "--ds-steps-item-bg",
         "--ds-steps-item-bg-active",
-        "--ds-steps-item-bg-complete",
         "--ds-steps-item-color",
         "--ds-steps-item-color-active",
         "--ds-steps-process-bg",
@@ -536,7 +464,6 @@
         "--ds-steps-wait-bg",
         "--ds-steps-wait-border",
         "--ds-switch-bg",
-        "--ds-switch-bg-disabled",
         "--ds-switch-bg-hover",
         "--ds-switch-checked-bg",
         "--ds-switch-checked-bg-hover",
@@ -568,7 +495,6 @@
         "--ds-tag-warning-color",
         "--ds-text-disabled",
         "--ds-text-inverse",
-        "--ds-text-muted",
         "--ds-text-primary",
         "--ds-text-secondary",
         "--ds-text-tertiary",
@@ -617,22 +543,18 @@
         "--ds-tooltip-default-bg",
         "--ds-tooltip-default-color",
         "--ds-tooltip-error-bg",
-        "--ds-tooltip-error-color",
         "--ds-tooltip-primary-bg",
         "--ds-tooltip-primary-color",
         "--ds-tooltip-secondary-bg",
         "--ds-tooltip-secondary-color",
         "--ds-tooltip-shadow",
         "--ds-tooltip-success-bg",
-        "--ds-tooltip-success-color",
         "--ds-tooltip-warning-bg",
-        "--ds-tooltip-warning-color",
         "--ds-transfer-bg",
         "--ds-transfer-border",
         "--ds-transfer-header-bg",
         "--ds-transfer-header-border",
         "--ds-transfer-item-bg-hover",
-        "--ds-tree-connector-color",
         "--ds-tree-node-bg-hover",
         "--ds-tree-node-bg-selected",
         "--ds-tree-node-color",
@@ -662,16 +584,12 @@
         "--ds-watermark-color"
       ],
       "only-bithire": [
-        "--ds-action-rail-card-bg",
-        "--ds-action-rail-card-border",
-        "--ds-action-rail-card-shadow",
         "--ds-badge-chip-radius",
         "--ds-badge-count-bg",
         "--ds-badge-count-border",
         "--ds-badge-count-font-family",
         "--ds-badge-count-radius",
-        "--ds-badge-default-border",
-        "--ds-badge-error-border",
+        "--ds-badge-error-color",
         "--ds-badge-focus-ring",
         "--ds-badge-font-family",
         "--ds-badge-frame",
@@ -683,7 +601,7 @@
         "--ds-badge-icon-bg",
         "--ds-badge-icon-border",
         "--ds-badge-icon-radius",
-        "--ds-badge-info-border",
+        "--ds-badge-info-color",
         "--ds-badge-ink",
         "--ds-badge-ink-hover",
         "--ds-badge-letter-spacing",
@@ -692,30 +610,24 @@
         "--ds-badge-padding-x",
         "--ds-badge-pill-radius",
         "--ds-badge-press-transform",
-        "--ds-badge-primary-border",
         "--ds-badge-pulse-duration",
         "--ds-badge-pulse-scale",
         "--ds-badge-remove-bg",
         "--ds-badge-remove-border",
         "--ds-badge-remove-hover-bg",
         "--ds-badge-remove-radius",
-        "--ds-badge-secondary-border",
         "--ds-badge-selected-frame",
         "--ds-badge-selected-ink",
         "--ds-badge-selected-shadow",
         "--ds-badge-selected-surface",
         "--ds-badge-shadow",
         "--ds-badge-shadow-hover",
-        "--ds-badge-success-border",
+        "--ds-badge-success-color",
         "--ds-badge-surface",
         "--ds-badge-surface-hover",
         "--ds-badge-surface-pressed",
         "--ds-badge-touch-target",
-        "--ds-badge-warning-border",
-        "--ds-breadcrumb-bar-bg",
-        "--ds-breadcrumb-bar-border",
-        "--ds-breadcrumb-bar-padding-x",
-        "--ds-breadcrumb-bar-shadow",
+        "--ds-badge-warning-color",
         "--ds-breadcrumb-bg",
         "--ds-breadcrumb-border",
         "--ds-breadcrumb-font-size",
@@ -723,19 +635,9 @@
         "--ds-breadcrumb-item-color",
         "--ds-breadcrumb-link-color",
         "--ds-breadcrumb-padding",
-        "--ds-button-danger-bg",
-        "--ds-button-danger-border",
-        "--ds-button-danger-color",
-        "--ds-button-danger-hover-bg",
-        "--ds-button-default-border-color",
-        "--ds-button-default-hover-bg",
-        "--ds-button-ghost-hover-bg",
         "--ds-button-lg-radius",
         "--ds-button-md-radius",
-        "--ds-button-primary-border-color",
-        "--ds-button-secondary-border-color",
         "--ds-button-sm-radius",
-        "--ds-button-text-hover-bg",
         "--ds-button-xl-radius",
         "--ds-button-xs-radius",
         "--ds-card-border-radius",
@@ -747,15 +649,7 @@
         "--ds-card-interactive-transform-hover",
         "--ds-card-padding",
         "--ds-card-radius",
-        "--ds-card-side-accent-soft",
         "--ds-card-title-letter-spacing",
-        "--ds-cell-pill-bg",
-        "--ds-cell-pill-border",
-        "--ds-cell-pill-color",
-        "--ds-chart-panel-border",
-        "--ds-chip-bg",
-        "--ds-chip-border",
-        "--ds-chip-color",
         "--ds-collection-card-bg",
         "--ds-collection-card-bg-hover",
         "--ds-collection-card-body-color",
@@ -775,7 +669,6 @@
         "--ds-collection-card-title-color",
         "--ds-collection-card-value-color",
         "--ds-color-info-ink",
-        "--ds-color-on-primary",
         "--ds-command-font",
         "--ds-command-glow",
         "--ds-command-grid-bg",
@@ -822,27 +715,16 @@
         "--ds-compact-card-shadow",
         "--ds-compact-card-title-color",
         "--ds-compact-card-value-color",
-        "--ds-control-brand-border",
-        "--ds-control-brand-tint",
-        "--ds-control-brand-tint-hover",
-        "--ds-control-ink",
-        "--ds-control-ink-muted",
-        "--ds-control-on-brand",
-        "--ds-control-surface",
-        "--ds-control-surface-raised",
-        "--ds-datepicker-panel-shadow",
         "--ds-density-mode-factor",
         "--ds-detail-continuous-boundary",
         "--ds-detail-continuous-surface",
         "--ds-detail-control-bg",
         "--ds-detail-control-border",
         "--ds-detail-control-border-hover",
-        "--ds-detail-control-shadow",
         "--ds-detail-hero-bg",
         "--ds-detail-hero-border",
         "--ds-detail-hero-shadow",
         "--ds-detail-hero-spine",
-        "--ds-detail-radius",
         "--ds-detail-rail-width",
         "--ds-detail-section-bg",
         "--ds-detail-section-border",
@@ -851,10 +733,6 @@
         "--ds-edge-hairline-width",
         "--ds-edge-standard-width",
         "--ds-elevation-lift-strength",
-        "--ds-expanded-panel-actions-bg",
-        "--ds-expanded-panel-actions-max-height",
-        "--ds-expanded-panel-bg",
-        "--ds-expanded-panel-border",
         "--ds-experience-profile",
         "--ds-filter-pill-active-bg",
         "--ds-filter-pill-active-border",
@@ -883,11 +761,9 @@
         "--ds-glass-bg",
         "--ds-glass-blur",
         "--ds-glass-border",
-        "--ds-global-search-results-width",
         "--ds-gradient-mesh",
         "--ds-gradient-primary",
         "--ds-gradient-surface",
-        "--ds-icon-tile-border",
         "--ds-input-action-active-transform",
         "--ds-input-action-focus-ring",
         "--ds-input-action-radius",
@@ -953,22 +829,13 @@
         "--ds-input-warning-bg",
         "--ds-input-xl-radius",
         "--ds-input-xs-radius",
-        "--ds-insight-panel-bg",
-        "--ds-insight-panel-border",
-        "--ds-insight-panel-shadow",
-        "--ds-list-preview-action-min-width",
-        "--ds-list-preview-cockpit-min-column-width",
-        "--ds-list-preview-lane-gap",
-        "--ds-list-preview-lane-marker-size",
-        "--ds-list-preview-meter-height",
+        "--ds-layout-header-height",
         "--ds-list-preview-motion-duration",
         "--ds-list-preview-motion-ease",
         "--ds-list-preview-panel-bg",
         "--ds-list-preview-panel-border",
         "--ds-list-preview-panel-shadow",
-        "--ds-list-preview-rail-border",
         "--ds-list-preview-rail-gap",
-        "--ds-list-preview-row-gap",
         "--ds-list-shell-section-gap",
         "--ds-listing-grid-card-bg",
         "--ds-listing-grid-card-border",
@@ -1078,18 +945,6 @@
         "--ds-metric-card-trend-color",
         "--ds-metric-card-value-color",
         "--ds-page-header-eyebrow-text-transform",
-        "--ds-premium-card-bg",
-        "--ds-premium-card-border",
-        "--ds-premium-card-border-hover",
-        "--ds-premium-card-footer-bg",
-        "--ds-premium-card-header-bg",
-        "--ds-premium-card-header-top-line-display",
-        "--ds-premium-card-section-alt-bg",
-        "--ds-premium-card-section-bg",
-        "--ds-premium-card-selected-border",
-        "--ds-premium-card-selected-ring",
-        "--ds-premium-card-sheen",
-        "--ds-preview-tooltip-max-width",
         "--ds-radius-button",
         "--ds-radius-input",
         "--ds-search-bg",
@@ -1143,22 +998,13 @@
         "--ds-segmented-sm-line-height",
         "--ds-segmented-sm-padding-x",
         "--ds-segmented-sm-radius",
-        "--ds-select-bg-focus",
-        "--ds-select-bg-hover",
-        "--ds-select-border-color",
-        "--ds-select-border-color-focus",
-        "--ds-select-border-color-hover",
-        "--ds-select-dropdown-border-color",
         "--ds-select-group-text-transform",
-        "--ds-select-option-color",
         "--ds-shadow-ambient-strength",
         "--ds-shadow-key-strength",
-        "--ds-shadow-popover",
         "--ds-shell-active-bg",
         "--ds-shell-active-gradient",
-        "--ds-shell-breadcrumb-bg",
-        "--ds-shell-breadcrumb-height",
         "--ds-shell-dropdown-shadow",
+        "--ds-shell-header-block-size",
         "--ds-shell-topbar-height",
         "--ds-signal-card-badge-bg",
         "--ds-signal-card-badge-border",
@@ -1177,47 +1023,27 @@
         "--ds-signal-card-shadow",
         "--ds-signal-card-title-color",
         "--ds-signal-card-top-line-display",
-        "--ds-surface-border",
-        "--ds-surface-border-soft",
-        "--ds-surface-border-strong",
         "--ds-surface-canvas",
         "--ds-surface-card",
         "--ds-surface-card-bg",
         "--ds-surface-card-border",
-        "--ds-surface-card-border-soft",
         "--ds-surface-card-border-strong",
-        "--ds-surface-card-grid-bg",
-        "--ds-surface-card-grid-line",
-        "--ds-surface-card-grid-line-strong",
-        "--ds-surface-card-grid-size",
         "--ds-surface-card-shadow",
         "--ds-surface-card-shadow-hover",
-        "--ds-surface-chip-bg",
-        "--ds-surface-chip-text",
         "--ds-surface-control",
         "--ds-surface-control-bg",
-        "--ds-surface-focus-ring",
-        "--ds-surface-icon-bg",
-        "--ds-surface-icon-border",
         "--ds-surface-inset",
         "--ds-surface-overlay",
         "--ds-surface-panel",
         "--ds-surface-panel-bg",
-        "--ds-surface-radius-lg",
-        "--ds-surface-radius-md",
-        "--ds-surface-radius-sm",
         "--ds-surface-raised",
-        "--ds-surface-shadow",
-        "--ds-surface-shadow-hover",
         "--ds-surface-shell",
         "--ds-table-action-bg",
         "--ds-table-action-border",
-        "--ds-table-action-tooltip-max-width",
         "--ds-table-filter-focus-shadow",
         "--ds-table-filter-row-bg",
         "--ds-table-header-bg-hover",
         "--ds-table-header-border",
-        "--ds-table-header-bubble-bg",
         "--ds-table-header-shadow",
         "--ds-table-header-text-transform",
         "--ds-table-padding-comfortable",
@@ -1231,7 +1057,6 @@
         "--ds-table-row-bg-expanded",
         "--ds-table-row-focus-shadow",
         "--ds-table-row-hover-shadow",
-        "--ds-table-tooltip-z-index",
         "--ds-tabs-active-reveal-duration",
         "--ds-tabs-gap",
         "--ds-tabs-icon-shadow-active",
@@ -1263,15 +1088,12 @@
         "--ds-tall-card-shadow",
         "--ds-tall-card-title-color",
         "--ds-tall-card-value-color",
-        "--ds-text-display-numeric",
-        "--ds-text-title-numeric",
         "--ds-textarea-max-height",
         "--ds-textarea-min-height",
         "--ds-textarea-padding-x",
         "--ds-textarea-padding-y",
         "--ds-textarea-radius",
         "--ds-textarea-resize",
-        "--ds-timepicker-panel-shadow",
         "--ds-toolbar-bg",
         "--ds-toolbar-border",
         "--ds-toolbar-border-bottom",
@@ -1311,36 +1133,14 @@
         "--ds-workspace-shell-shadow",
         "--ds-z-index-tooltip"
       ],
-      "only-evnto": [
-        "--ds-event-cancelled",
-        "--ds-event-cancelled-text",
-        "--ds-event-draft",
-        "--ds-event-draft-text",
-        "--ds-event-ended",
-        "--ds-event-ended-text",
-        "--ds-event-live",
-        "--ds-event-live-text",
-        "--ds-event-published",
-        "--ds-event-published-text",
-        "--ds-input-focus-border",
-        "--ds-input-placeholder",
-        "--ds-input-text",
-        "--ds-ticket-available",
-        "--ds-ticket-available-text",
-        "--ds-ticket-reserved",
-        "--ds-ticket-reserved-text",
-        "--ds-ticket-sold",
-        "--ds-ticket-sold-text"
-      ],
+      "only-evnto": [],
       "rottay+bithire-not-evnto": [
         "--ds-badge-default-bg",
         "--ds-badge-default-color",
         "--ds-badge-error-bg",
-        "--ds-badge-error-color",
         "--ds-badge-font-weight",
         "--ds-badge-gap",
         "--ds-badge-info-bg",
-        "--ds-badge-info-color",
         "--ds-badge-line-height",
         "--ds-badge-primary-bg",
         "--ds-badge-primary-color",
@@ -1348,14 +1148,16 @@
         "--ds-badge-secondary-bg",
         "--ds-badge-secondary-color",
         "--ds-badge-success-bg",
-        "--ds-badge-success-color",
         "--ds-badge-warning-bg",
-        "--ds-badge-warning-color",
         "--ds-breadcrumb-active-color",
         "--ds-breadcrumb-color",
         "--ds-breadcrumb-color-active",
         "--ds-breadcrumb-color-hover",
         "--ds-breadcrumb-separator-color",
+        "--ds-button-danger-bg",
+        "--ds-button-danger-border",
+        "--ds-button-danger-color",
+        "--ds-button-danger-hover-bg",
         "--ds-button-default-bg-active",
         "--ds-button-default-color-active",
         "--ds-button-default-color-hover",
@@ -1400,6 +1202,7 @@
         "--ds-button-text-color",
         "--ds-button-text-color-active",
         "--ds-button-text-color-hover",
+        "--ds-button-text-hover-bg",
         "--ds-button-warning-color",
         "--ds-button-xl-font-size",
         "--ds-button-xl-gap",
@@ -1441,8 +1244,6 @@
         "--ds-card-title-font-size",
         "--ds-card-title-font-weight",
         "--ds-card-xl-padding",
-        "--ds-color-accent-live",
-        "--ds-color-accent-live-bg",
         "--ds-color-bg-surface",
         "--ds-color-interactive-bg-active",
         "--ds-color-interactive-bg-hover",
@@ -1460,7 +1261,6 @@
         "--ds-input-clear-color",
         "--ds-input-clear-color-hover",
         "--ds-input-color",
-        "--ds-input-color-placeholder",
         "--ds-input-error-border",
         "--ds-input-error-color",
         "--ds-input-error-message-font-weight",
@@ -1535,17 +1335,11 @@
         "--ds-segmented-item-color-hover",
         "--ds-segmented-item-color-selected",
         "--ds-segmented-shadow",
-        "--ds-select-bg",
-        "--ds-select-color",
-        "--ds-select-color-placeholder",
-        "--ds-select-dropdown-bg",
-        "--ds-select-dropdown-shadow",
-        "--ds-select-option-bg-hover",
-        "--ds-select-option-bg-selected",
-        "--ds-select-option-color-selected",
         "--ds-shell-sidebar-collapsed-width",
         "--ds-shell-sidebar-width",
+        "--ds-sidebar-collapsed-width",
         "--ds-sidebar-footer-bg",
+        "--ds-sidebar-width",
         "--ds-tab-bg-hover",
         "--ds-tab-border-active",
         "--ds-tab-color",
@@ -1631,13 +1425,9 @@
         "--ds-button-warning-shadow",
         "--ds-button-warning-shadow-active",
         "--ds-button-warning-shadow-hover",
-        "--ds-color-dark-bg",
-        "--ds-color-primary-foreground",
         "--ds-motion-spring-gentle"
       ],
       "bithire+evnto-not-rottay": [
-        "--ds-button-primary-hover-bg",
-        "--ds-button-secondary-hover-bg",
         "--ds-material-card-background-hover",
         "--ds-material-control-background-hover"
       ],
@@ -1646,6 +1436,7 @@
         "--ds-button-default-bg-hover",
         "--ds-button-default-border",
         "--ds-button-default-color",
+        "--ds-button-default-hover-bg",
         "--ds-button-disabled-bg",
         "--ds-button-disabled-border",
         "--ds-button-disabled-border-color",
@@ -1654,20 +1445,34 @@
         "--ds-button-ghost-bg",
         "--ds-button-ghost-bg-hover",
         "--ds-button-ghost-color",
+        "--ds-button-ghost-hover-bg",
         "--ds-button-primary-bg",
         "--ds-button-primary-bg-hover",
         "--ds-button-primary-border",
         "--ds-button-primary-color",
+        "--ds-button-primary-hover-bg",
         "--ds-button-primary-shadow",
         "--ds-button-secondary-bg",
         "--ds-button-secondary-bg-hover",
         "--ds-button-secondary-border",
         "--ds-button-secondary-color",
+        "--ds-button-secondary-hover-bg",
         "--ds-card-bg",
         "--ds-card-border",
         "--ds-card-border-color",
         "--ds-card-shadow",
         "--ds-card-shadow-hover",
+        "--ds-card-side-accent-soft",
+        "--ds-chart-series-1",
+        "--ds-chart-series-10",
+        "--ds-chart-series-2",
+        "--ds-chart-series-3",
+        "--ds-chart-series-4",
+        "--ds-chart-series-5",
+        "--ds-chart-series-6",
+        "--ds-chart-series-7",
+        "--ds-chart-series-8",
+        "--ds-chart-series-9",
         "--ds-color-accent",
         "--ds-color-accent-100",
         "--ds-color-accent-200",
@@ -1694,9 +1499,6 @@
         "--ds-color-border-secondary",
         "--ds-color-border-subtle",
         "--ds-color-border-tertiary",
-        "--ds-color-dark-accent",
-        "--ds-color-dark-primary",
-        "--ds-color-dark-secondary",
         "--ds-color-error",
         "--ds-color-error-100",
         "--ds-color-error-200",
@@ -1751,7 +1553,9 @@
         "--ds-color-primary-700",
         "--ds-color-primary-800",
         "--ds-color-primary-900",
+        "--ds-color-primary-foreground",
         "--ds-color-primary-hover",
+        "--ds-color-primary-rgb",
         "--ds-color-secondary",
         "--ds-color-secondary-100",
         "--ds-color-secondary-200",
@@ -1764,6 +1568,7 @@
         "--ds-color-secondary-800",
         "--ds-color-secondary-900",
         "--ds-color-secondary-hover",
+        "--ds-color-secondary-rgb",
         "--ds-color-success",
         "--ds-color-success-100",
         "--ds-color-success-200",
@@ -1796,6 +1601,15 @@
         "--ds-color-warning-900",
         "--ds-color-warning-bg",
         "--ds-color-warning-border",
+        "--ds-control-brand-border",
+        "--ds-control-brand-tint",
+        "--ds-control-brand-tint-hover",
+        "--ds-control-ink",
+        "--ds-control-ink-muted",
+        "--ds-control-on-brand",
+        "--ds-control-surface",
+        "--ds-control-surface-raised",
+        "--ds-datepicker-panel-shadow",
         "--ds-density-scale",
         "--ds-ease-exit",
         "--ds-ease-standard",
@@ -1805,6 +1619,7 @@
         "--ds-font-family-display",
         "--ds-font-family-heading",
         "--ds-font-family-mono",
+        "--ds-icon-tile-border",
         "--ds-input-bg",
         "--ds-input-bg-disabled",
         "--ds-input-border",
@@ -1812,6 +1627,7 @@
         "--ds-input-border-disabled",
         "--ds-input-border-focus",
         "--ds-input-color-disabled",
+        "--ds-input-color-placeholder",
         "--ds-input-disabled-opacity",
         "--ds-input-shadow-focus",
         "--ds-layout-bg",
@@ -1845,14 +1661,40 @@
         "--ds-overlay-heavy",
         "--ds-overlay-light",
         "--ds-overlay-medium",
+        "--ds-premium-card-bg",
+        "--ds-premium-card-border",
+        "--ds-premium-card-border-hover",
+        "--ds-premium-card-footer-bg",
+        "--ds-premium-card-header-bg",
+        "--ds-premium-card-section-alt-bg",
+        "--ds-premium-card-section-bg",
+        "--ds-premium-card-selected-border",
+        "--ds-premium-card-selected-ring",
+        "--ds-premium-card-sheen",
         "--ds-radius-full",
         "--ds-radius-lg-base",
         "--ds-radius-md-base",
         "--ds-radius-scale",
         "--ds-radius-sm-base",
         "--ds-radius-xl-base",
+        "--ds-select-bg",
+        "--ds-select-bg-focus",
+        "--ds-select-bg-hover",
+        "--ds-select-border-color",
+        "--ds-select-border-color-focus",
+        "--ds-select-border-color-hover",
+        "--ds-select-color",
+        "--ds-select-color-placeholder",
+        "--ds-select-dropdown-bg",
+        "--ds-select-dropdown-border-color",
+        "--ds-select-dropdown-shadow",
+        "--ds-select-option-bg-hover",
+        "--ds-select-option-bg-selected",
+        "--ds-select-option-color",
+        "--ds-select-option-color-selected",
         "--ds-shadow-lg",
         "--ds-shadow-md",
+        "--ds-shadow-popover",
         "--ds-shadow-sm",
         "--ds-shadow-xl",
         "--ds-shell-grid-line",
@@ -1878,6 +1720,15 @@
         "--ds-sidebar-item-padding",
         "--ds-sidebar-text",
         "--ds-sidebar-text-muted",
+        "--ds-surface-card-grid-bg",
+        "--ds-surface-card-grid-line",
+        "--ds-surface-card-grid-size",
+        "--ds-surface-chip-bg",
+        "--ds-surface-icon-bg",
+        "--ds-surface-icon-border",
+        "--ds-surface-radius-md",
+        "--ds-surface-shadow",
+        "--ds-surface-shadow-hover",
         "--ds-table-border",
         "--ds-table-header-bg",
         "--ds-table-header-color",
@@ -1914,6 +1765,7 @@
         "--ds-text-title-line-height",
         "--ds-text-title-size",
         "--ds-text-title-weight",
+        "--ds-timepicker-panel-shadow",
         "--ds-tint-12",
         "--ds-tint-16",
         "--ds-tint-24",
@@ -2015,11 +1867,11 @@
     }
   },
   "valueParity": {
-    "commonChannels": 369,
-    "identicalValue": 144,
-    "divergentValue": 225,
-    "identicalRoleShape": 227,
-    "divergentRoleShape": 142,
+    "commonChannels": 431,
+    "identicalValue": 156,
+    "divergentValue": 275,
+    "identicalRoleShape": 291,
+    "divergentRoleShape": 140,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -2054,6 +1906,14 @@
         }
       },
       {
+        "channel": "--ds-button-default-hover-bg",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
+          "evnto": "base,overlay-mode"
+        }
+      },
+      {
         "channel": "--ds-button-ghost-bg-hover",
         "roles": {
           "rottay": "base,overlay-mode",
@@ -2070,11 +1930,11 @@
         }
       },
       {
-        "channel": "--ds-button-primary-bg-hover",
+        "channel": "--ds-button-ghost-hover-bg",
         "roles": {
           "rottay": "base,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base"
+          "bithire": "base",
+          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -2087,14 +1947,6 @@
       },
       {
         "channel": "--ds-button-secondary-bg",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-button-secondary-bg-hover",
         "roles": {
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
@@ -2121,6 +1973,14 @@
         "channel": "--ds-card-shadow-hover",
         "roles": {
           "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-card-side-accent-soft",
+        "roles": {
+          "rottay": "base",
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
@@ -2209,102 +2069,38 @@
         "channel": "--ds-color-accent-900",
         "roles": {
           "rottay": "base,overlay-mode",
-          "bithire": "base",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-hover",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-background",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-bg",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-bg-input",
-        "roles": {
-          "rottay": "base,default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-bg-overlay",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-bg-primary",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,default-mode,overlay-mode",
-          "evnto": "base,overlay-mode"
         }
       },
       {
         "channel": "--ds-color-border",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-border-primary",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-border-secondary",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode,overlay-mode"
         }
       },
       {
         "channel": "--ds-color-border-subtle",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
       {
         "channel": "--ds-color-border-tertiary",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
       {
         "channel": "--ds-color-error",
         "roles": {
-          "rottay": "base,default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
@@ -2326,25 +2122,25 @@
         }
       },
       {
-        "channel": "--ds-color-error-bg",
+        "channel": "--ds-color-error-900",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base",
+          "bithire": "base",
+          "evnto": "base,overlay-mode"
         }
       },
       {
         "channel": "--ds-color-error-border",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
       {
         "channel": "--ds-color-info",
         "roles": {
-          "rottay": "base,default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
@@ -2366,123 +2162,19 @@
         }
       },
       {
-        "channel": "--ds-color-info-bg",
+        "channel": "--ds-color-info-900",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base",
+          "bithire": "base",
+          "evnto": "base,overlay-mode"
         }
       },
       {
         "channel": "--ds-color-info-border",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-link",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-link-hover",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-link-visited",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-100",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-200",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-300",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-400",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-50",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-500",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-600",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-700",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-800",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-neutral-900",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
         }
       },
       {
@@ -2754,39 +2446,15 @@
         "roles": {
           "rottay": "base,overlay-mode",
           "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-success-bg",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "evnto": "base,overlay-mode"
         }
       },
       {
         "channel": "--ds-color-success-border",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-text-disabled",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-text-muted",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode,overlay-mode"
         }
       },
       {
@@ -2795,30 +2463,6 @@
           "rottay": "base,overlay-mode",
           "bithire": "base",
           "evnto": "base,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-text-primary",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-text-secondary",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "default-mode,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-text-tertiary",
-        "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
         }
       },
       {
@@ -2846,51 +2490,35 @@
         }
       },
       {
-        "channel": "--ds-color-warning-bg",
+        "channel": "--ds-color-warning-900",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base",
+          "bithire": "base",
+          "evnto": "base,overlay-mode"
         }
       },
       {
         "channel": "--ds-color-warning-border",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-datepicker-panel-shadow",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
       {
         "channel": "--ds-focus-ring-color",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode",
-          "evnto": "default-mode"
-        }
-      },
-      {
-        "channel": "--ds-font-family-base",
-        "roles": {
-          "rottay": "base,default-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-font-family-display",
-        "roles": {
-          "rottay": "base,default-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-font-family-heading",
-        "roles": {
-          "rottay": "base,default-mode",
-          "bithire": "base",
-          "evnto": "base"
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -2899,6 +2527,14 @@
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-input-color-placeholder",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "overlay-mode"
         }
       },
       {
@@ -2934,26 +2570,170 @@
         }
       },
       {
-        "channel": "--ds-motion-calm",
+        "channel": "--ds-premium-card-bg",
         "roles": {
           "rottay": "base",
-          "bithire": "base,reduced-motion",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
       {
-        "channel": "--ds-motion-deliberate",
+        "channel": "--ds-premium-card-footer-bg",
         "roles": {
           "rottay": "base",
-          "bithire": "base,reduced-motion",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
       {
-        "channel": "--ds-motion-instant",
+        "channel": "--ds-premium-card-header-bg",
         "roles": {
           "rottay": "base",
-          "bithire": "base,reduced-motion",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-premium-card-section-alt-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-premium-card-section-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-premium-card-sheen",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-bg",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-bg-focus",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-bg-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-border-color",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-border-color-focus",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-border-color-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-color",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-color-placeholder",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-dropdown-bg",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-dropdown-border-color",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-dropdown-shadow",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-option-bg-hover",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-option-bg-selected",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-option-color",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-select-option-color-selected",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
           "evnto": "base"
         }
       },
@@ -2969,6 +2749,14 @@
         "channel": "--ds-shadow-md",
         "roles": {
           "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-shadow-popover",
+        "roles": {
+          "rottay": "base",
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
@@ -3032,25 +2820,25 @@
       {
         "channel": "--ds-sidebar-group-margin-bottom",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
+          "evnto": "base"
         }
       },
       {
         "channel": "--ds-sidebar-group-margin-top",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
+          "evnto": "base"
         }
       },
       {
         "channel": "--ds-sidebar-group-padding-top",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
+          "evnto": "base"
         }
       },
       {
@@ -3120,9 +2908,9 @@
       {
         "channel": "--ds-sidebar-item-indent",
         "roles": {
-          "rottay": "default-mode,overlay-mode",
-          "bithire": "default-mode,overlay-mode",
-          "evnto": "default-mode"
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
+          "evnto": "base"
         }
       },
       {
@@ -3142,6 +2930,46 @@
         }
       },
       {
+        "channel": "--ds-surface-chip-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-surface-icon-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-surface-icon-border",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-surface-shadow",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-surface-shadow-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
         "channel": "--ds-table-border",
         "roles": {
           "rottay": "base,overlay-mode",
@@ -3156,12 +2984,20 @@
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
+      },
+      {
+        "channel": "--ds-timepicker-panel-shadow",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
       }
     ]
   },
   "cascadePresence": {
     "notSeverity": "Presencia, NO severidad. Un canal declarado puede re-derivar y dejar pasar el dial. La severidad esta en `cascadeSeverance`.",
-    "distinctChannelsDeclared": 317,
+    "distinctChannelsDeclared": 310,
     "roots": [
       {
         "root": "--ds-alert-dialog-motion-scale",
@@ -3242,10 +3078,10 @@
       {
         "root": "--ds-color-error",
         "channelsInCascade": 56,
-        "declaredByAny": 14,
+        "declaredByAny": 13,
         "declaredByAll": 3,
         "byTenant": {
-          "rottay": 13,
+          "rottay": 12,
           "bithire": 5,
           "evnto": 3
         },
@@ -3281,12 +3117,6 @@
           },
           {
             "channel": "--ds-checkbox-error-border",
-            "tenants": [
-              "rottay"
-            ]
-          },
-          {
-            "channel": "--ds-color-danger",
             "tenants": [
               "rottay"
             ]
@@ -3346,12 +3176,12 @@
       {
         "root": "--ds-color-primary",
         "channelsInCascade": 375,
-        "declaredByAny": 199,
-        "declaredByAll": 18,
+        "declaredByAny": 193,
+        "declaredByAll": 34,
         "byTenant": {
-          "rottay": 66,
-          "bithire": 161,
-          "evnto": 22
+          "rottay": 80,
+          "bithire": 156,
+          "evnto": 38
         },
         "channels": [
           {
@@ -3460,12 +3290,6 @@
             ]
           },
           {
-            "channel": "--ds-button-primary-border-color",
-            "tenants": [
-              "bithire"
-            ]
-          },
-          {
             "channel": "--ds-button-primary-shadow",
             "tenants": [
               "rottay",
@@ -3533,18 +3357,6 @@
               "rottay",
               "bithire",
               "evnto"
-            ]
-          },
-          {
-            "channel": "--ds-cell-pill-bg",
-            "tenants": [
-              "bithire"
-            ]
-          },
-          {
-            "channel": "--ds-cell-pill-border",
-            "tenants": [
-              "bithire"
             ]
           },
           {
@@ -3778,19 +3590,25 @@
           {
             "channel": "--ds-control-brand-border",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-control-brand-tint",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-control-brand-tint-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -3871,7 +3689,9 @@
           {
             "channel": "--ds-icon-tile-border",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -4218,31 +4038,41 @@
           {
             "channel": "--ds-premium-card-border",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-premium-card-border-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-premium-card-section-alt-bg",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-premium-card-selected-border",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-premium-card-selected-ring",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -4268,7 +4098,8 @@
             "channel": "--ds-select-dropdown-shadow",
             "tenants": [
               "rottay",
-              "bithire"
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -4302,13 +4133,9 @@
           {
             "channel": "--ds-shadow-popover",
             "tenants": [
-              "bithire"
-            ]
-          },
-          {
-            "channel": "--ds-shadow-primary",
-            "tenants": [
-              "rottay"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -4432,19 +4259,17 @@
           {
             "channel": "--ds-surface-card-grid-bg",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-surface-card-grid-line",
             "tenants": [
-              "bithire"
-            ]
-          },
-          {
-            "channel": "--ds-surface-card-grid-line-strong",
-            "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -4462,25 +4287,25 @@
           {
             "channel": "--ds-surface-chip-bg",
             "tenants": [
-              "bithire"
-            ]
-          },
-          {
-            "channel": "--ds-surface-focus-ring",
-            "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-surface-icon-bg",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-surface-icon-border",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -6718,25 +6543,16 @@
     },
     "perTenant": {
       "rottay": {
-        "declaredInCascade": 141,
-        "severedTotal": 66,
+        "declaredInCascade": 154,
+        "severedTotal": 60,
         "rootPinned": {
-          "count": 5,
+          "count": 7,
           "byReason": {
-            "tenant-parametric": 1,
+            "tenant-parametric": 3,
             "floor-literal": 1,
             "floor-absent": 3
           },
           "channels": [
-            {
-              "channel": "--ds-color-error",
-              "reason": "tenant-parametric",
-              "values": [
-                "base=#EF4444",
-                "overlay-mode=#DC2626",
-                "default-mode=var(--ds-color-error-400)"
-              ]
-            },
             {
               "channel": "--ds-density-scale",
               "reason": "floor-absent",
@@ -6758,6 +6574,28 @@
               }
             },
             {
+              "channel": "--ds-elevation-1",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)",
+                "overlay-mode=0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
+              ]
+            },
+            {
+              "channel": "--ds-font-family-base",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+              ]
+            },
+            {
+              "channel": "--ds-font-family-heading",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+              ]
+            },
+            {
               "channel": "--ds-radius-scale",
               "reason": "floor-absent",
               "values": [
@@ -6776,9 +6614,9 @@
           ]
         },
         "rootFrozen": {
-          "count": 6,
-          "readerEdges": 25,
-          "distinctReaders": 25,
+          "count": 4,
+          "readerEdges": 24,
+          "distinctReaders": 24,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -6795,87 +6633,57 @@
               }
             },
             {
+              "channel": "--ds-color-error",
+              "values": [
+                "base=#F87171",
+                "overlay-mode=#DC2626"
+              ],
+              "readers": [
+                "--ds-tint-error-12",
+                "--ds-tint-error-16",
+                "--ds-tint-error-24",
+                "--ds-tint-error-4",
+                "--ds-tint-error-8"
+              ],
+              "readerCount": 5,
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default.css",
+                "line": 177,
+                "value": "var(--ds-color-error-400)"
+              }
+            },
+            {
               "channel": "--ds-color-primary",
               "values": [
                 "base=#FFFFFF",
                 "overlay-mode=#0A0A0A"
               ],
               "readers": [
+                "--ds-control-brand-border",
+                "--ds-control-brand-tint",
+                "--ds-control-brand-tint-hover",
                 "--ds-elevation-4",
                 "--ds-elevation-5",
                 "--ds-focus-ring-color",
+                "--ds-premium-card-border",
+                "--ds-premium-card-border-hover",
+                "--ds-premium-card-selected-border",
+                "--ds-premium-card-selected-ring",
+                "--ds-surface-card-grid-line",
+                "--ds-surface-chip-bg",
+                "--ds-surface-icon-bg",
+                "--ds-surface-icon-border",
                 "--ds-tint-12",
                 "--ds-tint-16",
                 "--ds-tint-24",
                 "--ds-tint-4",
                 "--ds-tint-8"
               ],
-              "readerCount": 8,
+              "readerCount": 19,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 156,
                 "value": "var(--ds-color-primary-500)"
-              }
-            },
-            {
-              "channel": "--ds-elevation-1",
-              "values": [
-                "default-mode=inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)"
-              ],
-              "readers": [
-                "--ds-card-shadow",
-                "--ds-shadow-sm",
-                "--ds-shadow-xs"
-              ],
-              "readerCount": 3,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 800,
-                "value": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
-              }
-            },
-            {
-              "channel": "--ds-font-family-base",
-              "values": [
-                "base='Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif",
-                "default-mode='Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-              ],
-              "readers": [
-                "--ds-text-body",
-                "--ds-text-detail",
-                "--ds-text-display",
-                "--ds-text-emphasis",
-                "--ds-text-eyebrow",
-                "--ds-text-title",
-                "--ds-type-body-font-family",
-                "--ds-type-caption-font-family",
-                "--ds-type-label-font-family",
-                "--ds-type-supporting-font-family"
-              ],
-              "readerCount": 10,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 506,
-                "value": "var(--ds-font-sans)"
-              }
-            },
-            {
-              "channel": "--ds-font-family-heading",
-              "values": [
-                "base='Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif",
-                "default-mode='Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-              ],
-              "readers": [
-                "--ds-type-display-font-family",
-                "--ds-type-numeric-font-family",
-                "--ds-type-page-title-font-family",
-                "--ds-type-section-title-font-family"
-              ],
-              "readerCount": 4,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 507,
-                "value": "var(--ds-font-sans)"
               }
             },
             {
@@ -6895,26 +6703,26 @@
           ]
         },
         "severs": {
-          "count": 60,
+          "count": 56,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
               "values": [
-                "default-mode=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
+                "base=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
               ]
             },
             {
               "channel": "--ds-backtop-shadow",
               "values": [
-                "default-mode=0 4px 16px rgba(0, 0, 0, 0.30)",
+                "base=0 4px 16px rgba(0, 0, 0, 0.30)",
                 "overlay-mode=0 4px 12px rgba(0, 0, 0, 0.10)"
               ]
             },
             {
               "channel": "--ds-border-color-focus",
               "values": [
-                "default-mode=rgba(255, 255, 255, 0.40)",
+                "base=rgba(255, 255, 255, 0.40)",
                 "overlay-mode=rgba(10, 10, 10, 0.40)"
               ]
             },
@@ -6941,15 +6749,13 @@
             {
               "channel": "--ds-button-ghost-border",
               "values": [
-                "default-mode=transparent",
-                "overlay-mode=transparent"
+                "base=transparent"
               ]
             },
             {
               "channel": "--ds-button-ghost-border-hover",
               "values": [
-                "default-mode=transparent",
-                "overlay-mode=transparent"
+                "base=transparent"
               ]
             },
             {
@@ -6962,7 +6768,7 @@
             {
               "channel": "--ds-button-ghost-color-hover",
               "values": [
-                "default-mode=#ECECEC",
+                "base=#ECECEC",
                 "overlay-mode=#1A1A1A"
               ]
             },
@@ -7003,90 +6809,71 @@
             {
               "channel": "--ds-card-image-loading-active",
               "values": [
-                "default-mode=#ECECEC",
+                "base=#ECECEC",
                 "overlay-mode=#0A0A0A"
               ]
             },
             {
               "channel": "--ds-checkbox-error-border",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-checkbox-focus-ring",
               "values": [
-                "default-mode=0 0 0 2px rgba(255, 255, 255, 0.20)",
+                "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
                 "overlay-mode=0 0 0 2px rgba(10, 10, 10, 0.12)"
               ]
             },
             {
               "channel": "--ds-checkbox-focus-ring-color",
               "values": [
-                "default-mode=rgba(255, 255, 255, 0.12)",
+                "base=rgba(255, 255, 255, 0.12)",
                 "overlay-mode=rgba(10, 10, 10, 0.08)"
               ]
             },
             {
               "channel": "--ds-color-border-focus",
               "values": [
-                "overlay-mode=rgba(10, 10, 10, 0.32)",
-                "default-mode=rgba(255, 255, 255, 0.20)"
+                "base=rgba(255, 255, 255, 0.20)",
+                "overlay-mode=rgba(10, 10, 10, 0.32)"
               ]
             },
             {
               "channel": "--ds-color-link",
               "values": [
-                "overlay-mode=#1A1A1A",
-                "default-mode=#ECECEC"
+                "base=#ECECEC",
+                "overlay-mode=#1A1A1A"
               ]
             },
             {
               "channel": "--ds-drawer-shadow",
               "values": [
-                "default-mode=0 16px 48px rgba(0, 0, 0, 0.50)",
+                "base=0 16px 48px rgba(0, 0, 0, 0.50)",
                 "overlay-mode=0 12px 40px rgba(0, 0, 0, 0.12)"
               ]
             },
             {
               "channel": "--ds-dropdown-shadow",
               "values": [
-                "default-mode=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
+                "base=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
-              ]
-            },
-            {
-              "channel": "--ds-elevation-2",
-              "values": [
-                "default-mode=inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34)"
-              ]
-            },
-            {
-              "channel": "--ds-elevation-3",
-              "values": [
-                "default-mode=inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)"
               ]
             },
             {
               "channel": "--ds-floatbutton-badge-bg",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-floatbutton-primary-bg",
               "values": [
-                "default-mode=#FFFFFF",
+                "base=#FFFFFF",
                 "overlay-mode=#0A0A0A"
-              ]
-            },
-            {
-              "channel": "--ds-font-family-display",
-              "values": [
-                "base='Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif",
-                "default-mode='Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               ]
             },
             {
@@ -7099,35 +6886,35 @@
             {
               "channel": "--ds-live-feed-badge-bg",
               "values": [
-                "default-mode=#FFFFFF",
+                "base=#FFFFFF",
                 "overlay-mode=#0A0A0A"
               ]
             },
             {
               "channel": "--ds-live-feed-load-more-color",
               "values": [
-                "default-mode=#ECECEC",
+                "base=#ECECEC",
                 "overlay-mode=#1A1A1A"
               ]
             },
             {
               "channel": "--ds-menu-focus-ring-color",
               "values": [
-                "default-mode=#FFFFFF",
+                "base=#FFFFFF",
                 "overlay-mode=#0A0A0A"
               ]
             },
             {
               "channel": "--ds-menu-item-danger-color",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-menu-item-selected-color",
               "values": [
-                "default-mode=#ECECEC",
+                "base=#ECECEC",
                 "overlay-mode=#1A1A1A"
               ]
             },
@@ -7141,123 +6928,119 @@
             {
               "channel": "--ds-notification-shadow",
               "values": [
-                "default-mode=0 4px 24px rgba(0, 0, 0, 0.50), 0 0 0 1px #2A2A2F",
+                "base=0 4px 24px rgba(0, 0, 0, 0.50), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 24px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.04)"
               ]
             },
             {
               "channel": "--ds-popover-shadow",
               "values": [
-                "default-mode=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
+                "base=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
               ]
             },
             {
               "channel": "--ds-radio-error-border",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-radio-focus-ring",
               "values": [
-                "default-mode=0 0 0 2px rgba(255, 255, 255, 0.20)",
+                "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
                 "overlay-mode=0 0 0 2px rgba(10, 10, 10, 0.12)"
               ]
             },
             {
               "channel": "--ds-radio-focus-ring-color",
               "values": [
-                "default-mode=rgba(255, 255, 255, 0.12)",
+                "base=rgba(255, 255, 255, 0.12)",
                 "overlay-mode=rgba(10, 10, 10, 0.08)"
               ]
             },
             {
               "channel": "--ds-segmented-shadow",
               "values": [
-                "overlay-mode=0 1px 2px rgba(0, 0, 0, 0.04)",
-                "default-mode=0 1px 2px rgba(0, 0, 0, 0.20)"
+                "base=0 1px 2px rgba(0, 0, 0, 0.20)",
+                "overlay-mode=0 1px 2px rgba(0, 0, 0, 0.04)"
               ]
             },
             {
               "channel": "--ds-select-dropdown-shadow",
               "values": [
-                "default-mode=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
+                "base=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
               ]
             },
             {
               "channel": "--ds-shadow-focus-ring",
               "values": [
-                "default-mode=0 0 0 3px rgba(255, 255, 255, 0.12)",
+                "base=0 0 0 3px rgba(255, 255, 255, 0.12)",
                 "overlay-mode=0 0 0 3px rgba(10, 10, 10, 0.10)"
-              ]
-            },
-            {
-              "channel": "--ds-shadow-primary",
-              "values": [
-                "default-mode=0 4px 14px rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.20)",
-                "overlay-mode=0 2px 8px rgba(10, 10, 10, 0.08), 0 4px 16px rgba(10, 10, 10, 0.04)"
               ]
             },
             {
               "channel": "--ds-sidebar-item-gap",
               "values": [
-                "default-mode=9px"
+                "base=9px",
+                "overlay-mode=initial"
               ]
             },
             {
               "channel": "--ds-sidebar-item-padding-inline",
               "values": [
-                "default-mode=13px"
+                "base=13px",
+                "overlay-mode=initial"
               ]
             },
             {
               "channel": "--ds-sidebar-shell-padding-inline",
               "values": [
-                "default-mode=10px"
+                "base=10px",
+                "overlay-mode=initial"
               ]
             },
             {
               "channel": "--ds-skeleton-bg",
               "values": [
-                "default-mode=#1A1A1E",
+                "base=#1A1A1E",
                 "overlay-mode=#EDEDEC"
               ]
             },
             {
               "channel": "--ds-skeleton-wave-gradient",
               "values": [
-                "default-mode=linear-gradient(90deg, #1A1A1E 25%, #2A2A2F 50%, #1A1A1E 75%)",
+                "base=linear-gradient(90deg, #1A1A1E 25%, #2A2A2F 50%, #1A1A1E 75%)",
                 "overlay-mode=linear-gradient(90deg, #EDEDEC 25%, #F4F4F3 50%, #EDEDEC 75%)"
               ]
             },
             {
               "channel": "--ds-slider-focus-ring",
               "values": [
-                "default-mode=0 0 0 2px rgba(255, 255, 255, 0.20)",
+                "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
                 "overlay-mode=0 0 0 2px rgba(10, 10, 10, 0.12)"
               ]
             },
             {
               "channel": "--ds-spinner-color",
               "values": [
-                "default-mode=#FFFFFF",
+                "base=#FFFFFF",
                 "overlay-mode=#0A0A0A"
               ]
             },
             {
               "channel": "--ds-stats-grid-trend-negative",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-switch-focus-ring",
               "values": [
-                "default-mode=0 0 0 2px rgba(255, 255, 255, 0.20)",
+                "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
                 "overlay-mode=0 0 0 2px rgba(10, 10, 10, 0.12)"
               ]
             },
@@ -7277,46 +7060,46 @@
             {
               "channel": "--ds-toggle-focus-ring",
               "values": [
-                "default-mode=0 0 0 2px rgba(255, 255, 255, 0.20)",
+                "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
                 "overlay-mode=0 0 0 2px rgba(10, 10, 10, 0.12)"
               ]
             },
             {
               "channel": "--ds-tooltip-shadow",
               "values": [
-                "default-mode=0 4px 16px rgba(0, 0, 0, 0.40)",
+                "base=0 4px 16px rgba(0, 0, 0, 0.40)",
                 "overlay-mode=0 4px 12px rgba(0, 0, 0, 0.12)"
               ]
             },
             {
               "channel": "--ds-upload-error-border",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-upload-file-remove-color",
               "values": [
-                "default-mode=#EF4444",
+                "base=#EF4444",
                 "overlay-mode=#DC2626"
               ]
             },
             {
               "channel": "--ds-upload-progress-bar",
               "values": [
-                "default-mode=#FFFFFF",
+                "base=#FFFFFF",
                 "overlay-mode=#0A0A0A"
               ]
             }
           ]
         },
         "reDerives": {
-          "count": 70,
-          "reachingRoot": 28,
-          "reachingLiveRoot": 15,
-          "mixedRoleValues": 11,
-          "blockedUpstream": 18,
+          "count": 87,
+          "reachingRoot": 39,
+          "reachingLiveRoot": 26,
+          "mixedRoleValues": 12,
+          "blockedUpstream": 0,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -7416,7 +7199,7 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-card-footer-padding",
@@ -7467,8 +7250,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-card-shadow-elevated",
@@ -7478,7 +7261,7 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-card-shadow-hover",
@@ -7488,7 +7271,7 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-card-sm-padding",
@@ -7521,9 +7304,56 @@
               "blockedUpstream": false
             },
             {
-              "channel": "--ds-color-danger",
+              "channel": "--ds-control-brand-border",
               "reads": [
-                "--ds-color-error-400"
+                "--ds-color-border",
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-control-brand-tint",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-control-surface"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-control-brand-tint-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-control-surface"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-elevation-2",
+              "reads": [
+                "--ds-shadow-ambient-strength",
+                "--ds-shadow-key-strength",
+                "--ds-shadow-tint"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-elevation-3",
+              "reads": [
+                "--ds-shadow-ambient-strength",
+                "--ds-shadow-key-strength",
+                "--ds-shadow-tint"
               ],
               "reachesRoot": false,
               "mixed": true,
@@ -7533,22 +7363,48 @@
             {
               "channel": "--ds-elevation-4",
               "reads": [
-                "--ds-color-primary"
+                "--ds-color-primary",
+                "--ds-shadow-ambient-strength",
+                "--ds-shadow-key-strength",
+                "--ds-shadow-tint"
               ],
               "reachesRoot": true,
               "mixed": false,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-elevation-5",
               "reads": [
-                "--ds-color-primary"
+                "--ds-color-primary",
+                "--ds-shadow-ambient-strength",
+                "--ds-shadow-key-strength",
+                "--ds-shadow-tint"
               ],
               "reachesRoot": true,
               "mixed": false,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-font-family-display",
+              "reads": [
+                "--ds-font-pack-humanist-text"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-icon-tile-border",
+              "reads": [
+                "--ds-surface-icon-border"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-input-gap",
@@ -7717,6 +7573,65 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-premium-card-border",
+              "reads": [
+                "--ds-card-border-color",
+                "--ds-color-primary",
+                "--ds-material-card-border"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-border-hover",
+              "reads": [
+                "--ds-card-border-color",
+                "--ds-color-primary",
+                "--ds-material-card-border-hover",
+                "--ds-material-card-border-strong"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-section-alt-bg",
+              "reads": [
+                "--ds-rich-card-section-alt-bg"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-selected-border",
+              "reads": [
+                "--ds-card-border-color",
+                "--ds-color-primary",
+                "--ds-material-card-border-selected",
+                "--ds-material-card-border-strong"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-selected-ring",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-material-card-focus-ring"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-shadow-2xl",
               "reads": [
                 "--ds-elevation-5"
@@ -7734,7 +7649,7 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-shadow-md",
@@ -7744,7 +7659,17 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-shadow-popover",
+              "reads": [
+                "--ds-shadow-md"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-shadow-sm",
@@ -7753,8 +7678,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-shadow-xl",
@@ -7773,8 +7698,63 @@
               ],
               "reachesRoot": true,
               "mixed": true,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-card-grid-bg",
+              "reads": [
+                "--ds-surface-card-grid-line"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
               "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-card-grid-line",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-signal-card-accent"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-chip-bg",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-surface-card-bg"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-icon-bg",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-color-secondary",
+                "--ds-surface-card-bg"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-icon-border",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-surface-card-border"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-body",
@@ -7796,8 +7776,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-caption",
@@ -7819,8 +7799,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-caption-font-size",
@@ -7876,8 +7856,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-display-font-size",
@@ -7909,8 +7889,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-label-font-size",
@@ -7942,8 +7922,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-numeric-font-size",
@@ -7975,8 +7955,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-page-title-font-size",
@@ -8008,8 +7988,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-section-title-font-size",
@@ -8041,8 +8021,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-supporting-font-size",
@@ -8058,8 +8038,8 @@
         }
       },
       "bithire": {
-        "declaredInCascade": 268,
-        "severedTotal": 105,
+        "declaredInCascade": 263,
+        "severedTotal": 104,
         "rootPinned": {
           "count": 10,
           "byReason": {
@@ -8165,8 +8145,8 @@
         },
         "rootFrozen": {
           "count": 5,
-          "readerEdges": 118,
-          "distinctReaders": 118,
+          "readerEdges": 108,
+          "distinctReaders": 108,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -8175,10 +8155,9 @@
                 "overlay-mode=#1a7fe0"
               ],
               "readers": [
-                "--ds-button-primary-border",
-                "--ds-button-primary-border-color"
+                "--ds-button-primary-border"
               ],
-              "readerCount": 2,
+              "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/presentation/components/button.css",
                 "line": 93,
@@ -8193,10 +8172,13 @@
               ],
               "readers": [
                 "--ds-badge-error-bg",
-                "--ds-badge-error-border",
                 "--ds-badge-error-color",
                 "--ds-button-danger-bg",
+                "--ds-button-danger-border",
                 "--ds-button-danger-hover-bg",
+                "--ds-button-error-bg",
+                "--ds-button-error-bg-hover",
+                "--ds-button-error-border",
                 "--ds-input-count-color-error",
                 "--ds-input-error-bg",
                 "--ds-input-error-message-color",
@@ -8207,7 +8189,7 @@
                 "--ds-tint-error-4",
                 "--ds-tint-error-8"
               ],
-              "readerCount": 14,
+              "readerCount": 17,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 177,
@@ -8221,10 +8203,8 @@
                 "overlay-mode=#1e84e6"
               ],
               "readers": [
-                "--ds-action-rail-card-bg",
                 "--ds-badge-icon-bg",
                 "--ds-badge-info-bg",
-                "--ds-badge-info-border",
                 "--ds-badge-info-color",
                 "--ds-badge-primary-color",
                 "--ds-badge-remove-bg",
@@ -8232,7 +8212,6 @@
                 "--ds-badge-selected-surface",
                 "--ds-badge-surface-hover",
                 "--ds-badge-surface-pressed",
-                "--ds-breadcrumb-bar-bg",
                 "--ds-breadcrumb-bg",
                 "--ds-breadcrumb-color-hover",
                 "--ds-button-link-color",
@@ -8240,7 +8219,6 @@
                 "--ds-card-bg-hover",
                 "--ds-card-header-bg",
                 "--ds-card-side-accent-soft",
-                "--ds-chip-color",
                 "--ds-collection-card-status-border",
                 "--ds-command-home-control-border",
                 "--ds-command-home-control-hover-bg",
@@ -8266,12 +8244,8 @@
                 "--ds-input-autofill-caret",
                 "--ds-input-caret-color",
                 "--ds-input-loading-color",
-                "--ds-insight-panel-bg",
-                "--ds-insight-panel-border",
-                "--ds-insight-panel-shadow",
                 "--ds-list-preview-panel-bg",
                 "--ds-list-preview-panel-border",
-                "--ds-list-preview-rail-border",
                 "--ds-material-canvas-texture",
                 "--ds-material-card-background-active",
                 "--ds-material-card-background-selected",
@@ -8298,15 +8272,11 @@
                 "--ds-premium-card-section-alt-bg",
                 "--ds-premium-card-selected-border",
                 "--ds-premium-card-selected-ring",
-                "--ds-shell-breadcrumb-bg",
                 "--ds-signal-card-badge-color",
                 "--ds-signal-card-icon-bg",
                 "--ds-signal-card-section-alt-bg",
                 "--ds-surface-card-grid-line",
-                "--ds-surface-card-grid-line-strong",
                 "--ds-surface-chip-bg",
-                "--ds-surface-chip-text",
-                "--ds-surface-focus-ring",
                 "--ds-surface-icon-bg",
                 "--ds-surface-icon-border",
                 "--ds-table-filter-focus-shadow",
@@ -8324,7 +8294,7 @@
                 "--ds-workspace-card-icon-color",
                 "--ds-workspace-shell-overlay"
               ],
-              "readerCount": 102,
+              "readerCount": 90,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 156,
@@ -8361,7 +8331,7 @@
           ]
         },
         "severs": {
-          "count": 100,
+          "count": 99,
           "channels": [
             {
               "channel": "--ds-button-ghost-bg",
@@ -8487,15 +8457,15 @@
             {
               "channel": "--ds-color-border-focus",
               "values": [
-                "overlay-mode=#1a7fe0",
-                "default-mode=#3a6fb0"
+                "base=#3a6fb0",
+                "overlay-mode=#1a7fe0"
               ]
             },
             {
               "channel": "--ds-color-link",
               "values": [
-                "overlay-mode=#3b9af0",
-                "default-mode=#3a6fb0"
+                "base=#3a6fb0",
+                "overlay-mode=#3b9af0"
               ]
             },
             {
@@ -8837,12 +8807,6 @@
               ]
             },
             {
-              "channel": "--ds-shadow-popover",
-              "values": [
-                "default-mode=0 12px 30px rgba(20, 40, 59, 0.1), 0 2px 8px rgba(20, 40, 59, 0.06)"
-              ]
-            },
-            {
               "channel": "--ds-shadow-sm",
               "values": [
                 "base=0 1px 2px rgba(20, 40, 59, 0.08), 0 0 0 1px rgba(20, 40, 59, 0.025)",
@@ -8974,11 +8938,11 @@
           ]
         },
         "reDerives": {
-          "count": 153,
-          "reachingRoot": 90,
+          "count": 149,
+          "reachingRoot": 87,
           "reachingLiveRoot": 36,
-          "mixedRoleValues": 61,
-          "blockedUpstream": 17,
+          "mixedRoleValues": 62,
+          "blockedUpstream": 15,
           "channels": [
             {
               "channel": "--ds-badge-font-family",
@@ -9052,16 +9016,6 @@
             },
             {
               "channel": "--ds-button-primary-border",
-              "reads": [
-                "--ds-button-primary-bg"
-              ],
-              "reachesRoot": true,
-              "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
-            },
-            {
-              "channel": "--ds-button-primary-border-color",
               "reads": [
                 "--ds-button-primary-bg"
               ],
@@ -9179,26 +9133,6 @@
               ],
               "reachesRoot": false,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": false
-            },
-            {
-              "channel": "--ds-cell-pill-bg",
-              "reads": [
-                "--ds-control-brand-tint"
-              ],
-              "reachesRoot": false,
-              "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": false
-            },
-            {
-              "channel": "--ds-cell-pill-border",
-              "reads": [
-                "--ds-control-brand-border"
-              ],
-              "reachesRoot": false,
-              "mixed": false,
               "reachesLiveRoot": false,
               "blockedUpstream": false
             },
@@ -9973,6 +9907,7 @@
               "channel": "--ds-premium-card-section-alt-bg",
               "reads": [
                 "--ds-color-primary",
+                "--ds-rich-card-section-alt-bg",
                 "--ds-surface-panel"
               ],
               "reachesRoot": true,
@@ -10034,10 +9969,21 @@
             {
               "channel": "--ds-select-dropdown-shadow",
               "reads": [
+                "--ds-shadow-lg",
                 "--ds-shadow-popover"
               ],
               "reachesRoot": false,
               "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-shadow-popover",
+              "reads": [
+                "--ds-shadow-md"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
               "reachesLiveRoot": false,
               "blockedUpstream": true
             },
@@ -10118,20 +10064,7 @@
               "channel": "--ds-surface-card-grid-line",
               "reads": [
                 "--ds-color-primary",
-                "--ds-signal-card-accent",
-                "--rt-premium-card-accent"
-              ],
-              "reachesRoot": true,
-              "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": false
-            },
-            {
-              "channel": "--ds-surface-card-grid-line-strong",
-              "reads": [
-                "--ds-color-primary",
-                "--ds-signal-card-accent",
-                "--rt-premium-card-accent"
+                "--ds-signal-card-accent"
               ],
               "reachesRoot": true,
               "mixed": false,
@@ -10162,7 +10095,8 @@
               "channel": "--ds-surface-chip-bg",
               "reads": [
                 "--ds-color-primary",
-                "--ds-surface-card"
+                "--ds-surface-card",
+                "--ds-surface-card-bg"
               ],
               "reachesRoot": true,
               "mixed": false,
@@ -10170,20 +10104,12 @@
               "blockedUpstream": false
             },
             {
-              "channel": "--ds-surface-focus-ring",
-              "reads": [
-                "--ds-color-primary"
-              ],
-              "reachesRoot": true,
-              "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
-            },
-            {
               "channel": "--ds-surface-icon-bg",
               "reads": [
                 "--ds-color-primary",
-                "--ds-surface-card"
+                "--ds-color-secondary",
+                "--ds-surface-card",
+                "--ds-surface-card-bg"
               ],
               "reachesRoot": true,
               "mixed": false,
@@ -10194,7 +10120,8 @@
               "channel": "--ds-surface-icon-border",
               "reads": [
                 "--ds-color-border",
-                "--ds-color-primary"
+                "--ds-color-primary",
+                "--ds-surface-card-border"
               ],
               "reachesRoot": true,
               "mixed": false,
@@ -10597,12 +10524,12 @@
         }
       },
       "evnto": {
-        "declaredInCascade": 62,
-        "severedTotal": 23,
+        "declaredInCascade": 78,
+        "severedTotal": 19,
         "rootPinned": {
-          "count": 4,
+          "count": 6,
           "byReason": {
-            "tenant-parametric": 0,
+            "tenant-parametric": 2,
             "floor-literal": 1,
             "floor-absent": 3
           },
@@ -10628,6 +10555,20 @@
               }
             },
             {
+              "channel": "--ds-font-family-base",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+              ]
+            },
+            {
+              "channel": "--ds-font-family-heading",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+              ]
+            },
+            {
               "channel": "--ds-radius-scale",
               "reason": "floor-absent",
               "values": [
@@ -10646,9 +10587,9 @@
           ]
         },
         "rootFrozen": {
-          "count": 6,
-          "readerEdges": 28,
-          "distinctReaders": 28,
+          "count": 4,
+          "readerEdges": 26,
+          "distinctReaders": 26,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -10691,62 +10632,32 @@
                 "overlay-mode=#E8E8E0"
               ],
               "readers": [
+                "--ds-color-link",
+                "--ds-control-brand-border",
+                "--ds-control-brand-tint",
+                "--ds-control-brand-tint-hover",
                 "--ds-focus-ring-color",
                 "--ds-material-card-background-hover",
                 "--ds-material-control-background-hover",
+                "--ds-premium-card-border",
+                "--ds-premium-card-border-hover",
+                "--ds-premium-card-selected-border",
+                "--ds-premium-card-selected-ring",
+                "--ds-surface-card-grid-line",
+                "--ds-surface-chip-bg",
+                "--ds-surface-icon-bg",
+                "--ds-surface-icon-border",
                 "--ds-tint-12",
                 "--ds-tint-16",
                 "--ds-tint-24",
                 "--ds-tint-4",
                 "--ds-tint-8"
               ],
-              "readerCount": 8,
+              "readerCount": 20,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 156,
                 "value": "var(--ds-color-primary-500)"
-              }
-            },
-            {
-              "channel": "--ds-font-family-base",
-              "values": [
-                "base='Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, \"Noto Sans Arabic\", sans-serif"
-              ],
-              "readers": [
-                "--ds-text-body",
-                "--ds-text-detail",
-                "--ds-text-display",
-                "--ds-text-emphasis",
-                "--ds-text-eyebrow",
-                "--ds-text-title",
-                "--ds-type-body-font-family",
-                "--ds-type-caption-font-family",
-                "--ds-type-label-font-family",
-                "--ds-type-supporting-font-family"
-              ],
-              "readerCount": 10,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 506,
-                "value": "var(--ds-font-sans)"
-              }
-            },
-            {
-              "channel": "--ds-font-family-heading",
-              "values": [
-                "base='Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, \"Noto Sans Arabic\", sans-serif"
-              ],
-              "readers": [
-                "--ds-type-display-font-family",
-                "--ds-type-numeric-font-family",
-                "--ds-type-page-title-font-family",
-                "--ds-type-section-title-font-family"
-              ],
-              "readerCount": 4,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 507,
-                "value": "var(--ds-font-sans)"
               }
             },
             {
@@ -10766,7 +10677,7 @@
           ]
         },
         "severs": {
-          "count": 17,
+          "count": 15,
           "channels": [
             {
               "channel": "--ds-button-ghost-bg",
@@ -10791,7 +10702,8 @@
             {
               "channel": "--ds-button-primary-bg-hover",
               "values": [
-                "base=#262626"
+                "base=#262626",
+                "overlay-mode=#F0F0E8"
               ]
             },
             {
@@ -10828,20 +10740,8 @@
             {
               "channel": "--ds-color-border-focus",
               "values": [
-                "overlay-mode=#A89880",
-                "default-mode=#171717"
-              ]
-            },
-            {
-              "channel": "--ds-color-link",
-              "values": [
-                "default-mode=#171717"
-              ]
-            },
-            {
-              "channel": "--ds-font-family-display",
-              "values": [
-                "base='Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, \"Noto Sans Arabic\", sans-serif"
+                "base=#171717",
+                "overlay-mode=#A89880"
               ]
             },
             {
@@ -10877,11 +10777,11 @@
           ]
         },
         "reDerives": {
-          "count": 35,
-          "reachingRoot": 24,
-          "reachingLiveRoot": 14,
-          "mixedRoleValues": 0,
-          "blockedUpstream": 8,
+          "count": 53,
+          "reachingRoot": 36,
+          "reachingLiveRoot": 22,
+          "mixedRoleValues": 1,
+          "blockedUpstream": 3,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -10897,6 +10797,69 @@
               "channel": "--ds-button-secondary-shadow",
               "reads": [
                 "--ds-shadow-button-rest"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-color-link",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": true,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-control-brand-border",
+              "reads": [
+                "--ds-color-border",
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-control-brand-tint",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-control-surface"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-control-brand-tint-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-control-surface"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-font-family-display",
+              "reads": [
+                "--ds-font-pack-geometric-display"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-icon-tile-border",
+              "reads": [
+                "--ds-surface-icon-border"
               ],
               "reachesRoot": false,
               "mixed": false,
@@ -10992,6 +10955,140 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-premium-card-border",
+              "reads": [
+                "--ds-card-border-color",
+                "--ds-color-primary",
+                "--ds-material-card-border"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-border-hover",
+              "reads": [
+                "--ds-card-border-color",
+                "--ds-color-primary",
+                "--ds-material-card-border-hover",
+                "--ds-material-card-border-strong"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-section-alt-bg",
+              "reads": [
+                "--ds-rich-card-section-alt-bg"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-selected-border",
+              "reads": [
+                "--ds-card-border-color",
+                "--ds-color-primary",
+                "--ds-material-card-border-selected",
+                "--ds-material-card-border-strong"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-premium-card-selected-ring",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-material-card-focus-ring"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-select-dropdown-shadow",
+              "reads": [
+                "--ds-shadow-lg"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-shadow-popover",
+              "reads": [
+                "--ds-shadow-md"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-surface-card-grid-bg",
+              "reads": [
+                "--ds-surface-card-grid-line"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-card-grid-line",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-signal-card-accent"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-chip-bg",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-surface-card-bg"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-icon-bg",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-color-secondary",
+                "--ds-surface-card-bg"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-surface-icon-border",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-surface-card-border"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-type-body",
               "reads": [
                 "--ds-type-body-font-family",
@@ -11011,8 +11108,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-caption",
@@ -11034,8 +11131,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-caption-font-size",
@@ -11091,8 +11188,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-display-font-size",
@@ -11124,8 +11221,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-label-font-size",
@@ -11157,8 +11254,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-numeric-font-size",
@@ -11190,8 +11287,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-page-title-font-size",
@@ -11223,8 +11320,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-section-title-font-size",
@@ -11256,8 +11353,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-supporting-font-size",
@@ -11278,48 +11375,20 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 830,
-        "allInDistinctRoles": 829,
-        "sameRoleTwice": 1,
-        "sameRoleTwiceChannels": [
-          {
-            "channel": "--ds-divider-text-color",
-            "declarations": [
-              "default-mode=#ECECEC",
-              "default-mode=#ECECEC",
-              "overlay-mode=#1A1A1A",
-              "overlay-mode=#1A1A1A"
-            ],
-            "valuesDifferWithinRole": false
-          }
-        ]
+        "channelsDeclaredMoreThanOnce": 734,
+        "allInDistinctRoles": 734,
+        "sameRoleTwice": 0,
+        "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 448,
-        "allInDistinctRoles": 446,
-        "sameRoleTwice": 2,
-        "sameRoleTwiceChannels": [
-          {
-            "channel": "--ds-surface-card-border-strong",
-            "declarations": [
-              "base=var(--ds-material-card-border-strong)",
-              "base=var(--ds-color-border-secondary)"
-            ],
-            "valuesDifferWithinRole": true
-          },
-          {
-            "channel": "--ds-list-preview-row-gap",
-            "declarations": [
-              "base=10px",
-              "base=10px"
-            ],
-            "valuesDifferWithinRole": false
-          }
-        ]
+        "channelsDeclaredMoreThanOnce": 479,
+        "allInDistinctRoles": 479,
+        "sameRoleTwice": 0,
+        "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 53,
-        "allInDistinctRoles": 53,
+        "channelsDeclaredMoreThanOnce": 96,
+        "allInDistinctRoles": 96,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }

@@ -42,11 +42,11 @@
       "rootChannel": "--ds-experience-profile",
       "declaredAt": "manifest/cascade/roots/experience.profile.json:6",
       "reasonCode": "absent-from-fanout-facts",
-      "notMeasurableReason": "La cabeza --ds-experience-profile (manifest/cascade/roots/experience.profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:353. Sin nodo en los hechos no hay cascada que medir.",
+      "notMeasurableReason": "La cabeza --ds-experience-profile (manifest/cascade/roots/experience.profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:462. Sin nodo en los hechos no hay cascada que medir.",
       "evidence": [
         "manifest/cascade/roots/experience.profile.json:6",
         "manifest/fanout-facts/index.mjs:95",
-        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:353"
+        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:462"
       ]
     },
     {
@@ -54,12 +54,12 @@
       "rootChannel": "--ds-recipe-profile",
       "declaredAt": "manifest/cascade/roots/recipe-profile.json:6",
       "reasonCode": "absent-from-fanout-facts",
-      "notMeasurableReason": "La cabeza --ds-recipe-profile (manifest/cascade/roots/recipe-profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:690, src/foundation/tokens/css/facade/artifacts/rottay/index.css:400. Sin nodo en los hechos no hay cascada que medir.",
+      "notMeasurableReason": "La cabeza --ds-recipe-profile (manifest/cascade/roots/recipe-profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:816, src/foundation/tokens/css/facade/artifacts/rottay/index.css:766. Sin nodo en los hechos no hay cascada que medir.",
       "evidence": [
         "manifest/cascade/roots/recipe-profile.json:6",
         "manifest/fanout-facts/index.mjs:95",
-        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:690",
-        "src/foundation/tokens/css/facade/artifacts/rottay/index.css:400"
+        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:816",
+        "src/foundation/tokens/css/facade/artifacts/rottay/index.css:766"
       ]
     },
     {
@@ -26290,7 +26290,9 @@
               "line": 154,
               "prop": "background",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26300,7 +26302,9 @@
               "line": 184,
               "prop": "background",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26310,7 +26314,9 @@
               "line": 235,
               "prop": "background",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26320,7 +26326,9 @@
               "line": 242,
               "prop": "border-color",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26330,7 +26338,9 @@
               "line": 255,
               "prop": "border-color",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26340,7 +26350,9 @@
               "line": 275,
               "prop": "color",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26350,7 +26362,9 @@
               "line": 278,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26360,7 +26374,9 @@
               "line": 358,
               "prop": "background",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26370,7 +26386,9 @@
               "line": 385,
               "prop": "outline",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26380,7 +26398,9 @@
               "line": 450,
               "prop": "color",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -26390,7 +26410,9 @@
               "line": 473,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -32682,7 +32704,9 @@
               "line": 164,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -32692,7 +32716,9 @@
               "line": 454,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -33400,7 +33426,9 @@
               "line": 245,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -33410,7 +33438,9 @@
               "line": 258,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -37043,7 +37073,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -37052,7 +37084,9 @@
               "line": 149,
               "prop": "background",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -48588,7 +48622,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 9,
+          "channels": 10,
           "properties": [
             "background",
             "border",
@@ -48612,6 +48646,7 @@
               "channel": "--ds-color-primary",
               "props": [
                 "background",
+                "border-color",
                 "box-shadow",
                 "color",
                 "outline",
@@ -48621,6 +48656,7 @@
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx"
               ]
@@ -48632,7 +48668,8 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             },
             {
@@ -48641,7 +48678,17 @@
                 "box-shadow"
               ],
               "files": [
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-header-bg",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             },
             {
@@ -48863,7 +48910,7 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 9,
+          "channels": 10,
           "properties": [
             "background",
             "border",
@@ -48888,6 +48935,7 @@
               "props": [
                 "background",
                 "border",
+                "border-color",
                 "box-shadow",
                 "color",
                 "outline",
@@ -48896,6 +48944,7 @@
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -48907,6 +48956,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
             },
@@ -48916,7 +48966,17 @@
                 "box-shadow"
               ],
               "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-header-bg",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             },
             {
@@ -72561,7 +72621,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -72570,7 +72632,9 @@
               "line": 601,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72580,7 +72644,9 @@
               "line": 641,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -72594,7 +72660,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -72603,7 +72671,9 @@
               "line": 612,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -72617,7 +72687,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -72626,7 +72698,9 @@
               "line": 145,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72636,7 +72710,9 @@
               "line": 619,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -72650,7 +72726,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -72659,7 +72737,9 @@
               "line": 584,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72669,7 +72749,9 @@
               "line": 595,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72679,7 +72761,9 @@
               "line": 624,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -72693,7 +72777,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -72702,7 +72788,9 @@
               "line": 324,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72712,7 +72800,9 @@
               "line": 556,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72722,7 +72812,9 @@
               "line": 568,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72732,7 +72824,9 @@
               "line": 578,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72742,7 +72836,9 @@
               "line": 609,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -72752,7 +72848,9 @@
               "line": 630,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -75776,7 +75874,9 @@
               "line": 507,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -75786,7 +75886,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -81203,7 +81305,9 @@
               "line": 348,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -81213,7 +81317,9 @@
               "line": 535,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -81223,7 +81329,9 @@
               "line": 536,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -81233,7 +81341,9 @@
               "line": 636,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -81243,7 +81353,9 @@
               "line": 648,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -81253,7 +81365,9 @@
               "line": 649,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -85617,7 +85731,9 @@
               "line": 349,
               "prop": "margin-block-end",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -85627,7 +85743,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -97008,7 +97126,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
             "gap",
             "margin",
@@ -97016,11 +97134,13 @@
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
             {
@@ -97070,9 +97190,57 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -97080,6 +97248,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -97091,24 +97260,30 @@
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -97358,24 +97533,75 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 10,
+          "channels": 15,
           "properties": [
             "gap",
+            "margin",
             "margin-block-end",
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -97383,6 +97609,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -97390,13 +97617,17 @@
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -97404,12 +97635,15 @@
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -120657,7 +120891,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -120666,7 +120902,9 @@
               "line": 601,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120676,7 +120914,9 @@
               "line": 641,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -120690,7 +120930,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -120699,7 +120941,9 @@
               "line": 612,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -120713,7 +120957,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -120722,7 +120968,9 @@
               "line": 145,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120732,7 +120980,9 @@
               "line": 619,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -120746,7 +120996,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -120755,7 +121007,9 @@
               "line": 584,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120765,7 +121019,9 @@
               "line": 595,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120775,7 +121031,9 @@
               "line": 624,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -120789,7 +121047,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -120798,7 +121058,9 @@
               "line": 324,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120808,7 +121070,9 @@
               "line": 556,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120818,7 +121082,9 @@
               "line": 568,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120828,7 +121094,9 @@
               "line": 578,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120838,7 +121106,9 @@
               "line": 609,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -120848,7 +121118,9 @@
               "line": 630,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -123872,7 +124144,9 @@
               "line": 507,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -123882,7 +124156,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -129299,7 +129575,9 @@
               "line": 348,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -129309,7 +129587,9 @@
               "line": 535,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -129319,7 +129599,9 @@
               "line": 536,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -129329,7 +129611,9 @@
               "line": 636,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -129339,7 +129623,9 @@
               "line": 648,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -129349,7 +129635,9 @@
               "line": 649,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -133713,7 +134001,9 @@
               "line": 349,
               "prop": "margin-block-end",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -133723,7 +134013,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -145113,7 +145405,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
             "gap",
             "margin",
@@ -145121,11 +145413,13 @@
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
             {
@@ -145175,9 +145469,57 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -145185,6 +145527,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -145196,24 +145539,30 @@
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -145463,24 +145812,75 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 10,
+          "channels": 15,
           "properties": [
             "gap",
+            "margin",
             "margin-block-end",
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -145488,6 +145888,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -145495,13 +145896,17 @@
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -145509,12 +145914,15 @@
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -168879,7 +169287,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -168888,7 +169298,9 @@
               "line": 601,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -168898,7 +169310,9 @@
               "line": 641,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -168912,7 +169326,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -168921,7 +169337,9 @@
               "line": 612,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -168935,7 +169353,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -168944,7 +169364,9 @@
               "line": 145,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -168954,7 +169376,9 @@
               "line": 619,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -168968,7 +169392,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -168977,7 +169403,9 @@
               "line": 584,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -168987,7 +169415,9 @@
               "line": 595,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -168997,7 +169427,9 @@
               "line": 624,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -169011,7 +169443,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -169020,7 +169454,9 @@
               "line": 324,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -169030,7 +169466,9 @@
               "line": 556,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -169040,7 +169478,9 @@
               "line": 568,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -169050,7 +169490,9 @@
               "line": 578,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -169060,7 +169502,9 @@
               "line": 609,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -169070,7 +169514,9 @@
               "line": 630,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -172094,7 +172540,9 @@
               "line": 507,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -172104,7 +172552,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -177521,7 +177971,9 @@
               "line": 348,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -177531,7 +177983,9 @@
               "line": 535,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -177541,7 +177995,9 @@
               "line": 536,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -177551,7 +178007,9 @@
               "line": 636,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -177561,7 +178019,9 @@
               "line": 648,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -177571,7 +178031,9 @@
               "line": 649,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -181935,7 +182397,9 @@
               "line": 349,
               "prop": "margin-block-end",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -181945,7 +182409,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -193335,7 +193801,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
             "gap",
             "margin",
@@ -193343,11 +193809,13 @@
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
             {
@@ -193397,9 +193865,57 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -193407,6 +193923,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -193418,24 +193935,30 @@
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -193685,24 +194208,75 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 10,
+          "channels": 15,
           "properties": [
             "gap",
+            "margin",
             "margin-block-end",
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -193710,6 +194284,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -193717,13 +194292,17 @@
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -193731,12 +194310,15 @@
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -217110,7 +217692,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -217119,7 +217703,9 @@
               "line": 601,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217129,7 +217715,9 @@
               "line": 641,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -217143,7 +217731,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -217152,7 +217742,9 @@
               "line": 612,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -217166,7 +217758,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -217175,7 +217769,9 @@
               "line": 145,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217185,7 +217781,9 @@
               "line": 619,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -217199,7 +217797,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -217208,7 +217808,9 @@
               "line": 584,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217218,7 +217820,9 @@
               "line": 595,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217228,7 +217832,9 @@
               "line": 624,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -217242,7 +217848,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -217251,7 +217859,9 @@
               "line": 324,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217261,7 +217871,9 @@
               "line": 556,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217271,7 +217883,9 @@
               "line": 568,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217281,7 +217895,9 @@
               "line": 578,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217291,7 +217907,9 @@
               "line": 609,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -217301,7 +217919,9 @@
               "line": 630,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -220325,7 +220945,9 @@
               "line": 507,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -220335,7 +220957,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -225752,7 +226376,9 @@
               "line": 348,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -225762,7 +226388,9 @@
               "line": 535,
               "prop": "margin",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -225772,7 +226400,9 @@
               "line": 536,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -225782,7 +226412,9 @@
               "line": 636,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -225792,7 +226424,9 @@
               "line": 648,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -225802,7 +226436,9 @@
               "line": 649,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -230166,7 +230802,9 @@
               "line": 349,
               "prop": "margin-block-end",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -230176,7 +230814,9 @@
               "line": 534,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -241566,7 +242206,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
             "gap",
             "margin",
@@ -241574,11 +242214,13 @@
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
             {
@@ -241628,9 +242270,57 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -241638,6 +242328,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -241649,24 +242340,30 @@
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -241916,24 +242613,75 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 10,
+          "channels": 15,
           "properties": [
             "gap",
+            "margin",
             "margin-block-end",
             "margin-block-start",
             "margin-inline",
             "margin-inline-start",
+            "margin-top",
             "padding",
             "padding-block",
             "padding-block-end",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "padding-top"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-spacing-1",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-end",
                 "margin-block-start",
                 "margin-inline",
@@ -241941,6 +242689,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -241948,13 +242697,17 @@
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block-start",
                 "margin-inline-start",
+                "margin-top",
                 "padding-block",
-                "padding-block-end"
+                "padding-block-end",
+                "padding-top"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -241962,12 +242715,15 @@
             {
               "channel": "--ds-spacing-3",
               "props": [
+                "gap",
+                "margin-block-end",
                 "padding",
                 "padding-block",
                 "padding-inline"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -258594,7 +259350,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -258603,7 +259361,9 @@
               "line": 149,
               "prop": "background",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -259229,11 +259989,21 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 1,
+          "channels": 2,
           "properties": [
+            "background",
             "box-shadow"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-header-bg",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-workspace-card-shadow",
               "props": [
@@ -259267,11 +260037,21 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 1,
+          "channels": 2,
           "properties": [
+            "background",
             "box-shadow"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-header-bg",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-workspace-card-shadow",
               "props": [
@@ -262212,7 +262992,9 @@
               "line": 164,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -262222,7 +263004,9 @@
               "line": 454,
               "prop": "box-shadow",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -264653,7 +265437,8 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -264712,6 +265497,7 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
             }
@@ -268188,7 +268974,9 @@
               "line": 301,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -268198,7 +268986,9 @@
               "line": 495,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -268208,7 +268998,9 @@
               "line": 514,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -268218,7 +269010,9 @@
               "line": 538,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -269243,7 +270037,9 @@
           "paintsInModern": true,
           "families": [
             "pattern/data/list-toolbar",
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "primitive/feedback/spinner",
             "structure/headers/collection-header",
             "structure/headers/edit-header",
@@ -269311,7 +270107,9 @@
               "line": 538,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -269586,7 +270384,9 @@
           "paintsInModern": true,
           "families": [
             "pattern/data/list-toolbar",
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "structure/headers/collection-header",
             "structure/headers/edit-header",
             "structure/record/edit-fields",
@@ -269663,7 +270463,9 @@
               "line": 514,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -269991,7 +270793,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 1,
+          "channels": 3,
           "properties": [
             "font-family"
           ],
@@ -270002,7 +270804,26 @@
                 "font-family"
               ],
               "files": [
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-caption-font-family",
+              "props": [
+                "font-family"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-supporting-font-family",
+              "props": [
+                "font-family"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -270047,7 +270868,7 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 1,
+          "channels": 3,
           "properties": [
             "font-family"
           ],
@@ -270058,7 +270879,26 @@
                 "font-family"
               ],
               "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-caption-font-family",
+              "props": [
+                "font-family"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-supporting-font-family",
+              "props": [
+                "font-family"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -273135,7 +273975,9 @@
               "line": 301,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -273145,7 +273987,9 @@
               "line": 495,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -273358,7 +274202,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "structure/headers/collection-header",
             "structure/headers/edit-header",
             "structure/record/edit-fields",
@@ -273444,7 +274290,9 @@
               "line": 495,
               "prop": "font-family",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -273606,7 +274454,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 1,
+          "channels": 2,
           "properties": [
             "font-family"
           ],
@@ -273617,7 +274465,17 @@
                 "font-family"
               ],
               "files": [
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-page-title-font-family",
+              "props": [
+                "font-family"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -273653,7 +274511,7 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 1,
+          "channels": 2,
           "properties": [
             "font-family"
           ],
@@ -273664,7 +274522,17 @@
                 "font-family"
               ],
               "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-page-title-font-family",
+              "props": [
+                "font-family"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -275936,7 +276804,9 @@
               "line": 655,
               "prop": "animation",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -279113,7 +279983,8 @@
                 "animation"
               ],
               "files": [
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -279151,6 +280022,7 @@
                 "animation"
               ],
               "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
             }
@@ -284981,7 +285853,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -284990,7 +285864,9 @@
               "line": 653,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -287322,7 +288198,9 @@
               "line": 273,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -287332,7 +288210,9 @@
               "line": 560,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -290524,7 +291404,9 @@
               "line": 441,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -293318,7 +294200,9 @@
               "line": 379,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -293328,7 +294212,9 @@
               "line": 653,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -294330,8 +295216,10 @@
             "pattern/data/widget-board",
             "pattern/feedback/empty-state",
             "pattern/navigation/shortcuts-overlay",
+            "pattern/shell/cockpit-header",
             "pattern/shell/feature-workspace-frame",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "pattern/visualization/pattern-kanban-board",
             "primitive/display/descriptions",
             "primitive/layout/box",
@@ -294850,7 +295738,9 @@
               "line": 147,
               "prop": "border-radius",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -297987,7 +298877,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 5,
+          "channels": 7,
           "properties": [
             "border-radius"
           ],
@@ -298002,6 +298892,15 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-skeleton-radius",
+              "props": [
+                "border-radius"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-radius-lg",
               "props": [
                 "border-radius"
@@ -298010,6 +298909,7 @@
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -298020,7 +298920,8 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
-                "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             },
             {
@@ -298030,7 +298931,17 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-radius-xl",
+              "props": [
+                "border-radius"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             },
             {
@@ -298148,11 +299059,20 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 5,
+          "channels": 7,
           "properties": [
             "border-radius"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-skeleton-radius",
+              "props": [
+                "border-radius"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-radius-lg",
               "props": [
@@ -298161,6 +299081,7 @@
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -298173,6 +299094,7 @@
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
             },
@@ -298183,7 +299105,17 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
+              ]
+            },
+            {
+              "channel": "--ds-radius-xl",
+              "props": [
+                "border-radius"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             },
             {
@@ -309216,7 +310148,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -309225,7 +310159,9 @@
               "line": 601,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309235,7 +310171,9 @@
               "line": 641,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -309249,7 +310187,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -309258,7 +310198,9 @@
               "line": 612,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -309272,7 +310214,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -309281,7 +310225,9 @@
               "line": 145,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309291,7 +310237,9 @@
               "line": 619,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -309305,7 +310253,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -309314,7 +310264,9 @@
               "line": 584,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309324,7 +310276,9 @@
               "line": 595,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309334,7 +310288,9 @@
               "line": 624,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -309348,7 +310304,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -309357,7 +310315,9 @@
               "line": 324,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309367,7 +310327,9 @@
               "line": 556,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309377,7 +310339,9 @@
               "line": 568,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309387,7 +310351,9 @@
               "line": 578,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309397,7 +310363,9 @@
               "line": 609,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -309407,7 +310375,9 @@
               "line": 630,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -309425,6 +310395,7 @@
             "pattern/data/widget-board",
             "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "primitive/inputs/form-field",
             "primitive/layout/box",
             "primitive/layout/flex",
@@ -309643,7 +310614,9 @@
               "line": 349,
               "prop": "margin-block-end",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -310012,11 +310985,13 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 6,
+          "channels": 11,
           "properties": [
             "gap",
             "margin-block-end",
-            "padding"
+            "margin-top",
+            "padding",
+            "padding-top"
           ],
           "rows": [
             {
@@ -310066,12 +311041,60 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-rhythm-effective-scale",
               "props": [
                 "margin-block-end"
               ],
               "files": [
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -310149,13 +311172,72 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 4,
+          "channels": 10,
           "properties": [
             "gap",
+            "margin-block-end",
             "margin-block-start",
-            "padding"
+            "margin-top",
+            "padding",
+            "padding-top"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-rhythm-effective-scale",
+              "props": [
+                "margin-block-end"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-workbench-header-action-gap",
               "props": [
@@ -313168,7 +314250,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -313177,7 +314261,9 @@
               "line": 601,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313187,7 +314273,9 @@
               "line": 641,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -313201,7 +314289,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -313210,7 +314300,9 @@
               "line": 612,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -313224,7 +314316,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -313233,7 +314327,9 @@
               "line": 145,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313243,7 +314339,9 @@
               "line": 619,
               "prop": "padding",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -313257,7 +314355,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -313266,7 +314366,9 @@
               "line": 584,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313276,7 +314378,9 @@
               "line": 595,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313286,7 +314390,9 @@
               "line": 624,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -313300,7 +314406,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "pattern/shell/pattern-page-shell"
+            "pattern/shell/cockpit-header",
+            "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header"
           ],
           "sites": [
             {
@@ -313309,7 +314417,9 @@
               "line": 324,
               "prop": "padding-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313319,7 +314429,9 @@
               "line": 556,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313329,7 +314441,9 @@
               "line": 568,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313339,7 +314453,9 @@
               "line": 578,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313349,7 +314465,9 @@
               "line": 609,
               "prop": "margin-top",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -313359,7 +314477,9 @@
               "line": 630,
               "prop": "gap",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -313377,6 +314497,7 @@
             "pattern/data/widget-board",
             "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "primitive/inputs/form-field",
             "primitive/layout/box",
             "primitive/layout/flex",
@@ -313595,7 +314716,9 @@
               "line": 349,
               "prop": "margin-block-end",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -313974,11 +315097,13 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 6,
+          "channels": 11,
           "properties": [
             "gap",
             "margin-block-end",
-            "padding"
+            "margin-top",
+            "padding",
+            "padding-top"
           ],
           "rows": [
             {
@@ -314028,12 +315153,60 @@
               ]
             },
             {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-rhythm-effective-scale",
               "props": [
                 "margin-block-end"
               ],
               "files": [
-                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+                "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -314111,13 +315284,72 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 4,
+          "channels": 10,
           "properties": [
             "gap",
+            "margin-block-end",
             "margin-block-start",
-            "padding"
+            "margin-top",
+            "padding",
+            "padding-top"
           ],
           "rows": [
+            {
+              "channel": "--ds-page-shell-action-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-content-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-header-padding",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-page-shell-section-gap",
+              "props": [
+                "gap",
+                "margin-top",
+                "padding-top"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-rhythm-effective-scale",
+              "props": [
+                "margin-block-end"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
             {
               "channel": "--ds-workbench-header-action-gap",
               "props": [
@@ -320439,7 +321671,9 @@
             "pattern/data/record-facts",
             "pattern/data/widget-board",
             "pattern/navigation/pattern-locale-switcher",
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "primitive/navigation/stepper"
           ],
           "sites": [
@@ -320499,7 +321733,9 @@
               "line": 509,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -320509,7 +321745,9 @@
               "line": 519,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -322099,7 +323337,9 @@
               "line": 362,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -326157,7 +327397,9 @@
               "line": 410,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -326167,7 +327409,9 @@
               "line": 539,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -329614,7 +330858,9 @@
           "paintsInModern": true,
           "families": [
             "pattern/data/list-toolbar",
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "pattern/workflow/approval-inbox",
             "pattern/workflow/moderation-gallery",
             "pattern/workflow/operational-ledger",
@@ -329815,7 +331061,9 @@
               "line": 539,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             },
@@ -330131,7 +331379,9 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "structure/headers/collection-header",
             "structure/headers/edit-header",
             "structure/record/edit-fields",
@@ -330274,7 +331524,9 @@
               "line": 496,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -330550,7 +331802,9 @@
           "paintsInModern": true,
           "families": [
             "pattern/data/list-toolbar",
+            "pattern/shell/cockpit-header",
             "pattern/shell/pattern-page-shell",
+            "pattern/shell/workbench-header",
             "structure/headers/collection-header",
             "structure/headers/edit-header",
             "structure/record/edit-fields",
@@ -330617,7 +331871,9 @@
               "line": 519,
               "prop": "font-size",
               "families": [
-                "pattern/shell/pattern-page-shell"
+                "pattern/shell/cockpit-header",
+                "pattern/shell/pattern-page-shell",
+                "pattern/shell/workbench-header"
               ],
               "resolvedBy": "class+binding"
             }
@@ -332640,7 +333896,7 @@
         {
           "family": "pattern/shell/cockpit-header",
           "manifestFamily": true,
-          "channels": 5,
+          "channels": 9,
           "properties": [
             "font-size"
           ],
@@ -332673,6 +333929,15 @@
               ]
             },
             {
+              "channel": "--ds-font-size-md",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-font-size-sm",
               "props": [
                 "font-size"
@@ -332680,6 +333945,7 @@
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
               ]
             },
@@ -332691,7 +333957,35 @@
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-caption-font-size",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-page-title-font-size",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-supporting-font-size",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]
@@ -332770,7 +334064,7 @@
         {
           "family": "pattern/shell/workbench-header",
           "manifestFamily": true,
-          "channels": 4,
+          "channels": 8,
           "properties": [
             "font-size"
           ],
@@ -332785,12 +334079,22 @@
               ]
             },
             {
+              "channel": "--ds-font-size-md",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-font-size-sm",
               "props": [
                 "font-size"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
               ]
@@ -332811,8 +334115,36 @@
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-caption-font-size",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-page-title-font-size",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-supporting-font-size",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
               ]
             }
           ]

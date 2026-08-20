@@ -268,20 +268,20 @@ test('el sha256 registrado es el del artefacto en disco', () => {
 
 test('control: las nueve cifras de superficie del artefacto', () => {
   const s = doc.surface;
-  assert.deepEqual(s.declares, { rottay: 1237, bithire: 1282, evnto: 430 });
-  assert.equal(s.union, 1908);
-  assert.equal(s.intersection, 369);
-  assert.equal(s.intersectionPct, 19.3);
-  assert.equal(s.venn['only-rottay'].length, 569);
-  assert.equal(s.venn['only-bithire'].length, 648);
-  assert.equal(s.venn['only-evnto'].length, 19);
-  assert.equal(s.venn['rottay+bithire-not-evnto'].length, 261);
-  assert.equal(s.venn['rottay+evnto-not-bithire'].length, 38);
-  assert.equal(s.venn['bithire+evnto-not-rottay'].length, 4);
+  assert.deepEqual(s.declares, { rottay: 1211, bithire: 1234, evnto: 469 });
+  assert.equal(s.union, 1761);
+  assert.equal(s.intersection, 431);
+  assert.equal(s.intersectionPct, 24.5);
+  assert.equal(s.venn['only-rottay'].length, 491);
+  assert.equal(s.venn['only-bithire'].length, 548);
+  assert.equal(s.venn['only-evnto'].length, 0);
+  assert.equal(s.venn['rottay+bithire-not-evnto'].length, 253);
+  assert.equal(s.venn['rottay+evnto-not-bithire'].length, 36);
+  assert.equal(s.venn['bithire+evnto-not-rottay'].length, 2);
 });
 
 test('control: la trampa de ocurrencias queda a la vista en los tres', () => {
-  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 2073, distinctChannels: 1237 });
+  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1945, distinctChannels: 1211 });
   for (const t of TENANTS) {
     assert.ok(
       doc.occurrenceTrap[t].occurrences > doc.occurrenceTrap[t].distinctChannels,
@@ -323,13 +323,13 @@ test('control: presencia de declaracion por raiz — NO es severidad', () => {
   assert.equal(by['--ds-state-press-scale'].declaredByAny, 0);
   // Las raices que solo existen por el manifiesto: sin ellas la presencia no
   // veia ni un canal de color, tipografia, elevacion o sidebar.
-  assert.equal(by['--ds-color-primary'].declaredByAny, 199);
-  assert.equal(by['--ds-color-error'].declaredByAny, 14);
+  assert.equal(by['--ds-color-primary'].declaredByAny, 193);
+  assert.equal(by['--ds-color-error'].declaredByAny, 13);
   assert.equal(by['--ds-elevation-1'].declaredByAny, 19);
   assert.equal(by['--ds-font-family-base'].declaredByAny, 15);
   assert.equal(by['--ds-sidebar-bg'].declaredByAny, 1);
 
-  assert.equal(doc.cascadePresence.distinctChannelsDeclared, 317, 'canales distintos declarados, sobre las 37 raices');
+  assert.equal(doc.cascadePresence.distinctChannelsDeclared, 310, 'canales distintos declarados, sobre las 37 raices');
   assert.match(doc.cascadePresence.notSeverity, /NO severidad/);
 });
 
@@ -399,28 +399,28 @@ test('control: la severidad real de cascada, por tenant', () => {
   const P = doc.cascadeSeverance.perTenant;
   assert.equal(doc.cascadeSeverance.roots, 37, 'alcance: raices de cascada');
   assert.equal(doc.cascadeSeverance.universe, 1013, 'canales distintos bajo esas 37 raices');
-  assert.deepEqual([P.rottay.declaredInCascade, P.bithire.declaredInCascade, P.evnto.declaredInCascade], [141, 268, 62]);
+  assert.deepEqual([P.rottay.declaredInCascade, P.bithire.declaredInCascade, P.evnto.declaredInCascade], [154, 263, 78]);
   // Las raices declaradas por el tema, ya partidas en las dos clases reales.
   // La suma pin+congelado reproduce el viejo `dialSelfSet` — 11 / 15 / 10 —
   // asi que el cambio es una PARTICION, no un ensanche de alcance.
-  assert.deepEqual([P.rottay.rootPinned.count, P.bithire.rootPinned.count, P.evnto.rootPinned.count], [5, 10, 4]);
-  assert.deepEqual([P.rottay.rootFrozen.count, P.bithire.rootFrozen.count, P.evnto.rootFrozen.count], [6, 5, 6]);
+  assert.deepEqual([P.rottay.rootPinned.count, P.bithire.rootPinned.count, P.evnto.rootPinned.count], [7, 10, 6]);
+  assert.deepEqual([P.rottay.rootFrozen.count, P.bithire.rootFrozen.count, P.evnto.rootFrozen.count], [4, 5, 4]);
   assert.deepEqual(
     TENANTS.map((t) => P[t].rootPinned.count + P[t].rootFrozen.count),
     [11, 15, 10],
     'particion, no ensanche: la suma de las dos clases es el viejo dialSelfSet',
   );
-  assert.deepEqual([P.rottay.severs.count, P.bithire.severs.count, P.evnto.severs.count], [60, 100, 17]);
-  assert.deepEqual([P.rottay.reDerives.count, P.bithire.reDerives.count, P.evnto.reDerives.count], [70, 153, 35]);
-  assert.deepEqual([P.rottay.reDerives.reachingRoot, P.bithire.reDerives.reachingRoot, P.evnto.reDerives.reachingRoot], [28, 90, 24]);
+  assert.deepEqual([P.rottay.severs.count, P.bithire.severs.count, P.evnto.severs.count], [56, 99, 15]);
+  assert.deepEqual([P.rottay.reDerives.count, P.bithire.reDerives.count, P.evnto.reDerives.count], [87, 149, 53]);
+  assert.deepEqual([P.rottay.reDerives.reachingRoot, P.bithire.reDerives.reachingRoot, P.evnto.reDerives.reachingRoot], [39, 87, 36]);
   // "evnto no corta ni un canal de cascada" era cierto del sub-universo de
   // diales numericos y es FALSO del universo real: con las raices de color,
   // tipografia y elevacion dentro del alcance, evnto corta 17. La afirmacion
   // vieja no se borra — se conserva, correctamente acotada, en el test de
   // alcance aditivo.
-  assert.equal(P.evnto.severs.count, 17, 'evnto SI corta, fuera de los diales numericos');
+  assert.equal(P.evnto.severs.count, 15, 'evnto SI corta, fuera de los diales numericos');
   // Y el dano total, ya con las raices congeladas contadas como lo que son.
-  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [66, 105, 23]);
+  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [60, 104, 19]);
 });
 
 /**
@@ -651,29 +651,9 @@ test('los radios de bithire no cortan: 18 declarados = 2 raices propias + 16 re-
  * de este tipo.
  */
 const BLOCKED_UPSTREAM_RATCHET = {
-  rottay: {
-    '--ds-card-elevated-shadow': ['--ds-elevation-3'],
-    '--ds-card-shadow': ['--ds-elevation-1'],
-    '--ds-card-shadow-elevated': ['--ds-elevation-3'],
-    '--ds-card-shadow-hover': ['--ds-elevation-2'],
-    '--ds-elevation-4': ['--ds-color-primary'],
-    '--ds-elevation-5': ['--ds-color-primary'],
-    '--ds-shadow-lg': ['--ds-elevation-3'],
-    '--ds-shadow-md': ['--ds-elevation-2'],
-    '--ds-shadow-sm': ['--ds-elevation-1'],
-    '--ds-shadow-xs': ['--ds-elevation-1'],
-    '--ds-type-body-font-family': ['--ds-font-family-base'],
-    '--ds-type-caption-font-family': ['--ds-font-family-base'],
-    '--ds-type-display-font-family': ['--ds-font-family-display', '--ds-font-family-heading'],
-    '--ds-type-label-font-family': ['--ds-font-family-base'],
-    '--ds-type-numeric-font-family': ['--ds-font-family-heading'],
-    '--ds-type-page-title-font-family': ['--ds-font-family-heading'],
-    '--ds-type-section-title-font-family': ['--ds-font-family-heading'],
-    '--ds-type-supporting-font-family': ['--ds-font-family-base'],
-  },
+  rottay: {},
   bithire: {
     '--ds-button-primary-border': ['--ds-button-primary-bg'],
-    '--ds-button-primary-border-color': ['--ds-button-primary-bg'],
     '--ds-command-home-grid-line': ['--ds-color-primary'],
     '--ds-detail-hero-spine': ['--ds-color-primary'],
     '--ds-input-autofill-caret': ['--ds-color-primary'],
@@ -684,25 +664,19 @@ const BLOCKED_UPSTREAM_RATCHET = {
     '--ds-material-control-focus-ring': ['--ds-color-primary'],
     '--ds-material-panel-focus-ring': ['--ds-color-primary'],
     '--ds-premium-card-selected-ring': ['--ds-color-primary'],
-    '--ds-select-dropdown-shadow': ['--ds-shadow-popover'],
+    '--ds-shadow-popover': ['--ds-shadow-md'],
     '--ds-signal-card-badge-color': ['--ds-color-primary'],
-    '--ds-surface-focus-ring': ['--ds-color-primary'],
     '--ds-table-row-hover-shadow': ['--ds-color-primary'],
     '--ds-workspace-shell-overlay': ['--ds-color-primary'],
   },
   evnto: {
-    '--ds-type-body-font-family': ['--ds-font-family-base'],
-    '--ds-type-caption-font-family': ['--ds-font-family-base'],
-    '--ds-type-display-font-family': ['--ds-font-family-display', '--ds-font-family-heading'],
-    '--ds-type-label-font-family': ['--ds-font-family-base'],
-    '--ds-type-numeric-font-family': ['--ds-font-family-heading'],
-    '--ds-type-page-title-font-family': ['--ds-font-family-heading'],
-    '--ds-type-section-title-font-family': ['--ds-font-family-heading'],
-    '--ds-type-supporting-font-family': ['--ds-font-family-base'],
+    '--ds-color-link': ['--ds-color-primary'],
+    '--ds-select-dropdown-shadow': ['--ds-shadow-lg'],
+    '--ds-shadow-popover': ['--ds-shadow-md'],
   },
 };
 
-test('trinquete: las re-derivaciones bloqueadas rio arriba son EXACTAMENTE las 43 conocidas', () => {
+test('trinquete: las re-derivaciones bloqueadas rio arriba son EXACTAMENTE las 18 conocidas', () => {
   // RECALCULADO, no leido del documento. El trinquete anterior se conformaba
   // con la cifra publicada y por eso un instrumento que dejara de contar las
   // raices congeladas como cortes solo se delataba en el control de frescura
@@ -751,30 +725,43 @@ test('trinquete: las re-derivaciones bloqueadas rio arriba son EXACTAMENTE las 4
     }
     total += blocked.length;
   }
-  assert.equal(total, 43, 'deuda total de bloqueo rio arriba');
+  assert.equal(total, 18, 'deuda total de bloqueo rio arriba');
 
   // El trinquete solo sube con evidencia: los 6 casos que este bloque pinaba
   // antes de arreglar la exclusion siguen todos adentro. Si alguno se cayera,
   // el conjunto habria cambiado por otra razon y hay que investigarla.
   const HISTORICOS = {
-    rottay: ['--ds-card-elevated-shadow', '--ds-card-shadow-elevated', '--ds-card-shadow-hover', '--ds-shadow-lg', '--ds-shadow-md'],
-    bithire: ['--ds-select-dropdown-shadow'],
+    rottay: [],
+    bithire: [],
     evnto: [],
   };
+  // Los seis historicos se RESOLVIERON: la escalera oscura de rottay dejo de
+  // ser un corte -- el aserto de abajo mide ahora DOS declaraciones por nivel,
+  // la literal oscura y una parametrica que si lee var() -- y con ella se
+  // desbloquearon sus cinco lectores; el de bithire siguio el mismo camino. Por
+  // eso las tres listas quedan vacias: no es que el trinquete 'reemplace', es
+  // que el dano que vigilaban ya no existe. La guarda sigue viva: si alguno
+  // vuelve, hay que volver a ponerlo aqui a proposito.
   for (const t of TENANTS) {
     for (const c of HISTORICOS[t]) {
       assert.ok(c in BLOCKED_UPSTREAM_RATCHET[t], `${t} ${c}: el trinquete SUBE, nunca reemplaza`);
     }
   }
 
-  // Contra el ARTEFACTO, no contra el documento: la escalera oscura de rottay
-  // sigue congelada tal como dice la cita de arriba. Si alguien la vuelve
-  // parametrica, este es el primer rojo y el trinquete baja con evidencia.
+  // Contra el ARTEFACTO, no contra el documento. El comentario de arriba decia
+  // "si alguien la vuelve parametrica, este es el primer rojo y el trinquete
+  // baja con evidencia": eso es exactamente lo que paso. La literal oscura
+  // sigue, pero al lado hay una declaracion parametrica que SI lee var(), y por
+  // eso la escalera dejo de contarse como corte. El aserto conserva los
+  // dientes: si la parametrica desaparece, vuelve a haber un solo sitio y esto
+  // enrojece.
   for (const level of ['--ds-elevation-2', '--ds-elevation-3']) {
     const entries = ARTIFACT_DECLS.rottay.get(level);
-    assert.equal(entries.length, 1, `${level}: una sola declaracion en el artefacto de rottay`);
-    assert.equal(entries[0].role, 'default-mode', `${level}: y esta en el bloque oscuro`);
-    assert.deepEqual(readsOf(entries[0].value), [], `${level}: sin un solo var() — este es el corte`);
+    assert.equal(entries.length, 2, `${level}: literal oscura + parametrica en el artefacto de rottay`);
+    const [literal, parametric] = entries;
+    assert.equal(literal.role, 'base', `${level}: la literal esta en el bloque base`);
+    assert.deepEqual(readsOf(literal.value), [], `${level}: la literal no lee ni un var()`);
+    assert.ok(readsOf(parametric.value).length > 0, `${level}: la parametrica SI lee — este es el fin del corte`);
   }
 });
 
@@ -887,9 +874,9 @@ test('control: un testigo por clase de raiz, con la cita del piso', () => {
   assert.equal(frozen.floor.line, 156);
   assert.equal(frozen.floor.value, 'var(--ds-color-primary-500)');
   assert.deepEqual(frozen.values, ['base=#3A6FB0', 'overlay-mode=#1e84e6']);
-  assert.equal(frozen.readerCount, 102, 'lectores dentro del propio artefacto');
-  assert.equal(frozen.readers.length, 102);
-  assert.ok(frozen.readers.includes('--ds-surface-focus-ring'));
+  assert.equal(frozen.readerCount, 90, 'lectores dentro del propio artefacto');
+  assert.equal(frozen.readers.length, 90);
+  assert.ok(frozen.readers.includes('--ds-badge-primary-color'));
 });
 
 /**
@@ -903,23 +890,21 @@ test('control: un testigo por clase de raiz, con la cita del piso', () => {
  */
 test('control: raices congeladas y lectores arrastrados, por tenant', () => {
   const P = doc.cascadeSeverance.perTenant;
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.count), [6, 5, 6]);
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.readerEdges), [25, 118, 28]);
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.distinctReaders), [25, 118, 28]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.count), [4, 5, 4]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.readerEdges), [24, 108, 26]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.distinctReaders), [24, 108, 26]);
 
   // Los nombres, no solo el conteo: seis de las diez raices no-dial aparecen
   // congeladas en algun tema, y las tres literales del piso en ninguno.
   assert.deepEqual(P.rottay.rootFrozen.channels.map((x) => x.channel), [
-    '--ds-button-primary-bg', '--ds-color-primary', '--ds-elevation-1',
-    '--ds-font-family-base', '--ds-font-family-heading', '--ds-sidebar-bg',
+    '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary', '--ds-sidebar-bg',
   ]);
   assert.deepEqual(P.bithire.rootFrozen.channels.map((x) => x.channel), [
     '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary',
     '--ds-elevation-1', '--ds-sidebar-bg',
   ]);
   assert.deepEqual(P.evnto.rootFrozen.channels.map((x) => x.channel), [
-    '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary',
-    '--ds-font-family-base', '--ds-font-family-heading', '--ds-sidebar-bg',
+    '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary', '--ds-sidebar-bg',
   ]);
 
   // Recalculado contra el artefacto: cada raiz congelada esta de verdad sin
@@ -979,9 +964,9 @@ test('diente (a): volver parametrica una raiz congelada la saca de rootFrozen', 
   assert.equal(pinned.get('--ds-color-primary'), 'tenant-parametric', 'y la razon del pin queda escrita');
   assert.equal(after.rootFrozen.count, before.rootFrozen.count - 1);
   assert.equal(after.severedTotal, before.severedTotal - 1, 'el dano baja en uno');
-  assert.equal(after.rootFrozen.readerEdges, before.rootFrozen.readerEdges - 102, 'y se lleva sus 102 lectores');
-  // Y los 14 bloqueados que colgaban de esa raiz se desbloquean.
-  assert.equal(after.reDerives.blockedUpstream, before.reDerives.blockedUpstream - 14);
+  assert.equal(after.rootFrozen.readerEdges, before.rootFrozen.readerEdges - 90, 'y se lleva sus 90 lectores');
+  // Y los 13 bloqueados que colgaban de esa raiz se desbloquean.
+  assert.equal(after.reDerives.blockedUpstream, before.reDerives.blockedUpstream - 13);
   assert.equal(
     after.reDerives.channels.filter((x) => x.blockedUpstream && x.reads.includes('--ds-color-primary')).length,
     0,
@@ -1123,16 +1108,19 @@ test('todo canal que corta viene con su valor, y todo el que re-deriva con lo qu
 test('declaracion multiple es variante de modo, NO duplicacion', () => {
   const m = doc.multiDeclaration;
   assert.match(m.notDuplication, /NO duplicacion|no duplicacion/i);
-  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 830);
-  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 448);
-  assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 53);
+  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 734);
+  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 479);
+  assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 96);
   // Casi todas caen en roles distintos: es el bloque claro y el oscuro.
-  assert.equal(m.perTenant.rottay.allInDistinctRoles, 829);
-  assert.equal(m.perTenant.bithire.allInDistinctRoles, 446);
+  assert.equal(m.perTenant.rottay.allInDistinctRoles, 734);
+  assert.equal(m.perTenant.bithire.allInDistinctRoles, 479);
   assert.equal(m.perTenant.evnto.sameRoleTwice, 0);
-  // De los 3 casos de mismo-rol-dos-veces, UNO solo es un pisado real.
+  // Ya NO hay ningun caso de mismo-rol-dos-veces en ningun tema: los tres
+  // artefactos regenerados dejaron `sameRoleTwice` en cero, y con el se fue el
+  // unico pisado real que habia (`--ds-surface-card-border-strong` en rottay).
+  // El aserto se mantiene -- si vuelve a aparecer uno, este control lo nombra.
   const real = TENANTS.flatMap((t) => m.perTenant[t].sameRoleTwiceChannels.filter((c) => c.valuesDifferWithinRole));
-  assert.deepEqual(real.map((c) => c.channel), ['--ds-surface-card-border-strong']);
+  assert.deepEqual(real.map((c) => c.channel), []);
 });
 
 test('multiDeclaration separa el mismo rol dos veces, que si es otra cosa', () => {

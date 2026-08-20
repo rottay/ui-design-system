@@ -203,6 +203,16 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/engine/cascade-wiring-ratchet/index.mjs'],
     blocking: true,
   },
+  // Los tres artefactos de `manifest/generated/` describen el arbol: los hechos
+  // de fanout, la paridad de los tres temas y las listas de alcance por raiz.
+  // Hasta F2.3 NADIE los leia -- ni siquiera una comprobacion de frescura -- asi
+  // que podian pudrirse en silencio, y se pudrieron: llegaron a F2 con un mes de
+  // deriva y con nueve tests de la suite rojos por eso. Estos tres `--check`
+  // cierran ese agujero. La PARIDAD real (que los numeros sean los correctos, no
+  // solo los actuales) es F4; esto es frescura.
+  { id: 'fanout-facts-freshness', run: ['node', 'manifest/fanout-facts/index.mjs', '--check'], blocking: true },
+  { id: 'root-checklists-freshness', run: ['node', 'manifest/root-checklist/index.mjs', '--check'], blocking: true },
+  { id: 'mirror-parity-freshness', run: ['node', 'manifest/mirror-parity/index.mjs', '--check'], blocking: true },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
   // the documentation, the code-derived vertical rows, the data-part corpus, and
