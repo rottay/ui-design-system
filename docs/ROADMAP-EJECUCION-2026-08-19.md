@@ -658,6 +658,13 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F1.4c ✅ (adjudicación del coordinador, medida):** las 5.100 celdas
+quedaron 100% gobernadas — 1.472 con filas + 3.628 con ley escrita, **0
+peladas**. `targetBinding` **NO se borra** (corrección al §4: el plan decía
+"borrar al final"; medido el árbol, es el portador de la ley por celda —
+status + prescripciones son adjudicaciones, no andamio). Los 629
+uncoveredByDesign son adjudicaciones escritas con puntero a fase 3 — quedan
+como están, visibles.
 **F1.4b structure+final ✅ `a43ad6550` + `c45e96d69` — F1.4b COMPLETO:**
 10 celdas migradas con fila (6 piloto + 4 pattern) + **354 marcas** unificadas
 (marca = celda adjudicada). El trabajo real fue ~2% de las candidatas; el
