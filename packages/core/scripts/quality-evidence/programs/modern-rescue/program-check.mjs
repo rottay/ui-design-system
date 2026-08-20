@@ -1585,6 +1585,97 @@ export function validateModernRescueContracts(
   failures.push(...collectContractFailures(contracts));
   failures.push(...collectHistoricalContractFailures(contracts));
 
+  /*
+   * CELDA GOBERNADA -- ninguna de las 5100 celdas puede quedar sin ley.
+   *
+   * Una celda es la interseccion de un control y una familia: la pregunta
+   * "¿este control alcanza a esta familia, y por donde?". Estar gobernada
+   * significa que alguien ya contesto esa pregunta, de una de tres formas, y
+   * las tres son respuestas legitimas:
+   *
+   *   (a) `internalChannels` no vacio -- el mecanismo esta declarado: por que
+   *       socket viaja, quien lo produce, quien lo consume.
+   *   (b) `targetBinding` con `status` declarado o con `uncoveredByDesign` --
+   *       la ley esta escrita aunque el mecanismo no exista todavia
+   *       (MUST_NOT_REACH, ESCAPE_HATCH, NO_CSS_CHANNEL y las prescripciones
+   *       de fase 3 son adjudicaciones, no deuda).
+   *   (c) `migratedToInternalChannels === true` -- la celda fue revisada y
+   *       adjudicada aunque no le corresponda fila (consumo por canal
+   *       compartido, dueño cruzado, sin socket propio).
+   *
+   * Una celda que no cumple ninguna es una celda PELADA: nadie dijo nunca si
+   * ese control llega o no llega ahi. Eso es lo que este chequeo refuta.
+   *
+   * POR QUE ESTO NO LO CUBRIA NADA. `validateInternalChannels`
+   * (manifest/rules/index.mjs) dice de si misma: "internalChannels is REQUIRED
+   * at IMPLEMENTED+ and OPTIONAL below it". Es decir: por debajo de
+   * IMPLEMENTED, una celda podia no declarar nada y nadie se enteraba. Esta
+   * regla cubre el resto del espectro sin tocar esa: alli donde la fila es
+   * opcional, exige al menos ley escrita o adjudicacion.
+   *
+   * POR QUE `targetBinding` NO SE BORRA (adjudicacion del coordinador, que
+   * corrige el "borrar targetBinding" del plan original). `targetBinding` es
+   * el PORTADOR DE LA LEY POR CELDA: es donde vive el `status`, la evidencia
+   * `uncoveredByDesign` y la marca de adjudicacion. Borrarlo en masa dejaria
+   * 3.628 celdas -- las que hoy no tienen fila -- sin una sola razon escrita,
+   * y este chequeo las reportaria peladas a todas. Solo puede desaparecer de
+   * una celda el dia que su ley este re-expresada en otro portador; nunca
+   * antes, y nunca en masa.
+   */
+  const familiesRoot = join(repoRoot, MANIFEST_DIR, 'families');
+  if (existsSync(familiesRoot)) {
+    const bare = [];
+    let cellsSeen = 0;
+    const walkGoverned = (dir, prefix) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+        if (entry.isDirectory()) {
+          walkGoverned(join(dir, entry.name), rel);
+          continue;
+        }
+        if (!entry.name.endsWith('.json')) continue;
+        const familyId = rel.replace(/\.json$/u, '');
+        const doc = readJson(join(MANIFEST_DIR, 'families', rel));
+        for (const cell of doc?.themeControls ?? []) {
+          cellsSeen += 1;
+          const binding = cell?.targetBinding;
+          const hasRows = Array.isArray(cell?.internalChannels) && cell.internalChannels.length > 0;
+          const hasWrittenLaw =
+            !!binding && (binding.status !== undefined && binding.status !== null
+              ? true
+              : binding.uncoveredByDesign !== undefined && binding.uncoveredByDesign !== null);
+          const isAdjudicated = binding?.migratedToInternalChannels === true;
+          if (!hasRows && !hasWrittenLaw && !isAdjudicated) {
+            bare.push(`${familyId}#${cell?.controlId ?? '<unnamed>'}`);
+          }
+        }
+      }
+    };
+    walkGoverned(familiesRoot, '');
+    // Un recorrido que ve MENOS celdas de las que el manifiesto dice tener no
+    // esta limpio: esta roto, y reporta cero peladas exactamente igual que un
+    // arbol sano. El denominador lo publica el propio indice, asi que la guarda
+    // se mide contra la fuente y no contra un numero pegado aqui.
+    const declaredCells = readJson(join(MANIFEST_DIR, 'index.json'))?.denominators?.controlFamilyCells;
+    if (typeof declaredCells === 'number' && cellsSeen !== declaredCells) {
+      failures.push(
+        `governed-cell: the walk saw ${cellsSeen} cells but manifest/index.json declares ` +
+          `${declaredCells}: a walk that misses cells reports zero bare ones exactly like a clean tree`,
+      );
+    }
+    for (const id of bare.slice(0, 20)) {
+      failures.push(
+        `governed-cell: ${id} is bare -- no internalChannels, no targetBinding.status, ` +
+          'no uncoveredByDesign and no migratedToInternalChannels: nobody ever said whether this ' +
+          'control reaches this family',
+      );
+    }
+    if (bare.length > 20) {
+      failures.push(`governed-cell: ${bare.length - 20} more bare cells not listed`);
+    }
+  }
+
+
   if (includeManifestGate) {
     try {
       const manifestErrors = validateCustomizationManifest();

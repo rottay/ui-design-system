@@ -716,3 +716,136 @@ test("planted root axis with no mapped owner fails closed", () => {
     writeFileSync(target, original);
   }
 });
+
+/*
+ * CELDA GOBERNADA drills. La regla es una disyuncion de tres, asi que un solo
+ * drill no alcanza: hay que plantar la celda pelada Y probar que cada una de
+ * las tres coberturas la salva por si sola. Si no, la regla podria estar
+ * mirando una sola de las tres y nadie lo notaria.
+ */
+function withFamily(relPath, mutate, run) {
+  const target = join(manifestRoot, `families/${relPath}`);
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    mutate(doc);
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    run(validateModernRescueContracts(baseline, { includeManifestGate: false }));
+  } finally {
+    writeFileSync(target, original);
+  }
+}
+
+/** Deja la celda pelada: sin filas, sin ley escrita y sin marca. */
+function strip(cell) {
+  delete cell.internalChannels;
+  delete cell.targetBinding;
+}
+
+test("planted bare cell fails closed", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => strip(doc.themeControls.find((c) => c.controlId === "density.mode")),
+    (errors) =>
+      expectError(
+        errors,
+        "governed-cell: primitive/inputs/form#density.mode is bare",
+        "una celda sin ninguna de las tres coberturas debe fallar"
+      )
+  );
+});
+
+test("CONTROL (a): internalChannels alone governs the cell", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => {
+      const cell = doc.themeControls.find((c) => c.controlId === "density.mode");
+      strip(cell);
+      cell.internalChannels = [
+        {
+          channelId: "--_ds-form-radius",
+          semanticOwner: "shape.radius-scale",
+          producer: "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form.css",
+          fallbackAuthority: null,
+          productiveConsumerFamilyIds: ["primitive/inputs/form"],
+          sourceBindings: [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form.css",
+          ],
+          replacementDisposition: { state: "REQUIRED_ADDITION", reason: "drill" },
+        },
+      ];
+    },
+    (errors) =>
+      assert.equal(
+        errors.filter((e) => e.includes("primitive/inputs/form#density.mode is bare")).length,
+        0,
+        `las filas solas deben gobernar la celda; got ${JSON.stringify(errors)}`
+      )
+  );
+});
+
+test("CONTROL (b): a written status alone governs the cell", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => {
+      const cell = doc.themeControls.find((c) => c.controlId === "density.mode");
+      strip(cell);
+      cell.targetBinding = { status: "MUST_NOT_REACH", source: "drill", bindings: [] };
+    },
+    (errors) =>
+      assert.equal(
+        errors.filter((e) => e.includes("primitive/inputs/form#density.mode is bare")).length,
+        0,
+        `la ley escrita sola debe gobernar la celda; got ${JSON.stringify(errors)}`
+      )
+  );
+});
+
+test("CONTROL (c): the adjudication mark alone governs the cell", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => {
+      const cell = doc.themeControls.find((c) => c.controlId === "density.mode");
+      strip(cell);
+      cell.targetBinding = { source: "drill", bindings: [], migratedToInternalChannels: true };
+    },
+    (errors) =>
+      assert.equal(
+        errors.filter((e) => e.includes("primitive/inputs/form#density.mode is bare")).length,
+        0,
+        `la marca sola debe gobernar la celda; got ${JSON.stringify(errors)}`
+      )
+  );
+});
+
+test("an empty internalChannels list does not govern by itself", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => {
+      const cell = doc.themeControls.find((c) => c.controlId === "density.mode");
+      strip(cell);
+      cell.internalChannels = [];
+    },
+    (errors) =>
+      expectError(
+        errors,
+        "governed-cell: primitive/inputs/form#density.mode is bare",
+        "una lista vacia es la ausencia de mecanismo, no su declaracion"
+      )
+  );
+});
+
+test("a walk that misses cells fails, instead of reporting zero bare ones", () => {
+  withFamily(
+    "primitive/inputs/form.json",
+    (doc) => {
+      doc.themeControls = doc.themeControls.filter((c) => c.controlId !== "density.mode");
+    },
+    (errors) =>
+      expectError(
+        errors,
+        "the walk saw 5099 cells but manifest/index.json declares 5100",
+        "un recorrido que pierde celdas no puede parecer un arbol limpio"
+      )
+  );
+});
