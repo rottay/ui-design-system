@@ -658,6 +658,11 @@ bounded/profile-id/…). Lotes:
   (mecánico), después las 3.194 de autoría nueva por familia/tier (diseño).
 - **F1.5** — `program-check`: validación de celda gobernada (rules:633 hoy a
   medias) + cierre con auditoría Fable del frente.
+**F2.1 ✅ `0de3acab6`** — las 12 raíces bautizadas (channel: null = 0). La
+declaración en CSS quedó fuera por adjudicación **B** (el worker midió que
+declarar sin lector = dead writer; el ratchet lo prohíbe por ley): **la
+declaración viaja con F2.4** — cada canal nace con su primer consumidor.
+Doctrina: "bautizar tampoco es declarar".
 **F2.1 bautismo — tabla aprobada con adjudicaciones (coordinador):** 2
 ADOPCIONES (state.delta.hover → `--ds-state-hover-shift` y state.delta.disabled
 → `--ds-state-disabled-opacity` — ya existían; el catálogo buscó otros nombres)
