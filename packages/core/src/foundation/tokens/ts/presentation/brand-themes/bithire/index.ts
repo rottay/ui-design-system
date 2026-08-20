@@ -343,7 +343,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         borderHover: "#3a4a5a",
         borderFocus: "#1a7fe0",
         shadowFocus: "0 0 0 1px #1a7fe0",
-        color: "#e4e8ed",
         colorPlaceholder: "#5a7085",
         addon: {
           bg: "var(--ds-surface-panel)",
@@ -505,7 +504,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       rowBorder: "#1d2a38",
       cellPadding: "0.875rem 1rem",
       cellFontSize: "0.875rem",
-      cellColor: "#e4e8ed",
       actionBg: "var(--ds-surface-control)",
       actionBorder: "color-mix(in srgb, var(--ds-color-border) 70%, transparent)",
       filterRowBg: "var(--ds-surface-panel)",
@@ -1696,7 +1694,7 @@ const CHROME: BrandChrome = {
       caretColor: "#3A6FB0",
       selectionBg: "rgba(58, 111, 176, 0.20)",
       selectionColor: "#14283B",
-      color: "#14283B",
+      color: "var(--ds-color-text-primary)",
       colorPlaceholder: "#8A9AAA",
       placeholderOpacity: 0.9,
       bgDisabled: "#F8F8F8",
@@ -1752,7 +1750,7 @@ const CHROME: BrandChrome = {
     cellPaddingComfortable: "10px 12px",
     cellPaddingSpacious: "14px 16px",
     cellFontSize: "0.8125rem",
-    cellColor: "#14283B",
+    cellColor: "var(--ds-color-text-primary)",
     filterRowBg: "#F4F8FD",
     filterFocusShadow:
       "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 0 8px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)",

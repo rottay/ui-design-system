@@ -8,7 +8,7 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: dc813e5d73a7cd2f359068770bd310a7f40d3987a3efc1971efe9aac7eb9340c
+digest: 5b6cec34abf479d4d3efefc58693f8d25bb17871f3d32debe82f1859d364ee70
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
@@ -25,7 +25,7 @@ digest: dc813e5d73a7cd2f359068770bd310a7f40d3987a3efc1971efe9aac7eb9340c
 | `motion.dial` | Motion intensity and duration | scale | engine cadence unchanged | 2 ch | `motion.*` | `appearance.general.motion.{intensity,durationScale,ambient}` | 43 | `button.css` |
 | `surfaces.elevation-posture` | Elevation posture | enum | soft (DS shadow ramp untouched) | 3 ch | `surfaces.shadows.*` | `appearance.general.surfaces.elevation` | 174 | `card.css` |
 | `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | 1 ch | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | 62 | `overlay-modal.css` |
-| `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 2 ch | `chrome.sidebar.*` | `appearance.general.navigation.sidebarTone` | 4 | `menu.css` |
+| `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 2 ch | `chrome.sidebar.*` | `appearance.general.navigation.sidebarTone` | 5 | `menu.css` |
 | `experience.profile` | Experience profile | profile-id | baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel | 5 ch | `expressive.experienceProfile` | `appearance.general.experienceProfile` | 75 | `index.tsx` |
 
 ## PRO — 7 controles (familias y perfiles)

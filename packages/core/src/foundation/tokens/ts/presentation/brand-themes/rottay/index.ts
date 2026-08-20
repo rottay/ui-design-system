@@ -665,7 +665,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       itemIndent: "6px",
       itemPadding: "6px 10px",
       iconSize: "16px",
-      footerBg: "#F4F4F3",
       /**
        * The nine geometry channels the dark body authors have no
        * root-level DS floor to restate — their only other declarations sit
@@ -1425,7 +1424,7 @@ const CHROME: BrandChrome = {
     itemBgHover: 'rgba(255, 255, 255, 0.04)',
     itemPadding: '0 13px',
     iconSize: '17.25px',
-    footerBg: '#0D0D10',
+    footerBg: 'var(--ds-sidebar-bg)',
     /**
      * Sidebar geometry, drained from the artifact extension root block.
      * These nine channels have no root-level DS floor — their only other

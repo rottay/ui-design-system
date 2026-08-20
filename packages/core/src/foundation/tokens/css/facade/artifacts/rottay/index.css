@@ -825,7 +825,7 @@
   --ds-sidebar-border: #18181C;
   --ds-sidebar-child-padding-inline: 6px;
   --ds-sidebar-collapsed-width: 96px;
-  --ds-sidebar-footer-bg: #0D0D10;
+  --ds-sidebar-footer-bg: var(--ds-sidebar-bg);
   --ds-sidebar-group-color: #6B6B72;
   --ds-sidebar-group-font-size: 10.9px;
   --ds-sidebar-group-font-weight: 600;
@@ -1764,7 +1764,6 @@
   --ds-sidebar-bg: #F4F4F3;
   --ds-sidebar-border: #E5E5E3;
   --ds-sidebar-child-padding-inline: initial;
-  --ds-sidebar-footer-bg: #F4F4F3;
   --ds-sidebar-group-color: #9C9C9C;
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-letter-spacing: 0.04em;

@@ -6,15 +6,15 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 92024,
-        "lines": 1961,
-        "sha256": "c8d73734c95eadaac42feaf840172063b24f7760fca55b37177c5e9accc20a3b"
+        "bytes": 92002,
+        "lines": 1960,
+        "sha256": "55856cfc465d2795800c297d9fe2831e70a7a4d26a5c35d0f0898994a374101b"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 97039,
-        "lines": 1737,
-        "sha256": "8a76f5095f263482944b3ab57cc344abf92e33ec6bcd2e8a7adb268645c2909a"
+        "bytes": 97018,
+        "lines": 1735,
+        "sha256": "ff61505dbbe6b683091eb5dea3fd342e0115b6639f1eadb1893571a13854aef6"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -26,15 +26,15 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 87805,
-        "lines": 2524,
-        "sha256": "6dac1fbcd158dba9356bd774a7be088d25b709ca26b66eed8fdb721b0d0aacec"
+        "bytes": 87791,
+        "lines": 2523,
+        "sha256": "9b83a5cadad245e7c80bac5dc47b86a1a339d1e5ed64cf13b1d4b236c28ba533"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 89497,
-        "lines": 2183,
-        "sha256": "a1bf175434af2077a269c44c21f0b253e338fb68994a693060b6054508766971"
+        "bytes": 89485,
+        "lines": 2181,
+        "sha256": "8565493c4681427f901c3eff1e634029bbb2323a8423fcbaccaf9cdb2101e25d"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -47,11 +47,11 @@
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1939,
+      "occurrences": 1938,
       "distinctChannels": 1211
     },
     "bithire": {
-      "occurrences": 1713,
+      "occurrences": 1711,
       "distinctChannels": 1234
     },
     "evnto": {
@@ -6615,8 +6615,8 @@
         },
         "rootFrozen": {
           "count": 4,
-          "readerEdges": 30,
-          "distinctReaders": 30,
+          "readerEdges": 31,
+          "distinctReaders": 31,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -6698,8 +6698,10 @@
                 "base=#0D0D10",
                 "overlay-mode=#F4F4F3"
               ],
-              "readers": [],
-              "readerCount": 0,
+              "readers": [
+                "--ds-sidebar-footer-bg"
+              ],
+              "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 998,
@@ -11399,14 +11401,14 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 728,
-        "allInDistinctRoles": 728,
+        "channelsDeclaredMoreThanOnce": 727,
+        "allInDistinctRoles": 727,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 479,
-        "allInDistinctRoles": 479,
+        "channelsDeclaredMoreThanOnce": 477,
+        "allInDistinctRoles": 477,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11422,8 +11424,8 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1822,
-      "bithire": 1506,
+      "rottay": 1821,
+      "bithire": 1504,
       "evnto": 398
     },
     "union": 2613,
@@ -11432,27 +11434,27 @@
     "intersectionPctOfSmallest": 87.2,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 717,
+        "shared": 714,
         "union": 2611,
-        "pctOfUnion": 27.5,
-        "pctOfSmaller": 47.6
+        "pctOfUnion": 27.3,
+        "pctOfSmaller": 47.5
       },
       "rottay+evnto": {
         "shared": 393,
-        "union": 1827,
+        "union": 1826,
         "pctOfUnion": 21.5,
         "pctOfSmaller": 98.7
       },
       "bithire+evnto": {
         "shared": 350,
-        "union": 1554,
-        "pctOfUnion": 22.5,
+        "union": 1552,
+        "pctOfUnion": 22.6,
         "pctOfSmaller": 87.9
       }
     },
     "exclusive": {
-      "rottay": 1059,
-      "bithire": 786,
+      "rottay": 1061,
+      "bithire": 787,
       "evnto": 2
     },
     "exclusiveSamples": {

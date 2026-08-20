@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "6a533e277edc96ecaa9034a71105dfb5d2fd03c75fa8dc35c547fc5b9d626383",
+    "authorityDigest": "cac851958eb6ff42f5d9ff1650763a05d7948155bdc92a168a19c50e71239a2c",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -2658,8 +2658,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 97039,
-        "sha256": "8a76f5095f263482944b3ab57cc344abf92e33ec6bcd2e8a7adb268645c2909a"
+        "bytes": 97018,
+        "sha256": "ff61505dbbe6b683091eb5dea3fd342e0115b6639f1eadb1893571a13854aef6"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -2674,8 +2674,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 92024,
-        "sha256": "c8d73734c95eadaac42feaf840172063b24f7760fca55b37177c5e9accc20a3b"
+        "bytes": 92002,
+        "sha256": "55856cfc465d2795800c297d9fe2831e70a7a4d26a5c35d0f0898994a374101b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
@@ -7507,8 +7507,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 89497,
-        "sha256": "a1bf175434af2077a269c44c21f0b253e338fb68994a693060b6054508766971"
+        "bytes": 89485,
+        "sha256": "8565493c4681427f901c3eff1e634029bbb2323a8423fcbaccaf9cdb2101e25d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -7538,8 +7538,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 87805,
-        "sha256": "6dac1fbcd158dba9356bd774a7be088d25b709ca26b66eed8fdb721b0d0aacec"
+        "bytes": 87791,
+        "sha256": "9b83a5cadad245e7c80bac5dc47b86a1a339d1e5ed64cf13b1d4b236c28ba533"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/emphasis/index.ts",
@@ -36947,8 +36947,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5380596,
-        "sha256": "07720ec4586131ee93b1850cbcc700466044e3a3234393aa2dd3357387709866"
+        "bytes": 5380575,
+        "sha256": "284c539952f3790acfbe8e1b2192931e82abb309c780dda73c385080901222d0"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
@@ -36963,8 +36963,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5504668,
-        "sha256": "d82718258544314c85e076aa13630e648bfb7be0b465a5b96bd75ff3f6f0f4c9"
+        "bytes": 5504625,
+        "sha256": "e092f970ac4706d85545e0df896213567530b176b9467b24fdb245c243931289"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -36979,8 +36979,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5375182,
-        "sha256": "f96193f29191261d637a20421ac71e3b76e09808bdbbcc3b1f9fe33fa3fc600c"
+        "bytes": 5375160,
+        "sha256": "aa5ffce8888239f8ca73b8bfa5be4d710e2281e531f95c18c3a4e8756b85aa91"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "6a533e277edc96ecaa9034a71105dfb5d2fd03c75fa8dc35c547fc5b9d626383"
+    "digest": "cac851958eb6ff42f5d9ff1650763a05d7948155bdc92a168a19c50e71239a2c"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "9e7efb092587d80cbe0bcc15669f9368ef4af4e2a01f1b9a24c090ab41a6dac0",
-      "9e7efb092587d80cbe0bcc15669f9368ef4af4e2a01f1b9a24c090ab41a6dac0"
+      "919703331337bf6f4dd54aad321db6971c22b37eba688f97d7d8f8d1742d3ccf",
+      "919703331337bf6f4dd54aad321db6971c22b37eba688f97d7d8f8d1742d3ccf"
     ],
     "agree": true
   }

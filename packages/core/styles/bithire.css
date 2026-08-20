@@ -125175,7 +125175,7 @@ html[lang]:lang(ar) {
   --ds-input-clear-border-hover: #C4D2DE;
   --ds-input-clear-color: #71869A;
   --ds-input-clear-color-hover: #14283B;
-  --ds-input-color: #14283B;
+  --ds-input-color: var(--ds-color-text-primary);
   --ds-input-color-disabled: #AEBCC8;
   --ds-input-color-placeholder: #8A9AAA;
   --ds-input-count-color: #71869A;
@@ -125616,7 +125616,7 @@ html[lang]:lang(ar) {
   --ds-table-action-border: color-mix(in srgb, #D4E0EA 70%, transparent);
   --ds-table-bg: #ffffff;
   --ds-table-border: #D4E0EA;
-  --ds-table-cell-color: #14283B;
+  --ds-table-cell-color: var(--ds-color-text-primary);
   --ds-table-cell-font-size: 0.8125rem;
   --ds-table-filter-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 0 8px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
   --ds-table-filter-row-bg: #F4F8FD;
@@ -126101,7 +126101,6 @@ html[lang]:lang(ar) {
   --ds-input-clear-border-hover: var(--ds-color-neutral-500);
   --ds-input-clear-color: var(--ds-color-text-tertiary);
   --ds-input-clear-color-hover: var(--ds-color-text-primary);
-  --ds-input-color: #e4e8ed;
   --ds-input-color-disabled: var(--ds-color-text-muted);
   --ds-input-color-placeholder: #5a7085;
   --ds-input-count-color: var(--ds-color-text-tertiary);
@@ -126313,7 +126312,6 @@ html[lang]:lang(ar) {
   --ds-table-action-border: color-mix(in srgb, var(--ds-color-border) 70%, transparent);
   --ds-table-bg: #0f1520;
   --ds-table-border: #1d2a38;
-  --ds-table-cell-color: #e4e8ed;
   --ds-table-cell-font-size: 0.875rem;
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-filter-row-bg: var(--ds-surface-panel);
