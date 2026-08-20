@@ -128,6 +128,9 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
             continue;
           }
           if (FORBIDDEN_SEGMENTS.has(sub.name)) add('R4-forbidden-segment', subRel);
+          if (sub.name.startsWith(`${entry.name}-`) || sub.name.startsWith(`${entry.name}.`)) {
+            add('R5-family-prefix-repeat', subRel);
+          }
           walkCapability(join(famPath, entry.name, sub.name), subRel);
         }
       } else {

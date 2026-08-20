@@ -6,7 +6,8 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
@@ -67,4 +68,100 @@ test('the baseline never absorbs silently: live findings match the baseline exac
   const live = new Set(collectFindings(SCRIPTS_ROOT).map((f) => `${f.rule} ${f.path}`));
   const recorded = new Set(BASELINE.entries.map((e) => `${e.rule} ${e.path}`));
   assert.deepEqual(live, recorded);
+});
+
+// ── Sandbox drills (Fable H2, F1): detection proven with REAL planted files ──
+// The --drill=<rule> CLI mode injects synthetic findings into the report array;
+// these drills instead plant real files in a synthetic scripts/ skeleton under a
+// tmpdir and run collectFindings against it. Detection and reporting both covered.
+
+const FAMILIES = [
+  'boundaries', 'builders', 'ci', 'codemods', 'engine', 'evidence', 'generators',
+  'i18n', 'lib', 'packaging', 'quality-evidence', 'structure', 'taxonomy',
+  'tokens', 'verticals',
+];
+const LIB_SUBS = ['build', 'engine', 'evidence', 'hooks', 'paint', 'source', 'taxonomy', 'tokens', 'verticals'];
+
+function buildSandbox(t) {
+  const root = mkdtempSync(join(tmpdir(), 'scripts-tree-sandbox-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeFileSync(join(root, 'vitest.scripts.config.ts'), '// toolchain\n');
+  writeFileSync(join(root, 'tests-typecheck-ambient.d.ts'), '// toolchain\n');
+  for (const family of FAMILIES) {
+    if (family === 'lib') {
+      mkdirSync(join(root, 'lib', 'repo-root'), { recursive: true });
+      writeFileSync(join(root, 'lib', 'repo-root', 'index.mjs'), '// repo-root\n');
+      for (const sub of LIB_SUBS) {
+        mkdirSync(join(root, 'lib', sub, 'probe'), { recursive: true });
+        writeFileSync(join(root, 'lib', sub, 'probe', 'index.mjs'), '// probe\n');
+      }
+      continue;
+    }
+    mkdirSync(join(root, family, 'probe'), { recursive: true });
+    writeFileSync(join(root, family, 'probe', 'index.mjs'), '// probe\n');
+  }
+  return root;
+}
+
+const rules = (findings) => findings.map((f) => `${f.rule} ${f.path}`);
+
+test('sandbox: a clean synthetic tree reports zero findings', (t) => {
+  const root = buildSandbox(t);
+  assert.deepEqual(collectFindings(root), []);
+});
+
+test('sandbox R1: a loose file at the scripts root is detected on disk', (t) => {
+  const root = buildSandbox(t);
+  writeFileSync(join(root, 'loose-script.mjs'), '// planted\n');
+  assert.ok(rules(collectFindings(root)).includes('R1-loose-root-file loose-script.mjs'));
+});
+
+test('sandbox R2: loose files at family and lib-subfamily level are detected on disk', (t) => {
+  const root = buildSandbox(t);
+  writeFileSync(join(root, 'ci', 'loose.mjs'), '// planted\n');
+  writeFileSync(join(root, 'lib', 'paint', 'loose.mjs'), '// planted\n');
+  const found = rules(collectFindings(root));
+  assert.ok(found.includes('R2-loose-family-file ci/loose.mjs'));
+  assert.ok(found.includes('R2-loose-libsub-file lib/paint/loose.mjs'));
+});
+
+test('sandbox R3: a foreign file inside a capability and an ownerless dir are detected on disk', (t) => {
+  const root = buildSandbox(t);
+  writeFileSync(join(root, 'tokens', 'probe', 'other-name.json'), '{}\n');
+  mkdirSync(join(root, 'ci', 'husk'));
+  const found = rules(collectFindings(root));
+  assert.ok(found.includes('R3-foreign-file tokens/probe/other-name.json'));
+  assert.ok(found.includes('R3-ownerless-dir ci/husk'));
+});
+
+test('sandbox R4: a generic ownership segment is detected on disk', (t) => {
+  const root = buildSandbox(t);
+  mkdirSync(join(root, 'engine', 'utils'));
+  assert.ok(rules(collectFindings(root)).includes('R4-forbidden-segment engine/utils'));
+});
+
+test('sandbox R5: an undeclared family and a family-prefix child are detected on disk', (t) => {
+  const root = buildSandbox(t);
+  mkdirSync(join(root, 'shadow', 'shadow-probe'), { recursive: true });
+  writeFileSync(join(root, 'shadow', 'shadow-probe', 'index.mjs'), '// probe\n');
+  mkdirSync(join(root, 'ci', 'ci-shadow'), { recursive: true });
+  writeFileSync(join(root, 'ci', 'ci-shadow', 'index.mjs'), '// probe\n');
+  const found = rules(collectFindings(root));
+  assert.ok(found.includes('R5-undeclared-family shadow'));
+  assert.ok(found.includes('R5-family-prefix-repeat ci/ci-shadow'));
+});
+
+test('sandbox R6: an undeclared lib subfamily is detected on disk', (t) => {
+  const root = buildSandbox(t);
+  mkdirSync(join(root, 'lib', 'shadow', 'shadow-probe'), { recursive: true });
+  writeFileSync(join(root, 'lib', 'shadow', 'shadow-probe', 'index.mjs'), '// probe\n');
+  assert.ok(rules(collectFindings(root)).includes('R6-undeclared-lib-subfamily lib/shadow'));
+});
+
+test('sandbox R5-lib: a subfamily-prefix child inside lib/ is detected on disk (Fable H1)', (t) => {
+  const root = buildSandbox(t);
+  rmSync(join(root, 'lib', 'paint', 'probe'), { recursive: true, force: true });
+  mkdirSync(join(root, 'lib', 'paint', 'paint-probe'), { recursive: true });
+  writeFileSync(join(root, 'lib', 'paint', 'paint-probe', 'index.mjs'), '// probe\n');
+  assert.ok(rules(collectFindings(root)).includes('R5-family-prefix-repeat lib/paint/paint-probe'));
 });

@@ -9,6 +9,9 @@
     { "rule": "R5-family-prefix-repeat", "path": "i18n/i18n-key-parity-gate", "reason": "nombre producto pre-regla — Paso C (F1)" },
     { "rule": "R5-family-prefix-repeat", "path": "taxonomy/taxonomy-parity-gate", "reason": "nombre producto pre-regla — Paso C (F1)" },
     { "rule": "R5-family-prefix-repeat", "path": "tokens/tokens-catalog", "reason": "nombre producto pre-regla (el catalogo de tokens); escribe vistas en docs-engineering — Paso C (F1)" },
+    { "rule": "R5-family-prefix-repeat", "path": "lib/build/build-input-hash", "reason": "nombre pre-regla detectado al extender R5 a subfamilias (Fable H1, cierre F0.5) — Paso C (F1)" },
+    { "rule": "R5-family-prefix-repeat", "path": "lib/engine/engine-corpus", "reason": "nombre pre-regla detectado al extender R5 a subfamilias (Fable H1, cierre F0.5) — Paso C (F1)" },
+    { "rule": "R5-family-prefix-repeat", "path": "lib/engine/engine-token-governance", "reason": "nombre pre-regla detectado al extender R5 a subfamilias (Fable H1, cierre F0.5) — Paso C (F1)" },
 
     { "rule": "R3-foreign-file", "path": "ci/ci-gates.manifest/ci-gates-manifest-flags.test.mjs", "reason": "test del drill de flags del manifiesto; nombre historico — Paso C alinea nombres de tests satellite" },
     { "rule": "R3-foreign-file", "path": "ci/red-inventory-gate/red-inventory.json", "reason": "inventario de gates rojos del gate; nombre corto historico sellado — Paso C" },

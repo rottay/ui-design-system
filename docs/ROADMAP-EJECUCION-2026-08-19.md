@@ -635,6 +635,18 @@ phase-a no se reescribe (1082 citas selladas; scope `:!**/phase-a/**`); hueco
 de wiring-coverage y forma capability de manifest/ (9 planos) anotados para
 F1/Paso C; zombi de 12h/100% CPU eliminado. gates:ci **80 VERDES** + sello
 gat-07 (`a0f35f34…`).
+**F1 — arranque (lote heredado del cierre F0.5).** H2 ✅: los drills del
+scripts-tree-gate ahora plantan archivos reales en un sandbox tmpdir (8 drills
+de detección en disco + los de reporte). H1 ✅: R5 extendido a subfamilias de
+lib/ (3 casos vivos adjudicados en baseline). **Worklist CERRADA de Paso C**
+(Fable: que el alcance no viva solo en la memoria del mapeo): (a) 6 prefijos
+de familia: ci-gates.manifest, engine-freeze-gate, engine-token-audit,
+i18n-key-parity-gate, taxonomy-parity-gate, tokens-catalog; (b) 3 prefijos de
+subfamilia lib/: build-input-hash, engine-corpus, engine-token-governance;
+(c) 4 infijos con juicio de producto: run-ci-gates, cra-17-packaging-license-gate,
+build-vertical-css, vertical-css-staleness.gate; (d) los 19 sidecars R3 con
+nombre histórico → forma corta; (e) forma capability de packages/core/manifest/
+(9 .mjs planos). Ejecución con la maquinaria path-keyed, nunca a mano.
 **Auditoría Fable del frente F0.5: APROBADO, 0 bloqueantes**
 (`/tmp/fable-frente-f05-verdict.md` — verificación de primera mano: gates:ci
 propio, sha256 de la cadena computados a mano, 3 corridas de suite 24/24
