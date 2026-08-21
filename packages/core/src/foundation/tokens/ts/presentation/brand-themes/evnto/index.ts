@@ -61,39 +61,151 @@ const OVERLAY_MODE = 'dark' satisfies BrandThemeMode;
  * step to the OKLCH derivation.
  */
 const OVERLAY: BrandThemeModeOverlay = {
-  /**
-   * @domicile unassigned
-   * @governor gap medido: gobierno parcial — palette.seeds alcanza 3 de 118 canales de la familia (115 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
-   */
   palette: {
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     primaryColor: "#E8E8E0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     onPrimaryColor: "#131210",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     primaryForegroundColor: "#131210",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     primaryHoverColor: "#F0F0E8",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     secondaryColor: "#A89880",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     secondaryHoverColor: "#B8A890",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     accentColor: "#A89880",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-secondary-hover
+     */
     accentHoverColor: "var(--ds-color-secondary-hover)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundColor: "#131210",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundSecondaryColor: "#1C1A16",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundTertiaryColor: "#24221C",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundElevatedColor: "#2A2820",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundOverlayColor: "rgba(2, 6, 23, 0.88)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textPrimaryColor: "#E8E8E0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textSecondaryColor: "#A8A898",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-neutral-600
+     */
     textTertiaryColor: "var(--ds-color-neutral-600)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textMutedColor: "#686858",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textDisabledColor: "#484838",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderColor: "#2E2C24",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderSecondaryColor: "#222018",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     borderFocusColor: "#A89880",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary
+     */
     linkColor: "var(--ds-color-primary)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary-hover
+     */
     linkHoverColor: "var(--ds-color-primary-hover)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-neutral-600
+     */
     linkVisitedColor: "var(--ds-color-neutral-600)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-success-50
+     */
     successBgColor: "var(--ds-color-success-50)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-warning-50
+     */
     warningBgColor: "var(--ds-color-warning-50)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-error-50
+     */
     errorBgColor: "var(--ds-color-error-50)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-info-50
+     */
     infoBgColor: "var(--ds-color-info-50)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     ramps: {
       primary: {
         50: "#FCFCFC",
@@ -188,14 +300,273 @@ const OVERLAY: BrandThemeModeOverlay = {
         800: "#1B232D",
       },
     },
+  /**
+   * @placeholder OVERLAY.palette.aliases
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaBlack100
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaBlack50
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaError10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaError20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaInfo10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaPrimary10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaPrimary20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSecondary10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSecondary20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSuccess10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSuccess20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaWarning10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaWarning20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaWhite50
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.backgroundSurfaceColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.bgHoverColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.bgInfoColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.bgSubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.borderSubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.borderTertiaryColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.errorBorderColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.errorColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.infoBorderColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.infoColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.infoInkColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.interactiveBgActiveColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.interactiveBgHoverColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.interactiveBgMutedColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.interactiveBorderColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.neutralZeroColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.primarySubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.ramps.error.900
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.ramps.info.900
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.ramps.success.900
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.ramps.warning.900
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.shadowColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.successBorderColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.successColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.surfaceColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.surfaceMutedColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.surfaceSecondaryColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.textColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.textInverseColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.textPageColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.warningBorderColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.warningColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   surfaces: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderRadius: {
       full: "9999px",
     },
+  /**
+   * @placeholder OVERLAY.surfaces.elevations
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.gradients
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.shadows
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.surfaceRoles
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; SURFACES lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
   },
   /**
    * Familia mixta. Controles: chrome.families, palette.seeds, token-overrides, navigation.sidebar-tone.

@@ -280,7 +280,12 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // pineado en el baseline, no aca: el pin estatico de un contador que baja
   // por diseno convierte cada lote bueno en rojo.
   assert.equal(real.matrix.intersection, 342);
-  assert.equal(real.matrix.positionIntersection, 890);
+  // F4A-7: 890 -> 1040. La interseccion AUTORADA (342) NO se mueve porque el
+  // lote no agrega ni una hoja; la POSICIONAL si, porque los 90 placeholders de
+  // hoja de OVERLAY.palette/OVERLAY.surfaces dan posicion sobre 150 slots que
+  // antes solo tenian uno o dos temas. Es el espejo exacto de `divergentSlots`,
+  // que baja 1669 -> 1519 en la misma corrida.
+  assert.equal(real.matrix.positionIntersection, 1040);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 

@@ -436,7 +436,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 196,
-        "maxSourceBytes": 1350925
+        "maxSourceBytes": 1900000,
+        "_note": "Con aire 2026-08-21 en F4A-7, parada del worker 16/16 adjudicada por el DT: el frente proyecta ~medio MB de comentarios de gobierno sobre las fuentes de tema (F4A-8..15 siguen); estos subpath mueren en F6. Medido ese dia: 1388156."
       },
       "symbols": [
         {
@@ -1569,7 +1570,8 @@
       "budget": {
         "maxDirectSources": 10,
         "maxReachableModules": 242,
-        "maxSourceBytes": 1821262
+        "maxSourceBytes": 2350000,
+        "_note": "Con aire 2026-08-21 en F4A-7, parada del worker 16/16 adjudicada por el DT: el frente proyecta ~medio MB de comentarios de gobierno sobre las fuentes de tema (F4A-8..15 siguen); estos subpath mueren en F6. Medido ese dia: 1827792."
       },
       "symbols": [
         {

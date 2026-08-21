@@ -72,6 +72,10 @@ const OVERLAY: BrandThemeModeOverlay = {
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
    */
   palette: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     ramps: {
       primary: {
         50: "#0d1b2a",
@@ -169,17 +173,65 @@ const OVERLAY: BrandThemeModeOverlay = {
         800: "#142331",
       },
     },
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     primaryColor: "#1e84e6",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     primaryHoverColor: "#2b8fef",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     secondaryHoverColor: "#69a6d5",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     secondaryColor: "#4f8ec0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     accentHoverColor: "#a6c6df",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundColor: "#0f1520",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundSecondaryColor: "#151d2b",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundTertiaryColor: "#1b2535",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundElevatedColor: "#1f2940",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundSurfaceColor: "#151d2b",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundOverlayColor: "rgba(20, 40, 59, 0.58)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textPrimaryColor: "#e4e8ed",
     /**
      * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
@@ -188,36 +240,301 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
      */
     textPageColor: "#9aacbf",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textSecondaryColor: "#9aacbf",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textTertiaryColor: "#7a90a5",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textMutedColor: "#5a7085",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textDisabledColor: "#3a4a5a",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     onPrimaryColor: "#ffffff",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderColor: "#253545",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderSecondaryColor: "#1d2a38",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderTertiaryColor: "#182230",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderSubtleColor: "#132032",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     borderFocusColor: "#1a7fe0",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     linkColor: "#3b9af0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     linkHoverColor: "#6bb5f5",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     linkVisitedColor: "#a78bca",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBorderColor: "#253545",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBgHoverColor: "rgba(255, 255, 255, 0.04)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBgActiveColor: "rgba(26, 127, 224, 0.12)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBgMutedColor: "rgba(255, 255, 255, 0.03)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     successColor: "#5ca6cf",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     successBgColor: "#132b40",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     successBorderColor: "rgba(92, 166, 207, 0.3)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     warningColor: "#d4943a",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     warningBgColor: "#2e2615",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     warningBorderColor: "rgba(212, 148, 58, 0.3)",
+    /**
+     * @domicile seed
+     * @governor dial: token-overrides
+     */
     errorColor: "#e04848",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     errorBgColor: "#2e1515",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     errorBorderColor: "rgba(224, 72, 72, 0.3)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     infoColor: "#1a7fe0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     infoBgColor: "#112840",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     infoBorderColor: "rgba(26, 127, 224, 0.3)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-info-300
+     */
     infoInkColor: "var(--ds-color-info-300)",
+  /**
+   * @placeholder OVERLAY.palette.accentColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.aliases
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaBlack100
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaBlack50
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaError10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaError20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaInfo10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaPrimary10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaPrimary20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSecondary10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSecondary20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSuccess10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaSuccess20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaWarning10
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaWarning20
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.alphaWhite50
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.bgHoverColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.bgInfoColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.bgSubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.neutralZeroColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.primaryForegroundColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.primarySubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.ramps.accent.900
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.shadowColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.surfaceColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.surfaceMutedColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.surfaceSecondaryColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.textColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.textInverseColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
@@ -236,9 +553,17 @@ const OVERLAY: BrandThemeModeOverlay = {
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
    */
   surfaces: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderRadius: {
       full: "9999px",
     },
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     shadows: {
       sm: "0 1px 2px rgba(20, 40, 59, 0.06)",
       md: "0 4px 12px rgba(20, 40, 59, 0.08)",
@@ -247,99 +572,429 @@ const OVERLAY: BrandThemeModeOverlay = {
     },
     surfaceRoles: {
       canvas: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-primary
+         */
         background: "var(--ds-color-bg-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         foreground: "var(--ds-color-text-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary
+         */
         texture: "radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--ds-color-primary) 14%, transparent), transparent 30%)",
       },
       shell: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         background: "var(--ds-color-neutral-50)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-secondary
+         */
         foreground: "var(--ds-color-text-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         border: "var(--ds-color-border-secondary)",
       },
       panel: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-primary
+         */
         background: "var(--ds-color-bg-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-surface
+         */
         backgroundHover: "var(--ds-color-bg-surface)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-bg-surface
+         */
         backgroundActive: "color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-color-bg-surface))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-bg-surface
+         */
         backgroundSelected: "color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-color-bg-surface))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-surface, --ds-color-bg-primary
+         */
         backgroundDisabled: "color-mix(in srgb, var(--ds-color-bg-surface) 55%, var(--ds-color-bg-primary))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         foreground: "var(--ds-color-text-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-secondary
+         */
         foregroundMuted: "var(--ds-color-text-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-muted
+         */
         foregroundDisabled: "var(--ds-color-text-muted)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border
+         */
         border: "var(--ds-color-border)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-500
+         */
         borderStrong: "var(--ds-color-neutral-500)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderHover: "color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderActive: "color-mix(in srgb, var(--ds-color-primary) 44%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderSelected: "color-mix(in srgb, var(--ds-color-primary) 58%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         borderDisabled: "var(--ds-color-border-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary
+         */
         focusRing: "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadow: "0 1px 2px color-mix(in srgb, var(--ds-color-neutral-50) 45%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadowHover: "0 10px 28px -22px color-mix(in srgb, var(--ds-color-neutral-50) 72%, transparent), 0 2px 6px color-mix(in srgb, var(--ds-color-neutral-50) 50%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadowActive: "0 1px 2px color-mix(in srgb, var(--ds-color-neutral-50) 40%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50, --ds-color-primary
+         */
         shadowSelected: "0 8px 24px -20px color-mix(in srgb, var(--ds-color-neutral-50) 68%, transparent), 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         highlight: "inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
       },
       card: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-surface
+         */
         background: "var(--ds-color-bg-surface)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-tertiary
+         */
         backgroundHover: "var(--ds-color-bg-tertiary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-bg-tertiary
+         */
         backgroundActive: "color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-color-bg-tertiary))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-bg-surface
+         */
         backgroundSelected: "color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-color-bg-surface))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-surface, --ds-color-bg-primary
+         */
         backgroundDisabled: "color-mix(in srgb, var(--ds-color-bg-surface) 70%, var(--ds-color-bg-primary))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         foreground: "var(--ds-color-text-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-secondary
+         */
         foregroundMuted: "var(--ds-color-text-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-muted
+         */
         foregroundDisabled: "var(--ds-color-text-muted)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border
+         */
         border: "var(--ds-color-border)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-500
+         */
         borderStrong: "var(--ds-color-neutral-500)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderHover: "color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderActive: "color-mix(in srgb, var(--ds-color-primary) 44%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderSelected: "color-mix(in srgb, var(--ds-color-primary) 58%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         borderDisabled: "var(--ds-color-border-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary
+         */
         focusRing: "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadow: "0 1px 2px color-mix(in srgb, var(--ds-color-neutral-50) 62%, transparent), 0 0 0 1px color-mix(in srgb, var(--ds-color-neutral-50) 40%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadowHover: "0 18px 38px -24px color-mix(in srgb, var(--ds-color-neutral-50) 78%, transparent), 0 3px 9px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadowActive: "0 1px 2px color-mix(in srgb, var(--ds-color-neutral-50) 55%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50, --ds-color-primary
+         */
         shadowSelected: "0 10px 26px -20px color-mix(in srgb, var(--ds-color-neutral-50) 70%, transparent), 0 2px 6px color-mix(in srgb, var(--ds-color-neutral-50) 50%, transparent), 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         highlight: "inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
       },
       inset: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         background: "var(--ds-color-neutral-50)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-secondary
+         */
         foreground: "var(--ds-color-text-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         border: "var(--ds-color-border-secondary)",
       },
       control: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-primary
+         */
         background: "var(--ds-color-bg-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-surface
+         */
         backgroundHover: "var(--ds-color-bg-surface)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-tertiary
+         */
         backgroundActive: "var(--ds-color-bg-tertiary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-bg-primary
+         */
         backgroundSelected: "color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-bg-primary))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-surface, --ds-color-bg-primary
+         */
         backgroundDisabled: "color-mix(in srgb, var(--ds-color-bg-surface) 60%, var(--ds-color-bg-primary))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         foreground: "var(--ds-color-text-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-secondary
+         */
         foregroundMuted: "var(--ds-color-text-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-muted
+         */
         foregroundDisabled: "var(--ds-color-text-muted)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border
+         */
         border: "var(--ds-color-border)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-500
+         */
         borderStrong: "var(--ds-color-neutral-500)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-500
+         */
         borderHover: "var(--ds-color-neutral-500)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderActive: "color-mix(in srgb, var(--ds-color-primary) 44%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary, --ds-color-border
+         */
         borderSelected: "color-mix(in srgb, var(--ds-color-primary) 58%, var(--ds-color-border))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         borderDisabled: "var(--ds-color-border-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary
+         */
         focusRing: "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         shadow: "inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50, --ds-color-text-primary
+         */
         shadowHover: "0 5px 14px color-mix(in srgb, var(--ds-color-neutral-50) 55%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadowActive: "inset 0 1px 2px color-mix(in srgb, var(--ds-color-neutral-50) 70%, transparent)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50, --ds-color-primary
+         */
         shadowSelected: "0 3px 10px color-mix(in srgb, var(--ds-color-neutral-50) 50%, transparent), 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)",
       },
       raised: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-elevated, --ds-color-bg-surface
+         */
         background: "linear-gradient(180deg, var(--ds-color-bg-elevated) 0%, var(--ds-color-bg-surface) 100%)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         foreground: "var(--ds-color-text-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border
+         */
         border: "var(--ds-color-border)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-50
+         */
         shadow: "0 16px 36px -24px color-mix(in srgb, var(--ds-color-neutral-50) 80%, transparent), 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent)",
       },
       overlay: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-elevated
+         */
         background: "var(--ds-color-bg-elevated)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         foreground: "var(--ds-color-text-primary)",
       },
     },
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-surface-card, --ds-surface-panel, --ds-surface-canvas
+     */
     gradients: {
       surface: "linear-gradient(145deg, var(--ds-surface-card) 0%, var(--ds-surface-panel) 58%, var(--ds-surface-canvas) 100%)",
     },
+  /**
+   * @placeholder OVERLAY.surfaces.elevations
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.shadows.focusRing
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.shadows.focusRingError
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.shadows.inner
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.shadows.xs
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.shadows.xxl
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
   },
   /**
    * Familia mixta. Controles: chrome.families, palette.seeds, shape.radius-scale, typography.scale, navigation.sidebar-tone.

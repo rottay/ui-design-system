@@ -65,6 +65,10 @@ const OVERLAY: BrandThemeModeOverlay = {
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
    */
   palette: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     ramps: {
       primary: {
         50: "#FAFAF9",
@@ -163,19 +167,75 @@ const OVERLAY: BrandThemeModeOverlay = {
         900: "#1E3A8A",
       },
     },
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     primaryColor: "#0A0A0A",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     primaryHoverColor: "#2A2A2A",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     primaryForegroundColor: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     secondaryColor: "#6B6B6B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     secondaryHoverColor: "#525252",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     accentColor: "#6B6B6B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     accentHoverColor: "#525252",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundColor: "#FAFAF9",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundSecondaryColor: "#F4F4F3",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundTertiaryColor: "#EDEDEC",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundElevatedColor: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundOverlayColor: "rgba(0, 0, 0, 0.48)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     backgroundSurfaceColor: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textPrimaryColor: "#1A1A1A",
     /**
      * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
@@ -184,33 +244,145 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
      */
     textPageColor: "#6B6B6B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textSecondaryColor: "#6B6B6B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textTertiaryColor: "#8A8A8A",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textMutedColor: "#9C9C9C",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textDisabledColor: "#C4C4C2",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     onPrimaryColor: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderColor: "#E5E5E3",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderSecondaryColor: "#D4D4D2",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderSubtleColor: "#EDEDEC",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderTertiaryColor: "#EDEDEC",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     borderFocusColor: "rgba(10, 10, 10, 0.32)",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     linkColor: "#1A1A1A",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     linkVisitedColor: "#6B6B6B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     successColor: "#16A34A",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     successBgColor: "rgba(22, 163, 74, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     successBorderColor: "rgba(22, 163, 74, 0.20)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     warningColor: "#D97706",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     warningBgColor: "rgba(217, 119, 6, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     warningBorderColor: "rgba(217, 119, 6, 0.20)",
+    /**
+     * @domicile seed
+     * @governor dial: token-overrides
+     */
     errorColor: "#DC2626",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     errorBgColor: "rgba(220, 38, 38, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     errorBorderColor: "rgba(220, 38, 38, 0.20)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     infoColor: "#2563EB",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     infoBgColor: "rgba(37, 99, 235, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     infoBorderColor: "rgba(37, 99, 235, 0.20)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBorderColor: "rgba(0, 0, 0, 0.12)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBgHoverColor: "rgba(0, 0, 0, 0.03)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBgActiveColor: "#EDEDEC",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     interactiveBgMutedColor: "#F4F4F3",
 
     // Light overlay for the T1 drain. A channel the dark body authors and
@@ -219,45 +391,199 @@ const OVERLAY: BrandThemeModeOverlay = {
     // the value the light artifact block already shipped, or, where that
     // block was silent, with the expression the DS floor resolved to on
     // the light root.
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaBlack50: "rgba(0, 0, 0, 0.03)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaBlack100: "rgba(0, 0, 0, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaWhite50: "rgba(255, 255, 255, 0.50)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaPrimary10: "rgba(10, 10, 10, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaPrimary20: "rgba(10, 10, 10, 0.12)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaSecondary10: "rgba(107, 107, 107, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaSecondary20: "rgba(107, 107, 107, 0.14)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaSuccess10: "rgba(22, 163, 74, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaSuccess20: "rgba(22, 163, 74, 0.14)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaWarning10: "rgba(217, 119, 6, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaWarning20: "rgba(217, 119, 6, 0.14)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaError10: "rgba(220, 38, 38, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaError20: "rgba(220, 38, 38, 0.14)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     alphaInfo10: "rgba(37, 99, 235, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bgHoverColor: "#F0EFEE",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-info-50
+     */
     bgInfoColor: "var(--ds-color-info-50)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bgSubtleColor: "#F7F7F6",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-white
+     */
     neutralZeroColor: "var(--ds-color-white)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     primarySubtleColor: "rgba(10, 10, 10, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     shadowColor: "rgba(0, 0, 0, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     surfaceColor: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     surfaceMutedColor: "#EDEDEC",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-bg-secondary
+     */
     surfaceSecondaryColor: "var(--ds-color-bg-secondary)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-primary
+     */
     textColor: "var(--ds-color-text-primary)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textInverseColor: "#FAFAF9",
 
     aliases: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       textPrimary: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       textSecondary: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       textTertiary: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-disabled
+       */
       textDisabled: "var(--ds-color-text-disabled)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       textInverse: "#FAFAF9",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       borderColor: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-primary
+       */
       borderColorDefault: "var(--ds-color-border-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-subtle
+       */
       borderColorMuted: "var(--ds-color-border-subtle)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       borderColorStrong: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       borderColorHover: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderColorFocus: "rgba(10, 10, 10, 0.40)",
     },
+  /**
+   * @placeholder OVERLAY.palette.infoInkColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.palette.linkHoverColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
   },
   /**
    * Familia mixta. Controles: palette.seeds, chrome.families, token-overrides, navigation.sidebar-tone.
@@ -920,25 +1246,65 @@ const OVERLAY: BrandThemeModeOverlay = {
       nodeColorSelected: "#1A1A1A",
     },
   },
-  /**
-   * @domicile unassigned
-   * @governor gap medido: gobierno parcial — palette.seeds alcanza 12 de 15 canales de la familia (3 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
-   */
   surfaces: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderRadius: {
       full: "9999px",
     },
     shadows: {
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       sm: "0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       md: "0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.06)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       lg: "0 4px 8px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.08)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       xl: "0 8px 16px rgba(0, 0, 0, 0.06), 0 20px 48px rgba(0, 0, 0, 0.10)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       xs: "0 1px 2px rgba(0, 0, 0, 0.04)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       xxl: "0 12px 24px rgba(0, 0, 0, 0.08), 0 32px 64px rgba(0, 0, 0, 0.14)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       focusRing: "0 0 0 3px rgba(10, 10, 10, 0.10)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       focusRingError: "0 0 0 3px rgba(220, 38, 38, 0.14)",
     },
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     elevations: {
       level1:
         "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)",
@@ -951,6 +1317,16 @@ const OVERLAY: BrandThemeModeOverlay = {
       level5:
         "0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent)",
     },
+  /**
+   * @placeholder OVERLAY.surfaces.gradients
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo no diverge en este slot; SURFACES lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.surfaces.surfaceRoles
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
   },
   /**
    * @placeholder OVERLAY.typography
