@@ -6,21 +6,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 87046,
-        "lines": 2621,
-        "sha256": "a14620820e7cb08ffb261f0717a0ed2c609b62681707ff7af4bd4bab67ad8792"
+        "bytes": 90924,
+        "lines": 2722,
+        "sha256": "de7faf7861286f7e590eca15d38a2c14f886f56ba7cf259b79858c78183694c0"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 103163,
-        "lines": 2619,
-        "sha256": "db81fdf5c983ae40235713badc0209a242f1ec227f1886eefed5c28f92e7cc57"
+        "bytes": 103739,
+        "lines": 2633,
+        "sha256": "c7eec51d6b114eac7fdf977fbcb0fc07c4e9faac07531074dd9ad01a81db912e"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 40636,
-        "lines": 1207,
-        "sha256": "a1164c1c55200630900c7a9e3d7627c18ae492f7cf7e55074e910f9148a66585"
+        "bytes": 40917,
+        "lines": 1214,
+        "sha256": "c911975efc61316d193e7fccbf9125d2321ef4158298ea0be07e67818c221b9a"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch."
@@ -185,8 +185,17 @@
   },
   "tagRegistry": {
     "law": "Vocabulario CERRADO: seed | baseline | derived | pro-expert | unassigned. @governor obligatorio, de una linea.",
-    "count": 216,
+    "count": 252,
     "entries": [
+      {
+        "tenant": "rottay",
+        "scope": "OVERLAY.palette.textPageColor",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: tenant-dial (tinta de pagina); calibracion en F4B",
+        "governorClass": "dial",
+        "line": 180
+      },
       {
         "tenant": "rottay",
         "scope": "OVERLAY.surfaces",
@@ -194,7 +203,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 983
+        "line": 953
       },
       {
         "tenant": "rottay",
@@ -203,7 +212,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el modo de rottay no diverge en typography",
         "governorClass": "capability-o-gap",
-        "line": 1015
+        "line": 985
       },
       {
         "tenant": "rottay",
@@ -212,7 +221,7 @@
         "domicile": "pro-expert",
         "governor": "capability: recipes (activa en rottay)",
         "governorClass": "capability",
-        "line": 1023
+        "line": 993
       },
       {
         "tenant": "rottay",
@@ -221,7 +230,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability expressive no autorada en rottay (capabilities.expressive dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 1031
+        "line": 1001
       },
       {
         "tenant": "rottay",
@@ -230,7 +239,7 @@
         "domicile": "seed",
         "governor": "dial en F4B (semilla de color; el roster no le da dial hoy)",
         "governorClass": "dial",
-        "line": 1043
+        "line": 1013
       },
       {
         "tenant": "rottay",
@@ -239,7 +248,16 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1148
+        "line": 1118
+      },
+      {
+        "tenant": "rottay",
+        "scope": "PALETTE.textPageColor",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: tenant-dial (tinta de pagina); calibracion en F4B",
+        "governorClass": "dial",
+        "line": 1136
       },
       {
         "tenant": "rottay",
@@ -248,7 +266,7 @@
         "domicile": "seed",
         "governor": "dial en F4B (raiz autora del par border, K2: --ds-color-border)",
         "governorClass": "dial",
-        "line": 1171
+        "line": 1148
       },
       {
         "tenant": "rottay",
@@ -257,7 +275,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 1176
+        "line": 1153
       },
       {
         "tenant": "rottay",
@@ -266,7 +284,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1184
+        "line": 1161
       },
       {
         "tenant": "rottay",
@@ -275,7 +293,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1189
+        "line": 1166
       },
       {
         "tenant": "rottay",
@@ -284,7 +302,7 @@
         "domicile": "seed",
         "governor": "dial: token-overrides",
         "governorClass": "dial",
-        "line": 1206
+        "line": 1183
       },
       {
         "tenant": "rottay",
@@ -293,7 +311,16 @@
         "domicile": "pro-expert",
         "governor": "capability: motion (activa en rottay)",
         "governorClass": "capability",
-        "line": 1330
+        "line": 1307
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.badge.secondaryColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1357
       },
       {
         "tenant": "rottay",
@@ -302,7 +329,7 @@
         "domicile": "seed",
         "governor": "dial: navigation.sidebar-tone",
         "governorClass": "dial",
-        "line": 1408
+        "line": 1389
       },
       {
         "tenant": "rottay",
@@ -311,7 +338,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia metricCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1412
+        "line": 1393
       },
       {
         "tenant": "rottay",
@@ -320,7 +347,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia listingGrid (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1417
+        "line": 1398
       },
       {
         "tenant": "rottay",
@@ -329,7 +356,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia filterPill (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1422
+        "line": 1403
       },
       {
         "tenant": "rottay",
@@ -338,7 +365,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia detail (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1427
+        "line": 1408
       },
       {
         "tenant": "rottay",
@@ -347,7 +374,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia compactCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1432
+        "line": 1413
       },
       {
         "tenant": "rottay",
@@ -356,7 +383,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia collectionCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1437
+        "line": 1418
       },
       {
         "tenant": "rottay",
@@ -365,7 +392,16 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1526
+        "line": 1507
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.popover.contentColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1514
       },
       {
         "tenant": "rottay",
@@ -374,7 +410,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1539
+        "line": 1524
       },
       {
         "tenant": "rottay",
@@ -383,7 +419,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia toolbar (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1543
+        "line": 1528
       },
       {
         "tenant": "rottay",
@@ -392,7 +428,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia tallCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1548
+        "line": 1533
       },
       {
         "tenant": "rottay",
@@ -401,7 +437,70 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia signalCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1553
+        "line": 1538
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.segmented.itemColorHover",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1702
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.form.labelColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1786
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.select.clearColorHover",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1849
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.select.tagColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1861
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.upload.buttonColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 1997
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.upload.draggerTextColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2009
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.controls.upload.fileColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2016
       },
       {
         "tenant": "rottay",
@@ -410,7 +509,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2015
+        "line": 2028
       },
       {
         "tenant": "rottay",
@@ -419,7 +518,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2043
+        "line": 2056
       },
       {
         "tenant": "rottay",
@@ -428,7 +527,34 @@
         "domicile": "seed",
         "governor": "dial: typography.scale",
         "governorClass": "dial",
-        "line": 2064
+        "line": 2077
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.table.headerColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2085
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.cardComponent.subtitleColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2131
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.cardComponent.bodyColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2136
       },
       {
         "tenant": "rottay",
@@ -437,7 +563,16 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2123
+        "line": 2148
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.modal.bodyColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2162
       },
       {
         "tenant": "rottay",
@@ -446,7 +581,34 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2144
+        "line": 2173
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.avatar.defaultColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2256
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.avatar.groupOverflowColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2267
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.avatar.secondaryColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2276
       },
       {
         "tenant": "rottay",
@@ -455,7 +617,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2246
+        "line": 2287
       },
       {
         "tenant": "rottay",
@@ -464,7 +626,16 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2284
+        "line": 2325
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.drawer.bodyColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2331
       },
       {
         "tenant": "rottay",
@@ -473,7 +644,34 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2296
+        "line": 2341
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.dropdown.itemColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2349
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.floatButton.defaultColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2373
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.floatButton.descriptionColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2378
       },
       {
         "tenant": "rottay",
@@ -482,7 +680,25 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2329
+        "line": 2386
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.liveFeed.refreshColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2400
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.menu.itemColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2420
       },
       {
         "tenant": "rottay",
@@ -491,7 +707,16 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2377
+        "line": 2442
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.pagination.itemColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2461
       },
       {
         "tenant": "rottay",
@@ -500,7 +725,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2418
+        "line": 2487
       },
       {
         "tenant": "rottay",
@@ -509,7 +734,79 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2427
+        "line": 2496
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.statistic.prefixColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2508
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.statistic.suffixColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2513
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.statistic.titleColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2518
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.statsGrid.labelColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2536
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.tag.defaultColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2572
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.tag.secondaryColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2585
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.timeline.contentColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2601
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.tree.nodeColor",
+        "kind": "scope",
+        "domicile": "derived",
+        "governor": "deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)",
+        "governorClass": "funcion-o-raiz",
+        "line": 2616
       },
       {
         "tenant": "rottay",
@@ -518,7 +815,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: rottay no autora la familia workspaceCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 2522
+        "line": 2623
       },
       {
         "tenant": "rottay",
@@ -527,7 +824,16 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability expressive no autorada en rottay (capabilities.expressive dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 2594
+        "line": 2695
+      },
+      {
+        "tenant": "bithire",
+        "scope": "OVERLAY.palette.textPageColor",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: tenant-dial (tinta de pagina); calibracion en F4B",
+        "governorClass": "dial",
+        "line": 184
       },
       {
         "tenant": "bithire",
@@ -536,7 +842,7 @@
         "domicile": "pro-expert",
         "governor": "capability: recipes (activa en bithire)",
         "governorClass": "capability",
-        "line": 757
+        "line": 764
       },
       {
         "tenant": "bithire",
@@ -545,7 +851,7 @@
         "domicile": "pro-expert",
         "governor": "capability: expressive (activa en bithire)",
         "governorClass": "capability",
-        "line": 774
+        "line": 781
       },
       {
         "tenant": "bithire",
@@ -554,7 +860,7 @@
         "domicile": "seed",
         "governor": "dial en F4B (semilla de color; el roster no le da dial hoy)",
         "governorClass": "dial",
-        "line": 831
+        "line": 838
       },
       {
         "tenant": "bithire",
@@ -563,7 +869,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 837
+        "line": 844
       },
       {
         "tenant": "bithire",
@@ -572,7 +878,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 842
+        "line": 849
       },
       {
         "tenant": "bithire",
@@ -581,7 +887,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 847
+        "line": 854
       },
       {
         "tenant": "bithire",
@@ -590,7 +896,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 852
+        "line": 859
       },
       {
         "tenant": "bithire",
@@ -599,7 +905,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 857
+        "line": 864
       },
       {
         "tenant": "bithire",
@@ -608,7 +914,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 862
+        "line": 869
       },
       {
         "tenant": "bithire",
@@ -617,7 +923,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 867
+        "line": 874
       },
       {
         "tenant": "bithire",
@@ -626,7 +932,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 872
+        "line": 879
       },
       {
         "tenant": "bithire",
@@ -635,7 +941,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 877
+        "line": 884
       },
       {
         "tenant": "bithire",
@@ -644,7 +950,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 882
+        "line": 889
       },
       {
         "tenant": "bithire",
@@ -653,7 +959,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 887
+        "line": 894
       },
       {
         "tenant": "bithire",
@@ -662,7 +968,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 892
+        "line": 899
       },
       {
         "tenant": "bithire",
@@ -671,7 +977,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 897
+        "line": 904
       },
       {
         "tenant": "bithire",
@@ -680,7 +986,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 902
+        "line": 909
       },
       {
         "tenant": "bithire",
@@ -689,7 +995,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 907
+        "line": 914
       },
       {
         "tenant": "bithire",
@@ -698,7 +1004,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 912
+        "line": 919
       },
       {
         "tenant": "bithire",
@@ -707,7 +1013,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 931
+        "line": 938
       },
       {
         "tenant": "bithire",
@@ -716,7 +1022,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 937
+        "line": 944
       },
       {
         "tenant": "bithire",
@@ -725,7 +1031,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 942
+        "line": 949
       },
       {
         "tenant": "bithire",
@@ -734,7 +1040,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 947
+        "line": 954
       },
       {
         "tenant": "bithire",
@@ -743,7 +1049,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 952
+        "line": 959
       },
       {
         "tenant": "bithire",
@@ -752,7 +1058,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 957
+        "line": 964
       },
       {
         "tenant": "bithire",
@@ -761,7 +1067,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 962
+        "line": 969
       },
       {
         "tenant": "bithire",
@@ -770,7 +1076,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 967
+        "line": 974
       },
       {
         "tenant": "bithire",
@@ -779,7 +1085,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 981
+        "line": 988
       },
       {
         "tenant": "bithire",
@@ -788,7 +1094,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 986
+        "line": 993
       },
       {
         "tenant": "bithire",
@@ -797,7 +1103,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 991
+        "line": 998
       },
       {
         "tenant": "bithire",
@@ -806,7 +1112,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 996
+        "line": 1003
       },
       {
         "tenant": "bithire",
@@ -815,7 +1121,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 1001
+        "line": 1008
       },
       {
         "tenant": "bithire",
@@ -824,7 +1130,16 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora esta hoja de palette",
         "governorClass": "capability-o-gap",
-        "line": 1006
+        "line": 1013
+      },
+      {
+        "tenant": "bithire",
+        "scope": "PALETTE.textPageColor",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: tenant-dial (tinta de pagina); calibracion en F4B",
+        "governorClass": "dial",
+        "line": 1019
       },
       {
         "tenant": "bithire",
@@ -833,7 +1148,7 @@
         "domicile": "seed",
         "governor": "dial en F4B (raiz autora del par border, K2: --ds-color-border)",
         "governorClass": "dial",
-        "line": 1017
+        "line": 1031
       },
       {
         "tenant": "bithire",
@@ -842,7 +1157,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 1022
+        "line": 1036
       },
       {
         "tenant": "bithire",
@@ -851,7 +1166,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1030
+        "line": 1044
       },
       {
         "tenant": "bithire",
@@ -860,7 +1175,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1035
+        "line": 1049
       },
       {
         "tenant": "bithire",
@@ -869,7 +1184,7 @@
         "domicile": "seed",
         "governor": "dial: token-overrides",
         "governorClass": "dial",
-        "line": 1048
+        "line": 1062
       },
       {
         "tenant": "bithire",
@@ -878,7 +1193,7 @@
         "domicile": "pro-expert",
         "governor": "capability: motion (activa en bithire)",
         "governorClass": "capability",
-        "line": 1242
+        "line": 1256
       },
       {
         "tenant": "bithire",
@@ -887,7 +1202,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia calendar (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1285
+        "line": 1299
       },
       {
         "tenant": "bithire",
@@ -896,7 +1211,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia backTop (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1290
+        "line": 1304
       },
       {
         "tenant": "bithire",
@@ -905,7 +1220,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia avatar (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1295
+        "line": 1309
       },
       {
         "tenant": "bithire",
@@ -914,7 +1229,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia anchor (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1300
+        "line": 1314
       },
       {
         "tenant": "bithire",
@@ -923,7 +1238,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia alert (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1305
+        "line": 1319
       },
       {
         "tenant": "bithire",
@@ -932,7 +1247,7 @@
         "domicile": "seed",
         "governor": "dial: navigation.sidebar-tone",
         "governorClass": "dial",
-        "line": 1328
+        "line": 1342
       },
       {
         "tenant": "bithire",
@@ -941,7 +1256,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia result (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1332
+        "line": 1346
       },
       {
         "tenant": "bithire",
@@ -950,7 +1265,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia progress (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1337
+        "line": 1351
       },
       {
         "tenant": "bithire",
@@ -959,7 +1274,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia popover (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1342
+        "line": 1356
       },
       {
         "tenant": "bithire",
@@ -968,7 +1283,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia pagination (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1347
+        "line": 1361
       },
       {
         "tenant": "bithire",
@@ -977,7 +1292,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia notification (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1352
+        "line": 1366
       },
       {
         "tenant": "bithire",
@@ -986,7 +1301,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia message (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1357
+        "line": 1371
       },
       {
         "tenant": "bithire",
@@ -995,7 +1310,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia menu (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1362
+        "line": 1376
       },
       {
         "tenant": "bithire",
@@ -1004,7 +1319,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia liveFeed (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1367
+        "line": 1381
       },
       {
         "tenant": "bithire",
@@ -1013,7 +1328,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia floatButton (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1372
+        "line": 1386
       },
       {
         "tenant": "bithire",
@@ -1022,7 +1337,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia empty (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1377
+        "line": 1391
       },
       {
         "tenant": "bithire",
@@ -1031,7 +1346,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia dropdown (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1382
+        "line": 1396
       },
       {
         "tenant": "bithire",
@@ -1040,7 +1355,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia drawer (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1387
+        "line": 1401
       },
       {
         "tenant": "bithire",
@@ -1049,7 +1364,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia descriptions (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1392
+        "line": 1406
       },
       {
         "tenant": "bithire",
@@ -1058,7 +1373,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia collapse (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1397
+        "line": 1411
       },
       {
         "tenant": "bithire",
@@ -1067,7 +1382,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1444
+        "line": 1458
       },
       {
         "tenant": "bithire",
@@ -1076,7 +1391,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia timeline (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1508
+        "line": 1522
       },
       {
         "tenant": "bithire",
@@ -1085,7 +1400,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia tag (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1513
+        "line": 1527
       },
       {
         "tenant": "bithire",
@@ -1094,7 +1409,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia steps (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1518
+        "line": 1532
       },
       {
         "tenant": "bithire",
@@ -1103,7 +1418,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia statsGrid (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1523
+        "line": 1537
       },
       {
         "tenant": "bithire",
@@ -1112,7 +1427,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia statistic (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1528
+        "line": 1542
       },
       {
         "tenant": "bithire",
@@ -1121,7 +1436,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia spinner (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1533
+        "line": 1547
       },
       {
         "tenant": "bithire",
@@ -1130,7 +1445,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia skeleton (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1538
+        "line": 1552
       },
       {
         "tenant": "bithire",
@@ -1139,7 +1454,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1557
+        "line": 1571
       },
       {
         "tenant": "bithire",
@@ -1148,7 +1463,7 @@
         "domicile": "seed",
         "governor": "dial: typography.families",
         "governorClass": "dial",
-        "line": 1585
+        "line": 1599
       },
       {
         "tenant": "bithire",
@@ -1157,7 +1472,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2191
+        "line": 2205
       },
       {
         "tenant": "bithire",
@@ -1166,7 +1481,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2214
+        "line": 2228
       },
       {
         "tenant": "bithire",
@@ -1175,7 +1490,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2278
+        "line": 2292
       },
       {
         "tenant": "bithire",
@@ -1184,7 +1499,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: bithire no autora la familia tree (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 2305
+        "line": 2319
       },
       {
         "tenant": "bithire",
@@ -1193,7 +1508,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2394
+        "line": 2408
       },
       {
         "tenant": "bithire",
@@ -1202,7 +1517,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2427
+        "line": 2441
       },
       {
         "tenant": "bithire",
@@ -1211,7 +1526,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2457
+        "line": 2471
       },
       {
         "tenant": "bithire",
@@ -1220,7 +1535,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 2479
+        "line": 2493
       },
       {
         "tenant": "evnto",
@@ -1575,12 +1890,21 @@
       },
       {
         "tenant": "evnto",
+        "scope": "PALETTE.textPageColor",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: tenant-dial (tinta de pagina); calibracion en F4B",
+        "governorClass": "dial",
+        "line": 492
+      },
+      {
+        "tenant": "evnto",
         "scope": "PALETTE.errorColor",
         "kind": "scope",
         "domicile": "seed",
         "governor": "dial: token-overrides",
         "governorClass": "dial",
-        "line": 501
+        "line": 508
       },
       {
         "tenant": "evnto",
@@ -1589,7 +1913,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 508
+        "line": 515
       },
       {
         "tenant": "evnto",
@@ -1598,7 +1922,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 514
+        "line": 521
       },
       {
         "tenant": "evnto",
@@ -1607,7 +1931,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 522
+        "line": 529
       },
       {
         "tenant": "evnto",
@@ -1616,7 +1940,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 528
+        "line": 535
       },
       {
         "tenant": "evnto",
@@ -1625,7 +1949,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 534
+        "line": 541
       },
       {
         "tenant": "evnto",
@@ -1634,7 +1958,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 539
+        "line": 546
       },
       {
         "tenant": "evnto",
@@ -1643,7 +1967,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 544
+        "line": 551
       },
       {
         "tenant": "evnto",
@@ -1652,7 +1976,7 @@
         "domicile": "derived",
         "governor": "deriva de: --ds-color-border (raiz canonica del par, K2)",
         "governorClass": "funcion-o-raiz",
-        "line": 549
+        "line": 556
       },
       {
         "tenant": "evnto",
@@ -1661,7 +1985,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 554
+        "line": 561
       },
       {
         "tenant": "evnto",
@@ -1670,7 +1994,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 559
+        "line": 566
       },
       {
         "tenant": "evnto",
@@ -1679,7 +2003,7 @@
         "domicile": "unassigned",
         "governor": "capability: motion — evnto no la autora localmente: delega en el preset congelado EVNTO_CANONICAL_MOTION",
         "governorClass": "capability-o-gap",
-        "line": 629
+        "line": 636
       },
       {
         "tenant": "evnto",
@@ -1688,7 +2012,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia calendar (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 655
+        "line": 662
       },
       {
         "tenant": "evnto",
@@ -1697,7 +2021,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia breadcrumb (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 660
+        "line": 667
       },
       {
         "tenant": "evnto",
@@ -1706,7 +2030,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia badge (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 665
+        "line": 672
       },
       {
         "tenant": "evnto",
@@ -1715,7 +2039,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia backTop (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 670
+        "line": 677
       },
       {
         "tenant": "evnto",
@@ -1724,7 +2048,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia avatar (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 675
+        "line": 682
       },
       {
         "tenant": "evnto",
@@ -1733,7 +2057,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia anchor (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 680
+        "line": 687
       },
       {
         "tenant": "evnto",
@@ -1742,7 +2066,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia alert (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 685
+        "line": 692
       },
       {
         "tenant": "evnto",
@@ -1751,7 +2075,7 @@
         "domicile": "seed",
         "governor": "dial: navigation.sidebar-tone",
         "governorClass": "dial",
-        "line": 708
+        "line": 715
       },
       {
         "tenant": "evnto",
@@ -1760,7 +2084,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia search (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 712
+        "line": 719
       },
       {
         "tenant": "evnto",
@@ -1769,7 +2093,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia result (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 717
+        "line": 724
       },
       {
         "tenant": "evnto",
@@ -1778,7 +2102,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia progress (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 722
+        "line": 729
       },
       {
         "tenant": "evnto",
@@ -1787,7 +2111,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia popover (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 727
+        "line": 734
       },
       {
         "tenant": "evnto",
@@ -1796,7 +2120,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia pagination (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 732
+        "line": 739
       },
       {
         "tenant": "evnto",
@@ -1805,7 +2129,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia notification (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 737
+        "line": 744
       },
       {
         "tenant": "evnto",
@@ -1814,7 +2138,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia modal (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 742
+        "line": 749
       },
       {
         "tenant": "evnto",
@@ -1823,7 +2147,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia metricCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 747
+        "line": 754
       },
       {
         "tenant": "evnto",
@@ -1832,7 +2156,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia message (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 752
+        "line": 759
       },
       {
         "tenant": "evnto",
@@ -1841,7 +2165,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia menu (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 757
+        "line": 764
       },
       {
         "tenant": "evnto",
@@ -1850,7 +2174,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia liveFeed (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 762
+        "line": 769
       },
       {
         "tenant": "evnto",
@@ -1859,7 +2183,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia listingGrid (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 767
+        "line": 774
       },
       {
         "tenant": "evnto",
@@ -1868,7 +2192,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia list (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 772
+        "line": 779
       },
       {
         "tenant": "evnto",
@@ -1877,7 +2201,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia floatButton (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 777
+        "line": 784
       },
       {
         "tenant": "evnto",
@@ -1886,7 +2210,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia filterPill (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 782
+        "line": 789
       },
       {
         "tenant": "evnto",
@@ -1895,7 +2219,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia empty (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 787
+        "line": 794
       },
       {
         "tenant": "evnto",
@@ -1904,7 +2228,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia dropdown (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 792
+        "line": 799
       },
       {
         "tenant": "evnto",
@@ -1913,7 +2237,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia drawer (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 797
+        "line": 804
       },
       {
         "tenant": "evnto",
@@ -1922,7 +2246,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia detail (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 802
+        "line": 809
       },
       {
         "tenant": "evnto",
@@ -1931,7 +2255,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia descriptions (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 807
+        "line": 814
       },
       {
         "tenant": "evnto",
@@ -1940,7 +2264,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia compactCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 812
+        "line": 819
       },
       {
         "tenant": "evnto",
@@ -1949,7 +2273,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia collectionCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 817
+        "line": 824
       },
       {
         "tenant": "evnto",
@@ -1958,7 +2282,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia collapse (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 822
+        "line": 829
       },
       {
         "tenant": "evnto",
@@ -1967,7 +2291,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 985
+        "line": 992
       },
       {
         "tenant": "evnto",
@@ -1976,7 +2300,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia steps (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 989
+        "line": 996
       },
       {
         "tenant": "evnto",
@@ -1985,7 +2309,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia statsGrid (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 994
+        "line": 1001
       },
       {
         "tenant": "evnto",
@@ -1994,7 +2318,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia statistic (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 999
+        "line": 1006
       },
       {
         "tenant": "evnto",
@@ -2003,7 +2327,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia spinner (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1004
+        "line": 1011
       },
       {
         "tenant": "evnto",
@@ -2012,7 +2336,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia skeleton (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1009
+        "line": 1016
       },
       {
         "tenant": "evnto",
@@ -2021,7 +2345,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia signalCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1014
+        "line": 1021
       },
       {
         "tenant": "evnto",
@@ -2030,7 +2354,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1036
+        "line": 1043
       },
       {
         "tenant": "evnto",
@@ -2039,7 +2363,7 @@
         "domicile": "seed",
         "governor": "dial: palette.seeds",
         "governorClass": "dial",
-        "line": 1066
+        "line": 1073
       },
       {
         "tenant": "evnto",
@@ -2048,7 +2372,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia tabs (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1076
+        "line": 1083
       },
       {
         "tenant": "evnto",
@@ -2057,7 +2381,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia tag (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1081
+        "line": 1088
       },
       {
         "tenant": "evnto",
@@ -2066,7 +2390,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia tallCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1086
+        "line": 1093
       },
       {
         "tenant": "evnto",
@@ -2075,7 +2399,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia timeline (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1091
+        "line": 1098
       },
       {
         "tenant": "evnto",
@@ -2084,7 +2408,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia toolbar (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1096
+        "line": 1103
       },
       {
         "tenant": "evnto",
@@ -2093,7 +2417,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia tooltip (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1101
+        "line": 1108
       },
       {
         "tenant": "evnto",
@@ -2102,7 +2426,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia tree (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1106
+        "line": 1113
       },
       {
         "tenant": "evnto",
@@ -2111,7 +2435,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: evnto no autora la familia workspaceCard (gobernaria chrome.families)",
         "governorClass": "capability-o-gap",
-        "line": 1111
+        "line": 1118
       },
       {
         "tenant": "evnto",
@@ -2120,7 +2444,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability recipes no autorada en evnto (capabilities.recipes dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 1173
+        "line": 1180
       },
       {
         "tenant": "evnto",
@@ -2129,59 +2453,59 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability expressive no autorada en evnto (capabilities.expressive dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 1180
+        "line": 1187
       }
     ]
   },
   "matrix": {
     "unit": "authored-decision-leaf-path (importada de mirror-parity/authoredLeafPaths)",
     "leaves": {
-      "rottay": 1819,
-      "bithire": 1502,
-      "evnto": 396
+      "rottay": 1786,
+      "bithire": 1504,
+      "evnto": 397
     },
-    "universe": 2612,
-    "union": 2612,
+    "universe": 2586,
+    "union": 2586,
     "intersection": 344,
     "positionIntersection": 892,
     "positions": {
       "rottay": {
-        "authored": 1819,
+        "authored": 1786,
         "placeholder": 162,
-        "absent": 631
+        "absent": 638
       },
       "bithire": {
-        "authored": 1502,
+        "authored": 1504,
         "placeholder": 298,
-        "absent": 812
+        "absent": 784
       },
       "evnto": {
-        "authored": 396,
+        "authored": 397,
         "placeholder": 681,
-        "absent": 1535
+        "absent": 1508
       }
     },
     "exclusive": {
-      "rottay": 1061,
-      "bithire": 788,
-      "evnto": 2
+      "rottay": 1033,
+      "bithire": 793,
+      "evnto": 3
     },
     "orphanPlaceholders": [],
     "paintLeaves": {
-      "rottay": 1807,
-      "bithire": 1491,
-      "evnto": 385
+      "rottay": 1774,
+      "bithire": 1493,
+      "evnto": 386
     },
     "taggedPaintLeaves": {
-      "rottay": 366,
-      "bithire": 347,
-      "evnto": 198
+      "rottay": 393,
+      "bithire": 349,
+      "evnto": 199
     }
   },
   "ratchet": {
     "law": "decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.",
-    "divergentSlots": 1720,
-    "untaggedAuthoredLeaves": 2772
+    "divergentSlots": 1694,
+    "untaggedAuthoredLeaves": 2712
   },
   "failures": []
 }

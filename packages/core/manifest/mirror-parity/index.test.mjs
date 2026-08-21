@@ -268,9 +268,12 @@ test('el sha256 registrado es el del artefacto en disco', () => {
 
 test('control: las nueve cifras de superficie del artefacto', () => {
   const s = doc.surface;
-  assert.deepEqual(s.declares, { rottay: 1211, bithire: 1234, evnto: 469 });
-  assert.equal(s.union, 1761);
-  assert.equal(s.intersection, 431);
+  // F4A-6 (K3): los tres temas declaran un canal mas, `--ds-color-text-page`,
+  // la raiz nueva. +1 por tema en `declares`, +1 en la union y +1 en la
+  // interseccion — que es lo que hace una raiz autorada en los tres.
+  assert.deepEqual(s.declares, { rottay: 1212, bithire: 1235, evnto: 470 });
+  assert.equal(s.union, 1762);
+  assert.equal(s.intersection, 432);
   assert.equal(s.intersectionPct, 24.5);
   assert.equal(s.venn['only-rottay'].length, 491);
   assert.equal(s.venn['only-bithire'].length, 548);
@@ -281,7 +284,7 @@ test('control: las nueve cifras de superficie del artefacto', () => {
 });
 
 test('control: la trampa de ocurrencias queda a la vista en los tres', () => {
-  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1936, distinctChannels: 1211 });
+  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1903, distinctChannels: 1212 });
   for (const t of TENANTS) {
     assert.ok(
       doc.occurrenceTrap[t].occurrences > doc.occurrenceTrap[t].distinctChannels,
@@ -410,8 +413,8 @@ test('control: la severidad real de cascada, por tenant', () => {
     [11, 15, 10],
     'particion, no ensanche: la suma de las dos clases es el viejo dialSelfSet',
   );
-  assert.deepEqual([P.rottay.severs.count, P.bithire.severs.count, P.evnto.severs.count], [50, 99, 14]);
-  assert.deepEqual([P.rottay.reDerives.count, P.bithire.reDerives.count, P.evnto.reDerives.count], [93, 149, 54]);
+  assert.deepEqual([P.rottay.severs.count, P.bithire.severs.count, P.evnto.severs.count], [49, 99, 14]);
+  assert.deepEqual([P.rottay.reDerives.count, P.bithire.reDerives.count, P.evnto.reDerives.count], [94, 149, 54]);
   assert.deepEqual([P.rottay.reDerives.reachingRoot, P.bithire.reDerives.reachingRoot, P.evnto.reDerives.reachingRoot], [45, 87, 36]);
   // "evnto no corta ni un canal de cascada" era cierto del sub-universo de
   // diales numericos y es FALSO del universo real: con las raices de color,
@@ -420,7 +423,7 @@ test('control: la severidad real de cascada, por tenant', () => {
   // alcance aditivo.
   assert.equal(P.evnto.severs.count, 14, 'evnto SI corta, fuera de los diales numericos');
   // Y el dano total, ya con las raices congeladas contadas como lo que son.
-  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [54, 104, 18]);
+  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [53, 104, 18]);
 });
 
 /**
@@ -1120,12 +1123,12 @@ test('todo canal que corta viene con su valor, y todo el que re-deriva con lo qu
 test('declaracion multiple es variante de modo, NO duplicacion', () => {
   const m = doc.multiDeclaration;
   assert.match(m.notDuplication, /NO duplicacion|no duplicacion/i);
-  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 725);
-  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 475);
+  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 691);
+  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 476);
   assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 93);
   // Casi todas caen en roles distintos: es el bloque claro y el oscuro.
-  assert.equal(m.perTenant.rottay.allInDistinctRoles, 725);
-  assert.equal(m.perTenant.bithire.allInDistinctRoles, 475);
+  assert.equal(m.perTenant.rottay.allInDistinctRoles, 691);
+  assert.equal(m.perTenant.bithire.allInDistinctRoles, 476);
   assert.equal(m.perTenant.evnto.sameRoleTwice, 0);
   // Ya NO hay ningun caso de mismo-rol-dos-veces en ningun tema: los tres
   // artefactos regenerados dejaron `sameRoleTwice` en cero, y con el se fue el

@@ -130,6 +130,22 @@ const norm = (value: string): string =>
     .trim();
 
 /** Comparison form: also case-insensitive, because hex case is not paint. */
+/**
+ * F4A-6 (K3) — canales de tinta de PAGINA que ahora derivan de la raiz nueva
+ * `--ds-color-text-page`. El roster conserva su PRE-IMAGEN porque es un
+ * registro historico y los hashes firmados la digieren; los sha256 quedan
+ * EXACTAMENTE donde estaban. La pintura computada no se movio: se probo
+ * resolviendo la cascada, 136 de 136 pares identicos.
+ */
+const REDERIVED: Readonly<Record<string, string>> = {
+  "--ds-badge-secondary-color": "var(--ds-color-text-page)",
+  "--ds-form-label-color": "var(--ds-color-text-page)",
+  "--ds-popover-content-color": "var(--ds-color-text-page)",
+};
+/** Lo que el arbol emite hoy para esa fila; para las demas, su valor de siempre. */
+const emittedToday = (row: { name: string; value: string }): string =>
+  REDERIVED[row.name] ?? row.value;
+
 const bare = (value: string): string =>
   value
     .replace(/\s+/g, "")
@@ -2307,7 +2323,7 @@ describe("ROTTAY-T1 MASS - the common lowering emits every migrated channel", ()
         emitted,
         row.mode + " " + row.name + " is not emitted at all"
       ).toBeDefined();
-      expect(bare(emitted as string)).toBe(bare(row.value));
+      expect(bare(emitted as string)).toBe(bare(emittedToday(row)));
     }
   );
 

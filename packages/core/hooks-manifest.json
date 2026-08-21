@@ -52,8 +52,8 @@
     "valueConstraint": "an assignment to a promoted hook must chain through DS/tenant tokens; a raw colour literal would pin brand paint an application user cannot re-theme"
   },
   "counts": {
-    "tenantChannel": 2190,
-    "compilerConcreteEmissions": 2245,
+    "tenantChannel": 2191,
+    "compilerConcreteEmissions": 2246,
     "compilerEmissionPatterns": 12,
     "themeContractFiles": 34,
     "ambiguousThemeContractTypes": 0,
@@ -8425,6 +8425,7 @@
     "--ds-color-text-inverse",
     "--ds-color-text-muted",
     "--ds-color-text-on-primary",
+    "--ds-color-text-page",
     "--ds-color-text-primary",
     "--ds-color-text-secondary",
     "--ds-color-text-tertiary",

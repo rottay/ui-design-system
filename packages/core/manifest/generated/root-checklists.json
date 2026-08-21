@@ -42,11 +42,11 @@
       "rootChannel": "--ds-experience-profile",
       "declaredAt": "manifest/cascade/roots/experience.profile.json:6",
       "reasonCode": "absent-from-fanout-facts",
-      "notMeasurableReason": "La cabeza --ds-experience-profile (manifest/cascade/roots/experience.profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:462. Sin nodo en los hechos no hay cascada que medir.",
+      "notMeasurableReason": "La cabeza --ds-experience-profile (manifest/cascade/roots/experience.profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:463. Sin nodo en los hechos no hay cascada que medir.",
       "evidence": [
         "manifest/cascade/roots/experience.profile.json:6",
         "manifest/fanout-facts/index.mjs:95",
-        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:462"
+        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:463"
       ]
     },
     {
@@ -54,12 +54,12 @@
       "rootChannel": "--ds-recipe-profile",
       "declaredAt": "manifest/cascade/roots/recipe-profile.json:6",
       "reasonCode": "absent-from-fanout-facts",
-      "notMeasurableReason": "La cabeza --ds-recipe-profile (manifest/cascade/roots/recipe-profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:816, src/foundation/tokens/css/facade/artifacts/rottay/index.css:766. Sin nodo en los hechos no hay cascada que medir.",
+      "notMeasurableReason": "La cabeza --ds-recipe-profile (manifest/cascade/roots/recipe-profile.json:6) no existe como canal en generated/fanout-facts.json. El corpus de hechos excluye los snapshots generados (manifest/fanout-facts/index.mjs:95), y este canal SOLO se declara ahi: src/foundation/tokens/css/facade/artifacts/bithire/index.css:817, src/foundation/tokens/css/facade/artifacts/rottay/index.css:767. Sin nodo en los hechos no hay cascada que medir.",
       "evidence": [
         "manifest/cascade/roots/recipe-profile.json:6",
         "manifest/fanout-facts/index.mjs:95",
-        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:816",
-        "src/foundation/tokens/css/facade/artifacts/rottay/index.css:766"
+        "src/foundation/tokens/css/facade/artifacts/bithire/index.css:817",
+        "src/foundation/tokens/css/facade/artifacts/rottay/index.css:767"
       ]
     },
     {

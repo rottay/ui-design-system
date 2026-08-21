@@ -3,7 +3,7 @@
   "generatedBy": "scripts/tokens/customization-surface-census/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "5f84bbf74bd60697f01b93fcfff5f3227d0011a38afe20fec1c3e752302b2c87",
+    "inputsDigest": "1a43150b555daaf692e729d5e5193b3c0fee11de5c5a8843ff476641a4c23e58",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -13,19 +13,19 @@
     }
   },
   "counts": {
-    "universe": 7302,
-    "writers": 4668,
+    "universe": 7303,
+    "writers": 4669,
     "foundationTokens": 3357,
     "componentTokens": 566,
-    "tenantChannels": 2190,
+    "tenantChannels": 2191,
     "publicHooks": 91,
     "unadjudicatedReads": 2607,
     "deadWriters": 266,
     "frontierReserved": 20,
     "modernConsumedUnique": 3674,
-    "tsReadNames": 2690,
-    "tsWriteNames": 1209,
-    "tsMetadataNames": 654,
+    "tsReadNames": 2691,
+    "tsWriteNames": 1210,
+    "tsMetadataNames": 655,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
@@ -28486,6 +28486,21 @@
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
+    },
+    "--ds-color-text-page": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 35,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-text-primary": {
       "category": "tenant-raw-override",

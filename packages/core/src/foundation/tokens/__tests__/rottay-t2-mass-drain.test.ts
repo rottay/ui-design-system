@@ -171,8 +171,21 @@ const letter = (mode: Mode): string => (mode === "dark" ? "D" : "L");
  * arbol emite hoy, no el color: `--ds-color-primary` ya valia `#FFFFFF` en el
  * cuerpo y `#0A0A0A` en el bloque claro.
  */
+/**
+ * F4A-6 (K3) — segunda tanda de re-derivados: los canales de tinta de PAGINA
+ * que ahora cuelgan de la raiz nueva `--ds-color-text-page`. Misma ley que la
+ * tanda de F2: el roster conserva su PRE-IMAGEN (#A0A0A5 en el cuerpo oscuro,
+ * #6B6B6B en el bloque claro) porque es un registro historico, y los tres
+ * hashes firmados quedan EXACTAMENTE donde estaban. La pintura computada no se
+ * movio: se probo resolviendo la cascada, 136 de 136 pares identicos.
+ */
 const REDERIVED: Readonly<Record<string, string>> = {
   "--ds-upload-progress-bar": "var(--ds-color-primary)",
+  "--ds-select-clear-color-hover": "var(--ds-color-text-page)",
+  "--ds-select-tag-color": "var(--ds-color-text-page)",
+  "--ds-upload-button-color": "var(--ds-color-text-page)",
+  "--ds-upload-dragger-text-color": "var(--ds-color-text-page)",
+  "--ds-upload-file-color": "var(--ds-color-text-page)",
 };
 
 /** Lo que el arbol emite hoy para esa fila; para las demas, su valor de siempre. */
@@ -1549,7 +1562,7 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         (total, leaves) => total + Object.keys(leaves).length,
         0
       )
-    ).toBe(140);
+    ).toBe(135);
   });
 
   it("compiles the dark document to a ZERO delta -- byte-identical, not merely close", () => {
@@ -1568,17 +1581,17 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
     expect(delta).toEqual({ "--ds-upload-dragger-bg-hover": "#123456" });
   });
 
-  it("compiles the light document to 140 entries, each byte-equal to the static light artifact", () => {
+  it("compiles the light document to 135 entries, each byte-equal to the static light artifact", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const names = Object.keys(delta).sort();
-    expect(names).toHaveLength(140);
+    expect(names).toHaveLength(135);
     for (const name of names) {
       expect(t2Names).toContain(name);
       expect(delta[name]).toBe(EMITTED.light[name]);
     }
   });
 
-  it("omits exactly the eight channels whose light paint equals its dark paint", () => {
+  it("omits exactly the thirteen channels whose light paint equals its dark paint", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const channels = FAMILIES.flatMap((family) =>
       family.fields.map(([, channel]) => channel)
@@ -1605,7 +1618,7 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         );
       })
       .sort();
-    expect(identical).toHaveLength(8);
+    expect(identical).toHaveLength(13);
     expect(omitted).toEqual(identical);
   });
 });

@@ -824,6 +824,8 @@ function brandThemeToCssVariables(
       vars["--ds-color-text-primary"] = bt.palette.textPrimaryColor;
     if (bt.palette.textSecondaryColor)
       vars["--ds-color-text-secondary"] = bt.palette.textSecondaryColor;
+    if (bt.palette.textPageColor)
+      vars["--ds-color-text-page"] = bt.palette.textPageColor;
     if (bt.palette.textMutedColor)
       vars["--ds-color-text-muted"] = bt.palette.textMutedColor;
     if (bt.palette.textDisabledColor)

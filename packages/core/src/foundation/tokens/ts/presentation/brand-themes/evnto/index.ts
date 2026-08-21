@@ -489,6 +489,13 @@ const PALETTE: BrandPalette = {
    * @governor none — gap aceptado: evnto no autora esta hoja de palette
    */
   textPrimaryColor: '#111111',
+  /**
+   * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
+   * labels de formulario — el mobiliario de pagina, no el contenido.
+   * @domicile seed
+   * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
+   */
+  textPageColor: '#3d3d3d',
   textSecondaryColor: '#3d3d3d',
   textTertiaryColor: '#5c5c5c',
   textMutedColor: '#737373',

@@ -175,11 +175,37 @@ const letter = (mode: Mode): string => (mode === "dark" ? "D" : "L");
  * queda sin nada que decir y estos cuatro entran en la lista de "identicos"
  * (186 -> 182 hojas light).
  */
+/**
+ * F4A-6 (K3) — segunda tanda de re-derivados: los canales de tinta de PAGINA
+ * que ahora cuelgan de la raiz nueva `--ds-color-text-page`. Misma ley que la
+ * tanda de F2: el roster conserva su PRE-IMAGEN (#A0A0A5 en el cuerpo oscuro,
+ * #6B6B6B en el bloque claro) porque es un registro historico, y los tres
+ * hashes firmados quedan EXACTAMENTE donde estaban. La pintura computada no se
+ * movio: se probo resolviendo la cascada, 136 de 136 pares identicos.
+ */
 const REDERIVED: Readonly<Record<string, string>> = {
   "--ds-floatbutton-primary-bg": "var(--ds-color-primary)",
   "--ds-live-feed-badge-bg": "var(--ds-color-primary)",
   "--ds-menu-focus-ring-color": "var(--ds-color-primary)",
   "--ds-spinner-color": "var(--ds-color-primary)",
+  "--ds-avatar-default-color": "var(--ds-color-text-page)",
+  "--ds-avatar-group-overflow-color": "var(--ds-color-text-page)",
+  "--ds-avatar-secondary-color": "var(--ds-color-text-page)",
+  "--ds-drawer-body-color": "var(--ds-color-text-page)",
+  "--ds-dropdown-item-color": "var(--ds-color-text-page)",
+  "--ds-floatbutton-default-color": "var(--ds-color-text-page)",
+  "--ds-floatbutton-description-color": "var(--ds-color-text-page)",
+  "--ds-live-feed-refresh-color": "var(--ds-color-text-page)",
+  "--ds-menu-item-color": "var(--ds-color-text-page)",
+  "--ds-pagination-item-color": "var(--ds-color-text-page)",
+  "--ds-statistic-prefix-color": "var(--ds-color-text-page)",
+  "--ds-statistic-suffix-color": "var(--ds-color-text-page)",
+  "--ds-statistic-title-color": "var(--ds-color-text-page)",
+  "--ds-stats-grid-label-color": "var(--ds-color-text-page)",
+  "--ds-tag-default-color": "var(--ds-color-text-page)",
+  "--ds-tag-secondary-color": "var(--ds-color-text-page)",
+  "--ds-timeline-content-color": "var(--ds-color-text-page)",
+  "--ds-tree-node-color": "var(--ds-color-text-page)",
 };
 
 /** Lo que el arbol emite hoy para esa fila: la re-derivacion si la hay, y si no
@@ -227,8 +253,8 @@ const CENSUS = {
   holdTuples: 0,
   families: 26,
   bodyLeaves: 190,
-  lightLeaves: 182,
-  identicalChannels: 8,
+  lightLeaves: 164,
+  identicalChannels: 26,
   gradientValues: 6,
   maxShadowLayers: 2,
 } as const;
@@ -1805,14 +1831,32 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
     // este bloque -- "identico en ambos modos => no se restata en light" -- es
     // exactamente la que los admite.
     expect(identical).toEqual([
+      "--ds-avatar-default-color",
+      "--ds-avatar-group-overflow-color",
+      "--ds-avatar-secondary-color",
+      "--ds-drawer-body-color",
+      "--ds-dropdown-item-color",
       "--ds-floatbutton-badge-color",
+      "--ds-floatbutton-default-color",
+      "--ds-floatbutton-description-color",
       "--ds-floatbutton-primary-bg",
       "--ds-live-feed-badge-bg",
+      "--ds-live-feed-refresh-color",
       "--ds-menu-focus-ring-color",
+      "--ds-menu-item-color",
       "--ds-pagination-item-bg",
       "--ds-pagination-item-border",
+      "--ds-pagination-item-color",
       "--ds-spinner-color",
+      "--ds-statistic-prefix-color",
+      "--ds-statistic-suffix-color",
+      "--ds-statistic-title-color",
+      "--ds-stats-grid-label-color",
       "--ds-steps-wait-bg",
+      "--ds-tag-default-color",
+      "--ds-tag-secondary-color",
+      "--ds-timeline-content-color",
+      "--ds-tree-node-color",
     ]);
     expect(identical).toHaveLength(CENSUS.identicalChannels);
     for (const name of identical) {

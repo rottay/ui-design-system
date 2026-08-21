@@ -396,6 +396,15 @@ export interface BrandPalette {
   textPrimaryColor?: string;
   /** Supporting copy that must remain readable at normal text sizes. */
   textSecondaryColor?: string;
+  /**
+   * Ink of the page/navigation tier: sidebar items, table headers, form labels
+   * and the rest of the chrome that reads as page furniture rather than as
+   * content. Authored in F4A-6 (nudo K3) porque los 42 canales de `tier.page.fg`
+   * no tenian raiz: coincidian en valor con `--ds-color-accent`,
+   * `--ds-color-neutral-500` y `--ds-color-secondary`, y elegir cualquiera de
+   * las tres habria sido una coincidencia, no una derivacion.
+   */
+  textPageColor?: string;
   /** Quiet metadata/captions; still expected to meet accessible text contrast. */
   textMutedColor?: string;
   /** The third ink step, between muted and disabled. */

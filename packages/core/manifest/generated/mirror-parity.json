@@ -6,85 +6,85 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 91959,
-        "lines": 1958,
-        "sha256": "4787a69a67d916b86306eeaaa1cc9c0927c313ae5f26178a1f98f711f849c117"
+        "bytes": 91319,
+        "lines": 1925,
+        "sha256": "202639ebc940333f41295fa408ced3f997d9ded0b9afb5148a34e686c82d2065"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 96985,
-        "lines": 1733,
-        "sha256": "3168605f4e74919e547d4eaa410dbbf1c26c0e0e6da2efcbcd3235a87e23d247"
+        "bytes": 97051,
+        "lines": 1735,
+        "sha256": "e8787707f9c62e4da656b983bbfdbae8198df605d3ecee2867a6bce63b14e50a"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30278,
-        "lines": 584,
-        "sha256": "9a8d09143b981fcec98ccaf2838aaa0cdf2e99f603874036d24fd7dd51120653"
+        "bytes": 30311,
+        "lines": 585,
+        "sha256": "4151bd72d2842c1fdbc33ed467cf164fc6150b519a882f68634fc3e075266ede"
       }
     ],
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 87046,
-        "lines": 2621,
-        "sha256": "a14620820e7cb08ffb261f0717a0ed2c609b62681707ff7af4bd4bab67ad8792"
+        "bytes": 90924,
+        "lines": 2722,
+        "sha256": "de7faf7861286f7e590eca15d38a2c14f886f56ba7cf259b79858c78183694c0"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 103163,
-        "lines": 2619,
-        "sha256": "db81fdf5c983ae40235713badc0209a242f1ec227f1886eefed5c28f92e7cc57"
+        "bytes": 103739,
+        "lines": 2633,
+        "sha256": "c7eec51d6b114eac7fdf977fbcb0fc07c4e9faac07531074dd9ad01a81db912e"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 40636,
-        "lines": 1207,
-        "sha256": "a1164c1c55200630900c7a9e3d7627c18ae492f7cf7e55074e910f9148a66585"
+        "bytes": 40917,
+        "lines": 1214,
+        "sha256": "c911975efc61316d193e7fccbf9125d2321ef4158298ea0be07e67818c221b9a"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1936,
-      "distinctChannels": 1211
+      "occurrences": 1903,
+      "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1709,
-      "distinctChannels": 1234
+      "occurrences": 1711,
+      "distinctChannels": 1235
     },
     "evnto": {
-      "occurrences": 562,
-      "distinctChannels": 469
+      "occurrences": 563,
+      "distinctChannels": 470
     }
   },
   "surface": {
     "declares": {
-      "rottay": 1211,
-      "bithire": 1234,
-      "evnto": 469
+      "rottay": 1212,
+      "bithire": 1235,
+      "evnto": 470
     },
-    "union": 1761,
-    "intersection": 431,
+    "union": 1762,
+    "intersection": 432,
     "intersectionPct": 24.5,
     "intersectionPctOfSmallest": 91.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 684,
-        "union": 1761,
-        "pctOfUnion": 38.8,
+        "shared": 685,
+        "union": 1762,
+        "pctOfUnion": 38.9,
         "pctOfSmaller": 56.5
       },
       "rottay+evnto": {
-        "shared": 467,
-        "union": 1213,
-        "pctOfUnion": 38.5,
+        "shared": 468,
+        "union": 1214,
+        "pctOfUnion": 38.6,
         "pctOfSmaller": 99.6
       },
       "bithire+evnto": {
-        "shared": 433,
-        "union": 1270,
+        "shared": 434,
+        "union": 1271,
         "pctOfUnion": 34.1,
         "pctOfSmaller": 92.3
       }
@@ -1585,6 +1585,7 @@
         "--ds-color-text-disabled",
         "--ds-color-text-muted",
         "--ds-color-text-on-primary",
+        "--ds-color-text-page",
         "--ds-color-text-primary",
         "--ds-color-text-secondary",
         "--ds-color-text-tertiary",
@@ -1867,11 +1868,11 @@
     }
   },
   "valueParity": {
-    "commonChannels": 431,
+    "commonChannels": 432,
     "identicalValue": 157,
-    "divergentValue": 274,
-    "identicalRoleShape": 289,
-    "divergentRoleShape": 142,
+    "divergentValue": 275,
+    "identicalRoleShape": 288,
+    "divergentRoleShape": 144,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -1924,7 +1925,7 @@
       {
         "channel": "--ds-button-ghost-color",
         "roles": {
-          "rottay": "base,overlay-mode",
+          "rottay": "base",
           "bithire": "base",
           "evnto": "base,overlay-mode"
         }
@@ -2474,6 +2475,14 @@
         }
       },
       {
+        "channel": "--ds-color-text-page",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
         "channel": "--ds-color-warning",
         "roles": {
           "rottay": "base,overlay-mode",
@@ -2991,6 +3000,14 @@
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "overlay-mode"
+        }
+      },
+      {
+        "channel": "--ds-table-header-color",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -6560,7 +6577,7 @@
     "perTenant": {
       "rottay": {
         "declaredInCascade": 154,
-        "severedTotal": 54,
+        "severedTotal": 53,
         "rootPinned": {
           "count": 7,
           "byReason": {
@@ -6728,7 +6745,7 @@
           ]
         },
         "severs": {
-          "count": 50,
+          "count": 49,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
@@ -6781,13 +6798,6 @@
               "channel": "--ds-button-ghost-border-hover",
               "values": [
                 "base=transparent"
-              ]
-            },
-            {
-              "channel": "--ds-button-ghost-color",
-              "values": [
-                "base=#A0A0A5",
-                "overlay-mode=#6B6B6B"
               ]
             },
             {
@@ -7078,7 +7088,7 @@
           ]
         },
         "reDerives": {
-          "count": 93,
+          "count": 94,
           "reachingRoot": 45,
           "reachingLiveRoot": 26,
           "mixedRoleValues": 12,
@@ -7098,6 +7108,16 @@
               "channel": "--ds-button-focus-ring",
               "reads": [
                 "--ds-focus-ring"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-ghost-color",
+              "reads": [
+                "--ds-color-text-page"
               ],
               "reachesRoot": false,
               "mixed": false,
@@ -11423,14 +11443,14 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 725,
-        "allInDistinctRoles": 725,
+        "channelsDeclaredMoreThanOnce": 691,
+        "allInDistinctRoles": 691,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 475,
-        "allInDistinctRoles": 475,
+        "channelsDeclaredMoreThanOnce": 476,
+        "allInDistinctRoles": 476,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11446,38 +11466,38 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1819,
-      "bithire": 1502,
-      "evnto": 396
+      "rottay": 1786,
+      "bithire": 1504,
+      "evnto": 397
     },
-    "union": 2612,
+    "union": 2586,
     "intersection": 344,
-    "intersectionPct": 13.2,
-    "intersectionPctOfSmallest": 86.9,
+    "intersectionPct": 13.3,
+    "intersectionPctOfSmallest": 86.6,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 711,
-        "union": 2610,
-        "pctOfUnion": 27.2,
-        "pctOfSmaller": 47.3
+        "shared": 707,
+        "union": 2583,
+        "pctOfUnion": 27.4,
+        "pctOfSmaller": 47
       },
       "rottay+evnto": {
-        "shared": 391,
-        "union": 1824,
-        "pctOfUnion": 21.4,
-        "pctOfSmaller": 98.7
+        "shared": 390,
+        "union": 1793,
+        "pctOfUnion": 21.8,
+        "pctOfSmaller": 98.2
       },
       "bithire+evnto": {
-        "shared": 347,
-        "union": 1551,
+        "shared": 348,
+        "union": 1553,
         "pctOfUnion": 22.4,
-        "pctOfSmaller": 87.6
+        "pctOfSmaller": 87.7
       }
     },
     "exclusive": {
-      "rottay": 1061,
-      "bithire": 788,
-      "evnto": 2
+      "rottay": 1033,
+      "bithire": 793,
+      "evnto": 3
     },
     "exclusiveSamples": {
       "rottay": [
@@ -11510,7 +11530,8 @@
       ],
       "evnto": [
         "CAPABILITIES.recipes.note",
-        "CAPABILITIES.recipes.reason"
+        "CAPABILITIES.recipes.reason",
+        "OVERLAY.chrome.controls.buttonGhost.color"
       ]
     }
   }

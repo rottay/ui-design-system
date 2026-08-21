@@ -125001,6 +125001,7 @@ html[lang]:lang(ar) {
   --ds-color-text-disabled: #b2b6c5;
   --ds-color-text-muted: #8a9aaa;
   --ds-color-text-on-primary: #ffffff;
+  --ds-color-text-page: #53697E;
   --ds-color-text-primary: #14283B;
   --ds-color-text-secondary: #53697e;
   --ds-color-text-tertiary: #7f859b;
@@ -126040,6 +126041,7 @@ html[lang]:lang(ar) {
   --ds-color-success-border: rgba(92, 166, 207, 0.3);
   --ds-color-text-disabled: #3a4a5a;
   --ds-color-text-muted: #5a7085;
+  --ds-color-text-page: #9aacbf;
   --ds-color-text-primary: #e4e8ed;
   --ds-color-text-secondary: #9aacbf;
   --ds-color-text-tertiary: #7a90a5;

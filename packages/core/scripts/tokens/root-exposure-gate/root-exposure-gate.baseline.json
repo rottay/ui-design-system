@@ -4,8 +4,8 @@
   "producedOn": "F1.3",
   "counts": {
     "tenant-dial": 26,
-    "internal-head": 27,
+    "internal-head": 28,
     "gap": 10
   },
-  "reading": "De las 63 raices, 26 tienen control (1302 canales), 27 son cabezas internas correctas sin perilla (1477 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura, 1477 canales, NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps."
+  "reading": "De las 64 raices, 26 tienen control o dial declarado (1302 canales), 28 son cabezas internas correctas sin perilla (1512 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps. F4A-6 sumo tier.page.ink (--ds-color-text-page, 35 canales) como cabeza interna: su dial aterriza en F4B y ahi se reclasifica a tenant-dial."
 }

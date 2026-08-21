@@ -497,6 +497,44 @@
       "derivationDebt": true
     },
     {
+      "rootId": "tier.page.ink",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-page",
+      "channelStatus": "solo-artefacto",
+      "collapses": {
+        "total": 35,
+        "rottay": 35,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Tinta del tier de PAGINA: sidebar, headers de tabla, labels de formulario — el mobiliario de pagina, no el contenido. Autorada en F4A-6 (nudo K3): los 42 canales que colapsaban aca no tenian raiz, y coincidian en valor con --ds-color-accent, --ds-color-neutral-500 y --ds-color-secondary. Elegir cualquiera de las tres habria sido coincidencia de valor, no derivacion (filtro (a) de F2), asi que la raiz se AUTORA en vez de re-apuntar a una rival.",
+      "evidence": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (PALETTE.textPageColor); lowering en infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Raiz NUEVA de F4A-6 (nudo K3). internal-head hasta F4B: es lo que hacen sus cinco hermanas de tinta (tier.control/base/raised/overlay/accent.fg, todas internal-head con governedBy null), y meterla como tenant-dial sin control habria roto la invariante que las 26 tenant-dial cumplen sin excepcion. F4B la reclasifica a tenant-dial cuando el dial aterrice. Valor por tema = el computado de hoy (cero-delta por construccion): rottay #A0A0A5 base / #6B6B6B light, bithire #53697E base / #9aacbf dark, evnto #3d3d3d base SIN dark — agregarle un dark a evnto no seria cero-delta. Bithire la autora aunque hoy coincide con su --ds-color-text-secondary: son dos diales independientes desde F4B. channelStatus es solo-artefacto (no existe): el canal nace al compilar el tenant y no tiene declaracion en la base DS de src/ — lo dijo root-catalog-freshness en F4A-6.",
+      "derivationDebt": false
+    },
+    {
       "rootId": "tier.accent.fg",
       "group": "superficie-por-nivel",
       "channel": "--ds-color-info-ink",
@@ -2370,16 +2408,16 @@
     "statement": "Las 63 cabezas internas contra los 20 controles de tenant. Ninguna de las dos capas se subordina a la otra: se cruzan.",
     "byExposure": {
       "counts": {
-        "internal-head": 27,
+        "internal-head": 28,
         "tenant-dial": 26,
         "gap": 10
       },
       "channels": {
-        "internal-head": 1477,
+        "internal-head": 1512,
         "tenant-dial": 1302,
         "gap": 496
       },
-      "reading": "De las 63 raices, 26 tienen control (1302 canales), 27 son cabezas internas correctas sin perilla (1477 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura, 1477 canales, NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps."
+      "reading": "De las 64 raices, 26 tienen control o dial declarado (1302 canales), 28 son cabezas internas correctas sin perilla (1512 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps. F4A-6 sumo tier.page.ink (--ds-color-text-page, 35 canales) como cabeza interna: su dial aterriza en F4B y ahi se reclasifica a tenant-dial."
     },
     "byGroup": {
       "superficie-por-nivel": 18,

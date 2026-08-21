@@ -177,6 +177,13 @@ const OVERLAY: BrandThemeModeOverlay = {
     backgroundOverlayColor: "rgba(0, 0, 0, 0.48)",
     backgroundSurfaceColor: "#FFFFFF",
     textPrimaryColor: "#1A1A1A",
+    /**
+     * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
+     * labels de formulario — el mobiliario de pagina, no el contenido.
+     * @domicile seed
+     * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
+     */
+    textPageColor: "#6B6B6B",
     textSecondaryColor: "#6B6B6B",
     textTertiaryColor: "#8A8A8A",
     textMutedColor: "#9C9C9C",
@@ -289,10 +296,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         },
         clear: {
           color: "#9C9C9C",
-          colorHover: "#6B6B6B",
-        },
-        label: {
-          color: "#6B6B6B",
         },
         helper: {
           color: "#9C9C9C",
@@ -329,7 +332,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         bg: 'transparent',
         bgHover: "rgba(0, 0, 0, 0.04)",
         bgActive: "rgba(0, 0, 0, 0.08)",
-        color: "#6B6B6B",
                   colorHover: '#1A1A1A',
         colorActive: '#0A0A0A',
         border: 'transparent',
@@ -340,7 +342,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         bg: 'transparent',
         bgHover: "rgba(0, 0, 0, 0.04)",
         bgActive: "rgba(0, 0, 0, 0.08)",
-        color: "#6B6B6B",
                   colorHover: '#1A1A1A',
         colorActive: '#0A0A0A',
 },
@@ -370,7 +371,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         itemBg: "transparent",
         itemBgSelected: "#FFFFFF",
         itemColor: "#9C9C9C",
-        itemColorHover: "#6B6B6B",
         itemColorSelected: "#1A1A1A",
         shadow: "0 1px 2px rgba(0, 0, 0, 0.04)",
       },
@@ -392,7 +392,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         borderHover: "#D4D4D2",
         checkColor: "#0A0A0A",
         clearColor: "#9C9C9C",
-        clearColorHover: "#6B6B6B",
         colorDisabled: "#C4C4C2",
         dropdownBorder: "#E5E5E3",
         errorBorder: "#DC2626",
@@ -400,7 +399,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         optionColorDisabled: "#C4C4C2",
         shadowFocus: "0 0 0 2px rgba(10, 10, 10, 0.08)",
         tagBg: "#F4F4F3",
-        tagColor: "#6B6B6B",
       },
       textarea: {
         bg: "#ffffff",
@@ -416,7 +414,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         errorBorder: "#DC2626",
       },
       form: {
-        labelColor: "#6B6B6B",
         helpColor: "#9C9C9C",
         extraColor: "#9C9C9C",
         successColor: "#16A34A",
@@ -556,7 +553,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         borderHover: "#D4D4D2",
         buttonBg: "#FFFFFF",
         buttonBorder: "#E5E5E3",
-        buttonColor: "#6B6B6B",
         cardBg: "#FAFAF9",
         cardBorder: "#E5E5E3",
         draggerBg: "#FAFAF9",
@@ -564,10 +560,8 @@ const OVERLAY: BrandThemeModeOverlay = {
         draggerBorder: "#E5E5E3",
         draggerBorderActive: "#0A0A0A",
         draggerIconColor: "#9C9C9C",
-        draggerTextColor: "#6B6B6B",
         errorBorder: "#DC2626",
         fileBg: "#FAFAF9",
-        fileColor: "#6B6B6B",
         fileRemoveColor: "#DC2626",
         previewBackdrop: "rgba(0, 0, 0, 0.60)",
         previewOverlay: "rgba(0, 0, 0, 0.40)",
@@ -587,12 +581,10 @@ const OVERLAY: BrandThemeModeOverlay = {
       headerBorder: "#E5E5E3",
       headerColor: "#1A1A1A",
       titleColor: "#1A1A1A",
-      subtitleColor: "#6B6B6B",
       imagePlaceholderBg: "#F4F4F3",
       imagePlaceholderColor: "#9C9C9C",
       imageLoadingTrack: '#EDEDEC',
       imageLoadingActive: '#0A0A0A',
-      bodyColor: "#6B6B6B",
       footerBorder: "#E5E5E3",
       footerBg: "#FAFAF9",
     },
@@ -605,7 +597,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       headerBorder: "#E5E5E3",
       titleColor: "#1A1A1A",
       subtitleColor: "#6B6B6B",
-      bodyColor: "#6B6B6B",
       footerBorder: "#E5E5E3",
       footerBg: "#FAFAF9",
       closeColor: "#9C9C9C",
@@ -616,7 +607,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       bg: "#FFFFFF",
       border: "#E5E5E3",
       headerBg: "#FAFAF9",
-      headerColor: "#6B6B6B",
       rowBg: "#FFFFFF",
       rowBgHover: "#FAFAF9",
       rowBgStriped: "#FAFAF9",
@@ -688,7 +678,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       primaryBg: "#0A0A0A",
       primaryColor: "var(--ds-color-white, #ffffff)",
       secondaryBg: "#F4F4F3",
-      secondaryColor: "#6B6B6B",
       errorBg: "#DC2626",
       infoBg: "#2563EB",
     },
@@ -720,7 +709,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       shadow: "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
       titleColor: "#1A1A1A",
       titleBorder: "#E5E5E3",
-      contentColor: "#6B6B6B",
     },
     tooltip: {
       bg: "#1A1A1A",
@@ -771,19 +759,16 @@ const OVERLAY: BrandThemeModeOverlay = {
     avatar: {
       borderColor: "rgba(0, 0, 0, 0.06)",
       defaultBg: "#F4F4F3",
-      defaultColor: "#6B6B6B",
       errorBg: "rgba(220, 38, 38, 0.10)",
       errorColor: "#DC2626",
       gradientBg: "linear-gradient(135deg, #1A1A1A 0%, #6B6B6B 100%)",
       gradientColor: "#FFFFFF",
       groupBorder: "#FFFFFF",
       groupOverflowBg: "#F4F4F3",
-      groupOverflowColor: "#6B6B6B",
       primaryBg: "#0A0A0A",
       primaryColor: "#FFFFFF",
       ringColor: "#0A0A0A",
       secondaryBg: "#F4F4F3",
-      secondaryColor: "#6B6B6B",
       statusBorder: "#FFFFFF",
       successBg: "rgba(22, 163, 74, 0.10)",
       successColor: "#16A34A",
@@ -817,7 +802,6 @@ const OVERLAY: BrandThemeModeOverlay = {
     },
     drawer: {
       bg: "#FFFFFF",
-      bodyColor: "#6B6B6B",
       footerBorder: "#E5E5E3",
       headerBorder: "#E5E5E3",
       shadow: "0 12px 40px rgba(0, 0, 0, 0.12)",
@@ -827,7 +811,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       bg: "#FFFFFF",
       itemBgActive: "#F4F4F3",
       itemBgHover: "#FAFAF9",
-      itemColor: "#6B6B6B",
       itemColorActive: "#1A1A1A",
       itemColorHover: "#1A1A1A",
       shadow: "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
@@ -839,8 +822,6 @@ const OVERLAY: BrandThemeModeOverlay = {
     floatButton: {
       badgeBg: "#DC2626",
       defaultBg: "#FFFFFF",
-      defaultColor: "#6B6B6B",
-      descriptionColor: "#6B6B6B",
       primaryColor: "#FFFFFF",
     },
     liveFeed: {
@@ -852,7 +833,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       newBg: "rgba(37, 99, 235, 0.06)",
       newBorder: "rgba(37, 99, 235, 0.20)",
       newColor: "#2563EB",
-      refreshColor: "#6B6B6B",
       skeletonBg: "#EDEDEC",
     },
     menu: {
@@ -863,7 +843,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       groupTitleColor: "#9C9C9C",
       itemBgActive: "rgba(0, 0, 0, 0.06)",
       itemBgHover: "rgba(0, 0, 0, 0.03)",
-      itemColor: "#6B6B6B",
       itemColorActive: "#1A1A1A",
       itemColorHover: "#1A1A1A",
       itemDangerColor: "#DC2626",
@@ -888,7 +867,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       activeColor: "#FFFFFF",
       itemBgActive: "#0A0A0A",
       itemBgHover: "#FAFAF9",
-      itemColor: "#6B6B6B",
       itemColorActive: "#FFFFFF",
       itemColorHover: "#1A1A1A",
     },
@@ -913,9 +891,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       track: "#EDEDEC",
     },
     statistic: {
-      prefixColor: "#6B6B6B",
-      suffixColor: "#6B6B6B",
-      titleColor: "#6B6B6B",
       valueColor: "#1A1A1A",
     },
     statsGrid: {
@@ -925,7 +900,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       cardGlassBg: "rgba(255, 255, 255, 0.70)",
       cardGlassBorder: "#E5E5E3",
       descriptionColor: "#9C9C9C",
-      labelColor: "#6B6B6B",
       skeletonBg: "#EDEDEC",
       skeletonWaveGradient: "linear-gradient( 90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.06) 37%, rgba(0, 0, 0, 0.03) 63% )",
       trendNegative: "#DC2626",
@@ -950,7 +924,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       border: "#E5E5E3",
       defaultBg: "#F4F4F3",
       defaultBorder: "#E5E5E3",
-      defaultColor: "#6B6B6B",
       errorBg: "rgba(220, 38, 38, 0.08)",
       errorBorder: "rgba(220, 38, 38, 0.20)",
       errorColor: "#B91C1C",
@@ -959,7 +932,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       primaryColor: "#FFFFFF",
       secondaryBg: "#F4F4F3",
       secondaryBorder: "#E5E5E3",
-      secondaryColor: "#6B6B6B",
       successBg: "rgba(22, 163, 74, 0.08)",
       successBorder: "rgba(22, 163, 74, 0.20)",
       successColor: "#15803D",
@@ -968,7 +940,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       warningColor: "#B45309",
     },
     timeline: {
-      contentColor: "#6B6B6B",
       dotBg: "#0A0A0A",
       dotBorder: "#FFFFFF",
       lineColor: "#E5E5E3",
@@ -976,7 +947,6 @@ const OVERLAY: BrandThemeModeOverlay = {
     tree: {
       nodeBgHover: "#FAFAF9",
       nodeBgSelected: "#F4F4F3",
-      nodeColor: "#6B6B6B",
       nodeColorSelected: "#1A1A1A",
     },
   },
@@ -1163,6 +1133,13 @@ const PALETTE: BrandPalette = {
   backgroundSurfaceColor: '#18181B',
   backgroundOverlayColor: 'rgba(0, 0, 0, 0.64)',
   textPrimaryColor: '#F0F0F0',
+  /**
+   * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
+   * labels de formulario — el mobiliario de pagina, no el contenido.
+   * @domicile seed
+   * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
+   */
+  textPageColor: '#A0A0A5',
   textSecondaryColor: '#B0B0B5',
   textTertiaryColor: '#9A9AA2',
   textMutedColor: '#96969E',
@@ -1377,7 +1354,11 @@ const CHROME: BrandChrome = {
     primaryBg: '#FFFFFF',
     primaryColor: '#0C0C0E',
     secondaryBg: '#2A2A2F',
-    secondaryColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    secondaryColor: 'var(--ds-color-text-page)',
     successBg: '#16A34A',
     warningBg: '#D97706',
     errorBg: '#EF4444',
@@ -1530,7 +1511,11 @@ const CHROME: BrandChrome = {
   popover: {
     bg: '#1A1A1E',
     border: '#2A2A2F',
-    contentColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    contentColor: 'var(--ds-color-text-page)',
     shadow: '0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F',
     titleBorder: '#2A2A2F',
     titleColor: '#ECECEC',
@@ -1714,7 +1699,11 @@ const CHROME: BrandChrome = {
       itemBg: 'transparent',
       itemBgSelected: '#222226',
       itemColor: 'var(--ds-color-text-muted)',
-      itemColorHover: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      itemColorHover: 'var(--ds-color-text-page)',
       itemColorSelected: '#ECECEC',
       shadow: '0 1px 2px rgba(0, 0, 0, 0.20)',
     },
@@ -1744,7 +1733,7 @@ const CHROME: BrandChrome = {
     buttonGhost: {
       shadow: "none",
       shadowHover: "var(--ds-button-ghost-shadow)",
-      shadowActive: "var(--ds-button-ghost-shadow)", bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: '#A0A0A5', colorHover: '#ECECEC',
+      shadowActive: "var(--ds-button-ghost-shadow)", bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: 'var(--ds-color-text-page)', colorHover: '#ECECEC',
       colorActive: '#FFFFFF',
       border: 'transparent',
       borderHover: 'transparent',
@@ -1753,7 +1742,7 @@ const CHROME: BrandChrome = {
     buttonText: {
       shadow: "none",
       shadowHover: "var(--ds-button-text-shadow)",
-      shadowActive: "var(--ds-button-text-shadow)", bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: '#A0A0A5', colorHover: '#ECECEC',
+      shadowActive: "var(--ds-button-text-shadow)", bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: 'var(--ds-color-text-page)', colorHover: '#ECECEC',
       colorActive: '#FFFFFF',
 },
     buttonLink: {
@@ -1794,7 +1783,11 @@ const CHROME: BrandChrome = {
       warningBorder: '#D97706',
     },
     form: {
-      labelColor: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      labelColor: 'var(--ds-color-text-page)',
       labelFontWeight: '600',
       helpColor: '#6B6B72',
       extraColor: '#6B6B72',
@@ -1815,9 +1808,9 @@ const CHROME: BrandChrome = {
       shadowFocus: '0 0 0 3px rgba(255, 255, 255, 0.10)',
       filled: { bg: '#1A1A1E', bgHover: '#222226', bgFocus: '#1A1A1E' },
       addon: { bg: '#1A1A1E', color: '#6B6B72', border: '#2A2A2F' },
-      label: { color: '#A0A0A5' },
+      label: { color: 'var(--ds-color-text-page)' },
       helper: { color: '#6B6B72', errorFontWeight: 'var(--ds-font-weight-medium)' },
-      clear: { color: '#6B6B72', colorHover: '#A0A0A5' },
+      clear: { color: '#6B6B72', colorHover: 'var(--ds-color-text-page)' },
       readOnly: { borderStyle: 'solid', cursor: 'text' },
       successBorder: '#16A34A',
       successShadowFocus: '0 0 0 2px rgba(34, 197, 94, 0.18)',
@@ -1853,7 +1846,11 @@ const CHROME: BrandChrome = {
       borderHover: '#3A3A40',
       checkColor: '#FFFFFF',
       clearColor: '#6B6B72',
-      clearColorHover: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      clearColorHover: 'var(--ds-color-text-page)',
       colorDisabled: '#4A4A4F',
       dropdownBorder: '#2A2A2F',
       filledBg: '#1A1A1E',
@@ -1861,7 +1858,11 @@ const CHROME: BrandChrome = {
       shadowFocus: '0 0 0 2px rgba(255, 255, 255, 0.10)',
       successBorder: '#16A34A',
       tagBg: '#2A2A2F',
-      tagColor: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      tagColor: 'var(--ds-color-text-page)',
       warningBorder: '#D97706',
     },
     autocomplete: {
@@ -1993,7 +1994,11 @@ const CHROME: BrandChrome = {
       borderHover: 'rgba(255, 255, 255, 0.20)',
       buttonBg: '#131316',
       buttonBorder: '#2A2A2F',
-      buttonColor: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      buttonColor: 'var(--ds-color-text-page)',
       cardBg: '#1A1A1E',
       cardBorder: '#2A2A2F',
       draggerBg: '#131316',
@@ -2001,10 +2006,18 @@ const CHROME: BrandChrome = {
       draggerBorder: '#2A2A2F',
       draggerBorderActive: '#FFFFFF',
       draggerIconColor: '#6B6B72',
-      draggerTextColor: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      draggerTextColor: 'var(--ds-color-text-page)',
       errorBorder: '#EF4444',
       fileBg: '#1A1A1E',
-      fileColor: '#A0A0A5',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+       */
+      fileColor: 'var(--ds-color-text-page)',
       fileRemoveColor: '#EF4444',
       previewBackdrop: 'rgba(0, 0, 0, 0.70)',
       previewOverlay: 'rgba(0, 0, 0, 0.50)',
@@ -2069,7 +2082,11 @@ const CHROME: BrandChrome = {
     bg: '#0C0C0E',
     border: '#2A2A2F',
     headerBg: '#131316',
-    headerColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    headerColor: 'var(--ds-color-text-page)',
     headerFontWeight: 600,
     headerFontSize: '0.6875rem',
     rowBg: '#0C0C0E',
@@ -2111,8 +2128,16 @@ const CHROME: BrandChrome = {
     headerBorder: '#2A2A2F',
     headerColor: '#ECECEC',
     titleColor: '#ECECEC',
-    subtitleColor: '#A0A0A5',
-    bodyColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    subtitleColor: 'var(--ds-color-text-page)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    bodyColor: 'var(--ds-color-text-page)',
     footerBorder: '#2A2A2F',
     footerBg: '#101012',
         imagePlaceholderBg: '#1A1A1E',
@@ -2134,7 +2159,11 @@ const CHROME: BrandChrome = {
     headerBorder: '#2A2A2F',
     titleColor: '#ECECEC',
     subtitleColor: '#6B6B72',
-    bodyColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    bodyColor: 'var(--ds-color-text-page)',
     footerBorder: '#2A2A2F',
     footerBg: '#1A1A1E',
     closeColor: '#6B6B72',
@@ -2224,19 +2253,31 @@ const CHROME: BrandChrome = {
   avatar: {
     borderColor: 'rgba(255, 255, 255, 0.05)',
     defaultBg: '#2A2A2F',
-    defaultColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    defaultColor: 'var(--ds-color-text-page)',
     errorBg: 'rgba(239, 68, 68, 0.14)',
     errorColor: '#EF4444',
     gradientBg: 'linear-gradient(135deg, #ECECEC 0%, #6B6B72 100%)',
     gradientColor: '#0C0C0E',
     groupBorder: '#18181B',
     groupOverflowBg: '#2A2A2F',
-    groupOverflowColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    groupOverflowColor: 'var(--ds-color-text-page)',
     primaryBg: '#FFFFFF',
     primaryColor: '#0C0C0E',
     ringColor: '#FFFFFF',
     secondaryBg: '#2A2A2F',
-    secondaryColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    secondaryColor: 'var(--ds-color-text-page)',
     statusBorder: '#18181B',
     successBg: 'rgba(34, 197, 94, 0.14)',
     successColor: '#22C55E',
@@ -2287,7 +2328,11 @@ const CHROME: BrandChrome = {
    */
   drawer: {
     bg: '#1A1A1E',
-    bodyColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    bodyColor: 'var(--ds-color-text-page)',
     footerBorder: '#2A2A2F',
     headerBorder: '#2A2A2F',
     shadow: '0 16px 48px rgba(0, 0, 0, 0.50)',
@@ -2301,7 +2346,11 @@ const CHROME: BrandChrome = {
     bg: '#1A1A1E',
     itemBgActive: '#2A2A2F',
     itemBgHover: 'rgba(255, 255, 255, 0.04)',
-    itemColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    itemColor: 'var(--ds-color-text-page)',
     itemColorActive: '#ECECEC',
     itemColorHover: '#ECECEC',
     shadow: '0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F',
@@ -2321,8 +2370,16 @@ const CHROME: BrandChrome = {
     badgeBg: '#EF4444',
     badgeColor: '#ffffff',
     defaultBg: '#222226',
-    defaultColor: '#A0A0A5',
-    descriptionColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    defaultColor: 'var(--ds-color-text-page)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    descriptionColor: 'var(--ds-color-text-page)',
     primaryBg: 'var(--ds-color-primary)',
     primaryColor: '#0C0C0E',
   },
@@ -2340,7 +2397,11 @@ const CHROME: BrandChrome = {
     newBg: 'rgba(59, 130, 246, 0.10)',
     newBorder: 'rgba(59, 130, 246, 0.22)',
     newColor: '#3B82F6',
-    refreshColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    refreshColor: 'var(--ds-color-text-page)',
     skeletonBg: '#2A2A2F',
   },
   /**
@@ -2356,7 +2417,11 @@ const CHROME: BrandChrome = {
     groupTitleColor: '#6B6B72',
     itemBgActive: '#2A2A2F',
     itemBgHover: 'rgba(255, 255, 255, 0.04)',
-    itemColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    itemColor: 'var(--ds-color-text-page)',
     itemColorActive: '#ECECEC',
     itemColorHover: '#ECECEC',
     itemDangerColor: '#EF4444',
@@ -2393,7 +2458,11 @@ const CHROME: BrandChrome = {
     itemBgActive: '#FFFFFF',
     itemBgHover: 'rgba(255, 255, 255, 0.04)',
     itemBorder: 'transparent',
-    itemColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    itemColor: 'var(--ds-color-text-page)',
     itemColorActive: '#0C0C0E',
     itemColorHover: '#ECECEC',
   },
@@ -2436,9 +2505,21 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   statistic: {
-    prefixColor: '#A0A0A5',
-    suffixColor: '#A0A0A5',
-    titleColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    prefixColor: 'var(--ds-color-text-page)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    suffixColor: 'var(--ds-color-text-page)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    titleColor: 'var(--ds-color-text-page)',
     valueColor: '#ECECEC',
   },
   /**
@@ -2452,7 +2533,11 @@ const CHROME: BrandChrome = {
     cardGlassBg: 'rgba(255, 255, 255, 0.04)',
     cardGlassBorder: '#2A2A2F',
     descriptionColor: '#6B6B72',
-    labelColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    labelColor: 'var(--ds-color-text-page)',
     skeletonBg: '#2A2A2F',
     skeletonWaveGradient: 'linear-gradient( 90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 37%, rgba(255, 255, 255, 0.04) 63% )',
     trendNegative: '#EF4444',
@@ -2484,7 +2569,11 @@ const CHROME: BrandChrome = {
     border: '#2A2A2F',
     defaultBg: '#222226',
     defaultBorder: '#2A2A2F',
-    defaultColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    defaultColor: 'var(--ds-color-text-page)',
     errorBg: 'rgba(239, 68, 68, 0.12)',
     errorBorder: 'rgba(239, 68, 68, 0.22)',
     errorColor: '#F87171',
@@ -2493,7 +2582,11 @@ const CHROME: BrandChrome = {
     primaryColor: '#0C0C0E',
     secondaryBg: '#222226',
     secondaryBorder: '#2A2A2F',
-    secondaryColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    secondaryColor: 'var(--ds-color-text-page)',
     successBg: 'rgba(34, 197, 94, 0.12)',
     successBorder: 'rgba(34, 197, 94, 0.22)',
     successColor: '#34D399',
@@ -2505,7 +2598,11 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   timeline: {
-    contentColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    contentColor: 'var(--ds-color-text-page)',
     dotBg: '#FFFFFF',
     dotBorder: '#18181B',
     lineColor: '#2A2A2F',
@@ -2516,7 +2613,11 @@ const CHROME: BrandChrome = {
   tree: {
     nodeBgHover: 'rgba(255, 255, 255, 0.04)',
     nodeBgSelected: '#2A2A2F',
-    nodeColor: '#A0A0A5',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
+     */
+    nodeColor: 'var(--ds-color-text-page)',
     nodeColorSelected: '#ECECEC',
   },
   /**

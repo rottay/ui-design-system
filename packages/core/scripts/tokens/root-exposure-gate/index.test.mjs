@@ -57,7 +57,10 @@ test('the live tree passes', () => {
 
 test('the live snapshot is the measured one, not a guess', () => {
   const counts = countByExposure(JSON.parse(readFileSync(CATALOG_PATH, 'utf8')).roots);
-  assert.deepEqual(counts, { 'tenant-dial': 26, 'internal-head': 27, gap: 10 });
+  // F4A-6 (K3): entra `tier.page.ink` (--ds-color-text-page) como cabeza
+  // interna — internal-head hasta que F4B le de dial, que es lo que hacen sus
+  // cinco hermanas de tinta. tenant-dial y gap no se mueven.
+  assert.deepEqual(counts, { 'tenant-dial': 26, 'internal-head': 28, gap: 10 });
 });
 
 /* ---------------- LAW 1: a dial with no owner ---------------- */

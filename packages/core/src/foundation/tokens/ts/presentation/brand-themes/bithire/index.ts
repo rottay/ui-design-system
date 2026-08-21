@@ -181,6 +181,13 @@ const OVERLAY: BrandThemeModeOverlay = {
     backgroundSurfaceColor: "#151d2b",
     backgroundOverlayColor: "rgba(20, 40, 59, 0.58)",
     textPrimaryColor: "#e4e8ed",
+    /**
+     * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
+     * labels de formulario — el mobiliario de pagina, no el contenido.
+     * @domicile seed
+     * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
+     */
+    textPageColor: "#9aacbf",
     textSecondaryColor: "#9aacbf",
     textTertiaryColor: "#7a90a5",
     textMutedColor: "#5a7085",
@@ -1009,6 +1016,13 @@ const PALETTE: BrandPalette = {
    * @governor none — gap aceptado: bithire no autora esta hoja de palette
    */
   textPrimaryColor: "#14283B",
+  /**
+   * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
+   * labels de formulario — el mobiliario de pagina, no el contenido.
+   * @domicile seed
+   * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
+   */
+  textPageColor: "#53697E",
   textSecondaryColor: "#53697e",
   textTertiaryColor: "#7f859b",
   textMutedColor: "#8a9aaa",
