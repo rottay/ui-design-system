@@ -156,12 +156,18 @@ de capability activa; las 29 mixtas quedan con nota de clase (sus tags por
 hoja aterrizan EN su lote F4A-5…15); las 53 sin-control idem (disposición
 final = adjudicación de F4A-close). Cero valores tocados; prueba
 byte-idéntica ida y vuelta; baja `untaggedAuthoredLeaves` (3686 → residuo
-medido); el baseline lo baja el DT en el commit. **Estado: el harness tuvo un
-bug latente de scope (parada 10/10) ya arreglado en F4A-2b `6c549af78` (28/28
-drills, artefacto byte-idéntico) — F4A-3b se re-ejecuta con los generadores ya
-probados en `/tmp/f4a-3b/`; en paralelo, un lote Sonnet mueve el drill de
-cascade-ratchet a tmpdir (la carrera preexistente que la suite nueva hizo
-determinista).**
+medido); el baseline lo baja el DT en el commit. **Estado al cierre: F4A-3b ✅
+(45 narrativos fuera, 114 del kit, 37 tags — 32 seed + 5 pro-expert;
+untaggedAuthoredLeaves 3686→3029, baseline bajado por el DT; divergentSlots
+2268 clavado; artefactos byte-idénticos ida y vuelta; gat-07 re-sellado
+`fec98f592242…`; leyes rescatadas en `docs/f4a/leyes-fuentes-themes.md`).
+Excepción pendiente del DT: `rottay CHROME.statsGrid` (token-overrides no es
+dial de rottay en el roster) — nota de clase, se adjudica a más tardar en
+F4A-close.** **Siguiente lote: F4A-4 (worker, brief TUYO):** roster por
+placeholders byte-idéntico (evnto +34 / bithire +17 / rottay +10 — los slots
+del roster que un tema no autora quedan con `@placeholder <path>` +
+`@domicile unassigned` + razón; las líneas `// X: not authored` del esqueleto
+se canonizan); es el primer lote que baja `divergentSlots` desde 2268.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 

@@ -862,6 +862,35 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
+**F4A-3b ✅ (re-ejecutado sobre el harness arreglado; worker Opus; verificado
+por el DT contra el árbol).** Canon de comentarios aplicado, **byte-idéntico
+probado ida y vuelta** (revert→build→idéntico→re-aplicar→idéntico): **45
+docblocks narrativos fuera, 114 del kit adentro, 37 tags** (32 seed + 5
+pro-expert — son 5 y no 6 porque evnto no tiene `const MOTION`, el hallazgo de
+F4A-2 otra vez consistente; **0 baseline, 0 @placeholder, 0 en el esqueleto**).
+**`untaggedAuthoredLeaves` 3686→3029** (baseline bajado por el DT en este
+commit, verificado contra el artefacto regenerado); `divergentSlots` **2268
+clavado** (los tags no son posiciones; los placeholders de F4A-4 sí);
+matriz 2613/345 y sourceSkeleton 1820/1503/397 intactos. Banners ya
+canónicos (0 trabajo); orden alfabético NO-OP medido (0 consts movidos). La
+excepción única de §3: `rottay CHROME.statsGrid` (`token-overrides` no es dial
+de rottay en el roster) → nota de clase, adjudicación pendiente del DT. La
+cadena arrastró `fanout-facts.json` (**990 citas file:line movidas por los
+comentarios, CERO medición movida** — exactamente lo que un cambio de
+comentarios debe producir; el worker lo regeneró y lo reportó en vez de
+esconderlo, correcto). mirror-parity: **solo provenance**. docs-engineering:
+**vacío** (`tokens:catalog:write` sin un solo diff — ningún valor ni conteo de
+lectura cambió). Suite: el worker midió 1711/15 con las **2 forcing functions
+diseñadas** (el pin del baseline + el test de F4A-2 que pineaba
+`tagRegistry.count === 0`); ambas las resolví YO en este commit: (1) baseline
+bajado 3686→3029; (2) ese test reescrito como **AGED_EXPECTATION** (ahora
+valida vocabulario cerrado + failures vacíos sobre los 37 tags reales) → suite
+de vuelta en **1711/13**. gat-07 **re-sellado por el DT**: digest
+`fec98f592242…` (src/ cambió: comentarios entran al digest). Leyes: los 45
+docblocks leídos uno por uno, **28 con ley real** → verbatim re-domiciliado en
+`docs/f4a/leyes-fuentes-themes.md` (lo escribí yo, del verbatim del worker; la
+referencia tema:línea es pre-edición; incluye la memoria de tranches
+ROTTAY-T2/MASS-C3/EVNTO-TERMINAL-2/T1/K0.6 que F2 citaba).
 **Lote drill→tmpdir ✅ `003b8f7ba` (worker Sonnet, verificado por el DT contra
 el árbol).** La 14ª falla de la suite (carrera ENOENT del drill de
 cascade-ratchet plantando en `src/`) queda erradicada: el walker compartido

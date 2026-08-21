@@ -25,6 +25,11 @@ detalle detrás de cada asentamiento.
   53 sin control (380). Hallazgo: el plano canal → raíz-de-cascada NO existe
   en ningún artefacto (root-checklists atribuye a CONTROL; intersección con
   las 66 raíces del roster vacía). Insumo de F4A-3b.
+- `leyes-fuentes-themes.md` — F4A-3b (verbatim del worker, re-domicilio del
+  DT): las 28 leyes reales que cargaban los 45 docblocks narrativos borrados
+  de las 3 fuentes por el canon de comentarios. Las referencias `tema:línea`
+  son pre-edición. Es memoria, no mecanismo: si una ley cambia, cambia en su
+  lote de reescritura (F4A-5…15).
 
 Origen: `/tmp/f4a-1-*.md`, `/tmp/f4a-1c-roster-draft.*` (2026-08-20).
 
