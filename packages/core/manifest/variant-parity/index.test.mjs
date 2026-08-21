@@ -288,7 +288,11 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // F4A-8: 1040 -> 1145, misma ley. Los 59 placeholders de hoja de SURFACES dan
   // posicion sobre 105 slots mas, y `divergentSlots` baja 1519 -> 1414 en la
   // misma corrida: otra vez el espejo exacto.
-  assert.equal(real.matrix.positionIntersection, 1145);
+  // F4A-9: 1145 -> 1601. CHROME.controls es la familia con mas superficie de
+  // ausencia parcial del frente (402/295/93 hojas sobre una union de 514), y sus
+  // 295 placeholders de hoja dan posicion sobre 456 slots mas. `divergentSlots`
+  // baja 1414 -> 958 en la misma corrida: el espejo, por tercera vez.
+  assert.equal(real.matrix.positionIntersection, 1601);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 

@@ -26,21 +26,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 109971,
-        "lines": 3278,
-        "sha256": "0c30bbd11cd87144910297a83b043a8fe5106a21f5ac734eca9136cc8529ce7a"
+        "bytes": 164987,
+        "lines": 4817,
+        "sha256": "b764e7e7922235402934f6b8f6b4d392eaedbbcf9b7a9e2f6512af27eb330422"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 137598,
-        "lines": 3622,
-        "sha256": "cecfe09be09a382adcbb4accda2162833282f6895dcf08c1b50d74b271594934"
+        "bytes": 189506,
+        "lines": 5020,
+        "sha256": "cbc919e1264740aa8884937e548dcda313b49544fb623d8013a3801247cf7b4c"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 70005,
-        "lines": 1846,
-        "sha256": "dc9fc20bbab2c5cf68721514a63916874cbd86a931b819af7d4ddaac96b53758"
+        "bytes": 108384,
+        "lines": 2720,
+        "sha256": "c3d3bb063af6c41bc03571fa14e53aaeedafa9d5ea9380df0e94b3204edd9a3a"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."

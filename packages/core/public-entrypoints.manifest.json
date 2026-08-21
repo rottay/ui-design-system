@@ -1013,8 +1013,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 133,
-        "maxSourceBytes": 1350000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1062790 de techo previo."
+        "maxSourceBytes": 1550000,
+        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1350000."
       },
       "symbols": [
         {
@@ -1110,8 +1110,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 137,
-        "maxSourceBytes": 1350000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1063964 de techo previo."
+        "maxSourceBytes": 1550000,
+        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1350000."
       },
       "symbols": [
         {
@@ -1149,8 +1149,8 @@
       "budget": {
         "maxDirectSources": 3,
         "maxReachableModules": 142,
-        "maxSourceBytes": 1450000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1154374 de techo previo."
+        "maxSourceBytes": 1650000,
+        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1450000."
       },
       "symbols": [
         {
@@ -1253,8 +1253,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 155,
-        "maxSourceBytes": 1450000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1167072 de techo previo."
+        "maxSourceBytes": 1650000,
+        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1450000."
       },
       "symbols": [
         {

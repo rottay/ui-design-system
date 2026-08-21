@@ -1517,105 +1517,979 @@ const CHROME: BrandChrome = {
     // --ds-shadow-* are dark-aware and a literal would regress dark mode.
     // Generated from receipts/cohort-1-button-shadow-state-census.json.
     semantic: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       ink: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       inkMuted: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       onBrand:
         "var(--ds-color-text-on-primary, var(--ds-color-text-inverse))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card-bg
+       */
       surface: "var(--ds-surface-card-bg)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       surfaceRaised:
         "color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg))",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       brandTint:
         "color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-control-surface))",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       brandTintHover:
         "color-mix(in srgb, var(--ds-color-primary) 15%, var(--ds-control-surface))",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       brandBorder:
         "color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-icon-border
+       */
       iconTileBorder: "var(--ds-surface-icon-border)",
     },
     buttonAI: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest
+       */
       shadow: "var(--ds-shadow-button-rest)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-hover
+       */
       shadowHover: "var(--ds-shadow-button-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest
+       */
       shadowActive: "var(--ds-shadow-button-rest)",
     },
     buttonInfo: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest
+       */
       shadow: "var(--ds-shadow-button-rest)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-info-shadow
+       */
       shadowHover: "var(--ds-button-info-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-info-shadow
+       */
       shadowActive: "var(--ds-button-info-shadow)",
     },
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-shadow-error-sm
+     */
     buttonError: {
       shadow: "var(--ds-shadow-error-sm)",
       shadowHover: "var(--ds-shadow-error-sm)",
       shadowActive: "var(--ds-shadow-error-sm)",
     },
     buttonWarning: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-warning-sm
+       */
       shadow: "var(--ds-shadow-warning-sm)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-warning-shadow
+       */
       shadowHover: "var(--ds-button-warning-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-warning-shadow
+       */
       shadowActive: "var(--ds-button-warning-shadow)",
     },
     buttonSuccess: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-success-sm
+       */
       shadow: "var(--ds-shadow-success-sm)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-success-shadow
+       */
       shadowHover: "var(--ds-button-success-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-success-shadow
+       */
       shadowActive: "var(--ds-button-success-shadow)",
     },
     buttonLink: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadow: "none",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-link-shadow
+       */
       shadowHover: "var(--ds-button-link-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-link-shadow
+       */
       shadowActive: "var(--ds-button-link-shadow)",
     },
     buttonText: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadow: "none",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-text-shadow
+       */
       shadowHover: "var(--ds-button-text-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-text-shadow
+       */
       shadowActive: "var(--ds-button-text-shadow)",
     },
     buttonDashed: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadow: "none",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-dashed-shadow
+       */
       shadowHover: "var(--ds-button-dashed-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-dashed-shadow
+       */
       shadowActive: "var(--ds-button-dashed-shadow)",
     },
+    /**
+     * @domicile seed
+     * @governor mixta medida en linea compartida: 3 por dial: palette.seeds; 2 por dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a); 1 por dial: chrome.families — las 6 hojas comparten una sola linea fuente y no admiten docblock propio sin reformatear
+     */
     buttonPrimary: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-hover
+       */
       shadowHover: "var(--ds-shadow-button-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest, --ds-color-primary
+       */
       shadowActive: "var(--ds-shadow-button-rest)", bg: 'var(--ds-color-primary)', bgHover: '#262626', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     buttonSecondary: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest
+       */
       shadow: "var(--ds-shadow-button-rest)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-hover
+       */
       shadowHover: "var(--ds-shadow-button-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest
+       */
       shadowActive: "var(--ds-shadow-button-rest)", bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.15)' },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     buttonDefault: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest
+       */
       shadow: "var(--ds-shadow-button-rest)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-hover
+       */
       shadowHover: "var(--ds-shadow-button-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-button-rest, --ds-color-primary
+       */
       shadowActive: "var(--ds-shadow-button-rest)", bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', color: 'var(--ds-color-primary)', border: 'rgba(0, 0, 0, 0.1)' },
+    /**
+     * @domicile seed
+     * @governor mixta medida en linea compartida: 2 por dial: token-overrides; 1 por dial: palette.seeds; 1 por dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — las 4 hojas comparten una sola linea fuente y no admiten docblock propio sin reformatear
+     */
     buttonGhost: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadow: "none",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-ghost-shadow
+       */
       shadowHover: "var(--ds-button-ghost-shadow)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-button-ghost-shadow
+       */
       shadowActive: "var(--ds-button-ghost-shadow)", bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.03)', text: '#525252', color: '#525252' },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     disabled: { opacity: 0.4, bg: '#FAFAFA', text: 'rgba(0, 0, 0, 0.25)', border: 'rgba(0, 0, 0, 0.06)', borderColor: 'rgba(0, 0, 0, 0.06)' },
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary
+     */
     focusRingColor: 'var(--ds-color-primary)',
     input: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       bg: '#ffffff',
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       border: 'rgba(0, 0, 0, 0.12)',
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderFocus: '#171717',
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadowFocus: '0 0 0 1px rgba(23, 23, 23, 0.2)',
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       bgDisabled: '#FAFAFA',
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       colorDisabled: 'rgba(0, 0, 0, 0.25)',
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderDisabled: 'rgba(0, 0, 0, 0.06)',
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       disabledOpacity: 0.4,
     },
     select: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control, --ds-color-bg-input, --ds-color-white
+       */
       bg: 'var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control, --ds-color-bg-input, --ds-color-white
+       */
       bgHover: 'var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control, --ds-color-bg-input, --ds-color-white
+       */
       bgFocus: 'var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-900
+       */
       color: 'var(--ds-color-neutral-900)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-400
+       */
       colorPlaceholder: 'var(--ds-color-neutral-400)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-300
+       */
       borderColor: 'var(--ds-color-neutral-300)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-400
+       */
       borderColorHover: 'var(--ds-color-neutral-400)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-500
+       */
       borderColorFocus: 'var(--ds-color-primary-500)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-white
+       */
       dropdownBg: 'var(--ds-color-white)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-200
+       */
       dropdownBorderColor: 'var(--ds-color-neutral-200)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-lg
+       */
       dropdownShadow: 'var(--ds-shadow-lg)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-100
+       */
       optionBgHover: 'var(--ds-color-neutral-100)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-50
+       */
       optionBgSelected: 'var(--ds-color-primary-50)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-900
+       */
       optionColor: 'var(--ds-color-neutral-900)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-700
+       */
       optionColorSelected: 'var(--ds-color-primary-700)',
     },
+    /**
+     * @placeholder CHROME.controls.autocomplete
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonDefault.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonDefault.borderActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonDefault.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonDefault.colorActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonDefault.colorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonError.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonError.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonError.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonError.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonError.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonError.text
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGeometry
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGhost.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGhost.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGhost.borderActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGhost.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGhost.colorActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonGhost.colorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonInfo.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonInfo.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonInfo.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonInfo.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonInfo.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonInfo.text
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonLink.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonLink.colorActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonLink.colorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonPrimary.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSecondary.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSecondary.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSuccess.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSuccess.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSuccess.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSuccess.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSuccess.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonSuccess.text
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.colorActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.colorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonText.text
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonWarning.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonWarning.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonWarning.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonWarning.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonWarning.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.buttonWarning.text
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.checkbox
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.datePicker
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.fieldGeometry
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.focusRing
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.form
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.addon
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.affix
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.autofill
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.bgFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.borderColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.borderColorFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.borderColorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.caretColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.clear
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.colorPlaceholder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no lo autora en el cuerpo pero si en el overlay; el bloque que lo autora sirve su valor (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.count
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.errorBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.errorBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.errorColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.errorShadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.filled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.helper
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.insetShadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.label
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.loadingColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.placeholderOpacity
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.readOnly
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.selectionBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.selectionColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.shadowHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.shadowRest
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.successBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.successBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.successShadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.warningBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.warningBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.input.warningShadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.inputNumber
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.radio
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.rate
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.segmented
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.arrowColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.bgDisabled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.borderFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.checkColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.clearColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.clearColorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.colorDisabled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.dropdownBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.filledBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.optionColorDisabled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.shadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.successBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.tagBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.tagColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.select.warningBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.slider
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.switch
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.textarea
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.timePicker
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.toggle
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.transfer
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.controls.upload
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
   /**
    * @domicile seed
