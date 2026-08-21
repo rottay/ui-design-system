@@ -906,6 +906,42 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-13 ✅ (worker Opus; parada 19/19 correcta con DOS premisas falsas mías
+medidas contra el árbol, adjudicadas y re-despachadas; verificado por el DT) —
+capacidades + forma + residuos. EL FRENTE QUEDA CERRADO SALVO `CHROME.table`
+(K5/F4A-15).** Mis premisas falsas, medidas por el worker: (a) mis 8 familias
+contenían 67 de las 181 — el resto era **TYPOGRAPHY base huérfana (48)** (el
+diseño de lotes la asignó a F4A-6, que hizo el nudo K3, no la familia), el
+**esqueleto THEME.\* (26)** (taggeable desde mi fix de F4A-8 — el worker
+verificó la línea 225) y **table (40)**, excluida por mi propio brief; (b) 28
+de los 67 (CHARTS + CHROME.accent) no encajaban en ninguna de mis 3 categorías
+sin inventar un ancla falsa (vocabulario de forma que no baja a canal y sin
+capability que lo gobierne — `expressive` solo activa en bithire, medido).
+**Adjudicaciones MÍAS**: CAPABILITIES.\* (24) `pro-expert` anclado a SU PROPIA
+capability con el estado autorado medido (la hoja ES la declaración — verdadero
+en los 3 temas); CHARTS+accent (28) `unassigned` + governor con la razón medida
+(vocabulario de forma consumido como argumento; disposición final F4A-close) —
+NO se inventó clase nueva; TYPOGRAPHY (48) kit estándar; THEME.\* (26)
+`unassigned` + "el esqueleto cablea los planos, no autora pintura" (la ley
+F4A-3b por hoja); table intacta para K5. **141 tags + 20 placeholders = 161
+docblocks**; `untaggedAuthoredLeaves` 181→**40** (exactamente las de table — mi
+predicción, clavada), `divergentSlots` 39→**33** con la nota medida escrita en
+el test: el contador NO llega a 0 por esta vía (los 33 restantes son slots que
+NINGÚN tema autora — un placeholder no puede darles posición; **el 0 real lo
+certifica el gate `realKeypathParity` de F4A-close**, adjudicación A4), espejo
+positionIntersection 2520→**2526**, universo 2559 e intersección 342 clavados,
+tagRegistry 3938→**4099**. **Dos bugs del worker atrapados por sus propias
+verificaciones** (índice sin normalizar `BrandTheme$ → THEME` como el parser;
+prefijo de placeholder trepando por encima de la familia → el guard de
+@placeholder contradictorio del harness lo rechazó con 4 failures — restauró a
+HEAD y acotó: el instrumento hizo su trabajo). Byte-identidad ×3 builds reales.
+Cadena completa verde; digest reconciliation `1ec7b2797c05` (NOVENA vez
+huérfano). Batería ×2: rosters 1304/1304 enteros, mirror 44/44, variant 34/34
+tras la Baja, root-exposure 13/13, pierna 1 MÍA **1717/13** por nombre (par
+export-* pair-aware). gat-07 re-sellado por el DT: `8dc47e9bc302…`. gates:ci
+**88+2 verdes**. **Siguiente lote: F4A-14 = K4** (las 16 asimétricas con valor
+= resolución computada de hoy) y después **F4A-15 = K5** (tabla bithire =
+baseline con razón, NO se unifica; cierra las 40 hojas de CHROME.table).
 **F4A-12 ✅ (worker Opus; verificado por el DT contra el árbol) — el barrido
 de las CHROME chicas (47 pares familia×tema, el lote más ancho).** **527 tags
 + 209 placeholders = 736 docblocks** cubriendo las 533 hojas pendientes (565

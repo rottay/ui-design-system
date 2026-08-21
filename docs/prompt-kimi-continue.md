@@ -311,10 +311,23 @@ con K5/F4A-15); `statsGrid` llevó la nota de clase (nunca tuvo tag de sección
 de forma en METADATA_EXCLUSION lo explican. `untaggedAuthoredLeaves`
 499→**181**, `divergentSlots` 172→**39** (espejo →2520; superficie casi
 agotada), tagRegistry 3217→**3938** (Baja #12). Aviso §8 adjudicado: 7 techos
-con 1,5× de aire cierran el frente. Suite 1717/13 por nombre. gat-07
-`363f99b7a859…`. **Siguiente lote: F4A-13** (worker, brief TUYO):
-capacidades + forma + residuos (MOTION/RECIPES/EXPRESSIVE/CAPABILITIES/CHARTS/
-accent/toolbar/OVERLAY.typography) — las 181 hojas restantes.
+con 1,5× de aire cierran el frente. Suite 1717/13 por nombre. gat-07 `363f99b7a859…`. **Estado al cierre: F4A-13
+✅ (worker Opus; parada 19/19 con DOS premisas falsas mías — medidas y
+adjudicadas).** El frente queda cerrado salvo `CHROME.table` (K5). 161
+docblocks (141 tags + 20 placeholders); grupos adjudicados: CAPABILITIES con
+pro-expert anclado a su propia capability con estado medido; CHARTS/accent con
+unassigned + razón de vocabulario de forma (NINGUNA capability los gobierna —
+medido; no se inventó clase ni ancla falsa); TYPOGRAPHY base huérfana (48) con
+kit estándar; THEME.* (26) con la ley F4A-3b por hoja (taggeables desde mi fix
+de F4A-8). `untaggedAuthoredLeaves` 181→**40** (exactamente table — predicción
+clavada), `divergentSlots` 39→**33** (medido: NO llega a 0 por esta vía — son
+slots que ningún tema autora; el 0 real lo certifica el gate realKeypathParity
+de F4A-close), tagRegistry 3938→**4099** (Baja #13). Dos bugs del worker
+atrapados por sus propias verificaciones (normalización BrandTheme→THEME;
+prefijo de placeholder trepando la familia — el guard del harness lo rechazó).
+Suite 1717/13 por nombre. gat-07 `8dc47e9bc302…`. **Siguiente lote: F4A-14 =
+K4** (worker, brief TUYO): las 16 asimétricas con valor = resolución computada
+de hoy.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
