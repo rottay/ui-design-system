@@ -340,8 +340,8 @@
       "budget": {
         "maxDirectSources": 6,
         "maxReachableModules": 187,
-        "maxSourceBytes": 1500000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1208052 de techo previo."
+        "maxSourceBytes": 1700000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1500000."
       },
       "symbols": [
         {
@@ -437,8 +437,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 196,
-        "maxSourceBytes": 1900000,
-        "_note": "Con aire 2026-08-21 en F4A-7, parada del worker 16/16 adjudicada por el DT: el frente proyecta ~medio MB de comentarios de gobierno sobre las fuentes de tema (F4A-8..15 siguen); estos subpath mueren en F6. Medido ese dia: 1388156."
+        "maxSourceBytes": 2000000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1900000."
       },
       "symbols": [
         {
@@ -511,8 +511,8 @@
       "budget": {
         "maxDirectSources": 2,
         "maxReachableModules": 48,
-        "maxSourceBytes": 900000,
-        "_note": "Con aire 2026-08-21 (900000) en F4A-5, parada del worker 12/12 adjudicada por el DT: re-anclar al valor exacto medido (387391 en F4A-4a, 398278 en F4A-4) garantiza el choque del lote siguiente — ya choco dos veces. El frente F4A entero proyecta del orden de medio MB de comentarios de gobierno (kit de tags + placeholders) sobre las 3 fuentes de tema: solo la Parte 1 de F4A-5 (PALETTE) proyectaba +46138 bytes sobre un aire de 0. Los comentarios no llegan al bundle: el artefacto compilado sale byte-identico (probado ida y vuelta en F4A-3b/4/5). Este subpath es de los 77 granulares que se retiran en F6: el presupuesto muere con el. La nota de 2026-08-11 documentaba la pregunta correcta: el peso es brand-theme alcanzable desde una entrada use client; la respuesta es la cascada (F2-F4), no un tema mas chico."
+        "maxSourceBytes": 1050000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 900000."
       },
       "symbols": [
         {
@@ -574,8 +574,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 589,
-        "maxSourceBytes": 2050000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1944213 de techo previo."
+        "maxSourceBytes": 2300000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2050000."
       },
       "symbols": [
         {
@@ -898,8 +898,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 132,
-        "maxSourceBytes": 1350000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1041794 de techo previo."
+        "maxSourceBytes": 1600000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1350000."
       },
       "symbols": [
         {
@@ -1013,8 +1013,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 133,
-        "maxSourceBytes": 1550000,
-        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1350000."
+        "maxSourceBytes": 1600000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1550000."
       },
       "symbols": [
         {
@@ -1033,8 +1033,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 146,
-        "maxSourceBytes": 1400000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1090776 de techo previo."
+        "maxSourceBytes": 1650000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1400000."
       },
       "symbols": [
         {
@@ -1110,8 +1110,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 137,
-        "maxSourceBytes": 1550000,
-        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1350000."
+        "maxSourceBytes": 1600000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1550000."
       },
       "symbols": [
         {
@@ -1149,8 +1149,8 @@
       "budget": {
         "maxDirectSources": 3,
         "maxReachableModules": 142,
-        "maxSourceBytes": 1650000,
-        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1450000."
+        "maxSourceBytes": 1700000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1650000."
       },
       "symbols": [
         {
@@ -1253,8 +1253,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 155,
-        "maxSourceBytes": 1650000,
-        "_note": "Con aire 2026-08-21 en F4A-9, aviso del worker (§8) adjudicado por el DT: la proyeccion del resto del frente es ~271 KB (1394 hojas x 194 B, tasa medida en CHROME.controls) + 25% de aire, dimensionado para que F4A-10 no arranque con una parada; estos subpath mueren en F6. Techo previo: 1450000."
+        "maxSourceBytes": 1700000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1650000."
       },
       "symbols": [
         {
@@ -1292,8 +1292,8 @@
       "budget": {
         "maxDirectSources": 4,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1550000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1272927 de techo previo."
+        "maxSourceBytes": 1750000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1550000."
       },
       "symbols": [
         {
@@ -1347,8 +1347,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1600000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1279520 de techo previo."
+        "maxSourceBytes": 1800000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1600000."
       },
       "symbols": [
         {
@@ -1367,8 +1367,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 656,
-        "maxSourceBytes": 2400000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 2292252 de techo previo."
+        "maxSourceBytes": 2650000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2400000."
       },
       "symbols": [
         {
@@ -1581,8 +1581,8 @@
       "budget": {
         "maxDirectSources": 10,
         "maxReachableModules": 242,
-        "maxSourceBytes": 2350000,
-        "_note": "Con aire 2026-08-21 en F4A-7, parada del worker 16/16 adjudicada por el DT: el frente proyecta ~medio MB de comentarios de gobierno sobre las fuentes de tema (F4A-8..15 siguen); estos subpath mueren en F6. Medido ese dia: 1827792."
+        "maxSourceBytes": 2450000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2350000."
       },
       "symbols": [
         {
@@ -1669,7 +1669,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 601,
-        "maxSourceBytes": 2101503
+        "maxSourceBytes": 2300000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2101503."
       },
       "symbols": [
         {
@@ -1745,8 +1746,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 643,
-        "maxSourceBytes": 2350000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 2258900 de techo previo."
+        "maxSourceBytes": 2550000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2350000."
       },
       "symbols": [
         {
@@ -1765,8 +1766,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 778,
-        "maxSourceBytes": 3300000,
-        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 3224313 de techo previo."
+        "maxSourceBytes": 3550000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 3300000."
       },
       "symbols": [
         {

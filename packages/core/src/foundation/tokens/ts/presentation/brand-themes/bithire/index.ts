@@ -1003,10 +1003,26 @@ const OVERLAY: BrandThemeModeOverlay = {
   chrome: {
     controls: {
       buttonPrimary: {
+        /**
+         * @domicile seed
+         * @governor dial: chrome.families
+         */
         bg: "#1a7fe0",
+        /**
+         * @domicile seed
+         * @governor dial: palette.seeds
+         */
         bgHover: "#2b8fef",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         color: "#ffffff",
       },
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       buttonSecondary: {
         bg: "transparent",
         border: "#253545",
@@ -1014,76 +1030,272 @@ const OVERLAY: BrandThemeModeOverlay = {
         bgHover: "#1b2535",
       },
       input: {
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         bg: "#0f1520",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         border: "#253545",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         borderHover: "#3a4a5a",
+        /**
+         * @domicile seed
+         * @governor dial: palette.seeds
+         */
         borderFocus: "#1a7fe0",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         shadowFocus: "0 0 0 1px #1a7fe0",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         colorPlaceholder: "#5a7085",
         addon: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-surface-panel
+           */
           bg: "var(--ds-surface-panel)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-neutral-500
+           */
           border: "var(--ds-color-neutral-500)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-secondary
+           */
           color: "var(--ds-color-text-secondary)",
         },
         affix: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-surface-panel
+           */
           bg: "var(--ds-surface-panel)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-secondary
+           */
           color: "var(--ds-color-text-secondary)",
         },
         autofill: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-surface-panel
+           */
           bg: "var(--ds-surface-panel)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-primary
+           */
           caret: "var(--ds-color-primary)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-primary
+           */
           color: "var(--ds-color-text-primary)",
         },
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-material-control-background-disabled
+         */
         bgDisabled: "var(--ds-material-control-background-disabled)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         borderDisabled: "var(--ds-color-border-secondary)",
         // Dark pins for the border COLOR channel — see the note above the
         // dark select block.
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-300
+         */
         borderColor: "var(--ds-color-neutral-300)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-400
+         */
         borderColorHover: "var(--ds-color-neutral-400)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary-500
+         */
         borderColorFocus: "var(--ds-color-primary-500)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary
+         */
         caretColor: "var(--ds-color-primary)",
         clear: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-material-control-background-hover
+           */
           bgHover: "var(--ds-material-control-background-hover)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-neutral-500
+           */
           borderHover: "var(--ds-color-neutral-500)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-tertiary
+           */
           color: "var(--ds-color-text-tertiary)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-primary
+           */
           colorHover: "var(--ds-color-text-primary)",
         },
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-muted
+         */
         colorDisabled: "var(--ds-color-text-muted)",
         count: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-tertiary
+           */
           color: "var(--ds-color-text-tertiary)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-error
+           */
           colorError: "var(--ds-color-error)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-warning
+           */
           colorWarning: "var(--ds-color-warning)",
         },
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-error, --ds-surface-card
+         */
         errorBg: "color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-card))",
         helper: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-error
+           */
           errorColor: "var(--ds-color-error)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-tertiary
+           */
           color: "var(--ds-color-text-tertiary)",
         },
         filled: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-surface-panel
+           */
           bg: "var(--ds-surface-panel)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-surface-control
+           */
           bgFocus: "var(--ds-surface-control)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-material-control-background-hover
+           */
           bgHover: "var(--ds-material-control-background-hover)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-border
+           */
           border: "var(--ds-color-border)",
         },
         label: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-primary
+           */
           color: "var(--ds-color-text-primary)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-tertiary
+           */
           disabledColor: "var(--ds-color-text-tertiary)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-error
+           */
           requiredColor: "var(--ds-color-error)",
         },
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary
+         */
         loadingColor: "var(--ds-color-primary)",
         readOnly: {
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-surface-panel
+           */
           bg: "var(--ds-surface-panel)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-border
+           */
           border: "var(--ds-color-border)",
+          /**
+           * @domicile derived
+           * @governor deriva de: --ds-color-text-secondary
+           */
           color: "var(--ds-color-text-secondary)",
         },
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-primary
+         */
         selectionColor: "var(--ds-color-text-primary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-success, --ds-surface-card
+         */
         successBg: "color-mix(in srgb, var(--ds-color-success) 4%, var(--ds-surface-card))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-warning, --ds-surface-card
+         */
         warningBg: "color-mix(in srgb, var(--ds-color-warning) 5%, var(--ds-surface-card))",
       },
       disabled: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-material-control-background-disabled
+         */
         bg: "var(--ds-material-control-background-disabled)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         border: "var(--ds-color-border-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-border-secondary
+         */
         borderColor: "var(--ds-color-border-secondary)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-text-muted
+         */
         text: "var(--ds-color-text-muted)",
       },
       /*
@@ -1096,37 +1308,125 @@ const OVERLAY: BrandThemeModeOverlay = {
        * are not a dark design, and each is the natural candidate for a
        * later, deliberate "let the premium treatment reach dark" decision.
        */
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-400
+       */
       focusRingColor: "var(--ds-color-primary-400)",
       select: {
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-surface-control, --ds-color-bg-input, --ds-color-white
+         */
         bg: "var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         bgHover:
           "var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))",
+        /**
+         * @domicile seed
+         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         */
         bgFocus:
           "var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-900
+         */
         color: "var(--ds-color-neutral-900)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-400
+         */
         colorPlaceholder: "var(--ds-color-neutral-400)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-300
+         */
         borderColor: "var(--ds-color-neutral-300)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-400
+         */
         borderColorHover: "var(--ds-color-neutral-400)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary-500
+         */
         borderColorFocus: "var(--ds-color-primary-500)",
         // The one channel the retired dark block authored explicitly.
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-surface-card
+         */
         dropdownBg: "var(--ds-surface-card)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-200
+         */
         dropdownBorderColor: "var(--ds-color-neutral-200)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-shadow-lg
+         */
         dropdownShadow: "var(--ds-shadow-lg)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-100
+         */
         optionBgHover: "var(--ds-color-neutral-100)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary-50
+         */
         optionBgSelected: "var(--ds-color-primary-50)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-neutral-900
+         */
         optionColor: "var(--ds-color-neutral-900)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-primary-700
+         */
         optionColorSelected: "var(--ds-color-primary-700)",
       },
     },
     // Dark pins for the rich-card interior; the frame channels above the
     // fold are mode-agnostic and are authored once in the theme body.
     premiumCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background, --ds-card-bg
+       */
       bg: "var(--ds-material-card-background, var(--ds-card-bg))",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       sheen:
         "linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-card-bg) 42%, transparent), transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-rich-card-header-bg
+       */
       headerBg: "var(--ds-rich-card-header-bg)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-rich-card-section-bg
+       */
       sectionBg: "var(--ds-rich-card-section-bg)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-rich-card-section-alt-bg
+       */
       sectionAltBg: "var(--ds-rich-card-section-alt-bg)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       footerBg:
         "color-mix(in srgb, var(--ds-color-bg-secondary) 72%, var(--ds-card-bg))",
     },
@@ -1134,263 +1434,1723 @@ const OVERLAY: BrandThemeModeOverlay = {
     // purpose: the body value and the consumer fallback are the same
     // expression, so dark is already unchanged without a pin.
     surface: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-sm
+       */
       shadow: "var(--ds-shadow-sm)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-md
+       */
       shadowHover: "var(--ds-shadow-md)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       iconBg:
         "linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)), color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg)))",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       iconBorder:
         "color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-surface-card-border))",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       chipBg:
         "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg))",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       cardSideAccentSoft: "transparent",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-shadow-md
+       */
       popoverShadow: "var(--ds-shadow-md)",
     },
     cardComponent: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       bgHover: "#1b2535",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       border: "#253545",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadow: "0 4px 12px rgba(20, 40, 59, 0.16),\n    0 2px 4px rgba(20, 40, 59, 0.1)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowHover: "0 8px 24px rgba(20, 40, 59, 0.18),\n    0 4px 8px rgba(20, 40, 59, 0.12)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       bodyColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       color: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       colorMuted: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       footerBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       footerBorderColor: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       footerColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card, --ds-surface-panel
+       */
       headerBg: "linear-gradient(112deg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card)) 0%, var(--ds-surface-card) 54%, var(--ds-surface-panel) 100%)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       headerBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       headerBorderColor: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       headerColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       imagePlaceholderBg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       imagePlaceholderColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       subtitleColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
     },
     table: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       bg: "#0f1520",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       border: "#1d2a38",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-radius-lg
+       */
       radius: "var(--ds-radius-lg)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       headerBg: "#151d2b",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       headerColor: "#9aacbf",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       headerFontSize: "0.75rem",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       rowBg: "#0f1520",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       rowBgHover: "#1b2535",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       rowBgStriped: "#131a26",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       rowBgSelected: "#112840",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       rowBorder: "#1d2a38",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       cellPadding: "0.875rem 1rem",
+      /**
+       * @domicile seed
+       * @governor dial: typography.scale
+       */
       cellFontSize: "0.875rem",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       actionBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       actionBorder: "color-mix(in srgb, var(--ds-color-border) 70%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       filterRowBg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       headerBgHover: "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       headerBorder: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       headerShadow: "inset 0 -1px 0 color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       rowBgExpanded: "var(--ds-surface-panel)",
     },
     sidebar: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       groupFontSize: "11px",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       groupColor: "#5a7085",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       groupMarginTop: "8px",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       groupMarginBottom: "4px",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       groupPaddingTop: "10px",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemFontSize: "13px",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemFontWeightActive: "500",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemColor: "#9aacbf",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemColorActive: "#3b9af0",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemBgActive: "rgba(26, 127, 224, 0.12)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemBgHover: "rgba(255, 255, 255, 0.04)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       itemIndent: "6px",
+      /**
+       * @domicile seed
+       * @governor dial: navigation.sidebar-tone
+       */
       bg: "#0a0f18",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       footerBg: "#0a0f18",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       border: "#1d2a38",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       text: "#9aacbf",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       textMuted: "#5a7085",
     },
     badge: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       countBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       iconBg: "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       ink: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-hover
+       */
       inkHover: "var(--ds-color-primary-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       removeBg: "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       removeHoverBg: "color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-hover
+       */
       selectedInk: "var(--ds-color-primary-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       selectedSurface: "color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       surface: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       surfaceHover: "color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       surfacePressed: "color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card))",
     },
     breadcrumb: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       colorActive: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       bg: "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       color: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       itemColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       separatorColor: "var(--ds-color-text-tertiary)",
     },
     collectionCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       bg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background-hover
+       */
       bgHover: "var(--ds-material-card-background-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       bodyColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       labelColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       statusBg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-color-border
+       */
       statusBorder: "color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-hover
+       */
       statusColor: "var(--ds-color-primary-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       valueColor: "var(--ds-color-text-primary)",
     },
     shell: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       commandHomeConsoleBg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       commandHomeControlBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-color-border
+       */
       commandHomeControlBorder: "color-mix(in srgb, var(--ds-color-primary) 40%, var(--ds-color-border))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       commandHomeControlHoverBg: "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       commandHomeHeroBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       commandHomeIconBg: "color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border, --ds-surface-card
+       */
       commandHomeMeterBg: "color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       commandHomePanelBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       commandHomePanelBgStrong: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-color-border
+       */
       commandHomePanelBorder: "color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-color-border
+       */
       commandHomePanelBorderSoft: "color-mix(in srgb, var(--ds-color-primary) 40%, var(--ds-color-border))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       commandHomeSurfaceBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       commandRailBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background-active
+       */
       activeBg: "var(--ds-material-card-background-active)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background-active
+       */
       activeGradient: "var(--ds-material-card-background-active)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-canvas, --ds-surface-panel, --ds-surface-shell
+       */
       bg: "linear-gradient(180deg, var(--ds-surface-canvas) 0%, var(--ds-surface-panel) 58%, var(--ds-surface-shell) 100%)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
     },
     compactCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       bg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background-hover
+       */
       bgHover: "var(--ds-material-card-background-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       bodyColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       labelColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       valueColor: "var(--ds-color-text-primary)",
     },
     filterPill: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary
+       */
       activeColor: "var(--ds-color-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       bg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       color: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       countBorder: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
     },
     search: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-muted
+       */
       clearColor: "var(--ds-color-text-muted)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       iconColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       bg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       categoryColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       clearColorHover: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       color: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       emptyBg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       inputBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-500
+       */
       inputBorder: "var(--ds-color-neutral-500)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       inputColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       placeholderColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       resultBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       resultBgHover: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       resultBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       resultMetaColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       resultTitleColor: "var(--ds-color-text-primary)",
     },
     layout: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       bg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       headerBg: "color-mix(in srgb, var(--ds-surface-card) 92%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       headerBorder: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       siderBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       siderBorder: "var(--ds-color-border)",
     },
     listingGrid: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       cardBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       cardBorder: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       emptyBg: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       emptyBorder: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       skeletonBg: "var(--ds-surface-panel)",
     },
     metricCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       bg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       iconBg: "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       labelColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border, --ds-surface-panel
+       */
       meterTrack: "color-mix(in srgb, var(--ds-color-border) 48%, var(--ds-surface-panel))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       meterTrackBorder: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-hover
+       */
       trendColor: "var(--ds-color-primary-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       valueColor: "var(--ds-color-text-primary)",
     },
     modal: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       bg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       bodyColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       closeBgHover: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       closeColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       closeColorHover: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       color: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-canvas
+       */
       footerBg: "var(--ds-surface-canvas)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       footerBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card, --ds-surface-panel
+       */
       headerBg: "color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-surface-panel))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       headerBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       subtitleColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
     },
     signalCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary
+       */
       badgeColor: "var(--ds-color-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       bg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       bodyColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       iconBg: "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border, --ds-surface-panel
+       */
       meterTrack: "color-mix(in srgb, var(--ds-color-border) 48%, var(--ds-surface-panel))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       meterTrackBorder: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-panel
+       */
       sectionAltBg: "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       sectionBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
     },
     tabs: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       bgHover: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       colorActive: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       colorHover: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       activeBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background-active
+       */
       badgeBgActive: "var(--ds-material-card-background-active)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-color-border
+       */
       badgeBorderActive: "color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary-hover
+       */
       badgeColorActive: "var(--ds-color-primary-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       border: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel, --ds-surface-card
+       */
       listBg: "color-mix(in srgb, var(--ds-surface-panel) 82%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       listBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       overflowControlBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-panel
+       */
       overflowControlBgHover: "var(--ds-surface-panel)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       panelBg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       panelBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       panelHighlight: "inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
     },
     tallCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card, --ds-surface-panel, --ds-surface-canvas
+       */
       bg: "linear-gradient(145deg, var(--ds-surface-card) 0%, var(--ds-surface-panel) 72%, var(--ds-surface-canvas) 100%)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       bodyColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       labelColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       valueColor: "var(--ds-color-text-primary)",
     },
     toolbar: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       bg: "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       borderBottom: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       color: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-control
+       */
       controlBg: "var(--ds-surface-control)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-neutral-500
+       */
       controlBorder: "var(--ds-color-neutral-500)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       controlColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       divider: "var(--ds-color-border-secondary)",
     },
     workspaceCard: {
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-card
+       */
       bg: "var(--ds-surface-card)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-card-background-hover
+       */
       bgHover: "var(--ds-material-card-background-hover)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       bodyColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border
+       */
       border: "var(--ds-color-border)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-surface-canvas
+       */
       footerBg: "var(--ds-surface-canvas)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
       footerBorder: "var(--ds-color-border-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-secondary
+       */
       footerColor: "var(--ds-color-text-secondary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary, --ds-surface-card
+       */
       iconBg: "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary
+       */
       iconColor: "var(--ds-color-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-tertiary
+       */
       labelColor: "var(--ds-color-text-tertiary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       titleColor: "var(--ds-color-text-primary)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-primary
+       */
       valueColor: "var(--ds-color-text-primary)",
     },
+    /**
+     * @placeholder OVERLAY.chrome.alert
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.anchor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.avatar
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.backTop
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.borderColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.defaultBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.defaultColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.errorBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.infoBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.primaryColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.secondaryBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.badge.textColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.breadcrumb.colorHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.calendar
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.borderAccentHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.footerBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.imageLoadingActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.imageLoadingTrack
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.cardComponent.shadowElevated
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.collapse
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.autocomplete
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonDefault
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonError
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonGhost
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonInfo
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonLink
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonPrimary.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonPrimary.shadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonPrimary.shadowHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonSecondary.bgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonSecondary.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.buttonText
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.checkbox
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.datePicker
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.form
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.bgFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.bgHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.errorBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.errorColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.errorShadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.successShadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.input.warningShadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.inputNumber
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.radio
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.rate
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.segmented
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.arrowColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.bgDisabled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.borderFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.borderHover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.clearColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.colorDisabled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.dropdownBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.errorBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.filledBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.optionColorDisabled
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.shadowFocus
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.select.tagBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.slider
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.switch
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.textarea
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.timePicker
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.toggle
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.transfer
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.controls.upload
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.descriptions
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.drawer
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.dropdown
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.empty
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.floatButton
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.layout.dividerColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.layout.dividerTextColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.list
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.liveFeed
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.menu
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.message
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.modal.overlayBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.modal.shadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.notification
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.pagination
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.popover
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.progress
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.result
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.search.commandPalette
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.shell.gridLine
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.childPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.groupLetterSpacing
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.iconColumnSize
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.iconSize
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemChildHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemFontSizeChild
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemFontWeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemGap
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemPadding
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.itemPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.shellPaddingCollapsed
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.sidebar.shellPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.skeleton
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.spinner
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.statistic
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.statsGrid
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.steps
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.surface.cardCoverOverlayBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.surface.gradientDark
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.surface.imageOverlayBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.surface.overlayBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.surface.pageShellSubtitleColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.surface.watermarkColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.table.cellColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.table.loadingOverlayBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.tabs.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.tag
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.timeline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.tooltip
+     * @domicile unassigned
+     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder OVERLAY.chrome.tree
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
 };
 

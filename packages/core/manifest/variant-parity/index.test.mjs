@@ -292,7 +292,11 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // ausencia parcial del frente (402/295/93 hojas sobre una union de 514), y sus
   // 295 placeholders de hoja dan posicion sobre 456 slots mas. `divergentSlots`
   // baja 1414 -> 958 en la misma corrida: el espejo, por tercera vez.
-  assert.equal(real.matrix.positionIntersection, 1601);
+  // F4A-10: 1601 -> 2288. OVERLAY.chrome es la familia mas grande y la mas
+  // dispar entre temas (507/293/31 hojas sobre una union de 710: evnto autora 31
+  // y necesita 188 placeholders). Sus 436 placeholders dan posicion sobre 687
+  // slots mas y `divergentSlots` baja 958 -> 271. Cuarta vez el mismo espejo.
+  assert.equal(real.matrix.positionIntersection, 2288);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 
