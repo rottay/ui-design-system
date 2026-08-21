@@ -307,7 +307,7 @@
       "theme": "rottay",
       "posture": "authored",
       "domicile": "derived",
-      "governor": "deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta)",
+      "governor": "deriva de: --ds-color-text-page (MATERIALIZADO en F4A-6, commit 3393f70d4; REDERIVED cero-delta verificado)",
       "ruleSource": "nudo K3",
       "note": "K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en rottay: base=#A0A0A5 | overlay=#6B6B6B."
     },
@@ -316,7 +316,7 @@
       "theme": "bithire",
       "posture": "authored",
       "domicile": "derived",
-      "governor": "deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta)",
+      "governor": "deriva de: --ds-color-text-page (MATERIALIZADO en F4A-6, commit 3393f70d4; REDERIVED cero-delta verificado)",
       "ruleSource": "nudo K3",
       "note": "K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en bithire: base=#53697E | overlay=#9aacbf."
     },
@@ -325,7 +325,7 @@
       "theme": "evnto",
       "posture": "authored",
       "domicile": "derived",
-      "governor": "deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta)",
+      "governor": "deriva de: --ds-color-text-page (MATERIALIZADO en F4A-6, commit 3393f70d4; REDERIVED cero-delta verificado)",
       "ruleSource": "nudo K3",
       "note": "K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en evnto: base=#3d3d3d."
     },
@@ -486,7 +486,7 @@
       "domicile": "seed",
       "governor": "dial: palette.seeds — K1 descongelada",
       "ruleSource": "nudo K1",
-      "note": "K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
+      "note": "K1: se descongela en el LOTE K1 (propio del DT, post-F4A-6 — quedo fuera de F4A-5 con razon medida: los 32 canales identicos son CHROME, no PALETTE); VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
     },
     {
       "root": "ramp.seed.primary",
@@ -495,7 +495,7 @@
       "domicile": "seed",
       "governor": "dial: palette.seeds — K1 descongelada",
       "ruleSource": "nudo K1",
-      "note": "K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
+      "note": "K1: se descongela en el LOTE K1 (propio del DT, post-F4A-6 — quedo fuera de F4A-5 con razon medida: los 32 canales identicos son CHROME, no PALETTE); VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
     },
     {
       "root": "ramp.seed.primary",
@@ -504,7 +504,7 @@
       "domicile": "seed",
       "governor": "dial: palette.seeds — K1 descongelada",
       "ruleSource": "nudo K1",
-      "note": "K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
+      "note": "K1: se descongela en el LOTE K1 (propio del DT, post-F4A-6 — quedo fuera de F4A-5 con razon medida: los 32 canales identicos son CHROME, no PALETTE); VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta."
     },
     {
       "root": "ramp.seed.secondary",

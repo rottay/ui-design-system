@@ -235,12 +235,18 @@ en F4A-5). Después F4A-7…15 por `/tmp/f4a-lotes-7-13.md`.
 
 `F4A-3` canon de comentarios (byte-idéntico) → `F4A-4` roster por placeholders
 (byte-idéntico: evnto +34, bithire +17, rottay +10) → `F4A-5…15` reescritas
-por familia (K1/K2→5 palette, K3→6 typography, K4→14 asimétricas, K5→15 tabla
-bithire; firmados solo REDERIVED) → `F4A-close` TUYO (ratchet a tolerancia
-cero + gates:ci) → **auditoría Fable del frente** → `F4B` (calibración causal
-de los 20 controles, receipts de 8 puntos, §7) → `F2-asimétrico` → `F3` →
-`F4C` → `F5→F8` → `F9` (UNKNOWN=0 sobre 255×20=5.100 celdas) → auditoría final
-→ goal completo con gates:ci verde en HEAD.
+por familia (K2→5 palette, K3→6 typography, K1→LOTE PROPIO del DT post-F4A-6,
+K4→14 asimétricas, K5→15 tabla bithire; firmados solo REDERIVED) → **`F4A-3c`
+correctivo (enmendado 2026-08-21 tras auditoría Codex verificada por el DT:
+mapa reclasificado con criterio estricto —limpias 33→0—, los 27 tags de
+familia no probados se estrechan o retiran, roster/registry/checkpoint al día,
+spec del gate de paridad real) — DESPUÉS de K1 y ANTES de F4A-7…15** →
+`F4A-close` TUYO (ratchet a tolerancia cero + **gate de paridad real sobre
+keypaths evaluados, separado de placeholders** + gates:ci) → **auditoría
+Fable del frente** (recibe el informe Codex de insumo) → `F4B` (calibración
+causal de los 20 controles, receipts de 8 puntos, §7) → `F2-asimétrico` →
+`F3` → `F4C` → `F5→F8` → `F9` (UNKNOWN=0 sobre 255×20=5.100 celdas) →
+auditoría final → goal completo con gates:ci verde en HEAD.
 
 ## 5. Reglas operativas que NO se re-abren
 

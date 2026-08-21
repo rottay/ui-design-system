@@ -3488,7 +3488,7 @@
    "programs": [
     "modern-rescue"
    ],
-   "notes": "Owner-authorized standalone Modern Rescue programme. START HERE: packages/core/scripts/quality-evidence/programs/modern-rescue/README.md. It executes R0-R6 only over 252 canonical families and 20 operational controls; R7 is disabled future work. The segmented manifest owns current assessment state. Historical SOURCE_TOUCHED/test/capture records are prioritization or evidence, not acceptance. Codex remains the final machine and sighted auditor and local committer. Never push; Classic/Rustic are read-only.",
+   "notes": "Owner-authorized standalone Modern Rescue programme. START HERE: packages/core/scripts/quality-evidence/programs/modern-rescue/README.md. It executes R0-R6 only over the 255 canonical families (the 252 figure predates F4A-0) and 20 operational controls; R7 is disabled future work. The segmented manifest owns current assessment state. Historical SOURCE_TOUCHED/test/capture records are prioritization or evidence, not acceptance. Operating model (owner order 2026-08-20, roadmap §12 decision 13, identity reconciliation 85d0583b9): Kimi K3 is DT/coordinator and sole local committer; Claude Opus/Sonnet workers implement via tmux and never commit; Fable is the independent auditor at each front's close; Codex is out of the loop. Never push; Classic/Rustic are read-only.",
    "progressLog": [
     {
      "at": "2026-08-04 22:07",

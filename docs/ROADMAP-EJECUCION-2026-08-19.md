@@ -906,6 +906,48 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**AUDITORÍA CODEX ad hoc (2026-08-21, pedida por el dueño sobre HEAD
+`3af69a654`) + verificación MÍA claim por claim contra el árbol.**
+Veredicto: la dirección es correcta (F4A-5/6 van bien; NO se revierten) con
+**UNA desviación semántica bloqueante confirmada** + 2 doc-drift + 1 brecha
+de gate. (a) **BLOQUEANTE — la clasificación "33 limpias" no prueba lo que
+los tags de familia afirman.** Recomputé `mapa-familia-canales.json`: el
+criterio del mapa (un solo control ENTRE LOS ATRIBUIDOS) da 33/29/53 ✓
+idéntico al .md; el criterio estricto (un solo control + CERO canales con
+`control:null` + cero hojas sin atribuir) da **0 limpias** — las 33 cargan
+nulos TODAS (rottay modal 1/14, tabs 1/37, sidebar 34 hojas/36 nulos;
+bithire badge 1/57, tabs 1/54; evnto OVERLAY.palette 3/115). Los 27 tags de
+familia mapeados (`@governor dial: X` a nivel sección) afirman gobierno
+probado para una fracción mínima de las hojas; el harness valida sintaxis y
+cobertura, no gobierno real. La adjudicación débil fue MÍA (línea ~1173:
+"tags de familia SOLO donde limpios" con el criterio del mapa) y el mapa.md
+nunca declaró que "limpia" cargaba nulos. Los tags de HOJA de F4A-5/6/K1 son
+otra clase (citan la raíz del recableo, que ES la prueba) — intactos.
+(b) **registry/checkpoint stale** — `roadmap/registry.json` (declarado
+`statusAuthority` en program.json) dice "Codex remains the final machine and
+sighted auditor and local committer" y 252 familias (son 255);
+`checkpoint.intent.json` habla de spacing.rhythm y carriles retirados;
+program-check no mira coherencia temporal. (c) **roster stale (menor)** —
+`tier.page.fg` decía "materializa F4A-6" en futuro estando aterrizado.
+(d) **brecha de gate (diseño)** — `@placeholder` da posición por prefijo
+(variant-parity:437, adjudicación F4A-4 deliberada) y puede bajar
+`divergentSlots` sin keypath real; la salida contractual (§"Salida F4A":
+paridad estructural real, cero shadowing) exige un **gate final de paridad
+sobre keypaths evaluados reales**, separado de placeholders — se escribe en
+F4A-close (queda en su definición). Los contadores 1694/2712/5100/0
+SIGHTED_ACCEPTED son foto de mitad de frente, no desviación. **Corrección:
+entra `F4A-3c` a la cola vinculante (después de K1, antes de F4A-7…15)** —
+reclasificación con criterio estricto declarado, estrechamiento o retiro de
+los 27 tags de familia (el vocabulario `governanceScope: parcial` ya existe
+en root-catalog), updates de roster/registry/checkpoint, y spec del gate de
+paridad real. Diseño mío (DT), ejecución de Opus; la auditoría Fable de F4A
+recibe el informe Codex como insumo. **ERRATUM F4A-6 (detectado por la
+batería de K1):** el pin de vocabulario select de T2 quedó ROJO en HEAD —
+`chained` era 9 (no 7 pineados) desde que K3 recableó `clearColorHover`/
+`tagColor`, y `admitted` 3 (no 1): nadie corrió T2 ENTERO tras los recableos
+(6b verificó hashes contra `git show` + censo T3, no las aserciones de
+vocabulario). **Ley: tras tocar fuente de tema, los 3 rosters firmados se
+corren ENTEROS (vitest de los 3 archivos), no por nombre ni solo hashes.**
 **F4A-6 ✅ (worker Opus + cierre F4A-6b con DOS adjudicaciones mías;
 verificado por el DT contra el árbol).** K3 ejecutado: **raíz NUEVA
 `--ds-color-text-page` autorada** (rootId `tier.page.ink`, campo tipado
@@ -1188,6 +1230,13 @@ re-autoría los hace verdaderos en el mismo commit; las 53 sin-control quedan
 con nota de clase (no tag) y su disposición final es adjudicación de
 F4A-close, ya enumeradas por el mapa (no silenciosas). El esqueleto `THEME.*`
 (35 hojas) no se taggea: cablea, no autora — docblock del kit sin tags.
+**CORRECCIÓN 2026-08-21 (auditoría Codex, verificada por mí):** el criterio
+"limpia" de arriba cuenta un solo control ENTRE LOS ATRIBUIDOS e ignora los
+canales `control:null`; con criterio estricto (cero nulos) las limpias son
+**0, no 33**. Los 27 tags de familia escritos bajo esta adjudicación afirman
+gobierno probado sobre hojas sin atribución medida — se estrechan o retiran
+en **F4A-3c** (cola vinculante, después de K1). Detalle en §13 (asiento de la
+auditoría).
 **F4A-2 ✅ `e6364e90b` (worker Opus, verificado por el DT contra el árbol, NO de
 palabra) — harness `variant-parity` blocking: 87→88 gates.** Productor hermano
 de mirror-parity (sub-decisión DT registrada): solo IMPORTA de él
@@ -1278,8 +1327,14 @@ tolerancia cero al cierre); **F4A-3** canon de comentarios (byte-idéntico);
 **F4A-4** alineación de roster por placeholders (byte-idéntico: evnto +34,
 bithire +17, rottay +10); **F4A-5…15** reescritas por familia ejecutando el
 esquema (K1/K2→5 palette, K3→6 typography, K4→14 asimétricas, K5→15 tabla
-bithire; REDERIVED para firmados); **F4A-close** mío: ratchet a tolerancia
-cero + gates:ci final + **auditoría Fable del frente**. Restricciones duras
+bithire; REDERIVED para firmados); **F4A-3c** (enmendada 2026-08-21 tras
+auditoría Codex): reclasificación del mapa con criterio estricto declarado,
+estrechamiento/retiro de los 27 tags de familia no probados, updates de
+roster/registry/checkpoint; **F4A-close** mío: ratchet a tolerancia
+cero + **gate de paridad real sobre keypaths evaluados, separado de la
+cobertura por placeholders** (brecha señalada por Codex: `@placeholder` da
+posición sin materializar keypath) + gates:ci final + **auditoría Fable del
+frente**. Restricciones duras
 registradas: F4A-0 antes que todo; F4A-1 antes que cualquier reescritura;
 F4A-2 antes que F4A-4+; la cadena censo→reconciliation→kimi→controls→catalog
 con gat-07 ÚLTIMO mío en cada lote; suite 1683/13 por nombre; lane-control

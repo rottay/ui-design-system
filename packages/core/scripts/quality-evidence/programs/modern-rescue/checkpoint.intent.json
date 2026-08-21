@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "currentWave": "Roadmap reconciliation and first control calibration",
-  "blockedOn": "No external blocker. Competing human authorities must be retired and the spacing rhythm trace must be source-bound before broad family propagation.",
+  "currentWave": "F4A — canon estructural de los 3 brand themes (F4A-0…6 cerrados; K1 en cierre; F4A-3c correctivo post-auditoría Codex; luego F4A-7…15 y F4A-close)",
+  "blockedOn": "No external blocker. F4A-close exige el ratchet a tolerancia cero + el gate de paridad real sobre keypaths evaluados (sin cobertura por placeholders) + la auditoría Fable del frente.",
   "laneTableCaption": "Active packets:",
   "lanes": [
     {
       "id": "authority",
       "work": "Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated.",
-      "model": "codex",
-      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership."
+      "model": "kimi-dt",
+      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Kimi K3 DT (owner order 2026-08-20, roadmap §12 decision 13); Codex is out of the loop since the identity reconciliation (85d0583b9)."
     },
     {
       "id": "control-calibration",
@@ -25,8 +25,8 @@
     {
       "id": "advisory-audit",
       "work": "Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme.",
-      "model": "fable-and-kimi-read-only",
-      "modelReason": "Independent methods expose shared assumptions; advisory prose is never authority and only reproduced source findings enter the canonical tree."
+      "model": "fable",
+      "modelReason": "Fable is the independent auditor at each front's close (owner order 2026-08-20, decision 13: DT ≠ auditor). Advisory prose is never authority and only reproduced source findings enter the canonical tree."
     }
   ],
   "refusedCaption": "Refused",

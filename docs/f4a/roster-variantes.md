@@ -127,7 +127,7 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 | bithire | `authored` | `seed` | nudo K1 | dial: palette.seeds — K1 descongelada |
 | evnto | `authored` | `seed` | nudo K1 | dial: palette.seeds — K1 descongelada |
 
-> K1: se descongela en F4A-5, VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta.
+> K1: se descongela en el LOTE K1 (propio del DT, post-F4A-6 — quedó fuera de F4A-5 con razón medida: los 32 canales idénticos son CHROME, no PALETTE), VALOR SIN CAMBIAR; 135 lectores arrastrados (r25/b90/e20); recableo solo cero-delta.
 
 **`ramp.seed.secondary`** · --ds-color-secondary · exposure `tenant-dial` · status `existe` · radio 57
 
@@ -550,9 +550,9 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `authored` | `derived` | nudo K3 | deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta) |
-| bithire | `authored` | `derived` | nudo K3 | deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta) |
-| evnto | `authored` | `derived` | nudo K3 | deriva de: --ds-color-text-page (materializa F4A-6; REDERIVED cero-delta) |
+| rottay | `authored` | `derived` | nudo K3 | deriva de: --ds-color-text-page (MATERIALIZADO en F4A-6, commit 3393f70d4; REDERIVED cero-delta verificado) |
+| bithire | `authored` | `derived` | nudo K3 | deriva de: --ds-color-text-page (MATERIALIZADO en F4A-6, commit 3393f70d4; REDERIVED cero-delta verificado) |
+| evnto | `authored` | `derived` | nudo K3 | deriva de: --ds-color-text-page (MATERIALIZADO en F4A-6, commit 3393f70d4; REDERIVED cero-delta verificado) |
 
 > K3 (adjudicacion nueva 2026-08-20): los 42 canales cuelgan de la raiz NUEVA --ds-color-text-page, no de --ds-color-text-secondary (que ya existia con otro valor). Valor de esta raiz en rottay: base=#A0A0A5 \| overlay=#6B6B6B.
 
