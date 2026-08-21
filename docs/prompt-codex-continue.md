@@ -29,33 +29,53 @@
   (ad hoc pedido por el dueño) ya fue verificado e integrado (ver §13 y
   `docs/f4a/auditoria-codex-2026-08-21.md`).
 
-## 2. Estado al momento de este prompt (2026-08-21, ~15h de sesión)
+## 2. Estado al momento de este prompt (2026-08-21, ~16h de sesión)
 
 **Frentes cerrados con auditoría Fable aprobada:** F0, F0.5, F1, F2.
 
-**F4A (canon estructural de los 3 themes) — EN CURSO.** Cerrados: F4A-0,
-F4A-1, F4A-2, F4A-3a/3b, F4A-4, F4A-5 (+5b), F4A-6 (+6b), K1, F4A-3c (paquete
-corrector post-Codex), F4A-7, F4A-8, F4A-9, F4A-10, F4A-11. **En vuelo al
-escribir esto: F4A-12 en Opus** (barrido de las CHROME chicas; si su flag
-`/tmp/f4a-12-listo.txt` existe al retomar, el cierre es tuyo: verificar →
-baseline → gat-07 → pierna 1 → gates:ci → commits).
+**F4A (canon estructural de los 3 themes) — CASI CERRADO.** Cerrados: F4A-0,
+F4A-1, F4A-2, F4A-3a/3b, F4A-3c (paquete corrector post-Codex), F4A-4,
+F4A-5 (+5b), F4A-6 (+6b), K1 (primary descongelada — la congelación murió:
+rootPinned floor-literal ×3), F4A-7, F4A-8 (con el fix del parser del DT:
+`export const` abre raíz + spread inline no anota ruta fantasma), F4A-9,
+F4A-10 (17 techos dimensionados para el frente entero), F4A-11, F4A-12
+(ciclo de vida: 15/15 gap-medido retirados; queda UNO: rottay table para K5),
+F4A-13 (parada 19/19 con dos premisas falsas del DT medidas y adjudicadas —
+el frente queda cerrado salvo `CHROME.table`). **Siguiente lote: F4A-14 = K4.**
 
-**Contadores vigentes (post-F4A-11, verificados contra el artefacto):**
+**Contadores vigentes (post-F4A-13, verificados contra el artefacto):**
 universo **2559** slots · leaves **1756/1504/395** · intersección autorada
-**342** · positionIntersection **2387** · exclusive **1007/795/3** ·
-tagRegistry **3217** · divergentSlots **172** · untaggedAuthoredLeaves **499**
-· rosters firmados 1304/1304 · suite pierna 1 **1717/13** por nombre ·
-gates:ci **88 blocking + 2 excluded** verdes.
+**342** · positionIntersection **2526** · exclusive **1007/795/3** ·
+tagRegistry **4099** · divergentSlots **33** (medido: NO llega a 0 por la vía
+de placeholders — son slots que ningún tema autora; el 0 real lo certifica el
+gate `realKeypathParity` de F4A-close) · untaggedAuthoredLeaves **40**
+(exactamente las hojas de `CHROME.table`, que van con K5) · rosters firmados
+1304/1304 · suite pierna 1 **1717/13** por nombre · gates:ci **88 blocking +
+2 excluded** verdes.
 
-**Qué queda en F4A (cola vinculante, no se reordena):** F4A-12 (en vuelo) →
-F4A-13 (MOTION/RECIPES/EXPRESSIVE/CAPABILITIES/CHARTS/accent/toolbar/
-OVERLAY.typography — capacidades + forma + residuos) → **F4A-14 = K4** (las 16
-asimétricas con valor = resolución computada de hoy) → **F4A-15 = K5** (tabla
-bithire = baseline con razón, NO se unifica; incluye `CHROME.table`, excluida
-de F4A-12) → **F4A-close del DT** (ratchet a tolerancia cero + **gate de
-paridad real sobre keypaths evaluados, separado de placeholders** — spec en
-§13 asiento-auditoría — + deudas nombradas abajo) → **auditoría Fable del
-frente F4A** (recibe el informe Codex de insumo).
+**Qué queda en F4A (cola vinculante, no se reordena):** **F4A-14 = K4** (las
+16 asimétricas con valor = resolución computada de hoy) → **F4A-15 = K5**
+(tabla bithire = baseline con razón, NO se unifica; incluye `CHROME.table`,
+las 40 hojas restantes) → **F4A-close del DT** (ratchet a tolerancia cero +
+**gate de paridad real sobre keypaths evaluados, separado de placeholders** —
+spec en §13 asiento-auditoría — + deudas nombradas abajo + la deuda de
+test-hygiene cra-12) → **auditoría Fable del frente F4A** (recibe el informe
+Codex de insumo, `docs/f4a/auditoria-codex-2026-08-21.md`).
+
+**Terminales vivas AHORA MISMO** (procesos del OS del usuario — sobreviven al
+cambio de cuenta; `tmux ls` para confirmar):
+- `f05-opus` — Claude Opus, el worker principal: TODO el contexto del frente
+  F4A (los 14 lotes que ejecutó, las paradas 1-19, el kit). Si hay un lote en
+  vuelo al retomar, su flag está en `/tmp/<lote>-listo.txt` y su reporte en
+  `/tmp/<lote>-reporte.md`.
+- `f05-sonnet` — Claude Sonnet, para lotes mecánicos.
+- `fable-ejec` — Fable, el auditor (contexto de las auditorías F0-F2; antes
+  de pedirle la de F4A evaluá `/clear` — su veredicto F2 está en
+  `/tmp/fable-f2-cierre-verdict.md`, no se pierde).
+Si alguna no existe: `tmux new-session -d -s <nombre> -c
+/Users/daniel/Developer/Rottay/ui-design-system` +
+`tmux send-keys -t <nombre> "claude --model <opus|sonnet|fable>
+--dangerously-skip-permissions" Enter`.
 
 **Después de F4A:** F4B (calibración causal de los 20 controles, receipts de 8
 puntos) → F2-asimétrico → F3 → F4C → F5→F8 → F9 (UNKNOWN=0 sobre
@@ -132,20 +152,30 @@ parada entera y adjudicá vos. Convención de entrega: reporte en /tmp + flag
 
 ## 5. Deudas nombradas que heredás (no te sorprendan)
 
-- **16 tags "gap medido" quedan tras F4A-11** (25 − 9 retirados); F4A-12
-  retira 15 más al probar sus familias hoja por hoja; `rottay table` queda
-  para K5/F4A-15. Regla: retirar SOLO si la familia quedó ENTERA.
+- **`rottay table` es el ÚNICO tag "gap medido" restante** (los otros 25 ya se
+  retiraron al quedar sus familias probadas hoja por hoja): se retira en
+  F4A-15/K5 cuando table quede entera. Regla: retirar SOLO si quedó ENTERA.
 - **`rottay CHROME.statsGrid`**: token-overrides no es dial de rottay en el
-  roster — se taggea con nota de clase en F4A-12; adjudicación en F4A-close.
+  roster — taggeada con nota de clase en F4A-12; adjudicación en F4A-close.
 - **bithire `--ds-button-primary-bg`** queda congelado (dark `#1a7fe0` ≠
   `#1e84e6` — divergencia autorada o near-dup): lo decide F4B/F2-asimétrico.
-- **`cra-12`**: la planta en árbol real correa los drills export-* (ver §4.4).
-  Aislarla del read-set del manifest: deuda de F4A-close (test-hygiene).
-- **Automatización del digest de reconciliation**: deuda escrita de F4A-close.
-- **Las 53 familias "sin control"** del mapa: su disposición final es
-  adjudicación de F4A-close (están siendo taggeadas por hoja en sus lotes).
-- **`divergentSlots` no llega a 0 por placeholders**: el gate de paridad REAL
-  (keypaths evaluados, placeholders no cuentan) es de F4A-close — spec en §13.
+  Es el testigo actual del diente (a) de mirror-parity — si se descongela, el
+  drill se re-sujeita (nota de mantenimiento en su comentario).
+- **`cra-12`**: la planta en árbol real (`__cra12-reanchor-drill.css` en
+  `src/foundation/tokens/css/`) correa los drills export-* de la suite — cuál
+  de los dos queda rojo lo decide el timing (pair-aware en la baseline de la
+  suite). Aislarla del read-set del manifest: deuda de F4A-close
+  (test-hygiene).
+- **Automatización del digest de reconciliation** (9 veces huérfano tras lotes
+  de fuentes — no lo escribe ningún productor): deuda escrita de F4A-close.
+- **Las clases de vocabulario sin capability** (CHARTS + CHROME.accent, 28
+  hojas) y el **esqueleto THEME.\*** quedaron `unassigned` con razón medida en
+  F4A-13: su disposición final es F4A-close.
+- **Las 53 familias "sin control"** del mapa: taggeadas por hoja en sus lotes;
+  la disposición final de la CLASE es adjudicación de F4A-close.
+- **`divergentSlots` no llega a 0 por placeholders** (33 restantes = slots que
+  ningún tema autora): el gate de paridad REAL (keypaths evaluados,
+  placeholders no cuentan) es de F4A-close — spec en §13 (adjudicación A4).
 
 ## 6. Cómo verificar el estado al retomar (hacelo, no asumas)
 
