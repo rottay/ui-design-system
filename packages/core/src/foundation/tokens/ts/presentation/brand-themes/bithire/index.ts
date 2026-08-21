@@ -4161,104 +4161,460 @@ const CHROME: BrandChrome = {
   sidebar: {
     // Shell geometry is a brand decision, not a color-mode one: authored
     // here it reaches both modes, matching how rottay already ships it.
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     width: "256px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     collapsedWidth: "64px",
+    /**
+     * @domicile seed
+     * @governor dial: navigation.sidebar-tone
+     */
     bg: "#ffffff",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     footerBg: "#F8FBFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     border: "#D4E0EA",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     text: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textMuted: "#728398",
     // Type ramp alignment (design-language §2.1): group headers on the
     // detail size, items on the body size, active weight on the 400/600/700 ramp.
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupFontSize: "0.75rem",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupFontWeight: 600,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupColor: "#728398",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupLetterSpacing: "0.04em",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupMarginTop: "8px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupMarginBottom: "4px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupPaddingTop: "10px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontSize: "0.875rem",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemIndent: "6px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontWeight: 400,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontWeightActive: 600,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemColor: "#53697E",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemColorActive: "#3A6FB0",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-tint-8
+     */
     itemBgActive: "var(--ds-tint-8)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemBgHover: "#F4F8FD",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemPadding: "6px 10px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     iconSize: "16px",
+    /**
+     * @placeholder CHROME.sidebar.childPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.headerHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.iconColumnSize
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemChildHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemFontSizeChild
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemGap
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.shellPaddingCollapsed
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.shellPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   layout: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerHeight: "56px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bg: "#F4F7FA",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBg: "rgba(255, 255, 255, 0.92)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBackdrop: "blur(8px)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBorder: "#D4E0EA",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     siderBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     siderBorder: "#D4E0EA",
+    /**
+     * @placeholder CHROME.layout.dividerColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.layout.dividerTextColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
-  /**
-   * @domicile unassigned
-   * @governor gap medido: gobierno parcial — palette.seeds alcanza 22 de 43 canales de la familia (21 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
-   */
   shell: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gridSize: "0px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gridLine: "transparent",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gridOpacity: 0,
     // The page canvas gradient is the ONE allowed background gradient
     // (design-language §5 budget item 1).
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     bg: "linear-gradient(180deg, #F8FAFC 0%, #F3F7FA 58%, #EDF3F7 100%)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     border: "#D4E0EA",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     overlay:
       "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 3.5%, transparent) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     shadow:
       "0 12px 34px -26px rgba(20, 40, 59, 0.36), 0 1px 3px rgba(20, 40, 59, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     activeBg: "#EDF2F6",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     activeGradient: "#EDF2F6",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     dropdownShadow:
       "0 12px 30px rgba(20, 40, 59, 0.10), 0 2px 8px rgba(20, 40, 59, 0.06)",
     // Decorative shimmers deleted per design-language §5 (skeletons stay
     // `pulse`; AI-live affordances are the sole shimmer exception and do
     // not read these tokens).
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandFont: "'SF Mono', 'Fira Code', Menlo, monospace",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandLetterSpacing: "0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandGridSize: "22px",
     // Blueprint grid overlays retired (design-language §5 / §6.4).
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandGridLineSoft: "transparent",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandGridLine: "transparent",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandGridLineStrong: "transparent",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandGridBg: "none",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandGridBgStrong: "none",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandGlow: "none",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandLine: "none",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandRailBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeMaxWidth: "1120px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeGap: "16px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomePanelGap: "14px",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeGridLine:
       "color-mix(in srgb, var(--ds-color-primary) 6%, transparent)",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomePanelBorder: "#A9C9EA",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomePanelBorderSoft: "#B7D3F2",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomePanelShadow: "0 1px 2px rgba(20, 40, 59, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomePanelBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomePanelBgStrong: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeCompactActionHeight: "202px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeConsoleMinHeight: "calc(100vh - 108px)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeConsolePadding:
       "clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeConsoleBg: "#F6FAFE",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeSurfaceBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeHeroBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeIconBg: "color-mix(in srgb, #3A6FB0 9%, #FFFFFF)",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeIconBorder: "color-mix(in srgb, #3A6FB0 32%, #D4E0EA)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeControlBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeControlBorder: "#B7D3F2",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeControlHoverBg: "color-mix(in srgb, #3A6FB0 7%, #FFFFFF)",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeControlHoverBorder: "color-mix(in srgb, #3A6FB0 42%, #D4E0EA)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     commandHomeMeterBg: "color-mix(in srgb, #D4E0EA 72%, transparent)",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     commandHomeMeterFill: "linear-gradient(90deg, #315F86, #6F98BC)",
   },
   /**
@@ -4414,17 +4770,61 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   breadcrumb: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bg: "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     border: "color-mix(in srgb, #D4E0EA 82%, transparent)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     color: "#53697E",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-secondary
+     */
     linkColor: "var(--ds-color-text-secondary)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemColor: "#53697E",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary
+     */
     colorHover: "var(--ds-color-primary)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     colorActive: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     separatorColor: "#8A9AAA",
     // Breadcrumbs sit on the detail step of the type ramp (design-language §2.1).
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     fontSize: "11px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     fontWeight: 400,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     padding: "0.625rem 1rem",
   },
   /**
@@ -6400,7 +6800,66 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   tooltip: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     zIndex: 2700,
+    /**
+     * @placeholder CHROME.tooltip.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.color
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.defaultBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.defaultColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.primaryBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.primaryColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.secondaryBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.secondaryColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.shadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.successBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tooltip.warningBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
   /**
    * Familia mixta. Controles: palette.seeds, token-overrides.
@@ -6611,95 +7070,417 @@ const CHROME: BrandChrome = {
     continuousSurface:
       "color-mix(in srgb, var(--ds-surface-card-bg, var(--ds-surface-card)) 94%, transparent)",
   },
-  /**
-   * @domicile unassigned
-   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 15 canales de la familia (14 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
-   */
   modal: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     color: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     shadow:
       "0 28px 72px rgba(20, 40, 59, 0.18), 0 8px 24px rgba(20, 40, 59, 0.10)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overlayBg: "rgba(20, 40, 59, 0.30)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overlayBackdrop: "blur(8px)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBg: "color-mix(in srgb, #FFFFFF 88%, #F4F8FD)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBorder: "#E3EAF0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     titleColor: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     subtitleColor: "#728398",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bodyColor: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     footerBorder: "#E3EAF0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     footerBg: "#F8FBFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     closeColor: "#728398",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     closeColorHover: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     closeBgHover: "#F4F8FD",
   },
-  /**
-   * @domicile unassigned
-   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 55 canales de la familia (54 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
-   */
   tabs: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     border: "#E3EAF0",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-secondary
+     */
     color: "var(--ds-color-text-secondary)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     colorHover: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     colorActive: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bgHover: "#F4F8FD",
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     borderActive: "#3A6FB0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listBg: "color-mix(in srgb, #F4F8FD 82%, #FFFFFF)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listBorder: "#E3EAF0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listRadius: "10px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listPadding: "3px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listShadow:
       "inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 1px 2px rgba(20, 40, 59, 0.04)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listTexture:
       "radial-gradient(circle at 1px 1px, rgba(58, 111, 176, 0.18) 0.55px, transparent 0.75px)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listTextureOpacity: 0.14,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     listHighlight: "inset 0 1px 0 rgba(255, 255, 255, 0.84)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gap: "3px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemGap: "6px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemRadius: "8px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontWeight: 450,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontWeightActive: 650,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     activeBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     activeShadow: "0 1px 2px rgba(20, 40, 59, 0.07)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     activeHighlight:
       "linear-gradient(118deg, transparent 12%, rgba(255, 255, 255, 0.72) 48%, transparent 76%)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     activeHighlightOpacity: 0.42,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     pressedTransform: "translateY(0) scale(0.985)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     iconPadding: "4px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     iconShadowActive:
       "inset 0 0 0 1px rgba(58, 111, 176, 0.16), 0 3px 8px rgba(58, 111, 176, 0.08)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     badgeBgActive: "#EAF2FC",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     badgeColorActive: "#285A94",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     badgeBorderActive: "#C8D9EB",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     indicatorHeight: "2px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     panelBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     panelBorder: "#E3EAF0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     panelRadius: "12px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     panelShadow:
       "0 1px 2px rgba(20, 40, 59, 0.04), 0 10px 26px rgba(20, 40, 59, 0.04)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     panelTexture:
       "linear-gradient(135deg, rgba(58, 111, 176, 0.035), transparent 42%)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     panelHighlight: "inset 0 1px 0 rgba(255, 255, 255, 0.92)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overflowControlBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overflowControlBgHover: "#F4F8FD",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overflowControlShadow: "0 1px 2px rgba(20, 40, 59, 0.06)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overflowControlShadowHover: "0 5px 14px rgba(20, 40, 59, 0.10)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-motion-feedback
+     */
     motionDuration: "var(--ds-motion-feedback, 140ms)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-motion-feedback
+     */
     activeRevealDuration: "var(--ds-motion-feedback, 140ms)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-motion-reveal
+     */
     panelMotionDuration: "var(--ds-motion-reveal, 180ms)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     smHeight: "30px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     smPadding: "0 10px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     smFontSize: "12px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     smIconSize: "14px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mdHeight: "34px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mdPadding: "0 12px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mdFontSize: "13px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mdIconSize: "15px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     lgHeight: "38px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     lgPadding: "0 14px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     lgFontSize: "14px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     lgIconSize: "16px",
+    /**
+     * @placeholder CHROME.tabs.badgeBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tabs.iconBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.tabs.iconBgActive
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
+  /**
+   * @placeholder CHROME.anchor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.drawer
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.dropdown
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.menu
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.message
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.notification
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.popover
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
 };
 
 // ── CAPABILITIES ──

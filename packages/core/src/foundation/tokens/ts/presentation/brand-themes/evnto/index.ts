@@ -2456,49 +2456,454 @@ const CHROME: BrandChrome = {
    * @governor none — gap aceptado: evnto no autora la familia collapse (gobernaria chrome.families)
    */
   sidebar: {
+    /**
+     * @domicile seed
+     * @governor dial: navigation.sidebar-tone
+     */
     bg: '#fafafa',
     // Unauthored, so the sidebar edge resolved #404040 — a mid-grey rule
     // against a #fafafa rail. Points at the tenant's own border channel
     // rather than restating the layout block's literal.
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-border
+     */
     border: 'var(--ds-color-border)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     text: '#171717',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     textMuted: '#525252',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupFontSize: '11px',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupFontWeight: 600,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupColor: '#737373',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupLetterSpacing: '0.04em',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupMarginTop: "12px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupMarginBottom: "4px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     groupPaddingTop: "12px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontSize: '14px',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemIndent: "8px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontWeight: 400,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemFontWeightActive: 500,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemColor: '#3d3d3d',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemColorActive: '#171717',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemBgActive: 'rgba(0, 0, 0, 0.06)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemBgHover: 'rgba(0, 0, 0, 0.03)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     itemPadding: '8px 12px',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     iconSize: '18px',
+    /**
+     * @placeholder CHROME.sidebar.childPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.collapsedWidth
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.footerBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.headerHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.iconColumnSize
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemChildHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemFontSizeChild
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemGap
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.itemPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.shellPaddingCollapsed
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.shellPaddingInline
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.sidebar.width
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   layout: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bg: '#FFFFFF',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBg: 'rgba(255, 255, 255, 0.95)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBackdrop: 'blur(10px)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     headerBorder: 'rgba(0, 0, 0, 0.06)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-sidebar-bg
+     */
     siderBg: 'var(--ds-sidebar-bg)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     siderBorder: 'rgba(0, 0, 0, 0.06)',
+    /**
+     * @placeholder CHROME.layout.dividerColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.layout.dividerTextColor
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.layout.headerHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   shell: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gridSize: '0px',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gridLine: 'transparent',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gridOpacity: 0,
+    /**
+     * @placeholder CHROME.shell.activeBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.activeGradient
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.bg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandFont
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGlow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGridBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGridBgStrong
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGridLine
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGridLineSoft
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGridLineStrong
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandGridSize
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeCompactActionHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeConsoleBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeConsoleMinHeight
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeConsolePadding
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeControlBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeControlBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeControlHoverBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeControlHoverBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeGap
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeGridLine
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeHeroBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeIconBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeIconBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeMaxWidth
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeMeterBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeMeterFill
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomePanelBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomePanelBgStrong
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomePanelBorder
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomePanelBorderSoft
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomePanelGap
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomePanelShadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandHomeSurfaceBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandLetterSpacing
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandLine
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.commandRailBg
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.dropdownShadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.overlay
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
+    /**
+     * @placeholder CHROME.shell.shadow
+     * @domicile unassigned
+     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     */
   },
   /**
    * Familia mixta. Controles: palette.seeds, chrome.families, token-overrides.
@@ -3617,6 +4022,61 @@ const CHROME: BrandChrome = {
    * @placeholder CHROME.workspaceCard
    * @domicile unassigned
    * @governor none — gap aceptado: evnto no autora la familia workspaceCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.anchor
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.breadcrumb
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.drawer
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.dropdown
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.menu
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.message
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.modal
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.notification
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.popover
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.tabs
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.tooltip
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
    */
 };
 

@@ -296,7 +296,11 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // dispar entre temas (507/293/31 hojas sobre una union de 710: evnto autora 31
   // y necesita 188 placeholders). Sus 436 placeholders dan posicion sobre 687
   // slots mas y `divergentSlots` baja 958 -> 271. Cuarta vez el mismo espejo.
-  assert.equal(real.matrix.positionIntersection, 2288);
+  // F4A-11: 2288 -> 2387. Las 14 familias de navegacion/estructura suman 171
+  // placeholders de hoja, que dan posicion sobre 99 slots mas; `divergentSlots`
+  // baja 271 -> 172. Quinta vez, y el margen se achica porque quedan pocos slots
+  // divergentes: el frente esta cerca de agotar esta superficie.
+  assert.equal(real.matrix.positionIntersection, 2387);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 
