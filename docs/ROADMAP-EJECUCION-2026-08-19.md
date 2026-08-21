@@ -906,6 +906,39 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-10 ✅ (worker Opus; parada 18/18 correcta y adjudicada; verificado por el
+DT contra el árbol) — OVERLAY.chrome SOLA, el lote más grande del frente.**
+**636 tags + 436 placeholders = 1072 docblocks** cubriendo las 831 hojas
+reales (premisa corregida por el worker y verificada: **507/293/31**, no
+571/293/34 del mapa — los 64+3 colapsados por K1/F4A-6/K2 trazan a
+adjudicaciones nombradas; `solo-arbol` = 0 en los 3, no apareció ninguna hoja)
+y **1299 ausencias** reconciliadas una por una (117 con contraparte en el
+CHROME base / 319 piso / 0 preset — medido, no asumido). Cero tags sin línea
+resuelta (esta familia no tiene la forma multi-clave de F4A-9 — medido).
+**Ciclo de vida confirmado: 0 gap-medido dentro de `const OVERLAY`** (los 25
+restantes viven en el CHROME base y se retiran en F4A-11/12). **Parada 18/18:
+techo de bytes otra vez** — exceso de 3174 B en `collection-workspace`; mi
+subida de 4 techos en F4A-9 promovió a los siguientes. **Adjudicación MÍA de
+una vez: los 17 techos dimensionados para el FRENTE COMPLETO** (proyección
+325017 B para las 1394 hojas restantes a 233 B/hoja medidos en este lote +
+25% de aire; la tasa sube porque el renglón caro son los placeholders y crecen
+con la disparidad de la familia — proyectar con la tasa vieja habría repetido
+el error). Verifiqué los 17 techos viejos contra el manifiesto: 17/17. Con
+eso **el frente restante YA ENTRA**: holgura medida +87557 B para F4A-11..15
+(margen mínimo 218823 en runtime/tenant). **Contadores medidos y verificados
+por mí contra el artefacto:** `untaggedAuthoredLeaves` 1394→**563** (−831
+exacto = 507+293+31), `divergentSlots` 958→**271** (−687, espejo con
+positionIntersection 1601→**2288**, re-anclado medido por el worker — cuarta
+vez la misma ley), universo **2559** e intersección autorada **342**
+clavados, tagRegistry 1646→**2718** (+1072). **Baja #10 del baseline, bajada
+por MÍ.** Byte-identidad ×3 builds reales. Cadena completa verde; digest
+reconciliation `cee2453dc5f0` (SEXTA vez huérfano — la automatización es deuda
+escrita de F4A-close). Batería ×2 (worker + DT): rosters 1304/1304 enteros sin
+moverse, mirror 44/44, variant 34/34 tras la Baja, root-exposure 13/13, pierna
+1 MÍA **1717/13** por nombre (par export-* pair-aware). gat-07 re-sellado por
+el DT: `b15a9a2ab6c1…`. gates:ci **88+2 verdes**. **Siguiente lote: F4A-11**
+(navegación/estructura — 14 familias chicas de afinidad chrome; ahí se retiran
+los primeros tags gap-medido del CHROME base al quedar probadas hoja por hoja).
 **F4A-9 ✅ (worker Opus; verificado por el DT contra el árbol) — CHROME.controls
 SOLA (la 2ª familia más grande; el lote más grande del frente).** **584 tags +
 295 placeholders = 879 docblocks** cubriendo las 772 hojas pendientes (384

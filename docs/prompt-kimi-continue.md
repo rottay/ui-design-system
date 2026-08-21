@@ -287,8 +287,19 @@ tag al padre de clase única o governor con desglose medido, cero reformateo).
 1414→**958** (espejo →1601), tagRegistry 767→**1646** (Baja #9). Aviso §8
 adjudicado DE UNA VEZ: +4 techos con la proyección del frente restante (~271
 KB; tag/badge→1550000, skeleton/typography→1650000). Suite 1717/13 por nombre.
-gat-07 `dcb640f08086…`. **Siguiente lote: F4A-10** (worker, brief TUYO):
-OVERLAY.chrome SOLA (la familia más grande, 571/293/34).
+gat-07 `dcb640f08086…`. **Estado al cierre: F4A-10 ✅ (worker Opus; parada
+18/18 — techos — adjudicada por el DT de una vez: 17 techos dimensionados para
+el FRENTE COMPLETO, 325 KB proyectados + 25% de aire; el frente restante ya
+entra con holgura +87557 B medida).** 1072 docblocks (636 tags + 436
+placeholders sobre 1299 ausencias); premisa corregida por el worker y
+verificada: 507/293/31 hojas reales (los colapsos de K1/F4A-6/K2 trazan).
+`untaggedAuthoredLeaves` 1394→**563** (−831 exacto), `divergentSlots`
+958→**271** (espejo →2288), tagRegistry 1646→**2718** (Baja #10). Suite
+1717/13 por nombre. gat-07 `b15a9a2ab6c1…`. **Siguiente lote: F4A-11**
+(worker, brief TUYO): navegación/estructura (sidebar+shell+tabs+menu+layout+
+breadcrumb+anchor+dropdown+drawer+modal+popover+tooltip+notification+message)
+— empieza el retiro de los 25 tags gap-medido del CHROME base al quedar
+probadas sus familias hoja por hoja.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
