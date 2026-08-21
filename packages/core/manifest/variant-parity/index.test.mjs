@@ -285,7 +285,10 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // hoja de OVERLAY.palette/OVERLAY.surfaces dan posicion sobre 150 slots que
   // antes solo tenian uno o dos temas. Es el espejo exacto de `divergentSlots`,
   // que baja 1669 -> 1519 en la misma corrida.
-  assert.equal(real.matrix.positionIntersection, 1040);
+  // F4A-8: 1040 -> 1145, misma ley. Los 59 placeholders de hoja de SURFACES dan
+  // posicion sobre 105 slots mas, y `divergentSlots` baja 1519 -> 1414 en la
+  // misma corrida: otra vez el espejo exacto.
+  assert.equal(real.matrix.positionIntersection, 1145);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 

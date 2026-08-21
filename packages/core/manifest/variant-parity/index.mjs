@@ -218,7 +218,11 @@ export function pathIndex(text) {
     const line = lines[i];
     perLine[i + 1] = { path: root ? [root, ...stack].join('.') : null, opens: null };
 
-    const constOpen = line.match(/^const\s+([A-Za-z0-9_$]+)\s*(?::[^=]*)?=\s*\{/);
+    // F4A-8 (defecto medido por el worker, radio cero sobre los contadores):
+    // el esqueleto del tema es `export const rottayBrandTheme: … = {` — sin el
+    // `export` opcional la raiz quedaba null y NINGUNA hoja THEME.* podia
+    // recibir tag (scopeOfBlock devolvia null).
+    const constOpen = line.match(/^(?:export\s+)?const\s+([A-Za-z0-9_$]+)\s*(?::[^=]*)?=\s*\{/);
     let j = 0;
     if (constOpen) {
       root = normalizeRoot(constOpen[1]);
@@ -251,7 +255,14 @@ export function pathIndex(text) {
         // `CHROME.controls.shadowActive` en vez de
         // `CHROME.controls.buttonPrimary.shadowActive`.
         if (pendingKey !== null && root !== null && perLine[i + 1].opens === null) {
-          perLine[i + 1].opens = [root, ...stack, pendingKey].join('.');
+          // F4A-8: la composicion por spread inline (`clave: { ...A, ...B },`)
+          // CABLEA planos, no autora un sub-arbol — anotarla abria rutas
+          // fantasma (`THEME.surfaces` en evnto) que ninguna hoja tiene.
+          // La llave se sigue contando para el NIVEL; solo no se anota ruta.
+          const resto = line.slice(j + 1);
+          if (!/^\s*\{\s*\.\.\./.test(resto)) {
+            perLine[i + 1].opens = [root, ...stack, pendingKey].join('.');
+          }
         }
         token = '';
         continue;

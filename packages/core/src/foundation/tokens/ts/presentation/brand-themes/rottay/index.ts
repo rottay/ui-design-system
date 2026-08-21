@@ -1618,39 +1618,129 @@ const TYPOGRAPHY: BrandTypography = {
  * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
 const SURFACES: BrandSurfaces = {
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   densityScale: 1.0,
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   borderRadius: { sm: '6px', md: '10px', lg: '14px', xl: '18px', full: '9999px' },
   shadows: {
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-elevation-1
+     */
     sm: 'var(--ds-elevation-1)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-elevation-2
+     */
     md: 'var(--ds-elevation-2)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-elevation-3
+     */
     lg: 'var(--ds-elevation-3)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-elevation-4
+     */
     xl: 'var(--ds-elevation-4)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-elevation-1
+     */
     xs: 'var(--ds-elevation-1)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-elevation-5
+     */
     xxl: 'var(--ds-elevation-5)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.30)',
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     focusRing: '0 0 0 3px rgba(255, 255, 255, 0.12)',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     focusRingError: '0 0 0 3px rgba(239, 68, 68, 0.16)',
   },
   elevations: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     level0: 'none',
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     level1:
       'inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)',
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     level2:
       'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34)',
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     level3:
       'inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)',
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     level4:
       'inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 24px rgba(0, 0, 0, 0.50), 0 20px 44px rgba(0, 0, 0, 0.44), 0 0 24px color-mix(in srgb, var(--ds-color-primary, #ffffff) 8%, transparent)',
+    /**
+     * @domicile seed
+     * @governor dial: palette.seeds
+     */
     level5:
       'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 40px rgba(0, 0, 0, 0.56), 0 32px 64px rgba(0, 0, 0, 0.48), 0 0 32px color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, transparent)',
   },
+  /**
+   * @domicile seed
+   * @governor dial: surfaces.effect-intensity
+   */
   glass: { blur: 'none', background: 'none', border: 'none' },
+  /**
+   * @domicile seed
+   * @governor mixta medida en una sola linea: primary y surface por dial surfaces.effect-intensity; mesh sin control atribuido (dial en F4B) — las 3 hojas comparten linea fuente y no admiten docblock propio sin reformatear
+   */
   gradients: { primary: 'none', surface: 'none', mesh: 'none' },
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   overlays: {
     light: 'rgba(255, 255, 255, 0.03)',
     medium: 'rgba(255, 255, 255, 0.06)',
     heavy: 'rgba(255, 255, 255, 0.1)',
   },
+  /**
+   * @placeholder SURFACES.effectIntensity
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder SURFACES.surfaceRoles
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
 };
 
 // ── MOTION ──
@@ -3145,6 +3235,10 @@ export const rottayBrandTheme: FirstPartyBrandTheme = {
   name: THEME_NAME,
 
   // appearance — which mode the authored decisions above ARE.
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto
+   */
   appearance: { defaultMode: DEFAULT_MODE },
 
   // modes — the other mode, as a typed overlay the compiler merges and diffs.

@@ -1771,10 +1771,22 @@ const SURFACES: BrandSurfaces = {
   // Operational recruiting surfaces need high information density without
   // shrinking touch targets. Component geometry below owns controls; this
   // multiplier tightens the surrounding spacing ramp.
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   densityScale: 0.9,
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   borderRadius: { sm: "7px", md: "10px", lg: "14px", xl: "18px", full: "9999px" },
   // Four deliberately quiet but perceptibly different levels. Borders keep
   // the information architecture explicit; elevation only explains nesting.
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   shadows: {
     sm: "0 1px 2px rgba(20, 40, 59, 0.08), 0 0 0 1px rgba(20, 40, 59, 0.025)",
     md: "0 10px 28px -18px rgba(20, 40, 59, 0.28), 0 2px 7px rgba(20, 40, 59, 0.08)",
@@ -1783,97 +1795,357 @@ const SURFACES: BrandSurfaces = {
   },
   surfaceRoles: {
     canvas: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       background: "#f8fbff",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foreground: "#14283B",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       texture:
         "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)",
     },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     shell: {
       background: "#EEF4F8",
       foreground: "#14283B",
       border: "#D4E0EA",
     },
     panel: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       background:
         "#f4f8fd",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundHover:
         "linear-gradient(180deg, #FBFDFE 0%, #F2F8FC 100%)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundActive:
         "linear-gradient(180deg, #F6FAFC 0%, #EBF3F8 100%)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundSelected:
         "linear-gradient(180deg, #F8FBFF 0%, #EAF3FB 100%)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       backgroundDisabled: "#EFF3F6",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foreground: "#14283B",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foregroundMuted: "#60758A",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foregroundDisabled: "#91A0AF",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       border: "#D4E0EA",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderStrong: "#B9CCDC",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderHover: "#9CB8CE",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderActive: "#6F96B8",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderSelected: "#5F8DB6",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderDisabled: "#DEE6EC",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       focusRing: "0 0 0 3px rgba(58, 111, 176, 0.14)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadow: "0 1px 2px rgba(20, 40, 59, 0.035)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowHover:
         "0 10px 28px -22px rgba(20, 40, 59, 0.28), 0 2px 6px rgba(20, 40, 59, 0.05)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadowActive: "0 1px 2px rgba(20, 40, 59, 0.025)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowSelected:
         "0 8px 24px -20px rgba(20, 40, 59, 0.26), 0 0 0 3px rgba(58, 111, 176, 0.14)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       highlight: "inset 0 1px 0 rgba(255, 255, 255, 0.84)",
     },
     card: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       background: "#FFFFFF",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundHover: "linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundActive: "linear-gradient(180deg, #F7FAFC 0%, #F1F6FA 100%)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundSelected: "linear-gradient(180deg, #F8FBFF 0%, #EDF5FC 100%)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       backgroundDisabled: "#F3F6F8",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foreground: "#14283B",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foregroundMuted: "#60758A",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foregroundDisabled: "#91A0AF",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       border: "#D4E0EA",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderStrong: "#B9CCDC",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderHover: "#86A6C2",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderActive: "#6F96B8",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderSelected: "#5F8DB6",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderDisabled: "#DEE6EC",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       focusRing: "0 0 0 3px rgba(58, 111, 176, 0.16)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadow:
         "0 1px 2px rgba(20, 40, 59, 0.08), 0 0 0 1px rgba(20, 40, 59, 0.025)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowHover:
         "0 18px 38px -24px rgba(20, 40, 59, 0.32), 0 3px 9px rgba(20, 40, 59, 0.08)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowActive: "0 1px 2px rgba(20, 40, 59, 0.06)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowSelected:
         "0 10px 26px -20px rgba(20, 40, 59, 0.3), 0 2px 6px rgba(20, 40, 59, 0.06), 0 0 0 3px rgba(58, 111, 176, 0.16)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       highlight: "inset 0 1px 0 rgba(255, 255, 255, 0.9)",
     },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     inset: {
       background: "#EDF3F7",
       foreground: "#31506B",
       border: "#D7E2EA",
     },
     control: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       background: "#FFFFFF",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundHover: "#FAFCFE",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundActive: "#F1F6FA",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       backgroundSelected: "#EDF5FC",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       backgroundDisabled: "#F2F5F7",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foreground: "#14283B",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foregroundMuted: "#60758A",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       foregroundDisabled: "#91A0AF",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       border: "#C7D6E2",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderStrong: "#86A6C2",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderHover: "#86A6C2",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderActive: "#6F96B8",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       borderSelected: "#5F8DB6",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       borderDisabled: "#DCE5EB",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       focusRing: "0 0 0 3px rgba(58, 111, 176, 0.16)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadow: "inset 0 1px 0 rgba(255, 255, 255, 0.92)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowHover:
         "0 5px 14px rgba(20, 40, 59, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.94)",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       shadowActive: "inset 0 1px 2px rgba(20, 40, 59, 0.08)",
+      /**
+       * @domicile seed
+       * @governor dial: palette.seeds
+       */
       shadowSelected:
         "0 3px 10px rgba(20, 40, 59, 0.05), 0 0 0 3px rgba(58, 111, 176, 0.16)",
     },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     raised: {
       background: "linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%)",
       foreground: "#14283B",
@@ -1881,30 +2153,88 @@ const SURFACES: BrandSurfaces = {
       shadow:
         "0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08)",
     },
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     overlay: {
       background: "#ffffff",
       foreground: "#14283B",
     },
   },
+  /**
+   * @domicile seed
+   * @governor dial: surfaces.effect-intensity
+   */
   glass: {
     blur: "12px",
     background: "rgba(255, 255, 255, 0.84)",
     border: "rgba(196, 210, 222, 0.86)",
   },
   gradients: {
+    /**
+     * @domicile seed
+     * @governor dial: surfaces.effect-intensity
+     */
     primary: "linear-gradient(135deg, #244D79 0%, #3A6FB0 54%, #86A6C2 100%)",
+    /**
+     * @domicile seed
+     * @governor dial: surfaces.effect-intensity
+     */
     surface: "linear-gradient(145deg, #FFFFFF 0%, #F7FAFC 58%, #F5F2EC 100%)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mesh: "radial-gradient(circle at 84% 8%, rgba(58, 111, 176, 0.14), transparent 58%)",
   },
   // Quiet-premium materiality. This intentionally stays below the tenant
   // compiler's conservative range while allowing reusable DS primitives to
   // express depth, glass and gradient roles.
+  /**
+   * @domicile seed
+   * @governor dial: surfaces.effect-intensity
+   */
   effectIntensity: 0.58,
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   overlays: {
     light: "rgba(20, 40, 59, 0.02)",
     medium: "rgba(20, 40, 59, 0.04)",
     heavy: "rgba(20, 40, 59, 0.08)",
   },
+  /**
+   * @placeholder SURFACES.elevations
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder SURFACES.shadows.focusRing
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder SURFACES.shadows.focusRingError
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder SURFACES.shadows.inner
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder SURFACES.shadows.xs
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder SURFACES.shadows.xxl
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
 };
 
 // ── MOTION ──
@@ -3253,6 +3583,10 @@ export const bithireBrandTheme: FirstPartyBrandTheme = {
   name: THEME_NAME,
 
   // appearance — which mode the authored decisions above ARE.
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto
+   */
   appearance: { defaultMode: DEFAULT_MODE },
 
   // modes — the other mode, as a typed overlay the compiler merges and diffs.

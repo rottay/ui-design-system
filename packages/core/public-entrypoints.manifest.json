@@ -340,7 +340,8 @@
       "budget": {
         "maxDirectSources": 6,
         "maxReachableModules": 187,
-        "maxSourceBytes": 1208052
+        "maxSourceBytes": 1500000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1208052 de techo previo."
       },
       "symbols": [
         {
@@ -573,7 +574,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 589,
-        "maxSourceBytes": 1944213
+        "maxSourceBytes": 2050000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1944213 de techo previo."
       },
       "symbols": [
         {
@@ -896,7 +898,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 132,
-        "maxSourceBytes": 1041794
+        "maxSourceBytes": 1350000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1041794 de techo previo."
       },
       "symbols": [
         {
@@ -1010,7 +1013,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 133,
-        "maxSourceBytes": 1062790
+        "maxSourceBytes": 1350000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1062790 de techo previo."
       },
       "symbols": [
         {
@@ -1029,7 +1033,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 146,
-        "maxSourceBytes": 1090776
+        "maxSourceBytes": 1400000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1090776 de techo previo."
       },
       "symbols": [
         {
@@ -1105,7 +1110,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 137,
-        "maxSourceBytes": 1063964
+        "maxSourceBytes": 1350000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1063964 de techo previo."
       },
       "symbols": [
         {
@@ -1143,7 +1149,8 @@
       "budget": {
         "maxDirectSources": 3,
         "maxReachableModules": 142,
-        "maxSourceBytes": 1154374
+        "maxSourceBytes": 1450000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1154374 de techo previo."
       },
       "symbols": [
         {
@@ -1246,7 +1253,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 155,
-        "maxSourceBytes": 1167072
+        "maxSourceBytes": 1450000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1167072 de techo previo."
       },
       "symbols": [
         {
@@ -1284,7 +1292,8 @@
       "budget": {
         "maxDirectSources": 4,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1272927
+        "maxSourceBytes": 1550000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1272927 de techo previo."
       },
       "symbols": [
         {
@@ -1338,7 +1347,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1279520
+        "maxSourceBytes": 1600000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 1279520 de techo previo."
       },
       "symbols": [
         {
@@ -1357,7 +1367,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 656,
-        "maxSourceBytes": 2292252
+        "maxSourceBytes": 2400000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 2292252 de techo previo."
       },
       "symbols": [
         {
@@ -1734,7 +1745,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 643,
-        "maxSourceBytes": 2258900
+        "maxSourceBytes": 2350000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 2258900 de techo previo."
       },
       "symbols": [
         {
@@ -1753,7 +1765,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 778,
-        "maxSourceBytes": 3224313
+        "maxSourceBytes": 3300000,
+        "_note": "Con aire 2026-08-21 en F4A-8, parada del worker 17/17 adjudicada por el DT: la proyeccion del frente es ~279 KB mas de comentarios de gobierno (2295 hojas sin tag x 121,7 B medidos en F4A-7/F4A-8) + 25% de aire, dimensionado UNA vez para no parar lote por lote; estos subpath mueren en F6. Medido ese dia: 3224313 de techo previo."
       },
       "symbols": [
         {
