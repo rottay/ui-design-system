@@ -862,6 +862,34 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
+**F4A-2 ✅ `e6364e90b` (worker Opus, verificado por el DT contra el árbol, NO de
+palabra) — harness `variant-parity` blocking: 87→88 gates.** Productor hermano
+de mirror-parity (sub-decisión DT registrada): solo IMPORTA de él
+(`authoredLeafPaths`, `TENANTS`, `provenanceOf`, `blankComments` — cero walks
+nuevos); parser puramente léxico sobre las 3 fuentes (nunca dist/ ni el
+artefacto: corre sin build — él el canon de fuente, mirror el espejo de
+salida). **Anclas reproducidas EXACTAS**: 1820/1503/397, unión 2613,
+intersección 345, **divergentSlots 2268**, exclusivos 1061/788/2, metadato 36
+→ denominador 3690. Artefacto `manifest/generated/variant-parity.json` (5
+secciones, tagRegistry hoy vacío y correcto) + baseline AUTORADO
+`variant-parity.baseline.json` (2268 / 3686, ley decrease-only escrita, se
+edita a mano con revisión del DT). **Dientes verificados por mí con mutaciones
+reales sobre el árbol**: baseline 2267 → FAIL (GREW); 9999 → FAIL con la
+instrucción de bajarlo; 1 byte al artefacto → FAIL frescura; restaurado →
+PASS. 22 drills verdes (corpus en memoria, nunca src/): vocabulario, forma,
+placeholder (baja la divergencia del fixture + contradictorio), scope ambiguo,
+ratchet en las dos direcciones, frescura, anti-vacío, determinismo + las
+anclas contra el corpus REAL. Suite 1683→**1705/13** (los 22 nuevos, 0 delta
+por nombre). **Desvío del brief adjudicado por el DT — ACEPTADO:** la lista de
+metadato queda en **36** (el universo de A.1 no se baja) con 2 entradas de
+evnto marcadas `via: EVNTO_CANONICAL_MOTION` — evnto no autora su motion,
+delega en el preset (`experience-baselines/evnto/index.ts:35`); la guarda
+anti-rename se bifurca (34 exigen hoja léxica, 2 exigen la referencia al
+preset) y las dos ramas están drilladas. `untaggedAuthoredLeaves` inicial =
+**3686** (unidad LÉXICA; no confundir con 3690 evaluada — trampa prevista en
+el brief, documentada en el baseline). gat-07 SIN MOVER (`9374cb75…`),
+mirror-parity intacto, scripts-tree-gate M1 verde. gates:ci: **88 blocking +
+2 excluded verdes** en este commit.
 **F4A-1 ✅ CERRADO (2026-08-20, tarde).** Roster final `docs/f4a/roster-variantes.json`
 (schemaVersion 3; copia duradera de `/tmp/f4a-1c-roster-draft.json` — los
 insumos de F4A viven en `docs/f4a/`, ver su README): **66 raíces × 3 temas = 198 entradas**,

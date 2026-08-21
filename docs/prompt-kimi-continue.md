@@ -132,18 +132,21 @@ es el modelo más avanzado de Claude; se usa SOLO para auditar.
   hoy (F4A-14). K5: tabla bithire = baseline con razón, NO se unifica (F4A-15).
   10 por-crear = seed, materialización a F2-asimétrico/F4B.
 
-**Siguiente lote: F4A-2 (worker, brief TUYO).** Harness de paridad estructural
-blocking. **Sub-decisión YA TOMADA (mía, 2026-08-20): productor HERMANO, no
-extender `manifest/mirror-parity/index.mjs`** — mirror-parity tiene ley de
-procedencia "mide, sin opinar" en su header; un harness que enforcea canon es
-otra responsabilidad (y el dueño exige un sentido único por carpeta). Carpeta
-nueva `manifest/variant-parity/` (folder/index, como todo): parsea los tags
-`@domicile`/`@governor` de las 3 fuentes, computa la matriz de paridad
-estructural, ratchet **decrease-only** desde ~2.268 slots divergentes hasta
-tolerancia cero en F4A-close, `--check` de frescura, gate blocking nuevo
-(87→88). Si el harness lee un `variant-assignments.json` como entrada de gate,
-su schema se fija primero en `manifest/rules.mjs` (el writeFence del
-root-catalog advierte que root-catalog.json NO es entrada de gates).
+**F4A-2 ✅ CERRADO (commit `e6364e90b`, 2026-08-20 noche).** El harness YA
+EXISTE: `manifest/variant-parity/` (productor hermano, solo importa de
+mirror-parity; parser léxico puro, nunca dist) + gate blocking **#88** +
+artefacto `generated/variant-parity.json` + baseline autorado
+`variant-parity.baseline.json` (**divergentSlots 2268 ·
+untaggedAuthoredLeaves 3686**, decrease-only, falla en las dos direcciones, se
+baja A MANO con revisión del DT en el commit del lote que movió el número).
+Gramática de tags ya fijada y drillada (22 drills): docblocks, vocabulario
+cerrado, herencia por cercanía, placeholders `@placeholder <path>` coherentes.
+Su `--check` es frescura + trinquete. **Siguiente lote: F4A-3 (worker, brief
+TUYO):** canon de comentarios byte-idéntico (kit del esquema §3: banner de
+sección único, docblock OVERLAY deduplicado, comentario de familia = tags +
+una línea; hoy el paisaje es heterogéneo: 32/4/15 docblocks por tema) — baja
+`untaggedAuthoredLeaves`, cero cambio de valor, artefacto compilado
+byte-idéntico (probarlo con build:vertical-css + diff de los 3 artefactos).
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
