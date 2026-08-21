@@ -906,6 +906,42 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-12 ✅ (worker Opus; verificado por el DT contra el árbol) — el barrido
+de las CHROME chicas (47 pares familia×tema, el lote más ancho).** **527 tags
++ 209 placeholders = 736 docblocks** cubriendo las 533 hojas pendientes (565
+totales menos 32 ya taggeadas por K1/F4A-6/9/10/11, respetadas) y **845
+ausencias** reconciliadas una por una (todas piso — medido por placeholder;
+cero overlay/preset). Cero colapsos a padre: ninguna de las 36 familias usa la
+forma multi-clave (medido). **Ciclo de vida: 15 de 15 retirados** (rottay
+surface/premiumCard/backTop/liveFeed/skeleton/spinner + bithire
+filterPill/badge/premiumCard/surface/signalCard/listingGrid/detail + evnto
+premiumCard/cardComponent — todas enteras, medido familia por familia);
+**queda UNO: `rottay table` (1/18 cubierta — va con K5 en F4A-15)**.
+**Corrección del worker a mi brief, aceptada**: `statsGrid` NO tenía tag de
+sección que retener (era una de las 6 parciales sin tag) — sus 13 hojas
+llevaron la **nota de clase** en el governor (`token-overrides no es dial de
+rottay en el roster — adjudicación pendiente en F4A-close`) y nada quedó
+retenido. **La aritmética honesta otra vez**: `untaggedAuthoredLeaves`
+499→**181** (−318, no −324: los 6 de diferencia son los booleanos de forma
+`CHROME.card.hoverTint`/`showBorder` ×3 temas en METADATA_EXCLUSION — nunca
+contaron en el denominador de pintura; tras el lote quedan **0** hojas sin
+cubrir en las 36 familias). `divergentSlots` 172→**39** (−133, espejo con
+positionIntersection 2387→**2520** — sexta vez la misma ley; la superficie de
+ausencia parcial casi agotada), universo **2559** e intersección **342**
+clavados, tagRegistry 3217→**3938** (+721 = 527+209−15). **Baja #12 del
+baseline, bajada por MÍ.** Byte-identidad ×3 builds reales. **Aviso §8 del
+worker adjudicado por el DT**: el cierre del frente faltaba por 6226 B en
+`runtime/tenant` → **7 techos con 1,5× de aire** (tenant 1050000→**1100000**,
+column-menu 2550000→**2600000**, toast 1750000→**1800000**, presence
+1800000→**1850000**, motion 1700000→**1750000**, tag/badge 1600000→**1650000**)
+— proyección 39285 B para las 181 hojas restantes a 217 B/hoja medidos; los
+subpath mueren en F6. Cadena completa verde; digest reconciliation
+`8b566000cfaf` (OCTAVA vez huérfano). Batería ×2: rosters 1304/1304 enteros,
+mirror 44/44, variant 34/34 tras la Baja, root-exposure 13/13, pierna 1 MÍA
+**1717/13** por nombre (par export-* pair-aware). gat-07 re-sellado por el DT:
+`363f99b7a859…`. gates:ci **88+2 verdes**. **Siguiente lote: F4A-13**
+(capacidades + forma + residuos: MOTION/RECIPES/EXPRESSIVE/CAPABILITIES/CHARTS/
+accent/toolbar/OVERLAY.typography — las 181 hojas restantes).
 **F4A-11 ✅ (worker Opus; verificado por el DT contra el árbol) —
 navegación/estructura (14 familias chrome chicas y heterogéneas).** **337 tags
 + 171 placeholders = 508 docblocks** cubriendo las 337 hojas pendientes (345

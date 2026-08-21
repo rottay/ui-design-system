@@ -303,11 +303,18 @@ untagged baja **−64, no −337** (281 de 345 ya estaban cubiertas por los tags
 familia que se retiraron — el frente cambia DE QUÉ cubre, no se ve en el
 contador). `untaggedAuthoredLeaves` 563→**499**, `divergentSlots` 271→**172**
 (espejo →2387; la superficie se agota), tagRegistry 2718→**3217** (Baja #11).
-Suite 1717/13 por nombre. gat-07 `2454accb7c20…`. **Siguiente lote: F4A-12**
-(worker, brief TUYO): barrido de TODAS las CHROME chicas restantes
-(tarjetas/datos sin table — el más ancho en familias; si el worker proyecta
-demasiado se parte 12a/12b, decisión del DT). `statsGrid` con su excepción
-arrastrada (se taggea con nota de clase; adjudicación en F4A-close).
+Suite 1717/13 por nombre. gat-07 `2454accb7c20…`. **Estado al cierre: F4A-12 ✅ (worker Opus).** 736
+docblocks (527 tags + 209 placeholders sobre 845 ausencias) en 47 pares
+familia×tema; **15/15 gap-medido retirados** (queda UNO: `rottay table` — va
+con K5/F4A-15); `statsGrid` llevó la nota de clase (nunca tuvo tag de sección
+— corrección del worker a mi brief, aceptada). El −318 (no −324): 6 booleanos
+de forma en METADATA_EXCLUSION lo explican. `untaggedAuthoredLeaves`
+499→**181**, `divergentSlots` 172→**39** (espejo →2520; superficie casi
+agotada), tagRegistry 3217→**3938** (Baja #12). Aviso §8 adjudicado: 7 techos
+con 1,5× de aire cierran el frente. Suite 1717/13 por nombre. gat-07
+`363f99b7a859…`. **Siguiente lote: F4A-13** (worker, brief TUYO):
+capacidades + forma + residuos (MOTION/RECIPES/EXPRESSIVE/CAPABILITIES/CHARTS/
+accent/toolbar/OVERLAY.typography) — las 181 hojas restantes.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
