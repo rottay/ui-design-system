@@ -295,11 +295,19 @@ placeholders sobre 1299 ausencias); premisa corregida por el worker y
 verificada: 507/293/31 hojas reales (los colapsos de K1/F4A-6/K2 trazan).
 `untaggedAuthoredLeaves` 1394→**563** (−831 exacto), `divergentSlots`
 958→**271** (espejo →2288), tagRegistry 1646→**2718** (Baja #10). Suite
-1717/13 por nombre. gat-07 `b15a9a2ab6c1…`. **Siguiente lote: F4A-11**
-(worker, brief TUYO): navegación/estructura (sidebar+shell+tabs+menu+layout+
-breadcrumb+anchor+dropdown+drawer+modal+popover+tooltip+notification+message)
-— empieza el retiro de los 25 tags gap-medido del CHROME base al quedar
-probadas sus familias hoja por hoja.
+1717/13 por nombre. gat-07 `b15a9a2ab6c1…`. **Estado al cierre: F4A-11 ✅ (worker Opus).** 508
+docblocks (337 tags — cero agrupaciones: ningún subárbol uniforme, medido — +
+171 placeholders, todas piso medido); **9/9 gap-medido retirados** al quedar
+sus familias enteras (quedan 16: 7/7/2). La lectura honesta del contador:
+untagged baja **−64, no −337** (281 de 345 ya estaban cubiertas por los tags de
+familia que se retiraron — el frente cambia DE QUÉ cubre, no se ve en el
+contador). `untaggedAuthoredLeaves` 563→**499**, `divergentSlots` 271→**172**
+(espejo →2387; la superficie se agota), tagRegistry 2718→**3217** (Baja #11).
+Suite 1717/13 por nombre. gat-07 `2454accb7c20…`. **Siguiente lote: F4A-12**
+(worker, brief TUYO): barrido de TODAS las CHROME chicas restantes
+(tarjetas/datos sin table — el más ancho en familias; si el worker proyecta
+demasiado se parte 12a/12b, decisión del DT). `statsGrid` con su excepción
+arrastrada (se taggea con nota de clase; adjudicación en F4A-close).
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 

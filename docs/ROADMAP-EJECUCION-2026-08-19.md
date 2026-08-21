@@ -906,6 +906,33 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-11 ✅ (worker Opus; verificado por el DT contra el árbol) —
+navegación/estructura (14 familias chrome chicas y heterogéneas).** **337 tags
++ 171 placeholders = 508 docblocks** cubriendo las 337 hojas pendientes (345
+hojas totales menos 8 ya taggeadas por K1/F4A-6, respetadas) — **cero
+agrupaciones: ningún subárbol resultó uniforme, medido, así que cada hoja
+pendiente recibió su tag propio** — y 339 ausencias reconciliadas (todas piso,
+medido por placeholder; cero preset/overlay). **Ciclo de vida: 9 de 9
+gap-medido retirados** (rottay popover/modal/tabs/drawer/dropdown/notification
++ bithire shell/modal/tabs) al quedar sus familias ENTERAS hoja por hoja; los
+16 restantes intactos (verificado por mí: 7/7/2); `statsGrid` no tocada (es de
+F4A-12 con su excepción). **La lectura honesta del contador, medida por el
+worker en vez de supuesta:** `untaggedAuthoredLeaves` baja **−64** (563→**499**)
+y no −337: solo 64 de las 345 hojas estaban SIN CUBRIR en HEAD (36/19/9); las
+otras 281 ya estaban cubiertas por los tags de familia que este lote retira —
+el frente cambia DE QUÉ están cubiertas (de afirmación no probada a tag de hoja
+medido), que no se ve en el contador. `divergentSlots` 271→**172** (−99, espejo
+con positionIntersection 2288→**2387** — quinta vez la misma ley; el worker
+anotó que la superficie se agota), universo **2559** e intersección **342**
+clavados, tagRegistry 2718→**3217** (+499 = 337+171−9). **Baja #11 del
+baseline, bajada por MÍ.** Byte-identidad ×3 builds reales. Cadena completa
+verde; digest reconciliation `10d253c69a57` (SÉPTIMA vez huérfano). Batería ×2:
+rosters 1304/1304 enteros sin moverse, mirror 44/44, variant 34/34 tras la
+Baja, root-exposure 13/13, pierna 1 MÍA **1717/13** por nombre. gat-07
+re-sellado por el DT: `2454accb7c20…`. gates:ci **88+2 verdes**. **Siguiente
+lote: F4A-12** (barrido de TODAS las CHROME chicas restantes — tarjetas/datos
+sin table; el lote más ancho en familias; si el worker proyecta demasiado, se
+parte 12a/12b — decisión del DT al despachar).
 **F4A-10 ✅ (worker Opus; parada 18/18 correcta y adjudicada; verificado por el
 DT contra el árbol) — OVERLAY.chrome SOLA, el lote más grande del frente.**
 **636 tags + 436 placeholders = 1072 docblocks** cubriendo las 831 hojas
