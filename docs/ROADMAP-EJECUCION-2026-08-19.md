@@ -906,6 +906,39 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-9 ✅ (worker Opus; verificado por el DT contra el árbol) — CHROME.controls
+SOLA (la 2ª familia más grande; el lote más grande del frente).** **584 tags +
+295 placeholders = 879 docblocks** cubriendo las 772 hojas pendientes (384
+rottay + 295 bithire + 93 evnto; las 18 ya taggeadas por K1/F4A-6 respetadas —
+doble docblock = alcance ambiguo) y 550 ausencias reconciliadas una por una
+(piso 294 / contraparte 1; el spread de preset NO aplica en chrome — medido, no
+asumido). **La trampa de forma a escala, resuelta honesta**: 85 hojas apiñadas
+en línea compartida (los controles de botón) — 10 padres de clase única con el
+tag exacto + **5 padres de governor mixto con el desglose medido en una línea**
+(`mixta medida en linea compartida: N por X; M por Y — …`), cero reformateo; si
+hubiera habido DOMICILIOS mixtos en una línea habría parado (el domicilio es de
+valor único) — no fue el caso, medido. **Contadores medidos y verificados por
+mí contra el artefacto:** `untaggedAuthoredLeaves` 2166→**1394** (−772 exacto),
+`divergentSlots` 1414→**958** (−456, espejo con positionIntersection
+1145→**1601**, re-anclado medido por el worker — tercera vez la misma ley),
+universo **2559** e intersección autorada **342** clavados, tagRegistry
+767→**1646** (+879). **Baja #9 del baseline, bajada por MÍ.** Byte-identidad
+×3 builds reales (hash conjunto idéntico en ida y vuelta, con verificación de
+QUE los 7 pasos corrieron — la lección de su propio casi-falso-verde de F4A-7).
+Cadena completa verde; digest reconciliation `9ca6aa1bcb50` (QUINTA vez
+huérfano — la automatización ya es deuda escrita de F4A-close). **Aviso del
+worker (§8) adjudicado por el DT DE UNA VEZ**: la proyección del resto del
+frente es ~271 KB (1394 hojas × 194 B medidos en este lote — la tasa subió
+porque controls tiene mucha superficie de ausencia parcial) → techos subidos
+con aire para que F4A-10 no arranque parada: `primitives/tag`
+1350000→**1550000**, `badge` 1350000→**1550000**, `skeleton`
+1450000→**1650000**, `typography` 1450000→**1650000** (bytes de hoy verificados
+por mí contra el gate: 4/4 exactos; `_note` fechada; los subpath mueren en F6).
+Batería ×2 (worker + DT): rosters 1304/1304 enteros sin moverse, mirror 44/44,
+variant 34/34 tras la Baja, root-exposure 13/13, pierna 1 MÍA **1717/13** por
+nombre (par export-* pair-aware). gat-07 re-sellado por el DT:
+`dcb640f08086…`. gates:ci **88+2 verdes**. **Siguiente lote: F4A-10**
+(OVERLAY.chrome, la familia más grande — SOLA; los techos ya tienen aire).
 **F4A-8 ✅ (worker Opus + cierre con DOS ediciones del DT; verificado por el DT
 contra el árbol).** Tags por hoja de **SURFACES + THEME**: **96 tags** por
 subárbol uniforme maximal (rottay 20/30, bithire 75/94, evnto 1/2) + **59

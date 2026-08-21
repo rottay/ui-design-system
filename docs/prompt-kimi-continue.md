@@ -279,8 +279,16 @@ THEME.* intaggeable; un carácter, radio cero medido ×2) + 3 tags
 `THEME.appearance.defaultMode` (adjudicación: NO es metadato — selecciona el
 bloque emitido). `untaggedAuthoredLeaves` 2295→**2166**, `divergentSlots`
 1519→**1414** (espejo 1040→1145), tagRegistry 609→**767** (Baja #8). Byte-
-identidad ×3 del worker + 1 mía. gat-07 `bb6b0bb1cf88…`. **Siguiente lote:
-F4A-9** (worker, brief TUYO): CHROME.controls SOLA (la 2ª más grande).
+identidad ×3 del worker + 1 mía. gat-07 `bb6b0bb1cf88…`. **Estado al cierre:
+F4A-9 ✅ (worker Opus) — CHROME.controls SOLA: 879 docblocks** (584 tags + 295
+placeholders sobre 550 ausencias; las 85 hojas apiñadas en línea compartida con
+tag al padre de clase única o governor con desglose medido, cero reformateo).
+`untaggedAuthoredLeaves` 2166→**1394** (−772 exacto), `divergentSlots`
+1414→**958** (espejo →1601), tagRegistry 767→**1646** (Baja #9). Aviso §8
+adjudicado DE UNA VEZ: +4 techos con la proyección del frente restante (~271
+KB; tag/badge→1550000, skeleton/typography→1650000). Suite 1717/13 por nombre.
+gat-07 `dcb640f08086…`. **Siguiente lote: F4A-10** (worker, brief TUYO):
+OVERLAY.chrome SOLA (la familia más grande, 571/293/34).
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
