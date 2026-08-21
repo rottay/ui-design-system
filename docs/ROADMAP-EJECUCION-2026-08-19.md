@@ -906,6 +906,46 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-4 ✅ (worker Opus; verificado por el DT contra el árbol; incluye PARADA
+CORRECTA 11/11).** Roster por placeholders aplicado **byte-idéntico** (son
+comentarios: el artefacto compilado salió idéntico en la prueba ida y
+vuelta): **90 placeholders del kit** — rottay **13** cubriendo 161 slots /
+bithire **27**→196 / evnto **50**→573 (los 34/17/10 del plan quedaron
+desactualizados: manda el roster commiteado de F4A-1). **`divergentSlots`
+2268→1826** (baseline bajado por el DT en este commit, verificado contra el
+artefacto regenerado con `--check`: 2613 slots / 787 con posición / 1826
+divergentes / 3029 sin tag / 127 tags leídos); `untaggedAuthoredLeaves` **3029
+clavado**; `tagRegistry` 37→**127** (32 seed · 5 pro-expert · 90
+placeholder/unassigned); matriz 2613/345 y sourceSkeleton intactos. El harness
+ganó **cobertura por prefijo** (`@placeholder P` da posición `placeholder` a
+todo slot del universo igual a `P` o bajo `P.`) con 5 drills nuevos
+(sub-árbol, sobre-autoría FAIL citando la hoja, hoja exacta, huérfano
+reportado en `orphanPlaceholders`, dos-placeholder) → **34/34 corridos por
+mí**. Mis 3 ediciones al harness en este commit: intersección autorada
+explícita **345** y `positionIntersection` **787** (dejan de derivarse del
+universo), y los exclusivos pasan a contarse sobre hojas AUTORADAS (ancla
+**1061/788/2** restaurada). **Parada del worker (correcta, 11/11):** los 90
+docblocks del kit sumaron ~15,6 KB de fuente (rottay +2.259 / bithire +4.741
+/ evnto +8.593; ~121 bytes por placeholder) y el subpath techo del manifest
+de entrypoints quedó por encima — **los comentarios cuentan como bytes de
+fuente** aunque el compilado sea byte-idéntico. Adjudicación mía:
+`maxSourceBytes` **387391→398278** con `_note` fechada 2026-08-20 (el subpath
+muere en F6; la alternativa de una forma más corta de placeholder queda
+anotada y descartada — el kit fijo es contrato de F4A-1). Cadena regenerada:
+variant-parity + mirror-parity (**solo provenance**) + fanout-facts (**990
+citas file:line movidas, CERO medición**) + censo + kimi + controls README +
+catalog **re-derivado por el DT** (digest `cffd2d272b…`, deadWriters 266=266,
+2 campos movidos verificados por diff — la 14ª falla de la suite era el
+catálogo stale y se cerró así). Hallazgos de clase del reporte: `evnto
+MOTION` es **delegación, no gap** (su esqueleto escribe los canales; el
+placeholder corresponde); `evnto THEME.surfaces` es ausencia léxica **sin
+placeholder**; tercera aparición de la clase "evnto compone desde preset
+canónico" → anotada para F4A-close. Las **ausencias parciales** (632 rottay
+en 18 familias / 914 bithire en 17 / 1643 evnto en 14) son exactamente el
+trabajo de F4A-5…15. Build verde (exports-artifact-gate 325 targets — el
+techo ya no bloquea). Suite: **1717/13**. gat-07 **re-sellado por el DT**:
+digest `2d5ad3e9760f…`. La excepción `rottay CHROME.statsGrid` sigue
+pendiente → adjudicación a más tardar en F4A-close.
 **F4A-3b — PARADA CORRECTA (10/10): el consumo encontró un bug en el harness
 (mío, sellado en F4A-2).** `pathIndex` solo bajaba la pila si la línea
 EMPEZABA con `}`; el corpus cierra con contenido+llave en la misma línea →

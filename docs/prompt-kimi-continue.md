@@ -163,11 +163,24 @@ untaggedAuthoredLeaves 3686→3029, baseline bajado por el DT; divergentSlots
 `fec98f592242…`; leyes rescatadas en `docs/f4a/leyes-fuentes-themes.md`).
 Excepción pendiente del DT: `rottay CHROME.statsGrid` (token-overrides no es
 dial de rottay en el roster) — nota de clase, se adjudica a más tardar en
-F4A-close.** **Siguiente lote: F4A-4 (worker, brief TUYO):** roster por
-placeholders byte-idéntico (evnto +34 / bithire +17 / rottay +10 — los slots
-del roster que un tema no autora quedan con `@placeholder <path>` +
-`@domicile unassigned` + razón; las líneas `// X: not authored` del esqueleto
-se canonizan); es el primer lote que baja `divergentSlots` desde 2268.
+F4A-close.** **Estado al cierre: F4A-4 ✅ (90 placeholders del kit — rottay
+13→161 slots, bithire 27→196, evnto 50→573; los 34/17/10 del plan quedaron
+desactualizados, manda el roster; `divergentSlots` 2268→1826 con baseline
+bajado por el DT; `untaggedAuthoredLeaves` 3029 clavado; tagRegistry 37→127;
+harness con cobertura por prefijo + 5 drills = 34/34; intersección autorada
+345 y `positionIntersection` 787 explícitas; exclusivos sobre hojas AUTORADAS
+con ancla 1061/788/2; parada correcta 11/11 por techo de bytes — los
+comentarios cuentan — `maxSourceBytes` 387391→398278 con `_note` fechada;
+catalog re-derivado por el DT, digest `cffd2d272b…`, deadWriters 266=266;
+gat-07 re-sellado `2d5ad3e9760f…`; suite 1717/13).** **Siguiente lote: F4A-5
+(worker, brief TUYO):** reescritura palette — K1 descongelar
+`--ds-color-primary` SIN cambiar valor (135 lectores arrastrados) + K2
+`--ds-color-border` raíz canónica del par (evnto invierte atadura a pintura
+idéntica, R35 REDERIVED, H3 deriva en el mismo lote). Antes del brief leer
+`docs/f4a/esquema-asignacion.md` §4 (K1/K2) y el roster; packet declaration
+obligatoria (raíz, canales, 3 verticales, negativo nombrado, restauración ida
+y vuelta); cero-delta computado; firmados solo REDERIVED (sha256 idénticos
+pre/post).
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
