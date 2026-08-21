@@ -18,6 +18,32 @@ Las hojas lexicas reproducen **1820 / 1503 / 397** exactas (ancla §3). La parti
 
 ## La respuesta a §6
 
+### Lectura ESTRICTA (F4A-3c, 2026-08-21 — vigente)
+
+| clase estricta | familias x tema | hojas |
+|---|---|---|
+| **LIMPIA COMPROBADA** — un solo control, cero canales `control: null`, cero hojas sin atribuir | **0** | 0 |
+| **GOBIERNO PARCIAL MEDIDO** — un solo control, pero quedan canales sin control atribuido | **33** | 640 |
+| **MIXTA** — mas de un control | **29** | 2706 |
+| **SIN CONTROL** atribuido | **53** | 380 |
+| **total** | **115** | **3726** |
+
+**Ninguna familia x tema esta comprobada como unidad gobernada: 0 de 115.** Las 33 que el criterio debil daba por limpias tienen gobierno PARCIAL medido — el control alcanza algunos de sus canales y el resto no tiene control atribuido. Ejemplos: rottay `CHROME.tabs` 1 de 38, bithire `CHROME.badge` 1 de 58, evnto `OVERLAY.palette` 3 de 118.
+
+#### El criterio estricto, escrito
+
+Una familia x tema es **limpia comprobada** solo si cumple las TRES condiciones a la vez:
+
+1. exactamente **un** control distinto entre los canales atribuidos;
+2. **cero** canales con `control: null` (ningun canal de la familia queda fuera del gobierno);
+3. **cero** entradas en `unattributedLeaves` (ninguna hoja de la familia queda sin canal).
+
+La condicion (2) es la que el criterio original no exigia, y es la que mueve el numero de 33 a 0.
+
+### Lectura DEBIL (F4A-3a, criterio original — HISTORICA, no vigente)
+
+> **Anotada el 2026-08-21 a raiz de la auditoria Codex (§13).** Esta tabla contaba **un solo control ENTRE LOS ATRIBUIDOS** e ignoraba los canales con `control: null`. Por eso publicaba 33 familias como "LIMPIA" y habilitaba un tag de familia directo sobre ellas. Los 27 docblocks de seccion que F4A-3b escribio con ese criterio se estrecharon en F4A-3c a `@domicile unassigned` + `@governor gap medido: ...`. La tabla NO se borra: es el registro de que se midio, que se publico y que se corrigio.
+
 | clase | familias x tema | hojas |
 |---|---|---|
 | **LIMPIA** — un solo control, tag de familia directo | **33** | 640 |
@@ -25,7 +51,7 @@ Las hojas lexicas reproducen **1820 / 1503 / 397** exactas (ancla §3). La parti
 | **SIN CONTROL** atribuido | **53** | 380 |
 | **total** | **115** | **3726** |
 
-**Solo el 29 % de los pares familia x tema (33 de 115) admite un tag de familia limpio, y cubren el 17 % de las hojas (640 de 3.726).**
+**Lectura original, hoy superada:** *"Solo el 29 % de los pares familia x tema (33 de 115) admite un tag de familia limpio, y cubren el 17 % de las hojas (640 de 3.726)."*
 
 ### Y los grupos NO son sub-bloques contiguos
 
@@ -98,3 +124,5 @@ De sus 38 canales, **30 no tienen control atribuido**, 7 caen en `palette.seeds`
 ## Como leer el JSON
 
 `/tmp/f4a-3a-mapa.json`: por tema, `families[]` con `family`, `leaves`, `leafPaths[]` (orden de fuente), `channels{}` (cada canal con `fedBy[]` = las hojas que lo mueven, `control` y `checklistRoot`) y `unattributedLeaves[]`.
+
+**Columna derivada (F4A-3c):** cada familia gana `strictClass` con uno de `limpia-estricta | gobierno-parcial | mixta | sin-control`, y `method.strictClass` lleva la regla escrita. Es una clasificacion COMPUTADA del crudo, no una re-medicion: quitandola, el JSON es byte-identico al de F4A-3a. `method.strictClassCounts` publica el reparto (0 / 33 / 29 / 53).

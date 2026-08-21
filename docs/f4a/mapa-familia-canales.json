@@ -5,7 +5,14 @@
  "method": {
   "leafToChannel": "SONDA POR HOJA: el compilador no expone la traza, asi que se OBSERVA — se muta la hoja con un centinela del mismo tipo, se recompila con compileBrandTheme (dist/infrastructure/compilers/kernel/runtime/brand-theme) y se diffean los canales (cambiados, agregados y quitados) contra la compilacion base. 3726 compilaciones.",
   "lexicalUnit": "authoredLeafPaths importado de manifest/mirror-parity/index.mjs — nunca re-implementado.",
-  "channelAttribution": "manifest/generated/root-checklists.json. ATENCION: atribuye a CONTROL (los 20 diales), NO a raiz del roster. Ver la parada del reporte."
+  "channelAttribution": "manifest/generated/root-checklists.json. ATENCION: atribuye a CONTROL (los 20 diales), NO a raiz del roster. Ver la parada del reporte.",
+  "strictClass": "COLUMNA DERIVADA agregada en F4A-3c (2026-08-21) tras la auditoria Codex. NO reescribe la medicion de F4A-3a: la clasifica. Regla, por familia x tema: `sin-control` = ningun canal tiene control atribuido; `mixta` = mas de un control distinto entre los atribuidos; `limpia-estricta` = EXACTAMENTE un control Y cero canales con `control: null` Y cero `unattributedLeaves`; `gobierno-parcial` = exactamente un control pero quedan canales sin control o hojas sin atribuir. El criterio DEBIL original contaba un solo control ENTRE LOS ATRIBUIDOS e ignoraba los `control: null`, y por eso publicaba 33 familias como limpias. Recomputado con el criterio estricto: limpia-estricta 0, gobierno-parcial 33, mixta 29, sin-control 53 (115 familias).",
+  "strictClassCounts": {
+   "limpia-estricta": 0,
+   "gobierno-parcial": 33,
+   "mixta": 29,
+   "sin-control": 53
+  }
  },
  "tenants": {
   "rottay": {
@@ -76,7 +83,8 @@
        "leaf": "capabilities.engineBridge.note",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHARTS",
@@ -115,7 +123,8 @@
        "leaf": "charts.tooltipStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.accent",
@@ -154,7 +163,8 @@
        "leaf": "chrome.accent.dividerStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.alert",
@@ -307,7 +317,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.anchor",
@@ -343,7 +354,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.avatar",
@@ -532,7 +544,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.backTop",
@@ -568,7 +581,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.badge",
@@ -721,7 +735,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.breadcrumb",
@@ -774,7 +789,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.calendar",
@@ -819,7 +835,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.card",
@@ -853,7 +870,8 @@
        "leaf": "chrome.card.paddingDensity",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.cardComponent",
@@ -1195,7 +1213,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.collapse",
@@ -1258,7 +1277,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.controls",
@@ -4938,7 +4958,8 @@
        "leaf": "chrome.controls.buttonInfo.text",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.descriptions",
@@ -4983,7 +5004,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.drawer",
@@ -5046,7 +5068,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.dropdown",
@@ -5118,7 +5141,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.empty",
@@ -5145,7 +5169,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.floatButton",
@@ -5217,7 +5242,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.layout",
@@ -5298,7 +5324,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.list",
@@ -5406,7 +5433,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.liveFeed",
@@ -5514,7 +5542,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.menu",
@@ -5667,7 +5696,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.message",
@@ -5712,7 +5742,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.modal",
@@ -5856,7 +5887,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.notification",
@@ -5892,7 +5924,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.pagination",
@@ -5982,7 +6015,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.popover",
@@ -6045,7 +6079,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.premiumCard",
@@ -6144,7 +6179,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.progress",
@@ -6198,7 +6234,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.result",
@@ -6234,7 +6271,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.search",
@@ -6306,7 +6344,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.shell",
@@ -6339,7 +6378,8 @@
        "leaf": "chrome.shell.gridOpacity",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.sidebar",
@@ -6678,7 +6718,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.skeleton",
@@ -6714,7 +6755,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.spinner",
@@ -6741,7 +6783,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.statistic",
@@ -6786,7 +6829,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.statsGrid",
@@ -6912,7 +6956,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.steps",
@@ -7029,7 +7074,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.surface",
@@ -7207,7 +7253,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.table",
@@ -7378,7 +7425,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.tabs",
@@ -7729,7 +7777,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.tag",
@@ -7909,7 +7958,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.timeline",
@@ -7954,7 +8004,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.tooltip",
@@ -8062,7 +8113,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.tree",
@@ -8107,7 +8159,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "MOTION",
@@ -8184,7 +8237,8 @@
        "leaf": "motion.countUpEnabled",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "OVERLAY.chrome",
@@ -13452,7 +13506,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "OVERLAY.palette",
@@ -15031,7 +15086,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "OVERLAY.surfaces",
@@ -15175,7 +15231,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "PALETTE",
@@ -16714,7 +16771,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "RECIPES",
@@ -16734,7 +16792,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "SURFACES",
@@ -17013,7 +17072,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "THEME",
@@ -17114,7 +17174,8 @@
        "leaf": "name",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "TYPOGRAPHY",
@@ -17256,7 +17317,8 @@
        "leaf": "typography.labelStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "mixta"
     }
    ]
   },
@@ -17318,7 +17380,8 @@
        "leaf": "capabilities.engineBridge.note",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHARTS",
@@ -17362,7 +17425,8 @@
        "leaf": "charts.colorScheme",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.accent",
@@ -17401,7 +17465,8 @@
        "leaf": "chrome.accent.dividerStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.badge",
@@ -17932,7 +17997,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.breadcrumb",
@@ -18048,7 +18114,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.card",
@@ -18082,7 +18149,8 @@
        "leaf": "chrome.card.paddingDensity",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.cardComponent",
@@ -18471,7 +18539,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.collectionCard",
@@ -18642,7 +18711,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.compactCard",
@@ -18759,7 +18829,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.controls",
@@ -21496,7 +21567,8 @@
        "leaf": "chrome.controls.buttonGhost.text",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.detail",
@@ -21622,7 +21694,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.filterPill",
@@ -21802,7 +21875,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.layout",
@@ -21890,7 +21964,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.list",
@@ -21962,7 +22037,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.listingGrid",
@@ -22079,7 +22155,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.metricCard",
@@ -22268,7 +22345,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.modal",
@@ -22412,7 +22490,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.premiumCard",
@@ -22511,7 +22590,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.search",
@@ -22716,7 +22796,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.shell",
@@ -23118,7 +23199,8 @@
        "leaf": "chrome.shell.gridOpacity",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.sidebar",
@@ -23359,7 +23441,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.signalCard",
@@ -23521,7 +23604,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.surface",
@@ -23645,7 +23729,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.table",
@@ -23978,7 +24063,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.tabs",
@@ -24482,7 +24568,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.tallCard",
@@ -24590,7 +24677,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.toolbar",
@@ -24707,7 +24795,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.tooltip",
@@ -24733,7 +24822,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.workspaceCard",
@@ -24922,7 +25012,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "EXPRESSIVE",
@@ -25421,7 +25512,8 @@
        "checklistRoot": "--ds-radius-scale"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "MOTION",
@@ -25508,7 +25600,8 @@
        "leaf": "motion.countUpEnabled",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "OVERLAY.chrome",
@@ -28226,7 +28319,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "OVERLAY.palette",
@@ -29477,7 +29571,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "OVERLAY.surfaces",
@@ -30206,7 +30301,8 @@
        "checklistRoot": "--ds-effect-intensity"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "OVERLAY.typography",
@@ -30242,7 +30338,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "PALETTE",
@@ -31494,7 +31591,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "RECIPES",
@@ -31514,7 +31612,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "SURFACES",
@@ -32377,7 +32476,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "THEME",
@@ -32401,7 +32501,8 @@
        "leaf": "appearance.defaultMode",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "TYPOGRAPHY",
@@ -32543,7 +32644,8 @@
        "leaf": "typography.labelStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "mixta"
     }
    ]
   },
@@ -32625,7 +32727,8 @@
        "leaf": "capabilities.engineBridge.note",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHARTS",
@@ -32664,7 +32767,8 @@
        "leaf": "charts.tooltipStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.accent",
@@ -32703,7 +32807,8 @@
        "leaf": "chrome.accent.dividerStyle",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.card",
@@ -32737,7 +32842,8 @@
        "leaf": "chrome.card.paddingDensity",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.cardComponent",
@@ -32790,7 +32896,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.controls",
@@ -33669,7 +33776,8 @@
        "leaf": "chrome.controls.buttonGhost.text",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "mixta"
     },
     {
      "family": "CHROME.layout",
@@ -33732,7 +33840,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.premiumCard",
@@ -33831,7 +33940,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.shell",
@@ -33864,7 +33974,8 @@
        "leaf": "chrome.shell.gridOpacity",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "CHROME.sidebar",
@@ -34062,7 +34173,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.surface",
@@ -34186,7 +34298,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "CHROME.table",
@@ -34231,7 +34344,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "MOTION",
@@ -34308,7 +34422,8 @@
        "leaf": "motion.countUpEnabled",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "OVERLAY.chrome",
@@ -34679,7 +34794,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "OVERLAY.palette",
@@ -35736,7 +35852,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "gobierno-parcial"
     },
     {
      "family": "OVERLAY.surfaces",
@@ -35754,7 +35871,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "sin-control"
     },
     {
      "family": "PALETTE",
@@ -36953,7 +37071,8 @@
        "checklistRoot": null
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "SURFACES",
@@ -37151,7 +37270,8 @@
        "checklistRoot": "--ds-color-primary"
       }
      },
-     "unattributedLeaves": []
+     "unattributedLeaves": [],
+     "strictClass": "mixta"
     },
     {
      "family": "THEME",
@@ -37175,7 +37295,8 @@
        "leaf": "appearance.defaultMode",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "sin-control"
     },
     {
      "family": "TYPOGRAPHY",
@@ -37321,7 +37442,8 @@
        "leaf": "typography.headingLetterSpacing",
        "reason": "no mueve ningun canal compilado"
       }
-     ]
+     ],
+     "strictClass": "mixta"
     }
    ]
   }

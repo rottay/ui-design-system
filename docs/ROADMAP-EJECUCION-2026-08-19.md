@@ -906,6 +906,53 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-3c ✅ (worker Opus; verificado por el DT contra el árbol) — el paquete
+corrector post-auditoría Codex.** (a) **Los 27 docblocks de familia quedaron
+ESTRECHADOS**: `@domicile unassigned` + `@governor gap medido: gobierno
+parcial — <control> alcanza N de N+M canales de la familia (M sin control;
+mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja
+aterriza en su lote F4A-7…15`. Censo verificado por mí: 14/10/3 = 27
+escritos, 0 tags `seed`+`dial:` a nivel sección restantes; los tags de HOJA
+(que citan la raíz del recableo — la prueba misma) intactos (resta exacta
+22→8 / 17→7 / 10→7). **Desviación deliberada del worker a mi plantilla,
+ACEPTADA**: mi "N de M" era aritméticamente "N alcanzados / M sin control"
+(total = N+M); escribir "1 de 37" para tabs habría plantado una falsedad
+(total real 38) en el lote que existe para retirar falsedades — escribió el
+total verdadero conservando mis dos números medidos, y lo reportó con la
+prueba (skeleton 2/1 y shell 22/21 tienen N>M, imposible bajo mi letra).
+(b) **Mapa republicado con criterio estricto declarado**: `strictClass` en
+las 115 familias + regla escrita en `method` + conteos `{limpia-estricta: 0,
+gobierno-parcial: 33, mixta: 29, sin-control: 53}`; la medición histórica
+quedó BYTE-IDÉNTICA (probado por mí: deepEqual true sin las columnas nuevas);
+el .md conserva la lectura débil anotada como superada. (c) Métricas
+CLAVADAS como mandó el diseño: divergentSlots 1669, untaggedAuthoredLeaves
+2655, tagRegistry 281 — el corrimiento de domicilios ocurrió conservando el
+total (seed 54→27, unassigned 152→179). (d) **Byte-identidad probada**: build
+exit 0 y los 4 árboles compilados vacíos en git status; mirror-parity.json se
+regeneró SOLO por huellas de fuente (6 diffs de provenance, cero métricas —
+las líneas ni se movieron). Techo de bytes 423167/900000. Batería verde en
+DOS corridas independientes (worker + DT): rosters 1304/1304 ENTEROS (ley del
+erratum), mirror-parity 44/44, variant-parity 34/34, root-exposure 13/13,
+pierna 1 mía 1717/13 por nombre. gat-07 re-sellado por el DT: `1c42b078f711…`
+(invariante al censo — no digiere esos contadores; verificado con doble corrida
+determinista).
+**Lección de cadena, segunda captura** (primera: F4A-6): el censo censa
+FUENTES y los comentarios cuentan — los 27 docblocks dejaron
+`customization-surface-report.json` stale y el pin `positive: the full check
+passes on the real tree` lo marcó en MI pierna 1 (la prueba de byte-identidad
+del worker cubrió los árboles COMPILADOS; el censo de fuentes es otro eje).
+Re-corrí la cadena completa yo (cifras clavadas: universo 7303, dead 266,
+catalog 341 vistas, kimi 80+266, controls 13+7, fanout sin-clasificar 0,
+variant-parity 2559/1669) y re-anclé el digest de reconciliation a
+`1b1d21bf6388` (= sha256 real del censo — SEGUNDA vez que este digest queda
+huérfano tras un lote de fuentes: no lo escribe ningún productor; queda
+anotado como candidato a automatizarse).
+**Deuda nombrada (reportada por el worker, adjudicación MÍA):** 6 familias
+con gobierno parcial medido nunca tuvieron tag de sección (sidebar ×3,
+statsGrid, tooltip, evnto surface) — NO se tocan: ninguna afirmación falsa
+que retirar; sus hojas siguen en untaggedAuthoredLeaves y su prueba por hoja
+aterriza en F4A-7…15 como todas. **Siguiente lote: F4A-7** por
+`/tmp/f4a-lotes-7-13.md`.
 **K1 ✅ (lote PROPIO del DT en su parte semántica + cierre mecánico por worker
 Opus tras el recordatorio de delegación del dueño; verificado por el DT contra
 el árbol, nunca de palabra).** Descongelado `--ds-color-primary` (el esquema

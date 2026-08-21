@@ -238,12 +238,22 @@ Baja #6: `divergentSlots` 1694→**1669**, `untaggedAuthoredLeaves`
 correcta: diente (a) huérfano → re-sujetado a bithire `--ds-button-primary-bg`
 (adjudicación del DT, 5 asertas vivas). Erratum F4A-6 confirmado y cerrado
 (pin select T2 stale en HEAD — ley nueva en §5.4: rosters firmados se corren
-ENTEROS). Suite 1717/13 por nombre. gat-07 `7ac1f9c2e5d1…`. **Siguiente
-lote: F4A-3c (worker Opus, diseño del DT en §13 asiento-auditoría):** el
-paquete corrector post-Codex — los 27 tags de familia se estrechan a
-`@domicile unassigned` + gobierno parcial medido N/M, el mapa se republica
-con criterio estricto declarado (limpias 0), spec del gate de paridad real
-para F4A-close. Después F4A-7…15 por `/tmp/f4a-lotes-7-13.md`.
+ENTEROS). Suite 1717/13 por nombre. gat-07 `7ac1f9c2e5d1…`. **Estado al
+cierre: F4A-3c ✅ (worker Opus, verificado por el DT):** los 27 docblocks de
+familia quedaron estrechados a `@domicile unassigned` + `@governor gap medido:
+gobierno parcial — <control> alcanza N de N+M canales (M sin control; criterio
+estricto 2026-08-21); la prueba por hoja aterriza en F4A-7…15` (desviación de
+plantilla del worker ACEPTADA: mi "N de M" era N/(N+M) — escribirlo literal
+plantaba una falsedad; reportado con prueba). Mapa republicado con
+`strictClass` en las 115 (0/33/29/53), historia byte-idéntica. Métricas
+clavadas (1669/2655/281; seed 54→27, unassigned 152→179). Byte-identidad de
+compilados probada. **Lección 2da captura: el censo censa FUENTES — un lote de
+solo-comentarios también re-corre la cadena** (el pin `positive: the full
+check passes` lo marcó; digest de reconciliation re-anclado a `1b1d21bf6388`).
+gat-07 `1c42b078f711…` (invariante al censo). Deuda nombrada: 6 familias con
+gobierno parcial medido sin tag de sección (sidebar ×3, statsGrid, tooltip,
+evnto surface) — su prueba por hoja en F4A-7…15. **Siguiente lote: F4A-7**
+(worker, brief TUYO) por `/tmp/f4a-lotes-7-13.md`.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
