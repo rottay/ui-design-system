@@ -1,0 +1,240 @@
+{
+  "$generatedBy": "manifest/variant-parity/index.mjs",
+  "$regenerate": "node manifest/variant-parity/index.mjs",
+  "$warning": "Mide la FUENTE de los 3 themes, no el artefacto compilado. Hermano de mirror-parity (que mide el artefacto): distinta procedencia, distinta unidad, nunca se fusionan.",
+  "provenance": {
+    "sources": [
+      {
+        "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+        "bytes": 87778,
+        "lines": 2522,
+        "sha256": "9a504fe631ff9b91689a106837f24f8b0a67b322bfcfd3a081fb091f668aeae7"
+      },
+      {
+        "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+        "bytes": 89479,
+        "lines": 2180,
+        "sha256": "1916f2d4c19ab64d46ceaff58d5e45652082cb28d27ba56498ff499e729aae20"
+      },
+      {
+        "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
+        "bytes": 30401,
+        "lines": 799,
+        "sha256": "8424f566c1b9f6f793277641ba04c5ce703470b007155a93bbd214f154da626d"
+      }
+    ],
+    "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch."
+  },
+  "metadataExclusion": {
+    "law": "A.1: la regla es una LISTA ENUMERADA, no un numero. Solo crece con adjudicacion escrita del DT.",
+    "count": 36,
+    "entries": [
+      {
+        "tenant": "bithire",
+        "path": "CAPABILITIES.engineBridge.note"
+      },
+      {
+        "tenant": "bithire",
+        "path": "CAPABILITIES.responsive.note"
+      },
+      {
+        "tenant": "bithire",
+        "path": "CHARTS.animateOnMount"
+      },
+      {
+        "tenant": "bithire",
+        "path": "CHARTS.showDots"
+      },
+      {
+        "tenant": "bithire",
+        "path": "CHARTS.useGradientFill"
+      },
+      {
+        "tenant": "bithire",
+        "path": "CHROME.card.hoverTint"
+      },
+      {
+        "tenant": "bithire",
+        "path": "CHROME.card.showBorder"
+      },
+      {
+        "tenant": "bithire",
+        "path": "MOTION.countUpEnabled"
+      },
+      {
+        "tenant": "bithire",
+        "path": "MOTION.useSpring"
+      },
+      {
+        "tenant": "bithire",
+        "path": "THEME.id"
+      },
+      {
+        "tenant": "bithire",
+        "path": "THEME.name"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CAPABILITIES.engineBridge.note"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CAPABILITIES.expressive.note"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CAPABILITIES.recipes.note"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CAPABILITIES.responsive.note"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CHARTS.animateOnMount"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CHARTS.showDots"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CHARTS.useGradientFill"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CHROME.card.hoverTint"
+      },
+      {
+        "tenant": "evnto",
+        "path": "CHROME.card.showBorder"
+      },
+      {
+        "tenant": "evnto",
+        "path": "MOTION.countUpEnabled",
+        "via": "EVNTO_CANONICAL_MOTION"
+      },
+      {
+        "tenant": "evnto",
+        "path": "MOTION.useSpring",
+        "via": "EVNTO_CANONICAL_MOTION"
+      },
+      {
+        "tenant": "evnto",
+        "path": "THEME.id"
+      },
+      {
+        "tenant": "evnto",
+        "path": "THEME.name"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CAPABILITIES.engineBridge.note"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CAPABILITIES.expressive.note"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CAPABILITIES.responsive.note"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CHARTS.animateOnMount"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CHARTS.showDots"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CHARTS.useGradientFill"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CHROME.card.hoverTint"
+      },
+      {
+        "tenant": "rottay",
+        "path": "CHROME.card.showBorder"
+      },
+      {
+        "tenant": "rottay",
+        "path": "MOTION.countUpEnabled"
+      },
+      {
+        "tenant": "rottay",
+        "path": "MOTION.useSpring"
+      },
+      {
+        "tenant": "rottay",
+        "path": "THEME.id"
+      },
+      {
+        "tenant": "rottay",
+        "path": "THEME.name"
+      }
+    ],
+    "paintDenominator": {
+      "value": 3690,
+      "derivation": "3726 hojas evaluadas (F4A-0, walk del objeto, 2 scopes) - 36 metadato enumerado",
+      "unit": "hoja-evaluada",
+      "warning": "Unidad EVALUADA, citada de F4A-0. NO es la unidad lexica de este artefacto (1820/1503/397). No se fusionan."
+    }
+  },
+  "tagRegistry": {
+    "law": "Vocabulario CERRADO: seed | baseline | derived | pro-expert | unassigned. @governor obligatorio, de una linea.",
+    "count": 0,
+    "entries": []
+  },
+  "matrix": {
+    "unit": "authored-decision-leaf-path (importada de mirror-parity/authoredLeafPaths)",
+    "leaves": {
+      "rottay": 1820,
+      "bithire": 1503,
+      "evnto": 397
+    },
+    "universe": 2613,
+    "union": 2613,
+    "intersection": 345,
+    "positions": {
+      "rottay": {
+        "authored": 1820,
+        "placeholder": 0,
+        "absent": 793
+      },
+      "bithire": {
+        "authored": 1503,
+        "placeholder": 0,
+        "absent": 1110
+      },
+      "evnto": {
+        "authored": 397,
+        "placeholder": 0,
+        "absent": 2216
+      }
+    },
+    "exclusive": {
+      "rottay": 1061,
+      "bithire": 788,
+      "evnto": 2
+    },
+    "paintLeaves": {
+      "rottay": 1808,
+      "bithire": 1492,
+      "evnto": 386
+    },
+    "taggedPaintLeaves": {
+      "rottay": 0,
+      "bithire": 0,
+      "evnto": 0
+    }
+  },
+  "ratchet": {
+    "law": "decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.",
+    "divergentSlots": 2268,
+    "untaggedAuthoredLeaves": 3686
+  },
+  "failures": []
+}
