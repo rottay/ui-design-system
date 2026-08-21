@@ -906,6 +906,69 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-7 ✅ (worker Opus; parada 16/16 correcta y adjudicada; verificado por el
+DT contra el árbol).** Tags por hoja de **OVERLAY.palette + OVERLAY.surfaces**
+en los 3 temas: **240 docblocks** (por subárbol uniforme maximal, NUNCA a
+nivel familia — el tag sobre `OVERLAY.palette.ramps` cubre 80 hojas y es
+falsable: las 80 medidas literales y con `control: null`; no es la herencia
+que F4A-3c retiró) + **90 placeholders de hoja cubriendo 272 ausencias** con
+la razón MEDIDA por mecanismo (14 con contraparte en el plano base / 76 sin
+contraparte en ningún plano — escribir una sola razón habría mentido en 76).
+Clasificación hoja por hoja MEDIDA (var/color-mix → derived con raíz real;
+atribuido en el mapa → seed + dial; sin atribución → seed + `dial en F4B (sin
+control atribuido)`, la fórmula del roster). Las 2 `textPageColor` ya tenían
+tag de K3 — excluidas (doble docblock = alcance ambiguo). **Ciclo de vida de
+los tags "gap medido" estrenado**: `rottay OVERLAY.surfaces` (15/15) y `evnto
+OVERLAY.palette` (104/104) quedaron probadas hoja por hoja y sus tags de
+sección de F4A-3c se RETIRARON (los otros 25 intactos hasta su lote).
+Corrección de premisa del worker verificada: rottay OVERLAY.palette mide
+**159** (no 160 del mapa histórico: −borderPrimaryColor K2, −linkHoverColor
+K1, +textPageColor K3 — cada delta traza a una adjudicación nombrada). Trampa
+de vocabulario asentada: el mapa nombra `modes.light.palette.*` y el léxico
+`OVERLAY.palette.*` — intersección literal CERO, se cruza por cola de ruta.
+**Contadores medidos y verificados por mí contra el artefacto:**
+`untaggedAuthoredLeaves` 2655→**2295** (−360 = 158+121+80+1; las 2 familias
+con tag de sección no bajan dos veces), `divergentSlots` 1669→**1519** (−150
+por los 90 placeholders; `positionIntersection` 890→**1040** espejo exacto,
+re-anclado medido por el worker con la razón escrita en el test), universo
+**2559** e intersección autorada **342** CLAVADOS (el lote no agrega hojas),
+tagRegistry 281→**609** (+328 = 240 tags − 2 retirados + 90 placeholders).
+**Baja #7 del baseline, bajada por MÍ.** **Parada 16/16: techo de bytes** —
+las 3 fuentes +48642 B por 330 docblocks reventaron `./runtime/provider`
+(+37231) y `./patterns/charts` (+6530) y `prebuild` cortaba antes de `tsc`
+(build que nunca corría = byte-identidad NO probada; el worker casi come un
+falso verde y lo detectó revisando QUÉ pasos corrieron, no el resultado).
+**Adjudicación MÍA: (A) sola** — techos subidos con aire de una vez
+(provider 1350925→**1900000**, charts 1821262→**2350000**, `_note` fechada:
+el frente proyecta ~medio MB de comentarios en 8…15; los subpath mueren en
+F6); (B) descartada (no resolvía provider y re-introducía tags de familia).
+Byte-identidad probada con TRES builds reales (ida y vuelta). Cadena completa
+verde; digest de reconciliation re-anclado a `5524ba2086ff` (TERCERA vez
+huérfano tras un lote de fuentes — candidato a automatizarse, anotado);
+reads-ledger 2607/2607; root-catalog 64 OK; root-exposure 26/28/10 OK.
+Batería: rosters 1304/1304 ENTEROS (sin moverse: cero valores), mirror 44/44,
+root-exposure 13/13, pierna 1 MÍA **1717/13 por nombre** (diff vacío contra
+las 13 conocidas). gat-07 re-sellado por el DT: `bfa9b8724a27…`. gates:ci:
+**88 blocking + 2 excluded verdes**. Lección operativa del DT asentada en el
+prompt §2: verificar input VACÍO antes de pegar briefs (dos contaminaciones
+de residuo, una con alcance falso — aclarada al instante). **La deuda cra-12
+SE MANIFESTÓ (estaba anotada "análisis propio cuando se manifieste"):
+`cra-12-motion-governance.reanchor.test.mjs` planta
+`src/foundation/tokens/css/__cra12-reanchor-drill.css` en el árbol REAL durante
+la suite, y `deriveHookManifest` lee ese árbol — si la derivación de uno de
+los dos drills export-* cae dentro de la ventana de la planta, le llega
+MANIFEST_STALE de regalo y el test queda rojo.** Prueba de raza y no de lote:
+la derivación es determinista y coincide con el disco en árbol quieto (medido
+por mí), y la pierna 1 DEL WORKER sobre el mismo árbol dio el resultado viejo.
+Efecto: el par export-missing/export-unshipped es UN slot rojo decidido por la
+carrera (estable como export-missing desde F4A-5; rotó a export-unshipped en
+mi corrida post-F4A-7 por los timings nuevos). Las 13 conocidas quedan 13 con
+el par como slot único (baseline de nombres pair-aware). **Deuda para
+F4A-close (test-hygiene): aislar la planta del read-set del manifest**
+(exclusión `__cra12-*` o scope fuera de styleRoots — decisión de implementación
+de ese momento). gates:ci no se afecta: el GATE no planta nada; la carrera vive
+solo en la suite concurrente. **Siguiente lote: F4A-8** (SURFACES + THEME,
+mismo molde).
 **F4A-3c ✅ (worker Opus; verificado por el DT contra el árbol) — el paquete
 corrector post-auditoría Codex.** (a) **Los 27 docblocks de familia quedaron
 ESTRECHADOS**: `@domicile unassigned` + `@governor gap medido: gobierno

@@ -82,6 +82,11 @@ es el modelo más avanzado de Claude; se usa SOLO para auditar.
   sleep 1 && tmux send-keys -t <nombre> Enter
   ```
 
+- **ANTES de pegar un brief, `capture-pane` y verificá que el input esté
+  VACÍO** (dos contaminaciones reales: una línea fantasma se envió junto al
+  brief de F4A-3c —inofensiva— y otra junto al de F4A-7 —contradecía el
+  alcance y pidió aclaración inmediata—). Si hay texto residual, se limpia o
+  se descarta ANTES de `load-buffer`; después de pegar, capture-pane otra vez.
 - **Verificá con capture-pane que el brief entró y arrancó** (spinner visible).
 - **Convención de entrega**: el worker NUNCA escribe en el repo salvo que el
   brief diga exactamente qué archivos; termina escribiendo
@@ -252,8 +257,20 @@ solo-comentarios también re-corre la cadena** (el pin `positive: the full
 check passes` lo marcó; digest de reconciliation re-anclado a `1b1d21bf6388`).
 gat-07 `1c42b078f711…` (invariante al censo). Deuda nombrada: 6 familias con
 gobierno parcial medido sin tag de sección (sidebar ×3, statsGrid, tooltip,
-evnto surface) — su prueba por hoja en F4A-7…15. **Siguiente lote: F4A-7**
-(worker, brief TUYO) por `/tmp/f4a-lotes-7-13.md`.
+evnto surface) — su prueba por hoja en F4A-7…15. **Estado al cierre: F4A-7 ✅
+(worker Opus; parada 16/16 — techos de bytes— adjudicada por el DT: (A) sola,
+provider→1900000 / charts→2350000 con aire para 8…15).** 240 docblocks por
+subárbol uniforme maximal (falsable, nunca herencia de familia) + 90
+placeholders con razón medida (14 con contraparte / 76 sin contraparte) +
+ciclo de vida estrenado (2 tags gap-medido retirados al quedar probadas las
+familias). `untaggedAuthoredLeaves` 2655→**2295** (−360), `divergentSlots`
+1669→**1519** (−150, espejo con positionIntersection 890→1040), universo 2559
+clavado, tagRegistry 281→**609** (Baja #7 del DT). Byte-identidad ×3 builds.
+**La deuda cra-12 se manifestó**: su planta en el árbol real correa los drills
+export-* (par roto decidido por timing — slot único pair-aware en la baseline
+de la suite; F4A-7 NO implicado: la pierna del worker en el mismo árbol dio el
+resultado viejo). Suite 1717/13 por nombre. gat-07 `bfa9b8724a27…`. **Siguiente
+lote: F4A-8** (worker, brief TUYO): SURFACES + THEME — mismo molde de F4A-7.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
