@@ -828,7 +828,92 @@ const EXPRESSIVE: BrandExpressiveSelection = {
  * Familia mixta. Controles: palette.seeds, token-overrides.
  * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
+/**
+ * Punto superior: el literal de marca es legitimo aca y en ningun otro lado.
+ * @domicile seed
+ * @governor dial en F4B (semilla de color; el roster no le da dial hoy)
+ */
 const PALETTE: BrandPalette = {
+  /**
+   * @placeholder PALETTE.aliases
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaBlack100
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaBlack50
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaError20
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaPrimary10
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaPrimary20
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaSecondary10
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaSecondary20
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaSuccess20
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaWarning20
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.alphaWhite50
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.bgInfoColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.bgSubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.neutralZeroColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.primaryForegroundColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.primarySubtleColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
   ramps: {
     neutral: {
       50: "#f3f2ef",
@@ -843,8 +928,47 @@ const PALETTE: BrandPalette = {
       900: "#191919",
     },
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   primaryColor: "#3A6FB0",
   primaryHoverColor: "#2c5587",
+  /**
+   * @placeholder PALETTE.ramps.accent
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.ramps.error
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.ramps.info
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.ramps.primary
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.ramps.secondary
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.ramps.success
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.ramps.warning
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
   secondaryColor: "#315F86",
   secondaryHoverColor: "#274e70",
   accentColor: "#86A6C2",
@@ -854,18 +978,64 @@ const PALETTE: BrandPalette = {
   backgroundTertiaryColor: "#e8eef6",
   backgroundElevatedColor: "#ffffff",
   backgroundSurfaceColor: "#ffffff",
+  /**
+   * @placeholder PALETTE.shadowColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.surfaceColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.surfaceMutedColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.surfaceSecondaryColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.textColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
+  /**
+   * @placeholder PALETTE.textInverseColor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora esta hoja de palette
+   */
   textPrimaryColor: "#14283B",
   textSecondaryColor: "#53697e",
   textTertiaryColor: "#7f859b",
   textMutedColor: "#8a9aaa",
   textDisabledColor: "#b2b6c5",
   onPrimaryColor: "#ffffff",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (raiz autora del par border, K2: --ds-color-border)
+   */
   borderColor: "#d4e0ea",
+  /**
+   * @domicile derived
+   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
+   */
   borderPrimaryColor: "var(--ds-color-border)",
   borderSecondaryColor: "#c4d2de",
   borderTertiaryColor: "#e8e9f0",
   borderSubtleColor: "#e4e5ed",
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   borderFocusColor: "#3a6fb0",
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   linkColor: "#3a6fb0",
   linkHoverColor: "#2c5587",
   linkVisitedColor: "#6b3fa0",
@@ -875,6 +1045,10 @@ const PALETTE: BrandPalette = {
   warningColor: "#D6A04E",
   warningBgColor: "#fffbeb",
   warningBorderColor: "rgba(231, 163, 62, 0.25)",
+  /**
+   * @domicile seed
+   * @governor dial: token-overrides
+   */
   errorColor: "#C5504C",
   errorBgColor: "#fef2f2",
   errorBorderColor: "rgba(204, 16, 22, 0.25)",

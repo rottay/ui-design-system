@@ -273,7 +273,7 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // pineado en el baseline, no aca: el pin estatico de un contador que baja
   // por diseno convierte cada lote bueno en rojo.
   assert.equal(real.matrix.intersection, 344);
-  assert.equal(real.matrix.positionIntersection, 786);
+  assert.equal(real.matrix.positionIntersection, 892);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1061, bithire: 788, evnto: 2 });
 });
 

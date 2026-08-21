@@ -1040,6 +1040,11 @@ const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/techn
  * Familia mixta. Controles: palette.seeds, token-overrides.
  * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
+/**
+ * Punto superior: el literal de marca es legitimo aca y en ningun otro lado.
+ * @domicile seed
+ * @governor dial en F4B (semilla de color; el roster no le da dial hoy)
+ */
 const PALETTE: BrandPalette = {
   ramps: {
     primary: {
@@ -1140,6 +1145,10 @@ const PALETTE: BrandPalette = {
     },
   },
   // Light-mode runtime colors mirror the explicit light artifact.
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   primaryColor: '#FFFFFF',
   primaryHoverColor: '#E0E0E0',
   secondaryColor: '#A0A0A5',
@@ -1159,12 +1168,28 @@ const PALETTE: BrandPalette = {
   textMutedColor: '#96969E',
   textDisabledColor: '#555560',
   onPrimaryColor: '#0C0C0E',
+  /**
+   * @domicile seed
+   * @governor dial en F4B (raiz autora del par border, K2: --ds-color-border)
+   */
   borderColor: '#28282C',
+  /**
+   * @domicile derived
+   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
+   */
   borderPrimaryColor: 'var(--ds-color-border)',
   borderSecondaryColor: '#252529',
   borderSubtleColor: '#161619',
   borderTertiaryColor: '#161619',
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   borderFocusColor: 'rgba(255, 255, 255, 0.20)',
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   linkColor: '#ECECEC',
   linkHoverColor: '#FFFFFF',
   linkVisitedColor: '#A0A0A5',
@@ -1178,6 +1203,10 @@ const PALETTE: BrandPalette = {
   warningColor: '#F59E0B',
   warningBgColor: 'rgba(245, 158, 11, 0.10)',
   warningBorderColor: 'rgba(245, 158, 11, 0.22)',
+  /**
+   * @domicile seed
+   * @governor dial: token-overrides
+   */
   errorColor: '#F87171',
   errorBgColor: 'rgba(239, 68, 68, 0.10)',
   errorBorderColor: 'rgba(239, 68, 68, 0.22)',

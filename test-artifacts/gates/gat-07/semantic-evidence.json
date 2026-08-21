@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "66ad3950ec961c4883db350c7b32dab03afe5541efff720fe9ecdfbb591e5828",
+    "authorityDigest": "16600123153fd9199b792b1e5f39b92c84ab977e110b474e0d893c54be54b4bd",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -7507,8 +7507,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 97983,
-        "sha256": "b64473771d30a4a29b54d2086334608965e8107691221aff28bf874dd50965be"
+        "bytes": 103163,
+        "sha256": "db81fdf5c983ae40235713badc0209a242f1ec227f1886eefed5c28f92e7cc57"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -7517,8 +7517,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 34224,
-        "sha256": "5ad587381118caeaa227f4d5e73f9273d5f36a89c5c08eb66680c93a1c9d54d6"
+        "bytes": 40636,
+        "sha256": "a1164c1c55200630900c7a9e3d7627c18ae492f7cf7e55074e910f9148a66585"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/index.ts",
@@ -7538,8 +7538,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 86381,
-        "sha256": "d3bca4d1429a6d1e3f4991c6ea49ff57d571de310acb9a38476a2e34f5e9f737"
+        "bytes": 87046,
+        "sha256": "a14620820e7cb08ffb261f0717a0ed2c609b62681707ff7af4bd4bab67ad8792"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/emphasis/index.ts",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "66ad3950ec961c4883db350c7b32dab03afe5541efff720fe9ecdfbb591e5828"
+    "digest": "16600123153fd9199b792b1e5f39b92c84ab977e110b474e0d893c54be54b4bd"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b8b343eb2e59d048704c61aa01945f4c77cf51e8c6623a4b497231037ecc4e70",
-      "b8b343eb2e59d048704c61aa01945f4c77cf51e8c6623a4b497231037ecc4e70"
+      "f9adf7318e83108a82d1f4138b6426d8c277a277e906c9aa42b774c07ee16418",
+      "f9adf7318e83108a82d1f4138b6426d8c277a277e906c9aa42b774c07ee16418"
     ],
     "agree": true
   }
