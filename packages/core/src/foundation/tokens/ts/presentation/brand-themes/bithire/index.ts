@@ -1109,6 +1109,31 @@ const CHROME: BrandChrome = {
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
+  /**
+   * @placeholder CHROME.calendar
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia calendar (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.backTop
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia backTop (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.avatar
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia avatar (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.anchor
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia anchor (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.alert
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia alert (gobernaria chrome.families)
+   */
   card: {
     defaultElevation: "md",
     hoverElevation: "lift-two",
@@ -1130,6 +1155,76 @@ const CHROME: BrandChrome = {
   /**
    * @domicile seed
    * @governor dial: navigation.sidebar-tone
+   */
+  /**
+   * @placeholder CHROME.result
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia result (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.progress
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia progress (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.popover
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia popover (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.pagination
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia pagination (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.notification
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia notification (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.message
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia message (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.menu
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia menu (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.liveFeed
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia liveFeed (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.floatButton
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia floatButton (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.empty
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia empty (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.dropdown
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia dropdown (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.drawer
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia drawer (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.descriptions
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia descriptions (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.collapse
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia collapse (gobernaria chrome.families)
    */
   sidebar: {
     // Shell geometry is a brand decision, not a color-mode one: authored
@@ -1236,6 +1331,41 @@ const CHROME: BrandChrome = {
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
+  /**
+   * @placeholder CHROME.timeline
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia timeline (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.tag
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia tag (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.steps
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia steps (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.statsGrid
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia statsGrid (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.statistic
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia statistic (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.spinner
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia spinner (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.skeleton
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia skeleton (gobernaria chrome.families)
    */
   toolbar: {
     bg: "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
@@ -1998,6 +2128,11 @@ const CHROME: BrandChrome = {
   /**
    * Familia mixta. Controles: palette.seeds, shape.radius-scale.
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
+  /**
+   * @placeholder CHROME.tree
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no autora la familia tree (gobernaria chrome.families)
    */
   workspaceCard: {
     bg: "#FFFFFF",

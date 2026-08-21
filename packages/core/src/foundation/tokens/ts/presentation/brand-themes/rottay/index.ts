@@ -1013,6 +1013,11 @@ const OVERLAY: BrandThemeModeOverlay = {
         "0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent)",
     },
   },
+  /**
+   * @placeholder OVERLAY.typography
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo de rottay no diverge en typography
+   */
 };
 
 // ── RECIPES ──
@@ -1023,6 +1028,12 @@ const OVERLAY: BrandThemeModeOverlay = {
 const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/technical-sharp@1' };
 
 // ── EXPRESSIVE ──
+
+/**
+ * @placeholder EXPRESSIVE
+ * @domicile unassigned
+ * @governor none — gap aceptado: capability expressive no autorada en rottay (capabilities.expressive dice por que)
+ */
 // not authored by this vertical — capabilities.expressive states why.
 
 // ── PALETTE ──
@@ -1370,6 +1381,36 @@ const CHROME: BrandChrome = {
    * @domicile seed
    * @governor dial: navigation.sidebar-tone
    */
+  /**
+   * @placeholder CHROME.metricCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia metricCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.listingGrid
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia listingGrid (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.filterPill
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia filterPill (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.detail
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia detail (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.compactCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia compactCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.collectionCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia collectionCard (gobernaria chrome.families)
+   */
   sidebar: {
     bg: '#0D0D10',
     border: '#18181C',
@@ -1470,6 +1511,21 @@ const CHROME: BrandChrome = {
   /**
    * @domicile seed
    * @governor dial: palette.seeds
+   */
+  /**
+   * @placeholder CHROME.toolbar
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia toolbar (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.tallCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia tallCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.signalCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia signalCard (gobernaria chrome.families)
    */
   tooltip: {
     bg: '#ECECEC',
@@ -2435,6 +2491,11 @@ const CHROME: BrandChrome = {
     nodeColor: '#A0A0A5',
     nodeColorSelected: '#ECECEC',
   },
+  /**
+   * @placeholder CHROME.workspaceCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: rottay no autora la familia workspaceCard (gobernaria chrome.families)
+   */
 };
 
 // ── CAPABILITIES ──
@@ -2502,7 +2563,11 @@ export const rottayBrandTheme: FirstPartyBrandTheme = {
   recipes: RECIPES,
 
   // expressive — governed expressive-profile selection (C1b).
-  // expressive: not authored — capabilities.expressive states why.
+  /**
+   * @placeholder THEME.expressive
+   * @domicile unassigned
+   * @governor none — gap aceptado: capability expressive no autorada en rottay (capabilities.expressive dice por que)
+   */
 
   // palette — ramps and semantic colour channels.
   palette: PALETTE,

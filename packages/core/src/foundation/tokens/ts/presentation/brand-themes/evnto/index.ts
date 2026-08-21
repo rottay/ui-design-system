@@ -259,12 +259,29 @@ const OVERLAY: BrandThemeModeOverlay = {
       text: "#A8A898",
     },
   },
+  /**
+   * @placeholder OVERLAY.typography
+   * @domicile unassigned
+   * @governor none — gap aceptado: el modo de evnto no diverge en typography
+   */
 };
 
 // ── RECIPES ──
+
+/**
+ * @placeholder RECIPES
+ * @domicile unassigned
+ * @governor none — gap aceptado: capability recipes no autorada en evnto (capabilities.recipes dice por que)
+ */
 // not authored by this vertical — capabilities.recipes states why.
 
 // ── EXPRESSIVE ──
+
+/**
+ * @placeholder EXPRESSIVE
+ * @domicile unassigned
+ * @governor none — gap aceptado: capability expressive no autorada en evnto (capabilities.expressive dice por que)
+ */
 // not authored by this vertical — capabilities.expressive states why.
 
 // ── PALETTE ──
@@ -391,6 +408,12 @@ const SURFACES: BrandSurfaces = {
 };
 
 // ── MOTION ──
+
+/**
+ * @placeholder MOTION
+ * @domicile unassigned
+ * @governor capability: motion — evnto no la autora localmente: delega en el preset congelado EVNTO_CANONICAL_MOTION
+ */
 // not authored as a local decision — this vertical references the canonical
 // experience baseline in place, so the preset stays the single source.
 
@@ -411,6 +434,41 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
 const CHROME: BrandChrome = {
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
+  /**
+   * @placeholder CHROME.calendar
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia calendar (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.breadcrumb
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia breadcrumb (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.badge
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia badge (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.backTop
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia backTop (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.avatar
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia avatar (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.anchor
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia anchor (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.alert
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia alert (gobernaria chrome.families)
    */
   card: {
     defaultElevation: 'md',
@@ -433,6 +491,121 @@ const CHROME: BrandChrome = {
   /**
    * @domicile seed
    * @governor dial: navigation.sidebar-tone
+   */
+  /**
+   * @placeholder CHROME.search
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia search (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.result
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia result (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.progress
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia progress (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.popover
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia popover (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.pagination
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia pagination (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.notification
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia notification (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.modal
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia modal (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.metricCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia metricCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.message
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia message (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.menu
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia menu (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.liveFeed
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia liveFeed (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.listingGrid
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia listingGrid (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.list
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia list (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.floatButton
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia floatButton (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.filterPill
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia filterPill (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.empty
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia empty (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.dropdown
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia dropdown (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.drawer
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia drawer (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.detail
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia detail (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.descriptions
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia descriptions (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.compactCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia compactCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.collectionCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia collectionCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.collapse
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia collapse (gobernaria chrome.families)
    */
   sidebar: {
     bg: '#fafafa',
@@ -596,6 +769,36 @@ const CHROME: BrandChrome = {
    * @domicile seed
    * @governor dial: palette.seeds
    */
+  /**
+   * @placeholder CHROME.steps
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia steps (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.statsGrid
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia statsGrid (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.statistic
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia statistic (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.spinner
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia spinner (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.skeleton
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia skeleton (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.signalCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia signalCard (gobernaria chrome.families)
+   */
   surface: {
     radiusMd: 'var(--ds-radius-md)',
     shadow: 'var(--ds-shadow-sm)',
@@ -653,6 +856,46 @@ const CHROME: BrandChrome = {
     shadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
     shadowHover: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
+  /**
+   * @placeholder CHROME.tabs
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia tabs (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.tag
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia tag (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.tallCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia tallCard (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.timeline
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia timeline (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.toolbar
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia toolbar (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.tooltip
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia tooltip (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.tree
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia tree (gobernaria chrome.families)
+   */
+  /**
+   * @placeholder CHROME.workspaceCard
+   * @domicile unassigned
+   * @governor none — gap aceptado: evnto no autora la familia workspaceCard (gobernaria chrome.families)
+   */
 };
 
 // ── CAPABILITIES ──
@@ -710,10 +953,18 @@ export const evntoBrandTheme: FirstPartyBrandTheme = {
   modes: { [OVERLAY_MODE]: OVERLAY },
 
   // recipes — governed recipe-profile selection (DS-S001).
-  // recipes: not authored — capabilities.recipes states why.
+  /**
+   * @placeholder THEME.recipes
+   * @domicile unassigned
+   * @governor none — gap aceptado: capability recipes no autorada en evnto (capabilities.recipes dice por que)
+   */
 
   // expressive — governed expressive-profile selection (C1b).
-  // expressive: not authored — capabilities.expressive states why.
+  /**
+   * @placeholder THEME.expressive
+   * @domicile unassigned
+   * @governor none — gap aceptado: capability expressive no autorada en evnto (capabilities.expressive dice por que)
+   */
 
   // palette — ramps and semantic colour channels.
   palette: PALETTE,

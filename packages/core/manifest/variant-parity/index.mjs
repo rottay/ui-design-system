@@ -16,8 +16,9 @@
  *               ya esta falsada en F4A-0: 1820/1503/397, union 2613,
  *               interseccion 345. NO se inventa otra: el walk se IMPORTA.
  *   posicion    `authored` (la hoja esta autorada) o `placeholder` (docblock
- *               `@placeholder` explicito). La ausencia SIN placeholder es
- *               SILENCIO, y el silencio es lo que el frente F4A elimina.
+ *               `@placeholder` explicito, que cubre POR PREFIJO: `P` y todo lo
+ *               que cuelgue de `P.`). La ausencia SIN placeholder es SILENCIO,
+ *               y el silencio es lo que el frente F4A elimina.
  *   divergente  slot del universo sin posicion completa en los 3 temas.
  *
  * El indice linea->ruta que usa el lexer de tags NO es un segundo walk: la
@@ -326,8 +327,17 @@ export function analyzeSource({ tenant, text }) {
         failures.push(`${tenant}:${block.start}: @placeholder exige @domicile unassigned (trae "${domicile ?? 'ninguno'}")`);
         continue;
       }
-      if (leaves.has(placeholder)) {
-        failures.push(`${tenant}:${block.start}: @placeholder ${placeholder} contradictorio — ${tenant} SI autora ese slot`);
+      // Contradiccion EXTENDIDA (F4A-4): un placeholder cubre por PREFIJO, asi
+      // que contradice si el tema autora la hoja exacta O cualquier hoja que
+      // cuelgue de ella. Es lo que fuerza el ciclo de vida: cuando una
+      // reescritura F4A-5..15 hace que el tema autore algo bajo P, el
+      // placeholder P tiene que borrarse en ESE lote o el gate lo dice.
+      const autoradas = [...leaves].filter((h) => h === placeholder || h.startsWith(`${placeholder}.`));
+      if (autoradas.length > 0) {
+        failures.push(
+          `${tenant}:${block.start}: @placeholder ${placeholder} contradictorio — ${tenant} SI autora `
+          + `${autoradas.length} hoja(s) bajo esa ruta (p.ej. ${autoradas[0]})`,
+        );
         continue;
       }
       placeholders.push({ tenant, slot: placeholder, governor, line: block.start });
@@ -415,17 +425,43 @@ export function buildDoc({ sources, provenance, enforceMetadata = true }) {
   const failures = tenants.flatMap((t) => perTenant[t].failures);
   if (enforceMetadata) failures.push(...metadataGuard(perTenant, sources));
 
+  // El universo son las hojas autoradas por algun tema, mas los slots que solo
+  // existen como placeholder (huerfanos: nadie cuelga nada de esa ruta).
+  const authoredUniverse = new Set(tenants.flatMap((t) => [...perTenant[t].leaves]));
+  const phSlots = tenants.flatMap((t) => perTenant[t].placeholders.map((p) => p.slot));
+  const orphanPlaceholders = phSlots.filter(
+    (p) => ![...authoredUniverse].some((h) => h === p || h.startsWith(`${p}.`)),
+  );
+  const universe = [...new Set([...authoredUniverse, ...orphanPlaceholders])].sort();
+
+  // COBERTURA POR PREFIJO (F4A-4, adjudicada): un `@placeholder P` da posicion
+  // `placeholder` a TODO slot del universo que sea `P` o cuelgue de `P.`. Sin
+  // esto, un placeholder de familia creaba un slot virtual y dejaba las hojas
+  // ausentes contadas como divergentes — el reves de lo que declara.
   const positions = {};
   for (const tenant of tenants) {
     const map = new Map();
     for (const leaf of perTenant[tenant].leaves) map.set(leaf, 'authored');
-    for (const ph of perTenant[tenant].placeholders) map.set(ph.slot, 'placeholder');
+    for (const ph of perTenant[tenant].placeholders) {
+      for (const slot of universe) {
+        if (slot === ph.slot || slot.startsWith(`${ph.slot}.`)) {
+          if (!map.has(slot)) map.set(slot, 'placeholder');
+        }
+      }
+    }
     positions[tenant] = map;
   }
-  const universe = [...new Set(tenants.flatMap((t) => [...positions[t].keys()]))].sort();
   const complete = universe.filter((slot) => tenants.every((t) => positions[t].has(slot)));
+  // Dos intersecciones, dos preguntas distintas: la AUTORADA (hojas que los 3
+  // autoran — el ancla de F4A-0, 345) y la DEL DOCUMENTO (slots con posicion
+  // en los 3, placeholders incluidos — la que se mueve con F4A-4; 2613 − 787
+  // = 1826 cierra con la divergencia). No se fusionan.
+  const completeAuthored = universe.filter((slot) => tenants.every((t) => positions[t].get(slot) === 'authored'));
+  // Los exclusivos igual: se miden sobre hojas AUTORADAS (el ancla 1061/788/2),
+  // no sobre posiciones — con placeholders en juego, "lo tengo de alguna forma"
+  // no es "lo autoro".
   const exclusive = Object.fromEntries(
-    tenants.map((t) => [t, universe.filter((s) => positions[t].has(s) && tenants.filter((x) => x !== t).every((x) => !positions[x].has(s))).length]),
+    tenants.map((t) => [t, universe.filter((s) => perTenant[t].leaves.has(s) && tenants.filter((x) => x !== t).every((x) => !perTenant[x].leaves.has(s))).length]),
   );
 
   const untagged = tenants.reduce((sum, t) => sum + (perTenant[t].paintLeafCount - perTenant[t].coveredCount), 0);
@@ -453,13 +489,15 @@ export function buildDoc({ sources, provenance, enforceMetadata = true }) {
       leaves: Object.fromEntries(tenants.map((t) => [t, perTenant[t].leaves.size])),
       universe: universe.length,
       union: universe.length,
-      intersection: complete.length,
+      intersection: completeAuthored.length,
+      positionIntersection: complete.length,
       positions: Object.fromEntries(tenants.map((t) => [t, {
         authored: perTenant[t].leaves.size,
-        placeholder: perTenant[t].placeholders.length,
+        placeholder: [...positions[t].values()].filter((v) => v === 'placeholder').length,
         absent: universe.length - positions[t].size,
       }])),
       exclusive,
+      orphanPlaceholders: [...new Set(orphanPlaceholders)].sort(),
       paintLeaves: Object.fromEntries(tenants.map((t) => [t, perTenant[t].paintLeafCount])),
       taggedPaintLeaves: Object.fromEntries(tenants.map((t) => [t, perTenant[t].coveredCount])),
     },
@@ -533,7 +571,7 @@ if (invokedDirectly) {
       process.exit(1);
     }
     console.log(
-      `variant-parity OK — ${doc.matrix.universe} slots, ${doc.matrix.intersection} con posicion en los 3, `
+      `variant-parity OK — ${doc.matrix.universe} slots, ${doc.matrix.positionIntersection} con posicion en los 3, `
       + `${doc.ratchet.divergentSlots} divergentes, ${doc.ratchet.untaggedAuthoredLeaves} hojas sin tag `
       + `(${doc.tagRegistry.count} tags leidos)`,
     );

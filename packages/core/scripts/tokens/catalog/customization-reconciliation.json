@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "tokens-catalog gate re-derivation, 2026-08-19 — digest+figures re-projected from the current census report; adjudications unchanged",
-  "basedOnReportDigest": "f46f8a1bdc5b81a179d0b710dfef6c3b19d402cf5fc9a5109902e00afd47740d",
+  "generatedBy": "tokens-catalog gate re-derivation, 2026-08-20 (F4A-4) — digest re-projected from the current census report; figures still project (deadWriters 266=266); adjudications unchanged",
+  "basedOnReportDigest": "cffd2d272b350c9c53a3143f282d48d6623406ba92a0b40832fa810369cbbbbf",
   "normative": {
     "writers": 4668,
     "deadWriters": 266,

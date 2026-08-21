@@ -509,8 +509,8 @@
       "budget": {
         "maxDirectSources": 2,
         "maxReachableModules": 48,
-        "maxSourceBytes": 387391,
-        "_note": "Re-medido 2026-08-19 (387391) tras las olas de identidad — el drift acumulado nunca se re-anclo. Este subpath es de los 77 granulares que se retiran en F6: el presupuesto muere con el. La nota anterior (2026-08-11) documentaba la pregunta correcta: el peso es brand-theme alcanzable desde una entrada use client; la respuesta es la cascada (F2-F4), no un tema mas chico."
+        "maxSourceBytes": 398278,
+        "_note": "Re-medido 2026-08-20 (398278) en F4A-4: el kit de placeholders del frente F4A (+15,6 KB de comentarios en las 3 fuentes de tema) paso el techo anterior (387391, re-anclado 2026-08-19 tras las olas de identidad). Los comentarios no llegan al bundle: el artefacto compilado salio byte-identico, probado ida y vuelta en el lote. Este subpath es de los 77 granulares que se retiran en F6: el presupuesto muere con el. La nota de 2026-08-11 documentaba la pregunta correcta: el peso es brand-theme alcanzable desde una entrada use client; la respuesta es la cascada (F2-F4), no un tema mas chico."
       },
       "symbols": [
         {

@@ -265,8 +265,12 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   const real = build();
   assert.deepEqual(real.matrix.leaves, { rottay: 1820, bithire: 1503, evnto: 397 });
   assert.equal(real.matrix.union, 2613);
+  // La interseccion AUTORADA es el ancla estatica (345); la DEL DOCUMENTO se
+  // mueve con los placeholders (787 tras F4A-4) y el conteo del ratchet vive
+  // pineado en el baseline, no aca: el pin estatico de un contador que baja
+  // por diseno convierte cada lote bueno en rojo.
   assert.equal(real.matrix.intersection, 345);
-  assert.equal(real.ratchet.divergentSlots, 2268);
+  assert.equal(real.matrix.positionIntersection, 787);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1061, bithire: 788, evnto: 2 });
 });
 
@@ -452,4 +456,111 @@ test('integracion F4A-2b: las anclas de familia aparecen todas', () => {
     }
     assert.equal(n, esperado[t], `${t}: anclas de familia`);
   }
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * F4A-4 — cobertura de placeholder POR PREFIJO
+ *
+ * Fixtures con la forma del corpus: cierres inline, familias anidadas. La
+ * regla adjudicada es que `@placeholder P` cubre `P` y todo lo que cuelgue de
+ * `P.`; antes cubria un unico slot exacto y por eso un placeholder de familia
+ * creaba un slot virtual sin tapar las hojas ausentes.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/** rottay autora dos familias; bithire solo una. */
+const A_AUTORA_DOS = `
+const CHROME = {
+  alert: {
+    bg: '#111111',
+    border: '#222222', color: '#333333' },
+  badge: {
+    bg: '#444444',
+  },
+};
+`;
+const B_AUTORA_UNA = `
+const CHROME = {
+  badge: {
+    bg: '#999999',
+  },
+};
+`;
+const B_CON_PLACEHOLDER = `
+const CHROME = {
+  /**
+   * @placeholder CHROME.alert
+   * @domicile unassigned
+   * @governor none — gap aceptado: bithire no pinta alert
+   */
+  badge: {
+    bg: '#999999',
+  },
+};
+`;
+
+test('drill F4A-4 (a): un placeholder de sub-arbol cubre sus hojas y baja la divergencia', () => {
+  const sin = doc({ rottay: A_AUTORA_DOS, bithire: B_AUTORA_UNA });
+  const con = doc({ rottay: A_AUTORA_DOS, bithire: B_CON_PLACEHOLDER });
+  assert.deepEqual(con.failures, []);
+  // rottay autora 4 hojas, bithire 1. Las 3 de CHROME.alert son las divergentes.
+  assert.equal(sin.ratchet.divergentSlots, 3, 'sin placeholder, las 3 hojas de alert divergen');
+  assert.equal(con.ratchet.divergentSlots, 0, 'el placeholder de la familia tapa las 3');
+  assert.equal(con.matrix.positions.bithire.placeholder, 3,
+    'y la posicion `placeholder` cuenta SLOTS cubiertos, no docblocks');
+});
+
+test('drill F4A-4 (b): placeholder sobre hojas que el tema SI autora falla', () => {
+  const text = B_CON_PLACEHOLDER.replace(
+    "  badge: {\n    bg: '#999999',\n  },",
+    "  badge: {\n    bg: '#999999',\n  },\n  alert: {\n    bg: '#888888',\n  },",
+  );
+  const a = analyzeSource({ tenant: 'bithire', text });
+  assert.equal(a.failures.length, 1);
+  assert.match(a.failures[0], /contradictorio/);
+  assert.match(a.failures[0], /1 hoja\(s\) bajo esa ruta/, 'la falla dice CUANTAS y cual');
+  assert.match(a.failures[0], /CHROME\.alert\.bg/);
+});
+
+test('drill F4A-4 (c): el placeholder de hoja EXACTA sigue funcionando', () => {
+  const b = `
+const CHROME = {
+  badge: {
+    /**
+     * @placeholder CHROME.alert.border
+     * @domicile unassigned
+     * @governor none — gap aceptado: bithire no pinta ese borde
+     */
+    bg: '#999999',
+  },
+};
+`;
+  const d = doc({ rottay: A_AUTORA_DOS, bithire: b });
+  assert.deepEqual(d.failures, []);
+  assert.equal(d.matrix.positions.bithire.placeholder, 1, 'cubre exactamente una hoja');
+  assert.equal(d.ratchet.divergentSlots, 2, 'quedan las otras dos de alert');
+});
+
+test('drill F4A-4 (d): un placeholder huerfano crea slot virtual y se REPORTA', () => {
+  const b = B_CON_PLACEHOLDER.replace('CHROME.alert', 'CHROME.noExisteEnNadie');
+  const d = doc({ rottay: A_AUTORA_DOS, bithire: b });
+  assert.deepEqual(d.failures, []);
+  assert.deepEqual(d.matrix.orphanPlaceholders, ['CHROME.noExisteEnNadie'],
+    'nadie cuelga nada de esa ruta: es un slot virtual y tiene que verse');
+  assert.ok(d.matrix.universe > 0);
+});
+
+test('drill F4A-4 (e): dos temas con placeholder y el tercero autorando = cobertura completa', () => {
+  const c = B_CON_PLACEHOLDER.replace("bg: '#999999'", "bg: '#777777'");
+  const d = doc({ rottay: A_AUTORA_DOS, bithire: B_CON_PLACEHOLDER, evnto: c });
+  assert.deepEqual(d.failures, []);
+  assert.equal(d.ratchet.divergentSlots, 0, 'las 3 hojas de alert quedan con posicion en los 3');
+  assert.equal(d.matrix.positionIntersection, d.matrix.universe, 'universo enteramente cubierto');
+});
+
+test('drill F4A-4: la cobertura por prefijo NO inventa slots que nadie autora', () => {
+  // Un placeholder de familia no debe agregar al universo las hojas que el
+  // otro tema tampoco tiene: solo cubre lo que YA existe en el universo.
+  const d = doc({ rottay: A_AUTORA_DOS, bithire: B_CON_PLACEHOLDER });
+  assert.equal(d.matrix.universe, 4, 'las 4 hojas autoradas por rottay, ni una mas');
+  assert.deepEqual(d.matrix.orphanPlaceholders, []);
 });
