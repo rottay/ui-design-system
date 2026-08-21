@@ -156,7 +156,12 @@ de capability activa; las 29 mixtas quedan con nota de clase (sus tags por
 hoja aterrizan EN su lote F4A-5…15); las 53 sin-control idem (disposición
 final = adjudicación de F4A-close). Cero valores tocados; prueba
 byte-idéntica ida y vuelta; baja `untaggedAuthoredLeaves` (3686 → residuo
-medido); el baseline lo baja el DT en el commit.
+medido); el baseline lo baja el DT en el commit. **Estado: el harness tuvo un
+bug latente de scope (parada 10/10) ya arreglado en F4A-2b `6c549af78` (28/28
+drills, artefacto byte-idéntico) — F4A-3b se re-ejecuta con los generadores ya
+probados en `/tmp/f4a-3b/`; en paralelo, un lote Sonnet mueve el drill de
+cascade-ratchet a tmpdir (la carrera preexistente que la suite nueva hizo
+determinista).**
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 

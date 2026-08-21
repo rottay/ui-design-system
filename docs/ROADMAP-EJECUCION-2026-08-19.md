@@ -862,6 +862,46 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
+**F4A-3b — PARADA CORRECTA (10/10): el consumo encontró un bug en el harness
+(mío, sellado en F4A-2).** `pathIndex` solo bajaba la pila si la línea
+EMPEZABA con `}`; el corpus cierra con contenido+llave en la misma línea →
+**594 rutas incoherentes en rottay (31%), 63 evnto, 0 bithire** (bithire se
+salvaba por casualidad: cierra todo en línea propia). Confirmado por mí contra
+el árbol, no de palabra: reproduje la firma exacta (` rottay:2188` →
+`CHROME.controls.buttonPrimary.…alert` en vez de `CHROME.alert`). Latente
+porque con 0 tags el índice nunca se consultaba, y los 22 drills pasaban con
+fixtures de forma linda. **Si 3b taggeaba, el harness mentía en verde** — la
+parada evitó un progreso falso. Bonus del reporte 3b (vale para el re-run):
+clases 33/29/53 reproducidas desde el mapa commiteado; join control→roster
+32/33 cierra (excepción: `rottay CHROME.statsGrid` con `token-overrides` —
+llevaría nota de clase, no tag); banners canónicos confirmados; generadores
+escritos y probados en `/tmp/f4a-3b/` (el lote se re-ejecuta tal cual); 28 de
+51 docblocks cargan ley real → su verbatim completo viene en el reporte del
+re-run y yo escribo `docs/f4a/leyes-fuentes-themes.md` en ese commit
+(adjudicación: la memoria de tranches — ROTTAY-T2, MASS C3, EVNTO TERMINAL-2,
+T1, K0.6 — pide docs/f4a/, no la fuente).
+**F4A-2b ✅ `6c549af78` (worker Opus, verificado por mí contra el árbol).**
+Eran TRES bugs: (a) la pila no bajaba en cierres con contenido; (b) `opens` se
+anotaba con la pila ya cerrada de fin de línea (ahora se anota en el `:` de la
+clave); (c) los `//` entraban como clave (`blankComments` solo limpia `/* */`)
+→ rutas `PALETTE.// Semantic`. Fix: nivel por conteo de llaves carácter a
+carácter, string-aware, `//` corta la línea; docstring reescrito con las formas
+del corpus que provocan cada caso (ley: el comentario dice lo que el código
+hace AHORA). 6 drills nuevos (**28/28**, corridos por mí): el del cierre-inline
+probado en las DOS direcciones (viejo falla / nuevo pasa, salida pegada en su
+reporte), llaves dentro de strings, `//` con dos puntos, e integración: **0/0/0
+rutas incoherentes** sobre las 3 fuentes reales + anclas de familia 54/39/18
+(evnto 18 y no 19 porque no tiene `const MOTION` — el hallazgo de F4A-2,
+consistente). **Artefacto byte-idéntico** (--check verde sin regenerar: la
+matriz no consulta el índice y hoy hay 0 tags). **Desvío declarado y
+atribuido**: suite 1705/13 → 1711/14 — la 14ª es la carrera PREEXISTENTE del
+drill de cascade-wiring-ratchet plantando en `src/` (el worker probó la
+atribución: restaura→13, reaplica→14, los dos archivos solos 73/73). Es la
+deuda declarada post-Paso B (fixtures a tmpdir): se paga en lote propio
+(Sonnet, en vuelo al escribir esto); NO se acepta como baseline nueva.
+Lección de método (del worker, adoptada): el fixture debe tener la forma fea
+del corpus real, y todo lexer se cruza contra una verdad independiente antes
+de cerrar el lote.
 **F4A-3 — PARADA CORRECTA del worker (9/9) + split adjudicado: 3a → 3b.** El
 brief original asumía que el roster proyecta sobre familias de fuente. Medido:
 **67 familias, solo 3 con match nominal a raíz del roster y las 3 falsos
