@@ -84,7 +84,7 @@ const OVERLAY: BrandThemeModeOverlay = {
     textTertiaryColor: "var(--ds-color-neutral-600)",
     textMutedColor: "#686858",
     textDisabledColor: "#484838",
-    borderPrimaryColor: "#2E2C24",
+    borderColor: "#2E2C24",
     borderSecondaryColor: "#222018",
     borderFocusColor: "#A89880",
     linkColor: "var(--ds-color-primary)",
@@ -241,7 +241,6 @@ const OVERLAY: BrandThemeModeOverlay = {
     },
     cardComponent: {
       bg: "#1C1A16",
-      border: "#2E2C24",
     },
     layout: {
       bg: "#131210",
@@ -330,14 +329,14 @@ const PALETTE: BrandPalette = {
   infoColor: '#475569',
   infoBgColor: '#f8fafc',
 
-  borderPrimaryColor: 'rgba(0, 0, 0, 0.08)',
+  borderPrimaryColor: 'var(--ds-color-border)',
   borderSecondaryColor: 'rgba(0, 0, 0, 0.12)',
-  borderColor: 'var(--ds-color-border-primary)',
+  borderColor: 'rgba(0, 0, 0, 0.08)',
 
   borderSubtleColor:
-    'color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent)',
+    'color-mix(in srgb, var(--ds-color-border) 66.667%, transparent)',
   borderTertiaryColor:
-    'color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent)',
+    'color-mix(in srgb, var(--ds-color-border) 66.667%, transparent)',
   successBorderColor: 'color-mix(in srgb, var(--ds-color-success) 20%, transparent)',
   warningBorderColor: 'color-mix(in srgb, var(--ds-color-warning) 20%, transparent)',
   errorBorderColor: 'color-mix(in srgb, var(--ds-color-error) 20%, transparent)',
@@ -852,7 +851,7 @@ const CHROME: BrandChrome = {
    */
   cardComponent: {
     bg: '#ffffff',
-    border: 'rgba(0, 0, 0, 0.08)',
+    border: 'var(--ds-color-border)',
     shadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
     shadowHover: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },

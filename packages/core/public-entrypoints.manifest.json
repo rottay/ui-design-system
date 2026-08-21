@@ -509,8 +509,8 @@
       "budget": {
         "maxDirectSources": 2,
         "maxReachableModules": 48,
-        "maxSourceBytes": 398278,
-        "_note": "Re-medido 2026-08-20 (398278) en F4A-4: el kit de placeholders del frente F4A (+15,6 KB de comentarios en las 3 fuentes de tema) paso el techo anterior (387391, re-anclado 2026-08-19 tras las olas de identidad). Los comentarios no llegan al bundle: el artefacto compilado salio byte-identico, probado ida y vuelta en el lote. Este subpath es de los 77 granulares que se retiran en F6: el presupuesto muere con el. La nota de 2026-08-11 documentaba la pregunta correcta: el peso es brand-theme alcanzable desde una entrada use client; la respuesta es la cascada (F2-F4), no un tema mas chico."
+        "maxSourceBytes": 900000,
+        "_note": "Con aire 2026-08-21 (900000) en F4A-5, parada del worker 12/12 adjudicada por el DT: re-anclar al valor exacto medido (387391 en F4A-4a, 398278 en F4A-4) garantiza el choque del lote siguiente — ya choco dos veces. El frente F4A entero proyecta del orden de medio MB de comentarios de gobierno (kit de tags + placeholders) sobre las 3 fuentes de tema: solo la Parte 1 de F4A-5 (PALETTE) proyectaba +46138 bytes sobre un aire de 0. Los comentarios no llegan al bundle: el artefacto compilado sale byte-identico (probado ida y vuelta en F4A-3b/4/5). Este subpath es de los 77 granulares que se retiran en F6: el presupuesto muere con el. La nota de 2026-08-11 documentaba la pregunta correcta: el peso es brand-theme alcanzable desde una entrada use client; la respuesta es la cascada (F2-F4), no un tema mas chico."
       },
       "symbols": [
         {

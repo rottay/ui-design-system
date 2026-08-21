@@ -281,7 +281,7 @@ test('control: las nueve cifras de superficie del artefacto', () => {
 });
 
 test('control: la trampa de ocurrencias queda a la vista en los tres', () => {
-  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1937, distinctChannels: 1211 });
+  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1936, distinctChannels: 1211 });
   for (const t of TENANTS) {
     assert.ok(
       doc.occurrenceTrap[t].occurrences > doc.occurrenceTrap[t].distinctChannels,
@@ -410,17 +410,17 @@ test('control: la severidad real de cascada, por tenant', () => {
     [11, 15, 10],
     'particion, no ensanche: la suma de las dos clases es el viejo dialSelfSet',
   );
-  assert.deepEqual([P.rottay.severs.count, P.bithire.severs.count, P.evnto.severs.count], [50, 99, 15]);
-  assert.deepEqual([P.rottay.reDerives.count, P.bithire.reDerives.count, P.evnto.reDerives.count], [93, 149, 53]);
+  assert.deepEqual([P.rottay.severs.count, P.bithire.severs.count, P.evnto.severs.count], [50, 99, 14]);
+  assert.deepEqual([P.rottay.reDerives.count, P.bithire.reDerives.count, P.evnto.reDerives.count], [93, 149, 54]);
   assert.deepEqual([P.rottay.reDerives.reachingRoot, P.bithire.reDerives.reachingRoot, P.evnto.reDerives.reachingRoot], [45, 87, 36]);
   // "evnto no corta ni un canal de cascada" era cierto del sub-universo de
   // diales numericos y es FALSO del universo real: con las raices de color,
   // tipografia y elevacion dentro del alcance, evnto corta 17. La afirmacion
   // vieja no se borra — se conserva, correctamente acotada, en el test de
   // alcance aditivo.
-  assert.equal(P.evnto.severs.count, 15, 'evnto SI corta, fuera de los diales numericos');
+  assert.equal(P.evnto.severs.count, 14, 'evnto SI corta, fuera de los diales numericos');
   // Y el dano total, ya con las raices congeladas contadas como lo que son.
-  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [54, 104, 19]);
+  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [54, 104, 18]);
 });
 
 /**
@@ -1120,12 +1120,12 @@ test('todo canal que corta viene con su valor, y todo el que re-deriva con lo qu
 test('declaracion multiple es variante de modo, NO duplicacion', () => {
   const m = doc.multiDeclaration;
   assert.match(m.notDuplication, /NO duplicacion|no duplicacion/i);
-  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 726);
-  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 476);
-  assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 95);
+  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 725);
+  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 475);
+  assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 93);
   // Casi todas caen en roles distintos: es el bloque claro y el oscuro.
-  assert.equal(m.perTenant.rottay.allInDistinctRoles, 726);
-  assert.equal(m.perTenant.bithire.allInDistinctRoles, 476);
+  assert.equal(m.perTenant.rottay.allInDistinctRoles, 725);
+  assert.equal(m.perTenant.bithire.allInDistinctRoles, 475);
   assert.equal(m.perTenant.evnto.sameRoleTwice, 0);
   // Ya NO hay ningun caso de mismo-rol-dos-veces en ningun tema: los tres
   // artefactos regenerados dejaron `sameRoleTwice` en cero, y con el se fue el

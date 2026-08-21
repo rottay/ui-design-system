@@ -340,7 +340,7 @@
   --ds-color-bg-tertiary: #141417;
   --ds-color-border: #28282C;
   --ds-color-border-focus: rgba(255, 255, 255, 0.20);
-  --ds-color-border-primary: #28282C;
+  --ds-color-border-primary: var(--ds-color-border);
   --ds-color-border-secondary: #252529;
   --ds-color-border-subtle: #161619;
   --ds-color-border-tertiary: #161619;
@@ -1431,7 +1431,6 @@
   --ds-color-bg-tertiary: #EDEDEC;
   --ds-color-border: #E5E5E3;
   --ds-color-border-focus: rgba(10, 10, 10, 0.32);
-  --ds-color-border-primary: #E5E5E3;
   --ds-color-border-secondary: #D4D4D2;
   --ds-color-border-subtle: #EDEDEC;
   --ds-color-border-tertiary: #EDEDEC;

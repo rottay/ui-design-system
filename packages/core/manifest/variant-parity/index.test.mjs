@@ -263,14 +263,17 @@ test('pathIndex normaliza el const de esqueleto a THEME, como authoredLeafPaths'
 
 test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', () => {
   const real = build();
-  assert.deepEqual(real.matrix.leaves, { rottay: 1820, bithire: 1503, evnto: 397 });
-  assert.equal(real.matrix.union, 2613);
+  // F4A-5 (K2): el par border dejo de restatearse en los overlays de los 3
+  // temas, asi que la fuente perdio 3 hojas y el universo un slot. La pintura
+  // no se movio (36/36 pares resueltos identicos); la cuenta lexica si.
+  assert.deepEqual(real.matrix.leaves, { rottay: 1819, bithire: 1502, evnto: 396 });
+  assert.equal(real.matrix.union, 2612);
   // La interseccion AUTORADA es el ancla estatica (345); la DEL DOCUMENTO se
   // mueve con los placeholders (787 tras F4A-4) y el conteo del ratchet vive
   // pineado en el baseline, no aca: el pin estatico de un contador que baja
   // por diseno convierte cada lote bueno en rojo.
-  assert.equal(real.matrix.intersection, 345);
-  assert.equal(real.matrix.positionIntersection, 787);
+  assert.equal(real.matrix.intersection, 344);
+  assert.equal(real.matrix.positionIntersection, 786);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1061, bithire: 788, evnto: 2 });
 });
 

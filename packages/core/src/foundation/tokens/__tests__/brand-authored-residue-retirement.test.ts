@@ -337,6 +337,40 @@ type RosterMode = "default" | "light" | "dark";
  * same-length value change (e.g. #D4D4D8 -> #A4A4A8) breaks the hash even though
  * roster and declaration counts stay the same.
  */
+/**
+ * F4A-5 (K2) — canales RE-DERIVADOS despues de que estos hashes se firmaran.
+ *
+ * `--ds-color-border-primary` era un literal de marca en los tres temas; la
+ * adjudicacion K2 lo hizo DERIVAR de `--ds-color-border`, que es la raiz
+ * canonica del par. La PINTURA no se movio (se probo resolviendo la cascada:
+ * 36 de 36 pares identicos en los 3 temas x 2 scopes) — se movio la FORMA.
+ *
+ * Este roster digiere el valor CRUDO, asi que sin esta tabla los seis hashes
+ * firmados se moverian por un cambio que no es de valor. La tabla mapea la
+ * forma nueva a su PRE-IMAGEN, que es lo que los hashes firmaron: los sha256
+ * quedan EXACTAMENTE donde estaban, que es la condicion del lote.
+ *
+ * Es el mismo patron REDERIVED que F2 uso en los rosters de drenaje T2/T3.
+ */
+/** La pre-imagen es POR MODO: el literal del cuerpo y el de la restitucion del
+ *  overlay eran dos bytes distintos, y los seis hashes firmaron los dos. */
+const REDERIVED: Readonly<Record<string, Readonly<Record<string, Readonly<Record<string, string>>>>>> = {
+  rottay: { "--ds-color-border-primary": { default: "#28282C", light: "#E5E5E3" } },
+  bithire: { "--ds-color-border-primary": { default: "#D4E0EA", dark: "#253545" } },
+  evnto: { "--ds-color-border-primary": { default: "rgba(0, 0, 0, 0.08)", dark: "#2E2C24" } },
+};
+/** El valor de PRE-IMAGEN de un canal re-derivado; si no lo es, el de hoy. */
+const preImagen = (
+  slug: string,
+  channel: string,
+  mode: string,
+  value: string | undefined,
+): string | undefined => {
+  const perMode = REDERIVED[slug]?.[channel];
+  if (perMode && typeof value === "string" && value.startsWith("var(")) return perMode[mode] ?? perMode.default;
+  return value;
+};
+
 function compileRosterEffectiveHash(
   brandTheme: unknown,
   slug: string,
@@ -354,7 +388,7 @@ function compileRosterEffectiveHash(
   const vars = mode === "default" ? baseVars : { ...baseVars, ...modeVars };
   const pairs = roster
     .map((ch) => {
-      const val = vars[ch];
+      const val = preImagen(slug, ch, mode, vars[ch]);
       return val === undefined ? `${ch}=` : `${ch}=${val}`;
     })
     .sort();
@@ -1043,7 +1077,10 @@ describe("compileBrandTheme propagates the moved PALETTE channels", () => {
     expect(cssVariables["--ds-color-neutral-50"]).toBe("#fafafa");
     expect(cssVariables["--ds-color-bg-overlay"]).toBe("rgba(0, 0, 0, 0.5)");
     expect(cssVariables["--ds-color-text-primary"]).toBe("#111111");
-    expect(cssVariables["--ds-color-border-primary"]).toBe("rgba(0, 0, 0, 0.08)");
+    // K2: la forma es `var(--ds-color-border)`; su pre-imagen — y su pintura
+    // resuelta — sigue siendo este literal.
+    expect(preImagen("evnto", "--ds-color-border-primary", "default", cssVariables["--ds-color-border-primary"]))
+      .toBe("rgba(0, 0, 0, 0.08)");
     expect(cssVariables["--ds-color-success-bg"]).toBe("#f0fdf4");
   });
 

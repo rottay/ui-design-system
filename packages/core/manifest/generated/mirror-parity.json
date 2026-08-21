@@ -6,56 +6,56 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 91982,
-        "lines": 1959,
-        "sha256": "c6f581ff2ad382b947f6bfbd626c84eac2965965cc018bd69b4e5159210b25bc"
+        "bytes": 91959,
+        "lines": 1958,
+        "sha256": "4787a69a67d916b86306eeaaa1cc9c0927c313ae5f26178a1f98f711f849c117"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 97008,
-        "lines": 1734,
-        "sha256": "ae76bde4a4a7a793736f45a10ca21c4e0d5cf13800c7fc907d2da1497714eccd"
+        "bytes": 96985,
+        "lines": 1733,
+        "sha256": "3168605f4e74919e547d4eaa410dbbf1c26c0e0e6da2efcbcd3235a87e23d247"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30368,
-        "lines": 586,
-        "sha256": "0b34f64be34aa34bb77a6b6cc75ab8034c66e88dc638f0f4643d80b958ea71e4"
+        "bytes": 30278,
+        "lines": 584,
+        "sha256": "9a8d09143b981fcec98ccaf2838aaa0cdf2e99f603874036d24fd7dd51120653"
       }
     ],
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 86401,
-        "lines": 2593,
-        "sha256": "05f3f1d6745dc0ca3ce092f68e8095f19fa6d670ae3f0a5c8440b86a42bda52a"
+        "bytes": 86381,
+        "lines": 2592,
+        "sha256": "d3bca4d1429a6d1e3f4991c6ea49ff57d571de310acb9a38476a2e34f5e9f737"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 98003,
-        "lines": 2446,
-        "sha256": "cfaa0576603027cb98cd9adae6d3d97a95d9f3ef4ed01fe50b7e43d7e1491e77"
+        "bytes": 97983,
+        "lines": 2445,
+        "sha256": "b64473771d30a4a29b54d2086334608965e8107691221aff28bf874dd50965be"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 34277,
-        "lines": 990,
-        "sha256": "45ea4c7a3bebb0963513b44bb2a7fc687180439b6352fce999e8ec75153a5684"
+        "bytes": 34224,
+        "lines": 989,
+        "sha256": "5ad587381118caeaa227f4d5e73f9273d5f36a89c5c08eb66680c93a1c9d54d6"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1937,
+      "occurrences": 1936,
       "distinctChannels": 1211
     },
     "bithire": {
-      "occurrences": 1710,
+      "occurrences": 1709,
       "distinctChannels": 1234
     },
     "evnto": {
-      "occurrences": 564,
+      "occurrences": 562,
       "distinctChannels": 469
     }
   },
@@ -1868,8 +1868,8 @@
   },
   "valueParity": {
     "commonChannels": 431,
-    "identicalValue": 156,
-    "divergentValue": 275,
+    "identicalValue": 157,
+    "divergentValue": 274,
     "identicalRoleShape": 289,
     "divergentRoleShape": 142,
     "divergentRoleShapeChannels": [
@@ -1962,11 +1962,19 @@
         }
       },
       {
+        "channel": "--ds-card-border",
+        "roles": {
+          "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
         "channel": "--ds-card-border-color",
         "roles": {
           "rottay": "base,overlay-mode",
           "bithire": "base",
-          "evnto": "base,overlay-mode"
+          "evnto": "base"
         }
       },
       {
@@ -2075,14 +2083,6 @@
       },
       {
         "channel": "--ds-color-accent-900",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-border",
         "roles": {
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
@@ -10568,7 +10568,7 @@
       },
       "evnto": {
         "declaredInCascade": 78,
-        "severedTotal": 19,
+        "severedTotal": 18,
         "rootPinned": {
           "count": 6,
           "byReason": {
@@ -10722,7 +10722,7 @@
           ]
         },
         "severs": {
-          "count": 15,
+          "count": 14,
           "channels": [
             {
               "channel": "--ds-button-ghost-bg",
@@ -10761,13 +10761,6 @@
               "channel": "--ds-button-primary-shadow",
               "values": [
                 "base=0 1px 2px rgba(0, 0, 0, 0.08)"
-              ]
-            },
-            {
-              "channel": "--ds-card-border",
-              "values": [
-                "base=rgba(0, 0, 0, 0.08)",
-                "overlay-mode=#2E2C24"
               ]
             },
             {
@@ -10822,7 +10815,7 @@
           ]
         },
         "reDerives": {
-          "count": 53,
+          "count": 54,
           "reachingRoot": 36,
           "reachingLiveRoot": 22,
           "mixedRoleValues": 1,
@@ -10842,6 +10835,16 @@
               "channel": "--ds-button-secondary-shadow",
               "reads": [
                 "--ds-shadow-button-rest"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-card-border",
+              "reads": [
+                "--ds-color-border"
               ],
               "reachesRoot": false,
               "mixed": false,
@@ -11420,20 +11423,20 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 726,
-        "allInDistinctRoles": 726,
+        "channelsDeclaredMoreThanOnce": 725,
+        "allInDistinctRoles": 725,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 476,
-        "allInDistinctRoles": 476,
+        "channelsDeclaredMoreThanOnce": 475,
+        "allInDistinctRoles": 475,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 95,
-        "allInDistinctRoles": 95,
+        "channelsDeclaredMoreThanOnce": 93,
+        "allInDistinctRoles": 93,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }
@@ -11443,32 +11446,32 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1820,
-      "bithire": 1503,
-      "evnto": 397
+      "rottay": 1819,
+      "bithire": 1502,
+      "evnto": 396
     },
-    "union": 2613,
-    "intersection": 345,
+    "union": 2612,
+    "intersection": 344,
     "intersectionPct": 13.2,
     "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 712,
-        "union": 2611,
-        "pctOfUnion": 27.3,
-        "pctOfSmaller": 47.4
+        "shared": 711,
+        "union": 2610,
+        "pctOfUnion": 27.2,
+        "pctOfSmaller": 47.3
       },
       "rottay+evnto": {
-        "shared": 392,
-        "union": 1825,
-        "pctOfUnion": 21.5,
+        "shared": 391,
+        "union": 1824,
+        "pctOfUnion": 21.4,
         "pctOfSmaller": 98.7
       },
       "bithire+evnto": {
-        "shared": 348,
-        "union": 1552,
+        "shared": 347,
+        "union": 1551,
         "pctOfUnion": 22.4,
-        "pctOfSmaller": 87.7
+        "pctOfSmaller": 87.6
       }
     },
     "exclusive": {
