@@ -3554,28 +3554,92 @@ const PALETTE: BrandPalette = {
  * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
 const TYPOGRAPHY: BrandTypography = {
+  /**
+   * @domicile seed
+   * @governor dial: typography.families
+   */
   fontFamilyBase:
     "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+  /**
+   * @domicile seed
+   * @governor dial: typography.pairing
+   */
   fontFamilyHeading:
     "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   fontFamilyMono:
     "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)",
+  /**
+   * @domicile seed
+   * @governor dial: typography.families
+   */
   fontFamilyDisplay:
     "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   headingWeightBias: 'normal',
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   headingLetterSpacing: '-0.025em',
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   labelStyle: 'sentence',
   letterSpacing: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     display: '-0.025em',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     heading: '-0.015em',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     body: '0',
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mono: '0',
   },
   lineHeight: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     display: 1.1,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     heading: 1.2,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     body: 1.6,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     tight: 1.25,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     relaxed: 1.75,
   },
 };
@@ -3738,10 +3802,22 @@ const MOTION: BrandMotion = {
  */
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   mountDuration: 800,
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   lineStyle: 'smooth',
   showDots: false,
   useGradientFill: true,
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   tooltipStyle: 'minimal',
 };
 
@@ -4087,11 +4163,35 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   accent: {
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     barPosition: 'top',
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     barThickness: 2,
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     barStyle: 'gradient',
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     iconContainerShape: 'rounded',
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     badgeShape: 'rounded',
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     dividerStyle: 'solid',
   },
   /**
@@ -8896,23 +8996,55 @@ const CAPABILITIES: BrandCapabilityCatalog = {
   // catalog that exists to prevent silent gaps becomes the thing asserting
   // one. When the last consumer goes, this flips — and
   // `tests/capability-honesty.test.ts` fails until it does.
+  /**
+   * @domicile pro-expert
+   * @governor capability: motion (estado autorado: active)
+   */
   motion: { status: 'active' },
+  /**
+   * @domicile pro-expert
+   * @governor capability: recipes (estado autorado: active)
+   */
   recipes: { status: 'active' },
   // Sighted selection pending. Rottay is the neutral baseline, so an
   // expressive profile is a real decision rather than a default, and no
   // governed id has been sighted against this canvas yet.
   expressive: {
+    /**
+     * @domicile pro-expert
+     * @governor capability: expressive (estado autorado: unassigned)
+     */
     status: 'unassigned',
+    /**
+     * @domicile pro-expert
+     * @governor capability: expressive (estado autorado: unassigned)
+     */
     reason: 'pending-selection',
     note: 'No expressive profile sighted against the Rottay dark canvas yet.',
   },
   responsive: {
+    /**
+     * @domicile pro-expert
+     * @governor capability: responsive (estado autorado: disabled)
+     */
     status: 'disabled',
+    /**
+     * @domicile pro-expert
+     * @governor capability: responsive (estado autorado: disabled)
+     */
     reason: 'not-authored',
     note: 'Rottay rides the baseline container ladder; no posture override.',
   },
   engineBridge: {
+    /**
+     * @domicile pro-expert
+     * @governor capability: engineBridge (estado autorado: disabled)
+     */
     status: 'disabled',
+    /**
+     * @domicile pro-expert
+     * @governor capability: engineBridge (estado autorado: disabled)
+     */
     reason: 'not-authored',
     note: 'No engine-specific bridge values; modern reads the compiled tokens directly.',
   },
@@ -8938,9 +9070,17 @@ export const rottayBrandTheme: FirstPartyBrandTheme = {
   appearance: { defaultMode: DEFAULT_MODE },
 
   // modes — the other mode, as a typed overlay the compiler merges and diffs.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   modes: { [OVERLAY_MODE]: OVERLAY },
 
   // recipes — governed recipe-profile selection (DS-S001).
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   recipes: RECIPES,
 
   // expressive — governed expressive-profile selection (C1b).
@@ -8951,23 +9091,86 @@ export const rottayBrandTheme: FirstPartyBrandTheme = {
    */
 
   // palette — ramps and semantic colour channels.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   palette: PALETTE,
 
   // typography — shipped font packs and heading/label strategy.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   typography: TYPOGRAPHY,
 
   // surfaces — radius, elevation, glass/gradient/overlay posture.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   surfaces: SURFACES,
 
   // motion — compatibility choreography dial, governed as a capability.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   motion: MOTION,
 
   // charts — chart personality posture.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   charts: CHARTS,
 
   // chrome — per-component chrome channels.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   chrome: CHROME,
 
   // capabilities — explicit disposition for every optional family.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   capabilities: CAPABILITIES,
+  /**
+   * @placeholder CAPABILITIES.recipes.note
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CAPABILITIES.recipes.reason
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHARTS.colorScheme
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder THEME.expressive
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder OVERLAY.typography
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CHROME.toolbar
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder EXPRESSIVE
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
 };

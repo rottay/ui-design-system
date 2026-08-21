@@ -304,7 +304,14 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // 209 placeholders de hoja sobre 133 slots mas, y `divergentSlots` baja
   // 172 -> 39. Sexta vez el mismo espejo, y la superficie casi agotada: quedan
   // 39 slots divergentes para F4A-13..15.
-  assert.equal(real.matrix.positionIntersection, 2520);
+  // F4A-13: 2520 -> 2526. El cierre del frente (capacidades, vocabulario de
+  // forma, TYPOGRAPHY y el esqueleto THEME) es casi todo TAG y casi nada
+  // placeholder: 141 tags contra 20 placeholders, que dan posicion sobre 6
+  // slots. `divergentSlots` baja 39 -> 33 y ahi se queda: lo que resta son
+  // slots que ningun tema autora en ninguno de los tres, no ausencias
+  // parciales. El 0 real se certifica sobre keypaths evaluados en F4A-close,
+  // no con este contador.
+  assert.equal(real.matrix.positionIntersection, 2526);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 

@@ -541,10 +541,22 @@ const OVERLAY: BrandThemeModeOverlay = {
    */
   typography: {
     letterSpacing: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       display: "-0.02em",
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       heading: "-0.01em",
     },
     lineHeight: {
+      /**
+       * @domicile seed
+       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       */
       body: 1.6,
     },
   },
@@ -3496,28 +3508,92 @@ const PALETTE: BrandPalette = {
  * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
 const TYPOGRAPHY: BrandTypography = {
+  /**
+   * @domicile seed
+   * @governor dial: typography.families
+   */
   fontFamilyBase:
     "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+  /**
+   * @domicile seed
+   * @governor dial: typography.pairing
+   */
   fontFamilyHeading:
     "var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   fontFamilyMono:
     "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)",
+  /**
+   * @domicile seed
+   * @governor dial: typography.families
+   */
   fontFamilyDisplay:
     "var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   headingWeightBias: "heavier",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   headingLetterSpacing: "-0.025em",
+  /**
+   * @domicile seed
+   * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+   */
   labelStyle: "sentence",
   letterSpacing: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     display: "-0.035em",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     heading: "-0.025em",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     body: "0",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     mono: "0",
   },
   lineHeight: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     display: 1.1,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     heading: 1.25,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     body: 1.55,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     tight: 1.25,
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     relaxed: 1.75,
   },
 };
@@ -4026,13 +4102,29 @@ const MOTION: BrandMotion = {
  */
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   mountDuration: 400,
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   lineStyle: "smooth",
   showDots: false,
   useGradientFill: true,
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   tooltipStyle: "detailed",
   // The monochrome family keeps dense recruiting charts legible; semantic
   // highlights still use success/warning/error at the call site.
+  /**
+   * @domicile unassigned
+   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   */
   colorScheme: "monochrome",
 };
 
@@ -4097,11 +4189,35 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   accent: {
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     barPosition: "none",
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     barThickness: 0,
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     barStyle: "solid",
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     iconContainerShape: "circle",
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     badgeShape: "pill",
+    /**
+     * @domicile unassigned
+     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     */
     dividerStyle: "solid",
   },
   /**
@@ -4676,17 +4792,65 @@ const CHROME: BrandChrome = {
    * @governor none — gap aceptado: bithire no autora la familia skeleton (gobernaria chrome.families)
    */
   toolbar: {
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     bg: "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     border: "#D4E0EA",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     borderBottom: "color-mix(in srgb, #D4E0EA 82%, transparent)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     color: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     shadow: "0 1px 2px rgba(20, 40, 59, 0.04)",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     radius: "8px",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     padding: "0.75rem 1rem",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     gap: "0.75rem",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     controlBg: "#ffffff",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     controlBorder: "#C4D2DE",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     controlColor: "#14283B",
+    /**
+     * @domicile seed
+     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+     */
     divider: "#E3EAF0",
   },
   filterPill: {
@@ -8842,16 +9006,44 @@ const CAPABILITIES: BrandCapabilityCatalog = {
   // `useSpring: false`, which is itself a live decision the compiler reads
   // to SUPPRESS spring lowering — a channel that can be switched off is by
   // definition a channel that is on.
+  /**
+   * @domicile pro-expert
+   * @governor capability: motion (estado autorado: active)
+   */
   motion: { status: 'active' },
+  /**
+   * @domicile pro-expert
+   * @governor capability: recipes (estado autorado: active)
+   */
   recipes: { status: 'active' },
+  /**
+   * @domicile pro-expert
+   * @governor capability: expressive (estado autorado: active)
+   */
   expressive: { status: 'active' },
   responsive: {
+    /**
+     * @domicile pro-expert
+     * @governor capability: responsive (estado autorado: disabled)
+     */
     status: 'disabled',
+    /**
+     * @domicile pro-expert
+     * @governor capability: responsive (estado autorado: disabled)
+     */
     reason: 'not-authored',
     note: 'BitHire rides the baseline container ladder; no posture override.',
   },
   engineBridge: {
+    /**
+     * @domicile pro-expert
+     * @governor capability: engineBridge (estado autorado: disabled)
+     */
     status: 'disabled',
+    /**
+     * @domicile pro-expert
+     * @governor capability: engineBridge (estado autorado: disabled)
+     */
     reason: 'not-authored',
     note: 'No engine-specific bridge values; modern reads the compiled tokens directly.',
   },
@@ -8877,32 +9069,92 @@ export const bithireBrandTheme: FirstPartyBrandTheme = {
   appearance: { defaultMode: DEFAULT_MODE },
 
   // modes — the other mode, as a typed overlay the compiler merges and diffs.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   modes: { [OVERLAY_MODE]: OVERLAY },
 
   // recipes — governed recipe-profile selection (DS-S001).
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   recipes: RECIPES,
 
   // expressive — governed expressive-profile selection (C1b).
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   expressive: EXPRESSIVE,
 
   // palette — ramps and semantic colour channels.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   palette: PALETTE,
 
   // typography — shipped font packs and heading/label strategy.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   typography: TYPOGRAPHY,
 
   // surfaces — radius, elevation, glass/gradient/overlay posture.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   surfaces: SURFACES,
 
   // motion — compatibility choreography dial, governed as a capability.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   motion: MOTION,
 
   // charts — chart personality posture.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   charts: CHARTS,
 
   // chrome — per-component chrome channels.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   chrome: CHROME,
 
   // capabilities — explicit disposition for every optional family.
+  /**
+   * @domicile unassigned
+   * @governor el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)
+   */
   capabilities: CAPABILITIES,
+  /**
+   * @placeholder CAPABILITIES.expressive.note
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CAPABILITIES.expressive.reason
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CAPABILITIES.recipes.note
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
+  /**
+   * @placeholder CAPABILITIES.recipes.reason
+   * @domicile unassigned
+   * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+   */
 };
