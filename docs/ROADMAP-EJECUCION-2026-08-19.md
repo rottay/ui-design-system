@@ -906,6 +906,49 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-8 ✅ (worker Opus + cierre con DOS ediciones del DT; verificado por el DT
+contra el árbol).** Tags por hoja de **SURFACES + THEME**: **96 tags** por
+subárbol uniforme maximal (rottay 20/30, bithire 75/94, evnto 1/2) + **59
+placeholders cubriendo 189 ausencias** con TRES mecanismos medidos (19 evnto
+aportadas por el preset congelado `EVNTO_CANONICAL_SURFACES` via spread —
+escribirles "lo resuelve el piso" habría sido FALSO; precedente: el placeholder
+de MOTION ya usa esa fórmula). **Desviación de premisa medida y aceptada:**
+evnto SURFACES autora **2 hojas, no 21** (el mapa cuenta evaluado, el léxico
+autorado — la ley de las dos unidades otra vez). Trampa de forma atrapada por
+la verificación previa del worker: `gradients` en una línea colapsó a UN tag
+con la división medida declarada (cero reformateo — el lote es solo
+comentarios). **Parada 17/17 correcta y luego AUTO-CORREGIDA por el worker:**
+su "adaptive-overlay al ras" era falso positivo de método (tamaño ≠ alcance —
+ese entrypoint no toca las fuentes de tema; medido con gate antes/después:
+18 entrypoints crecen +24849, adaptive-overlay clavado). **Adjudicación MÍA
+que queda en pie**: los techos se subieron para el FRENTE (proyección 264 KB
+restante: divider/typography/badge/tag/card/presence/skeleton/motion/toast
+reventaban en uno o dos lotes) — **13 techos se quedan;
+`./patterns/adaptive-overlay` se REVIRTIÓ a 338697** (nunca alcanza estas
+fuentes: ruido de gobierno que se limpia solo). **Fix del parser MÍO, en dos actos** (instrumento gobernado = pieza
+del DT): (1) `pathIndex` exigía `^const` y el esqueleto es `export const
+…BrandTheme = {` → ninguna hoja THEME.* podía recibir tag; (2) con la raíz
+abierta, la coherencia F4A-2b detectó la ruta fantasma `THEME.surfaces` en
+evnto (`surfaces: { ...EVNTO_CANONICAL_SURFACES, ...SURFACES }`) — segunda
+edición MÍA: la composición por spread inline CABLEA, no autora, y ya no anota
+ruta (la llave sigue contando para el nivel; `malas` medidas: 0 en los 3).
+Radio cero medido por el worker (contadores idénticos), por mí (ningún drill
+usa `export const` en fixtures — grep), y por la coherencia misma. Con el fix, los 3 tags
+`THEME.appearance.defaultMode` entraron (kit estándar; adjudicación MÍA: NO es
+metadato inerte — selecciona el bloque emitido; METADATA_EXCLUSION lo
+escondería del denominador de pintura y eso sí sería falso).
+**Contadores medidos y verificados por mí:** `untaggedAuthoredLeaves`
+2295→**2166** (−126 SURFACES exactas − 3 THEME tras el fix), `divergentSlots`
+1519→**1414** (−105, espejo con positionIntersection 1040→**1145**, re-anclado
+medido por el worker), universo **2559** e intersección **342** clavados,
+tagRegistry 609→**767** (+155 del worker + 3 míos). **Baja #8 del baseline,
+bajada por MÍ.** Byte-identidad probada ×3 builds reales por el worker + 1 mío
+tras mis ediciones. Cadena completa verde; digest reconciliation
+`75835e120733` (CUARTA vez huérfano — la automatización queda escrita como
+deuda de F4A-close). Batería: rosters 1304/1304 enteros sin moverse, mirror
+44/44, root-exposure 13/13, pierna 1 MÍA **1717/13 por nombre** (par export-*
+pair-aware). gat-07 re-sellado por el DT: `bb6b0bb1cf88…`. gates:ci **88+2 verdes**.
+**Siguiente lote: F4A-9** (CHROME.controls, la 2ª más grande — SOLA).
 **F4A-7 ✅ (worker Opus; parada 16/16 correcta y adjudicada; verificado por el
 DT contra el árbol).** Tags por hoja de **OVERLAY.palette + OVERLAY.surfaces**
 en los 3 temas: **240 docblocks** (por subárbol uniforme maximal, NUNCA a

@@ -269,8 +269,18 @@ clavado, tagRegistry 281→**609** (Baja #7 del DT). Byte-identidad ×3 builds.
 **La deuda cra-12 se manifestó**: su planta en el árbol real correa los drills
 export-* (par roto decidido por timing — slot único pair-aware en la baseline
 de la suite; F4A-7 NO implicado: la pierna del worker en el mismo árbol dio el
-resultado viejo). Suite 1717/13 por nombre. gat-07 `bfa9b8724a27…`. **Siguiente
-lote: F4A-8** (worker, brief TUYO): SURFACES + THEME — mismo molde de F4A-7.
+resultado viejo). Suite 1717/13 por nombre. gat-07 `bfa9b8724a27…`. **Estado
+al cierre: F4A-8 ✅ (worker Opus + 3 ediciones del DT).** 96 tags + 59
+placeholders (TRES mecanismos medidos: preset congelado evnto / contraparte en
+otro plano / piso). **La parada 17/17 era falso positivo del worker** (tamaño ≠
+alcance: adaptive-overlay no toca las fuentes — techo revertido; los otros 13
+quedan para el frente). **Fix del parser MÍO** (`export const` no abría raíz →
+THEME.* intaggeable; un carácter, radio cero medido ×2) + 3 tags
+`THEME.appearance.defaultMode` (adjudicación: NO es metadato — selecciona el
+bloque emitido). `untaggedAuthoredLeaves` 2295→**2166**, `divergentSlots`
+1519→**1414** (espejo 1040→1145), tagRegistry 609→**767** (Baja #8). Byte-
+identidad ×3 del worker + 1 mía. gat-07 `bb6b0bb1cf88…`. **Siguiente lote:
+F4A-9** (worker, brief TUYO): CHROME.controls SOLA (la 2ª más grande).
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
