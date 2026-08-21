@@ -209,7 +209,27 @@ lote: F4A-6 (worker, brief TUYO):** K3 — raíz NUEVA `--ds-color-text-page`
 (rottay `#A0A0A5`/`#6B6B6B`, bithire `#53697E`/`#9aacbf`, evnto `#3d3d3d` SIN
 dark) + los canales de tinta derivan; brief borrador en `/tmp/f4a-6-brief.md`
 — completar el mecanismo root-catalog con la forma que usó K1. Packet
-declaration obligatoria; firmados solo REDERIVED.
+declaration obligatoria; firmados solo REDERIVED. **Estado al cierre: F4A-6 ✅
+= K3** (raíz autorada con rootId `tier.page.ink` + lowering nuevo en el
+compilador; **35 canales de tinta recableados** en rottay, 7 intactos por el
+filtro (a) de F2, 8 hojas ajenas dispuestas con razón; cero-delta **136/136**
+por resolución de cascada). Cierre F4A-6b con DOS adjudicaciones del DT: (a)
+exposición `internal-head` hasta F4B como sus 5 hermanas `tier.*.fg`; (b)
+REDERIVED T1/T2/T3 autorizado — **22 hashes idénticos vs HEAD** probado
+contra `git show`. Adjudicación extra del DT: `--ds-color-text-page` entró a
+`TENANT_THEME_REFERENCE_TOKENS` (opción A; la B era bendecir la regresión de
+9 tests). Contadores: `divergentSlots` 1720→**1694** (Baja #5),
+`untaggedAuthoredLeaves` 2772→**2712**, `tagRegistry` 216→**252**, universo
+2612→**2586**, intersección autorada 344 intacta. Suite **1717/13** por
+nombre (×3 corridas del DT). gat-07 `145083775613…`. **Lección fijada: la
+cadena de regeneración incluye reads-ledger** (dos artefactos stale detectados
+en ESTE lote: el censo lo marcó la suite; el ledger `reads-adjudication.json`
+lo marcó gates:ci) — cadena completa en §5.2 ya corregida. **Siguiente lote:
+K1 PROPIO (DT, sin worker):** descongelar `--ds-color-primary` — 32 canales
+CHROME idénticos medidos (30 rottay + 2 evnto) + `--ds-button-primary-bg` que
+es él mismo rootFrozen (adjudicación, no recableo) + filas REDERIVED donde
+choque con T2/T3; la marca dialeable se escribe en root-catalog (adjudicado
+en F4A-5). Después F4A-7…15 por `/tmp/f4a-lotes-7-13.md`.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
@@ -227,17 +247,25 @@ de los 20 controles, receipts de 8 puntos, §7) → `F2-asimétrico` → `F3` �
 1. **Node 22 + env siempre**:
    `export PATH=/Users/daniel/.nvm/versions/node/v22.17.0/bin:$PATH`
    `export DOCS_ENGINEERING_ROOT=/Users/daniel/Developer/Rottay/docs-engineering`
-2. **Cadena de regeneración**: censo → reconciliation → kimi → **controls** →
-   catalog → **gat-07 SIEMPRE ÚLTIMO Y LO SELLÁS VOS**
+2. **Cadena de regeneración** (F4A-6 la fijó COMPLETA — dos artefactos stale
+   en ese lote lo demostraron): censo → reconciliation → kimi → **controls** →
+   catalog → **fanout-facts** → **mirror-parity** → **variant-parity** →
+   **reads-ledger** (`reads-adjudication.json`: su `basedOnManifestDigest` debe
+   ser el sha256 del `hooks-manifest.json` vigente; si el lote corrió
+   `hooks:generate`, re-anclarlo) → **gat-07 SIEMPRE ÚLTIMO Y LO SELLÁS VOS**
    (`node scripts/evidence/gat-07-exact-proof/index.mjs --write` luego
-   `--check-artifact`, desde `packages/core`; digest vigente post-W3:
-   `9374cb75…`). El worker corre `gat07:check` y reporta; nunca sella.
+   `--check-artifact`, desde `packages/core`; digest vigente post-F4A-6:
+   `145083775613…` — se mueve con cada lote que toca la cadena, el vigente es
+   el del §13 más reciente). El worker corre `gat07:check` y reporta; nunca
+   sella.
 3. **gates:ci**: `pnpm --filter @rottay/design-system gates:ci` desde la raíz
-   del repo, ~10-18 min, EN BACKGROUND. Verde = "87 blocking gate(s) passed" +
+   del repo, ~10-18 min, EN BACKGROUND. Verde = "88 blocking gate(s) passed" +
    2 excluded visibles con sus textos (channel-liveness, lane-control-drills —
-   re-adjudicados a F4A/F4B + F2-asimétrico). Va a 88 con F4A-2.
-4. **Suite**: 1683 tests / 13 fallas conocidas, comparar POR NOMBRE contra
-   baseline. lane-control-drills 10/13 NO crece. Si aparece
+   re-adjudicados a F4A/F4B + F2-asimétrico).
+4. **Suite**: pierna 1 = `node --test "scripts/**/*.test.mjs" "manifest/**/*.test.mjs"`
+   desde `packages/core` (NO vitest); 1717 tests / 13 fallas conocidas,
+   comparar POR NOMBRE contra baseline (`/tmp/f4a-5-fallas-baseline13.txt` o la
+   vigente). lane-control-drills 10/13 NO crece. Si aparece
    `brand-authored-residue-retirement` rojo NO es flake: es el mecanismo del
    par border. Build COMPLETO (`pnpm build` en packages/core) antes de
    cualquier batería — dist parcial = falsos rojos.

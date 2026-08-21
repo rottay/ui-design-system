@@ -906,6 +906,72 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-6 ✅ (worker Opus + cierre F4A-6b con DOS adjudicaciones mías;
+verificado por el DT contra el árbol).** K3 ejecutado: **raíz NUEVA
+`--ds-color-text-page` autorada** (rootId `tier.page.ink`, campo tipado
+`palette.textPageColor`, lowering nuevo en el compilador — colisión verificada
+por grep antes de escribir): rottay `#A0A0A5` base/`#6B6B6B` light, bithire
+`#53697E` base/`#9aacbf` dark, evnto `#3d3d3d` base **SIN dark** (mis rulings,
+conservados). **35 canales de tinta recableados** en rottay a
+`var(--ds-color-text-page)` (con restitución de overlay colapsada); **7
+intactos** por el filtro (a) de F2 (coincidencia de valor ≠ derivación: las
+raíces rivales y sus rampas); **8 hojas ajenas enumeradas y dispuestas con
+razón** (su canal no está entre los 42 medidos). **Cero-delta 136/136** por
+resolución de cascada (42 canales × 3 temas × 2 scopes contra HEAD);
+restauración ida y vuelta ✓; los 4 sitios multi-clave hechos a mano con el
+cuidado correcto (`color:` sí, `text:` no — mismo valor, canales distintos);
+0 rutas incoherentes (su propio drill de F4A-2b lo detectó y lo removió).
+La cadena arrastró `hooks-manifest.json` (+3 líneas, el gate pidió
+`hooks:generate`) y `manifest/index.json` (`generator --sync`; 36/36 y
+CONSTITUTION_READY) — **reportado, no escondido**. Negativo nombrado:
+`surface.declares` +1 en los tres (una raíz autorada ES un canal más —
+esperada-móvil); severs rottay 50→**49** (mejora), reDerives 93→**94**.
+Contadores (verificados por mí contra el artefacto): universo 2612→**2586**,
+hojas 1819/1502/396 → **1786/1504/397**, intersección autorada **344
+intacta**, `divergentSlots` 1720→**1694**, `untaggedAuthoredLeaves`
+2772→**2712**, `tagRegistry` 216→**252**, failures 0. **Baja #5 del baseline,
+bajada por MÍ.** gat-07 **re-sellado por el DT**: `145083775613…` (el sello
+final; hubo uno intermedio, `1b6fe22df0fd…`, que quedó viejo al curar el
+ledger de reads — ver abajo).
+**Las dos paradas del worker (14/14 correctas), adjudicadas:** (a) la
+exposición de la raíz queda **`internal-head` hasta F4B** — es lo que hacen
+sus cinco hermanas de tinta `tier.*.fg` y no viola la invariante viva (las 26
+tenant-dial existen TODAS con control); F4B la reclasifica cuando el dial
+aterrice (el worker corrigió por medición: `channelStatus` es
+`solo-artefacto`, no `existe` — la frescura mandó); root-exposure-gate **exit
+0** con los conteos re-anclados (26/28/10). (b) **REDERIVED T1/T2/T3
+AUTORIZADO por mí y ejecutado**: patrón R35 roster por roster, **22 hashes
+firmados IDÉNTICOS vs HEAD, probado mecánicamente contra `git show`** (el
+censo de T3 movió 182→164 porque los 18 canales quedaron idénticos entre
+modos — el overlay dejó de restatearlos, exacto); `rottay-t1-mass-drain`
+548/548. **Y la parada que me tocó a MÍ: `validateTenantThemeDocument`
+rechazaba `var(--ds-color-text-page)` como unsafe_value (9 tests rojos)** —
+el worker falsó su propia hipótesis (allowlist ≠ exposure: medido, no la usó)
+y presentó (A) agregar a la allowlist / (B) re-anclar los 9 = bendecir la
+regresión (uno es el censo de la superficie de rechazo, creció de 5 a 7).
+**Adjudicación mía: (A)** — `--ds-color-text-page` entró a
+`TENANT_THEME_REFERENCE_TOKENS` (raíz autorada por el frente con valor
+gobernado; la identidad static=DB no se angosta para que quepa el trabajo;
+además F4B la lleva a tenant-dial con consumidores DB). Los 9 volvieron
+verdes (19/19 en los archivos de la puerta, corridos por mí). Suite pierna 1,
+MI corrida: **1717/13, fallas por nombre idénticas a las 13 conocidas, cero
+nuevas** (con una lección mía que la suite detectó: mi línea de la allowlist
+dejó el censo stale DESPUÉS de la cadena del worker — el pin "the full check
+passes" lo marcó; re-regeneré la cadena completa yo, sin saltarme
+fanout-facts ni reconciliation esta vez). Y una segunda lección que me
+detectó **gates:ci** ya corriendo para el commit: el ledger
+`reads-adjudication.json` quedó con `basedOnManifestDigest` viejo tras el
+`hooks:generate` del worker — verifiqué cobertura exacta en ambas direcciones
+(2607/2607 rows, cero sin fila, cero sobrantes; `--ds-color-text-page` NO es
+hook fenced, correcto) y lo re-anclé yo a `302fe9aa3122e453` (sha256 del
+hooks-manifest vigente), con gat-07 sellado otra vez y pierna 1 en tercera
+corrida (1717/13 idéntico, diff de nombres vacío). La cadena completa queda
+FIJADA: censo → reconciliation → kimi → controls → catalog → fanout-facts →
+mirror-parity → variant-parity → **reads-ledger** → gat-07 (siempre último).
+**Siguiente lote: K1 propio** (descongelar
+`--ds-color-primary`: 32 canales CHROME + `--ds-button-primary-bg` rootFrozen
+él mismo + filas REDERIVED; la marca dialeable vive en root-catalog —
+adjudicado en F4A-5) y después F4A-7…15 por `/tmp/f4a-lotes-7-13.md`.
 **F4A-5b ✅ (worker Opus; verificado por el DT contra el árbol; incluye un
 defecto semántico que encontré en verificación y corregí YO en el cierre).**
 PALETTE etiquetada: **91 docblocks nuevos = 29 tags + 62 placeholders de
