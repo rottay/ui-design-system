@@ -18,6 +18,13 @@ detalle detrás de cada asentamiento.
 - `roster-variantes.json` / `roster-variantes.md` — F4A-1c (worker Opus,
   verificado por el DT): el roster del esquema, 66 raíces × 3 temas = 198
   entradas, schemaVersion 3, BLOCKED 0. Entrada de trabajo de F4A-2…F4A-15.
+- `mapa-familia-canales.json` / `mapa-familia-canales.md` — F4A-3a (worker
+  Opus, read-only, verificado por el DT): el plano familia → canales →
+  **control**, medido por sonda por hoja (3.726 compilaciones). 115 pares
+  familia × tema: 33 limpias (640 hojas) / 29 mixtas entrelazadas (2.706) /
+  53 sin control (380). Hallazgo: el plano canal → raíz-de-cascada NO existe
+  en ningún artefacto (root-checklists atribuye a CONTROL; intersección con
+  las 66 raíces del roster vacía). Insumo de F4A-3b.
 
 Origen: `/tmp/f4a-1-*.md`, `/tmp/f4a-1c-roster-draft.*` (2026-08-20).
 

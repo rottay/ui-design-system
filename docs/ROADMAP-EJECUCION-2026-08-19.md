@@ -862,6 +862,47 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
+**F4A-3 — PARADA CORRECTA del worker (9/9) + split adjudicado: 3a → 3b.** El
+brief original asumía que el roster proyecta sobre familias de fuente. Medido:
+**67 familias, solo 3 con match nominal a raíz del roster y las 3 falsos
+amigos; 64 sin proyección (82% de las hojas)**. Tag-por-familia hubiera sido
+promediar (prohibido); tag-por-hoja = ~3.062 docblocks (no es el kit). El
+worker citó la parte 3 §1 contra mi brief — correctamente: la parada ya estaba
+contenida en mi propia adjudicación. Adjudicación DT: la cola no se reordena;
+F4A-3 se divide EN SITIO: **3a** (el plano que falta, read-only) → **3b** (el
+canon de comentarios, ahora con insumo real). Bonus verificado de la parada:
+banners ya canónicos (0 trabajo), orden alfabético de consts NO-OP medido (0
+movimientos — cada sección tiene exactamente un const de decisión), residuo
+esqueleto 35 hojas `THEME.*`. **Nota para el dueño:** existe un `stash@{0}`
+(WIP de otra época, rutas `src/tokens/`/`src/tenancy/` que ya no existen) —
+ni el worker ni yo lo tocamos; dropearlo o no es llamada del dueño.
+**F4A-3a ✅ (worker Opus, read-only, verificado por el DT contra el JSON — NO
+de palabra).** El plano medido: `docs/f4a/mapa-familia-canales.{json,md}`.
+Método **sonda por hoja** (mutar 1 hoja con centinela, recompilar, diff de
+canales cambiados/agregados/quitados): **3.726 compilaciones, ~19 ms, 0
+errores**. Anclas: léxicas 1820/1503/397 EXACTAS; partición evaluada
+1811/1493/422 exacta. **Hallazgo estructural: son TRES planos, no dos** —
+canal→control EXISTE (root-checklists atribuye a los 20 diales); canal→raíz-
+de-cascada NO existe en ningún artefacto (intersección 16 rootIds × 66 raíces
+= VACÍA; la columna queda declarada, no rellenada). Clases medidas
+(recomputadas por mí desde el JSON crudo, idénticas al .md): **33 limpias**
+(640 hojas) / **29 mixtas** (2.706) / **53 sin control** (380); las mixtas
+están ENTRELAZADAS (24/29; mediana 3,5 tiradas/grupo; rottay CHROME.controls:
+4 grupos en 80 tiradas) → tag-por-sub-bloque NO alcanza. 149 hojas sin canal:
+8 son metadato A.1; **141 son decisiones autoradas reales** (vocabulario de
+forma, enums charts, prosa/estado capability, física motion) hoy invisibles
+para gates de canal. Auto-correcciones del worker verificadas en el JSON:
+`CHROME.card` emite CERO canales (5 hojas de vocabulario de forma; la que
+emite es `cardComponent`, 29 hojas / 38 canales, 30 sin control). **Mi
+adjudicación para 3b (registrada acá, brief aparte):** tags de familia SOLO
+donde limpios (las 33, domicilio via control→dial del roster) + secciones de
+capability (`pro-expert` anclado a la capability activa del tema); las mixtas
+entrelazadas NO llevan tag de domicilio en 3b (sería mentira uniforme) — sus
+tags por hoja/grupo aterrizan EN su lote de reescritura (F4A-5…15), donde la
+re-autoría los hace verdaderos en el mismo commit; las 53 sin-control quedan
+con nota de clase (no tag) y su disposición final es adjudicación de
+F4A-close, ya enumeradas por el mapa (no silenciosas). El esqueleto `THEME.*`
+(35 hojas) no se taggea: cablea, no autora — docblock del kit sin tags.
 **F4A-2 ✅ `e6364e90b` (worker Opus, verificado por el DT contra el árbol, NO de
 palabra) — harness `variant-parity` blocking: 87→88 gates.** Productor hermano
 de mirror-parity (sub-decisión DT registrada): solo IMPORTA de él

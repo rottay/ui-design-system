@@ -141,12 +141,22 @@ untaggedAuthoredLeaves 3686**, decrease-only, falla en las dos direcciones, se
 baja A MANO con revisión del DT en el commit del lote que movió el número).
 Gramática de tags ya fijada y drillada (22 drills): docblocks, vocabulario
 cerrado, herencia por cercanía, placeholders `@placeholder <path>` coherentes.
-Su `--check` es frescura + trinquete. **Siguiente lote: F4A-3 (worker, brief
-TUYO):** canon de comentarios byte-idéntico (kit del esquema §3: banner de
-sección único, docblock OVERLAY deduplicado, comentario de familia = tags +
-una línea; hoy el paisaje es heterogéneo: 32/4/15 docblocks por tema) — baja
-`untaggedAuthoredLeaves`, cero cambio de valor, artefacto compilado
-byte-idéntico (probarlo con build:vertical-css + diff de los 3 artefactos).
+Su `--check` es frescura + trinquete.
+**F4A-3 se dividió tras la parada del worker (9/9):** el roster (plano raíz)
+no proyecta sobre las familias de fuente (plano componente) — 64/67 sin
+proyección. **F4A-3a ✅** midió el plano familia→canales→control (sonda por
+hoja, 3.726 compilaciones): mapa duradero en `docs/f4a/mapa-familia-canales.*`
+— 33 limpias / 29 mixtas ENTRELAZADAS (los sub-bloques no existen) / 53 sin
+control; el plano canal→raíz-cascada NO existe en ningún artefacto (queda
+declarado). **Siguiente lote: F4A-3b (worker, brief TUYO):** canon de
+comentarios byte-idéntico guiado por el mapa — kit fijo (banners ya canónicos,
+0 trabajo; docblock OVERLAY deduplicado; esqueleto THEME con docblock del kit
+SIN tags), tags de familia SOLO en las 33 limpias + `pro-expert` en secciones
+de capability activa; las 29 mixtas quedan con nota de clase (sus tags por
+hoja aterrizan EN su lote F4A-5…15); las 53 sin-control idem (disposición
+final = adjudicación de F4A-close). Cero valores tocados; prueba
+byte-idéntica ida y vuelta; baja `untaggedAuthoredLeaves` (3686 → residuo
+medido); el baseline lo baja el DT en el commit.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
