@@ -11,15 +11,17 @@
 
 ## Operating model (owner decree, 2026-08-19)
 
-- **Kimi K3 (max effort) is the DT/coordinator.** It decomposes work into
-  bounded packets, makes every architecture/adjudication decision, and
+- **Codex is the DT/coordinator** (seat held by Kimi K3 from 2026-08-20 and
+  handed to Codex by owner order of 2026-08-21, on quota exhaustion of Kimi K3;
+  the backup DT documented in `docs/prompt-codex-continue.md` was activated).
+  It decomposes work into bounded packets, makes every architecture/adjudication decision, and
   verifies every packet with gates and diff review before any commit. It
   implements personally only the critical pieces (seals, programme contracts,
   delicate surgery).
 - **Mechanical packets are delegated to Claude terminals via tmux**, with the
   model tier chosen by risk: Sonnet for pure mechanical work, Opus for
   mid-risk, Fable for the full independent audit at the close of each front.
-  Kimi sub-agents inherit the coordinator's model (no per-subagent model
+  DT sub-agents inherit the coordinator's model (no per-subagent model
   selection exists), so cross-model delegation happens through tmux sessions,
   each carrying a written brief and a mechanical acceptance check.
 - The coordinator decides whether a terminal stays open (context reuse) or

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "6a5f4a2ea0ee9e1ab68dd3a7393c83469c74aac1c80526c6e56e4a9465bf420a",
+    "authorityDigest": "2b29a571a7c05620dab5a343114e933c563c7330e45117c2c4b44c8223c1ab2a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -239,8 +239,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 34160,
-        "sha256": "eac5c23b26d2e166613be0d498cc8cb107a1e14871117bdef736a462eed1736e"
+        "bytes": 34342,
+        "sha256": "ba4429a977c3bcbcb9039566ee6277c590ed3f1ea019228e9b91870910d0dee0"
       },
       {
         "path": "ui-design-system/package.json",
@@ -40471,7 +40471,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "6a5f4a2ea0ee9e1ab68dd3a7393c83469c74aac1c80526c6e56e4a9465bf420a"
+    "digest": "2b29a571a7c05620dab5a343114e933c563c7330e45117c2c4b44c8223c1ab2a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -41754,16 +41754,16 @@
           "claims": [
             "surface-profile-overrides"
           ],
-          "sha256": "eac5c23b26d2e166613be0d498cc8cb107a1e14871117bdef736a462eed1736e",
+          "sha256": "ba4429a977c3bcbcb9039566ee6277c590ed3f1ea019228e9b91870910d0dee0",
           "blocks": [
             {
               "claimId": "surface-profile-overrides",
-              "line": 454,
+              "line": 456,
               "sha256": "1d9f7f72afb78b9f32a880ed0682034c1b1a8f8d44cac0fe9761a325e54960df"
             },
             {
               "claimId": "surface-profile-overrides",
-              "line": 452,
+              "line": 454,
               "sha256": "e17d652eb1f683e087cb8f1feb30a91c8c7d2d7024fd76ea85ccb999946a9aef"
             }
           ]
@@ -113852,8 +113852,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "8dc47e9bc3029167fd0a8a1ae3fd4e1e8582996e5f6adb372326a8be084e0659",
-      "8dc47e9bc3029167fd0a8a1ae3fd4e1e8582996e5f6adb372326a8be084e0659"
+      "9b6c422f8e9913abda93b7bad00e2fb69348e5b2487da7e25f8137c5667545ee",
+      "9b6c422f8e9913abda93b7bad00e2fb69348e5b2487da7e25f8137c5667545ee"
     ],
     "agree": true
   }

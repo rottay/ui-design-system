@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "currentWave": "F4A — canon estructural de los 3 brand themes (F4A-0…6 cerrados; K1 en cierre; F4A-3c correctivo post-auditoría Codex; luego F4A-7…15 y F4A-close)",
+  "currentWave": "F4A — canon estructural de los 3 brand themes (F4A-0…13 cerrados, incluidos K1, K2, K3 y el correctivo F4A-3c; el frente queda cerrado salvo CHROME.table. Siguiente paquete estricto: F4A-14 = K4 (las 16 asimétricas), luego F4A-15 = K5 (las 40 hojas de CHROME.table) y F4A-close)",
   "blockedOn": "No external blocker. F4A-close exige el ratchet a tolerancia cero + el gate de paridad real sobre keypaths evaluados (sin cobertura por placeholders) + la auditoría Fable del frente.",
   "laneTableCaption": "Active packets:",
   "lanes": [
     {
       "id": "authority",
       "work": "Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated.",
-      "model": "kimi-dt",
-      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Kimi K3 DT (owner order 2026-08-20, roadmap §12 decision 13); Codex is out of the loop since the identity reconciliation (85d0583b9)."
+      "model": "codex-dt",
+      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Codex DT under the owner order of 2026-08-21, which activated the documented backup DT after Kimi K3 exhausted its quota. History: Kimi K3 held this seat from the identity reconciliation (85d0583b9, owner order 2026-08-20, roadmap §12 decision 13) until 2026-08-21 and is retired from the live seat; it does not re-enter as auditor or writer. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Codex in the seat."
     },
     {
       "id": "control-calibration",

@@ -191,7 +191,7 @@ A family is DONE only when:
 - applicable viewport/container, locale/RTL, content, input, forced-colors and
   reduced-motion cases pass;
 - evidence is bound to the frozen source and artifact hashes; and
-- Kimi K3 (DT) performs final sighted acceptance, with Fable 5 independent
+- Codex (DT) performs final sighted acceptance, with Fable 5 independent
   closure audit.
 
 Programme closure requires an honest disposition for every family in the active
@@ -305,7 +305,7 @@ The slice must:
 7. prove monotonicity and the density × rhythm × type-scale responsive matrix;
 8. prove exact restore for normalized output, variables, root attributes and
    computed properties; and
-9. obtain DT (Kimi K3) sighted acceptance before propagation is credited.
+9. obtain DT (Codex) sighted acceptance before propagation is credited.
 
 Valid enum stops currently share `TENANT_THEME_RHYTHM_FACTORS`, but invalid
 input handling, effective CSS clamping and exact static/DB parity remain claims
@@ -349,12 +349,16 @@ Builds, servers and browsers are serialized at reconciliation points.
 
 ## Roles
 
-- **Kimi K3** is the DT/coordinator: resolves disagreements, owns the
+- **Codex** is the DT/coordinator: resolves disagreements, owns the
   canonical programme tree, verifies every delegated packet (diff, battery,
   seals) and authorizes packets, committing bounded lots locally under the
-  owner's standing order — it never pushes. Kimi K3 succeeded Codex in this
-  seat by explicit owner order on 2026-08-20 (decision 13 of the sequencing
-  amendment); Codex is retired from the DT seat as of that date.
+  owner's standing order — it never pushes.
+  - Succession: **Codex** held this seat until the explicit owner order of
+    2026-08-20 (decision 13 of the sequencing amendment), which transferred it
+    to **Kimi K3**. The owner order of 2026-08-21 then returned it to **Codex**,
+    activating the backup DT documented in `docs/prompt-codex-continue.md`
+    after Kimi K3 exhausted its quota. Each seat was transferred, not removed —
+    exactly one DT authority exists before, during and after both successions.
 - The **Claude implementer pool (Sonnet/Opus)** is the sole implementer for
   source changes delegated by the DT, working through tmux terminals with the
   model tier chosen by risk. No other model may write programme source,
@@ -373,6 +377,12 @@ Builds, servers and browsers are serialized at reconciliation points.
     assumed the DT seat: DT is not the auditor (decision 13) is a
     conflict-of-interest fence, not a removal of audit capacity — the
     capacity is consolidated in Fable 5, which remains independent of the DT.
+    The same fence binds Codex while it holds the DT seat from 2026-08-21.
+  - **Kimi K3 is retired from the live seat as of 2026-08-21** and does not
+    re-enter as auditor or writer. Naming Codex as successor discharges the
+    `kimi-capacity-removal-lacks-successor-or-death-proof` stop condition by a
+    named successor rather than suppressing it; Fable 5 keeps its full
+    independent audit capacity across both DT successions.
 - Mechanical writers receive disjoint, pre-proven ownership only.
 
 Disagreement is recorded as a finding and resolved against source. Model names

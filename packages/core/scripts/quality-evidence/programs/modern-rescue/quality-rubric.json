@@ -19,7 +19,7 @@
     "testsAwardCraftPoints": false,
     "writerMayApproveSightedScore": false,
     "coordinatorMayApproveSightedScore": false,
-    "finalSightedAuthority": "Kimi K3 (DT)"
+    "finalSightedAuthority": "Codex (DT)"
   },
   "familyCompletionContract": {
     "progressUnit": "A family accepted by the DT after source-bound before/after evidence; files visited, files changed, lines, comments, tests, generated output and agent reports never count as progress.",

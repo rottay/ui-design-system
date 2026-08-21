@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "principle": "Parallelize independent ownership, not the number twenty.",
   "doubleAccept": {
-    "law": "A closure audit ACCEPT from Fable 5 plus the DT (Kimi K3) per-lot verification is the sighted quality signal. The DT commits bounded packets locally under the owner's standing order (2026-08-20); push is always forbidden. This does not substitute owner decisions nor product-domain adjudications.",
+    "law": "A closure audit ACCEPT from Fable 5 plus the DT (Codex) per-lot verification is the sighted quality signal. The DT commits bounded packets locally under the owner's standing order (2026-08-20, carried into the 2026-08-21 DT succession); push is always forbidden. This does not substitute owner decisions nor product-domain adjudications.",
     "requiredFor": "requesting an explicit owner order for the sighted packet",
     "notAuthorizationFor": [
       "local commit",
@@ -12,12 +12,28 @@
       "owner decision"
     ],
     "actors": ["Fable 5"],
-    "coordinator": "Kimi K3",
+    "coordinator": "Codex",
     "implementationActor": "Claude implementer pool (Sonnet/Opus)"
   },
   "coordinator": {
-    "model": "Kimi K3",
+    "model": "Codex",
     "role": "DT and programme coordinator",
+    "succession": [
+      {
+        "predecessor": "Codex",
+        "successor": "Kimi K3",
+        "ownerOrderDate": "2026-08-20",
+        "proof": "Decision 13 of the sequencing amendment (identity reconciliation 85d0583b9) moves the DT seat from Codex to Kimi K3 by explicit owner order. The seat is transferred, not removed: exactly one DT authority exists before and after this succession. Kimi K3 left advisoryReadOnly the same day, by conflict of interest (DT != auditor), not by capacity removal.",
+        "retainedAuditCapacity": ["Fable 5"]
+      },
+      {
+        "predecessor": "Kimi K3",
+        "successor": "Codex",
+        "ownerOrderDate": "2026-08-21",
+        "proof": "Explicit owner order of 2026-08-21 activates the documented backup DT (docs/prompt-codex-continue.md) because Kimi K3 exhausted its quota. The seat is transferred, not removed: exactly one DT authority exists before and after this succession. Kimi K3 is retired from the live seat and does NOT re-enter as auditor or writer. Fable 5 keeps its full independent read-only audit capacity, so DT != auditor (decision 13) holds with Codex in the seat. Naming Codex as successor discharges the kimi-capacity-removal-lacks-successor-or-death-proof stop condition by a named successor rather than suppressing it.",
+        "retainedAuditCapacity": ["Fable 5"]
+      }
+    ],
     "responsibilities": [
       "read selected round and current worktree",
       "construct conflict graph",
@@ -33,7 +49,7 @@
   "modelRouting": {
     "law": "Roles are fixed for the Modern Rescue programme. Model names are not a reason to wait, duplicate work, substitute actors or weaken a fence.",
     "programCoordinatorAndArchitectureControl": {
-      "actor": "Kimi K3",
+      "actor": "Codex",
       "work": [
         "round control and conflict graph",
         "architecture and single-authority decisions",
@@ -51,7 +67,7 @@
         "vacuous-evidence and canon-gap detection"
       ]
     },
-    "dtNotAuditorLaw": "Decision 13 (2026-08-20): the DT does not hold an audit seat. Kimi K3 left advisoryReadOnly the day it assumed the coordinator seat, by conflict of interest, not by capacity removal; audit capacity is consolidated in Fable 5, which stays independent of the DT.",
+    "dtNotAuditorLaw": "Decision 13 (2026-08-20): the DT does not hold an audit seat. The rule binds whoever holds the seat: Kimi K3 left advisoryReadOnly the day it assumed the coordinator seat in 2026-08-20, and Codex holds no audit seat while it holds the coordinator seat from 2026-08-21. In both cases the exclusion is conflict of interest, not capacity removal; audit capacity is consolidated in Fable 5, which stays independent of the DT.",
     "implementer": {
       "actor": "Claude implementer pool (Sonnet/Opus)",
       "work": [
@@ -79,7 +95,7 @@
         }
       ]
     },
-    "promotionLaw": "Escalate any authority conflict to the DT (Kimi K3); owner adjudication where the law requires the owner. No other model may invent architecture, authorize commits, or override the programme contracts.",
+    "promotionLaw": "Escalate any authority conflict to the DT (Codex); owner adjudication where the law requires the owner. No other model may invent architecture, authorize commits, or override the programme contracts.",
     "reportingLaw": "Record the chosen route and reason once per cohort in structured fields; do not narrate model deliberation per family."
   },
   "graph": {
@@ -265,7 +281,7 @@
   ],
   "r7Execution": {
     "enabled": false,
-    "main": "Kimi K3 coordinator owning conflict graph architecture canon and integration",
+    "main": "Codex coordinator owning conflict graph architecture canon and integration",
     "advisor": "Fable 5 read-only lane for architecture behavioral parity and visual coherence",
     "mechanicalWriters": {
       "maximum": 1,
@@ -293,7 +309,7 @@
       "chromium": 1
     },
     "longIterationLaw": "MAIN works through the complete current checkpoint without asking for reversible choices resolved by the contracts. Each lane writes durable JSON receipts and releases ownership before the next integration batch.",
-    "telemetryLaw": "The DT (Kimi K3) uses compact periodic telemetry and interrupts only at a checkpoint verified stall duplicate writer or hard external blocker."
+    "telemetryLaw": "The DT (Codex) uses compact periodic telemetry and interrupts only at a checkpoint verified stall duplicate writer or hard external blocker."
   },
   "stopConditions": [
     "head-or-worktree-ownership-cannot-be-reconciled",

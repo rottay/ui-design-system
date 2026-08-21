@@ -152,7 +152,7 @@ test('a family with a resolved profile clears its threshold and reports the sigh
   assert.deepEqual(verdict.blockers, []);
   assert.equal(verdict.binaryEligible, true);
   assert.equal(verdict.craftScore, 100);
-  assert.equal(verdict.sightedAuthority, 'Kimi K3 (DT)');
+  assert.equal(verdict.sightedAuthority, 'Codex (DT)');
   assert.equal(verdict.maximumClaim, 'IMPLEMENTED_PENDING_CODEX_AUDIT');
 });
 
@@ -1141,7 +1141,7 @@ test('NEGATIVE DRILL: a receipt whose artifact hash is stale is rejected', () =>
 });
 
 test('NEGATIVE DRILL: the sighted approver may not be the evidence producer', () => {
-  const result = validateReceipt({ producer: 'Kimi K3 (DT)', sourceFiles: [] });
+  const result = validateReceipt({ producer: 'Codex (DT)', sourceFiles: [] });
   assert.ok(result.failures.some((failure) => failure.includes('producer must not be the sighted approver')));
 });
 

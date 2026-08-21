@@ -38,8 +38,13 @@ test("live modern-rescue program contracts are internally consistent", () => {
 test("role drift fails closed", () => {
   expectError(
     mutated((copy) => { copy.orchestration.coordinator.model = "Opus"; }),
-    "coordinator must be Kimi K3",
+    "coordinator must be Codex",
     "Opus as coordinator must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.orchestration.coordinator.model = "Kimi K3"; }),
+    "coordinator must be Codex",
+    "reverting to the retired Kimi K3 coordinator must be rejected"
   );
   expectError(
     mutated((copy) => { copy.orchestration.modelRouting.implementer.actor = "Sonnet"; }),
@@ -54,9 +59,9 @@ test("role drift fails closed", () => {
   expectError(
     mutated((copy) => {
       copy.orchestration.coordinator.model = "Claude implementer pool (Sonnet/Opus)";
-      copy.orchestration.modelRouting.implementer.actor = "Kimi K3";
+      copy.orchestration.modelRouting.implementer.actor = "Codex";
     }),
-    "coordinator must be Kimi K3",
+    "coordinator must be Codex",
     "swapped coordinator/implementer must be rejected"
   );
   expectError(
@@ -68,10 +73,38 @@ test("role drift fails closed", () => {
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Kimi K3"];
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Codex"];
     }),
     "must not include the coordinator",
     "decision 13: the DT reappearing in advisoryReadOnly must be rejected"
+  );
+  // The same fence must bite for the retired DT too: Kimi K3 left the live
+  // seat on 2026-08-21 and does not re-enter as auditor. It is not the
+  // coordinator any more, so the coordinator-overlap rule cannot catch it --
+  // this drill pins that the advisory roster stays Fable-only by name.
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Kimi K3"];
+    }),
+    "must name Fable 5 as an advisor",
+    "the retired DT may not replace Fable 5 in advisoryReadOnly"
+  );
+  // The roster is EXACT, not a minimum. Inclusion-only let the retired DT
+  // re-enter simply by being appended next to Fable 5 -- it is not the live
+  // coordinator, so the overlap fence below cannot catch it.
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Kimi K3"];
+    }),
+    "advisoryReadOnly.actors must be exactly [\"Fable 5\"]",
+    "the retired DT re-entering advisoryReadOnly alongside Fable 5 must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.doubleAccept.actors = ["Fable 5", "Kimi K3"];
+    }),
+    "doubleAccept actors must be exactly [\"Fable 5\"]",
+    "the retired DT re-entering doubleAccept alongside Fable 5 must be rejected"
   );
   expectError(
     mutated((copy) => {
@@ -86,6 +119,132 @@ test("role drift fails closed", () => {
     }),
     "must not mention Opus or Sonnet",
     "an ungoverned Opus mention must still be rejected"
+  );
+});
+
+test("coordinator succession fails closed", () => {
+  expectError(
+    mutated((copy) => { delete copy.orchestration.coordinator.succession; }),
+    "coordinator must carry a succession record",
+    "removing the DT succession record must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.orchestration.coordinator.succession = []; }),
+    "coordinator must carry a succession record",
+    "an empty DT succession chain must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[0].predecessor = "Kimi K3";
+    }),
+    "coordinator succession record 0 predecessor must be Codex",
+    "erasing the Codex origin of the DT chain must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[0].ownerOrderDate = "2026-08-19";
+    }),
+    "coordinator succession record 0 must cite the 2026-08-20 owner order",
+    "an unmoored first DT succession date must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[1].ownerOrderDate = "2026-08-20";
+    }),
+    "coordinator succession record 1 must cite the 2026-08-21 owner order",
+    "an unmoored second DT succession date must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[1].predecessor = "Codex";
+    }),
+    "coordinator succession record 1 predecessor must be Kimi K3",
+    "a DT succession chain with a gap must be rejected"
+  );
+  // Dropping the 2026-08-20 record would make the chain read Codex -> Codex
+  // and erase the Kimi K3 tenure. The unbroken-chain law plus the pinned first
+  // date is what keeps that history from being rewritten.
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession = [copy.orchestration.coordinator.succession[1]];
+    }),
+    "coordinator succession must hold exactly 2 records",
+    "deleting the historical Kimi K3 tenure must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[1].successor = "Kimi K3";
+    }),
+    "coordinator succession record 1 successor must be Codex",
+    "a DT chain that does not end at the live coordinator must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.orchestration.coordinator.succession[1].proof = ""; }),
+    "every coordinator succession record must state a written succession proof",
+    "an unproven DT succession must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[1].retainedAuditCapacity = [];
+    }),
+    "record 1 must retain exactly the sole auditor roster",
+    "a DT succession that drops Fable audit capacity must be rejected"
+  );
+  // The tenure is immutable history. An origin/link/end-only law would accept
+  // `Codex -> AnyActor -> Codex` and erase that Kimi K3 ever held the seat, so
+  // the record count and every actor are pinned exactly.
+  expectError(
+    mutated((copy) => {
+      const chain = copy.orchestration.coordinator.succession;
+      copy.orchestration.coordinator.succession = [
+        chain[0],
+        { ...chain[0], predecessor: "Kimi K3", successor: "Codex", ownerOrderDate: "2026-08-21" },
+        { ...chain[1] },
+      ];
+    }),
+    "coordinator succession must hold exactly 2 records",
+    "padding the DT chain with an extra record must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[0].successor = "ArbitraryActor";
+      copy.orchestration.coordinator.succession[1].predecessor = "ArbitraryActor";
+    }),
+    "coordinator succession record 0 successor must be Kimi K3",
+    "an unbroken chain through an arbitrary middle actor must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[1].predecessor = "ArbitraryActor";
+    }),
+    "coordinator succession record 1 predecessor must be Kimi K3",
+    "a wrong latest predecessor must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[0].retainedAuditCapacity = [];
+    }),
+    "record 0 must retain exactly the sole auditor roster",
+    "dropping audit capacity from the historical DT record must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[0].retainedAuditCapacity = ["Fable 5", "Kimi K3"];
+    }),
+    "record 0 must retain exactly the sole auditor roster",
+    "re-adding the retired DT to the historical record's audit capacity must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.coordinator.succession[1].retainedAuditCapacity = ["Fable 5", "Kimi K3"];
+    }),
+    "record 1 must retain exactly the sole auditor roster",
+    "re-adding the retired DT to the live record's audit capacity must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.orchestration.coordinator.succession[0].proof = ""; }),
+    "every coordinator succession record must state a written succession proof",
+    "an unproven historical DT succession must be rejected"
   );
 });
 
@@ -385,8 +544,8 @@ test("double-accept does not authorize commit or R7", () => {
     mutated((copy) => {
       copy.orchestration.doubleAccept.coordinator = "Kimi 2.7";
     }),
-    "doubleAccept coordinator must be Kimi K3",
-    "non-Kimi-K3 doubleAccept coordinator must be rejected"
+    "doubleAccept coordinator must be Codex",
+    "non-Codex doubleAccept coordinator must be rejected"
   );
 });
 
@@ -439,7 +598,7 @@ test("historical quality rubric checks fail closed", () => {
   );
   expectError(
     mutated((copy) => { copy.rubric.eligibility.finalSightedAuthority = "writer"; }),
-    "Kimi K3 (DT) must remain final sighted authority",
+    "Codex (DT) must remain final sighted authority",
     "non-DT final sighted authority must be rejected"
   );
   expectError(
@@ -593,6 +752,21 @@ test("historical orchestration mechanics fail closed", () => {
     mutated((copy) => { copy.orchestration.r7Execution.longIterationLaw = "reversible choices"; }),
     "R7 MAIN must run long checkpoint-sized iterations",
     "longIterationLaw without MAIN must be rejected"
+  );
+});
+
+// Fable P1 correction (2026-08-21): Kimi K3 retired from all live seats that
+// day. tenant-art-direction.json's authority.creativeAdvisor previously named
+// a live Kimi seat; the checker must fail closed if that designation ever
+// comes back, while kimiProposalBoundary / KIMI-ANNOTATIONS stay untouched
+// (historical/dormant, not deleted).
+test("tenant art direction creative advisor retirement fails closed", () => {
+  expectError(
+    mutated((copy) => {
+      copy.artDirection.authority.creativeAdvisor = "Kimi through KIMI-ANNOTATIONS only";
+    }),
+    "tenant-art-direction.json authority.creativeAdvisor must equal exactly",
+    "restoring the live Kimi seat in tenant-art-direction.json must be rejected"
   );
 });
 

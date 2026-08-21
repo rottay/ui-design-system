@@ -47,16 +47,58 @@ const FILES = {
 // order (2026-08-17, 2026-08-20) and was never vacated, so the checker pins
 // the current successor by name and requires the unbroken succession chain
 // that discharges the kimi-capacity-removal-lacks-successor-or-death-proof
-// stop condition. Decision 13 (2026-08-20) also moved the DT seat from Codex
-// to Kimi K3 and consolidated the audit seat in Fable 5 alone: the DT does
-// not hold an audit seat (conflict of interest, not capacity removal).
+// stop condition. The DT seat follows the same law: decision 13 (2026-08-20)
+// moved it from Codex to Kimi K3, and the owner order of 2026-08-21 returned
+// it to Codex when Kimi K3 exhausted its quota (documented backup DT
+// activated). The seat moved twice and was never vacated, so the coordinator
+// is validated as an unbroken CHAIN, exactly like the implementer -- a single
+// pair of constants could not express two successions without erasing the
+// first. Fable 5 remains the sole audit seat throughout: the DT does not hold
+// one (conflict of interest, not capacity removal).
 const LIVE_IMPLEMENTER = 'Claude implementer pool (Sonnet/Opus)';
 const RETIRED_IMPLEMENTER = 'Kimi 2.7';
 const IMPLEMENTER_SUCCESSION_ORDER_DATE = '2026-08-17';
 const IMPLEMENTER_SUCCESSION_2_ORDER_DATE = '2026-08-20';
-const RETIRED_COORDINATOR = 'Codex';
+const LIVE_COORDINATOR = 'Codex';
+const COORDINATOR_CHAIN_ORIGIN = 'Codex';
 const COORDINATOR_SUCCESSION_ORDER_DATE = '2026-08-20';
+const COORDINATOR_SUCCESSION_2_ORDER_DATE = '2026-08-21';
 const RETAINED_AUDITORS = Object.freeze(['Fable 5']);
+
+// Fable P1 correction (2026-08-21): Kimi K3 retired from ALL live seats that
+// day, but tenant-art-direction.json's authority.creativeAdvisor still named
+// a live Kimi seat ("Kimi through KIMI-ANNOTATIONS only"). The
+// kimiProposalBoundary vocabulary and the KIMI-ANNOTATIONS inbox stay
+// intact by design (historical/dormant, not deleted) -- only the live-seat
+// designation is fail-closed here.
+const EXPECTED_CREATIVE_ADVISOR =
+  'none — Kimi K3 retired from all live seats on 2026-08-21; KIMI-ANNOTATIONS is historical/dormant';
+
+/**
+ * The sole-auditor roster is EXACT, not a minimum. Requiring only inclusion
+ * let a retired seat re-enter silently: `['Fable 5', 'Kimi K3']` satisfied
+ * "must name Fable 5" while contradicting the handoff law that the retired DT
+ * does not return as auditor. Order is canonical so the contract reads the
+ * same everywhere.
+ */
+function isSoleAuditorRoster(actors) {
+  return (
+    Array.isArray(actors) &&
+    actors.length === RETAINED_AUDITORS.length &&
+    actors.every((actor, index) => actor === RETAINED_AUDITORS[index])
+  );
+}
+
+/**
+ * The DT tenure is IMMUTABLE HISTORY, so the chain is pinned record by record,
+ * not merely by origin/link/end. Validating only those let
+ * `Codex -> AnyActor -> Codex` pass while erasing that Kimi K3 ever held the
+ * seat. Two records, exact actors, exact dates.
+ */
+const COORDINATOR_SUCCESSION_CHAIN = Object.freeze([
+  Object.freeze({ predecessor: 'Codex', successor: 'Kimi K3', ownerOrderDate: '2026-08-20' }),
+  Object.freeze({ predecessor: 'Kimi K3', successor: 'Codex', ownerOrderDate: '2026-08-21' }),
+]);
 // The 2026-08-17 successor seat, retired in turn on 2026-08-20. Its name
 // contains "Opus", and the succession chain must still be able to narrate
 // it, so it is admitted alongside the live pool name below -- never as a
@@ -215,11 +257,11 @@ function collectTextualFailures() {
   }
 
   if (
-    !readmeText.includes('Kimi K3') ||
+    !readmeText.includes(LIVE_COORDINATOR) ||
     !readmeText.includes(LIVE_IMPLEMENTER) ||
     !readmeText.includes('Fable 5')
   ) {
-    failures.push(`README.md Roles must name Kimi K3, ${LIVE_IMPLEMENTER} and Fable 5`);
+    failures.push(`README.md Roles must name ${LIVE_COORDINATOR}, ${LIVE_IMPLEMENTER} and Fable 5`);
   }
   if (!readmeText.includes(RETIRED_IMPLEMENTER) || !readmeText.includes(IMPLEMENTER_SUCCESSION_ORDER_DATE)) {
     failures.push(
@@ -231,9 +273,16 @@ function collectTextualFailures() {
       `README.md Roles must record the Cloud Opus implementer pool succession and its ${IMPLEMENTER_SUCCESSION_2_ORDER_DATE} owner order`,
     );
   }
-  if (!readmeText.includes(RETIRED_COORDINATOR) || !readmeText.includes(COORDINATOR_SUCCESSION_ORDER_DATE)) {
+  // Both DT successions must stay narrated: the 2026-08-20 move to Kimi K3 is
+  // history that the 2026-08-21 move back to Codex must not erase.
+  if (!readmeText.includes('Kimi K3') || !readmeText.includes(COORDINATOR_SUCCESSION_ORDER_DATE)) {
     failures.push(
-      `README.md Roles must record the ${RETIRED_COORDINATOR} DT succession and its ${COORDINATOR_SUCCESSION_ORDER_DATE} owner order`,
+      `README.md Roles must record the Kimi K3 DT succession and its ${COORDINATOR_SUCCESSION_ORDER_DATE} owner order`,
+    );
+  }
+  if (!readmeText.includes(COORDINATOR_SUCCESSION_2_ORDER_DATE)) {
+    failures.push(
+      `README.md Roles must record the ${LIVE_COORDINATOR} DT succession and its ${COORDINATOR_SUCCESSION_2_ORDER_DATE} owner order`,
     );
   }
   if (routesUngovernedModel(readmeText)) {
@@ -629,8 +678,64 @@ function collectContractFailures(contracts) {
 
   // agent-orchestration.json exact roles (T-1 rewrite)
   if (orchestration) {
-    if (orchestration.coordinator?.model !== 'Kimi K3') {
-      failures.push('agent-orchestration.json coordinator must be Kimi K3');
+    if (orchestration.coordinator?.model !== LIVE_COORDINATOR) {
+      failures.push(`agent-orchestration.json coordinator must be ${LIVE_COORDINATOR}`);
+    }
+    // The DT seat moved twice (2026-08-20, 2026-08-21) and was never vacated.
+    // The chain is pinned RECORD BY RECORD, not by origin/link/end alone: an
+    // origin/end-only law would accept `Codex -> AnyActor -> Codex` and erase
+    // the Kimi K3 tenure while still passing. The tenure is immutable history,
+    // so the actors, the dates and the record count are all exact, and each
+    // record must retain the exact sole-auditor roster.
+    const coordinatorSuccession = orchestration.coordinator?.succession;
+    if (!Array.isArray(coordinatorSuccession) || coordinatorSuccession.length === 0) {
+      failures.push('agent-orchestration.json coordinator must carry a succession record');
+    } else if (coordinatorSuccession.length !== COORDINATOR_SUCCESSION_CHAIN.length) {
+      failures.push(
+        `coordinator succession must hold exactly ${COORDINATOR_SUCCESSION_CHAIN.length} records (the ${COORDINATOR_SUCCESSION_ORDER_DATE} and ${COORDINATOR_SUCCESSION_2_ORDER_DATE} owner orders)`,
+      );
+    } else {
+      COORDINATOR_SUCCESSION_CHAIN.forEach((expected, index) => {
+        const record = coordinatorSuccession[index] ?? {};
+        if (record.predecessor !== expected.predecessor) {
+          failures.push(
+            `coordinator succession record ${index} predecessor must be ${expected.predecessor}`,
+          );
+        }
+        if (record.successor !== expected.successor) {
+          failures.push(
+            `coordinator succession record ${index} successor must be ${expected.successor}`,
+          );
+        }
+        if (record.ownerOrderDate !== expected.ownerOrderDate) {
+          failures.push(
+            `coordinator succession record ${index} must cite the ${expected.ownerOrderDate} owner order`,
+          );
+        }
+        if (typeof record.proof !== 'string' || record.proof.length === 0) {
+          failures.push('every coordinator succession record must state a written succession proof');
+        }
+        if (!isSoleAuditorRoster(record.retainedAuditCapacity)) {
+          failures.push(
+            `coordinator succession record ${index} must retain exactly the sole auditor roster ${JSON.stringify(RETAINED_AUDITORS)}`,
+          );
+        }
+      });
+      // Redundant with the record-by-record pins above, and deliberately kept:
+      // if the pinned chain is ever widened, the structural law still holds.
+      for (let i = 1; i < coordinatorSuccession.length; i += 1) {
+        if (coordinatorSuccession[i].predecessor !== coordinatorSuccession[i - 1].successor) {
+          failures.push(
+            'coordinator succession chain must be unbroken: each record predecessor must equal the prior record successor',
+          );
+        }
+      }
+      if (coordinatorSuccession[0].predecessor !== COORDINATOR_CHAIN_ORIGIN) {
+        failures.push(`coordinator succession must begin with predecessor ${COORDINATOR_CHAIN_ORIGIN}`);
+      }
+      if (coordinatorSuccession[coordinatorSuccession.length - 1].successor !== LIVE_COORDINATOR) {
+        failures.push(`coordinator succession must end with ${LIVE_COORDINATOR}`);
+      }
     }
     const routingText = JSON.stringify(orchestration.modelRouting ?? {});
     if (routesUngovernedModel(routingText)) {
@@ -695,6 +800,13 @@ function collectContractFailures(contracts) {
         failures.push(`agent-orchestration.json must name ${auditor} as an advisor`);
       }
     }
+    // EXACT roster, not a minimum: a retired seat must not be able to re-enter
+    // the audit roster by simply being appended next to Fable 5.
+    if (!isSoleAuditorRoster(advisory)) {
+      failures.push(
+        `agent-orchestration.json advisoryReadOnly.actors must be exactly ${JSON.stringify(RETAINED_AUDITORS)}`,
+      );
+    }
     // Decision 13: DT != auditor. The coordinator left the advisory/audit
     // seat the day it assumed the DT seat; a coordinator that still appears
     // in advisoryReadOnly is a live conflict of interest, not a harmless
@@ -726,8 +838,13 @@ function collectContractFailures(contracts) {
           failures.push(`doubleAccept actors must include ${auditor}`);
         }
       }
-      if (da.coordinator !== 'Kimi K3') {
-        failures.push('doubleAccept coordinator must be Kimi K3');
+      if (!isSoleAuditorRoster(da.actors)) {
+        failures.push(
+          `doubleAccept actors must be exactly ${JSON.stringify(RETAINED_AUDITORS)}`,
+        );
+      }
+      if (da.coordinator !== LIVE_COORDINATOR) {
+        failures.push(`doubleAccept coordinator must be ${LIVE_COORDINATOR}`);
       }
       if (da.implementationActor !== LIVE_IMPLEMENTER) {
         failures.push(`doubleAccept implementationActor must be the ${LIVE_IMPLEMENTER}`);
@@ -1002,8 +1119,8 @@ function collectHistoricalContractFailures(contracts) {
   if (rubric?.eligibility?.testsAwardCraftPoints !== false) {
     errors.push('tests must not award craft points');
   }
-  if (rubric?.eligibility?.finalSightedAuthority !== 'Kimi K3 (DT)') {
-    errors.push('Kimi K3 (DT) must remain final sighted authority');
+  if (rubric?.eligibility?.finalSightedAuthority !== `${LIVE_COORDINATOR} (DT)`) {
+    errors.push(`${LIVE_COORDINATOR} (DT) must remain final sighted authority`);
   }
   if (rubric?.dimensions?.some((dimension) => dimension.evidenceRequired !== true)) {
     errors.push('every scored quality dimension must require observable evidence');
@@ -1196,6 +1313,11 @@ function collectHistoricalContractFailures(contracts) {
   }
   if (artDirection?.authority?.sameTree !== true) {
     errors.push('tenant art direction must require the same React tree');
+  }
+  if (artDirection?.authority?.creativeAdvisor !== EXPECTED_CREATIVE_ADVISOR) {
+    errors.push(
+      `tenant-art-direction.json authority.creativeAdvisor must equal exactly "${EXPECTED_CREATIVE_ADVISOR}"`,
+    );
   }
   if ((artDirection?.divergenceContract?.r1MinimumObservableAxes ?? 0) < 8) {
     errors.push('R1 tenant art direction must require at least eight observable axes');
