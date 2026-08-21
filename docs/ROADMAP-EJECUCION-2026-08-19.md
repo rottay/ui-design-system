@@ -906,6 +906,80 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**K1 ✅ (lote PROPIO del DT en su parte semántica + cierre mecánico por worker
+Opus tras el recordatorio de delegación del dueño; verificado por el DT contra
+el árbol, nunca de palabra).** Descongelado `--ds-color-primary` (el esquema
+§4-K1 mandaba: literal EN la raíz, valor sin cambiar, raíz dialeable).
+**Adjudicaciones nuevas del DT, con evidencia:** (1) **el mecanismo es PISO
+LITERAL** — la vía paramétrica del diente (a) quedó falsada por medición (el
+paso 500 ≠ literal de marca en 5 de 6 celdas: rottay 500=#A0A0A5/#6B6B6B,
+bithire #376BAB en base, evnto #6B6B6B); por la ley del instrumento ("piso
+LITERAL, AUSENTE o tema paramétrico = rootPinned"), `default.css:156` pasó de
+`var(--ds-color-primary-500)` a `#171717` (su resolución de hoy; cero-delta
+global — los 3 temas pisan la raíz). Negativo NOMBRADO: en el tema default la
+raíz ya no sigue al paso 500 si se edita la rampa a mano; la derivación
+semilla→rampa→primario vive en el control `palette.seeds` (declara ambos
+canales como salidas), no en el piso. (2) **`--ds-button-primary-bg`**: rottay
+y evnto recableados a `var(--ds-color-primary)` (idéntico en los 2 scopes,
+medido) → paramétrico, sale de rootFrozen; **bithire INTACTO** (dark
+`#1a7fe0` ≠ `#1e84e6` — intención divergente o near-dup, lo decide
+F4B/F2-asimétrico; y mass-c3 no tiene mecanismo REDERIVED: tocar solo el base
+rompía los pins firmados). Deuda nombrada. (3) **la marca dialeable YA
+EXISTÍA** (root-catalog `ramp.seed.primary` = tenant-dial + palette.seeds — mi
+respuesta de F4A-5 se verificó, no se escribió nada). (4) **REDERIVED
+autorizado** name-only: T1 +3, T2 +9, T3 +14 (26 canales con colisión);
+pre-imágenes y pins intactos — **0 líneas sha256 en los diffs**, probado por
+mecánica de diff, no por lectura. **Recableo: 30 rottay + 2 evnto + 0 bithire
+con razón** (sus 15 ya eran var; los 3 base-only cambiarían en dark → fuera
+por cero-delta estricto). Medición reproducida por el DT dos veces (30/0/2).
+rottay: 30 recables + 30 colapsos de overlay + 29 docblocks de hoja
+(`@domicile derived / @governor deriva de: --ds-color-primary (semilla de
+marca, K1)`); evnto: 2 recables + 2 colapsos (sitios multi-clave inline, sin
+docblock — convención F4A-6: `color:` sí, `text:` no). **CERO-DELTA probado
+por resolución de cascada contra HEAD: 0 diffs de resolución en los 3
+artefactos (1212/1235/470 canales × 2 scopes) NI en el piso (1046 canales);
+32 diffs de forma, exactos.** mirror-parity medido post-K1: rootFrozen
+**[2,4,2]** (quedan color-error + sidebar-bg, y button-primary-bg solo en
+bithire), readerEdges **[7,18,7]**, rootPinned [9,11,8] con la partición
+11/15/10 INTACTA (K1 movió clases sin ensanchar alcance), severs [49,99,14]
+clavados, reDerives [94,149,54] clavados, severedTotal 51/103/16, y el
+trinquete `blockedUpstream` **24 → 4 por decrecimiento PURO** (subconjunto
+estricto: salieron los 20 que colgaban de primary — el sexteto de F2.4
+incluido —; los 4 supervivientes cuelgan de causas ajenas). **La congelación
+murió: la raíz reclasificó a rootPinned floor-literal en los 3 temas, y su
+dial ya alcanza a los 135 lectores vía el control.** Parada del worker 15/15
+correcta: el **diente (a)** quedó huérfano de sujeto (K1 descongeló al
+testigo) — adjudicación MÍA: re-sujetado a bithire `--ds-button-primary-bg`,
+la única raíz congelada con lector bloqueado hoy (las 5 asertas siguen
+mordiendo: 4→3, 103→102, 18→17, 2→1, bloqueados→0, verificadas por el worker
+antes de escribir; nota de mantenimiento: se re-sujeta cuando esa raíz se
+descongele; si la clase se vacía, sujeto sintético). Corrección de prosa del
+worker aceptada: la caída real del trinquete bithire era 15→2 (13 de 15 por
+primary), no 13→2. **ERRATUM F4A-6 confirmado mecánicamente** (`git show
+HEAD:` líneas 1853/1865): el pin de vocabulario select de T2 ya medía
+`chained`=9 en HEAD con el pin en 7 — nadie corrió T2 entero tras K3; K1
+heredó 2 de los 3 deltas y su re-anclaje (chained 10, admitted 4, ∩ []→3 con
+razón reescrita) cierra el erratum. Re-anclajes del worker, todos medidos del
+artefacto: T2 light 135→126 y omitidos 13→22, T3 lightLeaves 164→150 e
+idénticos 26→40 (con la cadena 4→+4→+18→+14=40 escrita y un título stale de
+TRES olas corregido), mirror-parity pins completos + testigo del pin + la
+coordenada del diente (b) 506→513 (las 7 líneas del comentario K1 del piso —
+coordenada que corre, no ley que cambia). Cadena completa en el orden fijado:
+universo censo 7303, reconciliation digest `066ccd97db34` (= sha256 real del
+censo, verificado por el DT), catalog 341 vistas, fanout sin clasificar 0,
+**reads-ledger 2607/2607 sin re-anclaje** (hooks-manifest no se movió),
+root-catalog 64 raíces OK, root-exposure 26/28/10 OK. **Baja #6 del baseline,
+bajada por MÍ**: divergentSlots 1694→**1669** (universo 2586→**2559** por las
+32 restituciones colapsadas, 27 exclusivas; positionIntersection 892→**890**;
+la ley universo−positionIntersection cierra: −27−(−2)=−25) y
+untaggedAuthoredLeaves 2712→**2655** (−55 rottay + −2 evnto; tagRegistry
+252→**281** por los 29 docblocks; 4 de las 32 colapsadas tenían tag:
+1393→1338 rottay, 198→196 evnto — aritmética exacta contra HEAD). gat-07
+**re-sellado por el DT**: `7ac1f9c2e5d1…`. Suite pierna 1, MI corrida: **1717/13** por
+nombre (las 14 previas = 13 conocidas + el pin del baseline que bajé).
+**Siguiente lote: F4A-3c** (paquete corrector post-Codex, diseño mío en
+§"auditoría Codex", ejecución Opus) y después F4A-7…15 por
+`/tmp/f4a-lotes-7-13.md`.
 **AUDITORÍA CODEX ad hoc (2026-08-21, pedida por el dueño sobre HEAD
 `3af69a654`) + verificación MÍA claim por claim contra el árbol.**
 Veredicto: la dirección es correcta (F4A-5/6 van bien; NO se revierten) con

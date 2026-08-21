@@ -224,12 +224,26 @@ contra `git show`. Adjudicación extra del DT: `--ds-color-text-page` entró a
 nombre (×3 corridas del DT). gat-07 `145083775613…`. **Lección fijada: la
 cadena de regeneración incluye reads-ledger** (dos artefactos stale detectados
 en ESTE lote: el censo lo marcó la suite; el ledger `reads-adjudication.json`
-lo marcó gates:ci) — cadena completa en §5.2 ya corregida. **Siguiente lote:
-K1 PROPIO (DT, sin worker):** descongelar `--ds-color-primary` — 32 canales
-CHROME idénticos medidos (30 rottay + 2 evnto) + `--ds-button-primary-bg` que
-es él mismo rootFrozen (adjudicación, no recableo) + filas REDERIVED donde
-choque con T2/T3; la marca dialeable se escribe en root-catalog (adjudicado
-en F4A-5). Después F4A-7…15 por `/tmp/f4a-lotes-7-13.md`.
+lo marcó gates:ci) — cadena completa en §5.2 ya corregida. **Estado al
+cierre: K1 ✅ = primary descongelada** (adjudicaciones del DT: mecanismo =
+PISO LITERAL en `default.css:156` — la vía paramétrica quedó falsada por
+medición, 500≠literal en 5/6 celdas —; 30 recables rottay + 2 evnto con
+colapsos de overlay; bithire intacto con razón; `--ds-button-primary-bg`
+paramétrico en rottay/evnto, congelado en bithire con deuda nombrada;
+REDERIVED T1+3/T2+9/T3+14 con 0 líneas sha256 tocadas; la congelación MURIÓ:
+rootPinned floor-literal ×3, trinquete 24→4 por decrecimiento puro).
+Cero-delta probado contra HEAD: 0 diffs de resolución en 3 artefactos + piso.
+Baja #6: `divergentSlots` 1694→**1669**, `untaggedAuthoredLeaves`
+2712→**2655**, universo 2586→**2559**, tagRegistry 252→**281**. Parada 15/15
+correcta: diente (a) huérfano → re-sujetado a bithire `--ds-button-primary-bg`
+(adjudicación del DT, 5 asertas vivas). Erratum F4A-6 confirmado y cerrado
+(pin select T2 stale en HEAD — ley nueva en §5.4: rosters firmados se corren
+ENTEROS). Suite 1717/13 por nombre. gat-07 `7ac1f9c2e5d1…`. **Siguiente
+lote: F4A-3c (worker Opus, diseño del DT en §13 asiento-auditoría):** el
+paquete corrector post-Codex — los 27 tags de familia se estrechan a
+`@domicile unassigned` + gobierno parcial medido N/M, el mapa se republica
+con criterio estricto declarado (limpias 0), spec del gate de paridad real
+para F4A-close. Después F4A-7…15 por `/tmp/f4a-lotes-7-13.md`.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 
@@ -274,7 +288,10 @@ auditoría final → goal completo con gates:ci verde en HEAD.
    vigente). lane-control-drills 10/13 NO crece. Si aparece
    `brand-authored-residue-retirement` rojo NO es flake: es el mecanismo del
    par border. Build COMPLETO (`pnpm build` en packages/core) antes de
-   cualquier batería — dist parcial = falsos rojos.
+   cualquier batería — dist parcial = falsos rojos. **Ley de rosters firmados
+   (erratum F4A-6): tras tocar fuente de tema, T1/T2/T3 se corren ENTEROS
+   (vitest de los 3 archivos), nunca por nombre ni solo hashes** — el pin de
+   vocabulario select de T2 quedó rojo en HEAD post-F4A-6 por eso.
 5. **docs-engineering** (repo hermano): SOLO contadores de catálogo. ~205
    archivos sucios ajenos del 4-ago que NUNCA se tocan.
 6. **Commits**: uno por lote, con PATHSPEC EXPLÍCITO mientras un worker esté
