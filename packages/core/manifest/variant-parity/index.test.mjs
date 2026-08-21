@@ -305,9 +305,17 @@ test('integracion: el baseline autorado pinea los dos contadores de la corrida r
   assert.deepEqual(evaluate(real, baseline), [], 'HEAD contra su baseline tiene que dar PASS');
 });
 
-test('integracion: hoy no hay ni un tag en las fuentes, y eso es correcto', () => {
+test('integracion: los tags del corpus real son del vocabulario cerrado y no hay failures', () => {
   const real = build();
-  assert.equal(real.tagRegistry.count, 0, 'F4A-2 no autora tags: los ponen F4A-3 en adelante');
+  // F4A-3b autora los primeros 37 (32 seed + 5 pro-expert). La expectativa
+  // pineada en cero de F4A-2 queda retirada por diseño (AGED_EXPECTATION): lo
+  // que se exige aca es el vocabulario cerrado y la ausencia de failures; el
+  // conteo lo gobierna el ratchet, no este test.
+  assert.ok(real.tagRegistry.count > 0, 'desde F4A-3b las fuentes llevan tags');
+  for (const entry of real.tagRegistry.entries) {
+    assert.ok(DOMICILES.includes(entry.domicile), `domicile fuera del vocabulario cerrado: ${entry.domicile}`);
+    assert.ok(typeof entry.governor === 'string' && entry.governor.length > 0, `governor vacio en ${entry.slot ?? entry.scope}`);
+  }
   assert.deepEqual(real.failures, []);
 });
 

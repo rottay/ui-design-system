@@ -60,6 +60,10 @@ const OVERLAY_MODE = 'light' satisfies BrandThemeMode;
  * step to the OKLCH derivation.
  */
 const OVERLAY: BrandThemeModeOverlay = {
+  /**
+   * Familia mixta. Controles: palette.seeds, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   palette: {
     ramps: {
       primary: {
@@ -250,6 +254,10 @@ const OVERLAY: BrandThemeModeOverlay = {
       borderColorFocus: "rgba(10, 10, 10, 0.40)",
     },
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, chrome.families, token-overrides, navigation.sidebar-tone.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   chrome: {
     controls: {
       input: {
@@ -367,12 +375,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         itemColorSelected: "#1A1A1A",
         shadow: "0 1px 2px rgba(0, 0, 0, 0.04)",
       },
-      /**
-       * Light divergence for the eight `controls.select` channels Rottay
-       * actually authors per mode. The remaining seven ride DS baseline
-       * expressions that already resolve per mode, so they carry no
-       * overlay row.
-       */
       select: {
         bg: "#FFFFFF",
         color: "#1A1A1A",
@@ -423,13 +425,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         errorColor: "#DC2626",
         requiredColor: "#DC2626",
       },
-      /**
-       * ROTTAY-T2 MASS light overlay. Three kinds of row live here: a light
-       * value that genuinely diverges from dark, a light restatement that
-       * stops a migrated dark value from bleeding into light (those light
-       * channels resolve to the DS floor and are therefore not migrated),
-       * and a light-only value whose dark twin already matches the floor.
-       */
       autocomplete: {
         bg: "#FFFFFF",
         border: "#E5E5E3",
@@ -665,13 +660,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       itemIndent: "6px",
       itemPadding: "6px 10px",
       iconSize: "16px",
-      /**
-       * The nine geometry channels the dark body authors have no
-       * root-level DS floor to restate — their only other declarations sit
-       * on descendant selectors inside the shell and skin stylesheets. A
-       * light root that inherited the dark body's geometry would be a new
-       * value, not the pre-drain one, so the mode resets them instead.
-       */
       shellPaddingInline: "initial",
       shellPaddingCollapsed: "initial",
       itemHeight: "initial",
@@ -993,6 +981,10 @@ const OVERLAY: BrandThemeModeOverlay = {
       nodeColorSelected: "#1A1A1A",
     },
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   surfaces: {
     borderRadius: {
       full: "9999px",
@@ -1008,11 +1000,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       focusRing: "0 0 0 3px rgba(10, 10, 10, 0.10)",
       focusRingError: "0 0 0 3px rgba(220, 38, 38, 0.14)",
     },
-    /**
-     * The light ladder is the DS floor expression, restated because the
-     * dark body now authors `elevations` and would otherwise carry into
-     * light. `level0` is `none` in both, so it is not restated.
-     */
     elevations: {
       level1:
         "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)",
@@ -1030,13 +1017,8 @@ const OVERLAY: BrandThemeModeOverlay = {
 
 // ── RECIPES ──
 /**
- * Governed recipe profile (K0.6, 2026-07-23): selected from sighted
- * same-tree evidence (`/probe/k0-profiles`, captures under
- * test-artifacts/rottay-design-platform/K0-K1/captures). technical-sharp
- * matches this theme's declared graphite/mono/border-first posture;
- * editorial-round was sighted and rejected (illegible active pill tab on
- * the dark canvas). Explicit component props still win over profile
- * defaults.
+ * @domicile pro-expert
+ * @governor capability: recipes (activa en rottay)
  */
 const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/technical-sharp@1' };
 
@@ -1044,13 +1026,11 @@ const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/techn
 // not authored by this vertical — capabilities.expressive states why.
 
 // ── PALETTE ──
+/**
+ * Familia mixta. Controles: palette.seeds, token-overrides.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const PALETTE: BrandPalette = {
-  /**
-   * Hand-tuned ramp steps. Rottay does not want the even OKLCH derivation
-   * for these roles: the steps are set against its own dark canvas. They
-   * shipped as a root block in the artifact extension until the contract
-   * could express a ramp step, which is what `ramps` is for.
-   */
   ramps: {
     primary: {
       50: "#0C0C0E",
@@ -1198,12 +1178,6 @@ const PALETTE: BrandPalette = {
   interactiveBgActiveColor: '#2A2A2F',
   interactiveBgMutedColor: '#1A1A1E',
 
-  /**
-   * Drained from the artifact extension's hand-written root block (T1).
-   * Rottay's default mode is dark, so these are the dark values and they
-   * apply in BOTH modes; `modes.light` restates only the ones that move.
-   * Every value here is the byte the extension already shipped.
-   */
   alphaBlack50: 'rgba(0, 0, 0, 0.12)',
   alphaBlack100: 'rgba(0, 0, 0, 0.20)',
   alphaWhite50: 'rgba(255, 255, 255, 0.04)',
@@ -1225,11 +1199,6 @@ const PALETTE: BrandPalette = {
   textColor: '#ECECEC',
   textInverseColor: '#0C0C0E',
 
-  /**
-   * The unprefixed alias namespace (`--ds-text-*`, `--ds-border-color*`).
-   * Same drain, same rule: one field reaches exactly one channel, so the
-   * value that shipped moves into the contract without changing.
-   */
   aliases: {
     textPrimary: '#ECECEC',
     textSecondary: '#A0A0A5',
@@ -1247,16 +1216,8 @@ const PALETTE: BrandPalette = {
 
 // ── TYPOGRAPHY ──
 /**
- * Neutral sober core. Rottay is the baseline the other two verticals are
- * read against, so it deliberately does NOT reach for a display face: one
- * humanist text family carries base, heading and display, and the mono
- * register carries the operational/data surfaces.
- *
- * Every family named here is physically shipped as a font pack (see
- * FONT_PACK_MANIFEST). This previously named 'Inter', 'JetBrains Mono' and
- * 'Geist Mono' — none of which the package ships. Naming an unpackaged
- * family is not a typography decision, it is a bet on the visitor's machine,
- * and it silently resolved to whatever the OS fallback was.
+ * Familia mixta. Controles: typography.families, typography.pairing.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
 const TYPOGRAPHY: BrandTypography = {
   fontFamilyBase:
@@ -1286,6 +1247,10 @@ const TYPOGRAPHY: BrandTypography = {
 };
 
 // ── SURFACES ──
+/**
+ * Familia mixta. Controles: palette.seeds, surfaces.effect-intensity.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const SURFACES: BrandSurfaces = {
   densityScale: 1.0,
   borderRadius: { sm: '6px', md: '10px', lg: '14px', xl: '18px', full: '9999px' },
@@ -1295,18 +1260,11 @@ const SURFACES: BrandSurfaces = {
     lg: 'var(--ds-elevation-3)',
     xl: 'var(--ds-elevation-4)',
     xs: 'var(--ds-elevation-1)',
-    /** `2xl` is not an identifier; the field is `xxl`, the channel keeps `2xl`. */
     xxl: 'var(--ds-elevation-5)',
     inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.30)',
     focusRing: '0 0 0 3px rgba(255, 255, 255, 0.12)',
     focusRingError: '0 0 0 3px rgba(239, 68, 68, 0.16)',
   },
-  /**
-   * The authored elevation ladder, drained from the artifact extension.
-   * `shadows.sm..xl` above forward to these levels, so the ladder has to be
-   * a contract field rather than a hand-written root block or the forward
-   * resolves against the DS floor instead of Rottay's own dark ramp.
-   */
   elevations: {
     level0: 'none',
     level1:
@@ -1330,6 +1288,10 @@ const SURFACES: BrandSurfaces = {
 };
 
 // ── MOTION ──
+/**
+ * @domicile pro-expert
+ * @governor capability: motion (activa en rottay)
+ */
 const MOTION: BrandMotion = {
   intensity: 1.0,
   entrance: 'spring',
@@ -1347,6 +1309,9 @@ const MOTION: BrandMotion = {
 };
 
 // ── CHARTS ──
+/**
+ * Enum de charts: personalidad de grafico; no baja a canal.
+ */
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   mountDuration: 800,
@@ -1359,10 +1324,7 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
 // ── CHROME ──
 const CHROME: BrandChrome = {
   /**
-   * A status badge on a control plane is a label on a record, not a button.
-   * The pill shape the DS and both sibling verticals use belongs to consumer
-   * surfaces; Rottay squares it off onto the same radius ramp its inputs and
-   * cards ride, which is what `technical-sharp` means in practice.
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   badge: {
     radius: 'var(--ds-radius-sm)',
@@ -1383,6 +1345,9 @@ const CHROME: BrandChrome = {
     infoBg: '#3B82F6',
   },
 
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   card: {
     defaultElevation: 'md',
     hoverElevation: 'lift-two',
@@ -1390,6 +1355,9 @@ const CHROME: BrandChrome = {
     hoverTint: true,
     paddingDensity: 'normal',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   accent: {
     barPosition: 'top',
     barThickness: 2,
@@ -1398,6 +1366,10 @@ const CHROME: BrandChrome = {
     badgeShape: 'rounded',
     dividerStyle: 'solid',
   },
+  /**
+   * @domicile seed
+   * @governor dial: navigation.sidebar-tone
+   */
   sidebar: {
     bg: '#0D0D10',
     border: '#18181C',
@@ -1424,13 +1396,6 @@ const CHROME: BrandChrome = {
     itemPadding: '0 13px',
     iconSize: '17.25px',
     footerBg: 'var(--ds-sidebar-bg)',
-    /**
-     * Sidebar geometry, drained from the artifact extension root block.
-     * These nine channels have no root-level DS floor — their only other
-     * declarations are on descendant selectors inside the shell and skin
-     * stylesheets — so `modes.light` resets them with `initial` rather than
-     * restating a floor that does not exist.
-     */
     shellPaddingInline: '10px',
     shellPaddingCollapsed: '8px',
     itemHeight: '62px',
@@ -1441,6 +1406,9 @@ const CHROME: BrandChrome = {
     itemGap: '9px',
     childPaddingInline: '6px',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   layout: {
     bg: '#0C0C0E',
     headerBg: 'rgba(12, 12, 14, 0.82)',
@@ -1451,11 +1419,17 @@ const CHROME: BrandChrome = {
     dividerColor: '#2A2A2F',
     dividerTextColor: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   shell: {
     gridSize: '28px',
     gridLine: 'rgba(255, 255, 255, 0.03)',
     gridOpacity: 0.9,
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   breadcrumb: {
     color: '#6B6B72',
     colorHover: '#ECECEC',
@@ -1464,10 +1438,7 @@ const CHROME: BrandChrome = {
   },
 
   /**
-   * List, popover, tooltip and command-palette chrome, drained from the
-   * artifact extension root block. `list` carries both channel spellings the
-   * DS ships (`--ds-list-bg` and `--ds-list-background-color`) because both
-   * have live readers; one field per channel, no aliasing in the compiler.
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   list: {
     bg: '#18181B',
@@ -1483,6 +1454,10 @@ const CHROME: BrandChrome = {
     itemHoverBackgroundColor: '#222226',
   },
 
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   popover: {
     bg: '#1A1A1E',
     border: '#2A2A2F',
@@ -1492,6 +1467,10 @@ const CHROME: BrandChrome = {
     titleColor: '#ECECEC',
   },
 
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   tooltip: {
     bg: '#ECECEC',
     color: '#0C0C0E',
@@ -1506,6 +1485,9 @@ const CHROME: BrandChrome = {
     shadow: '0 4px 16px rgba(0, 0, 0, 0.40)',
   },
 
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   search: {
     commandPalette: {
       backdrop: 'rgba(0, 0, 0, 0.60)',
@@ -1517,20 +1499,11 @@ const CHROME: BrandChrome = {
       shortcutBorder: '#2A2A2F',
     },
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, typography.scale, chrome.families, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   controls: {
-    /**
-     * The control ramp. Rottay is a console: a screen is a table of rows with
-     * inline controls, so the DS baseline (40px md, 56px xl) spends a third of
-     * the viewport on air. One seed — `--ds-input-md-height` — sets the row,
-     * and every other size is an offset from it, so a tenant that moves the
-     * seed moves the whole ladder including Button.
-     *
-     * The sizes are px and not `calc(… * var(--ds-density-*))`: the consumers
-     * already apply density themselves (`input.css`, `date-picker.css`,
-     * `tree-select.css`, `button.css` all wrap these tokens in
-     * `* var(--ds-density-effective-scale)`), so a factor here would apply
-     * twice. Height is the seed; padding and gap derive from it optically.
-     */
     semantic: {
       ink: 'var(--ds-color-text-primary)',
       inkMuted: 'var(--ds-color-text-secondary)',
@@ -1599,12 +1572,6 @@ const CHROME: BrandChrome = {
       },
     },
 
-    /**
-     * Button rides the same row height as the field, so a control strip lines
-     * up without per-screen correction. Buttons take more horizontal room than
-     * fields (0.42 of the height against 0.35) because a label needs shoulders
-     * where a value does not.
-     */
     buttonGeometry: {
       fontWeight: 'var(--ds-font-weight-medium)',
       letterSpacing: 'var(--ds-letter-spacing-body, 0)',
@@ -1727,14 +1694,7 @@ const CHROME: BrandChrome = {
       shadowActive: "var(--ds-button-info-shadow)", bg: '#3B82F6', bgHover: '#2563EB', bgActive: '#1D4ED8', text: '#ffffff', color: '#ffffff', border: 'transparent' },
     disabled: { opacity: 0.4, bg: '#18181B', text: '#52525B', border: '#2A2A2F', borderColor: '#2A2A2F' },
     focusRing: 'var(--ds-focus-ring)',
-    /**
-     * The focus ring's own colour channel. Authored once here and NOT
-     * restated in `modes.light`: it forwards to `--ds-color-primary`, which
-     * each mode already re-grounds, so a second authority would only be a
-     * chance to disagree with the seed.
-     */
     focusRingColor: 'var(--ds-color-primary)',
-    /** Textarea and form-field chrome, drained from the extension root block. */
     textarea: {
       bg: '#131316',
       bgDisabled: '#101012',
@@ -1774,12 +1734,6 @@ const CHROME: BrandChrome = {
       label: { color: '#A0A0A5' },
       helper: { color: '#6B6B72', errorFontWeight: 'var(--ds-font-weight-medium)' },
       clear: { color: '#6B6B72', colorHover: '#A0A0A5' },
-      /**
-       * A read-only field in a control plane is a fact, not an empty slot: it
-       * carries an id you are about to copy. The DS baseline dashes the border
-       * and blocks the caret, which reads as "disabled". Rottay keeps the solid
-       * border and the text cursor.
-       */
       readOnly: { borderStyle: 'solid', cursor: 'text' },
       successBorder: '#16A34A',
       successShadowFocus: '0 0 0 2px rgba(34, 197, 94, 0.18)',
@@ -1789,19 +1743,6 @@ const CHROME: BrandChrome = {
       errorShadowFocus: '0 0 0 2px rgba(239, 68, 68, 0.18)',
       errorColor: '#EF4444',
     },
-    /**
-     * Field and dropdown chrome. MASS C3-BITHIRE-ALL introduced
-     * `controls.select` as a closed semantic family, so all three
-     * first-party themes author the same keyset.
-     *
-     * Rottay's extension still declares the rustic-shaped `--ds-select-border*`
-     * spelling; the values below are the ones this brand resolves TODAY, so
-     * the compiled block adds no divergence and the rottay drain tranche can
-     * delete those extension rows without a paint change. The `borderColor*`,
-     * `bgHover`, `bgFocus`, `dropdownBorderColor` and `optionColor` channels
-     * had no brand row at all and carry the DS baseline expression they
-     * currently fall through to.
-     */
     select: {
       bg: '#131316',
       bgHover: 'var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))',
@@ -1839,18 +1780,6 @@ const CHROME: BrandChrome = {
       tagColor: '#A0A0A5',
       warningBorder: '#D97706',
     },
-    /**
-     * ROTTAY-T2 MASS. Twelve control families drained from the artifact
-     * extension into the typed Theme. Dark is the authored default, so every
-     * body row below is the exact literal the extension painted in the dark
-     * block; `modes.light` restates only what diverges. Channels whose paint
-     * the cascade already resolves identically (36 rows from `default.css`
-     * plus 5 component `:root` floors) carry no field at all; that is why
-     * `inputNumber.controlBg` and `rate`'s active/hover rows are absent.
-     * `rate` rides in this tranche because its channels are authored inside
-     * the same control block of the artifact, even though the family
-     * inventory files it under feedback.
-     */
     autocomplete: {
       bg: '#131316',
       border: '#2A2A2F',
@@ -2000,16 +1929,10 @@ const CHROME: BrandChrome = {
     },
   },
   /**
-   * Shared card/panel surface algebra. New in MASS C3-BITHIRE-ALL; Rottay has
-   * no brand divergence here yet, so every value is the expression this brand
-   * resolves today from the DS baseline. Authoring the keyset makes the family
-   * a real cross-vertical capability instead of a BitHire-only appendage.
+   * @domicile seed
+   * @governor dial: palette.seeds
    */
   surface: {
-    /**
-     * Page-level scrims, gradients and watermark ink, drained from the
-     * artifact extension root block.
-     */
     overlayBg: 'rgba(0, 0, 0, 0.64)',
     imageOverlayBg: 'rgba(0, 0, 0, 0.70)',
     cardCoverOverlayBg:
@@ -2034,9 +1957,8 @@ const CHROME: BrandChrome = {
     popoverShadow: 'var(--ds-shadow-md)',
   },
   /**
-   * Rich-card frame and banded interior. Same tranche, same rule: the keyset
-   * is shared with BitHire and Evnto; the values are Rottay's current
-   * resolution, so nothing repaints.
+   * @domicile seed
+   * @governor dial: palette.seeds
    */
   premiumCard: {
     bg: 'var(--ds-material-card-background, var(--ds-card-bg))',
@@ -2055,6 +1977,10 @@ const CHROME: BrandChrome = {
     selectedRing:
       'var(--ds-material-card-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent))',
   },
+  /**
+   * @domicile seed
+   * @governor dial: typography.scale
+   */
   table: {
     bg: '#0C0C0E',
     border: '#2A2A2F',
@@ -2071,28 +1997,15 @@ const CHROME: BrandChrome = {
     cellFontSize: '0.875rem',
     cellColor: '#ECECEC',
     loadingOverlayBg: 'rgba(12, 12, 14, 0.7)',
-    /**
-     * The header is a fixed rail on the control ladder rather than `auto`, so a
-     * table lines up with the toolbar controls above it.
-     */
     headerBlockSize: 'calc(var(--ds-input-md-height) - 0.25rem)',
-    /**
-     * 0.08em is eyebrow tracking for a two-word label. A data header is read in
-     * columns, not as prose; three quarters of the eyebrow keeps the channel and
-     * closes the letters up.
-     */
     headerLetterSpacing: 'calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * 0.75)',
-    /** No sheen. The baseline gradient is transparent-to-transparent anyway. */
     sheen: 'none',
   },
+  /**
+   * Familia mixta. Controles: typography.scale, palette.seeds.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   cardComponent: {
-    /**
-     * One padding ladder. The DS ships two that disagree — `--ds-card-{size}-padding`
-     * (12/16/24/32) and `--ds-card-padding-{size}` (16/20/28/40) — and a card
-     * gets whichever its skin happens to read. `paddingSm..Xl` writes both names
-     * from one field, so Rottay has a single answer, and each step sits on the
-     * spacing ramp so the density dial reaches it.
-     */
     paddingSm: 'var(--ds-spacing-3)',
     paddingMd: 'var(--ds-spacing-4)',
     paddingLg: 'var(--ds-spacing-5)',
@@ -2100,7 +2013,6 @@ const CHROME: BrandChrome = {
     headerPadding: 'var(--ds-spacing-4) var(--ds-spacing-4) var(--ds-spacing-3)',
     bodyPadding: 'var(--ds-spacing-4)',
     footerPadding: 'var(--ds-spacing-3) var(--ds-spacing-4)',
-    /** A console card title names a panel; it is a label, not a headline. */
     titleFontSize: 'var(--ds-font-size-sm)',
     titleFontWeight: 'var(--ds-font-weight-medium)',
     bg: '#18181B',
@@ -2124,6 +2036,10 @@ const CHROME: BrandChrome = {
     imageLoadingTrack: '#222226',
     imageLoadingActive: '#ECECEC',
 },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   modal: {
     bg: '#1A1A1E',
     color: '#ECECEC',
@@ -2141,6 +2057,10 @@ const CHROME: BrandChrome = {
     closeColorHover: '#ECECEC',
     closeBgHover: 'rgba(255, 255, 255, 0.05)',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   tabs: {
     border: '#2A2A2F',
     color: '#6B6B72',
@@ -2185,6 +2105,9 @@ const CHROME: BrandChrome = {
     overflowControlShadow: '0 2px 8px rgba(0, 0, 0, 0.22)',
     overflowControlShadowHover: '0 6px 16px rgba(0, 0, 0, 0.30)',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   alert: {
     errorBg: 'rgba(239, 68, 68, 0.10)',
     errorBorder: 'rgba(239, 68, 68, 0.22)',
@@ -2203,11 +2126,17 @@ const CHROME: BrandChrome = {
     warningColor: '#FCD34D',
     warningIcon: '#F59E0B',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   anchor: {
     inkColor: '#FFFFFF',
     linkColor: '#6B6B72',
     linkColorActive: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   avatar: {
     borderColor: 'rgba(255, 255, 255, 0.05)',
     defaultBg: '#2A2A2F',
@@ -2230,17 +2159,27 @@ const CHROME: BrandChrome = {
     warningBg: 'rgba(245, 158, 11, 0.14)',
     warningColor: '#F59E0B',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   backTop: {
     bg: '#FFFFFF',
     color: '#0C0C0E',
     shadow: '0 4px 16px rgba(0, 0, 0, 0.30)',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   calendar: {
     bg: '#1A1A1E',
     border: '#2A2A2F',
     dayColorOther: '#4A4A4F',
     headerColor: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   collapse: {
     bg: '#131316',
     border: '#2A2A2F',
@@ -2249,12 +2188,19 @@ const CHROME: BrandChrome = {
     headerBgHover: '#1A1A1E',
     headerColor: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   descriptions: {
     bg: '#131316',
     border: '#2A2A2F',
     contentColor: '#ECECEC',
     labelColor: '#6B6B72',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   drawer: {
     bg: '#1A1A1E',
     bodyColor: '#A0A0A5',
@@ -2263,6 +2209,10 @@ const CHROME: BrandChrome = {
     shadow: '0 16px 48px rgba(0, 0, 0, 0.50)',
     titleColor: '#ECECEC',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   dropdown: {
     bg: '#1A1A1E',
     itemBgActive: '#2A2A2F',
@@ -2272,10 +2222,17 @@ const CHROME: BrandChrome = {
     itemColorHover: '#ECECEC',
     shadow: '0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   empty: {
     descriptionColor: '#6B6B72',
     iconColor: '#4A4A4F',
   },
+  /**
+   * Familia mixta. Controles: token-overrides, palette.seeds.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   floatButton: {
     badgeBg: '#EF4444',
     badgeColor: '#ffffff',
@@ -2285,6 +2242,10 @@ const CHROME: BrandChrome = {
     primaryBg: 'var(--ds-color-primary)',
     primaryColor: '#0C0C0E',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   liveFeed: {
     badgeBg: 'var(--ds-color-primary)',
     badgeColor: '#0C0C0E',
@@ -2298,6 +2259,10 @@ const CHROME: BrandChrome = {
     refreshColor: '#A0A0A5',
     skeletonBg: '#2A2A2F',
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   menu: {
     bg: '#0C0C0E',
     darkBg: '#0C0C0E',
@@ -2316,17 +2281,27 @@ const CHROME: BrandChrome = {
     itemSelectedColor: '#ECECEC',
     submenuBg: '#131316',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   message: {
     bg: '#1A1A1E',
     closeColor: '#6B6B72',
     closeColorHover: '#ECECEC',
     shadow: '0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   notification: {
     bg: '#1A1A1E',
     shadow: '0 4px 24px rgba(0, 0, 0, 0.50), 0 0 0 1px #2A2A2F',
     titleColor: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   pagination: {
     activeBg: '#FFFFFF',
     activeColor: '#0C0C0E',
@@ -2338,6 +2313,9 @@ const CHROME: BrandChrome = {
     itemColorActive: '#0C0C0E',
     itemColorHover: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   progress: {
     bg: '#2A2A2F',
     fillError: '#EF4444',
@@ -2345,26 +2323,44 @@ const CHROME: BrandChrome = {
     fillSuccess: '#22C55E',
     fillWarning: '#F59E0B',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   result: {
     iconColor: '#0C0C0E',
     subtitleColor: '#6B6B72',
     titleColor: '#ECECEC',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   skeleton: {
     bg: '#1A1A1E',
     highlight: '#2A2A2F',
     waveGradient: 'linear-gradient(90deg, #1A1A1E 25%, #2A2A2F 50%, #1A1A1E 75%)',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   spinner: {
     color: 'var(--ds-color-primary)',
     track: '#2A2A2F',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   statistic: {
     prefixColor: '#A0A0A5',
     suffixColor: '#A0A0A5',
     titleColor: '#A0A0A5',
     valueColor: '#ECECEC',
   },
+  /**
+   * Un solo control (token-overrides), pero ese control no figura como dial
+   * de rottay en el roster: el tag queda pendiente de adjudicacion del DT.
+   */
   statsGrid: {
     cardBg: '#18181B',
     cardBorder: '#2A2A2F',
@@ -2380,6 +2376,9 @@ const CHROME: BrandChrome = {
     trendPositive: '#22C55E',
     valueColor: '#ECECEC',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   steps: {
     connectorColor: '#2A2A2F',
     connectorColorActive: '#FFFFFF',
@@ -2394,6 +2393,9 @@ const CHROME: BrandChrome = {
     waitBg: 'transparent',
     waitBorder: 'rgba(255, 255, 255, 0.14)',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   tag: {
     border: '#2A2A2F',
     defaultBg: '#222226',
@@ -2415,12 +2417,18 @@ const CHROME: BrandChrome = {
     warningBorder: 'rgba(245, 158, 11, 0.22)',
     warningColor: '#FBBF24',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   timeline: {
     contentColor: '#A0A0A5',
     dotBg: '#FFFFFF',
     dotBorder: '#18181B',
     lineColor: '#2A2A2F',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   tree: {
     nodeBgHover: 'rgba(255, 255, 255, 0.04)',
     nodeBgSelected: '#2A2A2F',
@@ -2431,13 +2439,7 @@ const CHROME: BrandChrome = {
 
 // ── CAPABILITIES ──
 /**
- * Explicit disposition for every optional capability family.
- *
- * The three first-party themes previously disagreed on which of these keys
- * existed at all — rottay had `recipes` but no `expressive`, bithire had
- * both, evnto had neither — and nothing distinguished "this vertical ships
- * no expressive selection" from "nobody got round to authoring one". These
- * entries say which it is.
+ * Estado y prosa de capability: declara disposicion, no pinta.
  */
 const CAPABILITIES: BrandCapabilityCatalog = {
   // ACTIVE, because the compilers actually read it.
@@ -2482,6 +2484,10 @@ const CAPABILITIES: BrandCapabilityCatalog = {
 // Nothing below carries a value. The exported object names the contract's
 // families in the contract's own order and references the decisions above.
 
+/**
+ * Esqueleto de contrato: nombra las familias en el orden del contrato y
+ * referencia las decisiones; ninguna hoja de aca abajo carga valor.
+ */
 export const rottayBrandTheme: FirstPartyBrandTheme = {
   id: THEME_ID,
   name: THEME_NAME,

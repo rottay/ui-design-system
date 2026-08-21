@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "law": "decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba. Un contador que SUBE es una divergencia nueva o cobertura perdida y falla; uno que BAJA falla tambien, con la instruccion de bajar este archivo en el MISMO commit que movio el numero. Se edita A MANO, con revision del DT.",
-  "producedBy": "F4A-2 — primera corrida sobre el arbol 2404ddc21, con CERO tags en las fuentes.",
+  "producedBy": "F4A-2 — primera corrida sobre el arbol 2404ddc21, con CERO tags en las fuentes. Baja #1: F4A-3b (canon de comentarios, 37 tags autorados) — untaggedAuthoredLeaves 3686 -> 3029, verificado por el DT contra el artefacto regenerado.",
   "divergentSlots": 2268,
-  "untaggedAuthoredLeaves": 3686,
+  "untaggedAuthoredLeaves": 3029,
   "reading": {
-    "divergentSlots": "2613 slots del universo - 345 con posicion en los tres = 2268 sin posicion completa. Hoy la unica posicion posible es `authored`: no hay ni un @placeholder en las fuentes, asi que toda ausencia es SILENCIO. F4A-3..15 lo bajan; F4A-close lo lleva a 0.",
-    "untaggedAuthoredLeaves": "3686 = (1820-12) + (1503-11) + (397-11): hojas autoradas menos el metadato LEXICAMENTE presente de cada tema. Unidad LEXICA — no confundir con el denominador de pintura 3690, que es la unidad EVALUADA citada de F4A-0.",
+    "divergentSlots": "2613 slots del universo - 345 con posicion en los tres = 2268 sin posicion completa. F4A-3b no lo movio (los tags no son posiciones nuevas; los placeholders de F4A-4 si). F4A-4..15 lo bajan; F4A-close lo lleva a 0.",
+    "untaggedAuthoredLeaves": "3029 tras F4A-3b. El residuo son las 29 familias mixtas (sus tags por hoja/grupo aterrizan EN su lote de reescritura F4A-5..15), las 53 sin-control (disposicion: F4A-close) y el esqueleto THEME.* (35 hojas de cableado, no de autoria). Arranque: 3686 = (1820-12) + (1503-11) + (397-11): hojas autoradas menos el metadato LEXICAMENTE presente de cada tema. Unidad LEXICA — no confundir con el denominador de pintura 3690, que es la unidad EVALUADA citada de F4A-0.",
     "porQueNoCoinciden": "3686 lexicas vs 3690 evaluadas: son dos unidades. Ademas evnto no autora su motion (escribe `motion: EVNTO_CANONICAL_MOTION`), asi que 2 de las 36 entradas de metadato no tienen hoja lexica y no restan aqui."
   }
 }

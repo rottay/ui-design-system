@@ -6,21 +6,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 87778,
-        "lines": 2522,
-        "sha256": "9a504fe631ff9b91689a106837f24f8b0a67b322bfcfd3a081fb091f668aeae7"
+        "bytes": 84142,
+        "lines": 2528,
+        "sha256": "393c93b4eb2746160ebfd49731d91bd0970ebb546973b0ed6c851758f1270bb1"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 89479,
-        "lines": 2180,
-        "sha256": "1916f2d4c19ab64d46ceaff58d5e45652082cb28d27ba56498ff499e729aae20"
+        "bytes": 93262,
+        "lines": 2311,
+        "sha256": "a0a5d4dbdb16818fddc2a6fb2787262c9416480f054db1c0befa1e9492b040a1"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 30401,
-        "lines": 799,
-        "sha256": "8424f566c1b9f6f793277641ba04c5ce703470b007155a93bbd214f154da626d"
+        "bytes": 25684,
+        "lines": 739,
+        "sha256": "3c8c5479db2cedb2e45aaff020125662d7c3c63cb17f8026ef296d399a479d7e"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch."
@@ -185,8 +185,342 @@
   },
   "tagRegistry": {
     "law": "Vocabulario CERRADO: seed | baseline | derived | pro-expert | unassigned. @governor obligatorio, de una linea.",
-    "count": 0,
-    "entries": []
+    "count": 37,
+    "entries": [
+      {
+        "tenant": "rottay",
+        "scope": "OVERLAY.surfaces",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 984
+      },
+      {
+        "tenant": "rottay",
+        "scope": "RECIPES",
+        "kind": "scope",
+        "domicile": "pro-expert",
+        "governor": "capability: recipes (activa en rottay)",
+        "governorClass": "capability",
+        "line": 1019
+      },
+      {
+        "tenant": "rottay",
+        "scope": "MOTION",
+        "kind": "scope",
+        "domicile": "pro-expert",
+        "governor": "capability: motion (activa en rottay)",
+        "governorClass": "capability",
+        "line": 1291
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.sidebar",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: navigation.sidebar-tone",
+        "governorClass": "dial",
+        "line": 1369
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.popover",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1457
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.tooltip",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1470
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.surface",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1931
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.premiumCard",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1959
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.table",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: typography.scale",
+        "governorClass": "dial",
+        "line": 1980
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.modal",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2039
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.tabs",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2060
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.backTop",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2162
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.drawer",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2200
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.dropdown",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2212
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.liveFeed",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2245
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.notification",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2293
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.skeleton",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2334
+      },
+      {
+        "tenant": "rottay",
+        "scope": "CHROME.spinner",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2343
+      },
+      {
+        "tenant": "bithire",
+        "scope": "RECIPES",
+        "kind": "scope",
+        "domicile": "pro-expert",
+        "governor": "capability: recipes (activa en bithire)",
+        "governorClass": "capability",
+        "line": 758
+      },
+      {
+        "tenant": "bithire",
+        "scope": "EXPRESSIVE",
+        "kind": "scope",
+        "domicile": "pro-expert",
+        "governor": "capability: expressive (activa en bithire)",
+        "governorClass": "capability",
+        "line": 775
+      },
+      {
+        "tenant": "bithire",
+        "scope": "MOTION",
+        "kind": "scope",
+        "domicile": "pro-expert",
+        "governor": "capability: motion (activa en bithire)",
+        "governorClass": "capability",
+        "line": 1069
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.sidebar",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: navigation.sidebar-tone",
+        "governorClass": "dial",
+        "line": 1130
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.shell",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1176
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.filterPill",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1254
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.badge",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: typography.families",
+        "governorClass": "dial",
+        "line": 1282
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.premiumCard",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1888
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.surface",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1911
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.signalCard",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 1975
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.listingGrid",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2086
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.detail",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2119
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.modal",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2149
+      },
+      {
+        "tenant": "bithire",
+        "scope": "CHROME.tabs",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 2171
+      },
+      {
+        "tenant": "evnto",
+        "scope": "OVERLAY.palette",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 64
+      },
+      {
+        "tenant": "evnto",
+        "scope": "CHROME.sidebar",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: navigation.sidebar-tone",
+        "governorClass": "dial",
+        "line": 433
+      },
+      {
+        "tenant": "evnto",
+        "scope": "CHROME.surface",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 595
+      },
+      {
+        "tenant": "evnto",
+        "scope": "CHROME.premiumCard",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 616
+      },
+      {
+        "tenant": "evnto",
+        "scope": "CHROME.cardComponent",
+        "kind": "scope",
+        "domicile": "seed",
+        "governor": "dial: palette.seeds",
+        "governorClass": "dial",
+        "line": 646
+      }
+    ]
   },
   "matrix": {
     "unit": "authored-decision-leaf-path (importada de mirror-parity/authoredLeafPaths)",
@@ -226,15 +560,15 @@
       "evnto": 386
     },
     "taggedPaintLeaves": {
-      "rottay": 0,
-      "bithire": 0,
-      "evnto": 0
+      "rottay": 212,
+      "bithire": 295,
+      "evnto": 150
     }
   },
   "ratchet": {
     "law": "decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.",
     "divergentSlots": 2268,
-    "untaggedAuthoredLeaves": 3686
+    "untaggedAuthoredLeaves": 3029
   },
   "failures": []
 }

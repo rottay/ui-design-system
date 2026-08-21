@@ -67,6 +67,10 @@ const OVERLAY_MODE = 'dark' satisfies BrandThemeMode;
  * step to the OKLCH derivation.
  */
 const OVERLAY: BrandThemeModeOverlay = {
+  /**
+   * Familia mixta. Controles: palette.seeds, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   palette: {
     ramps: {
       primary: {
@@ -209,6 +213,9 @@ const OVERLAY: BrandThemeModeOverlay = {
     infoBorderColor: "rgba(26, 127, 224, 0.3)",
     infoInkColor: "var(--ds-color-info-300)",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   typography: {
     letterSpacing: {
       display: "-0.02em",
@@ -218,6 +225,10 @@ const OVERLAY: BrandThemeModeOverlay = {
       body: 1.6,
     },
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, surfaces.effect-intensity.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   surfaces: {
     borderRadius: {
       full: "9999px",
@@ -324,6 +335,10 @@ const OVERLAY: BrandThemeModeOverlay = {
       surface: "linear-gradient(145deg, var(--ds-surface-card) 0%, var(--ds-surface-panel) 58%, var(--ds-surface-canvas) 100%)",
     },
   },
+  /**
+   * Familia mixta. Controles: chrome.families, palette.seeds, shape.radius-scale, typography.scale, navigation.sidebar-tone.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   chrome: {
     controls: {
       buttonPrimary: {
@@ -719,17 +734,6 @@ const OVERLAY: BrandThemeModeOverlay = {
 };
 
 // ── RECIPES ──
-/**
- * Governed recipe profile (K0.6, 2026-07-23): selected from sighted
- * same-tree evidence (`/probe/k0-profiles`, captures under
- * test-artifacts/rottay-design-platform/K0-K1/captures). technical-sharp
- * matches this theme's declared border-first, dense, ruled-table posture.
- * Review note for Codex: the profile sets the DEFAULT button recipe to
- * outline (unspecified variants render outlined instead of filled);
- * explicit `variant` props are sovereign over profile defaults.
- * editorial-round was sighted and rejected (contradicts the declared
- * dense, border-first posture).
- */
 /*
  * R1 Cohort 1 RESELECTION. The K0.6 selection above was correct for the
  * posture this theme then declared (border-first, dense, ruled). The R1
@@ -751,6 +755,10 @@ const OVERLAY: BrandThemeModeOverlay = {
  * extended -- and the previous id remains published and permanent per the
  * registry's supersede-never-reuse law.
  */
+/**
+ * @domicile pro-expert
+ * @governor capability: recipes (activa en bithire)
+ */
 const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: "rottay/network-professional@1" };
 
 // ── EXPRESSIVE ──
@@ -763,6 +771,10 @@ const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: "rottay/netwo
  * provenance marker). Review note for Codex: authored labelStyle
  * "sentence" and the authored table header chrome deliberately shield
  * this theme from the technical posture's uppercase defaults.
+ */
+/**
+ * @domicile pro-expert
+ * @governor capability: expressive (activa en bithire)
  */
 const EXPRESSIVE: BrandExpressiveSelection = {
   schemaVersion: 1,
@@ -813,6 +825,10 @@ const EXPRESSIVE: BrandExpressiveSelection = {
 };
 
 // ── PALETTE ──
+/**
+ * Familia mixta. Controles: palette.seeds, token-overrides.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const PALETTE: BrandPalette = {
   ramps: {
     neutral: {
@@ -873,6 +889,10 @@ const PALETTE: BrandPalette = {
 };
 
 // ── TYPOGRAPHY ──
+/**
+ * Familia mixta. Controles: typography.families, typography.pairing.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const TYPOGRAPHY: BrandTypography = {
   fontFamilyBase:
     "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)",
@@ -901,6 +921,10 @@ const TYPOGRAPHY: BrandTypography = {
 };
 
 // ── SURFACES ──
+/**
+ * Familia mixta. Controles: palette.seeds, surfaces.effect-intensity.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const SURFACES: BrandSurfaces = {
   // Operational recruiting surfaces need high information density without
   // shrinking touch targets. Component geometry below owns controls; this
@@ -1042,6 +1066,10 @@ const SURFACES: BrandSurfaces = {
 };
 
 // ── MOTION ──
+/**
+ * @domicile pro-expert
+ * @governor capability: motion (activa en bithire)
+ */
 const MOTION: BrandMotion = {
   // Expressive-calm: fast enough for operational work, alive enough to make
   // interactive surfaces feel intentional.
@@ -1061,6 +1089,9 @@ const MOTION: BrandMotion = {
 };
 
 // ── CHARTS ──
+/**
+ * Enum de charts: personalidad de grafico; no baja a canal.
+ */
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   mountDuration: 400,
@@ -1075,6 +1106,9 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
 
 // ── CHROME ──
 const CHROME: BrandChrome = {
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   card: {
     defaultElevation: "md",
     hoverElevation: "lift-two",
@@ -1082,6 +1116,9 @@ const CHROME: BrandChrome = {
     hoverTint: true,
     paddingDensity: "compact",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   accent: {
     barPosition: "none",
     barThickness: 0,
@@ -1090,6 +1127,10 @@ const CHROME: BrandChrome = {
     badgeShape: "pill",
     dividerStyle: "solid",
   },
+  /**
+   * @domicile seed
+   * @governor dial: navigation.sidebar-tone
+   */
   sidebar: {
     // Shell geometry is a brand decision, not a color-mode one: authored
     // here it reaches both modes, matching how rottay already ships it.
@@ -1120,6 +1161,9 @@ const CHROME: BrandChrome = {
     itemPadding: "6px 10px",
     iconSize: "16px",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   layout: {
     headerHeight: "56px",
     bg: "#F4F7FA",
@@ -1129,6 +1173,10 @@ const CHROME: BrandChrome = {
     siderBg: "#FFFFFF",
     siderBorder: "#D4E0EA",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   shell: {
     gridSize: "0px",
     gridLine: "transparent",
@@ -1186,6 +1234,9 @@ const CHROME: BrandChrome = {
     commandHomeMeterBg: "color-mix(in srgb, #D4E0EA 72%, transparent)",
     commandHomeMeterFill: "linear-gradient(90deg, #315F86, #6F98BC)",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   toolbar: {
     bg: "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
     border: "#D4E0EA",
@@ -1200,6 +1251,10 @@ const CHROME: BrandChrome = {
     controlColor: "#14283B",
     divider: "#E3EAF0",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   filterPill: {
     bg: "#ffffff",
     border: "#D4E0EA",
@@ -1224,6 +1279,10 @@ const CHROME: BrandChrome = {
     countActiveRing:
       "none",
   },
+  /**
+   * @domicile seed
+   * @governor dial: typography.families
+   */
   badge: {
     fontFamily: "var(--ds-font-family-base)",
     fontWeight: 700,
@@ -1289,6 +1348,9 @@ const CHROME: BrandChrome = {
     pulseScale: 1.14,
     touchTarget: "2.75rem",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   breadcrumb: {
     bg: "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
     border: "color-mix(in srgb, #D4E0EA 82%, transparent)",
@@ -1303,6 +1365,9 @@ const CHROME: BrandChrome = {
     fontWeight: 400,
     padding: "0.625rem 1rem",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   search: {
     bg: "#ffffff",
     border: "#D4E0EA",
@@ -1327,6 +1392,10 @@ const CHROME: BrandChrome = {
     categoryColor: "#728398",
     emptyBg: "#F4F8FD",
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, shape.button-style, typography.scale, shape.radius-scale, chrome.families, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   controls: {
     semantic: {
       ink: "var(--ds-color-text-primary)",
@@ -1719,6 +1788,10 @@ const CHROME: BrandChrome = {
       errorColor: "#14283B",
     },
   },
+  /**
+   * Familia mixta. Controles: shape.radius-scale, palette.seeds, typography.scale.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   table: {
     bg: "#ffffff",
     border: "#D4E0EA",
@@ -1762,6 +1835,10 @@ const CHROME: BrandChrome = {
     pageButtonHoverShadow: "0 1px 2px rgba(20, 40, 59, 0.06)",
     loadingOverlayBg: "rgba(255, 255, 255, 0.7)",
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, shape.radius-scale, typography.scale.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   cardComponent: {
     padding: "1rem",
     paddingSm: "0.875rem",
@@ -1808,6 +1885,10 @@ const CHROME: BrandChrome = {
   // Rich card: mode-agnostic frame plus the banded interior. The interior
   // grounds are light-mode values (this theme's default mode); `modes.dark`
   // pins the dark side to the component layer's own defaults.
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   premiumCard: {
     bg: "var(--ds-surface-card)",
     sheen: "none",
@@ -1827,6 +1908,10 @@ const CHROME: BrandChrome = {
     selectedRing:
       "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   surface: {
     radiusMd: "var(--ds-radius-md)",
     shadow:
@@ -1851,9 +1936,16 @@ const CHROME: BrandChrome = {
     cardGridBg:
       "linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--ds-surface-card-grid-line) 1px, transparent 1px), linear-gradient(115deg, transparent 0%, color-mix(in srgb, var(--ds-surface-card) 34%, transparent) 46%, transparent 66%)",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   tooltip: {
     zIndex: 2700,
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   metricCard: {
     bg: "#FFFFFF",
     border: "color-mix(in srgb, #3A6FB0 10%, #D4E0EA)",
@@ -1880,6 +1972,10 @@ const CHROME: BrandChrome = {
     meterFillError: "#C5504C",
     meterFillNeutral: "#8A9AAA",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   signalCard: {
     bg: "#ffffff",
     topLineDisplay: "none",
@@ -1899,6 +1995,10 @@ const CHROME: BrandChrome = {
     meterTrackBorder: "color-mix(in srgb, #D4E0EA 82%, transparent)",
     meterFill: "linear-gradient(90deg, #315F86, #86A6C2)",
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, shape.radius-scale.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   workspaceCard: {
     bg: "#FFFFFF",
     bgHover: "#FBFCFE",
@@ -1922,6 +2022,10 @@ const CHROME: BrandChrome = {
     footerColor: "#53697E",
     hoverTransform: "translateY(-1px)",
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, shape.radius-scale.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   compactCard: {
     bg: "#FFFFFF",
     bgHover: "#F9FBFE",
@@ -1936,6 +2040,10 @@ const CHROME: BrandChrome = {
     labelColor: "#728398",
     valueColor: "#14283B",
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, shape.radius-scale.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   tallCard: {
     bg: "linear-gradient(145deg, #FFFFFF 0%, #F8FBFF 72%, #F6F2EA 100%)",
     border: "#D4E0EA",
@@ -1950,6 +2058,10 @@ const CHROME: BrandChrome = {
     labelColor: "#728398",
     valueColor: "#14283B",
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, shape.radius-scale.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   collectionCard: {
     bg: "#FFFFFF",
     bgHover: "#F9FBFE",
@@ -1971,6 +2083,10 @@ const CHROME: BrandChrome = {
     statusBorder: "#C5DCEB",
     statusColor: "#285F84",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   listingGrid: {
     gap: "12px",
     minCardWidth: "260px",
@@ -1985,6 +2101,9 @@ const CHROME: BrandChrome = {
     emptyBorder: "#D4E0EA",
     skeletonBg: "#EEF3F8",
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   list: {
     previewRailGap: "clamp(14px, 1.45vw, 22px)",
     previewPanelBg:
@@ -1997,6 +2116,10 @@ const CHROME: BrandChrome = {
     previewMotionEase: "cubic-bezier(0.2, 0.8, 0.2, 1)",
     shellSectionGap: "14px",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   detail: {
     railWidth: "clamp(280px, 22vw, 340px)",
     heroBg:
@@ -2023,6 +2146,10 @@ const CHROME: BrandChrome = {
     continuousSurface:
       "color-mix(in srgb, var(--ds-surface-card-bg, var(--ds-surface-card)) 94%, transparent)",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   modal: {
     bg: "#FFFFFF",
     color: "#14283B",
@@ -2041,6 +2168,10 @@ const CHROME: BrandChrome = {
     closeColorHover: "#14283B",
     closeBgHover: "#F4F8FD",
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   tabs: {
     border: "#E3EAF0",
     color: "var(--ds-color-text-secondary)",
@@ -2108,11 +2239,7 @@ const CHROME: BrandChrome = {
 
 // ── CAPABILITIES ──
 /**
- * Explicit disposition for every optional capability family. BitHire is the
- * vertical that authored the most of these, which is exactly why the
- * catalog matters: without it, "bithire has expressive and the others do
- * not" reads as a capability gap in the siblings rather than as three
- * separate decisions.
+ * Estado y prosa de capability: declara disposicion, no pinta.
  */
 const CAPABILITIES: BrandCapabilityCatalog = {
   // ACTIVE. See the note on rottay's disposition: the authored block is read
@@ -2140,6 +2267,10 @@ const CAPABILITIES: BrandCapabilityCatalog = {
 // Nothing below carries a value. The exported object names the contract's
 // families in the contract's own order and references the decisions above.
 
+/**
+ * Esqueleto de contrato: nombra las familias en el orden del contrato y
+ * referencia las decisiones; ninguna hoja de aca abajo carga valor.
+ */
 export const bithireBrandTheme: FirstPartyBrandTheme = {
   id: THEME_ID,
   name: THEME_NAME,

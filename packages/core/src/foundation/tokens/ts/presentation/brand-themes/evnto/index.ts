@@ -61,6 +61,10 @@ const OVERLAY_MODE = 'dark' satisfies BrandThemeMode;
  * step to the OKLCH derivation.
  */
 const OVERLAY: BrandThemeModeOverlay = {
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   palette: {
     primaryColor: "#E8E8E0",
     onPrimaryColor: "#131210",
@@ -185,27 +189,26 @@ const OVERLAY: BrandThemeModeOverlay = {
       },
     },
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   surfaces: {
     borderRadius: {
       full: "9999px",
     },
   },
+  /**
+   * Familia mixta. Controles: chrome.families, palette.seeds, token-overrides, navigation.sidebar-tone.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   chrome: {
     controls: {
       buttonPrimary: {
         bg: "#E8E8E0",
-        /**
-         * The dark hover was authored only in the artifact extension, so
-         * the compiled root emitted the LIGHT hover unconditionally and the
-         * extension's dark-gated row won it back at paint time. Owning the
-         * value here makes the dark overlay the single authority for the
-         * mode it governs; the extension row is retired in the same change.
-         */
         bgHover: "#F0F0E8",
         color: "#131210",
       },
       buttonSecondary: {
-        /** Same law as `buttonPrimary.bgHover` directly above. */
         bgHover: "#1C1A16",
         color: "#A8A898",
         border: "#2E2C24",
@@ -232,28 +235,8 @@ const OVERLAY: BrandThemeModeOverlay = {
         bgDisabled: "#1C1A16",
         colorDisabled: "#484838",
         borderDisabled: "#222018",
-        /**
-         * EVNTO TERMINAL-2. The extension authored this byte under the
-         * senior, contract-less name `--ds-input-placeholder`; the typed
-         * owner is this field, which lowers to
-         * `--ds-input-color-placeholder`. The literal is kept because it
-         * is what the extension authored, not derived — it happens to
-         * equal `modes.dark.palette.textMutedColor` today, and a re-brand
-         * that moves the palette must decide this channel deliberately
-         * rather than drift with it.
-         */
         colorPlaceholder: "#686858",
       },
-      /**
-       * DARK PIN (EVNTO TERMINAL-2), same doctrine as the BitHire theme.
-       * `light` is this theme's default mode, so the focus ring's light
-       * authority lives in the BODY and compiles UNCONDITIONALLY. This pin
-       * holds dark exactly where it resolves today
-       * (`default.css` dark: `var(--ds-color-primary-400)`); it is not a
-       * dark design decision. It is load-bearing on `[data-ds-root]`
-       * embeddings, where the compiled tenant block lands on the container
-       * element and an unconditional body value would otherwise reach dark.
-       */
       focusRingColor: "var(--ds-color-primary-400)",
     },
     cardComponent: {
@@ -285,6 +268,10 @@ const OVERLAY: BrandThemeModeOverlay = {
 // not authored by this vertical — capabilities.expressive states why.
 
 // ── PALETTE ──
+/**
+ * Familia mixta. Controles: palette.seeds, token-overrides.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const PALETTE: BrandPalette = {
   ramps: {
     neutral: {
@@ -326,50 +313,6 @@ const PALETTE: BrandPalette = {
   infoColor: '#475569',
   infoBgColor: '#f8fafc',
 
-  /**
-   * The six border channels this vertical used to leave silent, and so
-   * inherited from `themes/default.css` — the DS's own tenant-less DARK
-   * fallback set. This is a LEAK REPAIR, not a derivation: measured before
-   * this block existed, `--ds-color-border-subtle` and `-tertiary` painted
-   * #161619 hairlines on the WHITE light ground, and all four status borders
-   * painted DS hues rather than the seeds above. Repairing it moves pixels
-   * on purpose; it is not a value-preserving edit.
-   *
-   * The vertical's own #171717-on-#FFFFFF ink/surface pair is deliberate and
-   * is NOT the fault here — `deriveBorderSubtle` cannot even run on it (its
-   * `isHexColor` gate rejects the translucent light border), and composited
-   * first it lands ≈#F2F2F2. The seed was simply missing.
-   *
-   * Authored as formulas over this vertical's own channels, never as
-   * literals: a baked hex would freeze today's rendering as if it were a
-   * design choice and would leave the channels unreachable from the palette.
-   * Each string is mode-blind, so `compileModeBlocks` emits it once in the
-   * unconditional block and it re-resolves against whichever seed each mode
-   * declares.
-   *
-   * A 2/3 wash IS the DS's `BORDER_SUBTLE_GROUND_STEP` derivation — one
-   * third of the way from the border back to the ground — expressed without
-   * naming the ground, so it stays correct on cards and sunken regions
-   * rather than only on the page canvas, and it survives this vertical's
-   * translucent light border. The seed is `-primary` rather than
-   * `--ds-color-border` because the latter is itself unauthored here and
-   * still resolves to the DS dark fallback in dark mode.
-   *
-   * `-tertiary` repeats the formula rather than aliasing `-subtle`: the two
-   * are one value in `themes/default.css` and in the former default theme, so the
-   * equality this vertical already paints is preserved, but as two
-   * independent channels a tenant can still move apart.
-   *
-   * The status washes keep the 20% strength these channels already paint;
-   * only the hue moves, from the DS defaults onto the seeds above.
-   */
-  /**
-   * The seventh channel of the same leak: unauthored here, so dark resolved
-   * `themes/default.css`'s `#1C1C20` — a cool grey on this vertical's warm
-   * `#131210` ground. Mode-blind on purpose: the light extension declares
-   * `--ds-color-border` at a higher specificity and keeps winning there, so
-   * this reaches only the mode that had no author.
-   */
   borderPrimaryColor: 'rgba(0, 0, 0, 0.08)',
   borderSecondaryColor: 'rgba(0, 0, 0, 0.12)',
   borderColor: 'var(--ds-color-border-primary)',
@@ -390,16 +333,8 @@ const PALETTE: BrandPalette = {
 
 // ── TYPOGRAPHY ──
 /**
- * Editorial ticketing/wallet posture: a geometric display face carries the
- * headline register, a humanist face carries reading copy, mono carries
- * codes and times. That split is what makes the type feel graphic rather
- * than administrative.
- *
- * Every family named here is physically shipped as a font pack (see
- * FONT_PACK_MANIFEST). This previously named 'Inter', 'JetBrains Mono' and
- * 'Fira Code' — none of which the package ships, so the "contemporary
- * strong typography" this vertical claims resolved to the visitor's OS
- * default in practice.
+ * Familia mixta. Controles: typography.families, typography.pairing.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
  */
 const TYPOGRAPHY: BrandTypography = {
   fontFamilyBase:
@@ -429,17 +364,6 @@ const TYPOGRAPHY: BrandTypography = {
 };
 
 // ── SURFACES ──
-/**
- * The shared baseline, plus the two semantic surface roles whose HOVER
- * ground this vertical never authored. Measured: both resolved `#18181C`,
- * so a card or control on the white canvas turned near-black under the
- * cursor. `glass` stays `none` from the baseline — that is this vertical's
- * deliberate choice, not a gap.
- *
- * The wash is the grammar `card.css` already falls back to, so the repaired
- * value is the one the DS itself intends, and it tracks the tenant's own
- * primary and elevated ground instead of a literal.
- */
 // `borderRadius` is spread by REFERENCE, never copied. The previous
 // `{ ...canonical, full: '9999px' }` produced a second object that merely
 // looked like the canonical one: the frozen source could no longer detect
@@ -449,6 +373,10 @@ const TYPOGRAPHY: BrandTypography = {
 // declares `--ds-radius-full: 9999px` (`tokens/css/foundation/themes/
 // default.css`), so the extension only restated the inherited value at
 // tenant scope. Dropping it moves no pixel and restores one source.
+/**
+ * Familia mixta. Controles: palette.seeds, surfaces.effect-intensity.
+ * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+ */
 const SURFACES: BrandSurfaces = {
   surfaceRoles: {
     card: {
@@ -467,6 +395,9 @@ const SURFACES: BrandSurfaces = {
 // experience baseline in place, so the preset stays the single source.
 
 // ── CHARTS ──
+/**
+ * Enum de charts: personalidad de grafico; no baja a canal.
+ */
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   mountDuration: 1200,
@@ -478,6 +409,9 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
 
 // ── CHROME ──
 const CHROME: BrandChrome = {
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   card: {
     defaultElevation: 'md',
     hoverElevation: 'lift-two',
@@ -485,6 +419,9 @@ const CHROME: BrandChrome = {
     hoverTint: true,
     paddingDensity: 'spacious',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   accent: {
     barPosition: 'top',
     barThickness: 4,
@@ -493,6 +430,10 @@ const CHROME: BrandChrome = {
     badgeShape: 'pill',
     dividerStyle: 'dashed',
   },
+  /**
+   * @domicile seed
+   * @governor dial: navigation.sidebar-tone
+   */
   sidebar: {
     bg: '#fafafa',
     // Unauthored, so the sidebar edge resolved #404040 — a mid-grey rule
@@ -519,6 +460,9 @@ const CHROME: BrandChrome = {
     itemPadding: '8px 12px',
     iconSize: '18px',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   layout: {
     bg: '#FFFFFF',
     headerBg: 'rgba(255, 255, 255, 0.95)',
@@ -527,11 +471,18 @@ const CHROME: BrandChrome = {
     siderBg: 'var(--ds-sidebar-bg)',
     siderBorder: 'rgba(0, 0, 0, 0.06)',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   shell: {
     gridSize: '0px',
     gridLine: 'transparent',
     gridOpacity: 0,
   },
+  /**
+   * Familia mixta. Controles: palette.seeds, chrome.families, token-overrides.
+   * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
+   */
   controls: {
     // ---- CTRL-04 PRESERVATION PINS (R1 Cohort 1) ----
     // NOT new product decisions. Each value is what this vertical ALREADY
@@ -612,13 +563,6 @@ const CHROME: BrandChrome = {
       shadowHover: "var(--ds-button-ghost-shadow)",
       shadowActive: "var(--ds-button-ghost-shadow)", bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.03)', text: '#525252', color: '#525252' },
     disabled: { opacity: 0.4, bg: '#FAFAFA', text: 'rgba(0, 0, 0, 0.25)', border: 'rgba(0, 0, 0, 0.06)', borderColor: 'rgba(0, 0, 0, 0.06)' },
-    /**
-     * EVNTO TERMINAL-2. The extension re-declared the focus ring because the
-     * `:root` fallback is the tenant-less dark-default literal, not
-     * `var(--ds-color-primary)`. The typed owner is this field. `light` is
-     * this theme's declared `appearance.defaultMode`, so the light value is
-     * the BODY authority; `modes.dark` pins dark's current paint.
-     */
     focusRingColor: 'var(--ds-color-primary)',
     input: {
       bg: '#ffffff',
@@ -630,15 +574,6 @@ const CHROME: BrandChrome = {
       borderDisabled: 'rgba(0, 0, 0, 0.06)',
       disabledOpacity: 0.4,
     },
-    /**
-     * Field and dropdown chrome. MASS C3-BITHIRE-ALL introduced
-     * `controls.select` as a closed semantic family, so all three first-party
-     * themes author the same keyset. Evnto declares no select channel in its
-     * extension and has no brand divergence here yet, so every value below is
-     * the DS baseline expression this brand resolves TODAY
-     * (`presentation/components/select.css`). Restating an identical `var()`
-     * chain at higher specificity computes identically, so nothing repaints.
-     */
     select: {
       bg: 'var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))',
       bgHover: 'var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)))',
@@ -658,11 +593,8 @@ const CHROME: BrandChrome = {
     },
   },
   /**
-   * Shared card/panel surface algebra. New in MASS C3-BITHIRE-ALL; Evnto has
-   * no brand divergence here yet, so every value is the expression this brand
-   * resolves today from the DS baseline. Authoring the keyset makes the
-   * family a real cross-vertical capability instead of a BitHire-only
-   * appendage.
+   * @domicile seed
+   * @governor dial: palette.seeds
    */
   surface: {
     radiusMd: 'var(--ds-radius-md)',
@@ -682,9 +614,8 @@ const CHROME: BrandChrome = {
     popoverShadow: 'var(--ds-shadow-md)',
   },
   /**
-   * Rich-card frame and banded interior. Same tranche, same rule: the keyset
-   * is shared with BitHire and Rottay; the values are Evnto's current
-   * resolution, so nothing repaints.
+   * @domicile seed
+   * @governor dial: palette.seeds
    */
   premiumCard: {
     bg: 'var(--ds-material-card-background, var(--ds-card-bg))',
@@ -703,12 +634,19 @@ const CHROME: BrandChrome = {
     selectedRing:
       'var(--ds-material-card-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent))',
   },
+  /**
+   * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
+   */
   table: {
     headerBg: 'rgba(0, 0, 0, 0.02)',
     headerColor: '#737373',
     headerFontWeight: 500,
     headerFontSize: '0.75rem',
   },
+  /**
+   * @domicile seed
+   * @governor dial: palette.seeds
+   */
   cardComponent: {
     bg: '#ffffff',
     border: 'rgba(0, 0, 0, 0.08)',
@@ -719,9 +657,7 @@ const CHROME: BrandChrome = {
 
 // ── CAPABILITIES ──
 /**
- * Explicit disposition for every optional capability family. Evnto authored
- * NONE of these keys before; absence read as "nothing selected" and as
- * "nobody looked" simultaneously.
+ * Estado y prosa de capability: declara disposicion, no pinta.
  */
 const CAPABILITIES: BrandCapabilityCatalog = {
   // ACTIVE. See the note on rottay's disposition. EVNTO_CANONICAL_MOTION is
@@ -759,6 +695,10 @@ const CAPABILITIES: BrandCapabilityCatalog = {
 // Nothing below carries a value. The exported object names the contract's
 // families in the contract's own order and references the decisions above.
 
+/**
+ * Esqueleto de contrato: nombra las familias en el orden del contrato y
+ * referencia las decisiones; ninguna hoja de aca abajo carga valor.
+ */
 export const evntoBrandTheme: FirstPartyBrandTheme = {
   id: THEME_ID,
   name: THEME_NAME,
