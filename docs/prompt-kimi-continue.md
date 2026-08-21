@@ -194,12 +194,22 @@ canales idénticos son de CHROME (no PALETTE), `--ds-button-primary-bg` es él
 mismo rootFrozen (adjudicación, no recableo), y chocan con T2/T3 (cada uno su
 fila REDERIVED) → lote propio.** Pregunta que el worker planteó y el DT
 responde: la marca "dialeable" se escribe en **root-catalog (exposure
-tenant-dial)** — se diseña en el brief del lote K1.)** **Siguiente lote:
-F4A-5b (worker, brief TUYO):** la Parte 1 del brief F4A-5, ahora con aire —
-tags por hoja de PALETTE ×3 (154/52/48 hojas, mixtas) + placeholders de HOJA
-para las ausencias parciales de PALETTE reconciliadas con el roster; mira
-`/tmp/f4a-5-brief.md` §1 y el reporte `/tmp/f4a-5-reporte.md` §1. Después:
-F4A-6 (K3 text-page) según `/tmp/f4a-6-brief.md`.
+tenant-dial)** — se diseña en el brief del lote K1.)** **Estado al cierre:
+F4A-5b ✅ (91 docblocks = 29 tags + 62 placeholders de hoja; las 254 hojas
+PALETTE cubiertas y las 208 ausencias parciales tapadas, reconciliación con
+roster cero desfases; `untaggedAuthoredLeaves` 3026→2772 = exactamente
+154+52+48; `divergentSlots` 1826→1720; `positionIntersection` 786→892;
+tagRegistry 218→216 tras la corrección del DT; byte-idéntico ×3 builds;
+docs-engineering cero diffs; Baja #4 del baseline bajada por el DT; defecto
+semántico de 4 docblocks —onPrimaryColor/borderColor en rottay/bithire—
+encontrado por el DT en verificación y corregido en el cierre; choque
+kit-vs-parser adjudicado: la invariante va ANTES de los tags, esquema §3
+corregido; suite 1717/13 por nombre; gat-07 `f9adf7318e83…`).** **Siguiente
+lote: F4A-6 (worker, brief TUYO):** K3 — raíz NUEVA `--ds-color-text-page`
+(rottay `#A0A0A5`/`#6B6B6B`, bithire `#53697E`/`#9aacbf`, evnto `#3d3d3d` SIN
+dark) + los canales de tinta derivan; brief borrador en `/tmp/f4a-6-brief.md`
+— completar el mecanismo root-catalog con la forma que usó K1. Packet
+declaration obligatoria; firmados solo REDERIVED.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 

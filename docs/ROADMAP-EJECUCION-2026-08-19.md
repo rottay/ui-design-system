@@ -906,6 +906,43 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-5b ✅ (worker Opus; verificado por el DT contra el árbol; incluye un
+defecto semántico que encontré en verificación y corregí YO en el cierre).**
+PALETTE etiquetada: **91 docblocks nuevos = 29 tags + 62 placeholders de
+hoja**, las 254 hojas PALETTE cubiertas y las 208 ausencias parciales tapadas
+(0/102/106 por tema, reconciliadas contra el roster — **cero desfases**: las
+ausencias de PALETTE son de hoja, no de raíz, el plano que el roster no ve).
+Contadores medidos y verificados por mí contra el artefacto regenerado:
+`untaggedAuthoredLeaves` 3026→**2772** (−254 = exactamente 154+52+48, las
+hojas PALETTE de los tres temas, ni una más); `divergentSlots` 1826→**1720**
+(−106: un slot deja de divergir solo cuando los TRES lo tienen — manda el que
+faltaba en dos); `tagRegistry` 127→218; `positionIntersection` 786→**892**
+(pin re-anclado por el worker, leído del artefacto); intersección autorada 344
+y universo 2612 **intactos**; failures [] y orphanPlaceholders [].
+**Byte-idéntico probado ida y vuelta ×3 builds** (los artefactos ni aparecen
+en el change set — la prueba de que el lote es de comentarios);
+docs-engineering: **cero diffs** (lo correcto para un lote de comentarios).
+**El defecto que corregí yo (4 docblocks)**: en rottay y bithire,
+`onPrimaryColor` quedó taggeada "derived de --ds-color-border" (falso — la
+cubría la herencia seed del const; borré el docblock erróneo) y `borderColor`
+quedó circular ("derived de sí misma" — re-etiquetada a su forma del roster:
+`seed`, "raiz autora del par border, K2"). evnto limpio (verificado). Tras la
+corrección: `tagRegistry` 216, `--check` verde (2612/892/1720/2772), 34/34
+drills corridos por mí, build exit 0 con los artefactos sin mover (mis
+ediciones son comentarios). Cadena regenerada por mí tras la corrección —
+con una lección mía que la suite detectó: mi primera pasada se salteó
+fanout-facts y reconciliation, y la suite lo marcó (1717/15: ORACULO de
+determinismo + el pin del catálogo); regenerados ambos, `tokens-catalog
+--check OK` (deadWriters 266=266). Baseline **Baja #4, bajada por MÍ**
+(1720/2772). gat-07 **re-sellado por el DT**: digest `f9adf7318e83…`.
+Suite pierna 1, MI corrida: **1717/13, fallas por nombre idénticas a las 13
+conocidas, cero nuevas**. **Decisión que el worker me devolvió, adjudicada**: el kit §1 y el parser se contradecían (la
+línea de invariante después de los tags rompe el parseo — la lee como governor
+multilínea); el worker la puso ANTES y la fuente quedó así. **Adjudicación:
+el kit se corrige para seguir la fuente** (esquema §3 en este commit) — el
+harness quedó sellado con 34 drills en F4A-2/2b y no se toca. **Siguiente
+lote: F4A-6** (K3: raíz NUEVA `--ds-color-text-page` + los canales de tinta —
+borrador en `/tmp/f4a-6-brief.md`).
 **F4A-5 ✅ = K2+H3 (worker Opus; verificado por el DT contra el árbol; incluye
 PARADA CORRECTA 12/12).** El par border canonizado en los 3 temas: rottay y
 bithire derivan `borderPrimaryColor` a `var(--ds-color-border)`; **evnto

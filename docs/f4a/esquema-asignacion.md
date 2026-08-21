@@ -53,6 +53,10 @@ folder/index intacto.
 - **Kit de comentarios**: banner de sección único por sección (texto fijo);
   docblock de OVERLAY por modo (el que existe, deduplicado); comentario de
   familia = solo los tags + una línea cuando la familia tiene invariante.
+  **La línea de invariante va ANTES de los tags** (corregido en F4A-5b: el
+  parser del harness lee texto después de `@governor` como governor multilínea
+  — la forma "tags primero, invariante después" rompía el parseo; la fuente
+  ya quedó escrita en la forma correcta y el kit se corrige para seguirla).
   Nada de prosa narrativa en fuente (la ley de eficiencia del orchestration).
 - **Placeholder**: slot presente en el objeto con su comentario
   `@domicile unassigned` + razón — nunca una llave vacía sin texto.
