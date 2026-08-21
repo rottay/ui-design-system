@@ -300,7 +300,11 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // placeholders de hoja, que dan posicion sobre 99 slots mas; `divergentSlots`
   // baja 271 -> 172. Quinta vez, y el margen se achica porque quedan pocos slots
   // divergentes: el frente esta cerca de agotar esta superficie.
-  assert.equal(real.matrix.positionIntersection, 2387);
+  // F4A-12: 2387 -> 2520. El barrido de las 36 familias chicas de CHROME suma
+  // 209 placeholders de hoja sobre 133 slots mas, y `divergentSlots` baja
+  // 172 -> 39. Sexta vez el mismo espejo, y la superficie casi agotada: quedan
+  // 39 slots divergentes para F4A-13..15.
+  assert.equal(real.matrix.positionIntersection, 2520);
   assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 

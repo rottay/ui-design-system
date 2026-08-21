@@ -340,8 +340,8 @@
       "budget": {
         "maxDirectSources": 6,
         "maxReachableModules": 187,
-        "maxSourceBytes": 1700000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1500000."
+        "maxSourceBytes": 1750000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1700000."
       },
       "symbols": [
         {
@@ -511,8 +511,8 @@
       "budget": {
         "maxDirectSources": 2,
         "maxReachableModules": 48,
-        "maxSourceBytes": 1050000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 900000."
+        "maxSourceBytes": 1100000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1050000."
       },
       "symbols": [
         {
@@ -1013,8 +1013,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 133,
-        "maxSourceBytes": 1600000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1550000."
+        "maxSourceBytes": 1650000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1600000."
       },
       "symbols": [
         {
@@ -1110,8 +1110,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 137,
-        "maxSourceBytes": 1600000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1550000."
+        "maxSourceBytes": 1650000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1600000."
       },
       "symbols": [
         {
@@ -1292,8 +1292,8 @@
       "budget": {
         "maxDirectSources": 4,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1750000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1550000."
+        "maxSourceBytes": 1800000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1750000."
       },
       "symbols": [
         {
@@ -1347,8 +1347,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1800000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1600000."
+        "maxSourceBytes": 1850000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1800000."
       },
       "symbols": [
         {
@@ -1746,8 +1746,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 643,
-        "maxSourceBytes": 2550000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2350000."
+        "maxSourceBytes": 2600000,
+        "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 2550000."
       },
       "symbols": [
         {

@@ -26,21 +26,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 274168,
-        "lines": 7711,
-        "sha256": "00ed8137aa3b6391466729e2c392f4a45565b1fc7ba580874d85c994a1ba5710"
+        "bytes": 319917,
+        "lines": 8974,
+        "sha256": "8bb6c9e684b538584ac405b325fb6f57c29ad71027cb2d2ab13835fd6cbeea36"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 277293,
-        "lines": 7561,
-        "sha256": "a22b67454baa51a2edf2be12a0ce7add4414d5e38985c96f9c037b7f09589c88"
+        "bytes": 317411,
+        "lines": 8909,
+        "sha256": "35e4efa5978ee78d5d49440be0d76121dd5eab64deb5b41b7d95246132d67311"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 179563,
-        "lines": 4176,
-        "sha256": "7beca2b718fbb0465e8118419bb1bf638e2b2424f076a2b921bbea9957b0260f"
+        "bytes": 200016,
+        "lines": 4658,
+        "sha256": "061c29a9fb4c37266c49f52501bc8d05e602f22ed12aa59d90345b4db0faed3a"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
