@@ -862,6 +862,21 @@ del commit). Succession = cadena de 2 registros unbroken validada por
 program-check; fence DT≠auditor como fallo cerrado. Verificado por mí contra
 el árbol (no de palabra): CONSTITUTION_READY, 41/41 + 36/36 + drills 133/133,
 gates:ci **87 blocking PASS** + 2 excluded re-adjudicados.
+**Lote drill→tmpdir ✅ `003b8f7ba` (worker Sonnet, verificado por el DT contra
+el árbol).** La 14ª falla de la suite (carrera ENOENT del drill de
+cascade-ratchet plantando en `src/`) queda erradicada: el walker compartido
+(`lib/engine/skin-files`) gana una costura de raíz con default inerte (los
+otros 2 consumidores intactos, 391 archivos igual) y el drill planta en
+sandbox tmpdir — dientes probados por el worker en las dos direcciones (sin
+planta no hay hallazgo; planta-no-vista tampoco) y gate verde con las cifras
+del baseline (2171/4374/391). Suite: **1711/13 ×2 corridas idénticas por
+nombre (worker) + mi propia corrida de la pierna 1 (1711/13, 0 ENOENT)** — la
+baseline de suite queda **1711/13** (los +6 tests de F4A-2b). gates:ci: **88
+blocking + 2 excluded verdes** en este commit. Deuda anotada (no tocada, con
+su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
+forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
+auditado puede depender del árbol completo) — análisis propio cuando se
+manifieste; hoy no es roja.
 **F4A-3b — PARADA CORRECTA (10/10): el consumo encontró un bug en el harness
 (mío, sellado en F4A-2).** `pathIndex` solo bajaba la pila si la línea
 EMPEZABA con `}`; el corpus cierra con contenido+llave en la misma línea →
