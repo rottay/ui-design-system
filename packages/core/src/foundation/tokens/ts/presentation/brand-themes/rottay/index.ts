@@ -195,7 +195,6 @@ const OVERLAY: BrandThemeModeOverlay = {
     borderTertiaryColor: "#EDEDEC",
     borderFocusColor: "rgba(10, 10, 10, 0.32)",
     linkColor: "#1A1A1A",
-    linkHoverColor: "#0A0A0A",
     linkVisitedColor: "#6B6B6B",
     successColor: "#16A34A",
     successBgColor: "rgba(22, 163, 74, 0.06)",
@@ -302,7 +301,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         },
       },
       buttonPrimary: {
-        bg: "#0A0A0A",
         bgHover: "#2A2A2A",
         bgActive: "#3D3D3D",
         color: "#FFFFFF",
@@ -333,7 +331,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         bgHover: "rgba(0, 0, 0, 0.04)",
         bgActive: "rgba(0, 0, 0, 0.08)",
                   colorHover: '#1A1A1A',
-        colorActive: '#0A0A0A',
         border: 'transparent',
         borderHover: 'transparent',
         borderActive: 'transparent',
@@ -343,7 +340,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         bgHover: "rgba(0, 0, 0, 0.04)",
         bgActive: "rgba(0, 0, 0, 0.08)",
                   colorHover: '#1A1A1A',
-        colorActive: '#0A0A0A',
 },
       buttonLink: {
         color: "#1A1A1A",
@@ -390,7 +386,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         border: "#E5E5E3",
         borderFocus: "rgba(10, 10, 10, 0.40)",
         borderHover: "#D4D4D2",
-        checkColor: "#0A0A0A",
         clearColor: "#9C9C9C",
         colorDisabled: "#C4C4C2",
         dropdownBorder: "#E5E5E3",
@@ -438,8 +433,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         bgDisabled: "#F4F4F3",
         border: "#D4D4D2",
         borderHover: "#A3A3A1",
-        checkedBg: "#0A0A0A",
-        checkedBorder: "#0A0A0A",
         checkedColor: "#FFFFFF",
         errorBorder: "#DC2626",
         errorColor: "#DC2626",
@@ -481,8 +474,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         border: "#D4D4D2",
         borderHover: "#A3A3A1",
         checkedBg: "#FFFFFF",
-        checkedBorder: "#0A0A0A",
-        checkedDot: "#0A0A0A",
         descriptionColor: "#9C9C9C",
         errorBorder: "#DC2626",
         errorColor: "#DC2626",
@@ -501,13 +492,11 @@ const OVERLAY: BrandThemeModeOverlay = {
         handleShadow: "0 1px 3px rgba(0, 0, 0, 0.12)",
         markColor: "#9C9C9C",
         railColor: "#E5E5E3",
-        trackColor: "#0A0A0A",
         trackColorDisabled: "#C4C4C2",
       },
       switch: {
         bg: "#D4D4D2",
         bgHover: "#C4C4C2",
-        checkedBg: "#0A0A0A",
         checkedBgHover: "#2A2A2A",
         focusRing: "0 0 0 2px rgba(10, 10, 10, 0.12)",
         labelColor: "#1A1A1A",
@@ -537,7 +526,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         labelColor: "#1A1A1A",
         successBg: "#16A34A",
         trackBg: "#D4D4D2",
-        trackBgChecked: "#0A0A0A",
         warningBg: "#D97706",
       },
       transfer: {
@@ -558,7 +546,6 @@ const OVERLAY: BrandThemeModeOverlay = {
         draggerBg: "#FAFAF9",
         draggerBgHover: "#F4F4F3",
         draggerBorder: "#E5E5E3",
-        draggerBorderActive: "#0A0A0A",
         draggerIconColor: "#9C9C9C",
         errorBorder: "#DC2626",
         fileBg: "#FAFAF9",
@@ -643,7 +630,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       itemFontWeight: "400",
       itemFontWeightActive: "500",
       itemColor: "#6B6B6B",
-      itemColorActive: "#0A0A0A",
       itemBgActive: "rgba(0, 0, 0, 0.06)",
       itemBgHover: "rgba(0, 0, 0, 0.03)",
       itemIndent: "6px",
@@ -675,7 +661,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       textColor: "#1A1A1A",
       defaultBg: "#F4F4F3",
       defaultColor: "#1A1A1A",
-      primaryBg: "#0A0A0A",
       primaryColor: "var(--ds-color-white, #ffffff)",
       secondaryBg: "#F4F4F3",
       errorBg: "#DC2626",
@@ -716,7 +701,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       shadow: "0 4px 12px rgba(0, 0, 0, 0.12)",
       defaultBg: "#1A1A1A",
       defaultColor: "#FAFAF9",
-      primaryBg: "#0A0A0A",
       primaryColor: "#ffffff",
       secondaryBg: "#ffffff",
       secondaryColor: "#1A1A1A",
@@ -752,7 +736,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       warningIcon: "#D97706",
     },
     anchor: {
-      inkColor: "#0A0A0A",
       linkColor: "#9C9C9C",
       linkColorActive: "#1A1A1A",
     },
@@ -765,9 +748,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       gradientColor: "#FFFFFF",
       groupBorder: "#FFFFFF",
       groupOverflowBg: "#F4F4F3",
-      primaryBg: "#0A0A0A",
       primaryColor: "#FFFFFF",
-      ringColor: "#0A0A0A",
       secondaryBg: "#F4F4F3",
       statusBorder: "#FFFFFF",
       successBg: "rgba(22, 163, 74, 0.10)",
@@ -776,7 +757,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       warningColor: "#D97706",
     },
     backTop: {
-      bg: "#0A0A0A",
       color: "#FFFFFF",
       shadow: "0 4px 12px rgba(0, 0, 0, 0.10)",
     },
@@ -863,9 +843,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       titleColor: "#1A1A1A",
     },
     pagination: {
-      activeBg: "#0A0A0A",
       activeColor: "#FFFFFF",
-      itemBgActive: "#0A0A0A",
       itemBgHover: "#FAFAF9",
       itemColorActive: "#FFFFFF",
       itemColorHover: "#1A1A1A",
@@ -873,7 +851,6 @@ const OVERLAY: BrandThemeModeOverlay = {
     progress: {
       bg: "#EDEDEC",
       fillError: "#DC2626",
-      fillPrimary: "#0A0A0A",
       fillSuccess: "#16A34A",
       fillWarning: "#D97706",
     },
@@ -909,15 +886,11 @@ const OVERLAY: BrandThemeModeOverlay = {
     },
     steps: {
       connectorColor: "#E5E5E3",
-      connectorColorActive: "#0A0A0A",
       finishBg: "#16A34A",
       finishBorder: "#16A34A",
       itemBg: "#EDEDEC",
-      itemBgActive: "#0A0A0A",
       itemColor: "#9C9C9C",
       itemColorActive: "#FFFFFF",
-      processBg: "#0A0A0A",
-      processBorder: "#0A0A0A",
       waitBorder: "#D4D4D2",
     },
     tag: {
@@ -927,8 +900,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       errorBg: "rgba(220, 38, 38, 0.08)",
       errorBorder: "rgba(220, 38, 38, 0.20)",
       errorColor: "#B91C1C",
-      primaryBg: "#0A0A0A",
-      primaryBorder: "#0A0A0A",
       primaryColor: "#FFFFFF",
       secondaryBg: "#F4F4F3",
       secondaryBorder: "#E5E5E3",
@@ -940,7 +911,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       warningColor: "#B45309",
     },
     timeline: {
-      dotBg: "#0A0A0A",
       dotBorder: "#FFFFFF",
       lineColor: "#E5E5E3",
     },
@@ -1168,7 +1138,11 @@ const PALETTE: BrandPalette = {
    * @governor dial: palette.seeds
    */
   linkColor: '#ECECEC',
-  linkHoverColor: '#FFFFFF',
+  /**
+   * @domicile derived
+   * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+   */
+  linkHoverColor: 'var(--ds-color-primary)',
   linkVisitedColor: '#A0A0A5',
   // Semantic: serious and muted. Dark-surface error/info sit at the 400 ramp
   // step so they clear APCA |Lc| 45 on the page ground while preserving the
@@ -1351,7 +1325,11 @@ const CHROME: BrandChrome = {
     textColor: '#ECECEC',
     defaultBg: '#2A2A2F',
     defaultColor: '#ECECEC',
-    primaryBg: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    primaryBg: 'var(--ds-color-primary)',
     primaryColor: '#0C0C0E',
     secondaryBg: '#2A2A2F',
     /**
@@ -1440,7 +1418,11 @@ const CHROME: BrandChrome = {
     itemFontWeight: 450,
     itemFontWeightActive: 600,
     itemColor: '#A0A0A5',
-    itemColorActive: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    itemColorActive: 'var(--ds-color-primary)',
     itemBgActive: 'rgba(255, 255, 255, 0.07)',
     itemBgHover: 'rgba(255, 255, 255, 0.04)',
     itemPadding: '0 13px',
@@ -1545,7 +1527,11 @@ const CHROME: BrandChrome = {
     color: '#0C0C0E',
     defaultBg: '#ECECEC',
     defaultColor: '#0C0C0E',
-    primaryBg: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    primaryBg: 'var(--ds-color-primary)',
     primaryColor: '#0C0C0E',
     secondaryBg: '#2A2A2F',
     secondaryColor: '#ECECEC',
@@ -1718,7 +1704,7 @@ const CHROME: BrandChrome = {
       shadowActive: "var(--ds-button-dashed-shadow)",
     },
     buttonPrimary: {
-      shadowActive: "var(--ds-shadow-button-rest)", bg: '#FFFFFF', bgHover: '#E0E0E0', bgActive: '#D4D4D8', text: '#0C0C0E', color: '#0C0C0E', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.30)', shadowHover: '0 2px 12px rgba(255, 255, 255, 0.08)' },
+      shadowActive: "var(--ds-shadow-button-rest)", bg: 'var(--ds-color-primary)', bgHover: '#E0E0E0', bgActive: '#D4D4D8', text: '#0C0C0E', color: '#0C0C0E', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.30)', shadowHover: '0 2px 12px rgba(255, 255, 255, 0.08)' },
     buttonSecondary: {
       shadow: "var(--ds-shadow-button-rest)",
       shadowHover: "var(--ds-shadow-button-hover)",
@@ -1734,7 +1720,11 @@ const CHROME: BrandChrome = {
       shadow: "none",
       shadowHover: "var(--ds-button-ghost-shadow)",
       shadowActive: "var(--ds-button-ghost-shadow)", bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: 'var(--ds-color-text-page)', colorHover: '#ECECEC',
-      colorActive: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      colorActive: 'var(--ds-color-primary)',
       border: 'transparent',
       borderHover: 'transparent',
       borderActive: 'transparent',
@@ -1743,7 +1733,11 @@ const CHROME: BrandChrome = {
       shadow: "none",
       shadowHover: "var(--ds-button-text-shadow)",
       shadowActive: "var(--ds-button-text-shadow)", bg: 'transparent', bgHover: 'rgba(255, 255, 255, 0.05)', bgActive: 'rgba(255, 255, 255, 0.08)', text: '#A0A0A5', color: 'var(--ds-color-text-page)', colorHover: '#ECECEC',
-      colorActive: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      colorActive: 'var(--ds-color-primary)',
 },
     buttonLink: {
       shadow: "none",
@@ -1844,7 +1838,11 @@ const CHROME: BrandChrome = {
       border: '#2A2A2F',
       borderFocus: 'rgba(255, 255, 255, 0.36)',
       borderHover: '#3A3A40',
-      checkColor: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      checkColor: 'var(--ds-color-primary)',
       clearColor: '#6B6B72',
       /**
        * @domicile derived
@@ -1881,8 +1879,16 @@ const CHROME: BrandChrome = {
       bgDisabled: '#101012',
       border: 'rgba(255, 255, 255, 0.18)',
       borderHover: 'rgba(255, 255, 255, 0.28)',
-      checkedBg: '#FFFFFF',
-      checkedBorder: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      checkedBg: 'var(--ds-color-primary)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      checkedBorder: 'var(--ds-color-primary)',
       checkedColor: '#0C0C0E',
       errorBorder: '#EF4444',
       focusRing: '0 0 0 2px rgba(255, 255, 255, 0.20)',
@@ -1923,8 +1929,16 @@ const CHROME: BrandChrome = {
       border: 'rgba(255, 255, 255, 0.18)',
       borderHover: 'rgba(255, 255, 255, 0.28)',
       checkedBg: '#131316',
-      checkedBorder: '#FFFFFF',
-      checkedDot: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      checkedBorder: 'var(--ds-color-primary)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      checkedDot: 'var(--ds-color-primary)',
       descriptionColor: '#6B6B72',
       errorBorder: '#EF4444',
       focusRing: '0 0 0 2px rgba(255, 255, 255, 0.20)',
@@ -1943,13 +1957,21 @@ const CHROME: BrandChrome = {
       handleShadow: '0 1px 3px rgba(0, 0, 0, 0.40)',
       markColor: '#6B6B72',
       railColor: 'rgba(255, 255, 255, 0.10)',
-      trackColor: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      trackColor: 'var(--ds-color-primary)',
       trackColorDisabled: '#4A4A4F',
     },
     switch: {
       bg: 'rgba(255, 255, 255, 0.14)',
       bgHover: 'rgba(255, 255, 255, 0.18)',
-      checkedBg: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      checkedBg: 'var(--ds-color-primary)',
       checkedBgHover: '#E0E0E0',
       focusRing: '0 0 0 2px rgba(255, 255, 255, 0.20)',
       labelColor: '#ECECEC',
@@ -1978,7 +2000,11 @@ const CHROME: BrandChrome = {
       labelColor: '#ECECEC',
       successBg: '#22C55E',
       trackBg: 'rgba(255, 255, 255, 0.14)',
-      trackBgChecked: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      trackBgChecked: 'var(--ds-color-primary)',
       warningBg: '#F59E0B',
     },
     transfer: {
@@ -2004,7 +2030,11 @@ const CHROME: BrandChrome = {
       draggerBg: '#131316',
       draggerBgHover: '#1A1A1E',
       draggerBorder: '#2A2A2F',
-      draggerBorderActive: '#FFFFFF',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+       */
+      draggerBorderActive: 'var(--ds-color-primary)',
       draggerIconColor: '#6B6B72',
       /**
        * @domicile derived
@@ -2243,7 +2273,11 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   anchor: {
-    inkColor: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    inkColor: 'var(--ds-color-primary)',
     linkColor: '#6B6B72',
     linkColorActive: '#ECECEC',
   },
@@ -2269,9 +2303,17 @@ const CHROME: BrandChrome = {
      * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
      */
     groupOverflowColor: 'var(--ds-color-text-page)',
-    primaryBg: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    primaryBg: 'var(--ds-color-primary)',
     primaryColor: '#0C0C0E',
-    ringColor: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    ringColor: 'var(--ds-color-primary)',
     secondaryBg: '#2A2A2F',
     /**
      * @domicile derived
@@ -2289,7 +2331,11 @@ const CHROME: BrandChrome = {
    * @governor dial: palette.seeds
    */
   backTop: {
-    bg: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    bg: 'var(--ds-color-primary)',
     color: '#0C0C0E',
     shadow: '0 4px 16px rgba(0, 0, 0, 0.30)',
   },
@@ -2452,10 +2498,18 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   pagination: {
-    activeBg: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    activeBg: 'var(--ds-color-primary)',
     activeColor: '#0C0C0E',
     itemBg: 'transparent',
-    itemBgActive: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    itemBgActive: 'var(--ds-color-primary)',
     itemBgHover: 'rgba(255, 255, 255, 0.04)',
     itemBorder: 'transparent',
     /**
@@ -2472,7 +2526,11 @@ const CHROME: BrandChrome = {
   progress: {
     bg: '#2A2A2F',
     fillError: '#EF4444',
-    fillPrimary: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    fillPrimary: 'var(--ds-color-primary)',
     fillSuccess: '#22C55E',
     fillWarning: '#F59E0B',
   },
@@ -2550,15 +2608,31 @@ const CHROME: BrandChrome = {
    */
   steps: {
     connectorColor: '#2A2A2F',
-    connectorColorActive: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    connectorColorActive: 'var(--ds-color-primary)',
     finishBg: '#22C55E',
     finishBorder: '#22C55E',
     itemBg: '#2A2A2F',
-    itemBgActive: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    itemBgActive: 'var(--ds-color-primary)',
     itemColor: '#6B6B72',
     itemColorActive: '#0C0C0E',
-    processBg: '#FFFFFF',
-    processBorder: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    processBg: 'var(--ds-color-primary)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    processBorder: 'var(--ds-color-primary)',
     waitBg: 'transparent',
     waitBorder: 'rgba(255, 255, 255, 0.14)',
   },
@@ -2577,8 +2651,16 @@ const CHROME: BrandChrome = {
     errorBg: 'rgba(239, 68, 68, 0.12)',
     errorBorder: 'rgba(239, 68, 68, 0.22)',
     errorColor: '#F87171',
-    primaryBg: '#FFFFFF',
-    primaryBorder: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    primaryBg: 'var(--ds-color-primary)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    primaryBorder: 'var(--ds-color-primary)',
     primaryColor: '#0C0C0E',
     secondaryBg: '#222226',
     secondaryBorder: '#2A2A2F',
@@ -2603,7 +2685,11 @@ const CHROME: BrandChrome = {
      * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
      */
     contentColor: 'var(--ds-color-text-page)',
-    dotBg: '#FFFFFF',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary (semilla de marca, K1)
+     */
+    dotBg: 'var(--ds-color-primary)',
     dotBorder: '#18181B',
     lineColor: '#2A2A2F',
   },

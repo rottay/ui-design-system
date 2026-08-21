@@ -1291,7 +1291,14 @@
      Keep these close to the primitive palettes so tenant runtime overrides only
      need to replace one family of variables (`--ds-color-*`).
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-color-primary: var(--ds-color-primary-500);
+  /* K1 (2026-08-21, docs/f4a/esquema-asignacion.md §4-K1): authored as the literal
+     this alias already resolves to here (`--ds-color-primary-500` is `#171717` at
+     line 30). A derived floor under a tenant that authors its own brand literal is
+     exactly the pattern mirror-parity counts as `rootFrozen` — a severed dial.
+     The seed→ramp→primary derivation lives in the `palette.seeds` control, which
+     emits both `--ds-color-primary` and `--ds-color-primary-500`; the floor is a
+     plain replaceable literal again and the freeze dies. */
+  --ds-color-primary: #171717;
   --ds-color-primary-hover: var(--ds-color-primary-600);
   --ds-color-primary-subtle: var(--ds-color-primary-100);
   --ds-color-primary-foreground: #ffffff;

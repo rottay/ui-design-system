@@ -1268,7 +1268,14 @@
      Keep these close to the primitive palettes so tenant runtime overrides only
      need to replace one family of variables (`--ds-color-*`).
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-color-primary: var(--ds-color-primary-500);
+  /* K1 (2026-08-21, docs/f4a/esquema-asignacion.md §4-K1): authored as the literal
+     this alias already resolves to here (`--ds-color-primary-500` is `#171717` at
+     line 30). A derived floor under a tenant that authors its own brand literal is
+     exactly the pattern mirror-parity counts as `rootFrozen` — a severed dial.
+     The seed→ramp→primary derivation lives in the `palette.seeds` control, which
+     emits both `--ds-color-primary` and `--ds-color-primary-500`; the floor is a
+     plain replaceable literal again and the freeze dies. */
+  --ds-color-primary: #171717;
   --ds-color-primary-hover: var(--ds-color-primary-600);
   --ds-color-primary-subtle: var(--ds-color-primary-100);
   --ds-color-primary-foreground: #ffffff;
@@ -124644,7 +124651,7 @@ html[lang]:lang(ar) {
   --ds-alert-warning-border: rgba(245, 158, 11, 0.22);
   --ds-alert-warning-color: #FCD34D;
   --ds-alert-warning-icon: #F59E0B;
-  --ds-anchor-ink-color: #FFFFFF;
+  --ds-anchor-ink-color: var(--ds-color-primary);
   --ds-anchor-link-color: #6B6B72;
   --ds-anchor-link-color-active: #ECECEC;
   --ds-autocomplete-bg: #131316;
@@ -124666,9 +124673,9 @@ html[lang]:lang(ar) {
   --ds-avatar-group-border: #18181B;
   --ds-avatar-group-overflow-bg: #2A2A2F;
   --ds-avatar-group-overflow-color: var(--ds-color-text-page);
-  --ds-avatar-primary-bg: #FFFFFF;
+  --ds-avatar-primary-bg: var(--ds-color-primary);
   --ds-avatar-primary-color: #0C0C0E;
-  --ds-avatar-ring-color: #FFFFFF;
+  --ds-avatar-ring-color: var(--ds-color-primary);
   --ds-avatar-secondary-bg: #2A2A2F;
   --ds-avatar-secondary-color: var(--ds-color-text-page);
   --ds-avatar-status-border: #18181B;
@@ -124676,7 +124683,7 @@ html[lang]:lang(ar) {
   --ds-avatar-success-color: #22C55E;
   --ds-avatar-warning-bg: rgba(245, 158, 11, 0.14);
   --ds-avatar-warning-color: #F59E0B;
-  --ds-backtop-bg: #FFFFFF;
+  --ds-backtop-bg: var(--ds-color-primary);
   --ds-backtop-color: #0C0C0E;
   --ds-backtop-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
   --ds-badge-border-color: #2A2A2F;
@@ -124687,7 +124694,7 @@ html[lang]:lang(ar) {
   --ds-badge-gap: var(--ds-spacing-1);
   --ds-badge-info-bg: #3B82F6;
   --ds-badge-line-height: var(--ds-line-height-none);
-  --ds-badge-primary-bg: #FFFFFF;
+  --ds-badge-primary-bg: var(--ds-color-primary);
   --ds-badge-primary-color: #0C0C0E;
   --ds-badge-radius: var(--ds-radius-sm);
   --ds-badge-secondary-bg: #2A2A2F;
@@ -124752,7 +124759,7 @@ html[lang]:lang(ar) {
   --ds-button-ghost-border-active: transparent;
   --ds-button-ghost-border-hover: transparent;
   --ds-button-ghost-color: var(--ds-color-text-page);
-  --ds-button-ghost-color-active: #FFFFFF;
+  --ds-button-ghost-color-active: var(--ds-color-primary);
   --ds-button-ghost-color-hover: #ECECEC;
   --ds-button-ghost-hover-bg: rgba(255, 255, 255, 0.05);
   --ds-button-ghost-shadow: none;
@@ -124785,7 +124792,7 @@ html[lang]:lang(ar) {
   --ds-button-md-icon-size: var(--ds-icon-sm-size);
   --ds-button-md-line-height: var(--ds-line-height-tight);
   --ds-button-md-padding-x: calc(var(--ds-input-md-height) * 0.42);
-  --ds-button-primary-bg: #FFFFFF;
+  --ds-button-primary-bg: var(--ds-color-primary);
   --ds-button-primary-bg-active: #D4D4D8;
   --ds-button-primary-bg-hover: #E0E0E0;
   --ds-button-primary-border: transparent;
@@ -124822,7 +124829,7 @@ html[lang]:lang(ar) {
   --ds-button-text-bg-active: rgba(255, 255, 255, 0.08);
   --ds-button-text-bg-hover: rgba(255, 255, 255, 0.05);
   --ds-button-text-color: var(--ds-color-text-page);
-  --ds-button-text-color-active: #FFFFFF;
+  --ds-button-text-color-active: var(--ds-color-primary);
   --ds-button-text-color-hover: #ECECEC;
   --ds-button-text-hover-bg: rgba(255, 255, 255, 0.05);
   --ds-button-text-shadow: none;
@@ -124906,8 +124913,8 @@ html[lang]:lang(ar) {
   --ds-checkbox-bg-disabled: #101012;
   --ds-checkbox-border: rgba(255, 255, 255, 0.18);
   --ds-checkbox-border-hover: rgba(255, 255, 255, 0.28);
-  --ds-checkbox-checked-bg: #FFFFFF;
-  --ds-checkbox-checked-border: #FFFFFF;
+  --ds-checkbox-checked-bg: var(--ds-color-primary);
+  --ds-checkbox-checked-border: var(--ds-color-primary);
   --ds-checkbox-checked-color: #0C0C0E;
   --ds-checkbox-error-border: #EF4444;
   --ds-checkbox-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.20);
@@ -124989,7 +124996,7 @@ html[lang]:lang(ar) {
   --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-color-interactive-bg-muted: #1A1A1E;
   --ds-color-link: #ECECEC;
-  --ds-color-link-hover: #FFFFFF;
+  --ds-color-link-hover: var(--ds-color-primary);
   --ds-color-link-visited: #A0A0A5;
   --ds-color-neutral-0: #0C0C0E;
   --ds-color-neutral-100: #131316;
@@ -125329,10 +125336,10 @@ html[lang]:lang(ar) {
   --ds-overlay-light: rgba(255, 255, 255, 0.03);
   --ds-overlay-medium: rgba(255, 255, 255, 0.06);
   --ds-page-shell-subtitle-color: #A0A0A5;
-  --ds-pagination-active-bg: #FFFFFF;
+  --ds-pagination-active-bg: var(--ds-color-primary);
   --ds-pagination-active-color: #0C0C0E;
   --ds-pagination-item-bg: transparent;
-  --ds-pagination-item-bg-active: #FFFFFF;
+  --ds-pagination-item-bg-active: var(--ds-color-primary);
   --ds-pagination-item-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-pagination-item-border: transparent;
   --ds-pagination-item-color: var(--ds-color-text-page);
@@ -125356,7 +125363,7 @@ html[lang]:lang(ar) {
   --ds-premium-card-sheen: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-card-bg) 42%, transparent), transparent);
   --ds-progress-bg: #2A2A2F;
   --ds-progress-fill-error: #EF4444;
-  --ds-progress-fill-primary: #FFFFFF;
+  --ds-progress-fill-primary: var(--ds-color-primary);
   --ds-progress-fill-success: #22C55E;
   --ds-progress-fill-warning: #F59E0B;
   --ds-radio-bg: #131316;
@@ -125364,8 +125371,8 @@ html[lang]:lang(ar) {
   --ds-radio-border: rgba(255, 255, 255, 0.18);
   --ds-radio-border-hover: rgba(255, 255, 255, 0.28);
   --ds-radio-checked-bg: #131316;
-  --ds-radio-checked-border: #FFFFFF;
-  --ds-radio-checked-dot: #FFFFFF;
+  --ds-radio-checked-border: var(--ds-color-primary);
+  --ds-radio-checked-dot: var(--ds-color-primary);
   --ds-radio-description-color: #6B6B72;
   --ds-radio-error-border: #EF4444;
   --ds-radio-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.20);
@@ -125401,7 +125408,7 @@ html[lang]:lang(ar) {
   --ds-select-border-color-hover: var(--ds-color-neutral-400);
   --ds-select-border-focus: rgba(255, 255, 255, 0.36);
   --ds-select-border-hover: #3A3A40;
-  --ds-select-check-color: #FFFFFF;
+  --ds-select-check-color: var(--ds-color-primary);
   --ds-select-clear-color: #6B6B72;
   --ds-select-clear-color-hover: var(--ds-color-text-page);
   --ds-select-color: #ECECEC;
@@ -125456,7 +125463,7 @@ html[lang]:lang(ar) {
   --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-sidebar-item-child-height: 45px;
   --ds-sidebar-item-color: #A0A0A5;
-  --ds-sidebar-item-color-active: #FFFFFF;
+  --ds-sidebar-item-color-active: var(--ds-color-primary);
   --ds-sidebar-item-font-size: 16.35px;
   --ds-sidebar-item-font-size-child: 14.2px;
   --ds-sidebar-item-font-weight: 450;
@@ -125481,7 +125488,7 @@ html[lang]:lang(ar) {
   --ds-slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.40);
   --ds-slider-mark-color: #6B6B72;
   --ds-slider-rail-color: rgba(255, 255, 255, 0.10);
-  --ds-slider-track-color: #FFFFFF;
+  --ds-slider-track-color: var(--ds-color-primary);
   --ds-slider-track-color-disabled: #4A4A4F;
   --ds-spinner-color: var(--ds-color-primary);
   --ds-spinner-track: #2A2A2F;
@@ -125503,15 +125510,15 @@ html[lang]:lang(ar) {
   --ds-stats-grid-trend-positive: #22C55E;
   --ds-stats-grid-value-color: #ECECEC;
   --ds-steps-connector-color: #2A2A2F;
-  --ds-steps-connector-color-active: #FFFFFF;
+  --ds-steps-connector-color-active: var(--ds-color-primary);
   --ds-steps-finish-bg: #22C55E;
   --ds-steps-finish-border: #22C55E;
   --ds-steps-item-bg: #2A2A2F;
-  --ds-steps-item-bg-active: #FFFFFF;
+  --ds-steps-item-bg-active: var(--ds-color-primary);
   --ds-steps-item-color: #6B6B72;
   --ds-steps-item-color-active: #0C0C0E;
-  --ds-steps-process-bg: #FFFFFF;
-  --ds-steps-process-border: #FFFFFF;
+  --ds-steps-process-bg: var(--ds-color-primary);
+  --ds-steps-process-border: var(--ds-color-primary);
   --ds-steps-wait-bg: transparent;
   --ds-steps-wait-border: rgba(255, 255, 255, 0.14);
   --ds-surface-card-grid-bg: linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--ds-surface-card-grid-line) 1px, transparent 1px);
@@ -125525,7 +125532,7 @@ html[lang]:lang(ar) {
   --ds-surface-shadow-hover: var(--ds-shadow-md);
   --ds-switch-bg: rgba(255, 255, 255, 0.14);
   --ds-switch-bg-hover: rgba(255, 255, 255, 0.18);
-  --ds-switch-checked-bg: #FFFFFF;
+  --ds-switch-checked-bg: var(--ds-color-primary);
   --ds-switch-checked-bg-hover: #E0E0E0;
   --ds-switch-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.20);
   --ds-switch-label-color: #ECECEC;
@@ -125594,8 +125601,8 @@ html[lang]:lang(ar) {
   --ds-tag-error-bg: rgba(239, 68, 68, 0.12);
   --ds-tag-error-border: rgba(239, 68, 68, 0.22);
   --ds-tag-error-color: #F87171;
-  --ds-tag-primary-bg: #FFFFFF;
-  --ds-tag-primary-border: #FFFFFF;
+  --ds-tag-primary-bg: var(--ds-color-primary);
+  --ds-tag-primary-border: var(--ds-color-primary);
   --ds-tag-primary-color: #0C0C0E;
   --ds-tag-secondary-bg: #222226;
   --ds-tag-secondary-border: #2A2A2F;
@@ -125655,7 +125662,7 @@ html[lang]:lang(ar) {
   --ds-textarea-success-border: #16A34A;
   --ds-textarea-warning-border: #D97706;
   --ds-timeline-content-color: var(--ds-color-text-page);
-  --ds-timeline-dot-bg: #FFFFFF;
+  --ds-timeline-dot-bg: var(--ds-color-primary);
   --ds-timeline-dot-border: #18181B;
   --ds-timeline-line-color: #2A2A2F;
   --ds-timepicker-bg: #131316;
@@ -125703,13 +125710,13 @@ html[lang]:lang(ar) {
   --ds-toggle-label-color: #ECECEC;
   --ds-toggle-success-bg: #22C55E;
   --ds-toggle-track-bg: rgba(255, 255, 255, 0.14);
-  --ds-toggle-track-bg-checked: #FFFFFF;
+  --ds-toggle-track-bg-checked: var(--ds-color-primary);
   --ds-toggle-warning-bg: #F59E0B;
   --ds-tooltip-bg: #ECECEC;
   --ds-tooltip-color: #0C0C0E;
   --ds-tooltip-default-bg: #ECECEC;
   --ds-tooltip-default-color: #0C0C0E;
-  --ds-tooltip-primary-bg: #FFFFFF;
+  --ds-tooltip-primary-bg: var(--ds-color-primary);
   --ds-tooltip-primary-color: #0C0C0E;
   --ds-tooltip-secondary-bg: #2A2A2F;
   --ds-tooltip-secondary-color: #ECECEC;
@@ -125808,7 +125815,7 @@ html[lang]:lang(ar) {
   --ds-upload-dragger-bg: #131316;
   --ds-upload-dragger-bg-hover: #1A1A1E;
   --ds-upload-dragger-border: #2A2A2F;
-  --ds-upload-dragger-border-active: #FFFFFF;
+  --ds-upload-dragger-border-active: var(--ds-color-primary);
   --ds-upload-dragger-icon-color: #6B6B72;
   --ds-upload-dragger-text-color: var(--ds-color-text-page);
   --ds-upload-error-border: #EF4444;
@@ -125841,7 +125848,6 @@ html[lang]:lang(ar) {
   --ds-alert-warning-border: rgba(217, 119, 6, 0.20);
   --ds-alert-warning-color: #B45309;
   --ds-alert-warning-icon: #D97706;
-  --ds-anchor-ink-color: #0A0A0A;
   --ds-anchor-link-color: #9C9C9C;
   --ds-anchor-link-color-active: #1A1A1A;
   --ds-autocomplete-bg: #FFFFFF;
@@ -125861,16 +125867,13 @@ html[lang]:lang(ar) {
   --ds-avatar-gradient-color: #FFFFFF;
   --ds-avatar-group-border: #FFFFFF;
   --ds-avatar-group-overflow-bg: #F4F4F3;
-  --ds-avatar-primary-bg: #0A0A0A;
   --ds-avatar-primary-color: #FFFFFF;
-  --ds-avatar-ring-color: #0A0A0A;
   --ds-avatar-secondary-bg: #F4F4F3;
   --ds-avatar-status-border: #FFFFFF;
   --ds-avatar-success-bg: rgba(22, 163, 74, 0.10);
   --ds-avatar-success-color: #16A34A;
   --ds-avatar-warning-bg: rgba(217, 119, 6, 0.10);
   --ds-avatar-warning-color: #D97706;
-  --ds-backtop-bg: #0A0A0A;
   --ds-backtop-color: #FFFFFF;
   --ds-backtop-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
   --ds-badge-border-color: #E5E5E3;
@@ -125878,7 +125881,6 @@ html[lang]:lang(ar) {
   --ds-badge-default-color: #1A1A1A;
   --ds-badge-error-bg: #DC2626;
   --ds-badge-info-bg: #2563EB;
-  --ds-badge-primary-bg: #0A0A0A;
   --ds-badge-primary-color: var(--ds-color-white, #ffffff);
   --ds-badge-secondary-bg: #F4F4F3;
   --ds-badge-text-color: #1A1A1A;
@@ -125914,7 +125916,6 @@ html[lang]:lang(ar) {
   --ds-button-error-bg-hover: #B91C1C;
   --ds-button-ghost-bg-active: rgba(0, 0, 0, 0.08);
   --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.04);
-  --ds-button-ghost-color-active: #0A0A0A;
   --ds-button-ghost-color-hover: #1A1A1A;
   --ds-button-ghost-hover-bg: rgba(0, 0, 0, 0.04);
   --ds-button-info-bg: #2563EB;
@@ -125923,7 +125924,6 @@ html[lang]:lang(ar) {
   --ds-button-link-color: #1A1A1A;
   --ds-button-link-color-active: #0A0A0A;
   --ds-button-link-color-hover: #6B6B6B;
-  --ds-button-primary-bg: #0A0A0A;
   --ds-button-primary-bg-active: #3D3D3D;
   --ds-button-primary-bg-hover: #2A2A2A;
   --ds-button-primary-color: #FFFFFF;
@@ -125939,7 +125939,6 @@ html[lang]:lang(ar) {
   --ds-button-secondary-hover-bg: #F4F4F3;
   --ds-button-text-bg-active: rgba(0, 0, 0, 0.08);
   --ds-button-text-bg-hover: rgba(0, 0, 0, 0.04);
-  --ds-button-text-color-active: #0A0A0A;
   --ds-button-text-color-hover: #1A1A1A;
   --ds-button-text-hover-bg: rgba(0, 0, 0, 0.04);
   --ds-calendar-bg: #FFFFFF;
@@ -125984,8 +125983,6 @@ html[lang]:lang(ar) {
   --ds-checkbox-bg-disabled: #F4F4F3;
   --ds-checkbox-border: #D4D4D2;
   --ds-checkbox-border-hover: #A3A3A1;
-  --ds-checkbox-checked-bg: #0A0A0A;
-  --ds-checkbox-checked-border: #0A0A0A;
   --ds-checkbox-checked-color: #FFFFFF;
   --ds-checkbox-error-border: #DC2626;
   --ds-checkbox-error-color: #DC2626;
@@ -126057,7 +126054,6 @@ html[lang]:lang(ar) {
   --ds-color-interactive-bg-muted: #F4F4F3;
   --ds-color-interactive-border: rgba(0, 0, 0, 0.12);
   --ds-color-link: #1A1A1A;
-  --ds-color-link-hover: #0A0A0A;
   --ds-color-link-visited: #6B6B6B;
   --ds-color-neutral-0: var(--ds-color-white);
   --ds-color-neutral-100: #F4F4F3;
@@ -126282,9 +126278,7 @@ html[lang]:lang(ar) {
   --ds-notification-title-color: #1A1A1A;
   --ds-overlay-bg: var(--ds-overlay-scrim);
   --ds-page-shell-subtitle-color: var(--ds-color-text-secondary);
-  --ds-pagination-active-bg: #0A0A0A;
   --ds-pagination-active-color: #FFFFFF;
-  --ds-pagination-item-bg-active: #0A0A0A;
   --ds-pagination-item-bg-hover: #FAFAF9;
   --ds-pagination-item-color-active: #FFFFFF;
   --ds-pagination-item-color-hover: #1A1A1A;
@@ -126295,7 +126289,6 @@ html[lang]:lang(ar) {
   --ds-popover-title-color: #1A1A1A;
   --ds-progress-bg: #EDEDEC;
   --ds-progress-fill-error: #DC2626;
-  --ds-progress-fill-primary: #0A0A0A;
   --ds-progress-fill-success: #16A34A;
   --ds-progress-fill-warning: #D97706;
   --ds-radio-bg: #FFFFFF;
@@ -126303,8 +126296,6 @@ html[lang]:lang(ar) {
   --ds-radio-border: #D4D4D2;
   --ds-radio-border-hover: #A3A3A1;
   --ds-radio-checked-bg: #FFFFFF;
-  --ds-radio-checked-border: #0A0A0A;
-  --ds-radio-checked-dot: #0A0A0A;
   --ds-radio-description-color: #9C9C9C;
   --ds-radio-error-border: #DC2626;
   --ds-radio-error-color: #DC2626;
@@ -126327,7 +126318,6 @@ html[lang]:lang(ar) {
   --ds-select-border: #E5E5E3;
   --ds-select-border-focus: rgba(10, 10, 10, 0.40);
   --ds-select-border-hover: #D4D4D2;
-  --ds-select-check-color: #0A0A0A;
   --ds-select-clear-color: #9C9C9C;
   --ds-select-color: #1A1A1A;
   --ds-select-color-disabled: #C4C4C2;
@@ -126368,7 +126358,6 @@ html[lang]:lang(ar) {
   --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
   --ds-sidebar-item-child-height: initial;
   --ds-sidebar-item-color: #6B6B6B;
-  --ds-sidebar-item-color-active: #0A0A0A;
   --ds-sidebar-item-font-size: 13px;
   --ds-sidebar-item-font-size-child: initial;
   --ds-sidebar-item-font-weight: 400;
@@ -126391,7 +126380,6 @@ html[lang]:lang(ar) {
   --ds-slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   --ds-slider-mark-color: #9C9C9C;
   --ds-slider-rail-color: #E5E5E3;
-  --ds-slider-track-color: #0A0A0A;
   --ds-slider-track-color-disabled: #C4C4C2;
   --ds-spinner-track: #EDEDEC;
   --ds-statistic-value-color: #1A1A1A;
@@ -126408,19 +126396,14 @@ html[lang]:lang(ar) {
   --ds-stats-grid-trend-positive: #16A34A;
   --ds-stats-grid-value-color: #1A1A1A;
   --ds-steps-connector-color: #E5E5E3;
-  --ds-steps-connector-color-active: #0A0A0A;
   --ds-steps-finish-bg: #16A34A;
   --ds-steps-finish-border: #16A34A;
   --ds-steps-item-bg: #EDEDEC;
-  --ds-steps-item-bg-active: #0A0A0A;
   --ds-steps-item-color: #9C9C9C;
   --ds-steps-item-color-active: #FFFFFF;
-  --ds-steps-process-bg: #0A0A0A;
-  --ds-steps-process-border: #0A0A0A;
   --ds-steps-wait-border: #D4D4D2;
   --ds-switch-bg: #D4D4D2;
   --ds-switch-bg-hover: #C4C4C2;
-  --ds-switch-checked-bg: #0A0A0A;
   --ds-switch-checked-bg-hover: #2A2A2A;
   --ds-switch-focus-ring: 0 0 0 2px rgba(10, 10, 10, 0.12);
   --ds-switch-label-color: #1A1A1A;
@@ -126447,8 +126430,6 @@ html[lang]:lang(ar) {
   --ds-tag-error-bg: rgba(220, 38, 38, 0.08);
   --ds-tag-error-border: rgba(220, 38, 38, 0.20);
   --ds-tag-error-color: #B91C1C;
-  --ds-tag-primary-bg: #0A0A0A;
-  --ds-tag-primary-border: #0A0A0A;
   --ds-tag-primary-color: #FFFFFF;
   --ds-tag-secondary-bg: #F4F4F3;
   --ds-tag-secondary-border: #E5E5E3;
@@ -126474,7 +126455,6 @@ html[lang]:lang(ar) {
   --ds-textarea-error-border: #DC2626;
   --ds-textarea-filled-bg: #F4F4F3;
   --ds-textarea-shadow-focus: 0 0 0 2px rgba(10, 10, 10, 0.08);
-  --ds-timeline-dot-bg: #0A0A0A;
   --ds-timeline-dot-border: #FFFFFF;
   --ds-timeline-line-color: #E5E5E3;
   --ds-timepicker-bg: #FFFFFF;
@@ -126497,14 +126477,12 @@ html[lang]:lang(ar) {
   --ds-toggle-label-color: #1A1A1A;
   --ds-toggle-success-bg: #16A34A;
   --ds-toggle-track-bg: #D4D4D2;
-  --ds-toggle-track-bg-checked: #0A0A0A;
   --ds-toggle-warning-bg: #D97706;
   --ds-tooltip-bg: #1A1A1A;
   --ds-tooltip-color: #FAFAF9;
   --ds-tooltip-default-bg: #1A1A1A;
   --ds-tooltip-default-color: #FAFAF9;
   --ds-tooltip-error-bg: #DC2626;
-  --ds-tooltip-primary-bg: #0A0A0A;
   --ds-tooltip-primary-color: #ffffff;
   --ds-tooltip-secondary-bg: #ffffff;
   --ds-tooltip-secondary-color: #1A1A1A;
@@ -126527,7 +126505,6 @@ html[lang]:lang(ar) {
   --ds-upload-dragger-bg: #FAFAF9;
   --ds-upload-dragger-bg-hover: #F4F4F3;
   --ds-upload-dragger-border: #E5E5E3;
-  --ds-upload-dragger-border-active: #0A0A0A;
   --ds-upload-dragger-icon-color: #9C9C9C;
   --ds-upload-error-border: #DC2626;
   --ds-upload-file-bg: #FAFAF9;

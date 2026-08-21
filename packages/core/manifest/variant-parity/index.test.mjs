@@ -268,15 +268,20 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // no se movio (36/36 pares resueltos identicos); la cuenta lexica si.
   // F4A-6 (K3): rottay pierde 35 restituciones de overlay al derivar los canales
   // de tier.page a la raiz nueva; los tres ganan la hoja `textPageColor`.
-  assert.deepEqual(real.matrix.leaves, { rottay: 1786, bithire: 1504, evnto: 397 });
-  assert.equal(real.matrix.union, 2586);
+  // K1 (descongelar --ds-color-primary): mismo mecanismo, tercera vez. rottay
+  // pierde 30 restituciones de overlay y evnto 2 -- exactamente los 30/0/2
+  // canales re-cableados a `var(--ds-color-primary)`, que al valer lo mismo en
+  // ambos scopes dejan de restatearse en el bloque claro. bithire no se movio
+  // porque K1 no lo toco. 1786/1504/397 -> 1756/1504/395, union 2586 -> 2559.
+  assert.deepEqual(real.matrix.leaves, { rottay: 1756, bithire: 1504, evnto: 395 });
+  assert.equal(real.matrix.union, 2559);
   // La interseccion AUTORADA es el ancla estatica (345); la DEL DOCUMENTO se
   // mueve con los placeholders (787 tras F4A-4) y el conteo del ratchet vive
   // pineado en el baseline, no aca: el pin estatico de un contador que baja
   // por diseno convierte cada lote bueno en rojo.
-  assert.equal(real.matrix.intersection, 344);
-  assert.equal(real.matrix.positionIntersection, 892);
-  assert.deepEqual(real.matrix.exclusive, { rottay: 1033, bithire: 793, evnto: 3 });
+  assert.equal(real.matrix.intersection, 342);
+  assert.equal(real.matrix.positionIntersection, 890);
+  assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
 });
 
 test('integracion: la lista de metadato son 36 y el denominador publicado es 3690', () => {

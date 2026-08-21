@@ -70,6 +70,16 @@
  * Por eso `t3Roster` y `t3Membership` no se movieron y solo `t3Tuple` -- que
  * es el unico que digiere el VALOR -- se re-anclo. 186 light leaves -> 182.
  *
+ * La misma ley se aplico dos veces mas, y por eso el censo claro siguio
+ * bajando sin que se moviera un solo pin firmado:
+ *   - F4A-6 (K3): 18 canales de tinta pasaron a `var(--ds-color-text-page)`
+ *     en ambos modos. 182 light leaves -> 164; identicos 8 -> 26.
+ *   - K1: 14 canales pasaron a `var(--ds-color-primary)` al descongelarse la
+ *     raiz. 164 light leaves -> 150; identicos 26 -> 40.
+ * En las tres olas el cuerpo y el claro terminan leyendo la MISMA raiz, que
+ * ya resolvia al mismo literal en cada modo; el bloque claro deja de tener
+ * algo distinto que decir y por eso no lo restata.
+ *
  * -- The census convention, restated ------------------------------------------
  *
  *   380 -> 0     custom-property declarations (`--*`) -- THE GOVERNED COUNT.
@@ -206,6 +216,23 @@ const REDERIVED: Readonly<Record<string, string>> = {
   "--ds-tag-secondary-color": "var(--ds-color-text-page)",
   "--ds-timeline-content-color": "var(--ds-color-text-page)",
   "--ds-tree-node-color": "var(--ds-color-text-page)",
+  // K1 (2026-08-21) — tanda del descongelamiento de `--ds-color-primary`:
+  // canales CHROME identicos al literal de marca en los dos modos. Misma ley:
+  // pre-imagen intacta, hashes firmados quietos, pintura computada identica.
+  "--ds-anchor-ink-color": "var(--ds-color-primary)",
+  "--ds-avatar-primary-bg": "var(--ds-color-primary)",
+  "--ds-avatar-ring-color": "var(--ds-color-primary)",
+  "--ds-backtop-bg": "var(--ds-color-primary)",
+  "--ds-pagination-active-bg": "var(--ds-color-primary)",
+  "--ds-pagination-item-bg-active": "var(--ds-color-primary)",
+  "--ds-progress-fill-primary": "var(--ds-color-primary)",
+  "--ds-steps-connector-color-active": "var(--ds-color-primary)",
+  "--ds-steps-item-bg-active": "var(--ds-color-primary)",
+  "--ds-steps-process-bg": "var(--ds-color-primary)",
+  "--ds-steps-process-border": "var(--ds-color-primary)",
+  "--ds-tag-primary-bg": "var(--ds-color-primary)",
+  "--ds-tag-primary-border": "var(--ds-color-primary)",
+  "--ds-timeline-dot-bg": "var(--ds-color-primary)",
 };
 
 /** Lo que el arbol emite hoy para esa fila: la re-derivacion si la hay, y si no
@@ -253,8 +280,8 @@ const CENSUS = {
   holdTuples: 0,
   families: 26,
   bodyLeaves: 190,
-  lightLeaves: 164,
-  identicalChannels: 26,
+  lightLeaves: 150,
+  identicalChannels: 40,
   gradientValues: 6,
   maxShadowLayers: 2,
 } as const;
@@ -1811,7 +1838,7 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
     }
   });
 
-  it("omits exactly the four channels whose light paint equals its dark paint", () => {
+  it("omits exactly the forty channels whose light paint equals its dark paint", () => {
     const identical = t3Names
       .filter((name) => {
         const dark = darkRows.find((row) => row.name === name);
@@ -1824,6 +1851,11 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
         );
       })
       .sort();
+    // El titulo historico decia "four": esos eran los CUATRO originales.
+    // La lista crecio en tres olas de re-cableo, todas de forma y no de
+    // pintura -- F2.4 PILOTO +4, F4A-6 (K3) +18, K1 +14 -- hasta los 40 de
+    // hoy, y el titulo se re-anclo con ella.
+    //
     // F2.4 PILOTO: cuatro se sumaron a los cuatro originales. No cambiaron de
     // pintura -- cambiaron de FORMA: el cuerpo pasa de un literal a
     // `var(--ds-color-primary)`, que ya resolvia a ese mismo literal en cada
@@ -1831,9 +1863,13 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
     // este bloque -- "identico en ambos modos => no se restata en light" -- es
     // exactamente la que los admite.
     expect(identical).toEqual([
+      "--ds-anchor-ink-color",
       "--ds-avatar-default-color",
       "--ds-avatar-group-overflow-color",
+      "--ds-avatar-primary-bg",
+      "--ds-avatar-ring-color",
       "--ds-avatar-secondary-color",
+      "--ds-backtop-bg",
       "--ds-drawer-body-color",
       "--ds-dropdown-item-color",
       "--ds-floatbutton-badge-color",
@@ -1844,18 +1880,28 @@ describe("ROTTAY-T3 MASS - the typed shape is closed and total", () => {
       "--ds-live-feed-refresh-color",
       "--ds-menu-focus-ring-color",
       "--ds-menu-item-color",
+      "--ds-pagination-active-bg",
       "--ds-pagination-item-bg",
+      "--ds-pagination-item-bg-active",
       "--ds-pagination-item-border",
       "--ds-pagination-item-color",
+      "--ds-progress-fill-primary",
       "--ds-spinner-color",
       "--ds-statistic-prefix-color",
       "--ds-statistic-suffix-color",
       "--ds-statistic-title-color",
       "--ds-stats-grid-label-color",
+      "--ds-steps-connector-color-active",
+      "--ds-steps-item-bg-active",
+      "--ds-steps-process-bg",
+      "--ds-steps-process-border",
       "--ds-steps-wait-bg",
       "--ds-tag-default-color",
+      "--ds-tag-primary-bg",
+      "--ds-tag-primary-border",
       "--ds-tag-secondary-color",
       "--ds-timeline-content-color",
+      "--ds-timeline-dot-bg",
       "--ds-tree-node-color",
     ]);
     expect(identical).toHaveLength(CENSUS.identicalChannels);

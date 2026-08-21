@@ -1291,7 +1291,14 @@
      Keep these close to the primitive palettes so tenant runtime overrides only
      need to replace one family of variables (`--ds-color-*`).
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-color-primary: var(--ds-color-primary-500);
+  /* K1 (2026-08-21, docs/f4a/esquema-asignacion.md §4-K1): authored as the literal
+     this alias already resolves to here (`--ds-color-primary-500` is `#171717` at
+     line 30). A derived floor under a tenant that authors its own brand literal is
+     exactly the pattern mirror-parity counts as `rootFrozen` — a severed dial.
+     The seed→ramp→primary derivation lives in the `palette.seeds` control, which
+     emits both `--ds-color-primary` and `--ds-color-primary-500`; the floor is a
+     plain replaceable literal again and the freeze dies. */
+  --ds-color-primary: #171717;
   --ds-color-primary-hover: var(--ds-color-primary-600);
   --ds-color-primary-subtle: var(--ds-color-primary-100);
   --ds-color-primary-foreground: #ffffff;
@@ -124660,7 +124667,7 @@ html[lang]:lang(ar) {
   --ds-button-default-bg: #FFFFFF;
   --ds-button-default-bg-hover: #FAFAFA;
   --ds-button-default-border: rgba(0, 0, 0, 0.1);
-  --ds-button-default-color: #171717;
+  --ds-button-default-color: var(--ds-color-primary);
   --ds-button-default-hover-bg: #FAFAFA;
   --ds-button-default-shadow: var(--ds-shadow-button-rest);
   --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
@@ -124686,7 +124693,7 @@ html[lang]:lang(ar) {
   --ds-button-link-shadow: none;
   --ds-button-link-shadow-active: var(--ds-button-link-shadow);
   --ds-button-link-shadow-hover: var(--ds-button-link-shadow);
-  --ds-button-primary-bg: #171717;
+  --ds-button-primary-bg: var(--ds-color-primary);
   --ds-button-primary-bg-hover: #262626;
   --ds-button-primary-border: transparent;
   --ds-button-primary-color: #ffffff;
@@ -125127,7 +125134,6 @@ html[lang]:lang(ar) {
   --ds-button-default-bg: #1C1A16;
   --ds-button-default-bg-hover: #24221C;
   --ds-button-default-border: #2E2C24;
-  --ds-button-default-color: #E8E8E0;
   --ds-button-default-hover-bg: #24221C;
   --ds-button-disabled-bg: #1C1A16;
   --ds-button-disabled-border: #222018;
@@ -125136,7 +125142,6 @@ html[lang]:lang(ar) {
   --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-button-ghost-color: #A8A898;
   --ds-button-ghost-hover-bg: rgba(255, 255, 255, 0.04);
-  --ds-button-primary-bg: #E8E8E0;
   --ds-button-primary-bg-hover: #F0F0E8;
   --ds-button-primary-color: #131210;
   --ds-button-primary-hover-bg: #F0F0E8;

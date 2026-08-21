@@ -204,7 +204,6 @@ const OVERLAY: BrandThemeModeOverlay = {
   chrome: {
     controls: {
       buttonPrimary: {
-        bg: "#E8E8E0",
         bgHover: "#F0F0E8",
         color: "#131210",
       },
@@ -216,7 +215,6 @@ const OVERLAY: BrandThemeModeOverlay = {
       buttonDefault: {
         bg: "#1C1A16",
         bgHover: "#24221C",
-        color: "#E8E8E0",
         border: "#2E2C24",
       },
       buttonGhost: {
@@ -946,7 +944,7 @@ const CHROME: BrandChrome = {
     },
     buttonPrimary: {
       shadowHover: "var(--ds-shadow-button-hover)",
-      shadowActive: "var(--ds-shadow-button-rest)", bg: '#171717', bgHover: '#262626', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
+      shadowActive: "var(--ds-shadow-button-rest)", bg: 'var(--ds-color-primary)', bgHover: '#262626', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
     buttonSecondary: {
       shadow: "var(--ds-shadow-button-rest)",
       shadowHover: "var(--ds-shadow-button-hover)",
@@ -954,7 +952,7 @@ const CHROME: BrandChrome = {
     buttonDefault: {
       shadow: "var(--ds-shadow-button-rest)",
       shadowHover: "var(--ds-shadow-button-hover)",
-      shadowActive: "var(--ds-shadow-button-rest)", bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.1)' },
+      shadowActive: "var(--ds-shadow-button-rest)", bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', color: 'var(--ds-color-primary)', border: 'rgba(0, 0, 0, 0.1)' },
     buttonGhost: {
       shadow: "none",
       shadowHover: "var(--ds-button-ghost-shadow)",

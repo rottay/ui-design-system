@@ -141,6 +141,12 @@ const REDERIVED: Readonly<Record<string, string>> = {
   "--ds-badge-secondary-color": "var(--ds-color-text-page)",
   "--ds-form-label-color": "var(--ds-color-text-page)",
   "--ds-popover-content-color": "var(--ds-color-text-page)",
+  // K1 (2026-08-21) — tanda del descongelamiento de `--ds-color-primary`:
+  // canales CHROME identicos al literal de marca en los dos modos. Misma ley:
+  // pre-imagen intacta, hashes firmados quietos, pintura computada identica.
+  "--ds-badge-primary-bg": "var(--ds-color-primary)",
+  "--ds-select-check-color": "var(--ds-color-primary)",
+  "--ds-tooltip-primary-bg": "var(--ds-color-primary)",
 };
 /** Lo que el arbol emite hoy para esa fila; para las demas, su valor de siempre. */
 const emittedToday = (row: { name: string; value: string }): string =>

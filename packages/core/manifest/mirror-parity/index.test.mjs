@@ -284,7 +284,11 @@ test('control: las nueve cifras de superficie del artefacto', () => {
 });
 
 test('control: la trampa de ocurrencias queda a la vista en los tres', () => {
-  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1903, distinctChannels: 1212 });
+  // K1: 1903 -> 1873. Los 30 canales rottay re-cableados a `var(--ds-color-primary)`
+  // colapsaron su bloque claro (mismo valor en ambos modos), asi que el artefacto
+  // los declara una vez y no dos. `distinctChannels` NO se mueve: no desaparecio
+  // ningun canal, solo dejaron de declararse por duplicado.
+  assert.deepEqual(doc.occurrenceTrap.rottay, { occurrences: 1873, distinctChannels: 1212 });
   for (const t of TENANTS) {
     assert.ok(
       doc.occurrenceTrap[t].occurrences > doc.occurrenceTrap[t].distinctChannels,
@@ -406,8 +410,11 @@ test('control: la severidad real de cascada, por tenant', () => {
   // Las raices declaradas por el tema, ya partidas en las dos clases reales.
   // La suma pin+congelado reproduce el viejo `dialSelfSet` — 11 / 15 / 10 —
   // asi que el cambio es una PARTICION, no un ensanche de alcance.
-  assert.deepEqual([P.rottay.rootPinned.count, P.bithire.rootPinned.count, P.evnto.rootPinned.count], [7, 10, 6]);
-  assert.deepEqual([P.rottay.rootFrozen.count, P.bithire.rootFrozen.count, P.evnto.rootFrozen.count], [4, 5, 4]);
+  // K1 (descongelar --ds-color-primary) movio canales ENTRE las dos clases sin
+  // tocar la suma: 7/10/6 -> 9/11/8 pinned y 4/5/4 -> 2/4/2 frozen, con la suma
+  // intacta en 11/15/10. Es la mejor prueba de que sigue siendo una particion.
+  assert.deepEqual([P.rottay.rootPinned.count, P.bithire.rootPinned.count, P.evnto.rootPinned.count], [9, 11, 8]);
+  assert.deepEqual([P.rottay.rootFrozen.count, P.bithire.rootFrozen.count, P.evnto.rootFrozen.count], [2, 4, 2]);
   assert.deepEqual(
     TENANTS.map((t) => P[t].rootPinned.count + P[t].rootFrozen.count),
     [11, 15, 10],
@@ -423,7 +430,9 @@ test('control: la severidad real de cascada, por tenant', () => {
   // alcance aditivo.
   assert.equal(P.evnto.severs.count, 14, 'evnto SI corta, fuera de los diales numericos');
   // Y el dano total, ya con las raices congeladas contadas como lo que son.
-  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [53, 104, 18]);
+  // severedTotal = severs + rootFrozen. `severs` no se movio (49/99/14); lo que
+  // bajo es rootFrozen (4/5/4 -> 2/4/2), asi que 53/104/18 -> 51/103/16.
+  assert.deepEqual([P.rottay.severedTotal, P.bithire.severedTotal, P.evnto.severedTotal], [51, 103, 16]);
 });
 
 /**
@@ -654,44 +663,31 @@ test('los radios de bithire no cortan: 18 declarados = 2 raices propias + 16 re-
  * de este tipo.
  */
 const BLOCKED_UPSTREAM_RATCHET = {
-  // F2.4 PILOTO: el sexteto de rottay dejo de CORTAR (`severs` 56 -> 50) y paso
-  // a re-derivar de `--ds-color-primary`. Entra aqui porque esa raiz sigue
-  // congelada en el tema: el corte se movio un nivel rio arriba, no desaparecio.
-  // Es una MEJORA que hace SUBIR este registro, que es lo que la linea "el
-  // trinquete SUBE, nunca reemplaza" describe.
-  rottay: {
-    '--ds-floatbutton-primary-bg': ['--ds-color-primary'],
-    '--ds-live-feed-badge-bg': ['--ds-color-primary'],
-    '--ds-menu-focus-ring-color': ['--ds-color-primary'],
-    '--ds-spinner-color': ['--ds-color-primary'],
-    '--ds-tab-border-active': ['--ds-color-primary'],
-    '--ds-upload-progress-bar': ['--ds-color-primary'],
-  },
+  // K1 BAJA el trinquete de 24 a 4, que es la direccion que este registro
+  // premia: `blockedUpstream` cuenta canales que re-derivan de una raiz MUERTA,
+  // asi que revivir la raiz los desbloquea. Al descongelarse
+  // `--ds-color-primary` en los tres temas, los 20 que colgaban de el salieron:
+  // los 6 de rottay (el sexteto de F2.4 PILOTO, que entro aqui justamente
+  // porque la raiz seguia congelada), 13 de bithire y `--ds-color-link` de
+  // evnto. Es un DECRECIMIENTO PURO -- se verifico que el conjunto nuevo es
+  // subconjunto estricto del viejo: no aparecio ni un bloqueo nuevo.
+  //
+  // Los 4 que sobreviven lo hacen por causas ajenas a K1: en bithire
+  // `--ds-button-primary-bg` sigue congelado (dark divergente, deuda nombrada),
+  // y las tres sombras cuelgan de `--ds-shadow-md`/`--ds-shadow-lg`, que estan
+  // cortadas (`severs`), no congeladas.
+  rottay: {},
   bithire: {
     '--ds-button-primary-border': ['--ds-button-primary-bg'],
-    '--ds-command-home-grid-line': ['--ds-color-primary'],
-    '--ds-detail-hero-spine': ['--ds-color-primary'],
-    '--ds-input-autofill-caret': ['--ds-color-primary'],
-    '--ds-input-caret-color': ['--ds-color-primary'],
-    '--ds-input-loading-color': ['--ds-color-primary'],
-    '--ds-material-canvas-texture': ['--ds-color-primary'],
-    '--ds-material-card-focus-ring': ['--ds-color-primary'],
-    '--ds-material-control-focus-ring': ['--ds-color-primary'],
-    '--ds-material-panel-focus-ring': ['--ds-color-primary'],
-    '--ds-premium-card-selected-ring': ['--ds-color-primary'],
     '--ds-shadow-popover': ['--ds-shadow-md'],
-    '--ds-signal-card-badge-color': ['--ds-color-primary'],
-    '--ds-table-row-hover-shadow': ['--ds-color-primary'],
-    '--ds-workspace-shell-overlay': ['--ds-color-primary'],
   },
   evnto: {
-    '--ds-color-link': ['--ds-color-primary'],
     '--ds-select-dropdown-shadow': ['--ds-shadow-lg'],
     '--ds-shadow-popover': ['--ds-shadow-md'],
   },
 };
 
-test('trinquete: las re-derivaciones bloqueadas rio arriba son EXACTAMENTE las 24 conocidas', () => {
+test('trinquete: las re-derivaciones bloqueadas rio arriba son EXACTAMENTE las 4 conocidas', () => {
   // RECALCULADO, no leido del documento. El trinquete anterior se conformaba
   // con la cifra publicada y por eso un instrumento que dejara de contar las
   // raices congeladas como cortes solo se delataba en el control de frescura
@@ -740,7 +736,7 @@ test('trinquete: las re-derivaciones bloqueadas rio arriba son EXACTAMENTE las 2
     }
     total += blocked.length;
   }
-  assert.equal(total, 24, 'deuda total de bloqueo rio arriba');
+  assert.equal(total, 4, 'deuda total de bloqueo rio arriba');
 
   // El trinquete solo sube con evidencia: los 6 casos que este bloque pinaba
   // antes de arreglar la exclusion siguen todos adentro. Si alguno se cayera,
@@ -881,17 +877,24 @@ test('control: un testigo por clase de raiz, con la cita del piso', () => {
   assert.equal(floorVerdict(FLOOR, '--ds-font-family-base').kind, 'derived', 'el piso SI lo deriva');
 
   // ── rootFrozen ────────────────────────────────────────────────────────
-  // `--ds-color-primary` es el caso mas caro: el piso lo deriva de la rampa
-  // y bithire lo congela en un hex, con 102 lectores dentro del artefacto.
-  const frozen = frozenOf('bithire').get('--ds-color-primary');
-  assert.ok(frozen, 'bithire congela --ds-color-primary');
+  // El testigo de esta clase ERA `--ds-color-primary` en bithire (90 lectores).
+  // K1 lo retiro de la clase: el piso ya no lo deriva de la rampa sino que lo
+  // declara literal, asi que los tres temas lo reclasifican a rootPinned
+  // `floor-literal`. El testigo pasa al caso mas caro que QUEDA congelado, que
+  // es el mismo fenomeno con otra raiz de color: el piso deriva
+  // `--ds-color-error` de `--ds-color-error-400` y bithire lo congela en un hex,
+  // arrastrando 17 lectores.
+  assert.equal(frozenOf('bithire').has('--ds-color-primary'), false, 'K1 lo descongelo');
+  assert.equal(pinnedOf('bithire').get('--ds-color-primary').reason, 'floor-literal');
+  const frozen = frozenOf('bithire').get('--ds-color-error');
+  assert.ok(frozen, 'bithire congela --ds-color-error');
   assert.equal(frozen.floor.file, 'src/foundation/tokens/css/foundation/themes/default.css');
-  assert.equal(frozen.floor.line, 156);
-  assert.equal(frozen.floor.value, 'var(--ds-color-primary-500)');
-  assert.deepEqual(frozen.values, ['base=#3A6FB0', 'overlay-mode=#1e84e6']);
-  assert.equal(frozen.readerCount, 90, 'lectores dentro del propio artefacto');
-  assert.equal(frozen.readers.length, 90);
-  assert.ok(frozen.readers.includes('--ds-badge-primary-color'));
+  assert.equal(frozen.floor.line, 184);
+  assert.equal(frozen.floor.value, 'var(--ds-color-error-400)');
+  assert.deepEqual(frozen.values, ['base=#C5504C', 'overlay-mode=#e04848']);
+  assert.equal(frozen.readerCount, 17, 'lectores dentro del propio artefacto');
+  assert.equal(frozen.readers.length, 17);
+  assert.ok(frozen.readers.includes('--ds-badge-error-bg'));
 });
 
 /**
@@ -905,21 +908,26 @@ test('control: un testigo por clase de raiz, con la cita del piso', () => {
  */
 test('control: raices congeladas y lectores arrastrados, por tenant', () => {
   const P = doc.cascadeSeverance.perTenant;
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.count), [4, 5, 4]);
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.readerEdges), [32, 108, 27]);
-  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.distinctReaders), [32, 108, 27]);
+  // K1: al descongelarse --ds-color-primary en los tres temas (y --ds-button-primary-bg
+  // en rottay/evnto), el dano cae de 4/5/4 raices y 32/108/27 lectores a 2/4/2 y 7/18/7.
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.count), [2, 4, 2]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.readerEdges), [7, 18, 7]);
+  assert.deepEqual(TENANTS.map((t) => P[t].rootFrozen.distinctReaders), [7, 18, 7]);
 
   // Los nombres, no solo el conteo: seis de las diez raices no-dial aparecen
   // congeladas en algun tema, y las tres literales del piso en ninguno.
   assert.deepEqual(P.rottay.rootFrozen.channels.map((x) => x.channel), [
-    '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary', '--ds-sidebar-bg',
+    '--ds-color-error', '--ds-sidebar-bg',
   ]);
+  // bithire conserva `--ds-button-primary-bg` con razon adjudicada: su modo oscuro
+  // (`#1a7fe0`) NO es el primario oscuro (`#1e84e6`), asi que re-cablearlo NO seria
+  // cero-delta. Queda como deuda nombrada para F4B/F2-asimetrico.
   assert.deepEqual(P.bithire.rootFrozen.channels.map((x) => x.channel), [
-    '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary',
+    '--ds-button-primary-bg', '--ds-color-error',
     '--ds-elevation-1', '--ds-sidebar-bg',
   ]);
   assert.deepEqual(P.evnto.rootFrozen.channels.map((x) => x.channel), [
-    '--ds-button-primary-bg', '--ds-color-error', '--ds-color-primary', '--ds-sidebar-bg',
+    '--ds-color-error', '--ds-sidebar-bg',
   ]);
 
   // Recalculado contra el artefacto: cada raiz congelada esta de verdad sin
@@ -960,30 +968,52 @@ test('control: raices congeladas y lectores arrastrados, por tenant', () => {
 /**
  * (a) Volver PARAMETRICA una raiz congelada la saca de `rootFrozen`.
  *
- * Es la direccion "se arreglo": si bithire dejara de congelar
- * `--ds-color-primary` y volviera a leer la rampa, la clase tiene que
- * moverse, `severedTotal` bajar y los 14 lectores bloqueados por esa raiz
- * desbloquearse. Un instrumento que devolviera lo mismo antes y despues no
- * estaria midiendo nada.
+ * Es la direccion "se arreglo": si el tema dejara de congelar la raiz y
+ * volviera a leerla, la clase tiene que moverse, `severedTotal` bajar, los
+ * lectores irse con ella y los bloqueados rio arriba desbloquearse. Un
+ * instrumento que devolviera lo mismo antes y despues no estaria midiendo nada.
+ *
+ * El testigo ERA `--ds-color-primary` en bithire (90 lectores, 13 bloqueados).
+ * K1 lo descongelo de verdad, asi que esa victoria ya no se simula aca: quedo
+ * ASENTADA EN EL ARTEFACTO, donde el `blockedUpstream` de bithire cayo de 15 a
+ * 2 -- 13 de esas 13 bajas son exactamente los canales que colgaban de primary.
+ * Un drill no puede seguir probando un deshielo que ya ocurrio: sobre un sujeto
+ * que ya esta descongelado la mutacion es un no-op y el diente pasaria sin
+ * morder.
+ *
+ * El testigo nuevo es la variante de marca del boton, que K1 mantuvo congelada
+ * SOLO en bithire y con razon escrita: su modo oscuro diverge del primario
+ * (`#1a7fe0` != `#1e84e6`), asi que re-cablearla NO habria sido cero-delta. Es
+ * ademas la unica raiz congelada que HOY tiene un lector bloqueado por ella
+ * (`--ds-button-primary-border`), y por eso es la unica que mantiene vivas las
+ * seis asertas del diente a la vez. El drill prueba el mecanismo de deshielo
+ * sobre el testigo que todavia lo necesita.
+ *
+ * MANTENIMIENTO: cuando esta raiz se descongele (F4B/F2-asimetrico decide la
+ * divergencia dark), el diente se re-sujeita de nuevo. Si la clase `rootFrozen`
+ * llegara a vaciarse entera, pasa a sujeto sintetico -- adjudicacion de ESE
+ * momento, no de hoy.
  */
 test('diente (a): volver parametrica una raiz congelada la saca de rootFrozen', () => {
   const before = doc.cascadeSeverance.perTenant.bithire;
-  const mutated = mutateDecls(ARTIFACT_DECLS.bithire, '--ds-color-primary', [
-    { role: 'base', value: 'var(--ds-color-primary-500)' },
+  const mutated = mutateDecls(ARTIFACT_DECLS.bithire, '--ds-button-primary-bg', [
+    { role: 'base', value: 'var(--ds-color-primary)' },
   ]);
   const after = cascadeSeverance(CHECKLISTS, { ...ARTIFACT_DECLS, bithire: mutated }, FLOOR).perTenant.bithire;
 
   const frozen = new Map(after.rootFrozen.channels.map((x) => [x.channel, x]));
   const pinned = new Map(after.rootPinned.channels.map((x) => [x.channel, x.reason]));
-  assert.equal(frozen.has('--ds-color-primary'), false, 'ya no congela');
-  assert.equal(pinned.get('--ds-color-primary'), 'tenant-parametric', 'y la razon del pin queda escrita');
-  assert.equal(after.rootFrozen.count, before.rootFrozen.count - 1);
+  assert.equal(frozen.has('--ds-button-primary-bg'), false, 'ya no congela');
+  assert.equal(pinned.get('--ds-button-primary-bg'), 'tenant-parametric', 'y la razon del pin queda escrita');
+  assert.equal(after.rootFrozen.count, before.rootFrozen.count - 1, '4 -> 3');
   assert.equal(after.severedTotal, before.severedTotal - 1, 'el dano baja en uno');
-  assert.equal(after.rootFrozen.readerEdges, before.rootFrozen.readerEdges - 90, 'y se lleva sus 90 lectores');
-  // Y los 13 bloqueados que colgaban de esa raiz se desbloquean.
-  assert.equal(after.reDerives.blockedUpstream, before.reDerives.blockedUpstream - 13);
+  assert.equal(after.rootFrozen.readerEdges, before.rootFrozen.readerEdges - 1, 'y se lleva su unico lector');
+  // Y el bloqueado que colgaba de esa raiz se desbloquea: 2 -> 1. El que queda
+  // es `--ds-shadow-popover`, que cuelga de `--ds-shadow-md` -- un SEVER, no una
+  // raiz congelada, asi que no es asunto de este diente.
+  assert.equal(after.reDerives.blockedUpstream, before.reDerives.blockedUpstream - 1);
   assert.equal(
-    after.reDerives.channels.filter((x) => x.blockedUpstream && x.reads.includes('--ds-color-primary')).length,
+    after.reDerives.channels.filter((x) => x.blockedUpstream && x.reads.includes('--ds-button-primary-bg')).length,
     0,
   );
   // El reparto sigue siendo total despues de la mutacion.
@@ -1013,7 +1043,10 @@ test('diente (b): congelar una raiz que hoy re-deriva la mete en rootFrozen', ()
   const w = frozen.get('--ds-font-family-base');
   assert.ok(w, 'congelada: el piso la deriva y el tema ya no lee nada');
   assert.equal(w.floor.file, 'src/foundation/tokens/css/foundation/themes/default.css');
-  assert.equal(w.floor.line, 506);
+  // K1 inserto un bloque de comentario de 7 lineas en default.css antes de este
+  // punto (2210 -> 2217 lineas), asi que la CITA corrio 506 -> 513. La ley del
+  // diente no cambio: sigue mordiendo igual.
+  assert.equal(w.floor.line, 513);
   assert.ok(w.readerCount > 0, 'y viene con sus lectores, que es donde se ve el dano');
   assert.equal(after.rootFrozen.count, before.rootFrozen.count + 1);
   assert.equal(after.severedTotal, before.severedTotal + 1);
@@ -1123,11 +1156,13 @@ test('todo canal que corta viene con su valor, y todo el que re-deriva con lo qu
 test('declaracion multiple es variante de modo, NO duplicacion', () => {
   const m = doc.multiDeclaration;
   assert.match(m.notDuplication, /NO duplicacion|no duplicacion/i);
-  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 691);
+  // K1: rottay 691 -> 661 (-30) y evnto 93 -> 91 (-2), exactamente los canales
+  // re-cableados en cada tema; bithire no se movio porque K1 no lo toco.
+  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 661);
   assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 476);
-  assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 93);
+  assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 91);
   // Casi todas caen en roles distintos: es el bloque claro y el oscuro.
-  assert.equal(m.perTenant.rottay.allInDistinctRoles, 691);
+  assert.equal(m.perTenant.rottay.allInDistinctRoles, 661);
   assert.equal(m.perTenant.bithire.allInDistinctRoles, 476);
   assert.equal(m.perTenant.evnto.sameRoleTwice, 0);
   // Ya NO hay ningun caso de mismo-rol-dos-veces en ningun tema: los tres

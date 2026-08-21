@@ -6,9 +6,9 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 91319,
-        "lines": 1925,
-        "sha256": "202639ebc940333f41295fa408ced3f997d9ded0b9afb5148a34e686c82d2065"
+        "bytes": 90678,
+        "lines": 1895,
+        "sha256": "dac73bb2d3880490662510c01d48fd05afe646709f100674cfdc0580e2def2ae"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
@@ -18,17 +18,17 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30311,
-        "lines": 585,
-        "sha256": "4151bd72d2842c1fdbc33ed467cf164fc6150b519a882f68634fc3e075266ede"
+        "bytes": 30270,
+        "lines": 583,
+        "sha256": "263208d88fac1f82fd5d58dc3ab087f51e2475c6187e862887af5d5a16a281a5"
       }
     ],
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 90924,
-        "lines": 2722,
-        "sha256": "de7faf7861286f7e590eca15d38a2c14f886f56ba7cf259b79858c78183694c0"
+        "bytes": 93793,
+        "lines": 2808,
+        "sha256": "47fcbf5b6b646eb057d1f1b70002971d0788ee5ef92664ec1afb79d643276319"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
@@ -38,16 +38,16 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 40917,
-        "lines": 1214,
-        "sha256": "c911975efc61316d193e7fccbf9125d2321ef4158298ea0be07e67818c221b9a"
+        "bytes": 40900,
+        "lines": 1212,
+        "sha256": "affebfd27780a32ea8ce64f0f8b7a2473125c496902c69b2e3bde4fd2fee364a"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1903,
+      "occurrences": 1873,
       "distinctChannels": 1212
     },
     "bithire": {
@@ -55,7 +55,7 @@
       "distinctChannels": 1235
     },
     "evnto": {
-      "occurrences": 563,
+      "occurrences": 561,
       "distinctChannels": 470
     }
   },
@@ -1871,8 +1871,8 @@
     "commonChannels": 432,
     "identicalValue": 157,
     "divergentValue": 275,
-    "identicalRoleShape": 288,
-    "divergentRoleShape": 144,
+    "identicalRoleShape": 286,
+    "divergentRoleShape": 146,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -1903,7 +1903,7 @@
         "roles": {
           "rottay": "base,overlay-mode",
           "bithire": "base",
-          "evnto": "base,overlay-mode"
+          "evnto": "base"
         }
       },
       {
@@ -1936,6 +1936,14 @@
           "rottay": "base,overlay-mode",
           "bithire": "base",
           "evnto": "base,overlay-mode"
+        }
+      },
+      {
+        "channel": "--ds-button-primary-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
         }
       },
       {
@@ -2184,6 +2192,14 @@
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-color-link-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -2901,7 +2917,7 @@
       {
         "channel": "--ds-sidebar-item-color-active",
         "roles": {
-          "rottay": "base,overlay-mode",
+          "rottay": "base",
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
@@ -6570,22 +6586,42 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 466,
       "channels": 3577,
-      "sha256": "2e138892f0441b1794fd426cd3dbe5a41072c6f9f0e85326a7ec9f416943d89f",
+      "sha256": "f1e2f06909aad31f4c182063d83e4f836c269f47133107d8e06ae376780339ec",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
     "perTenant": {
       "rottay": {
         "declaredInCascade": 154,
-        "severedTotal": 53,
+        "severedTotal": 51,
         "rootPinned": {
-          "count": 7,
+          "count": 9,
           "byReason": {
-            "tenant-parametric": 3,
-            "floor-literal": 1,
+            "tenant-parametric": 4,
+            "floor-literal": 2,
             "floor-absent": 3
           },
           "channels": [
+            {
+              "channel": "--ds-button-primary-bg",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-color-primary)"
+              ]
+            },
+            {
+              "channel": "--ds-color-primary",
+              "reason": "floor-literal",
+              "values": [
+                "base=#FFFFFF",
+                "overlay-mode=#0A0A0A"
+              ],
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default.css",
+                "line": 163,
+                "value": "#171717"
+              }
+            },
             {
               "channel": "--ds-density-scale",
               "reason": "floor-absent",
@@ -6647,24 +6683,10 @@
           ]
         },
         "rootFrozen": {
-          "count": 4,
-          "readerEdges": 32,
-          "distinctReaders": 32,
+          "count": 2,
+          "readerEdges": 7,
+          "distinctReaders": 7,
           "channels": [
-            {
-              "channel": "--ds-button-primary-bg",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
-              ],
-              "readers": [],
-              "readerCount": 0,
-              "floor": {
-                "file": "src/foundation/tokens/css/presentation/components/button.css",
-                "line": 93,
-                "value": "var(--ds-color-primary-500)"
-              }
-            },
             {
               "channel": "--ds-color-error",
               "values": [
@@ -6681,48 +6703,8 @@
               "readerCount": 5,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 177,
+                "line": 184,
                 "value": "var(--ds-color-error-400)"
-              }
-            },
-            {
-              "channel": "--ds-color-primary",
-              "values": [
-                "base=#FFFFFF",
-                "overlay-mode=#0A0A0A"
-              ],
-              "readers": [
-                "--ds-control-brand-border",
-                "--ds-control-brand-tint",
-                "--ds-control-brand-tint-hover",
-                "--ds-elevation-4",
-                "--ds-elevation-5",
-                "--ds-floatbutton-primary-bg",
-                "--ds-focus-ring-color",
-                "--ds-live-feed-badge-bg",
-                "--ds-menu-focus-ring-color",
-                "--ds-premium-card-border",
-                "--ds-premium-card-border-hover",
-                "--ds-premium-card-selected-border",
-                "--ds-premium-card-selected-ring",
-                "--ds-spinner-color",
-                "--ds-surface-card-grid-line",
-                "--ds-surface-chip-bg",
-                "--ds-surface-icon-bg",
-                "--ds-surface-icon-border",
-                "--ds-tab-border-active",
-                "--ds-tint-12",
-                "--ds-tint-16",
-                "--ds-tint-24",
-                "--ds-tint-4",
-                "--ds-tint-8",
-                "--ds-upload-progress-bar"
-              ],
-              "readerCount": 25,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 156,
-                "value": "var(--ds-color-primary-500)"
               }
             },
             {
@@ -6738,7 +6720,7 @@
               "readerCount": 2,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 998,
+                "line": 1005,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -7090,9 +7072,9 @@
         "reDerives": {
           "count": 94,
           "reachingRoot": 45,
-          "reachingLiveRoot": 26,
+          "reachingLiveRoot": 45,
           "mixedRoleValues": 12,
-          "blockedUpstream": 6,
+          "blockedUpstream": 0,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -7314,7 +7296,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7325,7 +7307,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7336,7 +7318,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7373,7 +7355,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7386,7 +7368,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7396,8 +7378,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-font-family-display",
@@ -7526,8 +7508,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-menu-focus-ring-color",
@@ -7536,8 +7518,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-motion-attention",
@@ -7614,7 +7596,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7627,7 +7609,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7650,7 +7632,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7661,7 +7643,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7741,8 +7723,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-surface-card-grid-bg",
@@ -7762,7 +7744,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7773,7 +7755,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7785,7 +7767,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7796,7 +7778,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -7806,8 +7788,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-type-body",
@@ -8094,20 +8076,20 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             }
           ]
         }
       },
       "bithire": {
         "declaredInCascade": 263,
-        "severedTotal": 104,
+        "severedTotal": 103,
         "rootPinned": {
-          "count": 10,
+          "count": 11,
           "byReason": {
             "tenant-parametric": 3,
-            "floor-literal": 4,
+            "floor-literal": 5,
             "floor-absent": 3
           },
           "channels": [
@@ -8121,6 +8103,19 @@
                 "file": "src/foundation/tokens/css/presentation/components/badge.css",
                 "line": 145,
                 "value": "1.05"
+              }
+            },
+            {
+              "channel": "--ds-color-primary",
+              "reason": "floor-literal",
+              "values": [
+                "base=#3A6FB0",
+                "overlay-mode=#1e84e6"
+              ],
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default.css",
+                "line": 163,
+                "value": "#171717"
               }
             },
             {
@@ -8151,7 +8146,7 @@
               ],
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 729,
+                "line": 736,
                 "value": "1px"
               }
             },
@@ -8207,9 +8202,9 @@
           ]
         },
         "rootFrozen": {
-          "count": 5,
-          "readerEdges": 108,
-          "distinctReaders": 108,
+          "count": 4,
+          "readerEdges": 18,
+          "distinctReaders": 18,
           "channels": [
             {
               "channel": "--ds-button-primary-bg",
@@ -8255,113 +8250,8 @@
               "readerCount": 17,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 177,
+                "line": 184,
                 "value": "var(--ds-color-error-400)"
-              }
-            },
-            {
-              "channel": "--ds-color-primary",
-              "values": [
-                "base=#3A6FB0",
-                "overlay-mode=#1e84e6"
-              ],
-              "readers": [
-                "--ds-badge-icon-bg",
-                "--ds-badge-info-bg",
-                "--ds-badge-info-color",
-                "--ds-badge-primary-color",
-                "--ds-badge-remove-bg",
-                "--ds-badge-remove-hover-bg",
-                "--ds-badge-selected-surface",
-                "--ds-badge-surface-hover",
-                "--ds-badge-surface-pressed",
-                "--ds-breadcrumb-bg",
-                "--ds-breadcrumb-color-hover",
-                "--ds-button-link-color",
-                "--ds-button-secondary-bg-active",
-                "--ds-card-bg-hover",
-                "--ds-card-header-bg",
-                "--ds-card-side-accent-soft",
-                "--ds-collection-card-status-border",
-                "--ds-command-home-control-border",
-                "--ds-command-home-control-hover-bg",
-                "--ds-command-home-grid-line",
-                "--ds-command-home-icon-bg",
-                "--ds-command-home-panel-border",
-                "--ds-command-home-panel-border-soft",
-                "--ds-control-brand-border",
-                "--ds-control-brand-tint",
-                "--ds-control-brand-tint-hover",
-                "--ds-detail-control-border-hover",
-                "--ds-detail-hero-bg",
-                "--ds-detail-hero-shadow",
-                "--ds-detail-hero-spine",
-                "--ds-detail-section-border",
-                "--ds-filter-pill-active-border",
-                "--ds-filter-pill-active-color",
-                "--ds-filter-pill-frame-border",
-                "--ds-filter-pill-hover-bg",
-                "--ds-filter-pill-hover-border",
-                "--ds-focus-ring-color",
-                "--ds-icon-tile-border",
-                "--ds-input-autofill-caret",
-                "--ds-input-caret-color",
-                "--ds-input-loading-color",
-                "--ds-list-preview-panel-bg",
-                "--ds-list-preview-panel-border",
-                "--ds-material-canvas-texture",
-                "--ds-material-card-background-active",
-                "--ds-material-card-background-selected",
-                "--ds-material-card-border-active",
-                "--ds-material-card-border-hover",
-                "--ds-material-card-border-selected",
-                "--ds-material-card-focus-ring",
-                "--ds-material-card-shadow-selected",
-                "--ds-material-control-background-selected",
-                "--ds-material-control-border-active",
-                "--ds-material-control-border-selected",
-                "--ds-material-control-focus-ring",
-                "--ds-material-control-shadow-selected",
-                "--ds-material-panel-background-active",
-                "--ds-material-panel-background-selected",
-                "--ds-material-panel-border-active",
-                "--ds-material-panel-border-hover",
-                "--ds-material-panel-border-selected",
-                "--ds-material-panel-focus-ring",
-                "--ds-material-panel-shadow-selected",
-                "--ds-metric-card-icon-bg",
-                "--ds-premium-card-border",
-                "--ds-premium-card-border-hover",
-                "--ds-premium-card-section-alt-bg",
-                "--ds-premium-card-selected-border",
-                "--ds-premium-card-selected-ring",
-                "--ds-signal-card-badge-color",
-                "--ds-signal-card-icon-bg",
-                "--ds-signal-card-section-alt-bg",
-                "--ds-surface-card-grid-line",
-                "--ds-surface-chip-bg",
-                "--ds-surface-icon-bg",
-                "--ds-surface-icon-border",
-                "--ds-table-filter-focus-shadow",
-                "--ds-table-header-bg-hover",
-                "--ds-table-row-focus-shadow",
-                "--ds-table-row-hover-shadow",
-                "--ds-tabs-badge-border-active",
-                "--ds-tint-12",
-                "--ds-tint-16",
-                "--ds-tint-24",
-                "--ds-tint-4",
-                "--ds-tint-8",
-                "--ds-toolbar-bg",
-                "--ds-workspace-card-icon-bg",
-                "--ds-workspace-card-icon-color",
-                "--ds-workspace-shell-overlay"
-              ],
-              "readerCount": 90,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 156,
-                "value": "var(--ds-color-primary-500)"
               }
             },
             {
@@ -8373,7 +8263,7 @@
               "readerCount": 0,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 800,
+                "line": 807,
                 "value": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
               }
             },
@@ -8387,7 +8277,7 @@
               "readerCount": 0,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 998,
+                "line": 1005,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -9003,9 +8893,9 @@
         "reDerives": {
           "count": 149,
           "reachingRoot": 87,
-          "reachingLiveRoot": 36,
+          "reachingLiveRoot": 86,
           "mixedRoleValues": 62,
-          "blockedUpstream": 15,
+          "blockedUpstream": 2,
           "channels": [
             {
               "channel": "--ds-badge-font-family",
@@ -9257,7 +9147,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9288,7 +9178,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9298,8 +9188,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-command-home-hero-bg",
@@ -9319,7 +9209,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9330,7 +9220,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9341,7 +9231,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9382,7 +9272,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9393,7 +9283,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9404,7 +9294,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9415,7 +9305,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9425,8 +9315,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-filter-pill-focus-ring",
@@ -9446,7 +9336,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9479,7 +9369,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9499,8 +9389,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-input-border-focus",
@@ -9519,8 +9409,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-input-loading-color",
@@ -9529,8 +9419,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-listing-grid-card-border",
@@ -9569,8 +9459,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-material-card-background-active",
@@ -9580,7 +9470,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9601,7 +9491,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9612,7 +9502,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9623,7 +9513,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9633,8 +9523,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-material-card-highlight",
@@ -9684,7 +9574,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9715,7 +9605,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9726,7 +9616,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9737,7 +9627,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9747,8 +9637,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-material-control-shadow-hover",
@@ -9769,7 +9659,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9780,7 +9670,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9801,7 +9691,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9812,7 +9702,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9823,7 +9713,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9833,8 +9723,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-material-panel-shadow-hover",
@@ -9854,7 +9744,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9865,7 +9755,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9952,7 +9842,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9963,7 +9853,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9975,7 +9865,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9986,7 +9876,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9996,8 +9886,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-radius-input",
@@ -10067,8 +9957,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-signal-card-bg",
@@ -10098,7 +9988,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10109,7 +9999,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10131,7 +10021,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10163,7 +10053,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10176,7 +10066,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10188,7 +10078,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10199,7 +10089,7 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10230,8 +10120,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-tall-card-border",
@@ -10580,23 +10470,43 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             }
           ]
         }
       },
       "evnto": {
         "declaredInCascade": 78,
-        "severedTotal": 18,
+        "severedTotal": 16,
         "rootPinned": {
-          "count": 6,
+          "count": 8,
           "byReason": {
-            "tenant-parametric": 2,
-            "floor-literal": 1,
+            "tenant-parametric": 3,
+            "floor-literal": 2,
             "floor-absent": 3
           },
           "channels": [
+            {
+              "channel": "--ds-button-primary-bg",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-color-primary)"
+              ]
+            },
+            {
+              "channel": "--ds-color-primary",
+              "reason": "floor-literal",
+              "values": [
+                "base=#171717",
+                "overlay-mode=#E8E8E0"
+              ],
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default.css",
+                "line": 163,
+                "value": "#171717"
+              }
+            },
             {
               "channel": "--ds-density-scale",
               "reason": "floor-absent",
@@ -10650,24 +10560,10 @@
           ]
         },
         "rootFrozen": {
-          "count": 4,
-          "readerEdges": 27,
-          "distinctReaders": 27,
+          "count": 2,
+          "readerEdges": 7,
+          "distinctReaders": 7,
           "channels": [
-            {
-              "channel": "--ds-button-primary-bg",
-              "values": [
-                "base=#171717",
-                "overlay-mode=#E8E8E0"
-              ],
-              "readers": [],
-              "readerCount": 0,
-              "floor": {
-                "file": "src/foundation/tokens/css/presentation/components/button.css",
-                "line": 93,
-                "value": "var(--ds-color-primary-500)"
-              }
-            },
             {
               "channel": "--ds-color-error",
               "values": [
@@ -10684,43 +10580,8 @@
               "readerCount": 6,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 177,
+                "line": 184,
                 "value": "var(--ds-color-error-400)"
-              }
-            },
-            {
-              "channel": "--ds-color-primary",
-              "values": [
-                "base=#171717",
-                "overlay-mode=#E8E8E0"
-              ],
-              "readers": [
-                "--ds-color-link",
-                "--ds-control-brand-border",
-                "--ds-control-brand-tint",
-                "--ds-control-brand-tint-hover",
-                "--ds-focus-ring-color",
-                "--ds-material-card-background-hover",
-                "--ds-material-control-background-hover",
-                "--ds-premium-card-border",
-                "--ds-premium-card-border-hover",
-                "--ds-premium-card-selected-border",
-                "--ds-premium-card-selected-ring",
-                "--ds-surface-card-grid-line",
-                "--ds-surface-chip-bg",
-                "--ds-surface-icon-bg",
-                "--ds-surface-icon-border",
-                "--ds-tint-12",
-                "--ds-tint-16",
-                "--ds-tint-24",
-                "--ds-tint-4",
-                "--ds-tint-8"
-              ],
-              "readerCount": 20,
-              "floor": {
-                "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 156,
-                "value": "var(--ds-color-primary-500)"
               }
             },
             {
@@ -10735,7 +10596,7 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
-                "line": 998,
+                "line": 1005,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -10837,9 +10698,9 @@
         "reDerives": {
           "count": 54,
           "reachingRoot": 36,
-          "reachingLiveRoot": 22,
+          "reachingLiveRoot": 36,
           "mixedRoleValues": 1,
-          "blockedUpstream": 3,
+          "blockedUpstream": 2,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -10878,8 +10739,8 @@
               ],
               "reachesRoot": true,
               "mixed": true,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-control-brand-border",
@@ -10889,7 +10750,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10900,7 +10761,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10911,7 +10772,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10942,7 +10803,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10953,7 +10814,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11031,7 +10892,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11044,7 +10905,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11067,7 +10928,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11078,7 +10939,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11119,7 +10980,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11130,7 +10991,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11142,7 +11003,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11153,7 +11014,7 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11443,8 +11304,8 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 691,
-        "allInDistinctRoles": 691,
+        "channelsDeclaredMoreThanOnce": 661,
+        "allInDistinctRoles": 661,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11455,8 +11316,8 @@
         "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 93,
-        "allInDistinctRoles": 93,
+        "channelsDeclaredMoreThanOnce": 91,
+        "allInDistinctRoles": 91,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }
@@ -11466,37 +11327,37 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1786,
+      "rottay": 1756,
       "bithire": 1504,
-      "evnto": 397
+      "evnto": 395
     },
-    "union": 2586,
-    "intersection": 344,
-    "intersectionPct": 13.3,
+    "union": 2559,
+    "intersection": 342,
+    "intersectionPct": 13.4,
     "intersectionPctOfSmallest": 86.6,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 707,
-        "union": 2583,
-        "pctOfUnion": 27.4,
-        "pctOfSmaller": 47
+        "shared": 704,
+        "union": 2556,
+        "pctOfUnion": 27.5,
+        "pctOfSmaller": 46.8
       },
       "rottay+evnto": {
-        "shared": 390,
-        "union": 1793,
-        "pctOfUnion": 21.8,
-        "pctOfSmaller": 98.2
+        "shared": 387,
+        "union": 1764,
+        "pctOfUnion": 21.9,
+        "pctOfSmaller": 98
       },
       "bithire+evnto": {
-        "shared": 348,
-        "union": 1553,
+        "shared": 347,
+        "union": 1552,
         "pctOfUnion": 22.4,
-        "pctOfSmaller": 87.7
+        "pctOfSmaller": 87.8
       }
     },
     "exclusive": {
-      "rottay": 1033,
-      "bithire": 793,
+      "rottay": 1007,
+      "bithire": 795,
       "evnto": 3
     },
     "exclusiveSamples": {

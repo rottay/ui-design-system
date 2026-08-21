@@ -22,7 +22,7 @@
   --ds-button-default-bg: #FFFFFF;
   --ds-button-default-bg-hover: #FAFAFA;
   --ds-button-default-border: rgba(0, 0, 0, 0.1);
-  --ds-button-default-color: #171717;
+  --ds-button-default-color: var(--ds-color-primary);
   --ds-button-default-hover-bg: #FAFAFA;
   --ds-button-default-shadow: var(--ds-shadow-button-rest);
   --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
@@ -48,7 +48,7 @@
   --ds-button-link-shadow: none;
   --ds-button-link-shadow-active: var(--ds-button-link-shadow);
   --ds-button-link-shadow-hover: var(--ds-button-link-shadow);
-  --ds-button-primary-bg: #171717;
+  --ds-button-primary-bg: var(--ds-color-primary);
   --ds-button-primary-bg-hover: #262626;
   --ds-button-primary-border: transparent;
   --ds-button-primary-color: #ffffff;
@@ -489,7 +489,6 @@
   --ds-button-default-bg: #1C1A16;
   --ds-button-default-bg-hover: #24221C;
   --ds-button-default-border: #2E2C24;
-  --ds-button-default-color: #E8E8E0;
   --ds-button-default-hover-bg: #24221C;
   --ds-button-disabled-bg: #1C1A16;
   --ds-button-disabled-border: #222018;
@@ -498,7 +497,6 @@
   --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-button-ghost-color: #A8A898;
   --ds-button-ghost-hover-bg: rgba(255, 255, 255, 0.04);
-  --ds-button-primary-bg: #E8E8E0;
   --ds-button-primary-bg-hover: #F0F0E8;
   --ds-button-primary-color: #131210;
   --ds-button-primary-hover-bg: #F0F0E8;

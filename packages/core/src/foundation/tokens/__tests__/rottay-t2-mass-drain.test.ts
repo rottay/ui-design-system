@@ -186,6 +186,18 @@ const REDERIVED: Readonly<Record<string, string>> = {
   "--ds-upload-button-color": "var(--ds-color-text-page)",
   "--ds-upload-dragger-text-color": "var(--ds-color-text-page)",
   "--ds-upload-file-color": "var(--ds-color-text-page)",
+  // K1 (2026-08-21) — tanda del descongelamiento de `--ds-color-primary`:
+  // canales CHROME identicos al literal de marca en los dos modos. Misma ley:
+  // pre-imagen intacta, hashes firmados quietos, pintura computada identica.
+  "--ds-checkbox-checked-bg": "var(--ds-color-primary)",
+  "--ds-checkbox-checked-border": "var(--ds-color-primary)",
+  "--ds-radio-checked-border": "var(--ds-color-primary)",
+  "--ds-radio-checked-dot": "var(--ds-color-primary)",
+  "--ds-select-check-color": "var(--ds-color-primary)",
+  "--ds-slider-track-color": "var(--ds-color-primary)",
+  "--ds-switch-checked-bg": "var(--ds-color-primary)",
+  "--ds-toggle-track-bg-checked": "var(--ds-color-primary)",
+  "--ds-upload-dragger-border-active": "var(--ds-color-primary)",
 };
 
 /** Lo que el arbol emite hoy para esa fila; para las demas, su valor de siempre. */
@@ -1562,7 +1574,7 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         (total, leaves) => total + Object.keys(leaves).length,
         0
       )
-    ).toBe(135);
+    ).toBe(126);
   });
 
   it("compiles the dark document to a ZERO delta -- byte-identical, not merely close", () => {
@@ -1581,17 +1593,17 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
     expect(delta).toEqual({ "--ds-upload-dragger-bg-hover": "#123456" });
   });
 
-  it("compiles the light document to 135 entries, each byte-equal to the static light artifact", () => {
+  it("compiles the light document to 126 entries, each byte-equal to the static light artifact", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const names = Object.keys(delta).sort();
-    expect(names).toHaveLength(135);
+    expect(names).toHaveLength(126);
     for (const name of names) {
       expect(t2Names).toContain(name);
       expect(delta[name]).toBe(EMITTED.light[name]);
     }
   });
 
-  it("omits exactly the thirteen channels whose light paint equals its dark paint", () => {
+  it("omits exactly the twenty-two channels whose light paint equals its dark paint", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const channels = FAMILIES.flatMap((family) =>
       family.fields.map(([, channel]) => channel)
@@ -1610,7 +1622,15 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         // que AMBAS filas sean `migrate` se relaja solo para los re-cableados:
         // `--ds-upload-progress-bar` tenia su fila clara adjudicada `delete`
         // (era un eco del piso), y ahora que el cuerpo lee la raiz el claro se
-        // queda sin delta por la misma razon que los otros siete.
+        // queda sin delta por la misma razon que sus pares.
+        //
+        // K1 (descongelar --ds-color-primary) sumo 9: checkbox-checked-bg,
+        // checkbox-checked-border, radio-checked-border, radio-checked-dot,
+        // select-check-color, slider-track-color, switch-checked-bg,
+        // toggle-track-bg-checked y upload-dragger-border-active. Los nueve
+        // pintaban el literal de marca en AMBOS scopes, asi que al leer la
+        // raiz el overlay claro dejo de tener algo distinto que decir. 13 + 9
+        // = 22, y el censo claro baja 135 - 9 = 126 por el mismo movimiento.
         return (
           dark?.disposition === "migrate" &&
           (light?.disposition === "migrate" || name in REDERIVED) &&
@@ -1618,7 +1638,7 @@ describe("ROTTAY-T2 MASS - the DB documents of the thirteen families", () => {
         );
       })
       .sort();
-    expect(identical).toHaveLength(13);
+    expect(identical).toHaveLength(22);
     expect(omitted).toEqual(identical);
   });
 });
@@ -1666,16 +1686,30 @@ describe("ROTTAY-T2 MASS - the select vocabulary opened by exactly eighteen name
   });
 
   it("records which core select fields a DB document may not carry", () => {
-    // Not a T2 regression and not fixed here. Seven of the core fifteen are
-    // authored as `var()` chains in the STATIC theme, and the DB value guard
-    // refuses six of them outright -- `borderColorFocus` is the exception,
-    // because its chain targets a channel the guard admits. That asymmetry is
-    // recorded, not repaired: it predates this tranche and belongs to the
-    // core fifteen, never to the eighteen added here.
+    // Not a T2 regression and not fixed here. This pin records WHICH select
+    // fields are authored as `var()` chains in the STATIC theme and which of
+    // those chains the DB value guard admits.
     //
-    // Every one of the 148 leaves this tranche added is a plain literal, so
-    // the DB transport carries the whole tranche without exception -- which is
-    // the fact the zero-delta proof above depends on.
+    // The original SEVEN belong to the core fifteen and predate this tranche:
+    // six are refused outright and `borderColorFocus` is admitted, because its
+    // chain targets `--ds-color-primary-500`, a channel in
+    // TENANT_THEME_REFERENCE_TOKENS. That asymmetry is recorded, not repaired.
+    //
+    // Three more chains landed AFTER this tranche was signed, and the
+    // "predates this tranche" reading no longer covers them:
+    //   - F4A-6 (K3) rewired `clearColorHover` and `tagColor` to
+    //     `var(--ds-color-text-page)`;
+    //   - K1 rewired `checkColor` to `var(--ds-color-primary)`.
+    // All three chain to ADMITTED channels, so `admitted` grows from one to
+    // four. Both rewires were proved cero-delta by cascade resolution, so the
+    // paint did not move -- only the form did.
+    //
+    // Those three are also the reason the last pin is no longer empty: unlike
+    // the original seven, they belong to the EIGHTEEN this tranche added, not
+    // to the core fifteen. What stays literal is the ROSTER: every one of the
+    // 148 leaves the tranche signed is still a plain literal in its
+    // pre-image, which is the fact the zero-delta proof above depends on --
+    // and the final assertion keeps proving exactly that.
     const chained = Object.entries(bodyControls.select ?? {})
       .filter(([, value]) => value.includes("var("))
       .map(([field]) => field)
@@ -1686,8 +1720,11 @@ describe("ROTTAY-T2 MASS - the select vocabulary opened by exactly eighteen name
       "borderColor",
       "borderColorFocus",
       "borderColorHover",
+      "checkColor",
+      "clearColorHover",
       "dropdownBorderColor",
       "optionColor",
+      "tagColor",
     ]);
     const admitted = chained.filter(
       (field) =>
@@ -1699,9 +1736,21 @@ describe("ROTTAY-T2 MASS - the select vocabulary opened by exactly eighteen name
           )
         ).success
     );
-    expect(admitted).toEqual(["borderColorFocus"]);
+    expect(admitted).toEqual([
+      "borderColorFocus",
+      "checkColor",
+      "clearColorHover",
+      "tagColor",
+    ]);
     const added = new Set(selectFields.map(([field]) => field));
-    expect(chained.filter((field) => added.has(field))).toEqual([]);
+    // Re-anclado de [] a los tres: ver el bloque de arriba. Un chain nuevo
+    // sobre uno de los dieciocho solo es legitimo si su destino esta admitido,
+    // y los tres lo estan -- por eso los tres aparecen tambien en `admitted`.
+    expect(chained.filter((field) => added.has(field))).toEqual([
+      "checkColor",
+      "clearColorHover",
+      "tagColor",
+    ]);
     expect(
       T2_ROSTER.filter((row) => row.value.includes("var("))
     ).toEqual([]);
