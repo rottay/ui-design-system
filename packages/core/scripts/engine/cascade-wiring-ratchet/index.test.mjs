@@ -3,15 +3,25 @@
  * canal huerfano nuevo, y ese mismo canal recableado a raiz) y dos plantan la
  * ROTURA DEL CLASIFICADOR, que es lo que los invariantes de forma existen para
  * cazar: un contador puede estar verde y estar contando mal.
+ *
+ * El CSS plantado NO se escribe en el arbol real. `collectSkinFiles()` (el
+ * unico walker, compartido con el token-audit y el literal-ownership-gate)
+ * ahora acepta una raiz; el drill arma una sandbox de tmpdir con la unica
+ * carpeta `skin/` que le importa, deja que el walker la descubra ahi, y
+ * concatena ese hallazgo con el corpus real sin plantar nada en `src/`. Antes
+ * escribia y borraba un archivo real bajo
+ * `src/foundation/tokens/css/presentation/components/skin/`, lo que hacia
+ * ENOENT determinista a otros tests que caminan ese arbol en paralelo
+ * (`app-ds-hook-contract-gate/index.test.mjs`).
  */
 
 import assert from 'node:assert/strict';
-import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import test from 'node:test';
 
-import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
+import { collectSkinFiles } from '../../lib/engine/skin-files/index.mjs';
 import {
   BASELINE_PATH,
   classifyCascadeWiring,
@@ -20,14 +30,6 @@ import {
   varCalls,
 } from './index.mjs';
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = findPackageRoot(HERE);
-/** Un archivo de skin nuevo entra al corpus por el propio walker: es `skin/`. */
-const PLANTED = join(
-  CORE_ROOT,
-  'src/foundation/tokens/css/presentation/components/skin/__cascade-ratchet-drill.css',
-);
-
 function expectFinding(findings, fragment, message) {
   assert.ok(
     findings.some((finding) => finding.includes(fragment)),
@@ -35,12 +37,20 @@ function expectFinding(findings, fragment, message) {
   );
 }
 
+/**
+ * Planta `css` en una carpeta `skin/` sandbox bajo tmpdir y le da a `run` el
+ * corpus real MAS lo que el walker descubre ahi -- nunca escribe en `src/`.
+ */
 function withPlantedCss(css, run) {
-  writeFileSync(PLANTED, css);
+  const sandbox = mkdtempSync(join(tmpdir(), 'cascade-ratchet-drill-'));
+  const skinDir = join(sandbox, 'src/foundation/tokens/css/presentation/components/skin');
+  mkdirSync(skinDir, { recursive: true });
+  writeFileSync(join(skinDir, '__cascade-ratchet-drill.css'), css);
   try {
-    run();
+    const files = [...collectSkinFiles(), ...collectSkinFiles(sandbox)];
+    run(files);
   } finally {
-    unlinkSync(PLANTED);
+    rmSync(sandbox, { recursive: true, force: true });
   }
 }
 
@@ -58,9 +68,9 @@ test('the pinned debt is the measured debt, not a guess', () => {
 test('a NEW unwired channel grows the debt and fails', () => {
   withPlantedCss(
     '.ds-cascade-ratchet-drill { color: var(--ds-cascade-ratchet-drill-orphan); }\n',
-    () => {
+    (files) => {
       expectFinding(
-        collectFindings(),
+        collectFindings({ files }),
         'debt GREW from',
         'un canal sin camino a raiz tiene que subir el contador y enrojecer',
       );
@@ -73,8 +83,8 @@ test('the same channel WIRED to a root does not grow the debt', () => {
   // rojo de arriba lo causa la FALTA DE CAMINO y no la aparicion del nombre.
   withPlantedCss(
     '.ds-cascade-ratchet-drill { color: var(--ds-cascade-ratchet-drill-orphan, var(--ds-color-primary)); }\n',
-    () => {
-      const findings = collectFindings();
+    (files) => {
+      const findings = collectFindings({ files });
       assert.equal(
         findings.filter((finding) => finding.includes('debt GREW')).length,
         0,
@@ -88,8 +98,8 @@ test('a functional fallback wrapped in color-mix still counts as wired (rule b)'
   withPlantedCss(
     '.ds-cascade-ratchet-drill { color: var(--ds-cascade-ratchet-drill-mix, ' +
       'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)); }\n',
-    () => {
-      const findings = collectFindings();
+    (files) => {
+      const findings = collectFindings({ files });
       assert.equal(
         findings.filter((finding) => finding.includes('debt GREW')).length,
         0,
@@ -104,9 +114,9 @@ test('rewiring an existing debt name to a root shrinks the debt and fails until 
   const victim = result.debt[0];
   assert.ok(victim, 'el arbol tiene que tener deuda para que este drill signifique algo');
   // Un sitio de lectura con fallback a raiz basta: la ley es "algun camino".
-  withPlantedCss(`.ds-cascade-ratchet-drill { color: var(${victim}, var(--ds-color-primary)); }\n`, () => {
+  withPlantedCss(`.ds-cascade-ratchet-drill { color: var(${victim}, var(--ds-color-primary)); }\n`, (files) => {
     expectFinding(
-      collectFindings(),
+      collectFindings({ files }),
       'debt SHRANK from',
       'bajar la deuda tiene que exigir bajar el baseline a proposito',
     );

@@ -13,9 +13,15 @@ import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot } from '../../repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const root = findPackageRoot(HERE);
+const DEFAULT_ROOT = findPackageRoot(HERE);
 
-export function collectSkinFiles() {
+/**
+ * `root` defaults to the real package root, so every existing caller
+ * (engine-token-audit, literal-ownership-gate, cascade-wiring-ratchet) is
+ * unaffected. A drill that needs the walker to discover a planted file
+ * without writing into the real tree passes a sandbox root instead.
+ */
+export function collectSkinFiles(root = DEFAULT_ROOT) {
   const skins = [];
   const walk = (dir) => {
     let entries;
