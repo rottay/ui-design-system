@@ -18,7 +18,7 @@ import {
   serialize,
   BASELINE_PATH,
 } from './index.mjs';
-import { TENANTS, PACKAGE_ROOT, sourcePath } from '../mirror-parity/index.mjs';
+import { TENANTS, PACKAGE_ROOT, sourcePath, authoredLeafPaths as authoredLeafPathsReal } from '../mirror-parity/index.mjs';
 
 /**
  * Los fixtures son texto de fuente SINTETICO y se mutan EN MEMORIA — nunca en
@@ -309,4 +309,139 @@ test('integracion: hoy no hay ni un tag en las fuentes, y eso es correcto', () =
   const real = build();
   assert.equal(real.tagRegistry.count, 0, 'F4A-2 no autora tags: los ponen F4A-3 en adelante');
   assert.deepEqual(real.failures, []);
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * F4A-2b — el indice de scope, con la forma FEA del corpus
+ *
+ * Los 22 drills de arriba pasaban con el indice roto: sus fixtures cierran
+ * todas las llaves en linea propia, que es la forma linda que uno escribe a
+ * mano. El corpus real no lo hace, y ahi el indice se rompia. Estos fixtures
+ * tienen la forma fea a proposito.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/** La forma exacta de `rottay/index.ts:1681`: contenido y cierre en la misma
+ *  linea. Con el indice viejo la pila no bajaba nunca y `alert` terminaba
+ *  colgando de `buttonPrimary`. */
+const CIERRE_INLINE = `
+const CHROME = {
+  controls: {
+    buttonPrimary: {
+      bg: '#FFFFFF',
+      shadowActive: "var(--ds-shadow-x)", bgHover: '#E0E0E0' },
+  },
+  alert: {
+    bg: '#111111',
+  },
+};
+`;
+
+test('drill F4A-2b: un cierre en linea CON CONTENIDO devuelve la pila a su nivel', () => {
+  const idx = pathIndex(CIERRE_INLINE);
+  const opens = idx.map((e, line) => (e?.opens ? `${line}:${e.opens}` : null)).filter(Boolean);
+  assert.ok(opens.includes('8:CHROME.alert'), `alert tiene que colgar de CHROME, no de buttonPrimary. Abiertas: ${JSON.stringify(opens)}`);
+  assert.ok(
+    !opens.some((o) => /alert/.test(o) && /buttonPrimary/.test(o)),
+    'con el indice viejo esto daba CHROME.controls.buttonPrimary.alert',
+  );
+  assert.ok(opens.includes('6:CHROME.controls.buttonPrimary.shadowActive'),
+    'y la hoja de la linea del cierre cuelga de buttonPrimary, no del nivel ya cerrado');
+});
+
+test('drill F4A-2b: scopeOfBlock atribuye cada docblock a su ruta real', () => {
+  const text = `
+const CHROME = {
+  controls: {
+    buttonPrimary: {
+      bg: '#FFFFFF', shadowActive: 'x' },
+  },
+  /**
+   * @domicile seed
+   * @governor dial: navigation.sidebar-tone
+   */
+  sidebar: {
+    bg: '#0D0D10',
+  },
+};
+`;
+  const a = analyzeSource({ tenant: 'rottay', text });
+  assert.deepEqual(a.failures, []);
+  assert.equal(a.tags.length, 1);
+  assert.equal(a.tags[0].scope, 'CHROME.sidebar',
+    `el docblock cubre CHROME.sidebar; con el indice viejo caia en una ruta acumulada. Dio: ${a.tags[0].scope}`);
+  // y la hoja de sidebar queda cubierta por ese tag
+  assert.equal(a.coveredCount, 1);
+});
+
+test('drill F4A-2b: una llave dentro de un string no mueve el nivel', () => {
+  const text = `
+const CHROME = {
+  card: {
+    content: 'no cierra }{ aca',
+    bg: '#111111',
+  },
+  alert: {
+    bg: '#222222',
+  },
+};
+`;
+  const idx = pathIndex(text);
+  const opens = idx.map((e, line) => (e?.opens ? `${line}:${e.opens}` : null)).filter(Boolean);
+  assert.ok(opens.includes('7:CHROME.alert'), `las llaves del string no cuentan. Abiertas: ${JSON.stringify(opens)}`);
+  assert.ok(opens.includes('4:CHROME.card.content'));
+});
+
+test('drill F4A-2b: un comentario de linea con dos puntos no es una clave', () => {
+  // `blankComments` limpia los bloques, no los `//`. Sin el corte, esto daba
+  // rutas como `PALETTE.// Semantic`.
+  const text = `
+const PALETTE = {
+  // Semantic ramp: la rampa semantica va abajo
+  primary: '#111111',
+};
+`;
+  const idx = pathIndex(text);
+  const opens = idx.map((e) => e?.opens).filter(Boolean);
+  assert.deepEqual(opens, ['PALETTE', 'PALETTE.primary'],
+    `un // no aporta clave. Dio: ${JSON.stringify(opens)}`);
+});
+
+test('integracion F4A-2b: cero rutas incoherentes sobre las 3 fuentes reales', () => {
+  // El cross-check que delato el bug: TODA ruta que el indice abre tiene que
+  // existir como hoja o como prefijo real de una hoja.
+  for (const t of TENANTS) {
+    const text = readFileSync(path.join(PACKAGE_ROOT, sourcePath(t)), 'utf8');
+    const idx = pathIndex(text);
+    const leaves = [...authoredLeafPathsReal(text, t)];
+    const malas = [];
+    for (let line = 1; line < idx.length; line += 1) {
+      const o = idx[line]?.opens;
+      if (!o) continue;
+      if (!leaves.some((h) => h === o || h.startsWith(`${o}.`))) malas.push(`${t}:${line}: ${o}`);
+    }
+    assert.deepEqual(malas, [], `${t} abre rutas que no existen: ${malas.slice(0, 5).join(' | ')}`);
+  }
+});
+
+test('integracion F4A-2b: las anclas de familia aparecen todas', () => {
+  // Antes del arreglo rottay daba 22 anclas para 54 familias, y bithire 39
+  // para 39 — esa asimetria fue el sintoma.
+  const esperado = { rottay: 54, bithire: 39, evnto: 18 };
+  const SECCIONES = new Set(['RECIPES', 'EXPRESSIVE', 'PALETTE', 'TYPOGRAPHY', 'SURFACES', 'MOTION', 'CHARTS', 'CAPABILITIES']);
+  for (const t of TENANTS) {
+    const text = readFileSync(path.join(PACKAGE_ROOT, sourcePath(t)), 'utf8');
+    const idx = pathIndex(text);
+    let n = 0;
+    for (const line of text.split('\n')) {
+      const m = line.match(/^const ([A-Z0-9_]+)(?::|\s*=)/);
+      if (m && SECCIONES.has(m[1])) n += 1;
+    }
+    for (let line = 1; line < idx.length; line += 1) {
+      const o = idx[line]?.opens;
+      if (!o) continue;
+      const seg = o.split('.');
+      if (seg.length === 2 && (seg[0] === 'CHROME' || seg[0] === 'OVERLAY')) n += 1;
+    }
+    assert.equal(n, esperado[t], `${t}: anclas de familia`);
+  }
 });

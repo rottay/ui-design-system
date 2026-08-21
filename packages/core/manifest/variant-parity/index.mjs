@@ -183,36 +183,95 @@ function finishBlock(open) {
 }
 
 /** Indice linea -> ruta abierta. NO es un segundo walk de hojas: la identidad
- *  de las hojas la da `authoredLeafPaths`. Esto solo permite colgar un tag del
- *  alcance correcto. Se corre sobre el texto SIN comentarios (reusa
- *  `blankComments` de mirror-parity) para que una llave dentro de un comentario
- *  no mueva el nivel. */
+ *  de las hojas la da `authoredLeafPaths`. Esto solo dice que ruta esta abierta
+ *  en cada linea, para poder colgar un tag del alcance correcto, y se cruza
+ *  contra el set de aquel.
+ *
+ *  El nivel se lleva contando LLAVES, caracter a caracter, no reconociendo el
+ *  comienzo de la linea. La version anterior bajaba la pila solo cuando la
+ *  linea EMPEZABA con `}` y por eso se rompia con la forma que el corpus usa de
+ *  verdad:
+ *
+ *      shadowActive: "var(--ds-shadow-button-rest)", bg: '#FFFFFF', … },
+ *
+ *  Contenido y cierre en la misma linea: la pila no bajaba nunca y las rutas se
+ *  acumulaban (`CHROME.controls.buttonPrimary.…​.alert` donde iba `CHROME.alert`).
+ *  Medido antes del arreglo: 594 rutas incoherentes en rottay (31 %), 63 en
+ *  evnto (15 %), 0 en bithire — que salia limpio solo porque cierra todas sus
+ *  llaves en linea propia. El latente no se veia porque `scopeOfBlock` solo
+ *  consulta este indice cuando hay un docblock CON tags, y hoy no hay ninguno.
+ *
+ *  Corre sobre el texto sin comentarios (`blankComments` de mirror-parity) para
+ *  que una llave comentada no mueva el nivel, y saltea las llaves dentro de
+ *  strings: hoy el corpus no tiene ninguna, y el test planta una para que siga
+ *  siendo verdad.
+ */
 export function pathIndex(text) {
   const clean = blankComments(text);
   const lines = clean.split('\n');
   const perLine = [];
-  const stack = [];
+  const stack = [];      // nombres de los niveles abiertos, alineados con las llaves
   let root = null;
+
   for (let i = 0; i < lines.length; i += 1) {
     const line = lines[i];
     perLine[i + 1] = { path: root ? [root, ...stack].join('.') : null, opens: null };
+
     const constOpen = line.match(/^const\s+([A-Za-z0-9_$]+)\s*(?::[^=]*)?=\s*\{/);
+    let j = 0;
     if (constOpen) {
       root = normalizeRoot(constOpen[1]);
       stack.length = 0;
       perLine[i + 1].opens = root;
-      continue;
+      j = line.indexOf('{') + 1;   // esa llave ya la conto el const
     }
-    if (root === null) continue;
-    const keyOpen = line.match(/^\s*['"`]?([A-Za-z0-9_$-]+)['"`]?\s*:\s*\{\s*$/);
-    if (keyOpen) {
-      perLine[i + 1].opens = [root, ...stack, keyOpen[1]].join('.');
-      stack.push(keyOpen[1]);
-      continue;
+
+    let pendingKey = null;         // la ultima clave vista antes de una `{`
+    let token = '';
+    let quote = null;
+
+    for (; j < line.length; j += 1) {
+      const ch = line[j];
+      if (quote !== null) {
+        if (ch === '\\') { j += 1; continue; }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      // `blankComments` limpia los bloques `/* */`, no los `//` de linea: sin
+      // esto, `// Semantic ramp:` entra como clave y produce rutas como
+      // `PALETTE.// Semantic`.
+      if (ch === '/' && line[j + 1] === '/') break;
+      if (ch === "'" || ch === '"' || ch === '`') { quote = ch; token = ''; continue; }
+      if (ch === ':') {
+        pendingKey = token.trim().replace(/^['"`]|['"`]$/g, '') || null;
+        // La ruta se anota AQUI, con la pila tal como esta en la posicion de la
+        // clave. Anotarla al final de la linea la calcularia con la pila ya
+        // cerrada: `…, shadowActive: "x", bg: '#FFF' },` daria
+        // `CHROME.controls.shadowActive` en vez de
+        // `CHROME.controls.buttonPrimary.shadowActive`.
+        if (pendingKey !== null && root !== null && perLine[i + 1].opens === null) {
+          perLine[i + 1].opens = [root, ...stack, pendingKey].join('.');
+        }
+        token = '';
+        continue;
+      }
+      if (ch === ',') { pendingKey = null; token = ''; continue; }
+      if (ch === '{') {
+        if (root === null) { token = ''; continue; }
+        // `opens` ya quedo anotado en el `:` de esta clave, con la misma pila.
+        stack.push(pendingKey);
+        pendingKey = null; token = '';
+        continue;
+      }
+      if (ch === '}') {
+        if (stack.length > 0) stack.pop();
+        else root = null;
+        pendingKey = null; token = '';
+        continue;
+      }
+      token += ch;
     }
-    const leaf = line.match(/^\s*['"`]?([A-Za-z0-9_$-]+)['"`]?\s*:\s*[^{]/);
-    if (leaf) { perLine[i + 1].opens = [root, ...stack, leaf[1]].join('.'); continue; }
-    if (/^\s*\}/.test(line)) { if (stack.length) stack.pop(); else root = null; }
+
   }
   return perLine;
 }
