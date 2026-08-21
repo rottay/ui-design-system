@@ -1456,8 +1456,8 @@ const CHROME: BrandChrome = {
     siderBorder: "#D4E0EA",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 22 de 43 canales de la familia (21 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   shell: {
     gridSize: "0px",
@@ -1569,8 +1569,8 @@ const CHROME: BrandChrome = {
     divider: "#E3EAF0",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 2 de 19 canales de la familia (17 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   filterPill: {
     bg: "#ffffff",
@@ -1597,8 +1597,8 @@ const CHROME: BrandChrome = {
       "none",
   },
   /**
-   * @domicile seed
-   * @governor dial: typography.families
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — typography.families alcanza 1 de 58 canales de la familia (57 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   badge: {
     fontFamily: "var(--ds-font-family-base)",
@@ -2203,8 +2203,8 @@ const CHROME: BrandChrome = {
   // grounds are light-mode values (this theme's default mode); `modes.dark`
   // pins the dark side to the component layer's own defaults.
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 5 de 10 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   premiumCard: {
     bg: "var(--ds-surface-card)",
@@ -2226,8 +2226,8 @@ const CHROME: BrandChrome = {
       "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 6 de 13 canales de la familia (7 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   surface: {
     radiusMd: "var(--ds-radius-md)",
@@ -2290,8 +2290,8 @@ const CHROME: BrandChrome = {
     meterFillNeutral: "#8A9AAA",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 11 de 17 canales de la familia (6 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   signalCard: {
     bg: "#ffffff",
@@ -2406,8 +2406,8 @@ const CHROME: BrandChrome = {
     statusColor: "#285F84",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 4 de 12 canales de la familia (8 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   listingGrid: {
     gap: "12px",
@@ -2439,8 +2439,8 @@ const CHROME: BrandChrome = {
     shellSectionGap: "14px",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 2 de 13 canales de la familia (11 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   detail: {
     railWidth: "clamp(280px, 22vw, 340px)",
@@ -2469,8 +2469,8 @@ const CHROME: BrandChrome = {
       "color-mix(in srgb, var(--ds-surface-card-bg, var(--ds-surface-card)) 94%, transparent)",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 15 canales de la familia (14 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   modal: {
     bg: "#FFFFFF",
@@ -2491,8 +2491,8 @@ const CHROME: BrandChrome = {
     closeBgHover: "#F4F8FD",
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 55 canales de la familia (54 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   tabs: {
     border: "#E3EAF0",

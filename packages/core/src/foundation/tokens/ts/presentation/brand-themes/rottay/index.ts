@@ -921,8 +921,8 @@ const OVERLAY: BrandThemeModeOverlay = {
     },
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 12 de 15 canales de la familia (3 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   surfaces: {
     borderRadius: {
@@ -1487,8 +1487,8 @@ const CHROME: BrandChrome = {
   },
 
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 6 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   popover: {
     bg: '#1A1A1E',
@@ -2056,8 +2056,8 @@ const CHROME: BrandChrome = {
     },
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 6 de 19 canales de la familia (13 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   surface: {
     overlayBg: 'rgba(0, 0, 0, 0.64)',
@@ -2084,8 +2084,8 @@ const CHROME: BrandChrome = {
     popoverShadow: 'var(--ds-shadow-md)',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 5 de 10 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   premiumCard: {
     bg: 'var(--ds-material-card-background, var(--ds-card-bg))',
@@ -2105,8 +2105,8 @@ const CHROME: BrandChrome = {
       'var(--ds-material-card-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent))',
   },
   /**
-   * @domicile seed
-   * @governor dial: typography.scale
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — typography.scale alcanza 1 de 18 canales de la familia (17 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   table: {
     bg: '#0C0C0E',
@@ -2176,8 +2176,8 @@ const CHROME: BrandChrome = {
     imageLoadingActive: '#ECECEC',
 },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 15 canales de la familia (14 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   modal: {
     bg: '#1A1A1E',
@@ -2201,8 +2201,8 @@ const CHROME: BrandChrome = {
     closeBgHover: 'rgba(255, 255, 255, 0.05)',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 38 canales de la familia (37 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   tabs: {
     border: '#2A2A2F',
@@ -2327,8 +2327,8 @@ const CHROME: BrandChrome = {
     warningColor: '#F59E0B',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 3 canales de la familia (2 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   backTop: {
     /**
@@ -2369,8 +2369,8 @@ const CHROME: BrandChrome = {
     labelColor: '#6B6B72',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 6 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   drawer: {
     bg: '#1A1A1E',
@@ -2385,8 +2385,8 @@ const CHROME: BrandChrome = {
     titleColor: '#ECECEC',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 7 canales de la familia (6 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   dropdown: {
     bg: '#1A1A1E',
@@ -2430,8 +2430,8 @@ const CHROME: BrandChrome = {
     primaryColor: '#0C0C0E',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 2 de 11 canales de la familia (9 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   liveFeed: {
     badgeBg: 'var(--ds-color-primary)',
@@ -2486,8 +2486,8 @@ const CHROME: BrandChrome = {
     shadow: '0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 3 canales de la familia (2 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   notification: {
     bg: '#1A1A1E',
@@ -2543,8 +2543,8 @@ const CHROME: BrandChrome = {
     titleColor: '#ECECEC',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 2 de 3 canales de la familia (1 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   skeleton: {
     bg: '#1A1A1E',
@@ -2552,8 +2552,8 @@ const CHROME: BrandChrome = {
     waveGradient: 'linear-gradient(90deg, #1A1A1E 25%, #2A2A2F 50%, #1A1A1E 75%)',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 1 de 2 canales de la familia (1 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   spinner: {
     color: 'var(--ds-color-primary)',

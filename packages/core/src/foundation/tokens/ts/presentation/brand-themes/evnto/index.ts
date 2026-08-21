@@ -62,8 +62,8 @@ const OVERLAY_MODE = 'dark' satisfies BrandThemeMode;
  */
 const OVERLAY: BrandThemeModeOverlay = {
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 3 de 118 canales de la familia (115 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   palette: {
     primaryColor: "#E8E8E0",
@@ -1039,8 +1039,8 @@ const CHROME: BrandChrome = {
     popoverShadow: 'var(--ds-shadow-md)',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 5 de 10 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   premiumCard: {
     bg: 'var(--ds-material-card-background, var(--ds-card-bg))',
@@ -1069,8 +1069,8 @@ const CHROME: BrandChrome = {
     headerFontSize: '0.75rem',
   },
   /**
-   * @domicile seed
-   * @governor dial: palette.seeds
+   * @domicile unassigned
+   * @governor gap medido: gobierno parcial — palette.seeds alcanza 3 de 5 canales de la familia (2 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
    */
   cardComponent: {
     bg: '#ffffff',

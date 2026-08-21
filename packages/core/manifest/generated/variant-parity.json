@@ -6,21 +6,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 93793,
+        "bytes": 96451,
         "lines": 2808,
-        "sha256": "47fcbf5b6b646eb057d1f1b70002971d0788ee5ef92664ec1afb79d643276319"
+        "sha256": "ca22f4df36f290eb6003872bbf8d04669511b81aad78792133bf4b1e47ab41ee"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 103739,
+        "bytes": 105647,
         "lines": 2633,
-        "sha256": "c7eec51d6b114eac7fdf977fbcb0fc07c4e9faac07531074dd9ad01a81db912e"
+        "sha256": "4132e90e39ab86ec0bfc1aa31dd05b8c01ef18dc874977018eeebf762dab2ad1"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 40900,
+        "bytes": 41472,
         "lines": 1212,
-        "sha256": "affebfd27780a32ea8ce64f0f8b7a2473125c496902c69b2e3bde4fd2fee364a"
+        "sha256": "95becaedb36375406d4b7fcbe0a4154958445f9aa85675cf7af362c99a10cd99"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch."
@@ -200,9 +200,9 @@
         "tenant": "rottay",
         "scope": "OVERLAY.surfaces",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 12 de 15 canales de la familia (3 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 923
       },
       {
@@ -416,9 +416,9 @@
         "tenant": "rottay",
         "scope": "CHROME.popover",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 6 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 1489
       },
       {
@@ -641,27 +641,27 @@
         "tenant": "rottay",
         "scope": "CHROME.surface",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 6 de 19 canales de la familia (13 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2058
       },
       {
         "tenant": "rottay",
         "scope": "CHROME.premiumCard",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 5 de 10 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2086
       },
       {
         "tenant": "rottay",
         "scope": "CHROME.table",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: typography.scale",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — typography.scale alcanza 1 de 18 canales de la familia (17 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2107
       },
       {
@@ -695,9 +695,9 @@
         "tenant": "rottay",
         "scope": "CHROME.modal",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 15 canales de la familia (14 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2178
       },
       {
@@ -713,9 +713,9 @@
         "tenant": "rottay",
         "scope": "CHROME.tabs",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 38 canales de la familia (37 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2203
       },
       {
@@ -776,9 +776,9 @@
         "tenant": "rottay",
         "scope": "CHROME.backTop",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 3 canales de la familia (2 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2329
       },
       {
@@ -794,9 +794,9 @@
         "tenant": "rottay",
         "scope": "CHROME.drawer",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 6 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2371
       },
       {
@@ -812,9 +812,9 @@
         "tenant": "rottay",
         "scope": "CHROME.dropdown",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 7 canales de la familia (6 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2387
       },
       {
@@ -848,9 +848,9 @@
         "tenant": "rottay",
         "scope": "CHROME.liveFeed",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 2 de 11 canales de la familia (9 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2432
       },
       {
@@ -875,9 +875,9 @@
         "tenant": "rottay",
         "scope": "CHROME.notification",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 3 canales de la familia (2 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2488
       },
       {
@@ -920,18 +920,18 @@
         "tenant": "rottay",
         "scope": "CHROME.skeleton",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 2 de 3 canales de la familia (1 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2545
       },
       {
         "tenant": "rottay",
         "scope": "CHROME.spinner",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 2 canales de la familia (1 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2554
       },
       {
@@ -1640,9 +1640,9 @@
         "tenant": "bithire",
         "scope": "CHROME.shell",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 22 de 43 canales de la familia (21 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 1458
       },
       {
@@ -1712,45 +1712,45 @@
         "tenant": "bithire",
         "scope": "CHROME.filterPill",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 2 de 19 canales de la familia (17 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 1571
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.badge",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: typography.families",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — typography.families alcanza 1 de 58 canales de la familia (57 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 1599
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.premiumCard",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 5 de 10 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2205
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.surface",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 6 de 13 canales de la familia (7 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2228
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.signalCard",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 11 de 17 canales de la familia (6 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2292
       },
       {
@@ -1766,45 +1766,45 @@
         "tenant": "bithire",
         "scope": "CHROME.listingGrid",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 4 de 12 canales de la familia (8 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2408
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.detail",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 2 de 13 canales de la familia (11 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2441
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.modal",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 15 canales de la familia (14 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2471
       },
       {
         "tenant": "bithire",
         "scope": "CHROME.tabs",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 1 de 55 canales de la familia (54 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 2493
       },
       {
         "tenant": "evnto",
         "scope": "OVERLAY.palette",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 3 de 118 canales de la familia (115 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 64
       },
       {
@@ -2612,18 +2612,18 @@
         "tenant": "evnto",
         "scope": "CHROME.premiumCard",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 5 de 10 canales de la familia (5 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 1041
       },
       {
         "tenant": "evnto",
         "scope": "CHROME.cardComponent",
         "kind": "scope",
-        "domicile": "seed",
-        "governor": "dial: palette.seeds",
-        "governorClass": "dial",
+        "domicile": "unassigned",
+        "governor": "gap medido: gobierno parcial — palette.seeds alcanza 3 de 5 canales de la familia (2 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15",
+        "governorClass": "capability-o-gap",
         "line": 1071
       },
       {

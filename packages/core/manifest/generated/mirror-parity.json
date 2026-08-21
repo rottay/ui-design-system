@@ -26,21 +26,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 93793,
+        "bytes": 96451,
         "lines": 2808,
-        "sha256": "47fcbf5b6b646eb057d1f1b70002971d0788ee5ef92664ec1afb79d643276319"
+        "sha256": "ca22f4df36f290eb6003872bbf8d04669511b81aad78792133bf4b1e47ab41ee"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 103739,
+        "bytes": 105647,
         "lines": 2633,
-        "sha256": "c7eec51d6b114eac7fdf977fbcb0fc07c4e9faac07531074dd9ad01a81db912e"
+        "sha256": "4132e90e39ab86ec0bfc1aa31dd05b8c01ef18dc874977018eeebf762dab2ad1"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 40900,
+        "bytes": 41472,
         "lines": 1212,
-        "sha256": "affebfd27780a32ea8ce64f0f8b7a2473125c496902c69b2e3bde4fd2fee364a"
+        "sha256": "95becaedb36375406d4b7fcbe0a4154958445f9aa85675cf7af362c99a10cd99"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
