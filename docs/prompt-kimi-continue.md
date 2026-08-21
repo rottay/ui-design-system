@@ -172,15 +172,34 @@ harness con cobertura por prefijo + 5 drills = 34/34; intersección autorada
 con ancla 1061/788/2; parada correcta 11/11 por techo de bytes — los
 comentarios cuentan — `maxSourceBytes` 387391→398278 con `_note` fechada;
 catalog re-derivado por el DT, digest `cffd2d272b…`, deadWriters 266=266;
-gat-07 re-sellado `2d5ad3e9760f…`; suite 1717/13).** **Siguiente lote: F4A-5
-(worker, brief TUYO):** reescritura palette — K1 descongelar
-`--ds-color-primary` SIN cambiar valor (135 lectores arrastrados) + K2
-`--ds-color-border` raíz canónica del par (evnto invierte atadura a pintura
-idéntica, R35 REDERIVED, H3 deriva en el mismo lote). Antes del brief leer
-`docs/f4a/esquema-asignacion.md` §4 (K1/K2) y el roster; packet declaration
-obligatoria (raíz, canales, 3 verticales, negativo nombrado, restauración ida
-y vuelta); cero-delta computado; firmados solo REDERIVED (sha256 idénticos
-pre/post).
+gat-07 re-sellado `2d5ad3e9760f…`; suite 1717/13).** **Estado al cierre:
+F4A-5 ✅ = K2+H3** (el par border canonizado en los 3 temas — rottay/bithire
+derivan `borderPrimaryColor` a `var(--ds-color-border)`, evnto INVIERTE
+completo: el literal se muda a la raíz en cuerpo Y overlay oscuro, detalle que
+la medición obligó y el brief no describía; H3 `--ds-card-border[-color]`
+evnto a la raíz; color-mix subtle/tertiary re-atados. Cero-delta **36/36 por
+resolución de cascada**, reproducido por el DT. R35: REDERIVED **por modo**
+(la tabla por tema dejó 2 hashes rojos: R35-light, E25-dark) → 72/72 con los
+6 sha256 intactos, verificado por corrida propia del DT. Negativo nombrado:
+severs evnto 15→**14** (mejora), identicalValue 156→**157** (el case dejó de
+separar), universo 2613→**2612**, intersección 345→**344**,
+positionIntersection 787→**786**, sourceSkeleton 1819/1502/396 — re-anclajes
+leídos del artefacto. `divergentSlots` **1826 sin mover** (explicado en el
+baseline); `untaggedAuthoredLeaves` 3029→**3026** (Baja #3, baseline bajado
+por el DT). **Parada correcta 12/12: la Parte 1 (tags PALETTE + placeholders
+de hoja) proyecta +46.138 bytes contra un techo con 0 de aire** — adjudicación
+del DT: `maxSourceBytes` → **900000 con aire de una vez** (el frente proyecta
+~medio MB; el subpath muere en F6). **K1 quedó FUERA con razón medida: los 32
+canales idénticos son de CHROME (no PALETTE), `--ds-button-primary-bg` es él
+mismo rootFrozen (adjudicación, no recableo), y chocan con T2/T3 (cada uno su
+fila REDERIVED) → lote propio.** Pregunta que el worker planteó y el DT
+responde: la marca "dialeable" se escribe en **root-catalog (exposure
+tenant-dial)** — se diseña en el brief del lote K1.)** **Siguiente lote:
+F4A-5b (worker, brief TUYO):** la Parte 1 del brief F4A-5, ahora con aire —
+tags por hoja de PALETTE ×3 (154/52/48 hojas, mixtas) + placeholders de HOJA
+para las ausencias parciales de PALETTE reconciliadas con el roster; mira
+`/tmp/f4a-5-brief.md` §1 y el reporte `/tmp/f4a-5-reporte.md` §1. Después:
+F4A-6 (K3 text-page) según `/tmp/f4a-6-brief.md`.
 
 ## 4. Cola vinculante después de F4A-2 (enmienda del dueño, no se reordena)
 

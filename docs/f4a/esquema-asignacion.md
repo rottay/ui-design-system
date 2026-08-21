@@ -77,12 +77,17 @@ valor computado sin cambios). Los canales H3 (evnto card-border[-color])
 derivan de la raíz canónica en el mismo lote.
 
 **K3 — `tier.page.fg` (42 canales #A0A0A5, 3 destinos rivales).** Se AUTORA la
-raíz que falta: **`--ds-color-text-secondary`** (convención medida: ya existe
-`--ds-color-text-primary` como raíz desde W1). Valor: `#A0A0A5` (el computado
-de hoy — cero-delta). Los 42 canales derivan en F4A-6. Exposición:
-tenant-dial (el usuario afina su tinta secundaria — es exactamente la
-personalización en cascada que el dueño pidió); la calibración del dial es
-F4B. root-catalog gana la entrada en el lote correspondiente.
+raíz que falta: **`--ds-color-text-page`** (REVISADO tras la falsación: la
+primera versión de este nudo decía `--ds-color-text-secondary`, pero ese canal
+YA EXISTE con otro valor y 262 lectores — queda INTACTO; la convención medida
+que sí vale es `--ds-color-text-primary` como raíz desde W1). Valores medidos
+por tema (el computado de hoy — cero-delta): rottay `#A0A0A5` base/`#6B6B6B`
+light; bithire `#53697E` base/`#9aacbf` dark; evnto `#3d3d3d` base SIN dark
+(se autora solo en base; agregar dark no es cero-delta). Los 42 canales
+derivan en F4A-6. Exposición: tenant-dial (el usuario afina su tinta de
+página — es exactamente la personalización en cascada que el dueño pidió); la
+calibración del dial es F4B. root-catalog gana la entrada en el lote
+correspondiente.
 
 **K4 — las 16 asimétricas** (14 derivationDebt + tier.accent.bg +
 effect.intensity). Valor asignado = la resolución computada de HOY por tema

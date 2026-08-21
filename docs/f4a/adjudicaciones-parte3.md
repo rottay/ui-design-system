@@ -50,8 +50,9 @@ computada idéntica; R35 REDERIVED). Raíces del catálogo: 63 + 2 = **65**.
 
 - `tier.overlay.fg`: governor = "la tinta del nivel inmediato anterior en la
   cadena de tiers (page → base → raised → overlay; la cabeza de tinta es
-  K3 `--ds-color-text-secondary` cuando aterrice F4A-6)". El mecanismo citado
-  ES la relación de raíz; la cita queda explícita.
+  K3 `--ds-color-text-page` cuando aterrice F4A-6 — revisado: la primera
+  versión citaba `--ds-color-text-secondary`, que ya existía con otro valor)".
+  El mecanismo citado ES la relación de raíz; la cita queda explícita.
 - `state.delta.disabled`: governor = "el reposo de su control padre (una
   parada: opacidad + desaturación sobre él)". `derived`.
 

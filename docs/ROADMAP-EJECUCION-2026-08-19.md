@@ -906,6 +906,64 @@ su razón): `cra-12-motion-governance.reanchor.test.mjs:50` tiene la misma
 forma de inyección-en-árbol-real PERO su comentario la justifica (el digest
 auditado puede depender del árbol completo) — análisis propio cuando se
 manifieste; hoy no es roja.
+**F4A-5 ✅ = K2+H3 (worker Opus; verificado por el DT contra el árbol; incluye
+PARADA CORRECTA 12/12).** El par border canonizado en los 3 temas: rottay y
+bithire derivan `borderPrimaryColor` a `var(--ds-color-border)`; **evnto
+invierte completo** — el literal se muda a la raíz en cuerpo Y overlay oscuro
+(detalle que la medición obligó y mi brief no describía: hoy `--ds-color-border`
+solo se declaraba en base como var, y en oscuro resolvía `#2E2C24` a través de
+él; sin esa mitad la inversión habría movido pintura). H3: `--ds-card-border[-color]`
+de evnto a la raíz; los color-mix subtle/tertiary re-atados a la canónica.
+**Cero-delta 36/36 por resolución de cascada, reproducido por mí** con el
+resolver del worker (6 canales × 3 temas × 2 scopes, HEAD vs árbol).
+**R35 — patrón REDERIVED por MODO**: la primera versión de la tabla (por tema)
+dejó 2 hashes rojos (R35-light, E25-dark: la pre-imagen del overlay era otro
+byte que la del cuerpo, y los 6 hashes firmaron los dos); con la tabla por
+modo **72/72 verde y los seis sha256 intactos carácter por carácter** —
+verificado por MI corrida del test, no de palabra. Negativo nombrado (leído
+del artefacto): severs evnto 15→**14** (mejora: `--ds-card-border` pasa de
+sever a re-derive), reDerives 53→54, identicalValue 156→**157** (el case
+`#d4e0ea`/`#D4E0EA` dejó de separar rottay de bithire), occurrenceTrap y
+multiDeclaration bajan, sourceSkeleton 1820/1503/397 → **1819/1502/396**,
+universo 2613→**2612**, intersección autorada 345→**344**,
+positionIntersection 787→**786** (re-anclajes del worker leídos del artefacto,
+con comentario en el test; el universo pierde 1 slot porque
+`OVERLAY.palette.borderPrimaryColor` colapsó en los 3 temas). Ratchet:
+`divergentSlots` **1826 sin mover** (K2 no agrega placeholders; la baja de
+slot compensa la posición ganada — explicado en el reading del baseline);
+`untaggedAuthoredLeaves` 3029→**3026** (**Baja #3, baseline bajado por MÍ** —
+la ley del archivo: se baja en el mismo commit). Restauración ida y vuelta del
+worker ✓ (revert→build→byte-idéntico→re-aplicar→el diff exacto vuelve).
+Byte-negativo −71 en las 3 fuentes: por eso entró bajo un techo con aire 0.
+**Parada del worker (12/12 correctas): la Parte 1 (tags PALETTE +
+placeholders de hoja) proyecta +46.138 bytes contra el techo re-anclado al
+valor exacto (aire: 0)** — y extrapolado: el frente entero proyecta ~medio MB
+de comentarios de gobierno sobre ese subpath. Adjudicación mía: `maxSourceBytes`
+→ **900000 con aire de una vez** (re-anclar exacto garantiza el choque del
+lote siguiente — chocó dos veces; los comentarios no llegan al bundle; el
+subpath muere en F6). **K1 quedó FUERA con razón medida, aceptada**: los 32
+canales computacionalmente idénticos son de CHROME (no de PALETTE — el lote
+era la familia), `--ds-button-primary-bg` es él mismo rootFrozen en rottay
+(recablearlo cambia su clase = adjudicación, no mecánica), y casi seguro
+chocan con los rosters de drenaje T2/T3 (cada uno pide su fila REDERIVED) →
+**lote propio**, y su pregunta abierta queda respondida: la marca "dialeable"
+se escribe en **root-catalog (exposure tenant-dial)** — se diseña en ese brief.
+Cadena regenerada completa y consistente (fanout-facts +3 readers, censo con
+inputsDigest nuevo, KIMI/reconciliation con el digest nuevo, controls README).
+docs-engineering: solo contadores. Suite: el worker midió 1717/14 donde la +1
+era el pin del baseline (mío, cerrado con la Baja #3); **MI corrida de la
+pierna 1: 1717/13, fallas por nombre IDÉNTICAS a las 13 conocidas, cero
+nuevas** (nota operativa mía: la pierna 1 es `node --test scripts/**+manifest/**`
+— la primera del encadenamiento de `test:scripts`, roadmap línea ~1491; mi
+primera corrida la hice contra el proyecto vitest `unit` por error, 63 fallas
+en 13854 tests = otra cosa entera, sin escribir en el árbol, descartada).
+gat-07 **re-sellado por el DT**: digest `b8b343eb2e59d048…` — idéntico al
+computado por el worker (confirmación cruzada). Corrección doc asentada en el
+mismo commit B: esquema §4-K3 y parte3 §4 citaban `--ds-color-text-secondary`
+(falsada) → **`--ds-color-text-page`**. **Siguiente lote: F4A-5b** (tags por
+hoja de PALETTE ×3 + placeholders de hoja de las ausencias parciales 0/102/106
+— la Parte 1 del brief F4A-5, con aire de techo; brief ya escrito en
+`/tmp/f4a-5b-brief.md`); después F4A-6 (K3, raíz NUEVA `--ds-color-text-page`).
 **F4A-4 ✅ (worker Opus; verificado por el DT contra el árbol; incluye PARADA
 CORRECTA 11/11).** Roster por placeholders aplicado **byte-idéntico** (son
 comentarios: el artefacto compilado salió idéntico en la prueba ida y
