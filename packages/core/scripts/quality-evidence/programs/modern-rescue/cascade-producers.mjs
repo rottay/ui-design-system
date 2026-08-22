@@ -1025,7 +1025,7 @@ export function buildProducers({
       const entry = dispositionAt.get(`${rel}|${site.ordinal}`);
       const disposition = entry ? entry.decision.disposition : null;
       if (disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
-        closedZeroGoverned.push({
+        const zeroRow = {
           plane: "tsx-inline-stamp",
           file: rel,
           symbol: site.symbol,
@@ -1033,7 +1033,15 @@ export function buildProducers({
           ordinal: site.ordinal,
           template: site.expression,
           reason: `zero-governed-emission-object:${site.form}`,
-        });
+        };
+        // T-BRANCH-37: a row that closed through the BRANCH UNION carries the
+        // per-arm receipt that justified it. Rows closed by any earlier route
+        // have no receipt here and keep their exact published form.
+        if (entry.receipt) {
+          zeroRow.resolvedVia = "branch-union";
+          zeroRow.evidence = entry.receipt;
+        }
+        closedZeroGoverned.push(zeroRow);
         continue;
       }
       if (disposition === "PUBLIC_BOUNDARY_CANDIDATE") {
@@ -1422,6 +1430,11 @@ export function buildProducers({
       ),
       // Receipt-bound digests: they cover the EVIDENCE, not just identity, so
       // removing or editing a receipt reddens `--check` instead of passing.
+      // T-BRANCH-37: the branch-union receipts are digest-covered, so mutating
+      // a witness moves the digest instead of hiding behind identity alone.
+      closedZeroGovernedReceipts: digest(
+        closedZeroGoverned.map((row) => [row.file, row.ordinal, row.resolvedVia ?? null, row.evidence ?? null]),
+      ),
       publicBoundaryReceipts: digest(
         publicBoundary.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
       ),

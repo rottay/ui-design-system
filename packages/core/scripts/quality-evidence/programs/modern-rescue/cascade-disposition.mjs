@@ -319,7 +319,7 @@ function safeText(node) {
 }
 
 
-function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
+export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
   if (shape.kind === "relay" && boundaryReceipt && boundaryReceipt.candidate) return { disposition: "PUBLIC_BOUNDARY_CANDIDATE", governance: null };
   // blocker 4: a wrapper mechanism applied but the chain did not close --
   // distinct from an unexamined relay, and NEVER a candidate.
@@ -342,6 +342,43 @@ function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
       const anyObjectClosed = shape.branches.some((b) => (b.kind === "object" || b.kind === "array") && b.closed);
       const anyObjectOpen = shape.branches.some((b) => (b.kind === "object" || b.kind === "array") && !b.closed);
       const anyOpaque = shape.branches.some((b) => !["object", "array", "nonObject"].includes(b.kind));
+
+      /* T-BRANCH-37 -- exhaustive branch inspection.
+       *
+       * When EVERY arm is either a closed object/array or a proven non-object,
+       * the conditional has no unexamined path: `scanClosedShape` already walks
+       * a `branches` shape arm by arm (origin "branch"), so the union of the
+       * emissions is decidable WITHOUT merging the arms into one style object.
+       * Each arm keeps its own key witnesses and its own astPath; nothing is
+       * flattened and no arm's shape is imposed on another.
+       *
+       * The disposition then comes from the EVIDENCE, not from the arms merely
+       * looking authored:
+       *   - scan complete AND the union emits no governed channel and no
+       *     internal socket -> the row is genuinely a zero-governed emission,
+       *     and closes as one with its per-arm witnesses as the receipt;
+       *   - the union DOES emit -> it is a real producer, but no cascade root
+       *     or owner has been proven for a conditional sink, so closing it
+       *     would mean inventing attribution. It stays BLOCKING;
+       *   - the scan is incomplete for any reason (spread that would not
+       *     resolve, computed key, cycle, depth guard, unproven causal link)
+       *     -> fail-closed, it stays BLOCKING.
+       * The last two keep the row in its own bucket and attach the governance
+       * evidence that explains why it could not close.
+       */
+      const armsExhaustivelyResolved =
+        !anyOpaque &&
+        !anyObjectOpen &&
+        anyObjectClosed &&
+        shape.branches.every(
+          (b) => ((b.kind === "object" || b.kind === "array") && b.closed) || b.kind === "nonObject",
+        );
+      if (armsExhaustivelyResolved) {
+        const outcome = governanceOutcome(shape, ctx, sourceParts);
+        if (outcome.disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") return outcome;
+        return { disposition: "BRANCH_CONDITIONAL_AUTHORED", governance: outcome.governance };
+      }
+
       if ((anyObjectClosed || anyObjectOpen || anyOpaque) && kinds.some((k) => k === "nonObject")) {
         return { disposition: anyOpaque || anyObjectOpen ? "BRANCH_COMPOSITE_OPEN" : "BRANCH_CONDITIONAL_AUTHORED", governance: null };
       }
@@ -563,6 +600,35 @@ export const DISPOSITION_DECISION_FIELDS = Object.freeze([
 const stable = (value) => JSON.stringify(value ?? null);
 
 /**
+ * T-BRANCH-37 -- the evidence a conditional sink produces once every arm has
+ * been inspected. It reports the arms, whether the custom-property scan was
+ * exhaustive, and the UNION of the governed channels and internal sockets the
+ * arms emit. The union is computed by walking each arm separately (governance
+ * recurses a `branches` shape arm by arm), so the arms are never merged into a
+ * single style object and each keeps its own witnesses.
+ *
+ * An EMPTY union under a complete scan is what licenses a close; a non-empty
+ * one is exactly what forbids it without a proven root.
+ */
+function branchUnionReceipt(row, arms, path) {
+  const governance = row.governance ?? {};
+  const witnesses = governance.keyWitnesses ?? [];
+  return {
+    branchCount: arms.length,
+    branchKinds: [...new Set(arms.map((b) => b.kind))].sort(),
+    allArmsClosed: arms.every((b) =>
+      b.kind === "object" || b.kind === "array" ? b.closed === true : true,
+    ),
+    customPropertyScanComplete: governance.customPropertyScanComplete ?? null,
+    governedChannelKeys: [...(governance.governedChannelKeys ?? [])].sort(),
+    internalSocketKeys: [...(governance.internalSocketKeys ?? [])].sort(),
+    branchWitnessCount: witnesses.filter((w) => w.origin === "branch").length,
+    witnessCount: witnesses.length,
+    path,
+  };
+}
+
+/**
  * The invariant half of a row's evidence: enough to audit ORIGIN and REASON,
  * bounded so the inventory does not carry the entire resolution graph. Per-sink
  * fields are deliberately absent -- they are merged by `dispositionIndex`.
@@ -596,14 +662,22 @@ export function boundedReceiptOf(row) {
     case "CLOSED_NONOBJECT":
       return { nonObjectReason: row.receipt?.reason ?? null, path };
 
+    /* T-BRANCH-37: a ZERO row that closed through the BRANCH UNION publishes
+     * the per-arm evidence that justified it. A ZERO row that closed by any
+     * earlier route keeps `null`, so nothing already in the artifact moves. */
+    case "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT": {
+      if (row.receipt?.kind !== "branches") return null;
+      const arms = row.receipt.branches ?? [];
+      return branchUnionReceipt(row, arms, path);
+    }
+
     /* ---- the seven OPEN dispositions: classified debt, never closed ---- *
      * These carry a receipt so the debt is actionable, but the receipt says
      * WHY resolution stopped -- it never asserts a shape the resolver could
      * not prove. A bounded projection is deliberate: publishing the whole
      * nested branch/leaf graph would put unproven structure into the durable
      * artifact and invite it being read as a result.                        */
-    case "BRANCH_COMPOSITE_OPEN":
-    case "BRANCH_CONDITIONAL_AUTHORED": {
+    case "BRANCH_COMPOSITE_OPEN": {
       const branches = row.receipt?.branches ?? [];
       return {
         branchCount: branches.length,
@@ -611,6 +685,12 @@ export function boundedReceiptOf(row) {
         path,
       };
     }
+    /* T-BRANCH-37: a row that survives here has been inspected arm by arm and
+     * did NOT close. The receipt must say which of the two reasons applies --
+     * an incomplete scan, or a real governed emission with no proven root --
+     * otherwise the blocker is unactionable. */
+    case "BRANCH_CONDITIONAL_AUTHORED":
+      return branchUnionReceipt(row, row.receipt?.branches ?? [], path);
     case "AUTHORED_OPEN": {
       const leaves = row.receipt?.authoredLeaves ?? [];
       return {
