@@ -64,7 +64,7 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
-import { classifyCrossFileRows } from "./cascade-disposition.mjs";
+import { classifyCrossFileRows, dispositionIndex } from "./cascade-disposition.mjs";
 import {
   BRAND_THEME,
   CHROME_VARIABLES,
@@ -549,6 +549,73 @@ export function engineScopeOfPath(rel) {
   };
 }
 
+/* ------------------------------------------- cross-file cohort rows --- */
+/**
+ * The four cohorts below are CLOSED contractually: every row is named, carries
+ * a receipt of where it came from and why, and is marked NOT consumable. None
+ * of them may ever be promoted to a tenant-consumable channel, and none of them
+ * may be merged into `closedZeroGoverned`, whose members are proven to emit no
+ * governed channel at all. Closing a row here means "this debt is identified
+ * and bounded", never "this debt is resolved".
+ */
+const cohortRow = ({ file, site, entry, reason, cause }) => ({
+  plane: "tsx-inline-stamp",
+  file,
+  symbol: site.symbol,
+  line: site.line,
+  ordinal: site.ordinal,
+  template: site.expression,
+  reason,
+  // Explicit, not inferred from the section name: a reader of a single row must
+  // be able to tell that it grants nothing.
+  consumable: false,
+  tenantSafe: false,
+  nonConsumableCause: cause,
+  // Every JSX sink this one expression reaches, merged across occurrences,
+  // and the relay kind each of those sinks implies. Both are sorted arrays and
+  // both may be empty; together they are the ONLY evidence that survives a
+  // coordinate carrying more than one occurrence, so neither may be dropped.
+  sinkTags: entry.sinkTags,
+  relayKinds: entry.relayKinds,
+  occurrences: entry.occurrences,
+  evidence: entry.receipt,
+});
+
+export function publicBoundaryRow(file, site, entry) {
+  return cohortRow({
+    file,
+    site,
+    entry,
+    reason: `public-boundary-candidate:${site.form}`,
+    // The object is supplied by the CALLER across a published entrypoint. The
+    // inventory cannot see it and never will from inside this package.
+    cause: "object-supplied-by-caller-across-public-entrypoint",
+  });
+}
+
+export function privateRelayRow(file, site, entry) {
+  return cohortRow({
+    file,
+    site,
+    entry,
+    reason: `private-relay-unresolved:${site.form}`,
+    cause: "private-passthrough-not-followed-by-resolver",
+  });
+}
+
+export function closedProducerRow(file, site, entry) {
+  return cohortRow({
+    file,
+    site,
+    entry,
+    reason: `governed-producer-object:${site.form}`,
+    // It DOES emit governed channels -- that is why it is a producer -- but no
+    // cascade root claims it. Inventing a root or a tenant reach for it is
+    // exactly the relabel this programme forbids.
+    cause: "governed-producer-with-no-attributed-cascade-root",
+  });
+}
+
 export function buildProducers({
   root = REPO_ABS,
   cssEdgesPath = CSS_EDGES,
@@ -564,13 +631,21 @@ export function buildProducers({
   // that emit ZERO governed channels. Only this disposition drains: boundary,
   // relay and every residual stay in `unknownProvenance`, non-consumable.
   const closedZeroGoverned = [];
+  // The three cross-file dispositions this inventory closes CONTRACTUALLY
+  // without ever making them consumable. A boundary row is a public API surface
+  // whose caller supplies the object, so it can never be tenant-safe; a relay
+  // row is a private passthrough the resolver refused to follow; a producer row
+  // emits governed channels but is attributed to NO cascade root. All three are
+  // accounted for by name and receipt instead of being left as anonymous debt.
+  const publicBoundary = [];
+  const privateRelay = [];
+  const closedProducer = [];
+  // FAIL-CLOSED join. `file|ordinal` is stable but NOT unique: one expression
+  // reaching several JSX sinks yields several rows. `dispositionIndex` throws on
+  // any material disagreement at a shared coordinate and merges only the
+  // per-sink evidence, so nothing is silently overwritten.
   const crossFile = classifyCrossFileRows();
-  const dispositionAt = new Map();
-  for (const row of crossFile.rows) {
-    // duplicates on this key were measured to NEVER disagree on disposition,
-    // so the last write is the same value as the first.
-    dispositionAt.set(`${row.file}|${row.ordinal}`, row.disposition);
-  }
+  const dispositionAt = dispositionIndex(crossFile.rows);
   const precedenceMetadata = [];
 
   const { byChannel: causalByChannel, excluded: causalExcluded } =
@@ -850,7 +925,9 @@ export function buildProducers({
     styleSinks += scan.styleSinks;
     const applicability = engineScopeOfPath(`/${rel}`);
     for (const site of scan.unresolved) {
-      if (dispositionAt.get(`${rel}|${site.ordinal}`) === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
+      const entry = dispositionAt.get(`${rel}|${site.ordinal}`);
+      const disposition = entry ? entry.decision.disposition : null;
+      if (disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         closedZeroGoverned.push({
           plane: "tsx-inline-stamp",
           file: rel,
@@ -859,6 +936,38 @@ export function buildProducers({
           ordinal: site.ordinal,
           template: site.expression,
           reason: `zero-governed-emission-object:${site.form}`,
+        });
+        continue;
+      }
+      if (disposition === "PUBLIC_BOUNDARY_CANDIDATE") {
+        publicBoundary.push(publicBoundaryRow(rel, site, entry));
+        continue;
+      }
+      if (disposition === "RELAY_PRIVATE_UNRESOLVED") {
+        privateRelay.push(privateRelayRow(rel, site, entry));
+        continue;
+      }
+      if (disposition === "CLOSED_PRODUCER") {
+        closedProducer.push(closedProducerRow(rel, site, entry));
+        continue;
+      }
+      if (disposition === "CLOSED_NONOBJECT") {
+        // The one site whose non-object nature is only visible ACROSS files:
+        // `SELECT_DEFAULTS.size` is a member of an imported object, so the local
+        // predicate in `provablyNonObject` cannot see the literal it resolves
+        // to. It joins the same receipt as the 68 locally-proven rows -- one
+        // identity, one array -- and declares its own provenance in two
+        // independent ways: the `cross-file:` reason prefix and `resolvedVia`.
+        closedNonObject.push({
+          plane: "tsx-inline-stamp",
+          file: rel,
+          symbol: site.symbol,
+          line: site.line,
+          ordinal: site.ordinal,
+          template: site.expression,
+          reason: `cross-file:${entry.receipt.nonObjectReason}`,
+          resolvedVia: "cross-file",
+          evidence: entry.receipt,
         });
         continue;
       }
@@ -1097,6 +1206,9 @@ export function buildProducers({
       unknownProvenance: unknownProvenance.length,
       closedNonObject: closedNonObject.length,
       closedZeroGoverned: closedZeroGoverned.length,
+      publicBoundary: publicBoundary.length,
+      privateRelay: privateRelay.length,
+      closedProducer: closedProducer.length,
       unknownProvenanceByReason: unknownProvenance.reduce((acc, row) => {
         acc[row.reason] = (acc[row.reason] ?? 0) + 1;
         return acc;
@@ -1138,6 +1250,26 @@ export function buildProducers({
       closedZeroGoverned: digest(
         closedZeroGoverned.map((row) => [row.plane, row.file, row.symbol, row.reason]),
       ),
+      publicBoundary: digest(
+        publicBoundary.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      privateRelay: digest(
+        privateRelay.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      closedProducer: digest(
+        closedProducer.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      // Receipt-bound digests: they cover the EVIDENCE, not just identity, so
+      // removing or editing a receipt reddens `--check` instead of passing.
+      publicBoundaryReceipts: digest(
+        publicBoundary.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      privateRelayReceipts: digest(
+        privateRelay.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      closedProducerReceipts: digest(
+        closedProducer.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
     },
     producerSites,
     channelEmissions,
@@ -1147,6 +1279,9 @@ export function buildProducers({
     unknownProvenance,
     closedNonObject,
     closedZeroGoverned,
+    publicBoundary,
+    privateRelay,
+    closedProducer,
   };
 }
 
@@ -1315,6 +1450,9 @@ const ROW_ARRAYS = new Set([
   "unknownProvenance",
   "closedNonObject",
   "closedZeroGoverned",
+  "publicBoundary",
+  "privateRelay",
+  "closedProducer",
   "causalRootsExcluded",
 ]);
 
@@ -1391,6 +1529,10 @@ function main(argv) {
   console.log(`with causal root:     ${output.stats.emissionsWithCausalRoot}`);
   console.log(`ownership conflicts:  ${output.stats.ownershipConflicts}`);
   console.log(`unknownProvenance:    ${output.stats.unknownProvenance}`);
+  console.log(
+    `closed non-consumable: nonObject=${output.stats.closedNonObject} zeroGoverned=${output.stats.closedZeroGoverned} ` +
+      `boundary=${output.stats.publicBoundary} relay=${output.stats.privateRelay} producer=${output.stats.closedProducer}`,
+  );
   console.log(`tsx census diff:      ${JSON.stringify(output.tsxInlineStamp.censusDiff)}`);
   console.log(`wrote ${OUT}`);
 }

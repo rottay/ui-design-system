@@ -21,7 +21,13 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { classifyCrossFileRows } from './cascade-disposition.mjs';
+import {
+  classifyCrossFileRows,
+  dispositionIndex,
+  boundedReceiptOf,
+  DispositionJoinConflict,
+  DISPOSITION_DECISION_FIELDS,
+} from './cascade-disposition.mjs';
 import {
   adjudicateDeclarationOwner,
   provablyNonObject,
@@ -727,10 +733,15 @@ test('P-2 (C-1) the drained set IS the recomputed cohort, by count, never by id 
   // multiset arithmetic, not tuple uniqueness (C-a2)
   assert.equal(out.stats.closedNonObject, out.closedNonObject.length);
   assert.equal(out.stats.unknownProvenance, out.unknownProvenance.length);
-  // T-ZERO-486 added a third bucket; the conservation law is unchanged in
-  // spirit -- every one of the 2024 sites is in exactly one of them.
+  // T-TYPED-1118 took the buckets from three to six; the conservation law is
+  // unchanged in spirit -- every one of the 2024 sites is in exactly one.
   assert.equal(
-    out.stats.unknownProvenance + out.stats.closedNonObject + out.stats.closedZeroGoverned,
+    out.stats.unknownProvenance +
+      out.stats.closedNonObject +
+      out.stats.closedZeroGoverned +
+      out.stats.publicBoundary +
+      out.stats.privateRelay +
+      out.stats.closedProducer,
     2024,
   );
   // disjoint by construction: a site is EITHER closed by proof OR unresolved
@@ -757,7 +768,10 @@ test('C-a1 the receipt publishes the same identity family as unknownProvenance',
       assert.ok(field in row, `closedNonObject row is missing ${field}`);
     }
     assert.equal(row.plane, 'tsx-inline-stamp');
-    assert.match(row.reason, /^(literal-kind:|undefined-keyword|prefix-unary-not-object|template-expression-css-string)/);
+    assert.match(
+      row.reason,
+      /^(cross-file:)?(literal-kind:|undefined-keyword|prefix-unary-not-object|template-expression-css-string)/,
+    );
   }
   assert.match(out.digests.closedNonObject, /^[0-9a-f]{64}$/);
 });
@@ -810,14 +824,15 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   const out = buildProducers();
   const byReason = out.stats.unknownProvenanceByReason;
   assert.ok(!('unresolved-expression' in byReason), 'the key must be removed, not zeroed');
-  // post T-ZERO-486: the ZERO cohort left these buckets (see Z-5 for the
-  // exact decomposition 7/113/305/61); dynamic-setProperty never drains.
-  assert.equal(byReason['unresolved-identifier'], 768);
-  assert.equal(byReason['unresolved-spread'], 522);
-  assert.equal(byReason['unresolved-member-access'], 84);
-  assert.equal(byReason['unresolved-call'], 92);
+  // post T-TYPED-1118: boundary+relay+producer+the cross-file non-object left
+  // these buckets too. dynamic-setProperty has never drained through any
+  // tranche -- it is the one bucket that is still exactly what lot A measured.
+  assert.equal(byReason['unresolved-identifier'], 68);
+  assert.equal(byReason['unresolved-spread'], 148);
+  assert.equal(byReason['unresolved-member-access'], 47);
+  assert.equal(byReason['unresolved-call'], 85);
   assert.equal(byReason['unresolved-dynamic-setProperty'], 4);
-  assert.equal(Object.values(byReason).reduce((a, b) => a + b, 0), 1470);
+  assert.equal(Object.values(byReason).reduce((a, b) => a + b, 0), 352);
 });
 
 test('C-a4 the frozen counters do not move with this tranche', () => {
@@ -842,10 +857,15 @@ test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conse
   const out = buildProducers();
   assert.equal(out.stats.closedZeroGoverned, 486);
   assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
-  assert.equal(out.stats.unknownProvenance, 1470);
+  assert.equal(out.stats.unknownProvenance, 352);
   // conservation: nothing vanished, everything is in exactly one bucket
   assert.equal(
-    out.stats.unknownProvenance + out.stats.closedZeroGoverned + out.stats.closedNonObject,
+    out.stats.unknownProvenance +
+      out.stats.closedZeroGoverned +
+      out.stats.closedNonObject +
+      out.stats.publicBoundary +
+      out.stats.privateRelay +
+      out.stats.closedProducer,
     2024,
   );
 });
@@ -885,14 +905,21 @@ test('Z-4 boundary 523 and relay 591 remain unknown and non-consumable', () => {
 });
 
 test('Z-5 the drained buckets decompose exactly as the cohort does', () => {
-  const out = buildProducers();
-  const byReason = out.stats.unknownProvenanceByReason;
-  // 486 = 7 identifier + 113 spread + 305 member-access + 61 call
-  assert.equal(775 - byReason['unresolved-identifier'], 7);
-  assert.equal(635 - byReason['unresolved-spread'], 113);
-  assert.equal(389 - byReason['unresolved-member-access'], 305);
-  assert.equal(153 - byReason['unresolved-call'], 61);
-  assert.equal(byReason['unresolved-dynamic-setProperty'], 4);
+  // Re-anchored by T-TYPED-1118. This used to subtract the live byReason from
+  // a hardcoded PRE-drain baseline, so every later tranche broke it even when
+  // the ZERO decomposition itself never moved. It now reads the decomposition
+  // off the cohort DIRECTLY, which is what the test always meant to assert and
+  // is immune to any further drain of the other dispositions.
+  const { rows } = classifyCrossFileRows();
+  const byForm = {};
+  for (const r of rows) {
+    if (r.disposition !== ZERO) continue;
+    byForm[r.form] = (byForm[r.form] || 0) + 1;
+  }
+  assert.deepEqual(byForm, { identifier: 7, spread: 113, 'member-access': 305, call: 61 });
+  assert.equal(Object.values(byForm).reduce((a, b) => a + b, 0), 486);
+  // dynamic-setProperty has never drained: it is still whole in the residual
+  assert.equal(buildProducers().stats.unknownProvenanceByReason['unresolved-dynamic-setProperty'], 4);
 });
 
 test('Z-6 the receipt publishes the identity family and a SEQUENCE digest', () => {
@@ -956,7 +983,8 @@ test('Z-11 the frozen producer counters do not move with this tranche', () => {
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
   assert.equal(out.stats.distinctChannels, 4585);
-  assert.equal(out.stats.closedNonObject, 68);
+  // 68 proven locally + the 1 that only resolves cross-file (T-TYPED-1118)
+  assert.equal(out.stats.closedNonObject, 69);
 });
 
 test('Z-12 the subsystem is PURE: importing it neither writes nor mutates the inventory', () => {
@@ -964,4 +992,310 @@ test('Z-12 the subsystem is PURE: importing it neither writes nor mutates the in
   const { rows } = classifyCrossFileRows();
   assert.equal(rows.length, 2024);
   assert.equal(readFileSync(OUT_PATH, 'utf8'), before);
+});
+
+/* ===================================================================== *
+ * T-TYPED-1118 -- the 1118 typed rows closed contractually.
+ *
+ * 523 PUBLIC_BOUNDARY_CANDIDATE + 591 RELAY_PRIVATE_UNRESOLVED +
+ * 3 CLOSED_PRODUCER + 1 cross-file CLOSED_NONOBJECT leave
+ * `unknownProvenance` and land in named collections WITH receipts. None of
+ * them becomes consumable, none of them joins `closedZeroGoverned`, and the
+ * 352 that remain still block lot B. The negatives below are the ones that
+ * would catch a false close.
+ * ===================================================================== */
+
+test('T-1 the four cohorts have exactly the measured sizes and the residual is 352', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.publicBoundary, 523);
+  assert.equal(out.stats.privateRelay, 591);
+  assert.equal(out.stats.closedProducer, 3);
+  assert.equal(out.stats.closedNonObject, 69);
+  assert.equal(out.stats.unknownProvenance, 352);
+  // stats mirror the arrays, never a bare counter
+  assert.equal(out.stats.publicBoundary, out.publicBoundary.length);
+  assert.equal(out.stats.privateRelay, out.privateRelay.length);
+  assert.equal(out.stats.closedProducer, out.closedProducer.length);
+  // the tranche moved exactly 1118 rows out of unknownProvenance
+  assert.equal(523 + 591 + 3 + 1, 1118);
+  assert.equal(1470 - 1118, out.stats.unknownProvenance);
+});
+
+test('T-2 NEGATIVE: a boundary row is NEVER consumable and never tenant-safe', () => {
+  const out = buildProducers();
+  assert.ok(out.publicBoundary.length > 0);
+  for (const row of out.publicBoundary) {
+    assert.equal(row.consumable, false, `${row.file}:${row.line} boundary must not be consumable`);
+    assert.equal(row.tenantSafe, false, `${row.file}:${row.line} boundary must not be tenant-safe`);
+    assert.equal(row.nonConsumableCause, 'object-supplied-by-caller-across-public-entrypoint');
+    assert.match(row.reason, /^public-boundary-candidate:/);
+  }
+});
+
+test('T-3 NEGATIVE: a relay row is never a producer and never joins the ZERO drain', () => {
+  const out = buildProducers();
+  const zeroKeys = new Set(out.closedZeroGoverned.map((r) => `${r.file}|${r.ordinal}`));
+  const producerKeys = new Set(out.closedProducer.map((r) => `${r.file}|${r.ordinal}`));
+  for (const row of out.privateRelay) {
+    assert.equal(row.consumable, false);
+    assert.equal(row.tenantSafe, false);
+    assert.ok(!zeroKeys.has(`${row.file}|${row.ordinal}`), `relay ${row.file}:${row.line} leaked into the ZERO drain`);
+    assert.ok(!producerKeys.has(`${row.file}|${row.ordinal}`), `relay ${row.file}:${row.line} claimed as a producer`);
+    assert.match(row.reason, /^private-relay-unresolved:/);
+  }
+});
+
+test('T-4 the six collections are pairwise DISJOINT and total the 2024 sites', () => {
+  const out = buildProducers();
+  const sections = {
+    unknownProvenance: out.unknownProvenance,
+    closedNonObject: out.closedNonObject,
+    closedZeroGoverned: out.closedZeroGoverned,
+    publicBoundary: out.publicBoundary,
+    privateRelay: out.privateRelay,
+    closedProducer: out.closedProducer,
+  };
+  // unknownProvenance publishes no ordinal, so it is compared on its own key
+  const keyed = ['closedNonObject', 'closedZeroGoverned', 'publicBoundary', 'privateRelay', 'closedProducer'];
+  const seen = new Map();
+  for (const name of keyed) {
+    for (const row of sections[name]) {
+      const k = `${row.file}|${row.ordinal}`;
+      if (seen.has(k) && seen.get(k) !== name) {
+        assert.fail(`site ${k} appears in both ${seen.get(k)} and ${name}`);
+      }
+      seen.set(k, name);
+    }
+  }
+  const total = Object.values(sections).reduce((a, rows) => a + rows.length, 0);
+  assert.equal(total, 2024);
+});
+
+test('T-5 every cohort row carries a receipt sufficient to audit origin and reason', () => {
+  const out = buildProducers();
+  for (const row of [...out.publicBoundary, ...out.privateRelay, ...out.closedProducer]) {
+    for (const f of ['plane', 'file', 'symbol', 'line', 'ordinal', 'template', 'reason', 'evidence', 'sinkTags', 'relayKinds', 'occurrences']) {
+      assert.ok(f in row, `${row.file}:${row.line} cohort row is missing ${f}`);
+    }
+    assert.equal(row.plane, 'tsx-inline-stamp');
+    assert.ok(row.evidence && typeof row.evidence === 'object', 'evidence must be an object');
+    assert.ok(Array.isArray(row.evidence.path) && row.evidence.path.length > 0, 'evidence must state a resolution path');
+    assert.ok(Array.isArray(row.sinkTags));
+    assert.ok(Array.isArray(row.relayKinds));
+    assert.ok(row.occurrences >= 1);
+  }
+  // a boundary receipt names the PUBLIC entrypoint that exposes it
+  for (const row of out.publicBoundary) {
+    assert.ok(row.evidence.entrypoint, `${row.file}:${row.line} boundary receipt must name its entrypoint`);
+    assert.ok(row.evidence.exportedAs, `${row.file}:${row.line} boundary receipt must name its export`);
+    assert.ok(row.evidence.hopChainDepth >= 1);
+  }
+});
+
+test('T-6 the 3 producer rows carry a full causal receipt and invent no root', () => {
+  const out = buildProducers();
+  assert.equal(out.closedProducer.length, 3);
+  for (const row of out.closedProducer) {
+    assert.match(row.reason, /^governed-producer-object:/);
+    assert.equal(row.nonConsumableCause, 'governed-producer-with-no-attributed-cascade-root');
+    assert.match(row.evidence.governedProducerSiteId, /^[0-9a-f]{64}$/);
+    assert.equal(row.evidence.customPropertyScanComplete, true, 'an incomplete scan may never be published as a closed producer');
+    assert.ok(row.evidence.governedChannelKeys.length > 0, 'a producer with no governed key is not a producer');
+    assert.ok(row.evidence.sourcePartRefs.length > 0, 'a producer must reference the source part it came from');
+    for (const key of row.evidence.governedChannelKeys) assert.match(key, /^--ds-/);
+    // NO invented reachability: the row states no cascade root and no tenant path
+    assert.ok(!('causalRootIds' in row), 'a closed producer must not claim a cascade root');
+    assert.ok(!('tenantReachable' in row), 'a closed producer must not claim tenant reachability');
+    assert.equal(row.tenantSafe, false);
+  }
+});
+
+test('T-7 the cross-file non-object adds exactly ONE row and keeps the 68 local ones intact', () => {
+  const out = buildProducers();
+  const local = out.closedNonObject.filter((r) => r.resolvedVia === undefined);
+  const cross = out.closedNonObject.filter((r) => r.resolvedVia === 'cross-file');
+  assert.equal(local.length, 68, 'the locally-proven receipt must not lose a row');
+  assert.equal(cross.length, 1, 'exactly one row resolves only across files');
+  assert.equal(out.stats.closedNonObject, 69);
+  // the local 68 still carry ONLY the local reason vocabulary
+  for (const row of local) {
+    assert.ok(!row.reason.startsWith('cross-file:'), 'a locally-proven row must not be relabelled cross-file');
+  }
+  // and the cross-file row declares its provenance twice, independently
+  assert.match(cross[0].reason, /^cross-file:/);
+  assert.equal(cross[0].resolvedVia, 'cross-file');
+  assert.ok(cross[0].evidence.nonObjectReason, 'it must publish the non-object reason it resolved to');
+  // NO IDENTITY DUPLICATION: its coordinate appears exactly once in the array
+  const k = `${cross[0].file}|${cross[0].ordinal}`;
+  assert.equal(out.closedNonObject.filter((r) => `${r.file}|${r.ordinal}` === k).length, 1);
+});
+
+test('T-8 NEGATIVE: the join THROWS when two rows at one coordinate disagree', () => {
+  const base = {
+    file: 'a/b.tsx', ordinal: 10, disposition: 'RELAY_PRIVATE_UNRESOLVED', closed: false,
+    form: 'identifier', symbol: 'X', line: 3, reason: 'unresolved-identifier', template: 'style',
+    resolutionPath: [{ kind: 'terminal-at-sink' }], receipt: { kind: 'relay' }, boundaryReceipt: null,
+  };
+  // identical rows collapse without complaint
+  assert.equal(dispositionIndex([base, { ...base }]).size, 1);
+  // ...but a disagreement on ANY decision field is fatal
+  for (const field of DISPOSITION_DECISION_FIELDS) {
+    const other = { ...base, [field]: field === 'line' ? 999 : `${base[field]}-DIFFERENT` };
+    assert.throws(
+      () => dispositionIndex([base, other]),
+      (e) => e instanceof DispositionJoinConflict && e.field === field,
+      `a disagreement on ${field} must throw`,
+    );
+  }
+  // ...and so is a disagreement inside the bounded receipt
+  const otherReceipt = { ...base, receipt: { kind: 'objectClosed' } };
+  assert.throws(
+    () => dispositionIndex([base, otherReceipt]),
+    (e) => e instanceof DispositionJoinConflict && e.field === 'boundedReceipt',
+  );
+});
+
+test('T-9 per-sink evidence MERGES instead of being overwritten by the last row', () => {
+  const base = {
+    file: 'a/b.tsx', ordinal: 10, disposition: 'RELAY_PRIVATE_UNRESOLVED', closed: false,
+    form: 'identifier', symbol: 'X', line: 3, reason: 'unresolved-identifier', template: 'style',
+    resolutionPath: [{ kind: 'terminal-at-sink' }], receipt: { kind: 'relay' },
+  };
+  const index = dispositionIndex([
+    { ...base, boundaryReceipt: { kind: 'PRIVATE_RELAY_UNRESOLVED', sinkTagName: 'h6' } },
+    { ...base, boundaryReceipt: { kind: 'CUSTOM_COMPONENT_SINK_NOT_FOLLOWED', sinkTagName: 'Title' } },
+  ]);
+  const entry = index.get('a/b.tsx|10');
+  assert.equal(entry.occurrences, 2);
+  assert.deepEqual(entry.sinkTags, ['Title', 'h6']);
+  assert.deepEqual(entry.relayKinds, ['CUSTOM_COMPONENT_SINK_NOT_FOLLOWED', 'PRIVATE_RELAY_UNRESOLVED']);
+  // sorted sets: the order the rows arrive in cannot change the result
+  const reversed = dispositionIndex([
+    { ...base, boundaryReceipt: { kind: 'CUSTOM_COMPONENT_SINK_NOT_FOLLOWED', sinkTagName: 'Title' } },
+    { ...base, boundaryReceipt: { kind: 'PRIVATE_RELAY_UNRESOLVED', sinkTagName: 'h6' } },
+  ]).get('a/b.tsx|10');
+  assert.deepEqual(reversed.sinkTags, entry.sinkTags);
+  assert.deepEqual(reversed.relayKinds, entry.relayKinds);
+});
+
+test('T-10 the live tree joins WITHOUT conflict over its 66 duplicated coordinates', () => {
+  const { rows } = classifyCrossFileRows();
+  const index = dispositionIndex(rows);
+  assert.equal(rows.length, 2024);
+  assert.equal(index.size, 1936);
+  const multi = [...index.values()].filter((e) => e.occurrences > 1);
+  assert.equal(multi.length, 66, 'the duplicated coordinates are a measured fact, not an estimate');
+  // those 66 coordinates carry 154 rows between them; the other 1870 are singletons
+  assert.equal(multi.reduce((a, e) => a + e.occurrences, 0), 154);
+  assert.equal(index.size - multi.length + 154, rows.length);
+});
+
+test('T-11 NEGATIVE: altering or removing a receipt moves the receipt-bound digest', () => {
+  const out = buildProducers();
+  for (const name of ['publicBoundary', 'privateRelay', 'closedProducer']) {
+    const key = `${name}Receipts`;
+    assert.match(out.digests[key], /^[0-9a-f]{64}$/);
+    assert.notEqual(out.digests[key], out.digests[name], 'the receipt digest must not equal the identity digest');
+  }
+  // a digest that ignored the receipt could not distinguish these two
+  const rows = out.publicBoundary.slice(0, 3);
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const withReceipt = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.evidence]));
+  const stripped = rows.map((r) => ({ ...r, evidence: null, sinkTags: [] }));
+  assert.equal(identity(rows), identity(stripped), 'identity alone cannot see the receipt');
+  assert.notEqual(withReceipt(rows), withReceipt(stripped), 'the receipt-bound digest MUST see it');
+});
+
+test('T-12 the residual 352 stays unknown and lot B does NOT open', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.unknownProvenance, 352);
+  assert.ok(out.stats.unknownProvenance > 0, 'F-5.1 requires unknownProvenance == [] and it is not');
+  assert.equal(out.unknownProvenance.length, 352);
+  // the residual dispositions are the ones NO tranche has proven anything about
+  const { rows } = classifyCrossFileRows();
+  const drained = new Set([
+    'CLOSED_ZERO_GOVERNED_EMISSION_OBJECT', 'PUBLIC_BOUNDARY_CANDIDATE',
+    'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
+  ]);
+  const residual = rows.filter((r) => !drained.has(r.disposition));
+  assert.equal(residual.length, 352);
+  const byDisposition = {};
+  for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
+  assert.deepEqual(byDisposition, {
+    BRANCH_COMPOSITE_OPEN: 162,
+    AUTHORED_OPEN: 99,
+    BRANCH_CONDITIONAL_AUTHORED: 37,
+    OPEN_UNKNOWN: 28,
+    COMPUTED_DOMAIN_PENDING: 21,
+    DYNAMIC_SINK_PENDING: 4,
+    CALL_ARGS_PENDING: 1,
+  });
+});
+
+test('T-13 boundedReceiptOf returns null for a disposition it cannot vouch for', () => {
+  // fail-closed: an unhandled disposition never fabricates evidence
+  assert.equal(boundedReceiptOf({ disposition: 'AUTHORED_OPEN', resolutionPath: [] }), null);
+  assert.equal(boundedReceiptOf({ disposition: 'OPEN_UNKNOWN', resolutionPath: [] }), null);
+  assert.equal(boundedReceiptOf({ disposition: 'BRANCH_COMPOSITE_OPEN', resolutionPath: [] }), null);
+});
+
+test('T-14 the frozen counters survive this tranche untouched', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  assert.equal(out.stats.ownershipConflicts, 0);
+  assert.equal(out.stats.closedZeroGoverned, 486);
+});
+
+test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-sink coordinates', () => {
+  const out = buildProducers();
+  const RELAY_KINDS = new Set(['PRIVATE_RELAY_UNRESOLVED', 'CUSTOM_COMPONENT_SINK_NOT_FOLLOWED']);
+  const BOUNDARY_KINDS = new Set(['PUBLIC_BOUNDARY_CANDIDATE', 'PUBLIC_BOUNDARY_UNKNOWN']);
+  const isSorted = (a) => JSON.stringify(a) === JSON.stringify([...a].sort());
+  const hasDuplicates = (a) => new Set(a).size !== a.length;
+
+  // A relay row exists BECAUSE a sink classified it, so its kind list is never
+  // empty; an empty one would mean the evidence was dropped on the way out.
+  for (const row of out.privateRelay) {
+    assert.ok(row.relayKinds.length > 0, `${row.file}:${row.line} relay published no relayKinds`);
+    assert.ok(isSorted(row.relayKinds), `${row.file}:${row.line} relayKinds must be sorted`);
+    assert.ok(!hasDuplicates(row.relayKinds), `${row.file}:${row.line} relayKinds must be a set`);
+    for (const kind of row.relayKinds) {
+      assert.ok(RELAY_KINDS.has(kind), `${row.file}:${row.line} unknown relay kind ${kind}`);
+    }
+    assert.ok(row.sinkTags.length > 0 && isSorted(row.sinkTags) && !hasDuplicates(row.sinkTags));
+  }
+  for (const row of out.publicBoundary) {
+    assert.ok(row.relayKinds.length > 0, `${row.file}:${row.line} boundary published no relayKinds`);
+    assert.ok(isSorted(row.relayKinds) && !hasDuplicates(row.relayKinds));
+    for (const kind of row.relayKinds) {
+      assert.ok(BOUNDARY_KINDS.has(kind), `${row.file}:${row.line} unknown boundary kind ${kind}`);
+    }
+  }
+  // A producer is reached through a CALL, not through a relay sink: its list is
+  // legitimately empty. Asserting that keeps "empty" a decision, not an omission.
+  for (const row of out.closedProducer) {
+    assert.deepEqual(row.relayKinds, [], 'a producer row has no relay sink to report');
+  }
+
+  // DURABLE multi-kind evidence: the 18 disagreeing pairs measured in the tree
+  // are exactly what would be lost by a last-write-wins join. At least one
+  // coordinate must publish BOTH kinds, or the merge is not observable in A5.
+  const multiKind = out.privateRelay.filter((r) => r.relayKinds.length > 1);
+  assert.ok(multiKind.length > 0, 'no coordinate publishes more than one relay kind');
+  assert.equal(multiKind.length, 8);
+  for (const row of multiKind) {
+    assert.deepEqual(row.relayKinds, ['CUSTOM_COMPONENT_SINK_NOT_FOLLOWED', 'PRIVATE_RELAY_UNRESOLVED']);
+    assert.ok(row.occurrences > 1, 'a multi-kind coordinate must have more than one occurrence');
+    assert.ok(row.sinkTags.length > 1, 'a multi-kind coordinate reaches more than one sink');
+  }
+  // and multi-sink evidence more generally survives
+  assert.equal([...out.publicBoundary, ...out.privateRelay].filter((r) => r.sinkTags.length > 1).length, 20);
+
+  // the receipt-bound digests COVER relayKinds: dropping it must move them
+  const withKinds = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
+  const withoutKinds = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, [], r.evidence]));
+  assert.notEqual(withKinds(out.privateRelay), withoutKinds(out.privateRelay));
 });

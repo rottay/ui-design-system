@@ -4,7 +4,7 @@
  * allowlist of ids anywhere in this subsystem.
  */
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve as pathResolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -519,4 +519,145 @@ export function classifyCrossFileRows() {
   }
 
   return { rows, scannedFiles, excludedFiles };
+}
+
+/* ------------------------------------------------- fail-closed join --- */
+/**
+ * The natural key a producer inventory can join on is `file|ordinal`: a stable
+ * source coordinate. It is NOT unique -- 66 coordinates carry more than one row
+ * (154 rows in total) because the SAME expression node flows into SEVERAL JSX
+ * sinks. `<Modal style={style}>` and `<Drawer style={style}>` in one component
+ * produce two rows at one coordinate.
+ *
+ * Those duplicates must never be collapsed by "last write wins", which silently
+ * picks one row's evidence and discards the rest. This index splits every field
+ * into one of two classes and treats them differently:
+ *
+ *  - DECISION fields decide WHETHER and HOW a row drains. If two rows at one
+ *    coordinate disagree on any of them the join THROWS: a coordinate whose
+ *    classification is ambiguous is never drained. Measured on the live tree:
+ *    0 disagreements over 66 duplicated coordinates.
+ *  - The bounded receipt is the invariant evidence of origin and reason
+ *    (entrypoint, exported name, wrapper, hop depth, resolution path, causal
+ *    governance). It must also agree, and it THROWS otherwise. Measured: 0
+ *    disagreements.
+ *  - PER-SINK evidence -- which tag the expression reached, and which relay
+ *    kind that sink implies -- legitimately varies between occurrences. It is
+ *    the one thing that is MERGED, as a sorted set, so nothing is discarded and
+ *    nothing is chosen arbitrarily. Measured: at most 4 distinct sink tags and
+ *    2 distinct relay kinds per coordinate.
+ *
+ * The result: the only collapse that happens is one drain DECISION per
+ * coordinate, and that decision is provably unambiguous.
+ */
+export const DISPOSITION_DECISION_FIELDS = Object.freeze([
+  "disposition",
+  "closed",
+  "form",
+  "symbol",
+  "line",
+  "reason",
+  "template",
+]);
+
+const stable = (value) => JSON.stringify(value ?? null);
+
+/**
+ * The invariant half of a row's evidence: enough to audit ORIGIN and REASON,
+ * bounded so the inventory does not carry the entire resolution graph. Per-sink
+ * fields are deliberately absent -- they are merged by `dispositionIndex`.
+ */
+export function boundedReceiptOf(row) {
+  const path = (row.resolutionPath ?? []).map((step) => step.kind);
+  switch (row.disposition) {
+    case "PUBLIC_BOUNDARY_CANDIDATE": {
+      const evidence = row.boundaryReceipt?.exportEvidence ?? {};
+      return {
+        entrypoint: evidence.entrypoint ?? null,
+        exportedAs: evidence.exportedAs ?? null,
+        via: evidence.via ?? null,
+        hopChainDepth: evidence.hopChain?.length ?? 0,
+        path,
+      };
+    }
+    case "RELAY_PRIVATE_UNRESOLVED":
+      return { bindingKind: row.receipt?.kind ?? null, path };
+    case "CLOSED_PRODUCER": {
+      const governance = row.governance;
+      return {
+        governedProducerSiteId: governance?.governedProducerSiteId ?? null,
+        customPropertyScanComplete: governance?.customPropertyScanComplete ?? null,
+        governedChannelKeys: [...(governance?.governedChannelKeys ?? [])].sort(),
+        internalSocketKeys: [...(governance?.internalSocketKeys ?? [])].sort(),
+        sourcePartRefs: [...(governance?.sourcePartRefs ?? [])].sort(),
+        path,
+      };
+    }
+    case "CLOSED_NONOBJECT":
+      return { nonObjectReason: row.receipt?.reason ?? null, path };
+    default:
+      return null;
+  }
+}
+
+export class DispositionJoinConflict extends Error {
+  constructor(key, field, left, right) {
+    super(
+      `disposition join conflict at ${key}: field ${field} disagrees between two rows ` +
+        `sharing one natural key (${stable(left)} vs ${stable(right)}). A coordinate whose ` +
+        `classification is ambiguous is never drained.`,
+    );
+    this.name = "DispositionJoinConflict";
+    this.key = key;
+    this.field = field;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+/**
+ * Build the fail-closed `file|ordinal` -> entry index. Throws
+ * `DispositionJoinConflict` on any material disagreement; merges per-sink
+ * evidence. Pure.
+ */
+export function dispositionIndex(rows) {
+  const index = new Map();
+  for (const row of rows) {
+    const key = `${row.file}|${row.ordinal}`;
+    const decision = {};
+    for (const field of DISPOSITION_DECISION_FIELDS) decision[field] = row[field];
+    const receipt = boundedReceiptOf(row);
+    const sinkTag = row.boundaryReceipt?.sinkTagName ?? null;
+    const relayKind = row.boundaryReceipt?.kind ?? null;
+
+    const prior = index.get(key);
+    if (!prior) {
+      index.set(key, {
+        key,
+        decision,
+        receipt,
+        sinkTags: new Set(sinkTag ? [sinkTag] : []),
+        relayKinds: new Set(relayKind ? [relayKind] : []),
+        occurrences: 1,
+      });
+      continue;
+    }
+    for (const field of DISPOSITION_DECISION_FIELDS) {
+      if (stable(prior.decision[field]) !== stable(decision[field])) {
+        throw new DispositionJoinConflict(key, field, prior.decision[field], decision[field]);
+      }
+    }
+    if (stable(prior.receipt) !== stable(receipt)) {
+      throw new DispositionJoinConflict(key, "boundedReceipt", prior.receipt, receipt);
+    }
+    if (sinkTag) prior.sinkTags.add(sinkTag);
+    if (relayKind) prior.relayKinds.add(relayKind);
+    prior.occurrences += 1;
+  }
+  // Freeze the merged sets into deterministic sorted arrays.
+  for (const entry of index.values()) {
+    entry.sinkTags = [...entry.sinkTags].sort();
+    entry.relayKinds = [...entry.relayKinds].sort();
+  }
+  return index;
 }
