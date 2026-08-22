@@ -1609,11 +1609,6 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      headerColor: "#9aacbf",
-      /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-       */
       headerFontSize: OVERLAY_SEED.typeDetail.tableHeaderSize,
       /**
        * @domicile seed
@@ -1657,34 +1652,9 @@ const OVERLAY: BrandThemeModeOverlay = {
       actionBg: "var(--ds-surface-control)",
       /**
        * @domicile derived
-       * @governor deriva de: --ds-color-border
-       */
-      actionBorder: "color-mix(in srgb, var(--ds-color-border) 70%, transparent)",
-      /**
-       * @domicile derived
-       * @governor deriva de: --ds-surface-panel
-       */
-      filterRowBg: "var(--ds-surface-panel)",
-      /**
-       * @domicile derived
        * @governor deriva de: --ds-color-primary, --ds-surface-card
        */
       headerBgHover: "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))",
-      /**
-       * @domicile derived
-       * @governor deriva de: --ds-color-border
-       */
-      headerBorder: "color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
-      /**
-       * @domicile derived
-       * @governor deriva de: --ds-color-border
-       */
-      headerShadow: "inset 0 -1px 0 color-mix(in srgb, var(--ds-color-border) 82%, transparent)",
-      /**
-       * @domicile derived
-       * @governor deriva de: --ds-surface-panel
-       */
-      rowBgExpanded: "var(--ds-surface-panel)",
     },
     sidebar: {
       /**
@@ -3136,9 +3106,8 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.cellColor
-     * @domicile unassigned
-     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
+     * @absent OVERLAY.chrome.table.headerColor
+     * @governor el main deriva --ds-color-text-page y esa raiz resuelve #9aacbf en dark: el tema deja de autorar esta hoja en el plano no-default porque la derivacion ya la cubre byte-exacta (A2-7), no es gap
      */
     /**
      * @placeholder OVERLAY.chrome.table.loadingOverlayBg
@@ -7240,15 +7209,15 @@ const CHROME: BrandChrome = {
    */
   table: {
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de las raices tier (tier.control.bg, tier.raised.bg, tier.page.bg, tier.overlay.bg); es el eje H4: coincide en base y diverge en dark; el fallback literal del skin es --ds-surface-card (data-table.css:288)
+     * @domicile derived
+     * @governor deriva de: --ds-surface-card (A2-1); base #FFFFFF identico; pin dark #0f1520 SE MANTIENE (raiz dark #151d2b)
      */
-    bg: "#ffffff",
+    bg: 'var(--ds-surface-card)',
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea)
+     * @domicile derived
+     * @governor deriva de: --ds-color-border (A2-2); base #d4e0ea (case-fold); pin dark #1d2a38 SE MANTIENE (raiz dark #253545)
      */
-    border: "#D4E0EA",
+    border: 'var(--ds-color-border)',
     /**
      * @domicile seed
      * @governor el propio archivo declara la relacion en bithire/index.ts:7237 ("Tables/panels ride the lg radius step"), pero el valor DIVERGE del peldano: --ds-radius-lg efectivo de bithire = 14px (base calc(14px/1.25) × escala 1.25, artefacto bithire :812-:814; DS default 12px, default.css:774) frente a 10px autorado
@@ -7266,10 +7235,10 @@ const CHROME: BrandChrome = {
      */
     headerBgHover: `color-mix(in srgb, ${PALETTE.primaryColor} 5%, ${SEED.surface.mistTint})`,
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.textPageColor (#53697E)
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-page (A2-7); base #53697E, dark #9aacbf identico al pin del overlay, que se retira
      */
-    headerColor: "#53697E",
+    headerColor: 'var(--ds-color-text-page)',
     /**
      * @domicile seed
      * @governor coincide con la familia de rol font-weight del tema — groupFontWeight (bithire/index.ts:4346), itemFontWeightActive (:4391), labelFontWeight (:5791), itemFontWeightSelected (:6099) —: relacion por rol declarada; converge ademas con el valor autorado por rottay para el mismo eje (600) y diverge de evnto (500); cardinalidad medida 7
@@ -7281,13 +7250,13 @@ const CHROME: BrandChrome = {
      */
     headerFontSize: SEED.typeDetail.tableHeaderSize,
     /**
-     * @domicile seed
-     * @governor sin coincidencia con PALETTE; DIVERGE de --ds-text-eyebrow-letter-spacing (0.08em), la rampa a la que default.css:1713 enruta este canal: divergencia medida declarada; cardinalidad medida 1
+     * @domicile derived
+     * @governor deriva de: --ds-text-eyebrow-letter-spacing x SEED.typeDetail.tableHeaderTrackingRatio (A2-8); 0.08em x 0.8125 = 0.065em exacto; consume el seed que A1 dejo sin lector
      */
-    headerLetterSpacing: "0.065em",
+    headerLetterSpacing: `calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * ${SEED.typeDetail.tableHeaderTrackingRatio})`,
     /**
      * @domicile seed
-     * @governor coincide con --ds-text-eyebrow-transform (uppercase), la rampa a la que default.css:1714 enruta este canal: relacion por rol declarada; cardinalidad medida 1
+     * @governor coincide con --ds-text-eyebrow-transform (uppercase), rampa a la que default.css:1714 enruta el canal. DEMOCION A2-9: retirarlo NO es visual-equivalente aqui — bithire autora EXPRESSIVE y expressive-profiles/expansion/index.ts:146 emite este canal desde row.tableHeader.textTransform; medido, sin el pin el artifact pasa de uppercase a none (:995). El pin enmascaraba al perfil, no al piso; rottay/evnto no autoran EXPRESSIVE. Se conserva; unificar es fase B
      */
     headerTextTransform: "uppercase",
     /**
@@ -7296,26 +7265,25 @@ const CHROME: BrandChrome = {
      */
     headerBlockSize: SEED.rhythm.tableHeaderBlockSize,
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
+     * @domicile derived
+     * @governor deriva de: --ds-color-border en color-mix (A2-10); adopta la expresion del overlay dark, que se retira como duplicado byte-exacto
      */
-    headerBorder: "color-mix(in srgb, #D4E0EA 82%, transparent)",
+    headerBorder: 'color-mix(in srgb, var(--ds-color-border) 82%, transparent)',
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border en color-mix (A2-11); adopta la expresion del overlay dark, que se retira como duplicado byte-exacto
+       */
+      headerShadow: 'inset 0 -1px 0 color-mix(in srgb, var(--ds-color-border) 82%, transparent)',
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
+     * @domicile derived
+     * @governor deriva de: --ds-surface-card (A2-1); mismo eje que bg, pin dark conservado
      */
-    headerShadow:
-      "inset 0 -1px 0 color-mix(in srgb, #D4E0EA 82%, transparent)",
+    rowBg: 'var(--ds-surface-card)',
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de las raices tier (tier.control.bg, tier.raised.bg, tier.page.bg, tier.overlay.bg); es el eje H4: coincide en base y diverge en dark; el fallback literal del skin es --ds-surface-card (data-table.css:288)
+     * @domicile derived
+     * @governor deriva de: --ds-surface-panel (A2-6); base #f4f8fd; pin dark #1b2535 SE MANTIENE
      */
-    rowBg: "#ffffff",
-    /**
-     * @domicile seed
-     * @governor coincide en color con itemBgHover (bithire/index.ts:4411) y resultBgHover (bithire/index.ts:5399), mismo rol de fondo hover: relacion declarada; sin coincidencia con PALETTE; cardinalidad medida 13
-     */
-    rowBgHover: "#F4F8FD",
+    rowBgHover: 'var(--ds-surface-panel)',
     /**
      * @domicile seed
      * @governor sin coincidencia con PALETTE, con raiz del catalogo ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1)
@@ -7327,10 +7295,10 @@ const CHROME: BrandChrome = {
      */
     rowBgSelected: SEED.surface.selectedTint,
     /**
-     * @domicile seed
-     * @governor coincide en color con el tinte compartido #F4F8FD del tema pero en roles distintos: accidente declarado; converge internamente con rowBgHover y filterRowBg del mismo bloque; cardinalidad medida 13
+     * @domicile derived
+     * @governor deriva de: --ds-surface-panel (A2-6); el overlay dark autoraba lo mismo y se retira como duplicado byte-exacto
      */
-    rowBgExpanded: "#F4F8FD",
+    rowBgExpanded: 'var(--ds-surface-panel)',
     /**
      * @domicile seed
      * @governor coincide en color con la familia de rol borde/divisor del tema — divider (bithire/index.ts:4854), resultBorder (:5404), headerBorder (:7380), footerBorder (:7436) —: relacion por rol declarada; no coincide con PALETTE.borderColor (:3462, #d4e0ea); cardinalidad medida 13
@@ -7374,10 +7342,10 @@ const CHROME: BrandChrome = {
      */
     cellColor: "var(--ds-color-text-primary)",
     /**
-     * @domicile seed
-     * @governor coincide en color con el tinte compartido #F4F8FD del tema pero en roles distintos (fondos de input/hover): accidente declarado; converge internamente con rowBgHover y rowBgExpanded del mismo bloque; cardinalidad medida 13
+     * @domicile derived
+     * @governor deriva de: --ds-surface-panel (A2-6); el overlay dark autoraba lo mismo y se retira como duplicado byte-exacto
      */
-    filterRowBg: "#F4F8FD",
+    filterRowBg: 'var(--ds-surface-panel)',
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-primary
@@ -7386,12 +7354,12 @@ const CHROME: BrandChrome = {
       "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 0 8px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)",
     /**
      * @domicile seed
-     * @governor coincide en color con las emisiones de PALETTE.primaryColor (#3A6FB0) y PALETTE.borderColor (#d4e0ea), ambos literales dentro de color-mix()
+     * @governor coincide con PALETTE.primaryColor (#3A6FB0) y PALETTE.borderColor (#d4e0ea) dentro de color-mix(). DEMOCION A2-12: el rewire NO es visual-equivalente en dark — medido color-mix(#3a6fb0 22%, #d4e0ea) vs color-mix(#1e84e6 22%, #253545); sin pin de overlay el literal base filtra al dark. Queda literal; correccion sighted en fase B
      */
     resizeBg: "color-mix(in srgb, #3A6FB0 22%, #D4E0EA)",
     /**
      * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.primaryColor (#3A6FB0)
+     * @governor coincide con PALETTE.primaryColor (#3A6FB0). DEMOCION A2-13: el rewire NO es visual-equivalente en dark — medido #3a6fb0 vs #1e84e6, misma causa que A2-12. Queda literal; correccion sighted en fase B
      */
     resizeBgHover: "#3A6FB0",
     /**
@@ -7400,15 +7368,15 @@ const CHROME: BrandChrome = {
      */
     reorderBg: "var(--ds-tint-12)",
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de las raices tier (tier.control.bg, tier.raised.bg, tier.page.bg, tier.overlay.bg)
+     * @domicile derived
+     * @governor deriva de: --ds-surface-card (A2-1); base #FFFFFF; el overlay dark conserva su raiz deliberada var(--ds-surface-control)
      */
-    actionBg: "#FFFFFF",
+    actionBg: 'var(--ds-surface-card)',
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
+     * @domicile derived
+     * @governor deriva de: --ds-color-border en color-mix (A2-14); adopta la expresion del overlay dark, que se retira como duplicado byte-exacto
      */
-    actionBorder: "color-mix(in srgb, #D4E0EA 70%, transparent)",
+    actionBorder: 'color-mix(in srgb, var(--ds-color-border) 70%, transparent)',
     /**
      * @domicile seed
      * @governor valor keyword none: declara ausencia de efecto, no un color; sin coincidencia de color posible
@@ -7420,10 +7388,9 @@ const CHROME: BrandChrome = {
      */
     pageButtonHoverShadow: SEED.material.pageButtonShadow,
     /**
-     * @domicile seed
-     * @governor sin coincidencia de raiz; razon falsable: el piso de default.css:1723 ya emite el mismo valor (rgba(255,255,255,0.7)); 0 consumo en modern/skin, consumido en rustic/skin/data-table.css:101
+     * @absent CHROME.table.loadingOverlayBg
+     * @governor retirado en A2-15: default.css:1723 emite el mismo rgba(255, 255, 255, 0.7); 0 lecturas en modern, 2 en rustic
      */
-    loadingOverlayBg: "rgba(255, 255, 255, 0.7)",
   },
   /**
    * @absent CHROME.table.cellPadding

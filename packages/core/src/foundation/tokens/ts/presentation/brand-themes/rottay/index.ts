@@ -1651,9 +1651,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       rowBgHover: OVERLAY_SEED.surface.wash,
       rowBgStriped: OVERLAY_SEED.surface.wash,
       rowBgSelected: OVERLAY_SEED.veil.selected,
-      rowBorder: "#EDEDEC",
       loadingOverlayBg: OVERLAY_SEED.scrim.loading,
-      cellColor: "#1A1A1A",
     },
     /**
      * @domicile seed
@@ -3096,11 +3094,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.actionBorder
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder OVERLAY.chrome.table.cellFontSize
      * @domicile unassigned
      * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
@@ -3111,17 +3104,7 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.filterRowBg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder OVERLAY.chrome.table.headerBgHover
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.table.headerBorder
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
@@ -3136,19 +3119,13 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.headerShadow
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder OVERLAY.chrome.table.radius
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.rowBgExpanded
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
+     * @absent OVERLAY.chrome.table.rowBorder
+     * @governor el main deriva --ds-border-color-muted y esa raiz resuelve #EDEDEC en light: el tema deja de autorar esta hoja en el plano no-default porque la derivacion ya la cubre byte-exacta (A2-3), no es gap
      */
     /**
      * @placeholder OVERLAY.chrome.tabs.activeBg
@@ -7313,25 +7290,25 @@ const CHROME: BrandChrome = {
      */
     rowBgSelected: SEED.veil.selected,
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de --ds-border-color-muted (delta medido +17)
+     * @domicile derived
+     * @governor deriva de: --ds-border-color-muted (A2-3); medido dark #222226 / light #EDEDEC, identicos a lo shippeado; el pin del overlay se retira
      */
-    rowBorder: '#222226',
+    rowBorder: 'var(--ds-border-color-muted)',
     /**
      * @domicile seed
      * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2)
      */
     cellPadding: SEED.rhythm.tableCellPadding,
     /**
-     * @domicile seed
-     * @governor coincide con la emision rottay de --ds-text-body-size (facade/artifacts/rottay/index.css:997, 0.875rem): relacion declarada (K-4 packet v2)
+     * @domicile derived
+     * @governor deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; la mueve typography.scale
      */
-    cellFontSize: '0.875rem',
+    cellFontSize: 'var(--ds-text-body-size)',
     /**
-     * @domicile seed
-     * @governor coincide en color con PALETTE.textColor (rottay:3533, #ECECEC), mismo rol de tinta de texto: relacion declarada; la tinta se comparte en 64 claves del archivo, dominadas por roles de texto (color ×11, titleColor ×6, labelColor ×4, …); linkColor (:3484) porta la misma tinta
+     * @domicile derived
+     * @governor deriva de: --ds-color-text (A2-5); medido dark #ECECEC / light #1A1A1A, identicos a lo shippeado; el pin del overlay se retira
      */
-    cellColor: '#ECECEC',
+    cellColor: 'var(--ds-color-text)',
     /**
      * @domicile seed
      * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2)

@@ -125545,8 +125545,8 @@ html[lang]:lang(ar) {
   --ds-tab-color-hover: #ECECEC;
   --ds-table-bg: #0C0C0E;
   --ds-table-border: #2A2A2F;
-  --ds-table-cell-color: #ECECEC;
-  --ds-table-cell-font-size: 0.875rem;
+  --ds-table-cell-color: var(--ds-color-text);
+  --ds-table-cell-font-size: var(--ds-text-body-size);
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-header-bg: #131316;
   --ds-table-header-block-size: calc(var(--ds-input-md-height) - 0.25rem);
@@ -125559,7 +125559,7 @@ html[lang]:lang(ar) {
   --ds-table-row-bg-hover: rgba(255, 255, 255, 0.025);
   --ds-table-row-bg-selected: rgba(255, 255, 255, 0.05);
   --ds-table-row-bg-striped: #131316;
-  --ds-table-row-border: #222226;
+  --ds-table-row-border: var(--ds-border-color-muted);
   --ds-table-sheen: none;
   --ds-tabs-active-bg: #222226;
   --ds-tabs-active-highlight: linear-gradient(118deg, transparent 12%, rgba(255, 255, 255, 0.06) 48%, transparent 76%);
@@ -126415,14 +126415,12 @@ html[lang]:lang(ar) {
   --ds-tab-color-hover: #1A1A1A;
   --ds-table-bg: #FFFFFF;
   --ds-table-border: #E5E5E3;
-  --ds-table-cell-color: #1A1A1A;
   --ds-table-header-bg: #FAFAF9;
   --ds-table-loading-overlay-bg: rgba(255, 255, 255, 0.7);
   --ds-table-row-bg: #FFFFFF;
   --ds-table-row-bg-hover: #FAFAF9;
   --ds-table-row-bg-selected: rgba(10, 10, 10, 0.04);
   --ds-table-row-bg-striped: #FAFAF9;
-  --ds-table-row-border: #EDEDEC;
   --ds-tabs-border: #E5E5E3;
   --ds-tag-border: #E5E5E3;
   --ds-tag-default-bg: #F4F4F3;

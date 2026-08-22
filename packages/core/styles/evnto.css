@@ -124994,7 +124994,7 @@ html[lang]:lang(ar) {
   --ds-surface-shadow: var(--ds-shadow-sm);
   --ds-surface-shadow-hover: var(--ds-shadow-md);
   --ds-table-header-bg: rgba(0, 0, 0, 0.02);
-  --ds-table-header-color: #737373;
+  --ds-table-header-color: var(--ds-color-text-muted);
   --ds-table-header-font-size: 0.75rem;
   --ds-table-header-font-weight: 500;
   --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);

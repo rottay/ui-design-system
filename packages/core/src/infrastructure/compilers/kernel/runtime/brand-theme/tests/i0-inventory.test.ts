@@ -1060,7 +1060,10 @@ describe("H3 contract: evnto", () => {
     it("headerBg", () =>
       expect(evntoBrandTheme.chrome?.table?.headerBg).toBeTruthy());
     it("headerColor", () =>
-      expect(evntoBrandTheme.chrome?.table?.headerColor).toBe("#737373"));
+      // A2-16: authored as the indirection; the base plane resolves #737373.
+      expect(evntoBrandTheme.chrome?.table?.headerColor).toBe(
+        "var(--ds-color-text-muted)"
+      ));
     it("headerFontWeight", () =>
       expect(evntoBrandTheme.chrome?.table?.headerFontWeight).toBe(500));
     it("headerFontSize", () =>
@@ -1157,7 +1160,12 @@ describe("H3 contract: evnto", () => {
       expect(artifact).toContain("--ds-shell-grid-size: 0px");
     });
     it("artifact: table header complete", () => {
-      expect(artifact).toContain("--ds-table-header-color: #737373");
+      // A2-16: the theme now derives the header ink from the governed root.
+      // The colour truth is kept by asserting what the root resolves to.
+      expect(artifact).toContain(
+        "--ds-table-header-color: var(--ds-color-text-muted)"
+      );
+      expect(artifact).toContain("--ds-color-text-muted: #737373");
       expect(artifact).toContain("--ds-table-header-font-weight: 500");
     });
     it("artifact: disabled vars present", () => {

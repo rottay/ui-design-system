@@ -1500,17 +1500,7 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.actionBorder
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder OVERLAY.chrome.table.bg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.table.cellColor
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
@@ -1525,17 +1515,7 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.table.filterRowBg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder OVERLAY.chrome.table.headerBgHover
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.table.headerBorder
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
@@ -1543,11 +1523,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @placeholder OVERLAY.chrome.table.headerFontSize
      * @domicile unassigned
      * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.table.headerShadow
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
      * @placeholder OVERLAY.chrome.table.loadingOverlayBg
@@ -1561,11 +1536,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      */
     /**
      * @placeholder OVERLAY.chrome.table.rowBg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.table.rowBgExpanded
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
@@ -4211,10 +4181,10 @@ const CHROME: BrandChrome = {
      */
     headerBg: SEED.surface.raised,
     /**
-     * @domicile seed
-     * @governor coincide en color con la emision de PALETTE.textMutedColor (#737373)
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-muted (A2-16); base #737373 identico a lo shippeado y a PALETTE.textMutedColor; pin dark #A8A898 SE MANTIENE (raiz dark #686858)
      */
-    headerColor: '#737373',
+    headerColor: 'var(--ds-color-text-muted)',
     /**
      * @domicile seed
      * @governor coincide con itemFontWeightActive (evnto/index.ts:2656), mismo rol de font-weight: relacion declarada; DIVERGE del valor autorado por rottay y bithire para el mismo eje (600): divergencia medida declarada; cardinalidad medida 2

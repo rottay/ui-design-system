@@ -503,8 +503,15 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // canales re-cableados a `var(--ds-color-primary)`, que al valer lo mismo en
   // ambos scopes dejan de restatearse en el bloque claro. bithire no se movio
   // porque K1 no lo toco. 1786/1504/397 -> 1756/1504/395, union 2586 -> 2559.
-  assert.deepEqual(real.matrix.leaves, { rottay: 1756, bithire: 1504, evnto: 395 });
-  assert.equal(real.matrix.union, 2559);
+  // A2 CHROME.table: -9 hojas autoradas retiradas por los rewires runtime --
+  // rottay 2 (OVERLAY cellColor/rowBorder) y bithire 7 (OVERLAY actionBorder/
+  // filterRowBg/headerBorder/headerColor/headerShadow/rowBgExpanded + CHROME
+  // loadingOverlayBg). evnto no retira ninguna. 1756/1504/395 -> 1754/1497/395.
+  assert.deepEqual(real.matrix.leaves, { rottay: 1754, bithire: 1497, evnto: 395 });
+  // A2 CHROME.table: -6 slots OVERLAY (actionBorder, cellColor, filterRowBg,
+  // headerBorder, headerShadow, rowBgExpanded) salen del universo al desaparecer
+  // su ultimo authored leaf y sus 12 placeholders huerfanos. 2559 -> 2553.
+  assert.equal(real.matrix.union, 2553);
   // La interseccion AUTORADA es el ancla estatica (345); la DEL DOCUMENTO se
   // mueve con los placeholders (787 tras F4A-4) y el conteo del ratchet vive
   // pineado en el baseline, no aca: el pin estatico de un contador que baja
@@ -541,8 +548,17 @@ test('integracion: las anclas de F4A-0 reproducen exactas sobre las 3 fuentes', 
   // slots que ningun tema autora en ninguno de los tres, no ausencias
   // parciales. El 0 real se certifica sobre keypaths evaluados en F4A-close,
   // no con este contador.
-  assert.equal(real.matrix.positionIntersection, 2526);
-  assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 795, evnto: 3 });
+  // A2 CHROME.table: 2526 -> 2518. -6 por los slots huerfanos que salen del
+  // universo (tenian posicion en los 3) y -2 porque en OVERLAY rowBorder
+  // (rottay) y OVERLAY headerColor (bithire) el tema que los retiro pasa a
+  // `declared-absent`, que NO es `position`: el slot sigue en el universo
+  // pero deja de estar en la interseccion de posiciones.
+  assert.equal(real.matrix.positionIntersection, 2518);
+  // A2 CHROME.table, neto 0/-4/+1: el retiro de los 6 slots huerfanos resta
+  // rottay cellColor (-1) y cinco de bithire (-5); las 3 disposiciones @absent
+  // dejan autor unico nuevo: loadingOverlayBg -> rottay (+1), OVERLAY rowBorder
+  // -> bithire (+1), OVERLAY headerColor -> evnto (+1).
+  assert.deepEqual(real.matrix.exclusive, { rottay: 1007, bithire: 791, evnto: 4 });
 });
 
 test('integracion: la lista de metadato son 36 y el denominador publicado es 3690', () => {
@@ -581,12 +597,14 @@ test('integracion: el baseline autorado pinea los tres contadores de la corrida 
   assert.deepEqual(evaluate(real, baseline), [], 'HEAD contra su baseline tiene que dar PASS');
 });
 
-test('integracion: silentPairs 0 y placeholderPairs congelado en 3969 sobre el corpus real', () => {
+test('integracion: silentPairs 0 y placeholderPairs congelado en 3957 sobre el corpus real', () => {
   const real = build();
   assert.equal(real.ratchet.silentPairs, 0, 'F4A-close: las 53 disposiciones @absent tienen que cerrar el silencio a 0');
-  assert.equal(real.ratchet.placeholderPairs, 3969, 'placeholderPairs no se mueve: ningun @absent tapa un placeholder');
-  assert.equal(real.ratchet.declaredAbsentPairs, 53, 'exactamente los 53 pares adjudicados por Fable B-6');
-  assert.deepEqual(real.matrix.declaredAbsent, { rottay: 19, bithire: 1, evnto: 33 });
+  assert.equal(real.ratchet.placeholderPairs, 3957, 'placeholderPairs solo baja por huerfanos retirados: ningun @absent tapa un placeholder');
+  assert.equal(real.ratchet.declaredAbsentPairs, 56, 'Fable B-6 = 53 + A2 = 3 (CHROME.table.loadingOverlayBg, OVERLAY.chrome.table.headerColor, OVERLAY.chrome.table.rowBorder)');
+  // Las mismas 3 disposiciones A2, por tema: rottay +1 (OVERLAY rowBorder),
+  // bithire +2 (OVERLAY headerColor + CHROME loadingOverlayBg), evnto +0.
+  assert.deepEqual(real.matrix.declaredAbsent, { rottay: 20, bithire: 3, evnto: 33 });
 });
 
 test('integracion: los tags del corpus real son del vocabulario cerrado y no hay failures', () => {
