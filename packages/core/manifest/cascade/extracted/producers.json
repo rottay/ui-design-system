@@ -18,13 +18,13 @@
     "cssEdges": "574150a5adeda7dafd9521822da5e39f6a49a1dd056b41534ecdbaa5d22f4139",
     "cascadeRoots": "1bd553d4a5b788d5f6d3c4b9157effec297ac2cce504128787644019551fe624",
     "rootCatalog": "6a0e68de3789a5c7b5751582cd485d42b8d71861bc014b7be4a585c04a963e9a",
-    "srcTsx": "eaafcc601fa4c12523162e96aa81d3c0582ba9402e08783adb32353671076e42",
+    "srcTsx": "84cd5a2a1cca1e10668f3a1d035dd55415af0372c3eba6f59a5abf11e1647f55",
     "srcCompilers": "6ba454c27fa223147de2ae0077fd0a4f3d2b5d9758491e5ad62abc2e65aeb5d2",
-    "artifacts": "78bba42561ad30f36898c4c3b2e82f6e6c87991a46cd1e2269eb2d1c1b4be071"
+    "artifacts": "dc5a4639ba4329dd2b2f9d905cccd71299788b0f22c06388f0ec743a24347521"
   },
   "stats": {
     "producerSites": 4872,
-    "channelEmissions": 10314,
+    "channelEmissions": 10313,
     "distinctChannels": 4585,
     "byPlane": {
       "css": {
@@ -33,7 +33,7 @@
       },
       "ts-compilers": {
         "producerSites": 49,
-        "channelEmissions": 3848
+        "channelEmissions": 3847
       },
       "ts-chrome-variables": {
         "producerSites": 74,
@@ -45,7 +45,7 @@
       }
     },
     "emissionsByEngineScope": {
-      "modern+rustic+classic": 9723,
+      "modern+rustic+classic": 9722,
       "modern": 521,
       "rustic": 68,
       "classic": 2
@@ -2087,8 +2087,8 @@
   ],
   "digests": {
     "producerSites": "cca4b034ea2d3611329ee7e9232ddc7b9572d8222c62a969f9227150f671fdfa",
-    "channelEmissions": "bfb419d52c9a47b3a9526d7c7de1594ca778f95f99b251ec8df168a30e849c99",
-    "byChannel": "2e154936bfacf407260506011923733c71615050fcdb7e00965cd43d78d93696",
+    "channelEmissions": "343fab4c87686c86894f391f00ac5ba279115b7b036b5cc63a1ff59d835c724a",
+    "byChannel": "5e062bf66ab80427899b2172a4658f872269e411d00610c31138878bf0e67a12",
     "unknownProvenance": "3d42bc1307ab5b42fa6ade7cc1292eece1e8fce7d8e95774395f9041fa387b2c"
   },
   "producerSites": [
@@ -5395,7 +5395,7 @@
     {"producerSiteId":"ad80f913dfff726c2a562be27c34c065558adf4201e0c7dc6a931ad04a3aa8a9","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default.css","line":631,"symbol":"--ds-font-weight-semibold","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default.css:631 declares --ds-font-weight-semibold"},
     {"producerSiteId":"ad850c5260b2f085eed7dfc5f901caa76990b0ab79eabc339835104f387f613e","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/avatar.css","line":47,"symbol":"--ds-avatar-2xl-status-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/avatar.css:47 declares --ds-avatar-2xl-status-size"},
     {"producerSiteId":"ad8b01299aa99d3073c17dd464ae5bc1771199cff281f06760c1b2a6365aad45","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/rate.css","line":18,"symbol":"--ds-rate-sm-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/rate.css:18 declares --ds-rate-sm-size"},
-    {"producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","plane":"ts-compilers","file":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css","line":1,"symbol":"<tenant-artifact:bithire>","ordinal":0,"ownerId":"declaration:tenant-artifact:bithire","ownerEvidence":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css: compiled tenant snapshot declaring 1235 governed channels at its own :root/[data-tenant] scope"},
+    {"producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","plane":"ts-compilers","file":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css","line":1,"symbol":"<tenant-artifact:bithire>","ordinal":0,"ownerId":"declaration:tenant-artifact:bithire","ownerEvidence":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css: compiled tenant snapshot declaring 1234 governed channels at its own :root/[data-tenant] scope"},
     {"producerSiteId":"adb74bc5bdba67ce1fe5f98240055d91a4ed5e252870bcd2526132ffbce5823a","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/modal.css","line":261,"symbol":"--ds-modal-loading-overlay-bg","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/modal.css:261 declares --ds-modal-loading-overlay-bg"},
     {"producerSiteId":"add6058c5de86f9f01f6164894797fe4ddecf6eefc28bdb8d953ac7e3ba9cb9a","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default.css","line":1503,"symbol":"--ds-inputnumber-lg-font-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default.css:1503 declares --ds-inputnumber-lg-font-size"},
     {"producerSiteId":"ade2fd926e9057ad528da59bf3350f175a5b72698be6b7c6483653f261d927c4","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/button.css","line":154,"symbol":"--ds-button-dashed-border-style","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/button.css:154 declares --ds-button-dashed-border-style"},
@@ -13441,7 +13441,6 @@
     {"channelEmissionId":"bfba67c78baa2f7da696ee0d0a190df19f9e5bb9cfeb5081e4cc989467dfe829","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-header-letter-spacing","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"6bb1ae69e0132dfe734bd99f2887bff1f0170f4b9f335f80deb07517144c26ca","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-header-shadow","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"aa71c853784fe19206027c2576a1b14f9b9eb885577ead1764e40bcf6590157b","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-header-text-transform","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
-    {"channelEmissionId":"6f7df2353675ffb6cec53e20f161a97a1d0d5afc41e0f6b127d3d6687d48fbc9","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-loading-overlay-bg","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"011bd822b476117e1f80f6a565caec4dc8bcb5282eb95485f41c8c7e3ffe3bfe","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-padding-comfortable","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"f761d317abc796338eb08b40d0ec6d8953c7a9a0ad74f3060e5f2fde1b6f66f5","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-padding-compact","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"5d9a3fcfafee1faef752f40b93699a80c23dfef95f0ee61d44539f261c9d1b01","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-table-padding-spacious","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
@@ -33169,7 +33168,6 @@
     ],
     "--ds-table-loading-overlay-bg": [
       "6245a4fab5c2d53bebedd751c0c5ec041acf7a820346be043761c3f384511339",
-      "6f7df2353675ffb6cec53e20f161a97a1d0d5afc41e0f6b127d3d6687d48fbc9",
       "80b52cfb4ee53e385f87a1b20360144501589af9f90e0320fa28ff7864c7e004",
       "f99e1afa7f850ed8478e3d910b0a5fc331f42cc632cef1a2e356ecd9f8cd0efc"
     ],
@@ -38558,7 +38556,7 @@
     {"channel":"--ds-table-header-letter-spacing","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:bithire","declaration:tenant-artifact:rottay"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-table-header-shadow","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-table-header-text-transform","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
-    {"channel":"--ds-table-loading-overlay-bg","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:bithire","declaration:tenant-artifact:rottay"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
+    {"channel":"--ds-table-loading-overlay-bg","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:rottay"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-table-padding-comfortable","executionContext":["compileTheme document"],"order":["compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-table-padding-compact","executionContext":["compileTheme document"],"order":["compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-table-padding-spacious","executionContext":["compileTheme document"],"order":["compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
