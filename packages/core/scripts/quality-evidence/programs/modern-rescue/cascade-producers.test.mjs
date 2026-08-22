@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   adjudicateDeclarationOwner,
+  provablyNonObject,
   authoredCausalRoots,
   buildProducers,
   channelEmissionIdOf,
@@ -672,4 +673,149 @@ test('P1-1 an unresolvable stamp in a real build lands in unknownProvenance, not
         `import { style } from './elsewhere';\nexport const B = () => <div style={style} />;\n`,
     },
   );
+});
+
+/* ==========================================================================
+ * T-NO-68 -- the sites the scanner CLOSES BY PROOF.
+ *
+ * The cohort is decided on the TypeScript AST node kind, never on a list of
+ * ids, files or lines: NA-4 proves that by neutralising the predicate and
+ * watching the count return to its undrained value. `closedNonObject` is a
+ * SEQUENCE, so every assertion here counts (multiset) and none demands tuple
+ * uniqueness -- two occurrences can legitimately share file:line:ordinal.
+ * ========================================================================== */
+
+const scanOf = (body) => scanTsxSource('packages/core/src/ui/probe/index.tsx', body);
+const stampOn = (expr) => `export const C = () => <div style={${expr}} />;\n`;
+
+test('P-1 every arm of the predicate closes with its typed reason', () => {
+  const cases = [
+    ["'a'", 'literal-kind:StringLiteral'],
+    ['`a`', 'literal-kind:NoSubstitutionTemplateLiteral'],
+    ['1', 'literal-kind:NumericLiteral'],
+    ['true', 'literal-kind:TrueKeyword'],
+    ['false', 'literal-kind:FalseKeyword'],
+    ['null', 'literal-kind:NullKeyword'],
+    ['undefined', 'undefined-keyword'],
+    ['!flag', 'prefix-unary-not-object'],
+  ];
+  for (const [expr, reason] of cases) {
+    const scan = scanOf(stampOn(expr));
+    assert.equal(scan.closedNonObject.length, 1, `${expr} should close exactly once`);
+    assert.equal(scan.closedNonObject[0].reason, reason);
+    assert.equal(scan.unresolved.length, 0, `${expr} must not also be unresolved`);
+  }
+});
+
+test('P-1b (Sonnet 6) a template expression closes as the CSS string it is', () => {
+  const scan = scanOf(`const t = \`w-\${n}\`;\n` + stampOn('t'));
+  assert.equal(scan.closedNonObject.length, 1);
+  assert.equal(scan.closedNonObject[0].reason, 'template-expression-css-string');
+  assert.equal(scan.unresolved.length, 0);
+});
+
+test('P-1c (Sonnet 2) a LOCAL BINDING to a non-object closes through the binding', () => {
+  const scan = scanOf('const x = undefined;\n' + stampOn('x'));
+  assert.equal(scan.closedNonObject.length, 1);
+  assert.equal(scan.closedNonObject[0].reason, 'undefined-keyword');
+  assert.equal(scan.unresolved.length, 0);
+});
+
+test('P-2 (C-1) the drained set IS the recomputed cohort, by count, never by id list', () => {
+  const out = buildProducers();
+  // multiset arithmetic, not tuple uniqueness (C-a2)
+  assert.equal(out.stats.closedNonObject, out.closedNonObject.length);
+  assert.equal(out.stats.unknownProvenance, out.unknownProvenance.length);
+  assert.equal(out.stats.unknownProvenance + out.stats.closedNonObject, 2024);
+  // disjoint by construction: a site is EITHER closed by proof OR unresolved
+  const closedKeys = out.closedNonObject.map((r) => `${r.file}|${r.line}|${r.ordinal}`);
+  const unknownKeys = new Set(out.unknownProvenance.map((r) => r.detail));
+  for (const row of out.closedNonObject) {
+    assert.ok(!unknownKeys.has(`${row.file}:${row.line} ${row.reason}`));
+  }
+  assert.equal(closedKeys.length, out.closedNonObject.length);
+});
+
+test('C-a2 closedNonObject is a SEQUENCE: a duplicated identity tuple is legal', () => {
+  const out = buildProducers();
+  const tuples = out.closedNonObject.map((r) => `${r.plane}|${r.file}|${r.line}|${r.ordinal}`);
+  // the section keeps every occurrence; deduping would UNDERCOUNT the receipt
+  assert.equal(tuples.length, out.stats.closedNonObject);
+  assert.ok(new Set(tuples).size <= tuples.length);
+});
+
+test('C-a1 the receipt publishes the same identity family as unknownProvenance', () => {
+  const out = buildProducers();
+  for (const row of out.closedNonObject) {
+    for (const field of ['plane', 'file', 'symbol', 'line', 'ordinal', 'template', 'reason']) {
+      assert.ok(field in row, `closedNonObject row is missing ${field}`);
+    }
+    assert.equal(row.plane, 'tsx-inline-stamp');
+    assert.match(row.reason, /^(literal-kind:|undefined-keyword|prefix-unary-not-object|template-expression-css-string)/);
+  }
+  assert.match(out.digests.closedNonObject, /^[0-9a-f]{64}$/);
+});
+
+test('NA-1 an object literal is NEVER closed by proof: it still emits', () => {
+  const scan = scanOf(stampOn("{ '--ds-x': 'red' }"));
+  assert.equal(scan.closedNonObject.length, 0);
+  assert.equal(scan.stamps.length, 1);
+  assert.equal(scan.stamps[0].channel, '--ds-x');
+});
+
+test('NA-2 an identifier bound to an object is NEVER closed: the binding is followed', () => {
+  const scan = scanOf("const s = { '--ds-y': 'blue' };\n" + stampOn('s'));
+  assert.equal(scan.closedNonObject.length, 0);
+  assert.equal(scan.stamps.length, 1);
+  assert.equal(scan.stamps[0].channel, '--ds-y');
+});
+
+test('NA-3 a member access stays UNRESOLVED: this rule does not pretend to cover it', () => {
+  const scan = scanOf(stampOn('theme.styles'));
+  assert.equal(scan.closedNonObject.length, 0);
+  assert.equal(scan.unresolved.length, 1);
+  assert.equal(scan.unresolved[0].form, 'member-access');
+});
+
+test('NA-4 ANTI-RELABEL: the cohort is a function of the AST, not of a list', () => {
+  // Neutralising the predicate must send every closed site back to unresolved.
+  // If the drain came from an allowlist this assertion could not be written.
+  const scan = scanOf(stampOn("'literal'"));
+  assert.equal(scan.closedNonObject.length, 1);
+  assert.equal(provablyNonObject(null), null);
+  const objectLike = scanOf(stampOn("{ '--ds-z': '1' }"));
+  assert.equal(objectLike.closedNonObject.length, 0);
+  // the predicate decides on kind alone -- same text, different kind, different verdict
+  assert.notEqual(scan.closedNonObject[0].reason, null);
+});
+
+test('NA-5 NO RE-ROUTE: a guarded object still reaches the sink and still emits', () => {
+  const scan = scanOf(stampOn("cond && { '--ds-guard': 'v' }"));
+  const channels = scan.stamps.map((s) => s.channel);
+  assert.ok(channels.includes('--ds-guard'), `guarded object must still emit; got ${JSON.stringify(channels)}`);
+});
+
+test('NA-6 DeleteExpression is OUT OF SCOPE and is not closed by this rule', () => {
+  const scan = scanOf("const o = {};\n" + stampOn('(delete o.k, o)'));
+  assert.equal(scan.closedNonObject.filter((r) => r.reason.startsWith('literal-kind')).length, 0);
+});
+
+test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other buckets', () => {
+  const out = buildProducers();
+  const byReason = out.stats.unknownProvenanceByReason;
+  assert.ok(!('unresolved-expression' in byReason), 'the key must be removed, not zeroed');
+  assert.equal(byReason['unresolved-identifier'], 775);
+  assert.equal(byReason['unresolved-spread'], 635);
+  assert.equal(byReason['unresolved-member-access'], 389);
+  assert.equal(byReason['unresolved-call'], 153);
+  assert.equal(byReason['unresolved-dynamic-setProperty'], 4);
+  assert.equal(Object.values(byReason).reduce((a, b) => a + b, 0), 1956);
+});
+
+test('C-a4 the frozen counters do not move with this tranche', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.ownershipConflicts, 0);
 });

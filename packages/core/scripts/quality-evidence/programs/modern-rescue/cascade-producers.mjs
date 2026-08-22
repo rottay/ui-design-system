@@ -208,6 +208,42 @@ function customPropertyKey(name) {
  * resolve — declared, never silently dropped, because an unresolved
  * passthrough is exactly the shape that would hide a producer.
  */
+/**
+ * Syntactic forms that CANNOT carry a custom property. A site whose backward
+ * resolution lands on one of them is closed BY PROOF -- it is not a producer
+ * hiding behind an unresolved passthrough, so leaving it in `unknownProvenance`
+ * would overstate the debt. The vocabulary is the census shape vocabulary:
+ * literals, `undefined`, a prefix-unary (always boolean) and a template
+ * expression (always a CSS string). Anything richer stays unresolved on
+ * purpose -- this rule adds proof, it never re-routes resolution.
+ */
+// Canonical names, NOT `ts.SyntaxKind[kind]`: that reverse lookup returns the
+// first alias sharing the numeric value, so NoSubstitutionTemplateLiteral would
+// print as `FirstTemplateToken` and NumericLiteral as `FirstLiteralToken`. The
+// receipt has to be stable and readable, so the name is pinned here.
+const NONOBJECT_KINDS = new Map([
+  [ts.SyntaxKind.StringLiteral, "StringLiteral"],
+  [ts.SyntaxKind.NoSubstitutionTemplateLiteral, "NoSubstitutionTemplateLiteral"],
+  [ts.SyntaxKind.NumericLiteral, "NumericLiteral"],
+  [ts.SyntaxKind.TrueKeyword, "TrueKeyword"],
+  [ts.SyntaxKind.FalseKeyword, "FalseKeyword"],
+  [ts.SyntaxKind.NullKeyword, "NullKeyword"],
+]);
+
+/**
+ * The typed reason a node is provably non-object, or null. Decided on the
+ * TypeScript AST node kind -- never on a list of ids, files or lines.
+ */
+export function provablyNonObject(node) {
+  if (!node) return null;
+  const literalKind = NONOBJECT_KINDS.get(node.kind);
+  if (literalKind) return `literal-kind:${literalKind}`;
+  if (ts.isIdentifier(node) && node.text === "undefined") return "undefined-keyword";
+  if (ts.isPrefixUnaryExpression(node)) return "prefix-unary-not-object";
+  if (ts.isTemplateExpression(node)) return "template-expression-css-string";
+  return null;
+}
+
 export function scanTsxSource(rel, text) {
   const source = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const localBindings = new Map();
@@ -221,6 +257,21 @@ export function scanTsxSource(rel, text) {
       ordinal: node.getStart(source),
       symbol: enclosingSymbol(node),
       form,
+      reason,
+      expression: node.getText(source).slice(0, 120).replace(/\s+/g, " "),
+    });
+  };
+  // CLOSED BY PROOF. Same identity family as an unresolved site (line,
+  // ordinal, symbol, text) so the receipt is reconcilable row by row. It is a
+  // SEQUENCE in deterministic generation order: two occurrences can share
+  // file:line:ordinal, so nothing here asserts tuple uniqueness.
+  const closedNonObject = [];
+  const noteClosedNonObject = (node, reason) => {
+    const { line } = source.getLineAndCharacterOfPosition(node.getStart(source));
+    closedNonObject.push({
+      line: line + 1,
+      ordinal: node.getStart(source),
+      symbol: enclosingSymbol(node),
       reason,
       expression: node.getText(source).slice(0, 120).replace(/\s+/g, " "),
     });
@@ -261,6 +312,12 @@ export function scanTsxSource(rel, text) {
     const found = [];
     const node = unwrap(expression);
     if (!node) return found;
+    // PROOF BEFORE SUSPICION.
+    const nonObject = provablyNonObject(node);
+    if (nonObject) {
+      noteClosedNonObject(node, nonObject);
+      return found;
+    }
     if (depth > 6) {
       noteUnresolved(expression, "depth-limit", "backward resolution hit the depth bound");
       return found;
@@ -407,7 +464,7 @@ export function scanTsxSource(rel, text) {
   };
   visit(source);
 
-  return { stamps, styleSinks: sinks.length, unresolved };
+  return { stamps, styleSinks: sinks.length, unresolved, closedNonObject };
 }
 
 /* ================================================= AUTHORED CENSUS DIFF ===
@@ -499,6 +556,9 @@ export function buildProducers({
   artifactsDir = ARTIFACTS_DIR,
 } = {}) {
   const unknownProvenance = [];
+  // Receipt for the sites the scanner CLOSES by proof (see provablyNonObject).
+  // Same identity family as `unknownProvenance`; a SEQUENCE, not a set.
+  const closedNonObject = [];
   const precedenceMetadata = [];
 
   const { byChannel: causalByChannel, excluded: causalExcluded } =
@@ -788,6 +848,17 @@ export function buildProducers({
         detail: `${rel}:${site.line} ${site.reason}`,
       });
     }
+    for (const site of scan.closedNonObject) {
+      closedNonObject.push({
+        plane: "tsx-inline-stamp",
+        file: rel,
+        symbol: site.symbol,
+        line: site.line,
+        ordinal: site.ordinal,
+        template: site.expression,
+        reason: site.reason,
+      });
+    }
     if (scan.stamps.length === 0) continue;
     const bySite = new Map();
     for (const stamp of scan.stamps) {
@@ -1000,6 +1071,7 @@ export function buildProducers({
       emissionsWithCausalRoot: channelEmissions.filter((e) => e.causalRootIds.length > 0).length,
       ownershipConflicts: ownershipConflicts.length,
       unknownProvenance: unknownProvenance.length,
+      closedNonObject: closedNonObject.length,
       unknownProvenanceByReason: unknownProvenance.reduce((acc, row) => {
         acc[row.reason] = (acc[row.reason] ?? 0) + 1;
         return acc;
@@ -1035,6 +1107,9 @@ export function buildProducers({
       unknownProvenance: digest(
         unknownProvenance.map((row) => [row.plane, row.file, row.symbol, row.reason]),
       ),
+      closedNonObject: digest(
+        closedNonObject.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
     },
     producerSites,
     channelEmissions,
@@ -1042,6 +1117,7 @@ export function buildProducers({
     ownershipConflicts,
     precedenceMetadata,
     unknownProvenance,
+    closedNonObject,
   };
 }
 
@@ -1208,6 +1284,7 @@ const ROW_ARRAYS = new Set([
   "ownershipConflicts",
   "precedenceMetadata",
   "unknownProvenance",
+  "closedNonObject",
   "causalRootsExcluded",
 ]);
 
