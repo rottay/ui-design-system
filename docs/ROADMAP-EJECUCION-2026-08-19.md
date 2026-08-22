@@ -488,12 +488,611 @@ como heredado.*
 
 ## 13. Estado de ejecución (vivo — se actualiza con cada lote)
 
+### Libro mayor único del DT — estado vigente 2026-08-21
+
+**Este roadmap es desde ahora la única escribanía durable del programa.** Toda
+medición, adjudicación, implementación, prueba, rechazo, aceptación, bloqueo y
+siguiente paso se registra acá. El handoff externo queda deprecado como simple
+puntero a este documento; no conserva estado paralelo. La regla de escritura es:
+
+1. trabajo en curso se registra en esta sección con estado explícito
+   `READ-ONLY`, `PENDIENTE`, `REJECT` o `ACCEPT_WITH_CORRECTIONS`;
+2. sólo una implementación con pruebas causales seriales, inspección DT y
+   postaudit Fable `ACCEPT` se registra como cierre `✅`;
+3. `roadmap/registry.json` y `checkpoint.intent.json` se actualizan cuando el
+   tranche correspondiente los gobierna; no se inventa progreso para hacerlos
+   coincidir;
+4. cada asiento conserva HEAD/preestado, write-set, hashes de memos, gates,
+   stop conditions y próximo paso, para poder reanudar desde cero sin memoria
+   de la sesión.
+
+#### Autoridad y roles vigentes
+
+- Repo: `/Users/daniel/Developer/Rottay/ui-design-system`.
+- HEAD anclado al abrir este asiento:
+  `9d5582dfdf1d02f1d7e8fd468720b1d829e50454`
+  (`chore(modern-rescue): hand DT control back to Codex`).
+- Preestado: worktree limpio; staged 0.
+- Codex: DT y autoridad de adjudicación.
+- Claude Opus: arquitectura e implementación de riesgo medio.
+- Claude Sonnet Max: medición e implementación mecánica bajo brief cerrado.
+- Fable 5: auditor formal estrictamente read-only.
+- **Kimi K3 está fuera por varios días y no es gate, auditor, implementador ni
+  dependencia**, por aclaración explícita más reciente del owner. Toda cláusula
+  histórica `OPEN_KIMI`, `Kimi bloqueante`, `doble ACCEPT Fable+Kimi` o
+  equivalente queda superseded. Las decisiones abiertas pasan a `OPEN_DT` y se
+  resuelven por Codex con propuesta Opus y challenge Fable.
+
+#### Cierres firmes que sostienen el frente actual
+
+- F0/F0.5/F1/T-1 de transferencia: cerrados según sus asientos históricos.
+- F2 seguro: cerrado; la cola asimétrica permanece detrás de F4B.
+- `program-check.mjs`: `CONSTITUTION_READY` sobre el HEAD anclado.
+- F4A está cerrado hasta F4A-13. No se reescriben sus asientos históricos; las
+  correcciones nuevas se registran en la cadena 14/15/close de abajo.
+
+#### F4A-14 / K4 — plano de raíces
+
+K4 es una reparación documental del plano de raíces: 8 repairs contractuales,
+3 no-op preservados y 5 ausencias preservadas. No materializa themes, no cambia
+pintura y su write-set eventual exacto es:
+
+1. `packages/core/manifest/cascade/root-catalog.json`;
+2. `docs/f4a/roster-variantes.json`;
+3. `docs/f4a/roster-variantes.md`.
+
+Cadena read-only/preaudit:
+
+- Opus v1 `/private/tmp/f4a-14a-opus-implementation-brief.md`, SHA
+  `bb44393a163e1624b75b2d2fbab572b3c50dc71bfc4dd97526c15cf16fa14837`;
+  Fable REJECT v1 `/private/tmp/f4a-14a-fable-preaudit.md`, SHA
+  `50b307dedc89c751c9b77096d8a0a0dd5470258af76e985faa4c0203932adbd2`.
+- Opus v2 SHA
+  `99b31ed5fcd849fe008232a2097a971c5442ac5f70b66f184913b6801be00e76`;
+  Fable REJECT v2 `/private/tmp/f4a-14a-v2-fable-reaudit.md`, SHA
+  `adb815ef7f30dd2d3be5c860271424fd6dbb562ad9556f22a5051949f8e3e53b`.
+- Opus v3 final `/private/tmp/f4a-14a-opus-implementation-brief-v3.md`, SHA
+  `06ecaa76c0a54b018fa91ca5d1bc68326e83e0af8af49c7779361a9ec0622ff1`;
+  Fable `ACCEPT` `/private/tmp/f4a-14a-v3-fable-reaudit.md`, SHA
+  `22c39c6de36f75cd78e53f192f00106af249db033cd20a0e3f559d41cc0f5918`.
+
+Verdad reproducida: 64 raíces suman `268 = 101 + 97 + 70`;
+`tier.page.ink` explica drift `+5`; K4 resta 7 y debe dejar
+`261 = 95 + 96 + 70`. Se preservan BitHire base+dark en raised/overlay
+foreground, `effectIntensity=0.58`, declinaciones Rottay/Evnto y cero
+materialización.
+
+**K4 CERRADO — implementación y postaudit 100%.** Sonnet Max implementó el
+write-set exacto de tres paths y emitió `SOURCE_READY` en
+`/private/tmp/f4a-14a-reporte.md`, SHA
+`20d748556bc9272cd74331701ee7138c1dde25000d1d3fb3bae971e5f407f088`.
+Fable inspeccionó el diff completo, re-derivó la aritmética y dio `ACCEPT` en
+`/private/tmp/f4a-k4-fable-postaudit.md`, SHA
+`e81d965fd51643e6c2a05f0fbcdddc51b6312e793aa8fd91a23b7768472174f4`.
+Resultado: 64 raíces; assignments `261 = 95 + 96 + 70`; estados de canal
+`47 existe / 10 por-crear / 7 solo-artefacto`; exposure `26/28/10` intacto;
+198 entries de roster, 16 reparadas dentro de las ocho raíces objetivo y 174
+fuera byte-idénticas. `control.ratio.iconSize` queda explícitamente parcial y
+su canal se adjudica en F4A-close; no se vende como cerrado. Cero cambio de
+theme, valor, artefacto o pintura; staged 0 y `git diff --check` verde.
+
+#### F4A-15 / K5 — Table, unión semántica y decisiones abiertas
+
+Cadena de medición/adjudicación, toda read-only:
+
+- Sonnet `/private/tmp/f4a-15-k5-sonnet-inventory.md`, SHA
+  `5ea2c0eaef80e802730ae44f139d736565b1f2d51286d8d1adf6b7bd0c2bf2a2`.
+- Opus v2 `/private/tmp/f4a-15-k5-opus-adjudication-v2.md`, SHA
+  `3590a3234222bb74386e2dac4cfd945ee064ae82bf3f30629924c7686e3869a9`.
+- Sonnet semantic map v2
+  `/private/tmp/f4a-15-k5c-sonnet-semantic-map-v2.md`, SHA
+  `fdf3ccc7a1831dce49636afde07d3d5c2f7c73f33bf9a38bc20caff58b3c9c4b`.
+- Fable ratificación semántica
+  `/private/tmp/f4a-15-k5c-v2-fable-ratification.md`, SHA
+  `f0a972c08134c3c307435db15a86d498c4bd826708d8789ad574a2e622b6f967`,
+  `ACCEPT`.
+- Packet final Opus v1 fue rechazado por falsa colisión de write-sets:
+  `/private/tmp/f4a-15-k5-final-packet-fable-preaudit.md`, SHA
+  `44414513d85d4b3d0d34c177be330b26629a8c61abc0d8a29de1dca582d608ca`.
+- Packet corregido Opus v2
+  `/private/tmp/f4a-15-k5-final-decision-packet-opus-v2.md`, SHA
+  `c29bf3fbfd5cdbf81b106d595c70c4572b2864549fdc52746aaf951f27a3ae15`;
+  Fable `ACCEPT` en
+  `/private/tmp/f4a-15-k5-final-packet-v2-fable-ratification.md`, SHA
+  `d2554c9068836bd364e18d979c058ac8e416871d607bdff16220fbbb3cc3fe20`.
+
+Verdades medidas:
+
+- 40 hojas autoradas sin tag = 36 BitHire + 4 Evnto + 0 Rottay, todas en
+  `CHROME.table`;
+- K5a mínimo mecánico = 6 hojas BitHire y contador esperado `40→34`;
+- unión léxica 37 y conjunto emissible 37 están en biyección 1:1;
+- 34 ejes semánticos tras colapsar padding; gaps `46 = 16 + 0 + 30`;
+- 132 canales consumidos por Modern: 34 emitidos+consumidos, 3 emitidos muertos
+  y 98 consumer-only que no son automáticamente campos del theme;
+- `anatomy` es un plano vivo de atributos, no un canal CSS desconectado;
+- los tres números `34` del paquete son distintos: ejes semánticos, canales
+  emitidos+consumidos y destino del contador K5a.
+
+**K5 CERRADO — implementación, postaudit y sello 100%.**
+
+Brief consolidado Opus `/private/tmp/f4a-k5-full-consolidated-opus-brief.md`,
+SHA `7580e63289d7ef2ad3f01e69737ee790e32335d0d6ef8f9809ae2e51a675ace8`. El
+preaudit Fable dio `REJECT` y corrigió 6 governors + `radius` + `cellFontSize`;
+adenda DT `/private/tmp/f4a-k5-full-dt-corrections-v2.md`, SHA
+`f38de26fa8fd20a14825de6ba8f3517a3421dc9de40c83eac0102e6f2336112a`; ratificación
+Fable `/private/tmp/f4a-k5-full-fable-ratification.md`, SHA
+`d4be41dfc06007a27170d4660e83285f2255bf8f5fe2872982f2c9c666c67b12`, `ACCEPT`.
+
+SOURCE_READY Sonnet `/private/tmp/f4a-k5-full-sonnet-source-ready.md`, SHA
+`e3d9adb415abe70e8488e6b295454dac17f4739d6b1f51bead08adb0b62b23e6`; postaudit
+Fable `/private/tmp/f4a-k5-full-fable-postaudit.md`, SHA
+`b4b401eae4fec10ac976845056f5c8fd6abde65063e2f93f0a66822ecf53a619`, `ACCEPT`.
+
+57 docblocks: rottay 17 + bithire 36 + evnto 4; 7 `derived` + 50 `seed`; −1
+family tag stale (rottay), `headerColor` rottay preservado; cero valores
+tocados. `untaggedAuthoredLeaves` 40→0, `divergentSlots` quieto en 33,
+`tagRegistry` 4099→4155. Una sola `Baja #14`. La clausura derivada dejó 11
+diffs materiales de 12 productores porque `root-checklists.json` quedó
+byte-idéntico honestamente (no proyecta líneas de `brand-themes`). R-1
+reprodujo exacto: `1719/1706/12/1`, identidad nominal.
+
+GAT-07 tuvo un primer intento con `STOP` correcto por el alias
+`reproducibility.authorityDigest` (movimiento legítimo mal enumerado en el
+brief); restore limpio. Adjudicación Opus
+`/private/tmp/f4a-k5-gat07-authority-digest-opus.md`, SHA
+`f9ae84efdeb5f9695fc4f30901b003c52e529a5cbe299cc50a64d9d797af7116`; Fable
+`/private/tmp/f4a-k5-gat07-authority-digest-fable.md`, SHA
+`6e2a800ae0956b3c34db5e6b53e8a178cde888408ea4359d4f341d20d7b6abf2`; reintento
+SOURCE_READY `/private/tmp/f4a-k5-gat07-seal-sonnet-retry-source-ready.md`,
+SHA `1427ebec193fc249c818d081eb3147b005a2d90435c09db13af006704e419471`;
+postaudit Fable `/private/tmp/f4a-k5-gat07-seal-fable-postaudit.md`, SHA
+`884d3cbf898ff00cbc25f29b42aaf52522675868eb694b9b268c3ae639ebd01b`, `ACCEPT`.
+`gates:ci`: 89 blocking `PASS` + 2 excluded (`channel-liveness`,
+`lane-control-drills`); `gat-07-exact-proof` en `PASS`; cero build, cero
+browser. El nombre legado `KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json` es un
+artefacto histórico, no un actor de la cadena: Kimi sigue fuera de toda
+decisión.
+
+Deudas separadas pendientes, no reabren K5: placeholder K5c
+`evnto × CHROME.table.border` (posterior al rediseño de `realKeypathParity`,
+ver abajo); retirar `baseline` de `DOMICILES`; los tres canales muertos
+(`filterRowBg`, `filterFocusShadow`, `loadingOverlayBg`); y el sidecar
+`semantic-groups` + su gate como propuesta **posterior, no adjudicada**,
+activable sólo si algún tema empieza a autorar `chrome.<familia>.anatomy`
+(medido hoy: 0/0/0 en los tres temas). Pertenecen a F4A-close.
+
+#### F4A-close — reconciliación read-only y correcciones vinculantes
+
+- Inventario Sonnet `/private/tmp/f4a-close-sonnet-inventory.md`, SHA
+  `d52f36ac4a086bc3f196255573c0d4203032b194bd09685c32a7d569998abd87`,
+  `INVENTORY_READY`.
+- Adjudicación Opus `/private/tmp/f4a-close-opus-adjudication.md`, SHA
+  `9ab5229577259f5bc2df76f31522346f42a9dabb2a74c4ac0be438b8a6d15b2a`,
+  `READY_FOR_FABLE_CHALLENGE`.
+- Challenge Fable `/private/tmp/f4a-close-opus-fable-challenge.md`, SHA
+  `e5375ae35be400a78abb492d3d94b6ad112d57989ca02f85fb0968cde2939845`,
+  `ACCEPT_WITH_CORRECTIONS`.
+
+Hallazgos aceptados:
+
+1. `program-check.test.mjs` muta/renombra el manifest real mientras el gate lo
+   corre concurrente con `manifest/generator/index.test.mjs`: P1 de carrera y
+   P0 de `renameSync`; `try/finally` restaura asserts, no crash/SIGKILL.
+2. `cra-12` planta en source real; se aísla separadamente con
+   `--workspace-root` y copia de los dos sourceRoots completos (medidos
+   ~46 MB/4264 archivos), conservando digest path-relativo+contenido.
+3. `cascade-wiring-ratchet` trata cualquier fallback como raíz posicional, no
+   consulta root-catalog y sus cuatro invariantes de forma son tautológicos.
+   Caso vivo: `--ds-input-md-icon-size`. La reconstrucción queda PRE_F4B; F4A
+   sólo deja una cerca honesta.
+4. `realKeypathParity` no existe. La fórmula Opus
+   `evaluatedUnion - evaluatedIntersection -> 0` queda **rechazada** por
+   inalcanzable (`2559-342=2217` con exclusividad legítima); `1918/1823` queda
+   prohibido sin derivación reproducible. Debe rediseñarse para certificar cero
+   shadowing real sin castigar exclusividad adjudicada ni esconder placeholders.
+5. `program.statusAuthority` es un pin literal, no una ruta resuelta. El bloque
+   README stampado es el drift operativo severo y `program-state --check` no
+   está cableado a CI.
+6. Restore universal `git show HEAD:path > path` queda rechazado. Todos los
+   tranches usan backup por contenido, prehash, existencia por path, restore por
+   copia+rehash y diff completo del porcelain.
+7. Denominador F4A-close = 14 salvo subsunción DT citada de la clase
+   `evnto compone desde preset canónico`. Preparación honesta tras challenge:
+   `14/14` medida, aproximadamente `7/14` diseñada, `0/14` implementada.
+
+Correcciones Fable C-1…C-7 son vinculantes: rediseño de paridad; reapertura
+explícita de T-0; autorización explícita para adelantar test-hygiene; clausura
+completa del sandbox (`customization-surface-census`, AGENTS/CLAUDE, showroom y
+~25 site-files); negativas que cubran ambos backups y crash determinista sólo
+post-fix; clase Evnto faltante; postura de roots `por-crear`/`solo-artefacto`.
+Las frases del memo Fable que aún tratan a Kimi como gate quedan superseded por
+la orden más reciente del owner registrada arriba; las correcciones técnicas
+permanecen válidas.
+
+#### Resolución DT de secuencia
+
+Resolución durable preparada en
+`/private/tmp/f4a-pre-k4-dt-sequence-ruling.md`, SHA
+`baa48c13d99db39c150c4eb2329d189e24e8bb34340a04a83b391549565c7bd2`.
+El DT reabre expresamente la adjudicación histórica que enviaba authority/test
+hygiene después de K4, porque no se certificará K4/K5 con evidencia dependiente
+del timing ni con el punto de entrada humano publicando roles retirados.
+
+Cola vinculante vigente. Los nombres `T-*` son **micro-tranches locales de
+hardening pre-K4**; no son F0 ni reinician el roadmap:
+
+1. **Hardening pre-K4 / authority-honesty (antes T-0)**: corregir
+   intent/README, cablear `program-state --check`, canon esperado
+   `89 blocking + 2 excluded`.
+2. **T-1a**: sandbox de `program-check.test.mjs`, clausura derivada y negativas
+   de mutación/crash; serialización sólo como cerca interina.
+3. **T-1b**: sandbox `cra-12`, corpus completo relevante y baseline pair-aware.
+4. **K4 — CERRADO**: brief v3, tres paths, tests seriales y postaudit Fable
+   `ACCEPT`.
+5. **K5 — CERRADO**: 57 docblocks (7 `derived` + 50 `seed`), `untaggedAuthoredLeaves`
+   40→0, `divergentSlots` 33, `tagRegistry` 4155; postaudit Fable `ACCEPT`;
+   GAT-07 sellado (reintento) con postaudit Fable `ACCEPT`; `gates:ci` 89
+   blocking + 2 excluded.
+6. Paridad real — **CERRADA**: `silentPairs` 53→0 sobre 7677 pares,
+   `placeholderPairs` quieto en 3969, `tagRegistry` 4208; postaudit Fable
+   `ACCEPT`.
+7. **F4A-close — CERRADO 14/14 (2026-08-22)**: Lotes A (parser P2 + 52
+   governors + cerca PRE_F4B), B (iconSize) y C (retiro de `baseline` de
+   `DOMICILES`, la última obligación abierta), cada uno con postaudit
+   Fable `ACCEPT`; arbitraje final Fable `F4A_KEEP_OPEN→CERRADO` con los
+   ocho requisitos de su §4 resueltos. Ver asiento arriba.
+8. `PRE_F4B` (inventario mecánico del gate cascade — `INVENTORY_READY`,
+   diseño/implementación NO aceptados) → `F4B 20/20` (bloqueado hasta el
+   gate falsable de cascade) → F2 asimétrico → F3 responsive/skins → F4C
+   premium → F5 → F6 → F7 → F8 → F9 5100/5100.
+
+#### Hardening pre-K4 / authority-honesty — SELLADO
+
+Fable ratificó la secuencia completa con `ACCEPT` en
+`/private/tmp/f4a-pre-k4-fable-sequence-ratification.md`, SHA
+`e6a6ba3f60924d8ada3b9d740e43ed30c2d6083439bdb54b1c6149b5d521a263`.
+Queda vinculante R-1: K4/K5 se comparan contra la baseline re-anclada después
+de que T-1a y T-1b estén aceptados, supersediendo el literal histórico
+`1717/13` sin editar sus briefs. También queda vinculante R-3: este lote deja
+el canon en `89 blocking + 2 excluded`; si T-5 agrega otro gate debe
+re-declararlo y arrastrar todos los contadores vivos.
+
+El DT admitió el write-set exacto de cinco paths en
+`/private/tmp/f4a-t0-dt-adjudication.md`, SHA
+`0d9b57705609be63533e3ede44a3feaa10b396484790f66ea96a44711fe4d468`.
+Opus implementó el lote y emitió `SOURCE_READY` en
+`/private/tmp/f4a-pre-k4-hardening-opus-source-ready.md`, SHA
+`291ff3e9c8e0cecc22e42dcd3a1194059337574a11cafc0ddef707193d27e94a`.
+Fable inspeccionó el diff completo y dio `ACCEPT` final en
+`/private/tmp/f4a-pre-k4-hardening-fable-postaudit.md`, SHA
+`929870cd5ccfb1fb54fca8474e08733ca2e8a5c0b312b2688a61456f97232997`.
+
+Resultado medido: `program-state --check` verde; `intentDigest`
+`5a86b12ae6369bdd`; `renderDigest` `55b37c5b919255e4`; gate nuevo único en
+índice 14; `91 total = 89 blocking + 2 excluded`; `validateManifest []`;
+`gates:ci` completo bajo Node `v22.17.0` con `89 PASS / 0 FAIL / 2 excluded`.
+La primera corrida bajo Node 25 falló honestamente en `gat-07-exact-proof`
+porque CI pinea major 22; ese gate sólo lee `ci.yml` y `pnpm-lock.yaml`, fuera
+del write-set. Ambas corridas quedaron preservadas. La negativa de edición
+manual del bloque dispara P8 sola, no P7+P8: P8 conserva detección blocking y
+Fable aceptó explícitamente la corrección. HEAD no se movió, staged sigue 0 y
+no hubo commit.
+
+#### T-1a / sandbox de `program-check.test.mjs` — SELLADO
+
+Opus emitió brief read-only
+`/private/tmp/f4a-pre-k4-t1a-opus-brief.md`, SHA
+`53110c0573ec41e3c208028ad3b0e1046862f46e6f5872519376fe3a67465e02`,
+con write-set corregido a un solo path. Fable lo preauditó con `ACCEPT` en
+`/private/tmp/f4a-pre-k4-t1a-fable-preaudit.md`, SHA
+`be99a11fe11c3bf3d94235659e7fa02ad69ff1aaa5e28f6be4bdb6b4cf23ab6e`.
+Sonnet Max implementó el sandbox y emitió `SOURCE_READY` en
+`/private/tmp/f4a-pre-k4-t1a-sonnet-source-ready.md`, SHA
+`95d695f8190fd4ed4c2e70a59781403ce011609653559f2936b644f700344906`.
+Fable inspeccionó el diff completo y dio `ACCEPT` final en
+`/private/tmp/f4a-pre-k4-t1a-fable-postaudit.md`, SHA
+`f5c3f1044f03261b40f271eceb1189df0e81acca856b52ba2f1403075a8cb851`.
+
+Resultado: las 37 escrituras y tres pares de rename de la suite caen sólo en
+un sandbox de clausura completa fuera del repo; imports y resolvers no vuelven
+al árbol vivo; los dos symlinks de `node_modules` son read-only y el guard
+rechaza write-through. Cohorte causal repetida tres veces, cinco SIGKILL,
+manifest vivo `360/360` byte-idéntico y cero residuos. `test:scripts` midió
+`1719 tests / 1705 pass / 13 fail / 1 skip`: las mismas 13 fallas nominales
+preexistentes y dos tests verdes adicionales. `gates:ci` bajo Node 22 quedó
+`89 blocking pass / 0 fail / 2 excluded`.
+
+#### T-1b / sandbox del drill CRA-12 — SELLADO
+
+Brief Opus
+`/private/tmp/f4a-pre-k4-t1b-opus-brief.md`, SHA
+`83df046539cc498ee129c7fd9fc48a11856488f9fc53e88f1ffa74e0be50ca7d`;
+preaudit Fable `ACCEPT` en
+`/private/tmp/f4a-pre-k4-t1b-fable-preaudit.md`, SHA
+`1223e2cf83c90d447e6e558bbfb4e7b2499cb3b09115e161bfb2ddcf55076eee`.
+Sonnet Max implementó el único path y emitió `SOURCE_READY` en
+`/private/tmp/f4a-pre-k4-t1b-sonnet-source-ready.md`, SHA
+`1a42e6fffc22b1a7dcb1b42c12cb5adbc088de905bb0da9b79ff996fc5c66e86`.
+Fable atacó el diff real, cleanup, escapes y false-greens, y dio `ACCEPT`
+final en `/private/tmp/f4a-pre-k4-t1b-fable-postaudit.md`, SHA
+`df8f92c8ce08d48651596d9eaed55b2d4228bd4e04941feff4fb8fe7ed2f1ac9`.
+
+Resultado: `cra-12-motion-governance.reanchor.test.mjs` copia el corpus
+completo gobernado a un sandbox fuera del repo y la planta vive sólo allí.
+Directo `6/6`, hermana `16/16`, cohorte con el walker `66/66` por tres
+corridas y ambos `export-missing`/`export-unshipped` verdes sin alternancia.
+`gates:ci` bajo Node 22: `89/89 blocking PASS`, `0 FAIL`, `2 excluded`.
+El árbol vivo, registry y siete dirty preexistentes quedaron byte-idénticos;
+staged 0, cero residuos y ningún commit.
+
+La desviación de backup por `git show` fue aceptada por Fable como no material
+en este caso limpio, pero queda escalada como ley V-1: desde el próximo tranche
+el backup es `cp` del worktree verificado contra prehash y una tercera
+reincidencia es `REJECT` procesal.
+
+#### R-1 / baseline de pierna 1 — RE-ANCLADA
+
+Asiento durable del DT:
+`/private/tmp/f4a-pre-k4-r1-reanchor.md`, SHA
+`09d8a180cd0ab34bbde5656ac77536f66c4c33c2d215c8130038cdeaf23c0c23`.
+Después de ambos postaudits `ACCEPT`, Codex ejecutó dos `pnpm test:scripts`
+oficiales, seriales, bajo Node `v22.17.0`. Ambas dieron exactamente
+`1719 tests / 1706 pass / 12 fail / 1 skip`; el diff de nombres completos,
+fallas y skips entre runs fue vacío. Logs:
+`/private/tmp/f4a-r1-official-run-1.log` SHA
+`9d931a1fa811b2c63bf23a3a70a0d3ef5a1e5fe3886eabe322cb461ddf19e007`
+y `/private/tmp/f4a-r1-official-run-2.log` SHA
+`e59903275b46a94b56dd2cf0709f3fb9cc22da633654c3fbe636e901c500c260`.
+
+Los dos tests agregados quedan nombrados: `coordinator succession fails
+closed` y `tenant art direction creative advisor retirement fails closed`,
+ambos verdes. El único skip es `--modern reports the four states over the real
+tree and keeps them internally consistent` porque `dist` no está construido.
+Los 12 fallos nominales exactos viven en el asiento durable; ninguno es
+`export-missing` ni `export-unshipped`, que quedaron verdes en ambas corridas.
+
+R-1 supersede el literal histórico `1717/13` para aceptar K4/K5 sin editar
+briefs ni asientos históricos. K4 y K5 están implementados y postauditados
+`ACCEPT`; K5 reprodujo R-1 exacto (`1719/1706/12/1`, identidad nominal).
+
+La paridad real (`realKeypathParity`) **CERRÓ**: nueva disposición
+`@absent <hoja exacta>` + `@governor` en `variant-parity` (ruling DT + Fable
+`ACCEPT_WITH_BINDING_CORRECTIONS`); 53 bloques escritos en los 3 temas
+(rottay 19, bithire 1, evnto 33), incluido `evnto × CHROME.table.border`
+como `declared-absent` — no placeholder. `silentPairs` 53→0 sobre 7677 pares
+(tema,slot); `placeholderPairs` quieto en 3969; `tagRegistry` 4155→4208;
+47/47 tests del productor verdes. R-1 reprodujo `1732/1719/12/1`: +13 tests
+(los de este lote, todos verdes, cero regresión), los 12 fallos y el skip
+idénticos a la referencia. `gates:ci` cerró 89 blocking + 2 excluded.
+SOURCE_READY Sonnet
+`/private/tmp/f4a-close-real-parity-sonnet-source-ready.md`, SHA
+`9256c7688d8b6af488c1cdbf51ee8ae22251fc2f63b4754077d59bb6b8dbe73c`;
+postaudit Fable `/private/tmp/f4a-close-real-parity-fable-postaudit.md`, SHA
+`c1b081910ad347ad1d6cc02f659e71763186313d08df20fafab4ecc00e90b563`, `ACCEPT`
+(un hallazgo P2 no bloqueante, ver abajo).
+
+El sidecar `semantic-groups` sigue sin ancla en el repo y sin adjudicar
+(Opus, `/private/tmp/f4a-close-semantic-groups-opus.md`, SHA
+`9298efb4fbd690fdfc88722c57b2ea3929b46f0755bda902063bd73ad30f5cdc`,
+`VERDICT: STOP`): el plano `attribute` no existe en el universo de
+`authoredLeafPaths` porque `anatomy` no está autorado por ningún tema hoy
+(0/0/0), así que el sidecar sólo se activaría si eso cambiara. Queda como
+propuesta posterior sin adjudicar. El siguiente paso de F4A-close son las
+deudas semánticas, el ratchet a cero, la cerca cascade y la auditoría final
+(cola vinculante, ítem 6).
+
+**P2 no bloqueante registrado (Fable, postaudit real-keypath-parity):** la
+regex de continuación `nextIsText` en `manifest/variant-parity/index.mjs`
+(línea ~192 a la fecha del postaudit) sigue siendo
+`@(domicile|governor|placeholder)` sin `absent`. Efecto medido: un docblock
+ordenado `@governor` antes que `@absent` se rechaza como `malformed:
+"governor multilinea"` — fail-closed (rojo de más, nunca verde de menos),
+mensaje engañoso nada más; impacto vivo hoy es cero (los 53 bloques usan la
+forma canónica `@absent` primero). Arreglo mínimo para la próxima vez que se
+toque este archivo: extender el patrón a
+`@(domicile|governor|placeholder|absent)\b`, con un fixture de orden
+invertido.
+
+#### F4A / F4A-close — CERRADO 14/14 (2026-08-22, acto DT)
+
+Arbitraje final Fable, `/private/tmp/f4a-final-conflict-fable.md`, SHA
+`f3737fd8ee778b10001e1ac0a9a5314ee708bdf03e5a46ca1550437afdb7a425`:
+veredicto `F4A_KEEP_OPEN` condicionado a un solo lote sustantivo (Lote C);
+los otros tres conflictos abiertos (C-1a los tres canales, C-1c el
+sidecar, C-3 la clase evnto/preset) quedaron adjudicados en el mismo
+arbitraje, sin escritura. Ejecutados en orden, cada uno con SOURCE_READY
+Sonnet + postaudit Fable:
+
+- **Lote A** — parser P2 + 52 governors + cerca PRE_F4B + clausura
+  derivada. SOURCE_READY Sonnet
+  `/private/tmp/f4a-close-lot-a-sonnet-source-ready.md`, SHA
+  `376864d0350661cedcffd8d91597baf6852e1fc243eeb7def4625e7eb43c8f24`.
+  Postaudit final (sello GAT+CI) Fable
+  `/private/tmp/f4a-close-lot-a-fable-final-postaudit.md`, SHA
+  `fe593863a4ee9daaa73ec33950dba329f69f6d2817afcd898178a7e1b75f11c9`,
+  `ACCEPT`. Cierra el parser (`nextIsText` acepta ahora `@absent`, con el
+  fixture de orden invertido exacto que pedía el P2 anotado arriba en el
+  asiento de paridad real — **esa deuda queda resuelta, no sólo
+  documentada**), 52 docblocks de sólo texto (10 CHARTS + 18
+  CHROME.accent `unassigned→seed`; 12 CHROME.statsGrid + 12
+  OVERLAY.chrome.statsGrid gemelas confirmadas `seed`, cero valor
+  tocado), la cerca ejecutable PRE_F4B (`rootsExcludedNote` + test
+  consumido por `cascade-wiring-ratchet-drill`, sin fila de gate nueva) y
+  la clausura derivada causal (`fanout-facts`/`root-checklist`
+  byte-idénticos). `tagRegistry` queda quieto en 4208. GAT-07 resellado
+  sobre este source, `gates:ci` 89+2.
+- **Lote B** — iconSize: catálogo + generator + `manifest/index.json` +
+  roster. SOURCE_READY Sonnet
+  `/private/tmp/f4a-close-lot-b-sonnet-source-ready.md`, SHA
+  `57161e5b7c86814c5e8bcf5a945758c0dae0c2ace0687cbf1dd7a97fbee40e86`.
+  Postaudit Fable `/private/tmp/f4a-close-lot-b-fable-postaudit.md`, SHA
+  `06a624a2bd79c9a3d582ed85cb0added96abc816596060886688fae9af032793`,
+  `ACCEPT`. `control.ratio.iconSize.channel` pasa de `--ds-icon-md-size`
+  (canal que ningún tema emite) a `--ds-input-md-icon-size` (declarado en
+  `input.css:38`, emitido por rottay y bithire); `manifest/index.json`
+  mueve sólo `inputsDigest`; los 275 JSON de `manifest/controls/**` +
+  `manifest/families/**` byte-idénticos a HEAD; roster 198→198 entradas,
+  retirada la cláusula "residuo abierto para F4A-close" en
+  rottay/bithire.
+- **Lote C** — retiro de `baseline` del vocabulario cerrado `DOMICILES`,
+  la ÚNICA obligación implementable que mantenía `F4A_KEEP_OPEN`.
+  SOURCE_READY Sonnet
+  `/private/tmp/f4a-close-lot-c-sonnet-source-ready.md`, SHA
+  `efce37aadebf3e2787ec8c5376040ace54cf33b98859d85793e202400d6a9eed`.
+  Postaudit único Fable (sin GAT)
+  `/private/tmp/f4a-close-lot-c-fable-postaudit.md`, SHA
+  `1c5a9a865ae54cf131d208e4237668949e13fe3782660fe1cca14ea39bb5b3ed`,
+  `.ready` (`verdict=ACCEPT`, `f4a_close=HABILITADO`). `DOMICILES` pasa a
+  `['seed', 'derived', 'pro-expert', 'unassigned']` (una palabra
+  retirada; el mensaje de fallo deriva sólo del `.join`); negativa nueva
+  `@domicile baseline` ⇒ exactamente 1 failure con el mensaje exacto;
+  `generated/variant-parity.json` cambia únicamente la línea `law`
+  (:187). Write-set exacto 3 paths, ningún cuarto path material tocado
+  (una anomalía de mtime en `root-catalog.json` fue adjudicada por Fable
+  como byte-neutral: el drill `root-exposure-gate` planta y restaura en
+  `finally`, hash antes==después de la propia corrida de `gates:ci`).
+
+Con el `ACCEPT` de Lote C sobre la ÚLTIMA obligación abierta, **F4A y
+F4A-close quedan CERRADOS, 14/14, por acto del DT**, respaldado por el
+`ACCEPT` final de Fable (arbitraje §3/§4 + postaudit del Lote C, que
+declara textualmente "F4A PUEDE CERRAR").
+
+**Canon final** (medido en los tres lotes, quieto salvo lo declarado
+arriba): `tagRegistry` **4208** · `ratchet.silentPairs` **0** ·
+`ratchet.placeholderPairs` **3969** · `ratchet.declaredAbsentPairs`
+**53** · `ratchet.untaggedAuthoredLeaves` **0** · `ratchet.divergentSlots`
+**33** (informativo — placeholders que ningún tema autora; el cero real
+de shadowing lo certifica el gate `realKeypathParity`, ya cerrado en el
+asiento de paridad real, no esta cifra). R-1 (`pnpm test:scripts`, Node
+22): **`1735/1722/12/1`** (+1 sobre la vara previa `1734/1721/12/1`,
+exactamente la negativa nueva de Lote C), **mismo failure-set/hash
+`4d6eda2d…`** que la vara anterior — cero regresión, cero re-ancla.
+`gates:ci`: **89 blocking + 2 excluded** (`channel-liveness`,
+`lane-control-drills`, dueño F2/F2-asimétrico) en los tres lotes.
+
+**Los ocho requisitos del arbitraje (§4), resueltos uno por uno:**
+
+1. `evnto × CHROME.table.border` queda **`@absent`** (paridad real, no
+   placeholder) — resuelto antes del arbitraje; este asiento lo ratifica.
+2. **Corrección de prosa K5**: los tres canales
+   `filterRowBg`/`filterFocusShadow`/`loadingOverlayBg` — la descripción
+   previa de "3 emitidos muertos" queda corregida. Medido en el
+   arbitraje: **sin lector en el engine Modern, pero compatibility-vivos
+   para rustic** (`--ds-table-filter-row-bg` 1 lector rustic;
+   `--ds-table-filter-focus-shadow` 1 lector rustic;
+   `--ds-table-loading-overlay-bg` 2 lectores rustic + 1 emisión default
+   en `default.css:1723`). **No se retira ninguno de los tres.**
+3. El sidecar `semantic-groups` queda ratificado tal cual estaba: la
+   transferencia ya lleva condición falsable escrita (medido hoy **0/0/0**
+   en los tres temas — activable sólo si algún tema empieza a autorar
+   `chrome.<familia>.anatomy`); propuesta posterior, no adjudicada.
+4. **C-6 / la clase "evnto compone desde preset canónico" — subsumida por
+   F4A-12, cita explícita**: las **845 ausencias de evnto** reconciliadas
+   una por una en F4A-12 son **todas piso** (medido por placeholder),
+   **cero overlay/preset** — evnto no compone desde ningún preset. La
+   clase queda disuelta por medición, no por definición.
+5. **Obligación del digest `basedOnReportDigest` — cerrada por el
+   mecanismo, no por re-anclaje manual**: el gate bloqueante de
+   `tokens-catalog` valida fail-closed (`catalog/index.mjs:1186`:
+   `recon.basedOnReportDigest !== reportDigest` ⇒ failure "reconciliation
+   digest mismatch… regenerate both"), el drill `recon-digest` está
+   testeado (`catalog-gate.test.mjs:103`) y el productor de regeneración
+   `tokens:catalog:write` existe y corre. El digest no puede quedar
+   huérfano en silencio; el re-anclaje manual por sí solo NO habría
+   cumplido esta obligación.
+6. `baseline` retirado de `DOMICILES` — Lote C, arriba.
+7. R-1 nueva vara: `1735/1722/12/1` — canon, arriba.
+8. Fase siguiente: **PRE_F4B**, con **F4B bloqueado hasta el gate
+   falsable de cascade** — ver bloque siguiente.
+
+**Dos residuos P2, no bloqueantes, registrados para drenar con causa
+futura (NO editados en este asiento):**
+
+- `GOVERNOR_CLASS.baseline: 'razon-falsable'` sigue en
+  `manifest/variant-parity/index.mjs:149` — inerte: el mapa es
+  reporta-no-bloquea y la clave es inalcanzable (el vocabulario cerrado
+  falla antes de llegar a leerla); retirarlo habría sido un cuarto edit
+  fuera del write-set autorizado de Lote C.
+- `docs/f4a/esquema-asignacion.md:18` sigue enumerando la gramática con
+  cinco domicilios (`seed | baseline | derived | pro-expert |
+  unassigned`) — eco documental stale, superseded por este ledger. No se
+  toca ese archivo en este asiento.
+
+#### PRE_F4B — inventario mecánico del gate cascade (en curso, NO aceptado)
+
+Inventario Sonnet, read-only, `/private/tmp/pre-f4b-sonnet-inventory.md`,
+SHA `411f29a1fe4a66f63160db12d8c11a66c33b92d5d09f112cb7da578503ddd731`,
+verdict `INVENTORY_READY`. **Es medición mecánica, no diseño ni
+implementación aceptada** — ningún número de este bloque autoriza a abrir
+F4B.
+
+Medición central: `cascade-wiring-ratchet` trata como "raíz" cualquier
+`--ds-X` que aparezca como target dentro del fallback de un
+`var(--ds-Y, ...)` ajeno — noción **puramente posicional por nombre**,
+sin acoplamiento mecánico con `manifest/cascade/root-catalog.json` (64
+filas / 60 canales únicos; el script del ratchet no lo importa ni lo
+referencia, cero apariciones verificado por lectura completa de sus 211
+líneas). De los **768** nombres que hoy excluye del denominador como
+"raíz":
+
+- sólo **38** son un canal canónico real del catálogo;
+- **730** (95,1%) son **raíces posicionales** — canales de componente
+  ordinarios que otro canal usa como su propio fallback, sin ninguna
+  cualidad arquitectónica de raíz. El caso ya adjudicado en el hallazgo 3
+  del challenge Fable de F4A-close (`--ds-input-md-icon-size`, resuelto
+  en Lote B arriba) es la punta de este conjunto de 730, no un caso
+  aislado.
+
+Sobre el grafo completo de reachability transitiva (5142 nodos, mismo
+parser balanceado del ratchet, ningún parser nuevo): **1563** nodos
+alcanzan una raíz canónica siguiendo 1+ saltos de fallback; 45 SON
+canónicos; el resto se reparte en terminales legítimos (declarados, con o
+sin fallback), terminales sin productor y **68 ciclos** que nunca tocan
+una raíz canónica. **El gate actual no prueba ninguna de las dos
+preguntas centrales — ni cuántas de sus 768 "raíces" son reales, ni si un
+nombre alcanza alguna** — sólo cuenta cableado posicional. Ese es el gate
+falsable de cascade que el arbitraje Fable (§4, punto 8) exige antes de
+abrir F4B.
+
+Este asiento NO adjudica diseño ni implementación. PRE_F4B queda con
+inventario mecánico completo; el diseño del gate real y su implementación
+son el siguiente paso, con dueño DT.
+
+#### Progreso operativo, no certificación
+
+| Hito | Avance vigente |
+|---|---:|
+| F0/F0.5/F1 + transferencia DT | 100% |
+| F2 seguro | 100% |
+| F4A estructural | 100% CERRADO (F4A-close 14/14, Lotes A/B/C, postaudit Fable `ACCEPT`) |
+| Cobertura de hojas F4A | `2559/2559 y 0/7677 pares silenciosos; divergentSlots 33 sólo informativo` |
+| Hardening pre-K4 / authority-honesty | 100%; `SOURCE_READY` + postaudit Fable `ACCEPT` |
+| T-1a sandbox `program-check.test.mjs` | 100%; `SOURCE_READY` + postaudit Fable `ACCEPT` |
+| T-1b sandbox `cra-12` | 100%; `SOURCE_READY` + postaudit Fable `ACCEPT` |
+| R-1 baseline de pierna 1 | 100%; `1735/1722/12/1` vigente (Lote C), mismo failure-set/hash `4d6eda2d…` que la vara previa |
+| K4 | 100%; implementación + postaudit Fable `ACCEPT` |
+| K5 | 100% implementación + postaudit + GAT/CI |
+| F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
+| PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
+| F4B | 0/20 controles — **bloqueado hasta que PRE_F4B entregue el gate falsable de cascade** |
+| F2 asimétrico | 0% |
+| F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
+| F9 | 0/5100 celdas aceptadas |
+| Programa completo | estimación prudente 39–43% realizado; 57–61% pendiente. Cerrar F4A **no certifica** F4B ni F9: ambos con gate/celdas propios, aún pendientes |
+
+**Regla de reporte:** el porcentaje sólo cambia por implementación o aceptación
+real; producir memos read-only no infla progreso.
+
 **Enmienda de secuencia vigente (dueño, 2026-08-20).** El frente actual sigue
 siendo F2.4 y su packet abierto no se cancela. F2 continúa packet por packet
 hasta que no quede ningún cluster con cero-delta computado demostrable. Cerrado
 ese conjunto seguro y auditado, el próximo frente es **F4A**, no F3; el residuo
 F2 dependiente de theme queda explícitamente detrás de F4B. La cola vinculante es:
-`F4A → F4B → F2 asimétrico → F3 → F4C → F5 → F6 → F7 → F8 → F9`.
+`F4A → PRE_F4B → F4B → F2 asimétrico → F3 → F4C → F5 → F6 → F7 → F8 → F9`.
+**F4A cerró 14/14 el 2026-08-22** (ver asiento arriba); PRE_F4B tiene
+inventario mecánico pero F4B permanece bloqueado hasta el gate falsable de
+cascade.
 F1 permanece correctamente «gobernado», pero no se reinterpretará como
 certificación: el rollup `UNKNOWN` sólo baja con evidencia causal y F9 lo lleva
 a cero.

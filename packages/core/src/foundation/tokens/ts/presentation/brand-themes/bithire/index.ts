@@ -4103,27 +4103,27 @@ const MOTION: BrandMotion = {
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   mountDuration: 400,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   lineStyle: "smooth",
   showDots: false,
   useGradientFill: true,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   tooltipStyle: "detailed",
   // The monochrome family keeps dense recruiting charts legible; semantic
   // highlights still use success/warning/error at the call site.
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   colorScheme: "monochrome",
 };
@@ -4190,33 +4190,33 @@ const CHROME: BrandChrome = {
    */
   accent: {
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barPosition: "none",
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barThickness: 0,
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barStyle: "solid",
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     iconContainerShape: "circle",
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     badgeShape: "pill",
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     dividerStyle: "solid",
   },
@@ -7232,48 +7232,196 @@ const CHROME: BrandChrome = {
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
    */
   table: {
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de las raices tier (tier.control.bg, tier.raised.bg, tier.page.bg, tier.overlay.bg); es el eje H4: coincide en base y diverge en dark; el fallback literal del skin es --ds-surface-card (data-table.css:288)
+     */
     bg: "#ffffff",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea)
+     */
     border: "#D4E0EA",
+    /**
+     * @domicile seed
+     * @governor el propio archivo declara la relacion en bithire/index.ts:7237 ("Tables/panels ride the lg radius step"), pero el valor DIVERGE del peldano: --ds-radius-lg efectivo de bithire = 14px (base calc(14px/1.25) × escala 1.25, artefacto bithire :812-:814; DS default 12px, default.css:774) frente a 10px autorado
+     */
     // Tables/panels ride the lg radius step (design-language §2.3).
     radius: "10px",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.backgroundSecondaryColor (#f3f2ef)
+     */
     headerBg: "#f3f2ef",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.primaryColor (#3A6FB0), literal dentro de color-mix()
+     */
     headerBgHover: "color-mix(in srgb, #3A6FB0 5%, #F5F8FA)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.textPageColor (#53697E)
+     */
     headerColor: "#53697E",
+    /**
+     * @domicile seed
+     * @governor coincide con la familia de rol font-weight del tema — groupFontWeight (bithire/index.ts:4346), itemFontWeightActive (:4391), labelFontWeight (:5791), itemFontWeightSelected (:6099) —: relacion por rol declarada; converge ademas con el valor autorado por rottay para el mismo eje (600) y diverge de evnto (500); cardinalidad medida 7
+     */
     headerFontWeight: 600,
+    /**
+     * @domicile seed
+     * @governor sin coincidencia de raiz; razon falsable: converge con el valor autorado por rottay para el mismo eje (mismo valor, convergencia medida)
+     */
     headerFontSize: "0.6875rem",
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE; DIVERGE de --ds-text-eyebrow-letter-spacing (0.08em), la rampa a la que default.css:1713 enruta este canal: divergencia medida declarada; cardinalidad medida 1
+     */
     headerLetterSpacing: "0.065em",
+    /**
+     * @domicile seed
+     * @governor coincide con --ds-text-eyebrow-transform (uppercase), la rampa a la que default.css:1714 enruta este canal: relacion por rol declarada; cardinalidad medida 1
+     */
     headerTextTransform: "uppercase",
+    /**
+     * @domicile seed
+     * @governor coincide con mdHeight (bithire/index.ts:8809), mismo rol de altura de control md: relacion declarada; NO coincide con --ds-input-md-height (artefacto bithire, 36px); cardinalidad medida 2
+     */
     headerBlockSize: "34px",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
+     */
     headerBorder: "color-mix(in srgb, #D4E0EA 82%, transparent)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
+     */
     headerShadow:
       "inset 0 -1px 0 color-mix(in srgb, #D4E0EA 82%, transparent)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de las raices tier (tier.control.bg, tier.raised.bg, tier.page.bg, tier.overlay.bg); es el eje H4: coincide en base y diverge en dark; el fallback literal del skin es --ds-surface-card (data-table.css:288)
+     */
     rowBg: "#ffffff",
+    /**
+     * @domicile seed
+     * @governor coincide en color con itemBgHover (bithire/index.ts:4411) y resultBgHover (bithire/index.ts:5399), mismo rol de fondo hover: relacion declarada; sin coincidencia con PALETTE; cardinalidad medida 13
+     */
     rowBgHover: "#F4F8FD",
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE, con raiz del catalogo ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1)
+     */
     rowBgStriped: "#FAFCFF",
+    /**
+     * @domicile seed
+     * @governor coincide en color con --ds-select-option-bg-selected (#e8f3ff), mismo rol de fondo de opcion/fila seleccionada: relacion declarada; sin coincidencia con PALETTE; cardinalidad medida 1
+     */
     rowBgSelected: "#E8F3FF",
+    /**
+     * @domicile seed
+     * @governor coincide en color con el tinte compartido #F4F8FD del tema pero en roles distintos: accidente declarado; converge internamente con rowBgHover y filterRowBg del mismo bloque; cardinalidad medida 13
+     */
     rowBgExpanded: "#F4F8FD",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la familia de rol borde/divisor del tema — divider (bithire/index.ts:4854), resultBorder (:5404), headerBorder (:7380), footerBorder (:7436) —: relacion por rol declarada; no coincide con PALETTE.borderColor (:3462, #d4e0ea); cardinalidad medida 13
+     */
     rowBorder: "#E3EAF0",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary
+     */
     rowHoverShadow:
       "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary
+     */
     rowFocusShadow:
       "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 28%, transparent), 0 4px 14px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1); es el peldano compacto del eje de densidad
+     */
     cellPaddingCompact: "7px 10px",
+    /**
+     * @domicile seed
+     * @governor coincide con padding (bithire/index.ts:8061), mismo rol de padding de celda/control: relacion declarada; cardinalidad medida 2
+     */
     cellPaddingComfortable: "10px 12px",
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1); es el peldano espacioso del eje de densidad
+     */
     cellPaddingSpacious: "14px 16px",
+    /**
+     * @domicile seed
+     * @governor dial: typography.scale
+     */
     cellFontSize: "0.8125rem",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-text-primary
+     */
     cellColor: "var(--ds-color-text-primary)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con el tinte compartido #F4F8FD del tema pero en roles distintos (fondos de input/hover): accidente declarado; converge internamente con rowBgHover y rowBgExpanded del mismo bloque; cardinalidad medida 13
+     */
     filterRowBg: "#F4F8FD",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-color-primary
+     */
     filterFocusShadow:
       "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 0 8px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con las emisiones de PALETTE.primaryColor (#3A6FB0) y PALETTE.borderColor (#d4e0ea), ambos literales dentro de color-mix()
+     */
     resizeBg: "color-mix(in srgb, #3A6FB0 22%, #D4E0EA)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.primaryColor (#3A6FB0)
+     */
     resizeBgHover: "#3A6FB0",
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-tint-12
+     */
     reorderBg: "var(--ds-tint-12)",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de las raices tier (tier.control.bg, tier.raised.bg, tier.page.bg, tier.overlay.bg)
+     */
     actionBg: "#FFFFFF",
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
+     */
     actionBorder: "color-mix(in srgb, #D4E0EA 70%, transparent)",
+    /**
+     * @domicile seed
+     * @governor valor keyword none: declara ausencia de efecto, no un color; sin coincidencia de color posible
+     */
     sheen: "none",
+    /**
+     * @domicile seed
+     * @governor coincide con el peldano sm de la escala de sombra del tema (bithire/index.ts:580), mismo rol de elevacion baja: relacion declarada; cardinalidad medida 8, toda en claves de rol shadow
+     */
     pageButtonHoverShadow: "0 1px 2px rgba(20, 40, 59, 0.06)",
+    /**
+     * @domicile seed
+     * @governor sin coincidencia de raiz; razon falsable: el piso de default.css:1723 ya emite el mismo valor (rgba(255,255,255,0.7)); 0 consumo en modern/skin, consumido en rustic/skin/data-table.css:101
+     */
     loadingOverlayBg: "rgba(255, 255, 255, 0.7)",
   },
+  /**
+   * @absent CHROME.table.cellPadding
+   * @governor cubre el eje bajo otro nombre: bithire reemplaza cellPadding por sus 3 variantes de densidad (cellPaddingCompact/Comfortable/Spacious), ya autoradas; pseudo-silencio, no gap
+   */
   /**
    * Familia mixta. Controles: palette.seeds, shape.radius-scale, typography.scale.
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.

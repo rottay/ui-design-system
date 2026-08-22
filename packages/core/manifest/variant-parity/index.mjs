@@ -19,7 +19,22 @@
  *               `@placeholder` explicito, que cubre POR PREFIJO: `P` y todo lo
  *               que cuelgue de `P.`). La ausencia SIN placeholder es SILENCIO,
  *               y el silencio es lo que el frente F4A elimina.
- *   divergente  slot del universo sin posicion completa en los 3 temas.
+ *   divergente  slot del universo sin posicion completa en los 3 temas. Queda
+ *               INFORMATIVO (F4A-close): ya no es el gate; su ultimo valor
+ *               (33) es observacion historica, no pin.
+ *
+ * F4A-close (real-keypath-parity, ruling DT + Fable ACCEPT_WITH_BINDING_CORRECTIONS)
+ * agrega una TERCERA disposicion, `declared-absent` (`@absent <hoja exacta>` +
+ * `@governor`), y mueve el gate de SLOT a PAR (tema,slot). El universo de
+ * pares es `temas x universo` (3 x 2559 = 7677 hoy). Cada par tiene EXACTAMENTE
+ * una disposicion: `authored`, `placeholder`, `declared-absent`, o SILENCIO (el
+ * unico defecto). `@absent` es por HOJA EXACTA — el prefijo esta PROHIBIDO
+ * (una afirmacion de familia es la forma que F4A-3c retiro por no probada) — y
+ * exige que la ruta pertenezca al universo de hojas autoradas por ALGUN tema
+ * (nunca el propio). `silentPairs` es el gate nuevo, objetivo 0.
+ * `placeholderPairs` es decrease-only aparte: taparlo con un placeholder
+ * bajaria `silentPairs` pero subiria `placeholderPairs`, y el ratchet lo
+ * enrojece — el regimen honesto es el unico que pasa.
  *
  * El indice linea->ruta que usa el lexer de tags NO es un segundo walk: la
  * identidad de las hojas sigue saliendo de `authoredLeafPaths`. Este indice
@@ -124,7 +139,7 @@ export const PAINT_DENOMINATOR = {
  * Gramatica de tags (§4 del brief) — vocabulario CERRADO
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-export const DOMICILES = ['seed', 'baseline', 'derived', 'pro-expert', 'unassigned'];
+export const DOMICILES = ['seed', 'derived', 'pro-expert', 'unassigned'];
 
 /** Clase de contenido esperada por domicilio. En F4A-2 se REPORTA, no bloquea:
  *  la validacion semantica contra el registro de diales es endurecimiento
@@ -160,12 +175,12 @@ export function parseDocblocks(text) {
 }
 
 function finishBlock(open) {
-  const tags = { domicile: null, governor: null, placeholder: null };
+  const tags = { domicile: null, governor: null, placeholder: null, absent: null };
   const malformed = [];
   let governorLines = 0;
   for (let k = 0; k < open.body.length; k += 1) {
     const raw = open.body[k];
-    const m = raw.match(/@(domicile|governor|placeholder)\b(.*)$/);
+    const m = raw.match(/@(domicile|governor|placeholder|absent)\b(.*)$/);
     if (!m) continue;
     const name = m[1];
     const value = m[2].replace(/\*\/\s*$/, '').trim();
@@ -174,7 +189,7 @@ function finishBlock(open) {
       // Una linea: si la siguiente linea del docblock no arranca otro tag y
       // trae texto, el governor se derramo y eso es FAIL de forma.
       const next = open.body[k + 1] ?? '';
-      const nextIsText = /^\s*\*\s+\S/.test(next) && !/@(domicile|governor|placeholder)\b/.test(next) && !/\*\//.test(next.trim());
+      const nextIsText = /^\s*\*\s+\S/.test(next) && !/@(domicile|governor|placeholder|absent)\b/.test(next) && !/\*\//.test(next.trim());
       if (nextIsText) malformed.push({ tag: 'governor', line: open.start + k, reason: 'governor multilinea' });
     }
     if (tags[name] !== null) malformed.push({ tag: name, line: open.start + k, reason: `@${name} repetido en el mismo docblock` });
@@ -316,13 +331,36 @@ export function analyzeSource({ tenant, text }) {
   const failures = [];
   const tags = [];
   const placeholders = [];
+  const absentCandidates = [];
 
   for (const block of blocks) {
     for (const bad of block.malformed) {
       failures.push(`${tenant}:${bad.line}: ${bad.reason}`);
     }
-    const { domicile, governor, placeholder } = block.tags;
-    if (domicile === null && governor === null && placeholder === null) continue;
+    const { domicile, governor, placeholder, absent } = block.tags;
+    if (domicile === null && governor === null && placeholder === null && absent === null) continue;
+
+    if (absent !== null) {
+      if (domicile !== null || placeholder !== null) {
+        failures.push(`${tenant}:${block.start}: @absent no se combina con @domicile/@placeholder en el mismo docblock`);
+        continue;
+      }
+      if (absent === '') { failures.push(`${tenant}:${block.start}: @absent sin ruta`); continue; }
+      if (governor === null || governor === '') {
+        failures.push(`${tenant}:${block.start}: @absent ${absent} sin @governor (es obligatorio y de una linea)`);
+        continue;
+      }
+      // Contradiccion: `@absent` declara que ESTE tema no autora la hoja. Si
+      // la autora, es mentira — a diferencia de `@placeholder`, aca la
+      // igualdad es EXACTA (nunca prefijo): `@absent CHROME.table` no puede
+      // taparse detras de que el tema autore `CHROME.table.bg`.
+      if (leaves.has(absent)) {
+        failures.push(`${tenant}:${block.start}: @absent ${absent} contradictorio — ${tenant} SI autora esa hoja`);
+        continue;
+      }
+      absentCandidates.push({ slot: absent, governor, line: block.start });
+      continue;
+    }
 
     if (domicile !== null && !DOMICILES.includes(domicile)) {
       failures.push(`${tenant}:${block.start}: @domicile desconocido "${domicile}" (cerrado: ${DOMICILES.join(' | ')})`);
@@ -360,6 +398,26 @@ export function analyzeSource({ tenant, text }) {
     tags.push({ tenant, scope, kind: 'scope', domicile, governor, governorClass: GOVERNOR_CLASS[domicile], line: block.start });
   }
 
+  // Validaciones de @absent que necesitan el conjunto COMPLETO de placeholders
+  // del mismo tema (por eso corren DESPUES del loop, no inline: un
+  // @placeholder puede aparecer en el texto despues del @absent que cubre).
+  const absences = [];
+  const seenAbsent = new Set();
+  for (const cand of absentCandidates) {
+    if (seenAbsent.has(cand.slot)) {
+      failures.push(`${tenant}:${cand.line}: @absent ${cand.slot} duplicado en este tema`);
+      continue;
+    }
+    const coveredByPlaceholder = placeholders.some((p) => cand.slot === p.slot || cand.slot.startsWith(`${p.slot}.`));
+    if (coveredByPlaceholder) {
+      failures.push(`${tenant}:${cand.line}: @absent ${cand.slot} ya cubierta por @placeholder de este mismo tema`);
+      continue;
+    }
+    seenAbsent.add(cand.slot);
+    absences.push({ tenant, slot: cand.slot, governor: cand.governor, line: cand.line });
+    tags.push({ tenant, slot: cand.slot, kind: 'absent', governor: cand.governor, line: cand.line });
+  }
+
   // Cobertura: la hoja la cubre el scope MAS CERCANO. Dos scopes con tags a la
   // misma distancia = ambiguo = FAIL.
   const scopeTags = tags.filter((t) => t.kind === 'scope');
@@ -386,6 +444,7 @@ export function analyzeSource({ tenant, text }) {
     leaves,
     tags,
     placeholders,
+    absences,
     failures,
     coveredCount: [...covered.keys()].filter((p) => !metaOfTenant.has(p)).length,
     paintLeafCount: paintLeaves.length,
@@ -445,6 +504,21 @@ export function buildDoc({ sources, provenance, enforceMetadata = true }) {
   );
   const universe = [...new Set([...authoredUniverse, ...orphanPlaceholders])].sort();
 
+  // Validacion GLOBAL de @absent (sólo se puede hacer aca, con el universo ya
+  // ensamblado de los 3 temas): la ruta debe pertenecer al universo de hojas
+  // AUTORADAS, por igualdad EXACTA — nunca prefijo. Un `@absent` que no cita
+  // una hoja que ALGUN tema autora es un hallazgo, no una hoja legitima.
+  for (const tenant of tenants) {
+    for (const abs of perTenant[tenant].absences) {
+      if (!authoredUniverse.has(abs.slot)) {
+        failures.push(
+          `${tenant}:${abs.line}: @absent ${abs.slot} no pertenece al universo de hojas autoradas `
+          + '(ninguna fuente lo autora como hoja exacta; los prefijos de familia no son validos)',
+        );
+      }
+    }
+  }
+
   // COBERTURA POR PREFIJO (F4A-4, adjudicada): un `@placeholder P` da posicion
   // `placeholder` a TODO slot del universo que sea `P` o cuelgue de `P.`. Sin
   // esto, un placeholder de familia creaba un slot virtual y dejaba las hojas
@@ -477,6 +551,26 @@ export function buildDoc({ sources, provenance, enforceMetadata = true }) {
 
   const untagged = tenants.reduce((sum, t) => sum + (perTenant[t].paintLeafCount - perTenant[t].coveredCount), 0);
 
+  // F4A-close: gate NUEVO, por PAR (tema,slot), no por slot. `disposition`
+  // EXTIENDE `positions` (authored+placeholder, sin tocar) con la tercera
+  // forma `declared-absent`. `positions` queda intacta y sigue alimentando
+  // `divergentSlots`, que pasa a informativo — el gate real es `silentPairs`.
+  const disposition = {};
+  for (const tenant of tenants) {
+    const map = new Map(positions[tenant]);
+    for (const abs of perTenant[tenant].absences) {
+      if (!map.has(abs.slot)) map.set(abs.slot, 'declared-absent');
+    }
+    disposition[tenant] = map;
+  }
+  const placeholderPairs = tenants.reduce(
+    (sum, t) => sum + [...disposition[t].values()].filter((v) => v === 'placeholder').length,
+    0,
+  );
+  const declaredAbsentPairs = tenants.reduce((sum, t) => sum + perTenant[t].absences.length, 0);
+  // Silencio = par sin NINGUNA disposicion. Es el UNICO defecto del gate nuevo.
+  const silentPairs = tenants.reduce((sum, t) => sum + (universe.length - disposition[t].size), 0);
+
   return {
     $generatedBy: 'manifest/variant-parity/index.mjs',
     $regenerate: 'node manifest/variant-parity/index.mjs',
@@ -501,21 +595,33 @@ export function buildDoc({ sources, provenance, enforceMetadata = true }) {
       universe: universe.length,
       union: universe.length,
       intersection: completeAuthored.length,
+      // INFORMATIVO (F4A-close): positionIntersection/divergentSlots ya no son
+      // el gate; se conservan congelados por continuidad historica (A4/§7.4).
       positionIntersection: complete.length,
       positions: Object.fromEntries(tenants.map((t) => [t, {
         authored: perTenant[t].leaves.size,
         placeholder: [...positions[t].values()].filter((v) => v === 'placeholder').length,
-        absent: universe.length - positions[t].size,
+        // Renombrado de `absent` (F4A-13) a `silent`: ese campo SIEMPRE midio
+        // "sin ninguna posicion", nunca la nueva disposicion `@absent`. El
+        // nombre viejo quedaba ambiguo apenas existe un `declared-absent` real.
+        silent: universe.length - positions[t].size,
       }])),
       exclusive,
       orphanPlaceholders: [...new Set(orphanPlaceholders)].sort(),
       paintLeaves: Object.fromEntries(tenants.map((t) => [t, perTenant[t].paintLeafCount])),
       taggedPaintLeaves: Object.fromEntries(tenants.map((t) => [t, perTenant[t].coveredCount])),
+      declaredAbsent: Object.fromEntries(tenants.map((t) => [t, perTenant[t].absences.length])),
     },
     ratchet: {
-      law: 'decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.',
-      divergentSlots: universe.length - complete.length,
+      law: 'decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba. '
+        + 'silentPairs objetivo 0; placeholderPairs decrease-only aparte (tapar silencio con '
+        + 'placeholder sube placeholderPairs y lo enrojece). divergentSlots queda informativo, '
+        + 'fuera del gate (F4A-close, ruling DT + Fable ACCEPT_WITH_BINDING_CORRECTIONS).',
+      silentPairs,
+      placeholderPairs,
+      declaredAbsentPairs,
       untaggedAuthoredLeaves: untagged,
+      divergentSlots: universe.length - complete.length,
     },
     failures,
   };
@@ -552,7 +658,10 @@ export function emptinessFailures(doc) {
 
 export function evaluate(doc, baseline) {
   const findings = [...doc.failures, ...emptinessFailures(doc)];
-  for (const key of ['divergentSlots', 'untaggedAuthoredLeaves']) {
+  // F4A-close: `divergentSlots` sale del bucle de pines (queda informativo,
+  // §7.4 del challenge Fable ACCEPT_WITH_BINDING_CORRECTIONS). El gate real es
+  // `silentPairs` (objetivo 0) + `placeholderPairs` (decrease-only aparte).
+  for (const key of ['silentPairs', 'placeholderPairs', 'untaggedAuthoredLeaves']) {
     const pinned = baseline?.[key];
     if (typeof pinned !== 'number') { findings.push(`variant-parity.baseline.json no pinea un ${key} numerico`); continue; }
     const now = doc.ratchet[key];
@@ -582,12 +691,15 @@ if (invokedDirectly) {
       process.exit(1);
     }
     console.log(
-      `variant-parity OK — ${doc.matrix.universe} slots, ${doc.matrix.positionIntersection} con posicion en los 3, `
-      + `${doc.ratchet.divergentSlots} divergentes, ${doc.ratchet.untaggedAuthoredLeaves} hojas sin tag `
-      + `(${doc.tagRegistry.count} tags leidos)`,
+      `variant-parity OK — ${doc.matrix.universe} slots (${doc.matrix.universe * TENANTS.length} pares), `
+      + `${doc.ratchet.silentPairs} silenciosos, ${doc.ratchet.placeholderPairs} con placeholder, `
+      + `${doc.ratchet.untaggedAuthoredLeaves} hojas sin tag (${doc.tagRegistry.count} tags leidos)`,
     );
   } else {
     writeFileSync(OUTPUT_PATH, text);
-    console.log(`variant-parity: generated/variant-parity.json escrito (${doc.matrix.universe} slots, ${doc.ratchet.divergentSlots} divergentes)`);
+    console.log(
+      `variant-parity: generated/variant-parity.json escrito (${doc.matrix.universe} slots, `
+      + `${doc.ratchet.silentPairs} pares silenciosos, ${doc.ratchet.placeholderPairs} pares con placeholder)`,
+    );
   }
 }

@@ -2336,20 +2336,20 @@ const SURFACES: BrandSurfaces = {
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   mountDuration: 1200,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   lineStyle: 'smooth',
   showDots: true,
   useGradientFill: true,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   tooltipStyle: 'detailed',
 };
@@ -2426,33 +2426,33 @@ const CHROME: BrandChrome = {
    */
   accent: {
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barPosition: 'top',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barThickness: 4,
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barStyle: 'animated',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     iconContainerShape: 'circle',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     badgeShape: 'pill',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     dividerStyle: 'dashed',
   },
@@ -4198,11 +4198,159 @@ const CHROME: BrandChrome = {
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
    */
   table: {
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE, con raiz del catalogo ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1)
+     */
     headerBg: 'rgba(0, 0, 0, 0.02)',
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de PALETTE.textMutedColor (#737373)
+     */
     headerColor: '#737373',
+    /**
+     * @domicile seed
+     * @governor coincide con itemFontWeightActive (evnto/index.ts:2656), mismo rol de font-weight: relacion declarada; DIVERGE del valor autorado por rottay y bithire para el mismo eje (600): divergencia medida declarada; cardinalidad medida 2
+     */
     headerFontWeight: 500,
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE ni con ninguna otra clave del tema (cardinalidad medida 1); NO converge con el valor autorado por bithire para el mismo eje (0.6875rem): la razon de convergencia que aplica en bithire seria falsa aqui
+     */
     headerFontSize: '0.75rem',
   },
+  /**
+   * @absent CHROME.table.actionBg
+   * @governor sin emision en :root; el skin resuelve --ds-table-action-bg con su propio fallback (data-table.css:697): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.actionBorder
+   * @governor sin emision en :root; el skin resuelve --ds-table-action-border con su propio fallback (data-table.css:696): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.bg
+   * @governor coincide con la emision de raiz --ds-table-bg (default.css:1704): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.border
+   * @governor autora el eje en el plano dark (evnto/index.ts:671, #222018) y declina deliberadamente el plano base; ambiguedad del prong (i) resuelta por declaracion (K5c clase b)
+   */
+  /**
+   * @absent CHROME.table.cellColor
+   * @governor sin emision en :root; el skin resuelve --ds-table-cell-color con su propio fallback (data-table.css:92): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.cellFontSize
+   * @governor coincide con la emision de raiz --ds-table-cell-font-size (default.css:1727): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.cellPadding
+   * @governor coincide con la emision de raiz --ds-table-cell-padding (default.css:1726): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.cellPaddingComfortable
+   * @governor el eje de densidad de bithire (compact/comfortable/spacious) colapsa a un unico cellPadding en este tema: no hay eje de 3 peldanos que autorar, no es gap
+   */
+  /**
+   * @absent CHROME.table.cellPaddingCompact
+   * @governor el eje de densidad de bithire (compact/comfortable/spacious) colapsa a un unico cellPadding en este tema: no hay eje de 3 peldanos que autorar, no es gap
+   */
+  /**
+   * @absent CHROME.table.cellPaddingSpacious
+   * @governor el eje de densidad de bithire (compact/comfortable/spacious) colapsa a un unico cellPadding en este tema: no hay eje de 3 peldanos que autorar, no es gap
+   */
+  /**
+   * @absent CHROME.table.filterFocusShadow
+   * @governor canal muerto: sin coincidencia de raiz y 0 lecturas en modern/skin bajo --ds-table-filter-focus-shadow; el tema no autora esta hoja porque el canal no pinta, no por gap
+   */
+  /**
+   * @absent CHROME.table.filterRowBg
+   * @governor canal muerto: sin coincidencia de raiz y 0 lecturas en modern/skin bajo --ds-table-filter-row-bg; el tema no autora esta hoja porque el canal no pinta, no por gap
+   */
+  /**
+   * @absent CHROME.table.headerBgHover
+   * @governor sin coincidencia de raiz en default.css ni consumo medido en modern/skin bajo --ds-table-header-bg-hover (0 lecturas); el tema no autora esta hoja: minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerBlockSize
+   * @governor coincide con la emision de raiz --ds-table-header-block-size (default.css:1715): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerBorder
+   * @governor sin emision en :root; el skin resuelve --ds-table-header-border con su propio fallback (data-table.css:1179): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerLetterSpacing
+   * @governor coincide con la emision de raiz --ds-table-header-letter-spacing (default.css:1713): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-header-shadow con su propio fallback (data-table.css:1178): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerTextTransform
+   * @governor coincide con la emision de raiz --ds-table-header-text-transform (default.css:1714): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.loadingOverlayBg
+   * @governor canal muerto: coincide con la raiz --ds-table-loading-overlay-bg (default.css:1723) pero 0 lecturas en modern/skin (data-table.css); el tema no autora esta hoja porque el canal no pinta ahi, no por gap
+   */
+  /**
+   * @absent CHROME.table.pageButtonHoverShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-page-button-hover-shadow con su propio fallback (data-table.css:1519): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.radius
+   * @governor coincide con la emision de raiz --ds-table-radius (default.css:1706): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.reorderBg
+   * @governor sin emision en :root; el skin resuelve --ds-table-reorder-bg con su propio fallback (data-table.css:1251): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.resizeBg
+   * @governor sin emision en :root; el skin resuelve --ds-table-resize-bg con su propio fallback (data-table.css:1278): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.resizeBgHover
+   * @governor sin emision en :root; el skin resuelve --ds-table-resize-bg-hover con su propio fallback (data-table.css:1250): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBg
+   * @governor coincide con la emision de raiz --ds-table-row-bg (default.css:1718): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBgExpanded
+   * @governor sin emision en :root; el skin resuelve --ds-table-row-bg-expanded con su propio fallback (data-table.css:1414): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBgHover
+   * @governor coincide con la emision de raiz --ds-table-row-bg-hover (default.css:1719): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBgSelected
+   * @governor coincide con la emision de raiz --ds-table-row-bg-selected (default.css:1721): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBgStriped
+   * @governor coincide con la emision de raiz --ds-table-row-bg-striped (default.css:1720): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBorder
+   * @governor coincide con la emision de raiz --ds-table-row-border (default.css:1722): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowFocusShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-row-focus-shadow con su propio fallback (data-table.css:1327): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowHoverShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-row-hover-shadow con su propio fallback (data-table.css:1347): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.sheen
+   * @governor sin emision en :root; el skin resuelve --ds-table-sheen con su propio fallback (data-table.css:1015): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
   cardComponent: {
     /**
      * @domicile seed

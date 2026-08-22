@@ -162,3 +162,12 @@ test('the fallback is read to the BALANCED paren, not to the first comma', () =>
   assert.equal(calls[0].name, '--ds-x');
   assert.ok(calls[0].fallback.includes('var(--ds-root)'), `fallback truncado: ${calls[0].fallback}`);
 });
+
+test('cerca PRE_F4B (C-3): rootsExcluded es |fallbackTargets| y el ratchet trata un canal real como raiz posicional', () => {
+  const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+  const r = classifyCascadeWiring();
+  assert.equal(r.roots, baseline.rootsExcluded);                    // la clave pasa a tener lector real
+  assert.ok(r.fallbackTargets.has('--ds-input-md-icon-size'));      // testigo C-3, medido true hoy
+  assert.ok(!r.reachesRoot.has('--ds-input-md-icon-size'));         // medido false hoy
+  assert.ok(!r.denominator.includes('--ds-input-md-icon-size'));    // excluido del denominador, medido
+});

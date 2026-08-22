@@ -84,7 +84,24 @@ test('positivo: la clase de governor se reporta por domicilio', () => {
 });
 
 test('el vocabulario de domicilios es exactamente el cerrado', () => {
-  assert.deepEqual(DOMICILES, ['seed', 'baseline', 'derived', 'pro-expert', 'unassigned']);
+  assert.deepEqual(DOMICILES, ['seed', 'derived', 'pro-expert', 'unassigned']);
+});
+
+/**
+ * F4A-close, Lote C (Fable arbitraje final, C-1b): `baseline` retirado del
+ * vocabulario cerrado. Ruling K5a v2 P1-3 lo pedia como deuda separada; 0
+ * usos en los 3 temas medidos antes de retirar. Esta negativa prueba que la
+ * palabra ya no es un domicilio valido: un docblock que la use falla igual
+ * que cualquier otro token fuera del vocabulario cerrado.
+ */
+test('drill C-1b: @domicile baseline ya no es valido -- vocabulario cerrado sin el', () => {
+  const text = CON_TAGS.replace('@domicile seed', '@domicile baseline');
+  const a = analyzeSource({ tenant: 'rottay', text });
+  assert.equal(a.failures.length, 1);
+  assert.equal(
+    a.failures[0].replace(/^rottay:\d+:\s*/, ''),
+    '@domicile desconocido "baseline" (cerrado: seed | derived | pro-expert | unassigned)',
+  );
 });
 
 /* ── 2. vocabulario ──────────────────────────────────────────────────────── */
@@ -152,6 +169,205 @@ test('drill placeholder: sin razon falla', () => {
   assert.ok(a.failures.some((f) => /sin @governor/.test(f)), JSON.stringify(a.failures));
 });
 
+/* ── 4b. @absent (F4A-close, disposicion declared-absent, por HOJA EXACTA) ── */
+
+const RA_EXCLUSIVA = `
+const PALETTE = {
+  primary: '#111111',
+  secondary: '#222222',
+  ramps: {
+    a: '#333333',
+  },
+};
+`;
+const RB_SOLO_PRIMARY = `
+const PALETTE = {
+  primary: '#999999',
+};
+`;
+const RB_CON_ABSENT = `
+const PALETTE = {
+  /**
+   * @absent PALETTE.secondary
+   * @governor canal muerto: 0 lecturas medidas (fixture)
+   */
+  /**
+   * @absent PALETTE.ramps.a
+   * @governor sin emision en :root; el skin resuelve con su propio fallback (fixture)
+   */
+  primary: '#999999',
+};
+`;
+
+test('drill @absent: PASS — exclusividad legitima con declared-absent en los otros 2 baja silentPairs a 0 para ese slot', () => {
+  const sinAbsent = doc({ rottay: RA_EXCLUSIVA, bithire: RB_SOLO_PRIMARY, evnto: RB_SOLO_PRIMARY });
+  const conAbsent = doc({ rottay: RA_EXCLUSIVA, bithire: RB_CON_ABSENT, evnto: RB_CON_ABSENT });
+  assert.deepEqual(conAbsent.failures, [], JSON.stringify(conAbsent.failures));
+  // sin @absent: bithire y evnto callan sobre 2 slots cada uno = 4 pares silenciosos.
+  assert.equal(sinAbsent.ratchet.silentPairs, 4, 'silencio: 2 tenants x 2 slots sin ninguna disposicion');
+  // con @absent: los 4 pares pasan a declared-absent, silentPairs baja a 0 para ese universo.
+  assert.equal(conAbsent.ratchet.silentPairs, 0, 'las 4 declaraciones tapan el silencio, no lo esconden');
+  assert.equal(conAbsent.ratchet.placeholderPairs, sinAbsent.ratchet.placeholderPairs,
+    'declared-absent NO es placeholder: el contador de placeholders no se mueve');
+  assert.deepEqual(conAbsent.matrix.declaredAbsent, { rottay: 0, bithire: 2, evnto: 2 });
+});
+
+test('drill @absent: retirar una declaracion vuelve a silencio (sube silentPairs)', () => {
+  const conAbsent = doc({ rottay: RA_EXCLUSIVA, bithire: RB_CON_ABSENT, evnto: RB_CON_ABSENT });
+  const unaMenos = RB_CON_ABSENT.replace(
+    /\/\*\*\n\s*\* @absent PALETTE\.ramps\.a\n\s*\* @governor[^\n]*\n\s*\*\/\n/,
+    '',
+  );
+  const retirada = doc({ rottay: RA_EXCLUSIVA, bithire: unaMenos, evnto: RB_CON_ABSENT });
+  assert.deepEqual(retirada.failures, []);
+  assert.equal(retirada.ratchet.silentPairs, conAbsent.ratchet.silentPairs + 1,
+    'retirar la declaracion sin sustituirla es silencio de nuevo');
+});
+
+test('drill @absent: negativa anti-tapadera — sustituir @absent por @placeholder muerde placeholderPairs', () => {
+  const conAbsent = doc({ rottay: RA_EXCLUSIVA, bithire: RB_CON_ABSENT, evnto: RB_CON_ABSENT });
+  const tapado = RB_CON_ABSENT
+    .replace('@absent PALETTE.secondary', '@placeholder PALETTE.secondary')
+    .replace('@governor canal muerto: 0 lecturas medidas (fixture)', '@domicile unassigned\n   * @governor tapado (fixture)');
+  const conPlaceholder = doc({ rottay: RA_EXCLUSIVA, bithire: tapado, evnto: RB_CON_ABSENT });
+  assert.deepEqual(conPlaceholder.failures, [], JSON.stringify(conPlaceholder.failures));
+  assert.equal(conPlaceholder.ratchet.silentPairs, conAbsent.ratchet.silentPairs,
+    'el silencio no sube: el placeholder SI cubre posicion');
+  assert.equal(conPlaceholder.ratchet.placeholderPairs, conAbsent.ratchet.placeholderPairs + 1,
+    'pero placeholderPairs SI sube — es exactamente lo que el ratchet decrease-only tiene que morder');
+});
+
+test('drill @absent: sin @governor falla', () => {
+  const text = RB_CON_ABSENT.replace(' * @governor canal muerto: 0 lecturas medidas (fixture)\n', '');
+  const a = analyzeSource({ tenant: 'bithire', text });
+  assert.ok(a.failures.some((f) => /@absent PALETTE\.secondary sin @governor/.test(f)), JSON.stringify(a.failures));
+});
+
+test('drill @absent: sobre hoja que el propio tema SI autora falla (contradiccion, igualdad exacta)', () => {
+  const text = RB_CON_ABSENT.replace("primary: '#999999',", "primary: '#999999',\n  secondary: '#888888',");
+  const a = analyzeSource({ tenant: 'bithire', text });
+  assert.ok(a.failures.some((f) => /@absent PALETTE\.secondary contradictorio/.test(f)), JSON.stringify(a.failures));
+});
+
+test('drill @absent: fuera del universo (nadie autora esa hoja, en ningun tema) falla en buildDoc', () => {
+  const text = `
+const PALETTE = {
+  /**
+   * @absent PALETTE.noExisteEnNadie
+   * @governor fixture: hoja inexistente
+   */
+  primary: '#999999',
+};
+`;
+  const d = doc({ rottay: RA_EXCLUSIVA, bithire: text });
+  assert.ok(
+    d.failures.some((f) => /@absent PALETTE\.noExisteEnNadie no pertenece al universo de hojas autoradas/.test(f)),
+    JSON.stringify(d.failures),
+  );
+});
+
+test('drill @absent: por PREFIJO (rama, no hoja exacta) falla — el prefijo esta PROHIBIDO', () => {
+  const text = `
+const PALETTE = {
+  /**
+   * @absent PALETTE.ramps
+   * @governor fixture: intento de afirmacion de familia
+   */
+  primary: '#999999',
+};
+`;
+  // PALETTE.ramps NUNCA es una hoja: solo PALETTE.ramps.a lo es (autorada por rottay).
+  // Un @absent sobre el PREFIJO tiene que fallar por igualdad exacta, nunca colar por prefijo.
+  const d = doc({ rottay: RA_EXCLUSIVA, bithire: text });
+  assert.ok(
+    d.failures.some((f) => /@absent PALETTE\.ramps no pertenece al universo de hojas autoradas/.test(f)),
+    JSON.stringify(d.failures),
+  );
+});
+
+test('drill @absent: no se combina con @domicile/@placeholder en el mismo docblock', () => {
+  const text = `
+const PALETTE = {
+  /**
+   * @absent PALETTE.secondary
+   * @domicile unassigned
+   * @governor fixture: combinacion invalida
+   */
+  primary: '#999999',
+};
+`;
+  const a = analyzeSource({ tenant: 'bithire', text });
+  assert.ok(a.failures.some((f) => /@absent no se combina con @domicile\/@placeholder/.test(f)), JSON.stringify(a.failures));
+});
+
+test('drill @absent: ya cubierta por @placeholder del mismo tema falla (aunque aparezcan en orden invertido)', () => {
+  const text = `
+const PALETTE = {
+  /**
+   * @absent PALETTE.secondary
+   * @governor fixture: intenta declarar lo que el placeholder ya cubre
+   */
+  /**
+   * @placeholder PALETTE.secondary
+   * @domicile unassigned
+   * @governor fixture: placeholder real
+   */
+  primary: '#999999',
+};
+`;
+  const a = analyzeSource({ tenant: 'bithire', text });
+  assert.ok(a.failures.some((f) => /@absent PALETTE\.secondary ya cubierta por @placeholder/.test(f)), JSON.stringify(a.failures));
+});
+
+test('drill @absent: duplicado en el mismo tema falla', () => {
+  const text = `
+const PALETTE = {
+  /**
+   * @absent PALETTE.secondary
+   * @governor fixture: primera declaracion
+   */
+  /**
+   * @absent PALETTE.secondary
+   * @governor fixture: segunda declaracion, duplicada
+   */
+  primary: '#999999',
+};
+`;
+  const a = analyzeSource({ tenant: 'bithire', text });
+  assert.ok(a.failures.some((f) => /@absent PALETTE\.secondary duplicado en este tema/.test(f)), JSON.stringify(a.failures));
+});
+
+test('drill @absent: no interfiere con orphanPlaceholders (sigue en 0)', () => {
+  const conAbsent = doc({ rottay: RA_EXCLUSIVA, bithire: RB_CON_ABSENT, evnto: RB_CON_ABSENT });
+  assert.deepEqual(conAbsent.matrix.orphanPlaceholders, []);
+});
+
+/**
+ * P2-1 (F4A-close, hallazgo Fable postaudit real-keypath-parity): `nextIsText`
+ * en `finishBlock` reconocia solo `@(domicile|governor|placeholder)` como
+ * continuacion valida de linea. Un docblock con `@governor` ANTES que
+ * `@absent` (orden invertido a la forma canonica) hacia que la linea
+ * `@absent ...` pareciera texto derramado del governor -> `malformed:
+ * governor multilinea`. Fail-closed (rojo de mas), pero por la razon
+ * equivocada. Fix: agregar `absent` al patron negativo.
+ */
+test('drill P2-1: orden invertido @governor -> @absent NO es governor multilinea', () => {
+  const ordenInvertido = `
+const PALETTE = {
+  /**
+   * @governor fixture: orden invertido, governor antes que absent
+   * @absent PALETTE.secondary
+   */
+  primary: '#999999',
+};
+`;
+  const a = analyzeSource({ tenant: 'bithire', text: ordenInvertido });
+  assert.deepEqual(a.failures, [], `orden invertido tiene que pasar limpio: ${JSON.stringify(a.failures)}`);
+  assert.equal(a.absences.length, 1);
+  assert.equal(a.absences[0].slot, 'PALETTE.secondary');
+  assert.equal(a.absences[0].governor, 'fixture: orden invertido, governor antes que absent');
+});
+
 /* ── 5. scope ambiguo ────────────────────────────────────────────────────── */
 
 test('drill scope: dos docblocks aplicables a la misma cercania fallan', () => {
@@ -165,7 +381,7 @@ const PALETTE = {
 };
 
 /**
- * @domicile baseline
+ * @domicile derived
  * @governor razon: dos
  */
 const PALETTE2 = {
@@ -183,7 +399,7 @@ const PALETTE2 = {
  * @governor dial: uno
  */
 /**
- * @domicile baseline
+ * @domicile derived
  * @governor razon: dos
  */
 const PALETTE = {
@@ -196,25 +412,39 @@ const PALETTE = {
 
 /* ── 6. ratchet ──────────────────────────────────────────────────────────── */
 
-test('drill ratchet: sube -> FAIL; baja -> FAIL con instruccion; igual -> PASS', () => {
+test('drill ratchet: sube -> FAIL; baja -> FAIL con instruccion; igual -> PASS (silentPairs + placeholderPairs)', () => {
   const d = doc({ rottay: SIN_TAGS, bithire: SIN_TAGS, evnto: SIN_TAGS });
-  const n = d.ratchet.divergentSlots;
+  const s = d.ratchet.silentPairs;
+  const p = d.ratchet.placeholderPairs;
   const u = d.ratchet.untaggedAuthoredLeaves;
 
-  assert.deepEqual(evaluate(d, { divergentSlots: n, untaggedAuthoredLeaves: u }), [], 'igual = PASS');
+  assert.deepEqual(evaluate(d, { silentPairs: s, placeholderPairs: p, untaggedAuthoredLeaves: u }), [], 'igual = PASS');
 
-  const subio = evaluate(d, { divergentSlots: n - 1, untaggedAuthoredLeaves: u });
-  assert.ok(subio.some((f) => /divergentSlots GREW from/.test(f)), JSON.stringify(subio));
+  const subio = evaluate(d, { silentPairs: s - 1, placeholderPairs: p, untaggedAuthoredLeaves: u });
+  assert.ok(subio.some((f) => /silentPairs GREW from/.test(f)), JSON.stringify(subio));
 
-  const bajo = evaluate(d, { divergentSlots: n + 1, untaggedAuthoredLeaves: u });
-  assert.ok(bajo.some((f) => /divergentSlots SHRANK from/.test(f)), JSON.stringify(bajo));
-  assert.ok(bajo.some((f) => /lower `divergentSlots` in manifest\/variant-parity\/variant-parity\.baseline\.json/.test(f)));
+  const bajo = evaluate(d, { silentPairs: s + 1, placeholderPairs: p, untaggedAuthoredLeaves: u });
+  assert.ok(bajo.some((f) => /silentPairs SHRANK from/.test(f)), JSON.stringify(bajo));
+  assert.ok(bajo.some((f) => /lower `silentPairs` in manifest\/variant-parity\/variant-parity\.baseline\.json/.test(f)));
+
+  const subioPh = evaluate(d, { silentPairs: s, placeholderPairs: p - 1, untaggedAuthoredLeaves: u });
+  assert.ok(subioPh.some((f) => /placeholderPairs GREW from/.test(f)), JSON.stringify(subioPh));
+});
+
+test('drill ratchet: divergentSlots ya NO se pinea ni se evalua (informativo, F4A-close)', () => {
+  const d = doc({ rottay: SIN_TAGS, bithire: SIN_TAGS, evnto: SIN_TAGS });
+  // Un baseline que sólo trae divergentSlots (la ley vieja) tiene que fallar
+  // por FALTA de los pines nuevos, nunca por divergentSlots en sí: ese campo
+  // ya no es parte del vocabulario de `evaluate`.
+  const f = evaluate(d, { divergentSlots: 0, untaggedAuthoredLeaves: d.ratchet.untaggedAuthoredLeaves });
+  assert.ok(f.some((x) => /no pinea un silentPairs numerico/.test(x)), JSON.stringify(f));
+  assert.ok(!f.some((x) => /divergentSlots/.test(x)), `divergentSlots no debe aparecer en los findings: ${JSON.stringify(f)}`);
 });
 
 test('drill ratchet: un baseline sin cifra numerica falla', () => {
   const d = doc({ rottay: SIN_TAGS });
-  const f = evaluate(d, { divergentSlots: 'muchos', untaggedAuthoredLeaves: 1 });
-  assert.ok(f.some((x) => /no pinea un divergentSlots numerico/.test(x)), JSON.stringify(f));
+  const f = evaluate(d, { silentPairs: 'muchos', placeholderPairs: 0, untaggedAuthoredLeaves: 1 });
+  assert.ok(f.some((x) => /no pinea un silentPairs numerico/.test(x)), JSON.stringify(f));
 });
 
 /* ── 7. frescura ─────────────────────────────────────────────────────────── */
@@ -234,7 +464,7 @@ test('drill anti-vacio: universo vacio y fuente sin hojas fallan distinguido', (
   const f = emptinessFailures(vacio);
   assert.ok(f.some((x) => /el universo de slots esta vacio/.test(x)), JSON.stringify(f));
   assert.ok(f.some((x) => /rottay no aporto ni una hoja/.test(x)), JSON.stringify(f));
-  assert.ok(evaluate(vacio, { divergentSlots: 0, untaggedAuthoredLeaves: 0 }).length > 0,
+  assert.ok(evaluate(vacio, { silentPairs: 0, placeholderPairs: 0, untaggedAuthoredLeaves: 0 }).length > 0,
     'un corpus vacio NUNCA puede salir verde en silencio');
 });
 
@@ -341,13 +571,22 @@ test('integracion: la guarda anti-rename del metadato tiene dientes', () => {
   assert.ok(g.some((x) => /via EVNTO_CANONICAL_MOTION/.test(x)), `la guarda del preset no mordio: ${JSON.stringify(g)}`);
 });
 
-test('integracion: el baseline autorado pinea los dos contadores de la corrida real', () => {
+test('integracion: el baseline autorado pinea los tres contadores de la corrida real', () => {
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
   const real = build();
-  assert.equal(baseline.divergentSlots, real.ratchet.divergentSlots);
+  assert.equal(baseline.silentPairs, real.ratchet.silentPairs);
+  assert.equal(baseline.placeholderPairs, real.ratchet.placeholderPairs);
   assert.equal(baseline.untaggedAuthoredLeaves, real.ratchet.untaggedAuthoredLeaves);
   assert.match(baseline.law, /decrease-only/);
   assert.deepEqual(evaluate(real, baseline), [], 'HEAD contra su baseline tiene que dar PASS');
+});
+
+test('integracion: silentPairs 0 y placeholderPairs congelado en 3969 sobre el corpus real', () => {
+  const real = build();
+  assert.equal(real.ratchet.silentPairs, 0, 'F4A-close: las 53 disposiciones @absent tienen que cerrar el silencio a 0');
+  assert.equal(real.ratchet.placeholderPairs, 3969, 'placeholderPairs no se mueve: ningun @absent tapa un placeholder');
+  assert.equal(real.ratchet.declaredAbsentPairs, 53, 'exactamente los 53 pares adjudicados por Fable B-6');
+  assert.deepEqual(real.matrix.declaredAbsent, { rottay: 19, bithire: 1, evnto: 33 });
 });
 
 test('integracion: los tags del corpus real son del vocabulario cerrado y no hay failures', () => {
@@ -358,6 +597,12 @@ test('integracion: los tags del corpus real son del vocabulario cerrado y no hay
   // conteo lo gobierna el ratchet, no este test.
   assert.ok(real.tagRegistry.count > 0, 'desde F4A-3b las fuentes llevan tags');
   for (const entry of real.tagRegistry.entries) {
+    // `absent` (F4A-close) es su propia disposicion, PARALELA a @domicile, no
+    // una quinta entrada de su vocabulario: no lleva domicile ni governorClass.
+    if (entry.kind === 'absent') {
+      assert.ok(typeof entry.governor === 'string' && entry.governor.length > 0, `governor vacio en @absent ${entry.slot}`);
+      continue;
+    }
     assert.ok(DOMICILES.includes(entry.domicile), `domicile fuera del vocabulario cerrado: ${entry.domicile}`);
     assert.ok(typeof entry.governor === 'string' && entry.governor.length > 0, `governor vacio en ${entry.slot ?? entry.scope}`);
   }

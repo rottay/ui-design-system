@@ -13,21 +13,105 @@
 
 import { strict as assert } from 'node:assert';
 import { spawnSync } from 'node:child_process';
-import { readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import {
+  cpSync,
+  existsSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
+import {
+  packageRoot as findPackageRoot,
+  repoRoot as findRepoRoot,
+} from '../../lib/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);
+const LIVE = findRepoRoot(HERE);
 const gate = resolve(HERE, 'index.mjs');
 const registryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
+
+// T-1b (sandbox isolation): the DRILL below used to write/remove a plant
+// directly under the live-scanned tree. A single test tolerates that, but a
+// partial copy would drown a real signal in unrelated drift if the corpus
+// were ever narrowed, and a crash mid-drill could leave `__cra12-*` behind on
+// the real tree. Instead the gate scans a throwaway, byte-complete copy of
+// the corpus, built once per module in `test.before` and reused by every
+// drill via `--workspace-root`; the real tree is asserted absent of the plant
+// at every step (D-4).
+const CORPUS_FILE_COUNT = 4329; // packages/core/src (3975) + packages/showroom/src (354)
+
+let SANDBOX_TMP;
+let WS;
+let sandboxPackageRoot;
+
+function countCorpusEntries(root) {
+  let files = 0;
+  let symlinks = 0;
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isSymbolicLink()) {
+        symlinks += 1;
+        continue;
+      }
+      if (entry.isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (entry.isFile()) files += 1;
+    }
+  };
+  walk(root);
+  return { files, symlinks };
+}
+
+test.before(() => {
+  SANDBOX_TMP = mkdtempSync(join(tmpdir(), 'cra12-reanchor-'));
+  WS = join(SANDBOX_TMP, 'ui-design-system');
+  sandboxPackageRoot = join(WS, 'packages/core');
+
+  cpSync(join(LIVE, 'packages/core/src'), join(WS, 'packages/core/src'), { recursive: true });
+  cpSync(join(LIVE, 'packages/showroom/src'), join(WS, 'packages/showroom/src'), { recursive: true });
+  cpSync(join(LIVE, 'packages/core/package.json'), join(WS, 'packages/core/package.json'));
+  cpSync(join(LIVE, 'packages/showroom/package.json'), join(WS, 'packages/showroom/package.json'));
+  cpSync(join(LIVE, 'pnpm-lock.yaml'), join(WS, 'pnpm-lock.yaml'));
+
+  if (!existsSync(join(WS, 'packages/core/src')) || !existsSync(join(WS, 'pnpm-lock.yaml'))) {
+    throw new Error('T-1b sandbox fence: corpus or lockfile missing from sandbox');
+  }
+  const core = countCorpusEntries(join(WS, 'packages/core/src'));
+  const showroom = countCorpusEntries(join(WS, 'packages/showroom/src'));
+  const totalFiles = core.files + showroom.files;
+  const totalSymlinks = core.symlinks + showroom.symlinks;
+  if (totalFiles !== CORPUS_FILE_COUNT) {
+    throw new Error(`T-1b sandbox fence: expected ${CORPUS_FILE_COUNT} corpus files, got ${totalFiles}`);
+  }
+  if (totalSymlinks !== 0) {
+    throw new Error(`T-1b sandbox fence: expected 0 symlinks in the copied corpus, got ${totalSymlinks}`);
+  }
+});
+
+test.after(() => {
+  if (
+    SANDBOX_TMP &&
+    (SANDBOX_TMP === tmpdir() || SANDBOX_TMP.startsWith(`${tmpdir()}${sep}`)) &&
+    basename(SANDBOX_TMP).startsWith('cra12-reanchor-')
+  ) {
+    rmSync(SANDBOX_TMP, { recursive: true, force: true });
+  }
+});
 
 function runGate(extra = []) {
   return spawnSync(
     process.execPath,
-    [gate, '--repositories', 'ui-design-system', ...extra],
+    [gate, '--repositories', 'ui-design-system', '--workspace-root', SANDBOX_TMP, ...extra],
     { cwd: packageRoot, encoding: 'utf8' },
   );
 }
@@ -42,14 +126,19 @@ test('DRILL: a NEW raw motion timing turns the gate red', () => {
   // growth. A gate re-anchored to "whatever is there now" but unable to detect
   // additions would be strictly worse than no gate.
   //
-  // The injection goes into the REAL scanned tree, because a partial copy
-  // changes every digest and drowns the signal in unrelated drift. The file is
-  // uniquely named and removed in `finally`.
-  const injected = resolve(
+  // The injection goes into the SANDBOXED copy of the scanned tree (T-1b): a
+  // partial copy changes every digest and drowns the signal in unrelated
+  // drift, so the whole corpus is copied and the plant moves with it. The
+  // real tree is asserted absent of the plant throughout (D-4) -- this file
+  // must never write to the live repo. The file is uniquely named and
+  // removed in `finally`.
+  const livePlant = resolve(
     packageRoot,
     'src/foundation/tokens/css/__cra12-reanchor-drill.css',
   );
+  const injected = join(sandboxPackageRoot, 'src/foundation/tokens/css/__cra12-reanchor-drill.css');
 
+  assert.equal(existsSync(livePlant), false, 'D-4: the real tree must never carry the drill plant (before)');
   assert.equal(runGate().status, 0, 'precondition: the gate is green before injection');
 
   try {
@@ -63,6 +152,8 @@ test('DRILL: a NEW raw motion timing turns the gate red', () => {
       'utf8',
     );
 
+    assert.equal(existsSync(livePlant), false, 'D-4: the real tree must never carry the drill plant (during)');
+
     const result = runGate();
     assert.notEqual(result.status, 0, 'a new raw timing must turn CRA-12 red');
     assert.match(result.stderr, /raw-motion-timing/);
@@ -71,6 +162,7 @@ test('DRILL: a NEW raw motion timing turns the gate red', () => {
     rmSync(injected, { force: true });
   }
 
+  assert.equal(existsSync(livePlant), false, 'D-4: the real tree must never carry the drill plant (after)');
   assert.equal(runGate().status, 0, 'the tree must be restored after the drill');
 });
 

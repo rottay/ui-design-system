@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "currentWave": "F4A — canon estructural de los 3 brand themes (F4A-0…13 cerrados, incluidos K1, K2, K3 y el correctivo F4A-3c; el frente queda cerrado salvo CHROME.table. Siguiente paquete estricto: F4A-14 = K4 (las 16 asimétricas), luego F4A-15 = K5 (las 40 hojas de CHROME.table) y F4A-close)",
-  "blockedOn": "No external blocker. F4A-close exige el ratchet a tolerancia cero + el gate de paridad real sobre keypaths evaluados (sin cobertura por placeholders) + la auditoría Fable del frente.",
+  "currentWave": "F4A — canon estructural de los 3 brand themes (cerrados desde el arranque del frente hasta F4A-13, incluidos K1, K2, K3 y el correctivo F4A-3c; el frente queda cerrado salvo CHROME.table. Siguiente paquete estricto: F4A-14 = K4 (las 16 asimétricas), luego F4A-15 = K5 (las 40 hojas de CHROME.table) y F4A-close)",
+  "blockedOn": "Kimi K3 deja de ser gate, auditor, implementador y dependencia por orden del owner del 2026-08-21; toda cláusula previa que lo declaraba bloqueante queda superseded. La cola vinculante en curso es: authority-honesty (este tranche), el aislamiento en sandbox de program-check, el aislamiento en sandbox de cra-12, F4A-14 = K4, F4A-15 = K5, las deudas semánticas del frente, el gate de paridad real con ratchet a tolerancia cero, la cerca de cascade-wiring con su work order PRE_F4B, y por último gates:ci final verde con la auditoría Fable del frente. F4A-close exige las cuatro obligaciones del roadmap, no tres: ratchet a tolerancia cero, gate de paridad real sobre keypaths evaluados sin cobertura por placeholders, gates:ci final verde, y auditoría Fable del frente.",
   "laneTableCaption": "Active packets:",
   "lanes": [
     {
       "id": "authority",
       "work": "Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated.",
       "model": "codex-dt",
-      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Codex DT under the owner order of 2026-08-21, which activated the documented backup DT after Kimi K3 exhausted its quota. History: Kimi K3 held this seat from the identity reconciliation (85d0583b9, owner order 2026-08-20, roadmap §12 decision 13) until 2026-08-21 and is retired from the live seat; it does not re-enter as auditor or writer. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Codex in the seat."
+      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Codex DT under the owner order of 2026-08-21, which activated the documented backup DT after Kimi K3 exhausted its quota. History: Kimi K3 held this seat from the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13) until 2026-08-21 and is retired from the live seat; it does not re-enter as auditor or writer. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Codex in the seat."
     },
     {
       "id": "control-calibration",

@@ -50,7 +50,7 @@ tagRegistry **4099** · divergentSlots **33** (medido: NO llega a 0 por la vía
 de placeholders — son slots que ningún tema autora; el 0 real lo certifica el
 gate `realKeypathParity` de F4A-close) · untaggedAuthoredLeaves **40**
 (exactamente las hojas de `CHROME.table`, que van con K5) · rosters firmados
-1304/1304 · suite pierna 1 **1717/13** por nombre · gates:ci **88 blocking +
+1304/1304 · suite pierna 1 **1717/13** por nombre · gates:ci **89 blocking +
 2 excluded** verdes.
 
 **Qué queda en F4A (cola vinculante, no se reordena):** **F4A-14 = K4** (las
@@ -99,7 +99,7 @@ HEAD y árbol limpio.
    re-anclarlo al sha256 real del censo en cada lote de fuentes (7 veces
    huérfano ya; su automatización es deuda de F4A-close).
 3. **gates:ci**: `pnpm --filter @rottay/design-system gates:ci` desde la raíz,
-   ~10-18 min, EN BACKGROUND. Verde = "88 blocking gate(s) passed" + 2
+   ~10-18 min, EN BACKGROUND. Verde = "89 blocking gate(s) passed" + 2
    excluded visibles con sus textos (channel-liveness, lane-control-drills —
    owners F4A/F4B + F2-asimétrico).
 4. **Suite**: pierna 1 = `node --test "scripts/**/*.test.mjs" "manifest/**/*.test.mjs"`

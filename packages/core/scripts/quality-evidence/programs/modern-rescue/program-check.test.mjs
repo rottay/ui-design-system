@@ -1,20 +1,128 @@
 import assert from "node:assert/strict";
-import { readFileSync, renameSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import test from "node:test";
 import {
-  readModernRescueContracts,
-  validateModernRescueContracts,
-} from "./program-check.mjs";
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync as rawRenameSync,
+  symlinkSync,
+  writeFileSync as rawWriteFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, sep } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import test from "node:test";
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = findRepoRoot(__dirname);
+const LIVE = findRepoRoot(__dirname);
 const programDir = "packages/core/scripts/quality-evidence/programs/modern-rescue";
-const programRoot = join(repoRoot, programDir);
+
+// T-1a (sandbox isolation): this file is the only mutator of the live
+// manifest tree in the blocking gate cohort (F4A-close, ratified). Every
+// writeFileSync/renameSync call site below stays untouched; only the three
+// roots move -- from the live repo to a throwaway copy built once per module
+// load -- so the 37 writes and 3 rename pairs land in the copy instead.
+const SANDBOX = mkdtempSync(join(tmpdir(), "modern-rescue-program-check-"));
+
+// The exact read-set of validateModernRescueContracts(), derived member by
+// member (F4A-close pre-K4 T-1a brief). A member missing here surfaces as a
+// baseline-parity difference (A-1), not a silent skip: receipts.mjs hashes a
+// missing sourceBinding as the literal 'MISSING' instead of throwing, so an
+// incomplete copy changes the verdict rather than crashing.
+const CLOSURE_MEMBERS = [
+  "pnpm-workspace.yaml",
+  "AGENTS.md",
+  "CLAUDE.md",
+  "packages/core/package.json",
+  "roadmap/registry.json",
+  "packages/core/manifest",
+  "packages/core/scripts/quality-evidence",
+  "packages/core/scripts/lib",
+  "packages/core/scripts/tokens/customization-surface-census",
+  "packages/core/scripts/tokens/kimi-preservation-manifest",
+  "packages/core/hooks-manifest.json",
+  "packages/core/tokens/controls/README.md",
+  "packages/core/src",
+  "packages/showroom/src",
+  "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts",
+];
+
+for (const rel of CLOSURE_MEMBERS) {
+  const dst = join(SANDBOX, rel);
+  mkdirSync(dirname(dst), { recursive: true });
+  cpSync(join(LIVE, rel), dst, { recursive: true });
+}
+
+// node_modules is never a write target (every write below derives from
+// manifestRoot/programRoot), so it is reused read-only via symlink instead of
+// copied; the D-4 guard further down still refuses to write through either
+// link.
+symlinkSync(join(LIVE, "node_modules"), join(SANDBOX, "node_modules"), "dir");
+symlinkSync(
+  join(LIVE, "packages/core/node_modules"),
+  join(SANDBOX, "packages/core/node_modules"),
+  "dir",
+);
+
+// Fence, asserted before anything is imported: if the sandbox were ever built
+// inside the repo, the ascend-to-root search below would find the LIVE
+// pnpm-workspace.yaml and silently validate the live tree. Fail closed.
+if (!existsSync(join(SANDBOX, "pnpm-workspace.yaml"))) {
+  throw new Error("T-1a sandbox fence: pnpm-workspace.yaml missing from sandbox root");
+}
+if (
+  JSON.parse(readFileSync(join(SANDBOX, "packages/core/package.json"), "utf8")).name !==
+  "@rottay/design-system"
+) {
+  throw new Error("T-1a sandbox fence: packages/core/package.json name mismatch in sandbox");
+}
+const sandboxProgramDir = join(SANDBOX, programDir);
+const resolvedRoot = findRepoRoot(sandboxProgramDir);
+if (resolvedRoot !== SANDBOX) {
+  throw new Error(
+    `T-1a sandbox fence: findRepoRoot(${sandboxProgramDir}) resolved to ${resolvedRoot}, expected ${SANDBOX}`,
+  );
+}
+
+const { readModernRescueContracts, validateModernRescueContracts } = await import(
+  pathToFileURL(join(sandboxProgramDir, "program-check.mjs")).href
+);
+
+const repoRoot = SANDBOX;
+const programRoot = sandboxProgramDir;
 // The manifest graduated to the package root; the programme still owns it.
-const manifestRoot = join(repoRoot, 'packages/core/manifest');
+const manifestRoot = join(repoRoot, "packages/core/manifest");
+
+// D-4: no write may escape the sandbox, including through either
+// node_modules symlink above (C-1, Fable preaudit). Every one of the 37
+// writeFileSync/renameSync call sites below is untouched; they resolve to
+// these guarded wrappers by name, not to the raw node:fs functions.
+const SANDBOX_ESCAPE_ROOTS = [
+  join(SANDBOX, "node_modules"),
+  join(SANDBOX, "packages/core/node_modules"),
+];
+function isUnderRoot(root, target) {
+  return target === root || target.startsWith(`${root}${sep}`);
+}
+function assertSandboxWritePath(target) {
+  if (!isUnderRoot(SANDBOX, target)) {
+    throw new Error(`T-1a sandbox write guard: ${target} is outside the sandbox`);
+  }
+  if (SANDBOX_ESCAPE_ROOTS.some((root) => isUnderRoot(root, target))) {
+    throw new Error(`T-1a sandbox write guard: ${target} targets a node_modules symlink`);
+  }
+}
+function writeFileSync(target, data) {
+  assertSandboxWritePath(target);
+  rawWriteFileSync(target, data);
+}
+function renameSync(oldPath, newPath) {
+  assertSandboxWritePath(oldPath);
+  assertSandboxWritePath(newPath);
+  rawRenameSync(oldPath, newPath);
+}
 
 const baseline = readModernRescueContracts();
 

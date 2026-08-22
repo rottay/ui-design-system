@@ -11,5 +11,6 @@
   "wired": 2203,
   "debt": 2171,
   "rootsExcluded": 768,
-  "skinFiles": 391
+  "skinFiles": 391,
+  "rootsExcludedNote": "F4A-close (Fable B-3/§4): esta clave ahora tiene lector real -- el test 'cerca PRE_F4B (C-3)' de index.test.mjs la compara contra classifyCascadeWiring().roots. Racional C-3 medido: --ds-input-md-icon-size es un canal real con declaracion base (presentation/components/input.css:38) y emision de tema, pero el ratchet lo trata como raiz posicional (aparece en fallbackTargets, no en reachesRoot ni en denominator) porque otros canales hacen fallback A el. Reconstruccion real del clasificador para distinguir raiz-legitima de canal-tratado-como-raiz queda diferida a PRE_F4B; la entrada a F4B queda bloqueada hasta que exista ese gate falsable. Los drenajes decrease-only de 'debt' siguen permitidos: esta nota no congela nada mas que rootsExcluded."
 }

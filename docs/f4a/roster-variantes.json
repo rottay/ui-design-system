@@ -206,29 +206,29 @@
     {
       "root": "tier.raised.fg",
       "theme": "rottay",
-      "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: calc",
-      "ruleSource": "exposure",
-      "note": "K4: valor = resolucion computada de hoy (base=#F0F0F0 | overlay=#1A1A1A); raiz por raiz en F4A-14."
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: calc",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
     },
     {
       "root": "tier.raised.fg",
       "theme": "bithire",
       "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: calc",
+      "domicile": "seed",
+      "governor": "seed sin dial — autorado directo, base y dark",
       "ruleSource": "exposure",
       "note": "K4: valor = resolucion computada de hoy (base=#14283B | overlay=#e4e8ed); raiz por raiz en F4A-14."
     },
     {
       "root": "tier.raised.fg",
       "theme": "evnto",
-      "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: calc",
-      "ruleSource": "exposure",
-      "note": "K4: valor = resolucion computada de hoy (base=#111111 | overlay=#E8E8E0); raiz por raiz en F4A-14."
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: calc",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
     },
     {
       "root": "tier.base.bg",
@@ -380,29 +380,29 @@
     {
       "root": "tier.overlay.fg",
       "theme": "rottay",
-      "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
-      "ruleSource": "exposure",
-      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#F0F0F0 | overlay=#1A1A1A); raiz por raiz en F4A-14."
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
+      "ruleSource": "posture",
+      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
     },
     {
       "root": "tier.overlay.fg",
       "theme": "bithire",
       "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
+      "domicile": "seed",
+      "governor": "seed sin dial — autorado directo, base y dark",
       "ruleSource": "exposure",
       "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#14283B | overlay=#e4e8ed); raiz por raiz en F4A-14."
     },
     {
       "root": "tier.overlay.fg",
       "theme": "evnto",
-      "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
-      "ruleSource": "exposure",
-      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#111111 | overlay=#E8E8E0); raiz por raiz en F4A-14."
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6)",
+      "ruleSource": "posture",
+      "note": "Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
     },
     {
       "root": "type.scale",
@@ -571,7 +571,7 @@
       "theme": "bithire",
       "posture": "authored",
       "domicile": "seed",
-      "governor": "dial: token-overrides",
+      "governor": "dial: (raiz autora — dial en F4B)",
       "ruleSource": "exposure",
       "note": "K4: valor = resolucion computada de hoy (base=#ffffff | overlay=var(--ds-color-bg-elevated)); raiz por raiz en F4A-14."
     },
@@ -884,20 +884,20 @@
     {
       "root": "control.ratio.padding",
       "theme": "rottay",
-      "posture": "unassigned",
-      "domicile": "seed",
-      "governor": "seed sin dial — materializacion pendiente",
-      "ruleSource": "nudo por-crear",
-      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: calc (paddingX = altura x 0.42 boton / altura x 0.35 campo; paddingY = altura x 0.20)",
+      "ruleSource": "nudo K4",
+      "note": "K4 (F4A-14a): rottay SI toma posicion -- deriva de calc (paddingX = altura x 0.42 boton / altura x 0.35 campo; paddingY = altura x 0.20 en las cinco filas de campo). El canal --ds-control-padding-ratio-label sigue channelStatus por-crear: la materializacion de cabeza sigue pendiente en F2-asimetrico/F4B (cierre F2); rottay ya escribio la ley por calc(), a la espera de esa cabeza. raiz por raiz en F4A-14."
     },
     {
       "root": "control.ratio.padding",
       "theme": "bithire",
-      "posture": "unassigned",
+      "posture": "authored",
       "domicile": "seed",
-      "governor": "seed sin dial — materializacion pendiente",
-      "ruleSource": "nudo por-crear",
-      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+      "governor": "seed sin dial — autorado directo, literales por familia",
+      "ruleSource": "nudo K4",
+      "note": "K4 (F4A-14a): bithire SI toma posicion -- seed sin dial, autorado directo por familia (10 literales, incluye textareaPaddingX/Y). El canal --ds-control-padding-ratio-label sigue channelStatus por-crear: la materializacion de cabeza sigue pendiente en F2-asimetrico/F4B (cierre F2). raiz por raiz en F4A-14."
     },
     {
       "root": "control.ratio.padding",
@@ -1026,8 +1026,8 @@
       "root": "control.ratio.lineHeight",
       "theme": "bithire",
       "posture": "authored",
-      "domicile": "derived",
-      "governor": "deriva de: --ds-line-height-tight",
+      "domicile": "seed",
+      "governor": "seed sin dial — autorado directo, 20px literal",
       "ruleSource": "exposure",
       "note": "K4: valor = resolucion computada de hoy (base=20px); raiz por raiz en F4A-14."
     },
@@ -1043,20 +1043,20 @@
     {
       "root": "control.ratio.iconSize",
       "theme": "rottay",
-      "posture": "unassigned",
-      "domicile": "unassigned",
-      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature",
-      "ruleSource": "posture",
-      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: --ds-icon-sm-size",
+      "ruleSource": "nudo K4",
+      "note": "K4 (F4A-14a): valor = resolucion computada de hoy (base=var(--ds-icon-sm-size)); rottay SI toma posicion -- deriva de --ds-icon-sm-size. La emision real corre por --ds-input-md-icon-size / --ds-button-md-icon-size; el catalogo adjudico --ds-input-md-icon-size como el channel representativo de esta raiz (F4A-close, Lote B: convencion del grupo geometria-de-controles, input como cabeza representativa; evidence en input.css:38). --ds-icon-md-size vuelve a ser token base del primitivo Icon, sin raiz. raiz por raiz en F4A-14."
     },
     {
       "root": "control.ratio.iconSize",
       "theme": "bithire",
-      "posture": "unassigned",
-      "domicile": "unassigned",
-      "governor": "ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature",
-      "ruleSource": "posture",
-      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+      "posture": "authored",
+      "domicile": "seed",
+      "governor": "seed sin dial — autorado directo, 15px literal",
+      "ruleSource": "nudo K4",
+      "note": "K4 (F4A-14a): valor = resolucion computada de hoy (base=15px); bithire SI toma posicion -- seed sin dial, autorado directo (15px literal). La emision real corre por --ds-button-md-icon-size; el catalogo adjudico --ds-input-md-icon-size como el channel representativo de esta raiz (F4A-close, Lote B: convencion del grupo geometria-de-controles, input como cabeza representativa; evidence en input.css:38). --ds-icon-md-size vuelve a ser token base del primitivo Icon, sin raiz. raiz por raiz en F4A-14."
     },
     {
       "root": "control.ratio.iconSize",
@@ -1190,20 +1190,20 @@
     {
       "root": "control.ratio.gap",
       "theme": "rottay",
-      "posture": "unassigned",
-      "domicile": "seed",
-      "governor": "seed sin dial — materializacion pendiente",
-      "ruleSource": "nudo por-crear",
-      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+      "posture": "authored",
+      "domicile": "derived",
+      "governor": "deriva de: calc (gap = altura x 0.18)",
+      "ruleSource": "nudo K4",
+      "note": "K4 (F4A-14a): rottay SI toma posicion -- deriva de calc (gap = altura x 0.18, seis veces seguidas). El canal --ds-control-gap-ratio sigue channelStatus por-crear: la materializacion de cabeza sigue pendiente en F2-asimetrico/F4B (cierre F2); rottay ya escribio la ley por calc(), a la espera de esa cabeza. raiz por raiz en F4A-14."
     },
     {
       "root": "control.ratio.gap",
       "theme": "bithire",
-      "posture": "unassigned",
+      "posture": "authored",
       "domicile": "seed",
-      "governor": "seed sin dial — materializacion pendiente",
-      "ruleSource": "nudo por-crear",
-      "note": "por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en bithire, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
+      "governor": "seed sin dial — autorado directo, literales por familia",
+      "ruleSource": "nudo K4",
+      "note": "K4 (F4A-14a): bithire SI toma posicion -- seed sin dial, autorado directo por familia (literales). El canal --ds-control-gap-ratio sigue channelStatus por-crear: la materializacion de cabeza sigue pendiente en F2-asimetrico/F4B (cierre F2). raiz por raiz en F4A-14."
     },
     {
       "root": "control.ratio.gap",
@@ -1592,11 +1592,11 @@
     {
       "root": "effect.intensity",
       "theme": "rottay",
-      "posture": "authored",
-      "domicile": "seed",
-      "governor": "dial: surfaces.effect-intensity",
-      "ruleSource": "exposure",
-      "note": "K4: valor = resolucion computada de hoy (base=1); raiz por raiz en F4A-14."
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.effect-intensity",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
     },
     {
       "root": "effect.intensity",
@@ -1610,11 +1610,11 @@
     {
       "root": "effect.intensity",
       "theme": "evnto",
-      "posture": "authored",
-      "domicile": "seed",
-      "governor": "dial: surfaces.effect-intensity",
-      "ruleSource": "exposure",
-      "note": "K4: valor = resolucion computada de hoy (base=1); raiz por raiz en F4A-14."
+      "posture": "unassigned",
+      "domicile": "unassigned",
+      "governor": "ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.effect-intensity",
+      "ruleSource": "posture",
+      "note": "K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14."
     },
     {
       "root": "color.border",

@@ -10,7 +10,7 @@
     "denominator": "Cada tema se compilo con esbuild y se recorrio el objeto EVALUADO, no el texto fuente: 3738 hojas (rottay 1819, bithire 1496, evnto 423). Se restaron 45 hojas de metadato/prosa, quedando 3693 CANALES DE PINTURA (rottay 1804, bithire 1482, evnto 407).",
     "classes": "Cada canal se clasifico en A DERIVABLE (sale de otro canal por referencia, duplicado, mezcla o calc), B VARIANTE (pertenece a un vocabulario cerrado o a un pin sobre una derivacion disponible), C SEMILLA (decision de marca irreductible) y D IRREDUCIBLE POR FAMILIA (literal sin hermano ni escalera). Resultado: A 2473 (67,0%), B 802 (21,7%), C 262 (7,1%), D 156 (4,2%). A+B = 3275 = 88,7%.",
     "roots": "Las 63 raices cubren el 100% de A+B: 3275 canales asignados, cero sin asignar. La verificacion de cobertura es constructiva -- el clasificador falla si un solo canal A o B queda sin raiz.",
-    "assignments": "Una ASIGNACION es un par raiz x modo por tema. Rottay tiene modo base y superposicion light; bithire y evnto base y dark. Total 263 (rottay 99, bithire 95, evnto 69). Es la medida de cuantas veces un tema tiene que TOMAR POSICION sobre una raiz, distinta de cuantos canales esa posicion regenera.",
+    "assignments": "Una ASIGNACION es un par raiz x modo por tema. Rottay tiene modo base y superposicion light; bithire y evnto base y dark. Total 261 (rottay 95, bithire 96, evnto 70). Es la medida de cuantas veces un tema tiene que TOMAR POSICION sobre una raiz, distinta de cuantos canales esa posicion regenera.",
     "channelStatus": "existe = hay al menos una declaracion \"--ds-nombre:\" en la base DS de packages/core/src (se cita el primer productor). solo-artefacto = cero declaraciones en la base DS; el canal solo nace al compilar un tenant y el lector lo consume con var(x, fallback). por-crear = cero declaraciones en todo src/: la raiz no tiene cabeza hoy. El detector se ancla en los DOS PUNTOS de la declaracion, porque var(--ds-x) y var(--ds-x, fallback) nunca llevan dos puntos despues del nombre.",
     "notMeasured": "Este catalogo NO mide adopcion en la capa de componente ni cobertura de productores; esos numeros viven en los encargos de cobertura y materializacion. Aqui solo se afirma: cuantos canales de tema regenera cada raiz, y quien la gobierna."
   },
@@ -307,7 +307,7 @@
     {
       "rootId": "tier.raised.fg",
       "group": "superficie-por-nivel",
-      "channel": "--ds-color-text-primary",
+      "channel": "--ds-material-raised-foreground",
       "channelStatus": "existe",
       "collapses": {
         "total": 93,
@@ -316,15 +316,12 @@
         "evnto": 0
       },
       "assignments": {
-        "total": 4,
-        "rottay": 2,
+        "total": 2,
+        "rottay": 0,
         "bithire": 2,
         "evnto": 0,
         "modes": {
-          "rottay": [
-            "base",
-            "light"
-          ],
+          "rottay": [],
           "bithire": [
             "base",
             "dark"
@@ -613,8 +610,8 @@
     {
       "rootId": "tier.overlay.fg",
       "group": "superficie-por-nivel",
-      "channel": "--ds-color-text-primary",
-      "channelStatus": "existe",
+      "channel": "--ds-material-overlay-foreground",
+      "channelStatus": "solo-artefacto",
       "collapses": {
         "total": 72,
         "rottay": 46,
@@ -622,15 +619,12 @@
         "evnto": 0
       },
       "assignments": {
-        "total": 4,
-        "rottay": 2,
+        "total": 2,
+        "rottay": 0,
         "bithire": 2,
         "evnto": 0,
         "modes": {
-          "rottay": [
-            "base",
-            "light"
-          ],
+          "rottay": [],
           "bithire": [
             "base",
             "dark"
@@ -643,7 +637,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606).",
+      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606). Nota obligatoria (K4): src/ui/primitives/overlay/Tour/tests/Tour.overlay-material.test.ts:55-64 pinea la AUSENCIA de este canal (expect(decl).not.toContain('--ds-material-overlay-foreground')), con el incidente en su propio comentario: \"The overlay-foreground arm is unauthored on some tenants, so the chain fell through to the dark on-primary base and painted black on black.\" No materializar nunca.",
       "derivationDebt": true
     },
     {
@@ -877,7 +871,7 @@
     {
       "rootId": "tier.overlay.bg",
       "group": "superficie-por-nivel",
-      "channel": "--ds-surface-overlay",
+      "channel": "--ds-material-overlay-background",
       "channelStatus": "existe",
       "collapses": {
         "total": 55,
@@ -886,23 +880,19 @@
         "evnto": 0
       },
       "assignments": {
-        "total": 4,
-        "rottay": 2,
-        "bithire": 2,
+        "total": 1,
+        "rottay": 0,
+        "bithire": 1,
         "evnto": 0,
         "modes": {
-          "rottay": [
-            "base",
-            "light"
-          ],
+          "rottay": [],
           "bithire": [
-            "base",
-            "dark"
+            "base"
           ],
           "evnto": []
         }
       },
-      "derivation": "La autoridad overlay-panel-scrim-split lo declara textual (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634): \"overlay ROLE is a floating panel derived from the elevated ground; the veil is --ds-overlay-scrim over --ds-color-bg-overlay; reduced-transparency collapses to the opaque pair\".",
+      "derivation": "La autoridad overlay-panel-scrim-split lo declara textual (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634): \"overlay ROLE is a floating panel derived from the elevated ground; the veil is --ds-overlay-scrim over --ds-color-bg-overlay; reduced-transparency collapses to the opaque pair\". Semantica de asignacion declarada (K4, F4A-14a, instruccion del DT 2026-08-21): esta reparacion cuenta EMISION DEL CANAL CABEZA POR MODO, no hoja autorada por modo -- bithire autora la hoja en los dos brazos (SURFACES.surfaceRoles.overlay.background y OVERLAY.surfaces.surfaceRoles.overlay.background), pero el canal cabeza --ds-material-overlay-background solo se emite en base (artifacts/bithire/index.css:716); el modo dark emite unicamente el canal secundario --ds-surface-overlay (:1664, contra :965 en base). Bajo la semantica de posicion autorada por modo esto daria x2; bajo emision del canal cabeza por modo da x1 -- esta es la semantica elegida. Segundo canal (informativo, no un segundo root ni una entrada de collapses): --ds-surface-overlay, autorado por bithire solo en modo dark. Nota: materializar esta raiz en rottay/evnto produce la declaracion circular --ds-surface-overlay: var(--ds-surface-overlay) -- no materializar.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:278",
       "governedBy": "token-overrides",
       "governanceScope": "canal-por-canal",
@@ -1582,7 +1572,7 @@
     {
       "rootId": "control.ratio.iconSize",
       "group": "geometria-de-controles",
-      "channel": "--ds-icon-md-size",
+      "channel": "--ds-input-md-icon-size",
       "channelStatus": "existe",
       "collapses": {
         "total": 23,
@@ -1606,7 +1596,7 @@
         }
       },
       "derivation": "iconSize ~ altura * 0.42. La autoridad icon-size-roles ya declara la figura para pozos de icono recurrentes: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature, con la nota \"a future icon profile modulates them\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:635-641).",
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/icon.css:21",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/input.css:38",
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
@@ -2776,7 +2766,10 @@
       "DETECCION DE CANALES: una verificacion intermedia mia filtro las declaraciones con grep -v \"var(\", lo que descarta toda declaracion cuyo VALOR es un var. Eso reporto como inexistentes dos canales que SI existen: --ds-radius-button (packages/core/src/foundation/tokens/css/foundation/base/borders.css:27, \"--ds-radius-button: var(--ds-radius-md);\") y --ds-shadow-button-rest (packages/core/src/foundation/tokens/css/foundation/base/shadows.css:89). El metodo correcto se ancla en los dos puntos de la declaracion y es el usado en todo este catalogo. Ningun dato del informe entregado dependia de aquella verificacion fallida.",
       "SUPERVIVIENTES DE CLASE D: el informe estimo \"unos 22 sobreviven\" y proyecto un residuo de ~284 a ojo sobre la tabla de cubetas. Aplicada una regla mecanica y citada (anatomia singular + receta propia), los supervivientes medidos son 13 y el residuo proyectado 275. Este catalogo usa la cifra mecanica; la estimacion previa queda superada.",
       "CUBETAS DE CLASE D: el reparto por cubeta publicado en el informe difiere en unas pocas unidades del de aqui porque el orden de evaluacion de las reglas cambia a que cubeta cae un literal ambiguo. Los totales estables (C 262, D 156, residuo 418) no cambian; la subclasificacion se declara explicitamente como heuristica.",
-      "CONTEO DE OCURRENCIAS --ds-*: la cifra de partida del encargo (278 / 639 / 141) es reproducible pero mide otra cosa. De esas ocurrencias, 263 / 626 / 133 estan dentro de var(--ds-...): son LECTURAS de la cascada, es decir canales ya colapsados, no autoria. El residuo (15 / 13 / 8) es prosa en comentarios. El denominador honesto de autoria son las hojas evaluadas: 3693 canales de pintura."
+      "CONTEO DE OCURRENCIAS --ds-*: la cifra de partida del encargo (278 / 639 / 141) es reproducible pero mide otra cosa. De esas ocurrencias, 263 / 626 / 133 estan dentro de var(--ds-...): son LECTURAS de la cascada, es decir canales ya colapsados, no autoria. El residuo (15 / 13 / 8) es prosa en comentarios. El denominador honesto de autoria son las hojas evaluadas: 3693 canales de pintura.",
+      "METHOD.ASSIGNMENTS -- DRIFT DE F4A-6 (263 -> 268), AJENO A K4: la prosa de method.assignments citaba el total 263 (rottay 99, bithire 95, evnto 69), que era la suma exacta del snapshot de 63 raices para el que fue escrita. F4A-6 agrego la raiz 64, tier.page.ink, con assignments {total:5, rottay:2, bithire:2, evnto:1}, y nunca actualizo esta prosa. La reconciliacion cierra al entero: 263+5=268, 99+2=101, 95+2=97, 69+1=70. Base real verificada sumando las assignments de las 64 raices: 268 = rottay 101 + bithire 97 + evnto 70.",
+      "METHOD.ASSIGNMENTS -- DELTA DE F4A-14a/K4 (268 -> 261): las reparaciones contractuales de tier.raised.fg, tier.overlay.fg y tier.overlay.bg corrigen assignments que contaban una posicion dark autorada de bithire como si tambien la autorara rottay. Delta: rottay -6 (tier.raised.fg -2, tier.overlay.fg -2, tier.overlay.bg -2), bithire -1 (tier.overlay.bg -1), evnto 0. Total -7. Destino: 268-7=261 = rottay 95 (101-6) + bithire 96 (97-1) + evnto 70 (70-0). El literal 263 (99/95/69) queda superado por las dos causas de arriba, declaradas por separado: el drift de F4A-6 y el delta de K4.",
+      "METHOD.ROOTS Y RECONCILIATION.STATEMENT -- MISMO VINTAGE DE F4A-6, NO REESCRITO EN K4: ambas prosas citan '63 raices' (method.roots: 'Las 63 raices cubren el 100% de A+B'; reconciliation.statement: 'Las 63 cabezas internas contra los 20 controles'), pero el catalogo tiene 64 raices desde que tier.page.ink entro en F4A-6. Se registra el drift, no se reescriben las dos frases: corregir la cobertura de A+B exige re-medir los 3275 canales asignados, y eso no es K4."
     ]
   },
   "provenance": {

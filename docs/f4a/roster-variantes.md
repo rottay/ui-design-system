@@ -12,11 +12,11 @@ schemaVersion 3. Re-emitido con las adjudicaciones de la parte 3 (**posture medi
 
 | domicilio | rottay | bithire | evnto | total |
 |---|---|---|---|---|
-| `seed` | 27 | 33 | 25 | **85** |
-| `derived` | 11 | 13 | 9 | **33** |
+| `seed` | 24 | 37 | 24 | **85** |
+| `derived` | 12 | 10 | 7 | **29** |
 | `baseline` | 0 | 0 | 0 | **0** |
 | `pro-expert` | 0 | 0 | 0 | **0** |
-| `unassigned` | 28 | 20 | 32 | **80** |
+| `unassigned` | 30 | 19 | 35 | **84** |
 | `BLOCKED` | 0 | 0 | 0 | **0** |
 | **total** | 66 | 66 | 66 | **198** |
 
@@ -25,8 +25,8 @@ schemaVersion 3. Re-emitido con las adjudicaciones de la parte 3 (**posture medi
 | tema | raices con posicion **autorada** | sin posicion |
 |---|---|---|
 | rottay | **36** / 66 | 30 |
-| bithire | **44** / 66 | 22 |
-| evnto | **32** / 66 | 34 |
+| bithire | **47** / 66 | 19 |
+| evnto | **29** / 66 | 37 |
 
 **Metodo:** compileBrandTheme sobre la FUENTE del tema (A.2): la raiz esta authored si su canal cabeza aparece en cssVariables del cuerpo o de algun modeBlock. NO es la lectura del artefacto (esa dio 159 y es chequeo derivado).
 
@@ -178,11 +178,11 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `authored` | `seed` | exposure | dial: surfaces.effect-intensity |
+| rottay | `unassigned` | `unassigned` | posture | ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.effect-intensity |
 | bithire | `authored` | `seed` | exposure | dial: surfaces.effect-intensity |
-| evnto | `authored` | `seed` | exposure | dial: surfaces.effect-intensity |
+| evnto | `unassigned` | `unassigned` | posture | ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: surfaces.effect-intensity |
 
-> K4: valor = resolucion computada de hoy (base=1); raiz por raiz en F4A-14.
+> Medido con el compilador productivo: --ds-effect-intensity emite rottay "1" · bithire "0.58" · evnto "1". Rottay y evnto declinan explicitamente (@placeholder SURFACES.effectIntensity, @domicile unassigned -- rottay index.ts:3767-3769, evnto 2076-2078) y heredan el fallback del lowering. La materializacion en rottay/evnto fue probada cero-delta (0 diffs sobre el mapa completo) y el DT la declino el 2026-08-21 para preservar la declinacion explicita. Escribir base=1 sobre bithire es regresion medida (1 diff: 0.58 -> 1) y esta prohibido.
 
 **`elevation.ladder`** · --ds-elevation-1 · exposure `tenant-dial` · status `existe` · radio 191
 
@@ -328,28 +328,28 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `unassigned` | `seed` | nudo por-crear | seed sin dial — materializacion pendiente |
-| bithire | `unassigned` | `seed` | nudo por-crear | seed sin dial — materializacion pendiente |
+| rottay | `authored` | `derived` | nudo K4 | deriva de: calc (gap = altura x 0.18) |
+| bithire | `authored` | `seed` | nudo K4 | seed sin dial — autorado directo, literales por familia |
 | evnto | `unassigned` | `seed` | nudo por-crear | seed sin dial — materializacion pendiente |
 
-> por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14.
+> K4 (F4A-14a): rottay SI toma posicion -- deriva de calc (gap = altura x 0.18, seis veces seguidas). El canal --ds-control-gap-ratio sigue channelStatus por-crear: la materializacion de cabeza sigue pendiente en F2-asimetrico/F4B (cierre F2); rottay ya escribio la ley por calc(), a la espera de esa cabeza. raiz por raiz en F4A-14.
 
-**`control.ratio.iconSize`** · --ds-icon-md-size · exposure `internal-head` · status `existe` · radio 23
+**`control.ratio.iconSize`** · --ds-input-md-icon-size · exposure `internal-head` · status `existe` · radio 23
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `unassigned` | `unassigned` | posture | ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-st |
-| bithire | `unassigned` | `unassigned` | posture | ley de placeholder: bithire no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-s |
+| rottay | `authored` | `derived` | nudo K4 | deriva de: --ds-icon-sm-size |
+| bithire | `authored` | `seed` | nudo K4 | seed sin dial — autorado directo, 15px literal |
 | evnto | `unassigned` | `unassigned` | posture | ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-icon-size-sta |
 
-> K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14.
+> K4 (F4A-14a): valor = resolucion computada de hoy (base=var(--ds-icon-sm-size)); rottay SI toma posicion -- deriva de --ds-icon-sm-size; bithire SI toma posicion -- seed sin dial, autorado directo (15px literal). La emision real corre por --ds-input-md-icon-size / --ds-button-md-icon-size; el catalogo adjudico --ds-input-md-icon-size como el channel representativo de esta raiz (F4A-close, Lote B: convencion del grupo geometria-de-controles, input como cabeza representativa; evidence en input.css:38). --ds-icon-md-size vuelve a ser token base del primitivo Icon, sin raiz. raiz por raiz en F4A-14.
 
 **`control.ratio.lineHeight`** · --ds-input-md-line-height · exposure `internal-head` · status `existe` · radio 23
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
 | rottay | `authored` | `derived` | exposure | deriva de: --ds-line-height-tight |
-| bithire | `authored` | `derived` | exposure | deriva de: --ds-line-height-tight |
+| bithire | `authored` | `seed` | exposure | seed sin dial — autorado directo, 20px literal |
 | evnto | `unassigned` | `unassigned` | posture | ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: --ds-line-height-t |
 
 > K4: valor = resolucion computada de hoy (base=var(--ds-line-height-tight)); raiz por raiz en F4A-14.
@@ -358,11 +358,11 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `unassigned` | `seed` | nudo por-crear | seed sin dial — materializacion pendiente |
-| bithire | `unassigned` | `seed` | nudo por-crear | seed sin dial — materializacion pendiente |
+| rottay | `authored` | `derived` | nudo K4 | deriva de: calc (paddingX = altura x 0.42 boton / altura x 0.35 campo; paddingY = altura x 0.20) |
+| bithire | `authored` | `seed` | nudo K4 | seed sin dial — autorado directo, literales por familia |
 | evnto | `unassigned` | `seed` | nudo por-crear | seed sin dial — materializacion pendiente |
 
-> por-crear: materializacion en F2-asimetrico/F4B (cierre F2). Hoy 0 declaraciones y 0 lectores. posture unassigned en rottay, pero el nudo escribe el domicilio: se conserva y la ausencia queda declarada. K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14.
+> K4 (F4A-14a): rottay SI toma posicion -- deriva de calc (paddingX = altura x 0.42 boton / altura x 0.35 campo; paddingY = altura x 0.20 en las cinco filas de campo). El canal --ds-control-padding-ratio-label sigue channelStatus por-crear: la materializacion de cabeza sigue pendiente en F2-asimetrico/F4B (cierre F2); rottay ya escribio la ley por calc(), a la espera de esa cabeza. raiz por raiz en F4A-14.
 
 **`control.ratio.radius`** · --ds-button-md-radius · exposure `tenant-dial` · status `existe` · radio 13
 
@@ -500,12 +500,12 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 | bithire | `authored` | `derived` | exposure | deriva de: --ds-color-text-on-primary |
 | evnto | `authored` | `derived` | exposure | deriva de: --ds-color-text-on-primary |
 
-**`tier.overlay.bg`** · --ds-surface-overlay · exposure `tenant-dial` · status `existe` · radio 55
+**`tier.overlay.bg`** · --ds-material-overlay-background · exposure `tenant-dial` · status `existe` · radio 55
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
 | rottay | `unassigned` | `unassigned` | posture | ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: dial: token-overrides |
-| bithire | `authored` | `seed` | exposure | dial: token-overrides |
+| bithire | `authored` | `seed` | exposure | dial: (raiz autora — dial en F4B) |
 | evnto | `unassigned` | `unassigned` | posture | ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: dial: token-overrides |
 
 > K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14.
@@ -520,15 +520,15 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 
 > K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella. K4: valor = resolucion computada de hoy (base=#28282C \| overlay=#E5E5E3); raiz por raiz en F4A-14.
 
-**`tier.overlay.fg`** · --ds-color-text-primary · exposure `internal-head` · status `existe` · radio 72
+**`tier.overlay.fg`** · --ds-material-overlay-foreground · exposure `internal-head` · status `solo-artefacto` · radio 72
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `authored` | `derived` | exposure | deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la  |
-| bithire | `authored` | `derived` | exposure | deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la  |
-| evnto | `authored` | `derived` | exposure | deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la  |
+| rottay | `unassigned` | `unassigned` | posture | ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6) |
+| bithire | `authored` | `seed` | exposure | seed sin dial — autorado directo, base y dark |
+| evnto | `unassigned` | `unassigned` | posture | ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: la tinta del nivel inmediato anterior en la cadena de tiers (page -> base -> raised -> overlay; la cabeza de tinta es --ds-color-text-page cuando aterrice F4A-6) |
 
-> Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy (base=#F0F0F0 \| overlay=#1A1A1A); raiz por raiz en F4A-14.
+> Citacion anclada por el DT (parte 3 §4). K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14.
 
 **`tier.page.bg`** · --ds-sidebar-bg · exposure `tenant-dial` · status `existe` · radio 80
 
@@ -574,15 +574,15 @@ Roster CAPABILITIES medido hoy (ancla de `pro-expert`): motion **activo en los 3
 
 > K2: el par salio del eje de tiers a la raiz autora color.border (parte 3 §3). Este tier deriva de ella.
 
-**`tier.raised.fg`** · --ds-color-text-primary · exposure `internal-head` · status `existe` · radio 93
+**`tier.raised.fg`** · --ds-material-raised-foreground · exposure `internal-head` · status `existe` · radio 93
 
 | tema | posture | domicilio | regla | governor |
 |---|---|---|---|---|
-| rottay | `authored` | `derived` | exposure | deriva de: calc |
-| bithire | `authored` | `derived` | exposure | deriva de: calc |
-| evnto | `authored` | `derived` | exposure | deriva de: calc |
+| rottay | `unassigned` | `unassigned` | posture | ley de placeholder: rottay no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: calc |
+| bithire | `authored` | `seed` | exposure | seed sin dial — autorado directo, base y dark |
+| evnto | `unassigned` | `unassigned` | posture | ley de placeholder: evnto no toma posicion autorada sobre esta raiz. Gobernaria: deriva de: calc |
 
-> K4: valor = resolucion computada de hoy (base=#F0F0F0 \| overlay=#1A1A1A); raiz por raiz en F4A-14.
+> K4: valor = resolucion computada de hoy ((no declarado)); raiz por raiz en F4A-14.
 
 
 ### tipografia

@@ -2463,62 +2463,62 @@ const OVERLAY: BrandThemeModeOverlay = {
     statsGrid: {
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       cardBg: "#FFFFFF",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       cardBorder: "#E5E5E3",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       cardFilledBg: "#FAFAF9",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       cardGlassBg: "rgba(255, 255, 255, 0.70)",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       cardGlassBorder: "#E5E5E3",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       descriptionColor: "#9C9C9C",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       skeletonBg: "#EDEDEC",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       skeletonWaveGradient: "linear-gradient( 90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.06) 37%, rgba(0, 0, 0, 0.03) 63% )",
       /**
        * @domicile seed
-       * @governor dial: token-overrides
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       trendNegative: "#DC2626",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       trendNeutral: "#9C9C9C",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       trendPositive: "#16A34A",
       /**
        * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
        */
       valueColor: "#1A1A1A",
     },
@@ -3803,20 +3803,20 @@ const MOTION: BrandMotion = {
 const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   mountDuration: 800,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   lineStyle: 'smooth',
   showDots: false,
   useGradientFill: true,
   /**
-   * @domicile unassigned
-   * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+   * @domicile seed
+   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
    */
   tooltipStyle: 'minimal',
 };
@@ -4164,33 +4164,33 @@ const CHROME: BrandChrome = {
    */
   accent: {
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barPosition: 'top',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barThickness: 2,
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     barStyle: 'gradient',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     iconContainerShape: 'rounded',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     badgeShape: 'rounded',
     /**
-     * @domicile unassigned
-     * @governor vocabulario de forma consumido por el compilador como argumento (no baja a canal; control null en mapa-familia-canales F4A-3a); ninguna capability lo gobierna (expressive unassigned en rottay/evnto, activa solo en bithire — anclarlo seria inventar); disposicion final: F4A-close
+     * @domicile seed
+     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
      */
     dividerStyle: 'solid',
   },
@@ -7254,34 +7254,174 @@ const CHROME: BrandChrome = {
     selectedRing:
       'var(--ds-material-card-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent))',
   },
-  /**
-   * @domicile unassigned
-   * @governor gap medido: gobierno parcial — typography.scale alcanza 1 de 18 canales de la familia (17 sin control; mapa-familia-canales, criterio estricto 2026-08-21); la prueba por hoja aterriza en su lote F4A-7…15
-   */
   table: {
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de tier.base.bg; byte-identico medido (#0C0C0E)
+     */
     bg: '#0C0C0E',
+    /**
+     * @domicile seed
+     * @governor coincide en color con la familia de rol borde del tema (#2A2A2F, 72 claves: border ×20, headerBorder ×4, borderColor ×4, footerBorder ×3, dividerColor ×2, cardBorder ×2, …): relacion por rol declarada; NO coincide con PALETTE.borderColor (rottay:3466, #28282C); la unica coincidencia en PALETTE es interactiveBgActiveColor (:3512), rol distinto: accidente declarado
+     */
     border: '#2A2A2F',
+    /**
+     * @domicile seed
+     * @governor coincide en color con la familia de rol fondo secundario del tema (#131316, 22 claves: bg ×13, headerBg ×3, …): relacion por rol declarada; sin coincidencia en PALETTE (backgroundSecondaryColor #0F0F12, backgroundTertiaryColor #141417 difieren); converge internamente con CHROME.table.rowBgStriped
+     */
     headerBg: '#131316',
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
      */
     headerColor: 'var(--ds-color-text-page)',
+    /**
+     * @domicile seed
+     * @governor sin coincidencia con PALETTE ni con raiz; converge con el valor autorado por bithire para el mismo eje (600) y diverge de evnto (500); cardinalidad medida 4, toda en claves de rol font-weight
+     */
     headerFontWeight: 600,
+    /**
+     * @domicile seed
+     * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2); converge con el valor autorado por bithire para el mismo eje (0.6875rem)
+     */
     headerFontSize: '0.6875rem',
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de tier.base.bg; byte-identico medido (#0C0C0E)
+     */
     rowBg: '#0C0C0E',
+    /**
+     * @domicile seed
+     * @governor superposicion alfa propia del eje; 3 ocurrencias en el archivo: esta hoja, iconBg (:7686) y un ingrediente de gradiente (:7742), ambas de rol distinto: accidente declarado; sin coincidencia de mismo rol
+     */
     rowBgHover: 'rgba(255, 255, 255, 0.025)',
+    /**
+     * @domicile seed
+     * @governor coincide en color con la familia de rol fondo secundario del tema (#131316, 22 claves: bg ×13, headerBg ×3, …): relacion por rol declarada; sin coincidencia en PALETTE (backgroundSecondaryColor #0F0F12, backgroundTertiaryColor #141417 difieren); converge internamente con CHROME.table.headerBg
+     */
     rowBgStriped: '#131316',
+    /**
+     * @domicile seed
+     * @governor 6 ocurrencias en el archivo; las otras 5 (headerBorder :4426, bgHover de botones :5669/:5710, closeBgHover :7566, borderColor :7977) son de rol distinto (hover/borde vs seleccionado): accidente declarado; NO coincide con --ds-select-option-bg-selected de rottay (#2A2A2F, artefacto, evidencia de valor) — a diferencia del mismo eje en bithire
+     */
     rowBgSelected: 'rgba(255, 255, 255, 0.05)',
+    /**
+     * @domicile seed
+     * @governor coincide en color con la emision de --ds-border-color-muted (delta medido +17)
+     */
     rowBorder: '#222226',
+    /**
+     * @domicile seed
+     * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2)
+     */
     cellPadding: '0.875rem 1rem',
+    /**
+     * @domicile seed
+     * @governor coincide con la emision rottay de --ds-text-body-size (facade/artifacts/rottay/index.css:997, 0.875rem): relacion declarada (K-4 packet v2)
+     */
     cellFontSize: '0.875rem',
+    /**
+     * @domicile seed
+     * @governor coincide en color con PALETTE.textColor (rottay:3533, #ECECEC), mismo rol de tinta de texto: relacion declarada; la tinta se comparte en 64 claves del archivo, dominadas por roles de texto (color ×11, titleColor ×6, labelColor ×4, …); linkColor (:3484) porta la misma tinta
+     */
     cellColor: '#ECECEC',
+    /**
+     * @domicile seed
+     * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2)
+     */
     loadingOverlayBg: 'rgba(12, 12, 14, 0.7)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-input-md-height
+     */
     headerBlockSize: 'calc(var(--ds-input-md-height) - 0.25rem)',
+    /**
+     * @domicile derived
+     * @governor deriva de: --ds-text-eyebrow-letter-spacing
+     */
     headerLetterSpacing: 'calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * 0.75)',
+    /**
+     * @domicile seed
+     * @governor valor keyword none: declara ausencia de efecto, no un color; sin coincidencia de color posible
+     */
     sheen: 'none',
   },
+  /**
+   * @absent CHROME.table.actionBg
+   * @governor sin emision en :root; el skin resuelve --ds-table-action-bg con su propio fallback (data-table.css:697): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.actionBorder
+   * @governor sin emision en :root; el skin resuelve --ds-table-action-border con su propio fallback (data-table.css:696): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.cellPaddingComfortable
+   * @governor el eje de densidad de bithire (compact/comfortable/spacious) colapsa a un unico cellPadding en este tema: no hay eje de 3 peldanos que autorar, no es gap
+   */
+  /**
+   * @absent CHROME.table.cellPaddingCompact
+   * @governor el eje de densidad de bithire (compact/comfortable/spacious) colapsa a un unico cellPadding en este tema: no hay eje de 3 peldanos que autorar, no es gap
+   */
+  /**
+   * @absent CHROME.table.cellPaddingSpacious
+   * @governor el eje de densidad de bithire (compact/comfortable/spacious) colapsa a un unico cellPadding en este tema: no hay eje de 3 peldanos que autorar, no es gap
+   */
+  /**
+   * @absent CHROME.table.filterFocusShadow
+   * @governor canal muerto: sin coincidencia de raiz y 0 lecturas en modern/skin bajo --ds-table-filter-focus-shadow; el tema no autora esta hoja porque el canal no pinta, no por gap
+   */
+  /**
+   * @absent CHROME.table.filterRowBg
+   * @governor canal muerto: sin coincidencia de raiz y 0 lecturas en modern/skin bajo --ds-table-filter-row-bg; el tema no autora esta hoja porque el canal no pinta, no por gap
+   */
+  /**
+   * @absent CHROME.table.headerBgHover
+   * @governor sin coincidencia de raiz en default.css ni consumo medido en modern/skin bajo --ds-table-header-bg-hover (0 lecturas); el tema no autora esta hoja: minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerBorder
+   * @governor sin emision en :root; el skin resuelve --ds-table-header-border con su propio fallback (data-table.css:1179): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-header-shadow con su propio fallback (data-table.css:1178): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.headerTextTransform
+   * @governor coincide con la emision de raiz --ds-table-header-text-transform (default.css:1714): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.pageButtonHoverShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-page-button-hover-shadow con su propio fallback (data-table.css:1519): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.radius
+   * @governor coincide con la emision de raiz --ds-table-radius (default.css:1706): el tema no autora esta hoja y hereda el default del sistema; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.reorderBg
+   * @governor sin emision en :root; el skin resuelve --ds-table-reorder-bg con su propio fallback (data-table.css:1251): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.resizeBg
+   * @governor sin emision en :root; el skin resuelve --ds-table-resize-bg con su propio fallback (data-table.css:1278): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.resizeBgHover
+   * @governor sin emision en :root; el skin resuelve --ds-table-resize-bg-hover con su propio fallback (data-table.css:1250): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowBgExpanded
+   * @governor sin emision en :root; el skin resuelve --ds-table-row-bg-expanded con su propio fallback (data-table.css:1414): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowFocusShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-row-focus-shadow con su propio fallback (data-table.css:1327): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
+  /**
+   * @absent CHROME.table.rowHoverShadow
+   * @governor sin emision en :root; el skin resuelve --ds-table-row-hover-shadow con su propio fallback (data-table.css:1347): el tema no autora esta hoja y hereda el piso del skin; minimalidad intencional, no gap
+   */
   /**
    * Familia mixta. Controles: typography.scale, palette.seeds.
    * Los tags por hoja/grupo aterrizan en su lote de reescritura F4A-5..15.
@@ -8644,32 +8784,32 @@ const CHROME: BrandChrome = {
   statsGrid: {
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     cardBg: '#18181B',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     cardBorder: '#2A2A2F',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     cardFilledBg: '#1A1A1E',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     cardGlassBg: 'rgba(255, 255, 255, 0.04)',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     cardGlassBorder: '#2A2A2F',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     descriptionColor: '#6B6B72',
     /**
@@ -8679,32 +8819,32 @@ const CHROME: BrandChrome = {
     labelColor: 'var(--ds-color-text-page)',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     skeletonBg: '#2A2A2F',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     skeletonWaveGradient: 'linear-gradient( 90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 37%, rgba(255, 255, 255, 0.04) 63% )',
     /**
      * @domicile seed
-     * @governor dial: token-overrides (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     trendNegative: '#EF4444',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     trendNeutral: '#6B6B72',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     trendPositive: '#22C55E',
     /**
      * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) (token-overrides no es dial de rottay en el roster — adjudicacion pendiente en F4A-close)
+     * @governor seed de statsGrid: baja a canal --ds-stats-grid-* (chromeToVariables, STATS_GRID_CHROME_VARIABLES); ingresa por el control pro chrome.families (ingress chrome.*); token-overrides no es su dial (contrato: escape hatch, no el modelo; roster K4 medido); el dial propio, si existe, es decision F4B sobre la celda familia x control (F9)
      */
     valueColor: '#ECECEC',
   },

@@ -239,22 +239,22 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=68f258690 written=2026-08-13T16:16:13.760Z intent=aa3a79f7f00ac414 render=adcfc6b9becc8a94 -->
+     head=9d5582dfd written=2026-08-21T22:16:07.037Z intent=5a86b12ae6369bdd render=55b37c5b919255e4 -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-**Current wave:** Roadmap reconciliation and first control calibration
+**Current wave:** F4A — canon estructural de los 3 brand themes (cerrados desde el arranque del frente hasta F4A-13, incluidos K1, K2, K3 y el correctivo F4A-3c; el frente queda cerrado salvo CHROME.table. Siguiente paquete estricto: F4A-14 = K4 (las 16 asimétricas), luego F4A-15 = K5 (las 40 hojas de CHROME.table) y F4A-close)
 
-**Blocked on:** No external blocker. Competing human authorities must be retired and the spacing rhythm trace must be source-bound before broad family propagation.
+**Blocked on:** Kimi K3 deja de ser gate, auditor, implementador y dependencia por orden del owner del 2026-08-21; toda cláusula previa que lo declaraba bloqueante queda superseded. La cola vinculante en curso es: authority-honesty (este tranche), el aislamiento en sandbox de program-check, el aislamiento en sandbox de cra-12, F4A-14 = K4, F4A-15 = K5, las deudas semánticas del frente, el gate de paridad real con ratchet a tolerancia cero, la cerca de cascade-wiring con su work order PRE_F4B, y por último gates:ci final verde con la auditoría Fable del frente. F4A-close exige las cuatro obligaciones del roadmap, no tres: ratchet a tolerancia cero, gate de paridad real sobre keypaths evaluados sin cobertura por placeholders, gates:ci final verde, y auditoría Fable del frente.
 
 Active packets:
 
 | Lane | Work | Model | Reason for the model |
 |---|---|---|---|
-| authority | Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated. | codex | This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership. |
+| authority | Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated. | codex-dt | This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Codex DT under the owner order of 2026-08-21, which activated the documented backup DT after Kimi K3 exhausted its quota. History: Kimi K3 held this seat from the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13) until 2026-08-21 and is retired from the live seat; it does not re-enter as auditor or writer. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Codex in the seat. |
 | control-calibration | Close spacing rhythm from both tenant inputs through normalized channels, canonical family parts, computed deltas, negative controls and exact restore. | strong-implementation | The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution. |
 | family-closure | After the control matrix stabilizes, enrich each family once against every applicable control, state and stress case recorded in the manifest. | disjoint-family-writers | A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work. |
-| advisory-audit | Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme. | fable-and-kimi-read-only | Independent methods expose shared assumptions; advisory prose is never authority and only reproduced source findings enter the canonical tree. |
+| advisory-audit | Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme. | fable | Fable is the independent auditor at each front's close (owner order 2026-08-20, decision 13: DT ≠ auditor). Advisory prose is never authority and only reproduced source findings enter the canonical tree. |
 
 **Refused:** the retracted CSS-basename rescope · SOURCE_TOUCHED as progress · a second product control for an existing concept · family-private customization outside the manifest · full-suite repair loops before failure classification · broad family propagation before static DB and restore calibration · R7 execution
 

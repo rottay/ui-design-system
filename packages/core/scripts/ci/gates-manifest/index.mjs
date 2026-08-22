@@ -103,6 +103,30 @@ export const CI_GATES = Object.freeze([
     blocking: true,
   },
   { id: 'modern-rescue-program-contract', run: ['node', 'scripts/quality-evidence/programs/modern-rescue/program-check.mjs'], blocking: true },
+  // The programme's human entry point (`program.json.humanEntry` AND
+  // `workOrderAuthority`) is a GENERATED section, and until now nothing in CI
+  // checked that it was still the output of the command that produces it. The
+  // measured result: the block published a superseded wave, a `blockedOn` that
+  // was not the intent's, and a retired audit model, all while gates:ci was
+  // green. The tool that catches it already existed and was simply not wired --
+  // `lane-control-drills` does not cover it (it is EXCLUDED, and it runs
+  // against a sandbox clone rather than the live document).
+  //
+  // Placed AFTER `modern-rescue-program-contract` on purpose: `--check` re-derives
+  // from `manifest/index.json` and `family-inventory.json`, so if those
+  // denominators are broken the gate above fails first with the precise message
+  // instead of this one dying in the derivation.
+  {
+    id: 'modern-rescue-checkpoint-state',
+    run: [
+      'node',
+      'src/tooling/lane-control/public/program-state/index.mjs',
+      '--check',
+      '--intent',
+      'scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json',
+    ],
+    blocking: true,
+  },
   { id: 'quality-evidence-v2-drills', run: ['node', '--test', 'scripts/quality-evidence/v2/drills.test.mjs'], blocking: true },
   // The `spacing.rhythm` control census the modern-rescue manifest asks for:
   // rhythm owns the room around a control, never the control's size, capacity,
