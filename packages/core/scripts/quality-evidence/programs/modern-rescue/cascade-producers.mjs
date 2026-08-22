@@ -604,7 +604,7 @@ export function privateRelayRow(file, site, entry) {
 }
 
 export function closedProducerRow(file, site, entry) {
-  return cohortRow({
+  const row = cohortRow({
     file,
     site,
     entry,
@@ -614,6 +614,18 @@ export function closedProducerRow(file, site, entry) {
     // exactly the relabel this programme forbids.
     cause: "governed-producer-with-no-attributed-cascade-root",
   });
+  // T-COMPUTED-DOMAIN: when one coordinate carries SEVERAL producer
+  // occurrences, their per-occurrence causal identities are merged by the join
+  // (they can never agree -- see PER_OCCURRENCE_IDENTITY_FIELDS). Publishing
+  // the merged sets keeps every identity visible instead of silently shipping
+  // whichever occurrence happened to be indexed first. Single-occurrence rows
+  // -- every producer published before this tranche -- gain nothing and stay
+  // byte-identical.
+  if (entry.producerSiteIds && entry.producerSiteIds.length > 1) {
+    row.occurrenceProducerSiteIds = entry.producerSiteIds;
+    row.occurrenceSourcePartRefs = entry.producerSourcePartRefs;
+  }
+  return row;
 }
 
 /* -------------------------------------------- open backlog (T-FINAL) --- */
@@ -1034,11 +1046,17 @@ export function buildProducers({
           template: site.expression,
           reason: `zero-governed-emission-object:${site.form}`,
         };
-        // T-BRANCH-37: a row that closed through the BRANCH UNION carries the
-        // per-arm receipt that justified it. Rows closed by any earlier route
-        // have no receipt here and keep their exact published form.
+        // A row that closed through a proven route carries the receipt that
+        // justified it, LABELLED BY THAT ROUTE: `branch-union` (T-BRANCH-37 /
+        // -COMPOSITE-162) or `computed-domain-enumeration` (T-COMPUTED-DOMAIN).
+        // Rows closed by an earlier route have no receipt and keep their exact
+        // published form.
         if (entry.receipt) {
-          zeroRow.resolvedVia = "branch-union";
+          zeroRow.resolvedVia = entry.receipt.domainKind
+            ? "computed-domain-enumeration"
+            : entry.receipt.nestedComputedDomains
+              ? "nested-computed-domain"
+              : "branch-union";
           zeroRow.evidence = entry.receipt;
         }
         closedZeroGoverned.push(zeroRow);

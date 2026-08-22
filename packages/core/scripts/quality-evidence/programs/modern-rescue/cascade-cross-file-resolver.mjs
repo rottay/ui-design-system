@@ -488,6 +488,65 @@ function enumerateKeyDomainByType(keyNode, useNode, source) {
   return literals.length ? literals : null;
 }
 
+/**
+ * T-COMPUTED-DOMAIN -- enumerate the domain of `OBJ[k]` from the CONTAINER
+ * instead of from the index's declared type.
+ *
+ * `enumerateKeyDomainByType` can only read an inline literal-union annotation on
+ * the index, which almost nothing in this tree carries (the types are named
+ * aliases). But the domain of the LOOKUP does not actually depend on the
+ * index's type at all: if the container is a sealed object literal whose keys
+ * are all static literals, then `OBJ[k]` can only ever be one of its authored
+ * values -- or, when `k` is outside that key set, `undefined`. Both halves are
+ * enumerable from the container alone, with no type inference whatsoever.
+ *
+ * SEALED means, strictly: an object literal shape, with NO spread entry (a
+ * spread imports keys this walk cannot enumerate), NO computed/unresolved key,
+ * and every key a real static literal. Anything else returns null and the row
+ * stays blocking.
+ *
+ * The `undefined` half is NOT optional. Nothing here proves `k` is confined to
+ * the container's keys, so an explicit `absent` branch is always appended:
+ * `indexMayEscape` records that, and the branch is a `nonObject`, which carries
+ * no key and therefore cannot manufacture a governed channel.
+ */
+function enumerateKeyDomainByContainer(objShape) {
+  if (!objShape || objShape.kind !== "object" || !Array.isArray(objShape.order)) return null;
+  const members = [];
+  const seen = new Set();
+  for (const entry of objShape.order) {
+    // a spread brings in keys from elsewhere: the key set is NOT enumerable here
+    if (entry.kind !== "leaf") return null;
+    if (entry.unresolvedKey) return null;
+    if (typeof entry.key !== "string" || entry.key.length === 0) return null;
+    /* P1a -- `__proto__` in an object literal is NOT an own property: it sets
+     * the prototype. Enumerating it as a member would invent a key the object
+     * does not have, and treating a lookup that misses it as `absent` would be
+     * wrong too, because the prototype it installed can answer that lookup.
+     * The whole container is therefore refused. */
+    if (entry.key === "__proto__") return null;
+    if (seen.has(entry.key)) continue; // later duplicate wins in JS; the key set is unchanged
+    seen.add(entry.key);
+    members.push(entry.key);
+  }
+  if (members.length === 0) return null;
+  const sourceFile = objShape.node ? objShape.node.getSourceFile() : null;
+  const start = objShape.node && sourceFile ? objShape.node.getStart(sourceFile) : null;
+  const text = objShape.node && sourceFile ? objShape.node.getText(sourceFile) : null;
+  return {
+    domainKind: "sealed-container-keys",
+    members,
+    indexMayEscape: true,
+    declaration: {
+      file: objShape.fileRel ?? (sourceFile ? sourceFile.fileName : null),
+      line: objShape.node && sourceFile ? sourceFile.getLineAndCharacterOfPosition(start).line + 1 : null,
+      span: objShape.node && sourceFile ? [start, objShape.node.getEnd()] : null,
+      sha256: text ? createHash("sha256").update(text, "utf8").digest("hex") : null,
+      memberCount: members.length,
+    },
+  };
+}
+
 /* ================================================== the Shape resolver === */
 const NONOBJECT_KINDS = new Set([
   ts.SyntaxKind.StringLiteral,
@@ -561,6 +620,33 @@ export function resolveShape(node, ctx) {
       if (ts.isSpreadAssignment(property)) {
         const spreadShape = resolveShape(property.expression, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "objectSpread" }] }));
         order.push({ kind: "spread", shape: spreadShape, node: property });
+        continue;
+      }
+      if (
+        ts.isGetAccessorDeclaration(property) ||
+        ts.isSetAccessorDeclaration(property) ||
+        ts.isMethodDeclaration(property) ||
+        !(ts.isPropertyAssignment(property) || ts.isShorthandPropertyAssignment(property))
+      ) {
+        /* P1b -- a member kind this walk does not model (getter, setter,
+         * method, or anything a future TypeScript grammar adds) must NEVER be
+         * skipped silently: dropping it would let the object look sealed while
+         * an unseen member decides the value. It is recorded as an OPEN SPREAD
+         * entry, which is the honest reading -- "a member is here whose keys and
+         * value this walk cannot account for". That single representation makes
+         * `entryIsClosed` false, makes `readProperty` return `open`, makes
+         * `scanClosedShape` mark the scan incomplete, and makes
+         * `enumerateKeyDomainByContainer` refuse the container. A getter is
+         * never evaluated. */
+        order.push({
+          kind: "spread",
+          node: property,
+          shape: {
+            kind: "openUnknown",
+            reason: `object-member-kind-not-modelled:${ts.SyntaxKind[property.kind]}`,
+            path: [...path, { kind: "unmodelledObjectMember" }],
+          },
+        });
         continue;
       }
       if (ts.isPropertyAssignment(property) || ts.isShorthandPropertyAssignment(property)) {
@@ -661,11 +747,31 @@ export function resolveShape(node, ctx) {
       const lookup = readProperty(objShape, literalKey);
       return shapeFromLookup(lookup);
     }
-    const domain = enumerateKeyDomainByType(n.argumentExpression, n, source);
-    if (!domain) return { kind: "computedKey", closed: false, reason: "index-not-a-closed-literal-union", path };
+    const typeDomain = enumerateKeyDomainByType(n.argumentExpression, n, source);
+    const domainInfo = typeDomain
+      ? { domainKind: "index-type-literal-union", members: typeDomain, indexMayEscape: false, declaration: null }
+      : enumerateKeyDomainByContainer(objShape);
+    if (!domainInfo) return { kind: "computedKey", closed: false, reason: "index-not-a-closed-literal-union", path };
+    const domain = domainInfo.members;
     const branchLookups = domain.map((v) => readProperty(objShape, v));
     const closed = branchLookups.every((l) => (l.status === "found" ? isShapeClosed(l.valueShape) && !l.conditional : l.status === "absent"));
-    return { kind: "computedKey", domain, branches: branchLookups.map(shapeFromLookup), closed, path };
+    const branches = branchLookups.map(shapeFromLookup);
+    if (domainInfo.indexMayEscape) {
+      // fail-closed completeness: nothing proves the index stays inside the key
+      // set, so the `undefined` outcome is carried explicitly as its own branch.
+      branches.push({ kind: "nonObject", reason: "index-outside-sealed-container-domain", path });
+    }
+    return {
+      kind: "computedKey",
+      domain,
+      domainKind: domainInfo.domainKind,
+      indexMayEscape: domainInfo.indexMayEscape,
+      declaration: domainInfo.declaration,
+      memberStatuses: domain.map((v, i) => ({ member: v, status: branchLookups[i].status })),
+      branches,
+      closed,
+      path,
+    };
   }
 
   if (ts.isCallExpression(n)) {
@@ -675,7 +781,10 @@ export function resolveShape(node, ctx) {
     }
     if (ts.isArrowFunction(callee) || ts.isFunctionExpression(callee)) {
       const sub = buildSubstitution(callee, n, ctx);
-      return resolveFunctionBody(callee, freshCtx(ctx, { substitution: sub, depth, path: [...path, { kind: "iife" }] }));
+      return withArgumentComputedDomains(
+        resolveFunctionBody(callee, freshCtx(ctx, { substitution: sub, depth, path: [...path, { kind: "iife" }] })),
+        n, ctx, path, depth,
+      );
     }
     if (ts.isIdentifier(callee)) {
       if (substitution.has(callee.text)) {
@@ -688,7 +797,10 @@ export function resolveShape(node, ctx) {
         const callKey = `${fileRel}::${binding.declaredAt}`;
         if (visitedCalls.has(callKey)) return { kind: "openUnknown", reason: "recursive-call-cycle", path: [...path, { kind: "callToHoistedFunction-cycle", declaredAt: binding.declaredAt }] };
         const sub = buildSubstitution(binding.node, n, ctx);
-        return resolveFunctionBody(binding.node, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToHoistedFunction", declaredAt: binding.declaredAt }] }));
+        return withArgumentComputedDomains(
+          resolveFunctionBody(binding.node, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToHoistedFunction", declaredAt: binding.declaredAt }] })),
+          n, ctx, path, depth,
+        );
       }
       if (binding.kind === "localConst" && !binding.mutated) {
         let fnNode = unwrap(binding.node);
@@ -704,7 +816,10 @@ export function resolveShape(node, ctx) {
           const callKey = `${fileRel}::${binding.declaredAt}`;
           if (visitedCalls.has(callKey)) return { kind: "openUnknown", reason: "recursive-call-cycle", path: [...path, { kind: "callToLocalFunctionValue-cycle", declaredAt: binding.declaredAt }] };
           const sub = buildSubstitution(fnNode, n, ctx);
-          return resolveFunctionBody(fnNode, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToLocalFunctionValue", declaredAt: binding.declaredAt }] }));
+          return withArgumentComputedDomains(
+            resolveFunctionBody(fnNode, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToLocalFunctionValue", declaredAt: binding.declaredAt }] })),
+            n, ctx, path, depth,
+          );
         }
         return { kind: "callArgsPending", reason: "callee-local-const-not-a-function", path: [...path, { kind: "call", callee: callee.text }] };
       }
@@ -790,7 +905,18 @@ export function readProperty(shape, key) {
   if (shape.kind === "array") return { status: "absent", path: shape.path ?? [] };
   if (shape.kind === "computedKey") {
     if (!shape.branches) return { status: "open", reason: "computed-key-not-enumerated", path: shape.path ?? [] };
-    return readPropertyOfBranches({ branches: shape.branches, path: shape.path }, key);
+    const through = readPropertyOfBranches({ branches: shape.branches, path: shape.path }, key);
+    /* P0 -- reading THROUGH an enumerated lookup yields the member values, and
+     * the `computedKey` node that justified them would otherwise vanish from the
+     * derived graph, leaving a downstream closure unexplained. Carry a reference
+     * to the originating enumeration on the derived shape so the audit trail
+     * survives the read. It is a reference, not a copy: no evidence is invented,
+     * and the cycle it creates is handled by the collector's visited set. */
+    if (shape.domainKind) {
+      if (through.valueShape) through.valueShape = { ...through.valueShape, viaComputedDomain: shape };
+      if (through.opaqueShape) through.opaqueShape = { ...through.opaqueShape, viaComputedDomain: shape };
+    }
+    return through;
   }
   return { status: "open", reason: `property-read-through-opaque-shape:${shape.kind}`, path: shape.path ?? [], opaqueShape: shape };
 }
@@ -866,6 +992,47 @@ function shapeFromLookup(lookup) {
   if (lookup.status === "absent") return { kind: "nonObject", reason: "property-absent-from-resolved-object", path: lookup.path };
   if (lookup.opaqueShape) return { ...lookup.opaqueShape, path: [...(lookup.opaqueShape.path ?? []), { kind: "propertyLookupThroughOpaque" }] };
   return { kind: "openUnknown", reason: lookup.reason ?? "property-lookup-open", path: lookup.path };
+}
+
+/**
+ * P0 -- carry the enumeration reference ACROSS a call boundary.
+ *
+ * `readProperty` already keeps the link when a value is read THROUGH an
+ * enumerated lookup. A call breaks it a second way: when an enumerated value is
+ * passed as an ARGUMENT, the function's return is built from the body, and a
+ * return like `` `${pad} 2rem` `` produces a fresh shape that no longer touches
+ * the argument's. The enumeration still determined the returned value, so the
+ * reference is attached to the call RESULT -- a reference to the real
+ * `computedKey` shape, never a synthesised receipt. Both the call form and the
+ * spread of that call inherit it, because both resolve through here.
+ */
+function harvestComputedDomains(shape, out = [], seen = new WeakSet(), depth = 0) {
+  if (!shape || typeof shape !== "object" || depth > 40 || seen.has(shape)) return out;
+  seen.add(shape);
+  if (shape.kind === "computedKey" && shape.domainKind) out.push(shape);
+  if (shape.viaComputedDomain) harvestComputedDomains(shape.viaComputedDomain, out, seen, depth + 1);
+  for (const entry of shape.order ?? []) harvestComputedDomains(entry.shape, out, seen, depth + 1);
+  for (const el of shape.elements ?? []) harvestComputedDomains(el.shape, out, seen, depth + 1);
+  for (const b of shape.branches ?? []) harvestComputedDomains(b, out, seen, depth + 1);
+  return out;
+}
+
+function withArgumentComputedDomains(result, callNode, ctx, path, depth) {
+  if (!result || typeof result !== "object" || !callNode.arguments?.length) return result;
+  const found = [];
+  for (const arg of callNode.arguments) {
+    const argShape = resolveShape(arg, freshCtx(ctx, { depth: depth + 1, path }));
+    harvestComputedDomains(argShape, found);
+  }
+  if (found.length === 0) return result;
+  const already = harvestComputedDomains(result);
+  const fresh = found.filter((d) => !already.includes(d));
+  if (fresh.length === 0) return result;
+  return {
+    ...result,
+    viaComputedDomain:
+      fresh.length === 1 ? fresh[0] : { kind: "branches", branches: fresh, path: result.path ?? [] },
+  };
 }
 
 /* ---------------------------------------------------- call substitution (P0-4) --- */

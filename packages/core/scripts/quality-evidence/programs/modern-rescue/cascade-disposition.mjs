@@ -288,7 +288,19 @@ function summarizeShape(shape, depthGuard = 0) {
     case "callArgsPending":
       return { kind: "callArgsPending", reason: shape.reason, path };
     case "computedKey":
-      return { kind: "computedKey", closed: !!shape.closed, domain: shape.domain, reason: shape.reason, branches: shape.branches ? shape.branches.map((b) => summarizeShape(b, depthGuard + 1)) : undefined, path };
+      return {
+        kind: "computedKey",
+        closed: !!shape.closed,
+        domain: shape.domain,
+        // T-COMPUTED-DOMAIN: the contract of HOW the domain was enumerated
+        domainKind: shape.domainKind,
+        indexMayEscape: shape.indexMayEscape,
+        declaration: shape.declaration,
+        memberStatuses: shape.memberStatuses,
+        reason: shape.reason,
+        branches: shape.branches ? shape.branches.map((b) => summarizeShape(b, depthGuard + 1)) : undefined,
+        path,
+      };
     case "dynamicSink":
       return { kind: "dynamicSink", path };
     case "openUnknown":
@@ -670,6 +682,13 @@ export function classifyCrossFileRows() {
       const { disposition, governance, branchRelayReceipt = null } = dispositionOf(
         shape, boundaryReceipt, govCtx, rawOrderedParts,
       );
+      // P0: enumerations reachable INSIDE this shape. Only meaningful when the
+      // root is not itself a computed lookup (that one publishes its own
+      // domain receipt).
+      const nestedComputedDomains =
+        shape && shape.kind !== "computedKey"
+          ? normalizeNestedComputedDomains(collectNestedComputedDomains(shape))
+          : [];
 
       if (governance && disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         governance.zeroEmissionSiteId = zeroEmissionSiteId(canonicalId, "");
@@ -703,6 +722,9 @@ export function classifyCrossFileRows() {
         // terminals are relays -- carries the per-terminal evidence for the
         // inheritance, or the published cause when it was refused.
         branchRelayReceipt,
+        // P0: non-empty only on rows that closed because an enumeration nested
+        // inside them resolved.
+        nestedComputedDomains,
         sourceParts,
       });
     };
@@ -753,6 +775,107 @@ export const DISPOSITION_DECISION_FIELDS = Object.freeze([
 ]);
 
 const stable = (value) => JSON.stringify(value ?? null);
+
+/**
+ * P0 -- collect every ENUMERATED computed lookup reachable inside a shape.
+ *
+ * A row can close INDIRECTLY: its own shape is an ordinary object, and what was
+ * blocking it was a `computedKey` buried in a leaf value or a spread. Such a row
+ * must not close on an unexplained "it resolved" -- it has to name the
+ * enumerations that justified it. This walks the LIVE shape (the summary does
+ * not carry leaf value sub-shapes) and returns one entry per enumerated lookup,
+ * with the resolution path that reaches it and the sealed declaration it read.
+ *
+ * Deduplication is by EXACT identity only: two lookups that differ in any
+ * published field are both kept, so no material occurrence is lost. Ordering is
+ * stable by astPath, then declaration file/line/span.
+ */
+function collectNestedComputedDomains(shape, visited = new WeakSet(), depth = 0, out = []) {
+  if (!shape || typeof shape !== "object" || depth > 80) return out;
+  if (visited.has(shape)) return out;
+  visited.add(shape);
+  if (shape.kind === "computedKey" && shape.domainKind) {
+    out.push({
+      astPath: (shape.path ?? []).map((step) => step.kind).join(">"),
+      domainKind: shape.domainKind,
+      members: [...(shape.domain ?? [])],
+      memberCount: (shape.domain ?? []).length,
+      memberStatuses: (shape.memberStatuses ?? []).map((st) => ({ member: st.member, status: st.status })),
+      indexMayEscape: shape.indexMayEscape ?? null,
+      domainComplete: shape.closed === true,
+      declaration: shape.declaration
+        ? {
+            file: shape.declaration.file,
+            line: shape.declaration.line,
+            span: shape.declaration.span,
+            sha256: shape.declaration.sha256,
+          }
+        : null,
+    });
+  }
+  // P0: an enumeration referenced by a shape derived THROUGH it (see
+  // `readProperty`'s computedKey branch) is part of this row's justification.
+  if (shape.viaComputedDomain) collectNestedComputedDomains(shape.viaComputedDomain, visited, depth + 1, out);
+  switch (shape.kind) {
+    case "object":
+      for (const entry of shape.order ?? []) collectNestedComputedDomains(entry.shape, visited, depth + 1, out);
+      break;
+    case "array":
+      for (const el of shape.elements ?? []) collectNestedComputedDomains(el.shape, visited, depth + 1, out);
+      break;
+    case "branches":
+    case "computedKey":
+      for (const b of shape.branches ?? []) collectNestedComputedDomains(b, visited, depth + 1, out);
+      break;
+    default:
+      break;
+  }
+  return out;
+}
+
+/** Stable order + exact-identity dedup for the nested-domain list. */
+function normalizeNestedComputedDomains(list) {
+  const seen = new Set();
+  const unique = [];
+  for (const item of list) {
+    const identity = JSON.stringify(item);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    unique.push(item);
+  }
+  return unique.sort((a, b) => {
+    const ka = `${a.astPath}|${a.declaration?.file ?? ""}|${a.declaration?.line ?? 0}|${(a.declaration?.span ?? []).join(",")}`;
+    const kb = `${b.astPath}|${b.declaration?.file ?? ""}|${b.declaration?.line ?? 0}|${(b.declaration?.span ?? []).join(",")}`;
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
+}
+
+/**
+ * T-COMPUTED-DOMAIN -- the evidence a computed lookup produces once its domain
+ * has been enumerated. It states HOW the domain was obtained, WHICH members it
+ * has in authored order, WHERE the sealed declaration lives (path + span +
+ * content hash, so a moved or edited container is detectable), whether the
+ * index could escape the key set, and the per-member lookup status. A reader
+ * can re-derive the enumeration from this alone.
+ */
+function computedDomainReceipt(row, path) {
+  const receipt = row.receipt ?? {};
+  const governance = row.governance ?? {};
+  return {
+    domainKind: receipt.domainKind ?? null,
+    members: [...(receipt.domain ?? [])],
+    memberCount: (receipt.domain ?? []).length,
+    memberStatuses: receipt.memberStatuses ?? [],
+    indexMayEscape: receipt.indexMayEscape ?? null,
+    declaration: receipt.declaration ?? null,
+    branchCount: (receipt.branches ?? []).length,
+    domainComplete: receipt.closed === true,
+    customPropertyScanComplete: governance.customPropertyScanComplete ?? null,
+    governedChannelKeys: [...(governance.governedChannelKeys ?? [])].sort(),
+    internalSocketKeys: [...(governance.internalSocketKeys ?? [])].sort(),
+    path,
+  };
+}
 
 /**
  * T-BRANCH-37 -- the evidence a conditional sink produces once every arm has
@@ -856,6 +979,11 @@ export function boundedReceiptOf(row) {
     case "CLOSED_PRODUCER": {
       const governance = row.governance;
       return {
+        // T-COMPUTED-DOMAIN: present only when the producer was reached through
+        // an enumerated lookup; absent on every producer published earlier.
+        ...(row.receipt?.kind === "computedKey"
+          ? { computedDomain: computedDomainReceipt(row, path) }
+          : {}),
         governedProducerSiteId: governance?.governedProducerSiteId ?? null,
         customPropertyScanComplete: governance?.customPropertyScanComplete ?? null,
         governedChannelKeys: [...(governance?.governedChannelKeys ?? [])].sort(),
@@ -871,6 +999,22 @@ export function boundedReceiptOf(row) {
      * the per-arm evidence that justified it. A ZERO row that closed by any
      * earlier route keeps `null`, so nothing already in the artifact moves. */
     case "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT": {
+      // T-COMPUTED-DOMAIN: a lookup closed by domain enumeration publishes its
+      // domain contract; a conditional closed by branch union publishes its
+      // arms; anything closed by an earlier route keeps `null` so nothing that
+      // is already in the artifact moves.
+      if (row.receipt?.kind === "computedKey") return computedDomainReceipt(row, path);
+      // P0: an INDIRECT closure names the enumerations that justified it.
+      if (row.receipt?.kind !== "branches" && row.nestedComputedDomains?.length) {
+        return {
+          nestedComputedDomains: row.nestedComputedDomains,
+          nestedComputedDomainCount: row.nestedComputedDomains.length,
+          customPropertyScanComplete: row.governance?.customPropertyScanComplete ?? null,
+          governedChannelKeys: [...(row.governance?.governedChannelKeys ?? [])].sort(),
+          internalSocketKeys: [...(row.governance?.internalSocketKeys ?? [])].sort(),
+          path,
+        };
+      }
       if (row.receipt?.kind !== "branches") return null;
       const arms = row.receipt.branches ?? [];
       return branchUnionReceipt(row, arms, path);
@@ -948,6 +1092,36 @@ export class DispositionJoinConflict extends Error {
  * `DispositionJoinConflict` on any material disagreement; merges per-sink
  * evidence. Pure.
  */
+/**
+ * T-COMPUTED-DOMAIN -- fields that are per-OCCURRENCE by construction and can
+ * therefore never agree between two rows at one coordinate.
+ *
+ * `governedProducerSiteId` derives from `canonicalPreimageId`, whose coordinate
+ * includes `snapshotIndex` -- a counter that is unique per row. `sourcePartRefs`
+ * is minted from the same id. Comparing them for INVARIANCE is a category
+ * error: they are identities of the occurrence, not claims about the site's
+ * classification. Until now no coordinate carried two producers, so the error
+ * was latent; enumerating computed domains produced the first one (3
+ * occurrences at collection-workspace/index.tsx|30542, identical in every
+ * classification field and differing only in these two ids).
+ *
+ * They are therefore MERGED, exactly like `sinkTags`/`relayKinds`: nothing is
+ * discarded, nothing is chosen arbitrarily, and every other field of the
+ * receipt -- governed keys, socket keys, scan completeness, resolution path,
+ * domain contract -- is still compared and still throws on disagreement.
+ */
+const PER_OCCURRENCE_IDENTITY_FIELDS = Object.freeze(["governedProducerSiteId", "sourcePartRefs"]);
+
+function invariantPartOf(receipt) {
+  if (!receipt || typeof receipt !== "object") return receipt;
+  const out = {};
+  for (const [field, value] of Object.entries(receipt)) {
+    if (PER_OCCURRENCE_IDENTITY_FIELDS.includes(field)) continue;
+    out[field] = value;
+  }
+  return out;
+}
+
 export function dispositionIndex(rows) {
   const index = new Map();
   for (const row of rows) {
@@ -955,6 +1129,8 @@ export function dispositionIndex(rows) {
     const decision = {};
     for (const field of DISPOSITION_DECISION_FIELDS) decision[field] = row[field];
     const receipt = boundedReceiptOf(row);
+    const producerSiteId = receipt && receipt.governedProducerSiteId ? receipt.governedProducerSiteId : null;
+    const partRefs = receipt && Array.isArray(receipt.sourcePartRefs) ? receipt.sourcePartRefs : [];
     const sinkTag = row.boundaryReceipt?.sinkTagName ?? null;
     const relayKind = row.boundaryReceipt?.kind ?? null;
 
@@ -966,6 +1142,8 @@ export function dispositionIndex(rows) {
         receipt,
         sinkTags: new Set(sinkTag ? [sinkTag] : []),
         relayKinds: new Set(relayKind ? [relayKind] : []),
+        producerSiteIds: new Set(producerSiteId ? [producerSiteId] : []),
+        producerSourcePartRefs: new Set(partRefs),
         occurrences: 1,
       });
       continue;
@@ -975,17 +1153,32 @@ export function dispositionIndex(rows) {
         throw new DispositionJoinConflict(key, field, prior.decision[field], decision[field]);
       }
     }
-    if (stable(prior.receipt) !== stable(receipt)) {
+    if (stable(invariantPartOf(prior.receipt)) !== stable(invariantPartOf(receipt))) {
       throw new DispositionJoinConflict(key, "boundedReceipt", prior.receipt, receipt);
     }
     if (sinkTag) prior.sinkTags.add(sinkTag);
     if (relayKind) prior.relayKinds.add(relayKind);
+    if (producerSiteId) prior.producerSiteIds.add(producerSiteId);
+    for (const ref of partRefs) prior.producerSourcePartRefs.add(ref);
     prior.occurrences += 1;
   }
   // Freeze the merged sets into deterministic sorted arrays.
   for (const entry of index.values()) {
     entry.sinkTags = [...entry.sinkTags].sort();
     entry.relayKinds = [...entry.relayKinds].sort();
+    entry.producerSiteIds = [...entry.producerSiteIds].sort();
+    entry.producerSourcePartRefs = [...entry.producerSourcePartRefs].sort();
+    /* Order-independence, the same rule the merged sets already obey: when a
+     * coordinate carries SEVERAL producer occurrences, `entry.receipt` still
+     * held whichever one happened to be indexed first, so reversing the input
+     * changed the published id. Strip the scalar identities there and let the
+     * sorted merged sets be the only account -- nothing is discarded and
+     * nothing is chosen arbitrarily. A coordinate with exactly one occurrence
+     * keeps its scalar fields untouched, so every producer published before
+     * this tranche is byte-identical. */
+    if (entry.producerSiteIds.length > 1) {
+      entry.receipt = invariantPartOf(entry.receipt);
+    }
   }
   return index;
 }
