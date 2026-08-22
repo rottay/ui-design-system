@@ -595,6 +595,49 @@ export function boundedReceiptOf(row) {
     }
     case "CLOSED_NONOBJECT":
       return { nonObjectReason: row.receipt?.reason ?? null, path };
+
+    /* ---- the seven OPEN dispositions: classified debt, never closed ---- *
+     * These carry a receipt so the debt is actionable, but the receipt says
+     * WHY resolution stopped -- it never asserts a shape the resolver could
+     * not prove. A bounded projection is deliberate: publishing the whole
+     * nested branch/leaf graph would put unproven structure into the durable
+     * artifact and invite it being read as a result.                        */
+    case "BRANCH_COMPOSITE_OPEN":
+    case "BRANCH_CONDITIONAL_AUTHORED": {
+      const branches = row.receipt?.branches ?? [];
+      return {
+        branchCount: branches.length,
+        branchKinds: [...new Set(branches.map((b) => b.kind))].sort(),
+        path,
+      };
+    }
+    case "AUTHORED_OPEN": {
+      const leaves = row.receipt?.authoredLeaves ?? [];
+      return {
+        closed: row.receipt?.closed ?? null,
+        authoredKeys: [...new Set(leaves.map((leaf) => leaf.key))].sort(),
+        authoredLeafCount: leaves.length,
+        // the openings are exactly what keeps the object open
+        spreadOpeningCount: (row.receipt?.spreadOpenings ?? []).length,
+        path,
+      };
+    }
+    case "COMPUTED_DOMAIN_PENDING":
+      return {
+        reason: row.receipt?.reason ?? null,
+        closed: row.receipt?.closed ?? null,
+        // false here is the WHOLE point: an enumerated domain would have been
+        // resolved instead of left pending.
+        domainEnumerated: Array.isArray(row.receipt?.domain),
+        branchCount: (row.receipt?.branches ?? []).length,
+        path,
+      };
+    case "OPEN_UNKNOWN":
+    case "CALL_ARGS_PENDING":
+      return { reason: row.receipt?.reason ?? null, path };
+    case "DYNAMIC_SINK_PENDING":
+      return { path };
+
     default:
       return null;
   }

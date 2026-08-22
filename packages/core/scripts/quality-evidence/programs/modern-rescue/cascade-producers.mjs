@@ -616,6 +616,86 @@ export function closedProducerRow(file, site, entry) {
   });
 }
 
+/* -------------------------------------------- open backlog (T-FINAL) --- */
+/**
+ * The seven OPEN dispositions. Publishing them is NOT resolving them: each row
+ * stays `consumable:false`, `tenantSafe:false` AND `blocking:true`, and the
+ * rollup keeps `openBlocking` at the full count. The only thing this buys is
+ * that the debt stops being an anonymous `unknownProvenance` blob and becomes
+ * a typed, addressable backlog: every row names the disposition that stopped
+ * resolution, the reason, and the path it got stuck on.
+ *
+ * `closed:false` is stamped explicitly so no reader can mistake one of these
+ * for a member of the CLOSED_* families.
+ */
+const OPEN_DISPOSITIONS = new Map([
+  ["BRANCH_COMPOSITE_OPEN", {
+    collection: "branchCompositeOpen",
+    reason: "branch-composite-open",
+    cause: "branch-composite-with-an-open-or-opaque-arm",
+  }],
+  ["AUTHORED_OPEN", {
+    collection: "authoredOpen",
+    reason: "authored-open",
+    cause: "authored-object-left-open-by-a-spread-or-unresolved-key",
+  }],
+  ["BRANCH_CONDITIONAL_AUTHORED", {
+    collection: "branchConditionalAuthored",
+    reason: "branch-conditional-authored",
+    cause: "conditional-arms-authored-but-not-reconciled-into-one-shape",
+  }],
+  ["OPEN_UNKNOWN", {
+    collection: "openUnknown",
+    reason: "open-unknown",
+    cause: "resolution-abandoned-before-any-shape-was-proven",
+  }],
+  ["COMPUTED_DOMAIN_PENDING", {
+    collection: "computedDomainPending",
+    reason: "computed-domain-pending",
+    cause: "computed-key-whose-domain-is-not-a-closed-literal-union",
+  }],
+  ["DYNAMIC_SINK_PENDING", {
+    collection: "dynamicSinkPending",
+    reason: "dynamic-sink-pending",
+    cause: "setProperty-name-is-not-a-literal-at-the-sink",
+  }],
+  ["CALL_ARGS_PENDING", {
+    collection: "callArgsPending",
+    reason: "call-args-pending",
+    cause: "call-argument-substitution-not-implemented",
+  }],
+]);
+
+export const OPEN_DISPOSITION_NAMES = Object.freeze([...OPEN_DISPOSITIONS.keys()].sort());
+export const OPEN_COLLECTION_NAMES = Object.freeze(
+  [...OPEN_DISPOSITIONS.values()].map((d) => d.collection).sort(),
+);
+
+export function openBacklogRow(file, site, entry, disposition) {
+  const spec = OPEN_DISPOSITIONS.get(disposition);
+  if (!spec) throw new Error(`openBacklogRow called for a non-open disposition: ${disposition}`);
+  return {
+    plane: "tsx-inline-stamp",
+    file,
+    symbol: site.symbol,
+    line: site.line,
+    ordinal: site.ordinal,
+    template: site.expression,
+    reason: `${spec.reason}:${site.form}`,
+    disposition,
+    // OPEN debt: not consumable, not tenant-safe, not closed, and still blocking
+    consumable: false,
+    tenantSafe: false,
+    closed: false,
+    blocking: true,
+    nonConsumableCause: spec.cause,
+    sinkTags: entry.sinkTags,
+    relayKinds: entry.relayKinds,
+    occurrences: entry.occurrences,
+    evidence: entry.receipt,
+  };
+}
+
 export function buildProducers({
   root = REPO_ABS,
   cssEdgesPath = CSS_EDGES,
@@ -640,6 +720,12 @@ export function buildProducers({
   const publicBoundary = [];
   const privateRelay = [];
   const closedProducer = [];
+  // The seven OPEN cohorts. They drain `unknownProvenance` of anonymity, NOT of
+  // obligation: every row stays blocking (see `openBacklogRow`).
+  const openBacklog = new Map(
+    [...OPEN_DISPOSITIONS.values()].map((spec) => [spec.collection, []]),
+  );
+  const openRowsOf = (name) => openBacklog.get(name);
   // FAIL-CLOSED join. `file|ordinal` is stable but NOT unique: one expression
   // reaching several JSX sinks yields several rows. `dispositionIndex` throws on
   // any material disagreement at a shared coordinate and merges only the
@@ -650,6 +736,13 @@ export function buildProducers({
 
   const { byChannel: causalByChannel, excluded: causalExcluded } =
     authoredCausalRoots(cascadeRootsDir);
+  /**
+   * `unknownProvenance` may reach [] ONLY when every site it used to hold is
+   * accounted for exactly once somewhere else. This is checked structurally
+   * below (`assertUniverseConserved`) rather than asserted in prose: if a site
+   * were dropped, the total would fall short and the build would throw instead
+   * of publishing a flattering empty list.
+   */
 
   /* --------------------------------------------------------- claims --- */
   /**
@@ -907,6 +1000,9 @@ export function buildProducers({
   const tsxForeign = new Set();
   let stampSites = 0;
   let unresolvedSites = 0;
+  // Every tsx site the scanner produced, before any routing. The conservation
+  // guard below compares the collections against THIS, not against a literal.
+  let tsxSiteTotal = 0;
   for (const abs of candidates) {
     const rel = relative(root, abs);
     if (isExcluded(`/${rel}`)) {
@@ -922,6 +1018,7 @@ export function buildProducers({
     // property is precisely an unresolved producer, and the fast path made it
     // invisible. Parsing every scanned file is the price of not lying.
     const scan = scanTsxSource(rel, text);
+    tsxSiteTotal += scan.unresolved.length + scan.closedNonObject.length;
     styleSinks += scan.styleSinks;
     const applicability = engineScopeOfPath(`/${rel}`);
     for (const site of scan.unresolved) {
@@ -949,6 +1046,11 @@ export function buildProducers({
       }
       if (disposition === "CLOSED_PRODUCER") {
         closedProducer.push(closedProducerRow(rel, site, entry));
+        continue;
+      }
+      const openSpec = disposition ? OPEN_DISPOSITIONS.get(disposition) : undefined;
+      if (openSpec) {
+        openRowsOf(openSpec.collection).push(openBacklogRow(rel, site, entry, disposition));
         continue;
       }
       if (disposition === "CLOSED_NONOBJECT") {
@@ -1158,6 +1260,54 @@ export function buildProducers({
         )
       : digest([]);
 
+  /* ------------------------------------------- open backlog rollup --- */
+  const openByDisposition = {};
+  for (const [dispositionName, spec] of OPEN_DISPOSITIONS) {
+    openByDisposition[dispositionName] = openRowsOf(spec.collection).length;
+  }
+  const openTotal = Object.values(openByDisposition).reduce((a, b) => a + b, 0);
+
+  /* CONSERVATION GUARD -- fail closed.
+   * Every tsx-inline-stamp site the scanner produced must land in exactly one
+   * collection. `unknownProvenance` reaching [] is legitimate ONLY when this
+   * arithmetic closes; otherwise a dropped row would read as progress. */
+  const accountedRows =
+    unknownProvenance.length +
+    closedNonObject.length +
+    closedZeroGoverned.length +
+    publicBoundary.length +
+    privateRelay.length +
+    closedProducer.length +
+    openTotal;
+  if (accountedRows !== tsxSiteTotal) {
+    throw new Error(
+      `cascade universe not conserved: ${tsxSiteTotal} tsx sites scanned but ` +
+        `${accountedRows} accounted for. Refusing to publish an inventory that ` +
+        `loses provenance rows.`,
+    );
+  }
+
+  const openBacklogRollup = {
+    // Calling it "open" is load-bearing: this is classified debt, not resolved debt.
+    total: openTotal,
+    blocking: openTotal > 0,
+    lotBOpen: unknownProvenance.length === 0 && openTotal === 0,
+    statement:
+      "These sites are CLASSIFIED, not resolved. Each carries a typed disposition, a reason and the resolution path it stopped on, which makes the debt addressable; none is consumable or tenant-safe, and none may be treated as a producer, a cascade root or a tenant-reachable channel. F4B stays blocked while any of them remains.",
+    byDisposition: openByDisposition,
+    universe: {
+      tsxSitesScanned: tsxSiteTotal,
+      accountedRows,
+      unknownProvenance: unknownProvenance.length,
+      closedNonObject: closedNonObject.length,
+      closedZeroGoverned: closedZeroGoverned.length,
+      publicBoundary: publicBoundary.length,
+      privateRelay: privateRelay.length,
+      closedProducer: closedProducer.length,
+      openBlocking: openTotal,
+    },
+  };
+
   return {
     generated: true,
     generator: "cascade-producers.mjs",
@@ -1209,6 +1359,17 @@ export function buildProducers({
       publicBoundary: publicBoundary.length,
       privateRelay: privateRelay.length,
       closedProducer: closedProducer.length,
+      branchCompositeOpen: openRowsOf("branchCompositeOpen").length,
+      authoredOpen: openRowsOf("authoredOpen").length,
+      branchConditionalAuthored: openRowsOf("branchConditionalAuthored").length,
+      openUnknown: openRowsOf("openUnknown").length,
+      computedDomainPending: openRowsOf("computedDomainPending").length,
+      dynamicSinkPending: openRowsOf("dynamicSinkPending").length,
+      callArgsPending: openRowsOf("callArgsPending").length,
+      // The rollup that must NOT be read as progress on resolution: these are
+      // still open, still blocking, and lot B stays shut while they exist.
+      openBlocking: openTotal,
+      openBacklogByDisposition: openByDisposition,
       unknownProvenanceByReason: unknownProvenance.reduce((acc, row) => {
         acc[row.reason] = (acc[row.reason] ?? 0) + 1;
         return acc;
@@ -1270,6 +1431,48 @@ export function buildProducers({
       closedProducerReceipts: digest(
         closedProducer.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
       ),
+      branchCompositeOpen: digest(
+        openRowsOf("branchCompositeOpen").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      authoredOpen: digest(
+        openRowsOf("authoredOpen").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      branchConditionalAuthored: digest(
+        openRowsOf("branchConditionalAuthored").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      openUnknown: digest(
+        openRowsOf("openUnknown").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      computedDomainPending: digest(
+        openRowsOf("computedDomainPending").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      dynamicSinkPending: digest(
+        openRowsOf("dynamicSinkPending").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      callArgsPending: digest(
+        openRowsOf("callArgsPending").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      branchCompositeOpenReceipts: digest(
+        openRowsOf("branchCompositeOpen").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      authoredOpenReceipts: digest(
+        openRowsOf("authoredOpen").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      branchConditionalAuthoredReceipts: digest(
+        openRowsOf("branchConditionalAuthored").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      openUnknownReceipts: digest(
+        openRowsOf("openUnknown").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      computedDomainPendingReceipts: digest(
+        openRowsOf("computedDomainPending").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      dynamicSinkPendingReceipts: digest(
+        openRowsOf("dynamicSinkPending").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      callArgsPendingReceipts: digest(
+        openRowsOf("callArgsPending").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
     },
     producerSites,
     channelEmissions,
@@ -1282,6 +1485,14 @@ export function buildProducers({
     publicBoundary,
     privateRelay,
     closedProducer,
+    openBacklogRollup,
+    branchCompositeOpen: openRowsOf("branchCompositeOpen"),
+    authoredOpen: openRowsOf("authoredOpen"),
+    branchConditionalAuthored: openRowsOf("branchConditionalAuthored"),
+    openUnknown: openRowsOf("openUnknown"),
+    computedDomainPending: openRowsOf("computedDomainPending"),
+    dynamicSinkPending: openRowsOf("dynamicSinkPending"),
+    callArgsPending: openRowsOf("callArgsPending"),
   };
 }
 
@@ -1453,6 +1664,13 @@ const ROW_ARRAYS = new Set([
   "publicBoundary",
   "privateRelay",
   "closedProducer",
+  "branchCompositeOpen",
+  "authoredOpen",
+  "branchConditionalAuthored",
+  "openUnknown",
+  "computedDomainPending",
+  "dynamicSinkPending",
+  "callArgsPending",
   "causalRootsExcluded",
 ]);
 
@@ -1532,6 +1750,9 @@ function main(argv) {
   console.log(
     `closed non-consumable: nonObject=${output.stats.closedNonObject} zeroGoverned=${output.stats.closedZeroGoverned} ` +
       `boundary=${output.stats.publicBoundary} relay=${output.stats.privateRelay} producer=${output.stats.closedProducer}`,
+  );
+  console.log(
+    `OPEN blocking:        ${output.stats.openBlocking} ${JSON.stringify(output.stats.openBacklogByDisposition)}`,
   );
   console.log(`tsx census diff:      ${JSON.stringify(output.tsxInlineStamp.censusDiff)}`);
   console.log(`wrote ${OUT}`);

@@ -733,17 +733,9 @@ test('P-2 (C-1) the drained set IS the recomputed cohort, by count, never by id 
   // multiset arithmetic, not tuple uniqueness (C-a2)
   assert.equal(out.stats.closedNonObject, out.closedNonObject.length);
   assert.equal(out.stats.unknownProvenance, out.unknownProvenance.length);
-  // T-TYPED-1118 took the buckets from three to six; the conservation law is
+  // T-FINAL-352 took the buckets from six to thirteen; the conservation law is
   // unchanged in spirit -- every one of the 2024 sites is in exactly one.
-  assert.equal(
-    out.stats.unknownProvenance +
-      out.stats.closedNonObject +
-      out.stats.closedZeroGoverned +
-      out.stats.publicBoundary +
-      out.stats.privateRelay +
-      out.stats.closedProducer,
-    2024,
-  );
+  assert.equal(universeTotal(out), 2024);
   // disjoint by construction: a site is EITHER closed by proof OR unresolved
   const closedKeys = out.closedNonObject.map((r) => `${r.file}|${r.line}|${r.ordinal}`);
   const unknownKeys = new Set(out.unknownProvenance.map((r) => r.detail));
@@ -824,15 +816,19 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   const out = buildProducers();
   const byReason = out.stats.unknownProvenanceByReason;
   assert.ok(!('unresolved-expression' in byReason), 'the key must be removed, not zeroed');
-  // post T-TYPED-1118: boundary+relay+producer+the cross-file non-object left
-  // these buckets too. dynamic-setProperty has never drained through any
-  // tranche -- it is the one bucket that is still exactly what lot A measured.
-  assert.equal(byReason['unresolved-identifier'], 68);
-  assert.equal(byReason['unresolved-spread'], 148);
-  assert.equal(byReason['unresolved-member-access'], 47);
-  assert.equal(byReason['unresolved-call'], 85);
-  assert.equal(byReason['unresolved-dynamic-setProperty'], 4);
-  assert.equal(Object.values(byReason).reduce((a, b) => a + b, 0), 352);
+  // post T-FINAL-352 `unknownProvenance` is empty, so its byReason is empty
+  // TOO -- and that is only legitimate because every reason it used to hold is
+  // now carried by a typed OPEN collection. T-16 proves the arithmetic; here we
+  // only fix that the map does not keep phantom keys behind.
+  assert.deepEqual(byReason, {});
+  assert.equal(out.stats.unknownProvenance, 0);
+  // the reasons did NOT evaporate: they moved, with their forms, into the seven
+  assert.equal(openRows(out).length, 352);
+  assert.equal(
+    openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
+    4,
+    'the 4 dynamic sinks kept their form and were not absorbed',
+  );
 });
 
 test('C-a4 the frozen counters do not move with this tranche', () => {
@@ -857,17 +853,9 @@ test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conse
   const out = buildProducers();
   assert.equal(out.stats.closedZeroGoverned, 486);
   assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
-  assert.equal(out.stats.unknownProvenance, 352);
+  assert.equal(out.stats.unknownProvenance, 0);
   // conservation: nothing vanished, everything is in exactly one bucket
-  assert.equal(
-    out.stats.unknownProvenance +
-      out.stats.closedZeroGoverned +
-      out.stats.closedNonObject +
-      out.stats.publicBoundary +
-      out.stats.privateRelay +
-      out.stats.closedProducer,
-    2024,
-  );
+  assert.equal(universeTotal(out), 2024);
 });
 
 test('Z-2 every drained row carries the ZERO disposition in the subsystem (no allowlist)', () => {
@@ -918,8 +906,9 @@ test('Z-5 the drained buckets decompose exactly as the cohort does', () => {
   }
   assert.deepEqual(byForm, { identifier: 7, spread: 113, 'member-access': 305, call: 61 });
   assert.equal(Object.values(byForm).reduce((a, b) => a + b, 0), 486);
-  // dynamic-setProperty has never drained: it is still whole in the residual
-  assert.equal(buildProducers().stats.unknownProvenanceByReason['unresolved-dynamic-setProperty'], 4);
+  // dynamic-setProperty has never been resolved by any tranche: it is still
+  // whole, now as its own nominated OPEN collection rather than as residue.
+  assert.equal(buildProducers().dynamicSinkPending.length, 4);
 });
 
 test('Z-6 the receipt publishes the identity family and a SEQUENCE digest', () => {
@@ -1005,20 +994,34 @@ test('Z-12 the subsystem is PURE: importing it neither writes nor mutates the in
  * would catch a false close.
  * ===================================================================== */
 
+/* T-FINAL-352 shared helpers: the collection roster lives in ONE place so a
+ * new collection cannot be added without every conservation test seeing it. */
+const OPEN_COLLECTIONS = [
+  'branchCompositeOpen', 'authoredOpen', 'branchConditionalAuthored', 'openUnknown',
+  'computedDomainPending', 'dynamicSinkPending', 'callArgsPending',
+];
+const CLOSED_COLLECTIONS = [
+  'closedNonObject', 'closedZeroGoverned', 'publicBoundary', 'privateRelay', 'closedProducer',
+];
+const ALL_COLLECTIONS = [...CLOSED_COLLECTIONS, ...OPEN_COLLECTIONS, 'unknownProvenance'];
+const openRows = (out) => OPEN_COLLECTIONS.flatMap((name) => out[name]);
+const universeTotal = (out) => ALL_COLLECTIONS.reduce((acc, name) => acc + out[name].length, 0);
+
 test('T-1 the four cohorts have exactly the measured sizes and the residual is 352', () => {
   const out = buildProducers();
   assert.equal(out.stats.publicBoundary, 523);
   assert.equal(out.stats.privateRelay, 591);
   assert.equal(out.stats.closedProducer, 3);
   assert.equal(out.stats.closedNonObject, 69);
-  assert.equal(out.stats.unknownProvenance, 352);
   // stats mirror the arrays, never a bare counter
   assert.equal(out.stats.publicBoundary, out.publicBoundary.length);
   assert.equal(out.stats.privateRelay, out.privateRelay.length);
   assert.equal(out.stats.closedProducer, out.closedProducer.length);
-  // the tranche moved exactly 1118 rows out of unknownProvenance
+  // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
-  assert.equal(1470 - 1118, out.stats.unknownProvenance);
+  assert.equal(1470 - 1118, 352);
+  assert.equal(out.stats.openBlocking, 352);
+  assert.equal(out.stats.unknownProvenance, 0);
 });
 
 test('T-2 NEGATIVE: a boundary row is NEVER consumable and never tenant-safe', () => {
@@ -1055,8 +1058,9 @@ test('T-4 the six collections are pairwise DISJOINT and total the 2024 sites', (
     privateRelay: out.privateRelay,
     closedProducer: out.closedProducer,
   };
+  for (const name of ['branchCompositeOpen', 'authoredOpen', 'branchConditionalAuthored', 'openUnknown', 'computedDomainPending', 'dynamicSinkPending', 'callArgsPending']) sections[name] = out[name];
   // unknownProvenance publishes no ordinal, so it is compared on its own key
-  const keyed = ['closedNonObject', 'closedZeroGoverned', 'publicBoundary', 'privateRelay', 'closedProducer'];
+  const keyed = ['closedNonObject', 'closedZeroGoverned', 'publicBoundary', 'privateRelay', 'closedProducer', ...['branchCompositeOpen', 'authoredOpen', 'branchConditionalAuthored', 'openUnknown', 'computedDomainPending', 'dynamicSinkPending', 'callArgsPending']];
   const seen = new Map();
   for (const name of keyed) {
     for (const row of sections[name]) {
@@ -1206,11 +1210,15 @@ test('T-11 NEGATIVE: altering or removing a receipt moves the receipt-bound dige
   assert.notEqual(withReceipt(rows), withReceipt(stripped), 'the receipt-bound digest MUST see it');
 });
 
-test('T-12 the residual 352 stays unknown and lot B does NOT open', () => {
+test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
   const out = buildProducers();
-  assert.equal(out.stats.unknownProvenance, 352);
-  assert.ok(out.stats.unknownProvenance > 0, 'F-5.1 requires unknownProvenance == [] and it is not');
-  assert.equal(out.unknownProvenance.length, 352);
+  // unknownProvenance is empty, but that is NOT lot B opening: the same 352
+  // sites are now blocking under their own names.
+  assert.equal(out.stats.unknownProvenance, 0);
+  assert.equal(out.unknownProvenance.length, 0);
+  assert.equal(out.stats.openBlocking, 352);
+  assert.equal(out.openBacklogRollup.blocking, true);
+  assert.equal(out.openBacklogRollup.lotBOpen, false, 'lot B must stay shut while open debt exists');
   // the residual dispositions are the ones NO tranche has proven anything about
   const { rows } = classifyCrossFileRows();
   const drained = new Set([
@@ -1233,10 +1241,12 @@ test('T-12 the residual 352 stays unknown and lot B does NOT open', () => {
 });
 
 test('T-13 boundedReceiptOf returns null for a disposition it cannot vouch for', () => {
-  // fail-closed: an unhandled disposition never fabricates evidence
-  assert.equal(boundedReceiptOf({ disposition: 'AUTHORED_OPEN', resolutionPath: [] }), null);
-  assert.equal(boundedReceiptOf({ disposition: 'OPEN_UNKNOWN', resolutionPath: [] }), null);
-  assert.equal(boundedReceiptOf({ disposition: 'BRANCH_COMPOSITE_OPEN', resolutionPath: [] }), null);
+  // fail-closed: an UNKNOWN disposition never fabricates evidence. The seven
+  // open ones gained receipts in T-FINAL-352, so the negative now uses names
+  // the module genuinely does not model.
+  assert.equal(boundedReceiptOf({ disposition: 'PUBLIC_BOUNDARY_UNKNOWN', resolutionPath: [] }), null);
+  assert.equal(boundedReceiptOf({ disposition: 'NOT_A_REAL_DISPOSITION', resolutionPath: [] }), null);
+  assert.equal(boundedReceiptOf({ disposition: undefined, resolutionPath: [] }), null);
 });
 
 test('T-14 the frozen counters survive this tranche untouched', () => {
@@ -1298,4 +1308,217 @@ test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-s
   const withKinds = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
   const withoutKinds = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, [], r.evidence]));
   assert.notEqual(withKinds(out.privateRelay), withoutKinds(out.privateRelay));
+});
+
+/* ===================================================================== *
+ * T-FINAL-352 -- the last 352 rows become TYPED OPEN debt.
+ *
+ * `unknownProvenance` reaches [] and that is NOT progress on resolution: the
+ * same 352 sites are still blocking, now under seven names with a reason and a
+ * path each. The tests below exist to make sure nobody can read the empty list
+ * as "solved", and that no row was lost on the way out.
+ * ===================================================================== */
+
+test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserved', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.unknownProvenance, 0);
+  assert.deepEqual(out.unknownProvenance, []);
+  // the seven exact counts -- measured, not estimated
+  assert.deepEqual(out.stats.openBacklogByDisposition, {
+    BRANCH_COMPOSITE_OPEN: 162,
+    AUTHORED_OPEN: 99,
+    BRANCH_CONDITIONAL_AUTHORED: 37,
+    OPEN_UNKNOWN: 28,
+    COMPUTED_DOMAIN_PENDING: 21,
+    DYNAMIC_SINK_PENDING: 4,
+    CALL_ARGS_PENDING: 1,
+  });
+  assert.equal(out.branchCompositeOpen.length, 162);
+  assert.equal(out.authoredOpen.length, 99);
+  assert.equal(out.branchConditionalAuthored.length, 37);
+  assert.equal(out.openUnknown.length, 28);
+  assert.equal(out.computedDomainPending.length, 21);
+  assert.equal(out.dynamicSinkPending.length, 4);
+  assert.equal(out.callArgsPending.length, 1);
+  assert.equal(openRows(out).length, 352);
+  assert.equal(out.stats.openBlocking, 352);
+  // TOTAL conservation across every collection, closed and open
+  assert.equal(universeTotal(out), 2024);
+  assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2024);
+  assert.equal(out.openBacklogRollup.universe.accountedRows, 2024);
+});
+
+test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
+  const out = buildProducers();
+  // Each collection is a SEQUENCE (C-a2): one coordinate may legitimately carry
+  // two occurrences when the same expression reaches two sinks. What must NEVER
+  // happen is a coordinate claimed by TWO DIFFERENT collections -- that would be
+  // the same debt counted twice, or drained and blocked at once.
+  const owner = new Map();
+  let rowCount = 0;
+  for (const name of [...CLOSED_COLLECTIONS, ...OPEN_COLLECTIONS]) {
+    for (const row of out[name]) {
+      rowCount += 1;
+      const key = `${row.file}|${row.ordinal}`;
+      if (owner.has(key)) {
+        assert.equal(owner.get(key), name, `site ${key} claimed by both ${owner.get(key)} and ${name}`);
+      }
+      owner.set(key, name);
+    }
+  }
+  assert.equal(rowCount, 2024, 'every scanned site is carried by exactly one collection');
+  assert.ok(owner.size <= rowCount);
+  // and the open/closed split is a partition of those coordinates
+  const openKeys = new Set(openRows(out).map((r) => `${r.file}|${r.ordinal}`));
+  const closedKeys = new Set(CLOSED_COLLECTIONS.flatMap((n) => out[n]).map((r) => `${r.file}|${r.ordinal}`));
+  for (const key of openKeys) {
+    assert.ok(!closedKeys.has(key), `${key} is simultaneously open debt and closed`);
+  }
+  // and the classifier's own residual matches the seven collections exactly
+  const { rows } = classifyCrossFileRows();
+  const openByDisposition = {};
+  for (const row of openRows(out)) {
+    openByDisposition[row.disposition] = (openByDisposition[row.disposition] || 0) + 1;
+  }
+  const fromClassifier = {};
+  for (const r of rows) {
+    if (!(r.disposition in openByDisposition)) continue;
+    fromClassifier[r.disposition] = (fromClassifier[r.disposition] || 0) + 1;
+  }
+  assert.deepEqual(openByDisposition, fromClassifier, 'the collections must BE the classifier cohorts');
+});
+
+test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
+  const out = buildProducers();
+  const rows = openRows(out);
+  assert.equal(rows.length, 352);
+  for (const row of rows) {
+    assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
+    assert.equal(row.consumable, false);
+    assert.equal(row.tenantSafe, false);
+    assert.equal(row.closed, false, `${row.file}:${row.line} an OPEN row must never be marked closed`);
+    assert.ok(row.nonConsumableCause && row.nonConsumableCause.length > 0, 'the cause must be nominated');
+    // NOTHING invented: no root, no owner, no tenant reach
+    assert.ok(!('causalRootIds' in row), 'an open row must not claim a cascade root');
+    assert.ok(!('tenantReachable' in row), 'an open row must not claim tenant reachability');
+    assert.ok(!('ownerId' in row), 'an open row must not claim an owner');
+    // and a receipt that is actually usable as a backlog item
+    assert.ok(row.evidence && Array.isArray(row.evidence.path) && row.evidence.path.length > 0);
+    assert.equal(row.plane, 'tsx-inline-stamp');
+    assert.match(row.reason, /:[a-zA-Z-]+$/, 'the reason must keep the site form');
+  }
+  // the rollup agrees with the rows, and does not pretend lot B opened
+  assert.equal(out.openBacklogRollup.total, 352);
+  assert.equal(out.openBacklogRollup.blocking, true);
+  assert.equal(out.openBacklogRollup.lotBOpen, false);
+  assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
+});
+
+test('T-19 the 4 dynamic sinks and the 1 call-args row stay INTACT and nominated', () => {
+  const out = buildProducers();
+  // These are the two cohorts a heuristic would be most tempted to absorb into
+  // a neighbouring bucket. They keep their own collection, count and cause.
+  assert.equal(out.dynamicSinkPending.length, 4);
+  for (const row of out.dynamicSinkPending) {
+    assert.equal(row.disposition, 'DYNAMIC_SINK_PENDING');
+    assert.equal(row.reason, 'dynamic-sink-pending:dynamic-setProperty');
+    assert.equal(row.nonConsumableCause, 'setProperty-name-is-not-a-literal-at-the-sink');
+    assert.equal(row.blocking, true);
+  }
+  assert.equal(out.callArgsPending.length, 1);
+  const [callArgs] = out.callArgsPending;
+  assert.equal(callArgs.disposition, 'CALL_ARGS_PENDING');
+  assert.equal(callArgs.nonConsumableCause, 'call-argument-substitution-not-implemented');
+  assert.equal(callArgs.evidence.reason, 'rest-parameter-substitution-not-implemented');
+  assert.equal(callArgs.blocking, true);
+  // neither leaked into any other collection
+  const others = [...CLOSED_COLLECTIONS, ...OPEN_COLLECTIONS]
+    .filter((n) => n !== 'dynamicSinkPending' && n !== 'callArgsPending')
+    .flatMap((n) => out[n]);
+  assert.equal(others.filter((r) => r.disposition === 'DYNAMIC_SINK_PENDING').length, 0);
+  assert.equal(others.filter((r) => r.disposition === 'CALL_ARGS_PENDING').length, 0);
+});
+
+test('T-20 NEGATIVE: mutating or removing an open receipt moves the receipt digest', () => {
+  const out = buildProducers();
+  for (const name of OPEN_COLLECTIONS) {
+    assert.match(out.digests[name], /^[0-9a-f]{64}$/, `${name} needs an identity digest`);
+    assert.match(out.digests[`${name}Receipts`], /^[0-9a-f]{64}$/, `${name} needs a receipt digest`);
+    assert.notEqual(out.digests[name], out.digests[`${name}Receipts`]);
+  }
+  // identity alone cannot see the receipt; the receipt-bound tuple must
+  const rows = out.branchCompositeOpen.slice(0, 5);
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
+  const stripped = rows.map((r) => ({ ...r, evidence: null }));
+  const mutated = rows.map((r) => ({ ...r, evidence: { ...r.evidence, path: ['tampered'] } }));
+  assert.equal(identity(rows), identity(stripped), 'identity is blind to the receipt by design');
+  assert.notEqual(bound(rows), bound(stripped), 'REMOVING a receipt must move the bound digest');
+  assert.notEqual(bound(rows), bound(mutated), 'MUTATING a receipt must move the bound digest');
+});
+
+test('T-21 --check FAILS when a published receipt is tampered with on disk', () => {
+  const original = readFileSync(OUT_PATH, 'utf8');
+  const parsed = JSON.parse(original);
+  assert.ok(parsed.branchCompositeOpen.length > 0);
+  parsed.branchCompositeOpen[0].evidence.path = ['tampered'];
+  let rejected = false;
+  try {
+    writeFileSync(OUT_PATH, JSON.stringify(parsed, null, 2));
+    try {
+      execFileSync(process.execPath, [SCRIPT, '--check'], { stdio: 'pipe' });
+    } catch {
+      rejected = true;
+    }
+  } finally {
+    writeFileSync(OUT_PATH, original);
+  }
+  assert.ok(rejected, '--check must reject a tampered receipt');
+  // and the tree is left exactly as we found it
+  assert.equal(readFileSync(OUT_PATH, 'utf8'), original);
+  execFileSync(process.execPath, [SCRIPT, '--check'], { stdio: 'pipe' });
+});
+
+test('T-22 reordering the classifier input changes NEITHER output NOR digest', () => {
+  const { rows } = classifyCrossFileRows();
+  const forward = dispositionIndex(rows);
+  const backward = dispositionIndex([...rows].reverse());
+  assert.equal(forward.size, backward.size);
+  for (const [key, entry] of forward) {
+    const other = backward.get(key);
+    assert.ok(other, `key ${key} vanished when the input was reversed`);
+    assert.deepEqual(entry.decision, other.decision);
+    assert.deepEqual(entry.receipt, other.receipt);
+    assert.deepEqual(entry.sinkTags, other.sinkTags, 'merged sets must be order-independent');
+    assert.deepEqual(entry.relayKinds, other.relayKinds);
+    assert.equal(entry.occurrences, other.occurrences);
+  }
+  // and the published inventory is stable across two full builds
+  const a = buildProducers();
+  const b = buildProducers();
+  for (const name of [...OPEN_COLLECTIONS, ...CLOSED_COLLECTIONS]) {
+    assert.equal(a.digests[name], b.digests[name], `${name} identity digest is unstable`);
+    assert.equal(a.digests[`${name}Receipts`] ?? null, b.digests[`${name}Receipts`] ?? null);
+    assert.deepEqual(a[name], b[name], `${name} rows are unstable between builds`);
+  }
+});
+
+test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched', () => {
+  const out = buildProducers();
+  // closed cohorts from the previous tranches
+  assert.equal(out.stats.publicBoundary, 523);
+  assert.equal(out.stats.privateRelay, 591);
+  assert.equal(out.stats.closedProducer, 3);
+  assert.equal(out.stats.closedNonObject, 69);
+  assert.equal(out.stats.closedZeroGoverned, 486);
+  // producer counters
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  assert.equal(out.stats.ownershipConflicts, 0);
+  // an OPEN row may never be counted as a producer or a governed emission
+  const openKeys = new Set(openRows(out).map((r) => `${r.file}|${r.ordinal}`));
+  const producerKeys = new Set(out.closedProducer.map((r) => `${r.file}|${r.ordinal}`));
+  for (const key of openKeys) assert.ok(!producerKeys.has(key), `${key} is both open and a producer`);
 });
