@@ -21,6 +21,7 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { classifyCrossFileRows } from './cascade-disposition.mjs';
 import {
   adjudicateDeclarationOwner,
   provablyNonObject,
@@ -726,7 +727,12 @@ test('P-2 (C-1) the drained set IS the recomputed cohort, by count, never by id 
   // multiset arithmetic, not tuple uniqueness (C-a2)
   assert.equal(out.stats.closedNonObject, out.closedNonObject.length);
   assert.equal(out.stats.unknownProvenance, out.unknownProvenance.length);
-  assert.equal(out.stats.unknownProvenance + out.stats.closedNonObject, 2024);
+  // T-ZERO-486 added a third bucket; the conservation law is unchanged in
+  // spirit -- every one of the 2024 sites is in exactly one of them.
+  assert.equal(
+    out.stats.unknownProvenance + out.stats.closedNonObject + out.stats.closedZeroGoverned,
+    2024,
+  );
   // disjoint by construction: a site is EITHER closed by proof OR unresolved
   const closedKeys = out.closedNonObject.map((r) => `${r.file}|${r.line}|${r.ordinal}`);
   const unknownKeys = new Set(out.unknownProvenance.map((r) => r.detail));
@@ -804,12 +810,14 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   const out = buildProducers();
   const byReason = out.stats.unknownProvenanceByReason;
   assert.ok(!('unresolved-expression' in byReason), 'the key must be removed, not zeroed');
-  assert.equal(byReason['unresolved-identifier'], 775);
-  assert.equal(byReason['unresolved-spread'], 635);
-  assert.equal(byReason['unresolved-member-access'], 389);
-  assert.equal(byReason['unresolved-call'], 153);
+  // post T-ZERO-486: the ZERO cohort left these buckets (see Z-5 for the
+  // exact decomposition 7/113/305/61); dynamic-setProperty never drains.
+  assert.equal(byReason['unresolved-identifier'], 768);
+  assert.equal(byReason['unresolved-spread'], 522);
+  assert.equal(byReason['unresolved-member-access'], 84);
+  assert.equal(byReason['unresolved-call'], 92);
   assert.equal(byReason['unresolved-dynamic-setProperty'], 4);
-  assert.equal(Object.values(byReason).reduce((a, b) => a + b, 0), 1956);
+  assert.equal(Object.values(byReason).reduce((a, b) => a + b, 0), 1470);
 });
 
 test('C-a4 the frozen counters do not move with this tranche', () => {
@@ -818,4 +826,142 @@ test('C-a4 the frozen counters do not move with this tranche', () => {
   assert.equal(out.stats.channelEmissions, 10313);
   assert.equal(out.stats.distinctChannels, 4585);
   assert.equal(out.stats.ownershipConflicts, 0);
+});
+
+/* ==========================================================================
+ * T-ZERO-486 -- the cross-file subsystem.
+ *
+ * ONLY `CLOSED_ZERO_GOVERNED_EMISSION_OBJECT` drains. Boundary, relay and
+ * every residual stay in `unknownProvenance`, non-consumable: the negatives
+ * below are the ones that would catch a false close.
+ * ========================================================================== */
+
+const ZERO = 'CLOSED_ZERO_GOVERNED_EMISSION_OBJECT';
+
+test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conserved', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.closedZeroGoverned, 486);
+  assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
+  assert.equal(out.stats.unknownProvenance, 1470);
+  // conservation: nothing vanished, everything is in exactly one bucket
+  assert.equal(
+    out.stats.unknownProvenance + out.stats.closedZeroGoverned + out.stats.closedNonObject,
+    2024,
+  );
+});
+
+test('Z-2 every drained row carries the ZERO disposition in the subsystem (no allowlist)', () => {
+  const out = buildProducers();
+  const { rows } = classifyCrossFileRows();
+  const at = new Map();
+  for (const r of rows) at.set(`${r.file}|${r.ordinal}`, r.disposition);
+  for (const row of out.closedZeroGoverned) {
+    assert.equal(at.get(`${row.file}|${row.ordinal}`), ZERO,
+      `${row.file}:${row.line} drained without a ZERO disposition`);
+  }
+});
+
+test('Z-3 FALSE CLOSE GUARD: no boundary or relay row is ever drained', () => {
+  const out = buildProducers();
+  const { rows } = classifyCrossFileRows();
+  const drained = new Set(out.closedZeroGoverned.map((r) => `${r.file}|${r.ordinal}`));
+  const leaked = rows.filter(
+    (r) =>
+      (r.disposition === 'PUBLIC_BOUNDARY_CANDIDATE' || r.disposition === 'RELAY_PRIVATE_UNRESOLVED') &&
+      drained.has(`${r.file}|${r.ordinal}`),
+  );
+  assert.equal(leaked.length, 0, `boundary/relay leaked into the drain: ${JSON.stringify(leaked.slice(0, 3))}`);
+});
+
+test('Z-4 boundary 523 and relay 591 remain unknown and non-consumable', () => {
+  const { rows } = classifyCrossFileRows();
+  const by = {};
+  for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
+  assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 523);
+  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 591);
+  assert.equal(by[ZERO], 486);
+  assert.equal(by.CLOSED_NONOBJECT, 69); // 68 reachable by A4 + 1 member-access
+  assert.equal(Object.values(by).reduce((a, b) => a + b, 0), 2024);
+});
+
+test('Z-5 the drained buckets decompose exactly as the cohort does', () => {
+  const out = buildProducers();
+  const byReason = out.stats.unknownProvenanceByReason;
+  // 486 = 7 identifier + 113 spread + 305 member-access + 61 call
+  assert.equal(775 - byReason['unresolved-identifier'], 7);
+  assert.equal(635 - byReason['unresolved-spread'], 113);
+  assert.equal(389 - byReason['unresolved-member-access'], 305);
+  assert.equal(153 - byReason['unresolved-call'], 61);
+  assert.equal(byReason['unresolved-dynamic-setProperty'], 4);
+});
+
+test('Z-6 the receipt publishes the identity family and a SEQUENCE digest', () => {
+  const out = buildProducers();
+  for (const row of out.closedZeroGoverned) {
+    for (const f of ['plane', 'file', 'symbol', 'line', 'ordinal', 'template', 'reason']) {
+      assert.ok(f in row, `closedZeroGoverned row missing ${f}`);
+    }
+    assert.match(row.reason, /^zero-governed-emission-object:/);
+  }
+  assert.match(out.digests.closedZeroGoverned, /^[0-9a-f]{64}$/);
+  // SEQUENCE: duplicated identity tuples are legal and must NOT be deduped
+  const tuples = out.closedZeroGoverned.map((r) => `${r.file}|${r.ordinal}`);
+  assert.equal(tuples.length, out.stats.closedZeroGoverned);
+});
+
+test('Z-7 FAIL-CLOSED: a spread whose source cannot be resolved is never ZERO', () => {
+  const { rows } = classifyCrossFileRows();
+  const zero = rows.filter((r) => r.disposition === ZERO);
+  for (const r of zero) {
+    assert.equal(r.closed, true, `${r.file}:${r.line} drained while not closed`);
+    assert.ok(r.governance, `${r.file}:${r.line} drained with no governance receipt`);
+    assert.equal(r.governance.customPropertyScanComplete, true,
+      `${r.file}:${r.line} drained on an INCOMPLETE scan`);
+  }
+});
+
+test('Z-8 FAIL-CLOSED: cycle, depth overflow and unresolved key never certify ZERO', () => {
+  const { rows } = classifyCrossFileRows();
+  for (const r of rows.filter((x) => x.disposition === ZERO)) {
+    assert.equal(r.governance.cycleDetected, false);
+    assert.equal(r.governance.depthOverflow, false);
+    assert.equal(r.governance.hasUnresolvedKey, false);
+    assert.equal(r.governance.scanIncomplete, false);
+  }
+});
+
+test('Z-9 a ZERO row really has zero governed and zero internal-socket keys', () => {
+  const { rows } = classifyCrossFileRows();
+  for (const r of rows.filter((x) => x.disposition === ZERO)) {
+    assert.equal(r.governance.governedChannelKeys.length, 0,
+      `${r.file}:${r.line} claims ZERO but declares governed keys`);
+    assert.equal(r.governance.internalSocketKeys.length, 0,
+      `${r.file}:${r.line} claims ZERO but declares internal sockets`);
+  }
+});
+
+test('Z-10 ZERO and PRODUCER are disjoint, and PRODUCER is never drained', () => {
+  const out = buildProducers();
+  const { rows } = classifyCrossFileRows();
+  const drained = new Set(out.closedZeroGoverned.map((r) => `${r.file}|${r.ordinal}`));
+  const producers = rows.filter((r) => r.disposition === 'CLOSED_PRODUCER');
+  for (const p of producers) {
+    assert.ok(!drained.has(`${p.file}|${p.ordinal}`), 'a CLOSED_PRODUCER was drained as ZERO');
+  }
+  assert.equal(producers.length, 3);
+});
+
+test('Z-11 the frozen producer counters do not move with this tranche', () => {
+  const out = buildProducers();
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.closedNonObject, 68);
+});
+
+test('Z-12 the subsystem is PURE: importing it neither writes nor mutates the inventory', () => {
+  const before = readFileSync(OUT_PATH, 'utf8');
+  const { rows } = classifyCrossFileRows();
+  assert.equal(rows.length, 2024);
+  assert.equal(readFileSync(OUT_PATH, 'utf8'), before);
 });

@@ -64,6 +64,7 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
+import { classifyCrossFileRows } from "./cascade-disposition.mjs";
 import {
   BRAND_THEME,
   CHROME_VARIABLES,
@@ -559,6 +560,17 @@ export function buildProducers({
   // Receipt for the sites the scanner CLOSES by proof (see provablyNonObject).
   // Same identity family as `unknownProvenance`; a SEQUENCE, not a set.
   const closedNonObject = [];
+  // Receipt for the sites the CROSS-FILE subsystem proves are closed objects
+  // that emit ZERO governed channels. Only this disposition drains: boundary,
+  // relay and every residual stay in `unknownProvenance`, non-consumable.
+  const closedZeroGoverned = [];
+  const crossFile = classifyCrossFileRows();
+  const dispositionAt = new Map();
+  for (const row of crossFile.rows) {
+    // duplicates on this key were measured to NEVER disagree on disposition,
+    // so the last write is the same value as the first.
+    dispositionAt.set(`${row.file}|${row.ordinal}`, row.disposition);
+  }
   const precedenceMetadata = [];
 
   const { byChannel: causalByChannel, excluded: causalExcluded } =
@@ -838,6 +850,18 @@ export function buildProducers({
     styleSinks += scan.styleSinks;
     const applicability = engineScopeOfPath(`/${rel}`);
     for (const site of scan.unresolved) {
+      if (dispositionAt.get(`${rel}|${site.ordinal}`) === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
+        closedZeroGoverned.push({
+          plane: "tsx-inline-stamp",
+          file: rel,
+          symbol: site.symbol,
+          line: site.line,
+          ordinal: site.ordinal,
+          template: site.expression,
+          reason: `zero-governed-emission-object:${site.form}`,
+        });
+        continue;
+      }
       unresolvedSites += 1;
       unknown({
         plane: "tsx-inline-stamp",
@@ -1072,6 +1096,7 @@ export function buildProducers({
       ownershipConflicts: ownershipConflicts.length,
       unknownProvenance: unknownProvenance.length,
       closedNonObject: closedNonObject.length,
+      closedZeroGoverned: closedZeroGoverned.length,
       unknownProvenanceByReason: unknownProvenance.reduce((acc, row) => {
         acc[row.reason] = (acc[row.reason] ?? 0) + 1;
         return acc;
@@ -1110,6 +1135,9 @@ export function buildProducers({
       closedNonObject: digest(
         closedNonObject.map((row) => [row.plane, row.file, row.symbol, row.reason]),
       ),
+      closedZeroGoverned: digest(
+        closedZeroGoverned.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
     },
     producerSites,
     channelEmissions,
@@ -1118,6 +1146,7 @@ export function buildProducers({
     precedenceMetadata,
     unknownProvenance,
     closedNonObject,
+    closedZeroGoverned,
   };
 }
 
@@ -1285,6 +1314,7 @@ const ROW_ARRAYS = new Set([
   "precedenceMetadata",
   "unknownProvenance",
   "closedNonObject",
+  "closedZeroGoverned",
   "causalRootsExcluded",
 ]);
 
