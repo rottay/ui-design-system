@@ -827,7 +827,7 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.deepEqual(byReason, {});
   assert.equal(out.stats.unknownProvenance, 0);
   // the reasons did NOT evaporate: they moved, with their forms, into the seven
-  assert.equal(openRows(out).length, 150);
+  assert.equal(openRows(out).length, 142);
   assert.equal(
     openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
     4,
@@ -856,7 +856,7 @@ const ZERO = 'CLOSED_ZERO_GOVERNED_EMISSION_OBJECT';
 test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conserved', () => {
   const out = buildProducers();
   // 486 by the original route + 43 through the branch union (35 flat + 8 nested)
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
   assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
   assert.equal(out.stats.unknownProvenance, 0);
   // conservation: nothing vanished, everything is in exactly one bucket
@@ -892,7 +892,7 @@ test('Z-4 boundary 523 and relay 591 remain unknown and non-consumable', () => {
   for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
   assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 538); // 523 direct + 15 inherited
   assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 675); // 591 direct + 84 inherited
-  assert.equal(by[ZERO], 571); // + 42 closed by T-COMPUTED-DOMAIN (18 direct, 24 indirect)
+  assert.equal(by[ZERO], 579); // + 8 closed by T-SEQUENTIAL-8
   assert.equal(by.BRANCH_CONDITIONAL_AUTHORED, 2); // the 2 that genuinely emit
   assert.equal(by.BRANCH_COMPOSITE_OPEN, 55); // 162 - 8 nested - 99 relay-inherited
   assert.equal(by.CLOSED_NONOBJECT, 69); // 68 reachable by A4 + 1 member-access
@@ -919,8 +919,10 @@ test('Z-5 the drained buckets decompose exactly as the cohort does', () => {
   // The non-branch cohort is no longer only the original 486: T-COMPUTED-DOMAIN
   // closed 18 more INDIRECTLY (an enumerated lookup nested inside them), and an
   // indirect closure leaves no route marker of its own to separate it by.
-  assert.deepEqual(byForm, { identifier: 7, spread: 124, 'member-access': 317, call: 74 });
-  assert.equal(Object.values(byForm).reduce((a, b) => a + b, 0), 522);
+  // + 8 more indirect arrivals from T-SEQUENTIAL-8, which close through an
+  // `object` root and so are not separable from this bucket by receipt kind
+  assert.deepEqual(byForm, { identifier: 7, spread: 128, 'member-access': 317, call: 78 });
+  assert.equal(Object.values(byForm).reduce((a, b) => a + b, 0), 530);
   assert.deepEqual(byBranchForm, { 'member-access': 9, spread: 28, call: 12 });
   assert.equal(Object.values(byBranchForm).reduce((a, b) => a + b, 0), 49);
   // dynamic-setProperty has never been resolved by any tranche: it is still
@@ -1038,7 +1040,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
   assert.equal(1470 - 1118, 352);
-  assert.equal(out.stats.openBlocking, 150); // T-TYPED-RELAY closed 9 more
+  assert.equal(out.stats.openBlocking, 142); // T-SEQUENTIAL-8 closed 8 more
   assert.equal(out.stats.unknownProvenance, 0);
 });
 
@@ -1267,7 +1269,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
   // sites are now blocking under their own names.
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(out.stats.openBlocking, 142);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false, 'lot B must stay shut while open debt exists');
   // the residual dispositions are the ones NO tranche has proven anything about
@@ -1277,7 +1279,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
     'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
   ]);
   const residual = rows.filter((r) => !drained.has(r.disposition));
-  assert.equal(residual.length, 150);
+  assert.equal(residual.length, 142);
   const byDisposition = {};
   for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
   // COMPUTED_DOMAIN_PENDING is absent, not zero: this map counts rows, and
@@ -1286,7 +1288,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
     BRANCH_COMPOSITE_OPEN: 55,
     AUTHORED_OPEN: 66,
     BRANCH_CONDITIONAL_AUTHORED: 2,
-    OPEN_UNKNOWN: 22,
+    OPEN_UNKNOWN: 14,
     DYNAMIC_SINK_PENDING: 4,
     CALL_ARGS_PENDING: 1,
   });
@@ -1308,7 +1310,7 @@ test('T-14 the frozen counters survive this tranche untouched', () => {
   assert.equal(out.stats.distinctChannels, 4585);
   assert.equal(out.stats.emissionsWithCausalRoot, 186);
   assert.equal(out.stats.ownershipConflicts, 0);
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
 });
 
 test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-sink coordinates', () => {
@@ -1399,7 +1401,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
     BRANCH_COMPOSITE_OPEN: 55,
     AUTHORED_OPEN: 66,
     BRANCH_CONDITIONAL_AUTHORED: 2,
-    OPEN_UNKNOWN: 22,
+    OPEN_UNKNOWN: 14,
     COMPUTED_DOMAIN_PENDING: 0,
     DYNAMIC_SINK_PENDING: 4,
     CALL_ARGS_PENDING: 1,
@@ -1407,12 +1409,12 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.authoredOpen.length, 66);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(out.openUnknown.length, 22);
+  assert.equal(out.openUnknown.length, 14);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
-  assert.equal(openRows(out).length, 150);
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(openRows(out).length, 142);
+  assert.equal(out.stats.openBlocking, 142);
   // TOTAL conservation across every collection, closed and open
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2024);
@@ -1462,7 +1464,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
 test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
   const out = buildProducers();
   const rows = openRows(out);
-  assert.equal(rows.length, 150);
+  assert.equal(rows.length, 142);
   for (const row of rows) {
     assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
     assert.equal(row.consumable, false);
@@ -1479,7 +1481,7 @@ test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed',
     assert.match(row.reason, /:[a-zA-Z-]+$/, 'the reason must keep the site form');
   }
   // the rollup agrees with the rows, and does not pretend lot B opened
-  assert.equal(out.openBacklogRollup.total, 150);
+  assert.equal(out.openBacklogRollup.total, 142);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false);
   assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
@@ -1590,7 +1592,7 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   assert.equal(out.stats.privateRelay, 675);
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
   // producer counters
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
@@ -1779,7 +1781,7 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
   }
   // the 486 that closed by the earlier route keep NO receipt and are untouched
   assert.equal(out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined).length, 486);
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
 
   // the 2 survivors stay blocking, each naming the channel that blocked it
   assert.equal(out.branchConditionalAuthored.length, 2);
@@ -1797,7 +1799,7 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
     assert.ok(!('causalRootIds' in row));
     assert.ok(!('ownerId' in row));
   }
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(out.stats.openBlocking, 142);
 });
 
 test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => {
@@ -1820,12 +1822,12 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   const out = buildProducers();
   assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.authoredOpen.length, 66);
-  assert.equal(out.openUnknown.length, 22);
+  assert.equal(out.openUnknown.length, 14);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(openRows(out).length, 150);
+  assert.equal(openRows(out).length, 142);
   assert.equal(universeTotal(out), 2024);
   // frozen closed cohorts and producer counters
   assert.equal(out.stats.publicBoundary, 538);
@@ -1862,7 +1864,7 @@ test('C-1 the composite bucket is 162 - 8 nested - 99 relay-inherited = 55', () 
   );
   assert.equal(relayInherited.length, 99);
   assert.equal(162 - 8 - 99, 55);
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(out.stats.openBlocking, 142);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -1935,7 +1937,7 @@ test('C-4 every ZERO row keeps the semantics of the route that closed it', () =>
   // of how it was closed.
   const byRoute = {};
   for (const row of out.closedZeroGoverned) byRoute[row.resolvedVia ?? '(none)'] = (byRoute[row.resolvedVia ?? '(none)'] || 0) + 1;
-  assert.deepEqual(byRoute, { '(none)': 486, 'branch-union': 49, 'computed-domain-enumeration': 18, 'nested-computed-domain': 18 });
+  assert.deepEqual(byRoute, { '(none)': 486, 'branch-union': 49, 'computed-domain-enumeration': 18, 'nested-computed-domain': 18, 'static-sequential-assignment': 8 });
   const original = out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined);
   assert.equal(original.length, 486);
   for (const row of original) {
@@ -2081,7 +2083,7 @@ test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
   assert.equal(out.stats.privateRelay, 675);
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(out.stats.openBlocking, 142);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -2145,12 +2147,12 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
     assert.equal(row.evidence.resolvedVia, undefined);
   }
   // and the other cohorts did not move at all
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.branchConditionalAuthored.length, 2);
   assert.equal(out.authoredOpen.length, 66);
-  assert.equal(out.openUnknown.length, 22);
+  assert.equal(out.openUnknown.length, 14);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
@@ -2362,8 +2364,8 @@ test('D-9 NEGATIVE: tampering with the domain receipt moves the bound digest', (
 test('D-10 the drain is exactly measured and openBlocking only went down', () => {
   const out = buildProducers();
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(out.stats.openBlocking, 150);
-  assert.ok(150 < 210, 'openBlocking must never grow');
+  assert.equal(out.stats.openBlocking, 142);
+  assert.ok(142 < 210, 'openBlocking must never grow');
   // 21 direct rows: 18 ZERO + 3 producer
   const directZero = out.closedZeroGoverned.filter((r) => r.resolvedVia === DOMAIN_VIA).length;
   const directProducer = out.closedProducer.filter((r) => r.evidence.computedDomain).length;
@@ -2438,8 +2440,8 @@ test('E-1 P0: indirect closures name the enumerations that justified them', () =
   // the full route split, so no row can change its story silently
   const byRoute = {};
   for (const r of out.closedZeroGoverned) byRoute[r.resolvedVia ?? '(none)'] = (byRoute[r.resolvedVia ?? '(none)'] || 0) + 1;
-  assert.deepEqual(byRoute, { '(none)': 486, 'branch-union': 49, 'computed-domain-enumeration': 18, 'nested-computed-domain': 18 });
-  assert.equal(486 + 49 + 18 + 18, 571);
+  assert.deepEqual(byRoute, { '(none)': 486, 'branch-union': 49, 'computed-domain-enumeration': 18, 'nested-computed-domain': 18, 'static-sequential-assignment': 8 });
+  assert.equal(486 + 49 + 18 + 18 + 8, 579);
 });
 
 test('E-2 P0 POSITIVE: an indirect closure is re-derivable from its receipt', () => {
@@ -2530,9 +2532,9 @@ test('E-7 P1b NEGATIVE: setter and method are represented too', () => {
 
 test('E-8 the invariants the correction must not disturb', () => {
   const out = buildProducers();
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
   assert.equal(out.stats.closedProducer, 21);
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(out.stats.openBlocking, 142);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.stats.publicBoundary, 538);
@@ -2633,16 +2635,16 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   const out = buildProducers();
   assert.equal(out.authoredOpen.length, 66);
   assert.equal(out.stats.closedProducer, 21);
-  assert.equal(out.stats.openBlocking, 150);
+  assert.equal(out.stats.openBlocking, 142);
   // the five other OPEN buckets are untouched
   assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(out.openUnknown.length, 22);
+  assert.equal(out.openUnknown.length, 14);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
   assert.equal(out.computedDomainPending.length, 0);
   // every closed cohort except closedProducer is untouched
-  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedZeroGoverned, 579);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.stats.privateRelay, 675);
@@ -2714,4 +2716,241 @@ test('R-T10 NEGATIVE: tampering with a typed-relay proof moves the bound digest'
     assert.notEqual(bound(rows), bound(mutated), `the bound digest MUST notice: ${name}`);
   }
   assert.match(out.digests.closedProducerReceipts, /^[0-9a-f]{64}$/);
+});
+
+/* ===================================================================== *
+ * T-SEQUENTIAL-8 -- `const X = {}` filled by a proven static sequence of
+ * property writes. The single-armed `if (cond) X.key = v;` is the
+ * procedural spelling of `...(cond ? {key:v} : {})`, so it builds the SAME
+ * branches shape. Everything unproven falls through to the coarse
+ * mutation bail-out, untouched.
+ * ===================================================================== */
+
+const SEQ_VIA = 'static-sequential-assignment';
+
+test('S-1 POSITIVE: single-armed conditional write closes', () => {
+  const out = branchProbe(
+    'const f = () => { const s = {}; if (a) s.top = 1; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(out.shape.kind, 'object');
+  assert.equal(out.shape.closed, true);
+  assert.equal(out.disposition, ZERO_D);
+  assert.equal(out.shape.sequentialAssignment.writeCount, 1);
+  assert.equal(out.shape.sequentialAssignment.writes[0].conditional, true);
+});
+
+test('S-2 POSITIVE: unconditional and conditional writes mix', () => {
+  const out = branchProbe(
+    'const f = () => { const s = {}; s.top = 1; if (a) s.left = 2; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(out.shape.closed, true);
+  assert.equal(out.disposition, ZERO_D);
+  const w = out.shape.sequentialAssignment.writes;
+  assert.equal(w.length, 2);
+  assert.deepEqual(w.map((x) => x.conditional).sort(), [false, true]);
+});
+
+test('S-3 POSITIVE: the written VALUE resolves through the existing machinery', () => {
+  const out = branchProbe(
+    'const g = (): string => "1px";\nconst f = () => { const s = {}; if (a) { s.top = g(); } return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(out.shape.closed, true, 'the value shape is resolved by resolveShape, not re-implemented');
+  assert.equal(out.disposition, ZERO_D);
+});
+
+test('S-4 POSITIVE: a governed key written this way is a PRODUCER, never a ZERO', () => {
+  const out = branchProbe(
+    'const f = () => { const s = {}; if (a) s["--ds-seq"] = "1"; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(out.disposition, 'CLOSED_PRODUCER');
+  assert.deepEqual(out.governance.governedChannelKeys, ['--ds-seq']);
+});
+
+test('S-5 NEGATIVE: a NON-EMPTY initializer is never attempted', () => {
+  for (const init of ['{ top: 1 }', '{ ...base }']) {
+    const out = branchProbe(
+      `const f = () => { const s = ${init}; if (a) s.left = 2; return s; };\nexport const C = () => <div style={f()} />;`,
+    );
+    assert.equal(out.shape.reason, 'reassignment-or-mutation-present', `initializer ${init} must fall through`);
+  }
+});
+
+test('S-6 NEGATIVE: else / else-if branches stay open', () => {
+  const withElse = branchProbe(
+    'const f = () => { const s = {}; if (a) s.top = 1; else s.top = 2; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(withElse.shape.reason, 'reassignment-or-mutation-present');
+  const elseIf = branchProbe(
+    'const f = () => { const s = {}; if (a) s.top = 1; else if (b) s.left = 2; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(elseIf.shape.reason, 'reassignment-or-mutation-present');
+});
+
+test('S-7 NEGATIVE: repeated key, computed key, alias, loop, escape and delete stay open', () => {
+  const cases = {
+    'repeated key': 'const f = () => { const s = {}; s.top = 1; s.top = 2; return s; };',
+    'computed key': 'const f = () => { const s = {}; if (a) s[k] = 1; return s; };',
+    alias: 'const f = () => { const s = {}; s.top = 1; const t = s; return t; };',
+    loop: 'const f = () => { const s = {}; for (const k of ks) s[k] = 1; return s; };',
+    delete: 'const f = () => { const s = {}; s.top = 1; delete s.top; return s; };',
+    'cond reads X': 'const f = () => { const s = {}; if (s.top) s.left = 1; return s; };',
+    'multi-statement if body': 'const f = () => { const s = {}; if (a) { s.top = 1; s.left = 2; } return s; };',
+    'statement after return': 'const f = () => { const s = {}; s.top = 1; return s; s.left = 2; };',
+    'value mentions X': 'const f = () => { const s = {}; s.top = s; return s; };',
+  };
+  for (const [name, body] of Object.entries(cases)) {
+    const out = branchProbe(`${body}\nexport const C = () => <div style={f()} />;`);
+    assert.equal(out.shape.reason, 'reassignment-or-mutation-present', `${name} must stay open`);
+    assert.notEqual(out.disposition, ZERO_D);
+    assert.equal(out.shape.sequentialAssignment, undefined, `${name} must not carry a sequential proof`);
+  }
+});
+
+test('S-7b PRE-EXISTING GAP, declared: an Object.assign escape over an EMPTY base', () => {
+  // `Object.assign(s, o)` is not a syntactic assignment, so the COARSE detector
+  // never marks the binding mutated -- the initializer `{}` resolves straight to
+  // an empty closed object. Measured identical at HEAD, so this is NOT produced
+  // by T-SEQUENTIAL-8: the fine pass is never even reached (it only runs when
+  // `binding.mutated` is true). Pinned here so the gap is visible and owned,
+  // and so a future change cannot quietly attribute it to this mechanism.
+  const out = branchProbe(
+    'const f = () => { const s = {}; Object.assign(s, o); return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(out.disposition, ZERO_D, 'current (pre-existing) behaviour');
+  assert.equal(out.shape.sequentialAssignment, undefined, 'T-SEQUENTIAL-8 did NOT produce this');
+  assert.deepEqual(out.shape.order, [], 'the shape is the bare empty initializer');
+  // the live consequence is bounded: getTableStyle uses Object.assign but over a
+  // NON-empty base, so it stays open exactly as the census requires
+  const table = buildProducers().openUnknown.filter((r) => String(r.template).includes('getTableStyle'));
+  assert.equal(table.length, 1, 'getTableStyle stays OPEN_UNKNOWN');
+});
+
+test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
+  const out = buildProducers();
+  const seq = out.closedZeroGoverned.filter((r) => r.resolvedVia === SEQ_VIA);
+  assert.equal(seq.length, 8);
+  // the exact identities from the census: 4 call-sites x (call + spread)
+  const ordinals = seq.map((r) => r.ordinal).sort((a, b) => a - b);
+  assert.deepEqual(ordinals, [11202, 11205, 16867, 16870, 21496, 21499, 26731, 26734]);
+  for (const row of seq) {
+    assert.ok(row.file.endsWith('Typography/engines/modern/index.tsx'));
+    assert.match(row.template, /resolveTypeRoleStyle/);
+  }
+  assert.equal(out.openUnknown.length, 14);
+  assert.equal(out.stats.openBlocking, 142);
+  // the five other open buckets are untouched
+  assert.equal(out.branchCompositeOpen.length, 55);
+  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.branchConditionalAuthored.length, 2);
+  assert.equal(out.dynamicSinkPending.length, 4);
+  assert.equal(out.callArgsPending.length, 1);
+  // closed cohorts and frozen counters
+  assert.equal(out.stats.closedProducer, 21);
+  assert.equal(out.stats.closedNonObject, 69);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(universeTotal(out), 2024);
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  assert.equal(out.stats.ownershipConflicts, 0);
+});
+
+test('S-9 the durable receipt is complete and re-derivable', () => {
+  const out = buildProducers();
+  const seq = out.closedZeroGoverned.filter((r) => r.resolvedVia === SEQ_VIA);
+  assert.equal(seq.length, 8);
+  for (const row of seq) {
+    const list = row.evidence.sequentialAssignments;
+    assert.ok(Array.isArray(list) && list.length > 0, `${row.file}:${row.line} closed with no proof`);
+    assert.equal(row.evidence.sequentialAssignmentCount, list.length);
+    for (const proof of list) {
+      assert.deepEqual(Object.keys(proof).sort(), ['binding', 'declaredAt', 'returnAt', 'writeCount', 'writes']);
+      assert.equal(proof.binding, 'style');
+      assert.ok(proof.declaredAt.startsWith('packages/core/src/'));
+      assert.ok(proof.returnAt.startsWith('packages/core/src/'));
+      assert.equal(proof.writeCount, proof.writes.length);
+      assert.equal(proof.writeCount, 2);
+      for (const w of proof.writes) {
+        assert.deepEqual(Object.keys(w).sort(), ['at', 'condition', 'conditional', 'key']);
+        assert.ok(w.key.length > 0);
+        assert.ok(w.at.startsWith('packages/core/src/'));
+        assert.equal(w.conditional, true);
+        assert.ok(w.condition && w.condition.length > 0, 'a conditional write must publish its condition');
+      }
+      // stable order, exact-tuple dedup
+      const keys = proof.writes.map((w) => `${w.key}|${w.at}`);
+      assert.deepEqual(keys, [...keys].sort());
+      assert.equal(new Set(proof.writes.map((w) => JSON.stringify(w))).size, proof.writes.length);
+    }
+    // proof of closure, never governance
+    assert.ok(!('causalRootIds' in row));
+    assert.ok(!('tenantReachable' in row));
+    assert.ok(!('ownerId' in row));
+  }
+  // no other ZERO row gains an empty or spurious field
+  const others = out.closedZeroGoverned.filter((r) => r.resolvedVia !== SEQ_VIA);
+  assert.equal(others.length, 571);
+  for (const row of others) assert.equal(row.evidence?.sequentialAssignments, undefined);
+});
+
+test('S-10 NEGATIVE: tampering with the sequential receipt moves the bound digest', () => {
+  const out = buildProducers();
+  const rows = out.closedZeroGoverned.filter((r) => r.resolvedVia === SEQ_VIA).slice(0, 4);
+  const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.resolvedVia ?? null, r.evidence ?? null]));
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const bend = (fn) => rows.map((r) => ({ ...r, evidence: { ...r.evidence, sequentialAssignments: r.evidence.sequentialAssignments.map(fn) } }));
+  const mutations = {
+    'list emptied': rows.map((r) => ({ ...r, evidence: { ...r.evidence, sequentialAssignments: [] } })),
+    'receipt removed': rows.map((r) => ({ ...r, evidence: null })),
+    'binding forged': bend((p) => ({ ...p, binding: 'other' })),
+    'declaration moved': bend((p) => ({ ...p, declaredAt: 'fake:1' })),
+    'return moved': bend((p) => ({ ...p, returnAt: 'fake:2' })),
+    'write dropped': bend((p) => ({ ...p, writes: p.writes.slice(1) })),
+    'conditional flipped': bend((p) => ({ ...p, writes: p.writes.map((w) => ({ ...w, conditional: false })) })),
+    'condition erased': bend((p) => ({ ...p, writes: p.writes.map((w) => ({ ...w, condition: null })) })),
+  };
+  for (const [name, mutated] of Object.entries(mutations)) {
+    assert.equal(identity(rows), identity(mutated), `identity must stay blind: ${name}`);
+    assert.notEqual(bound(rows), bound(mutated), `the bound digest MUST notice: ${name}`);
+  }
+  assert.match(out.digests.closedZeroGovernedReceipts, /^[0-9a-f]{64}$/);
+});
+
+test('S-11 NEGATIVE: a SIBLING declarator or a `var` binding is never proven', () => {
+  // The fine pass skips the declaration statement, so a sibling declarator would
+  // escape inspection entirely: `t` aliases the same object and `g` closes over
+  // it, and neither is reachable from the coarse detector (an initializer that
+  // READS X is not an assignment op). Without the single-declarator guard, S-11b
+  // and S-11c close as ZERO while emitting a GOVERNED channel -- the exact
+  // false-ZERO class this programme forbids. `var` hoists, so a write may run
+  // before the declaration statement, which the textual decl-to-return walk does
+  // not model; only `const`/`let` carry the ordering the walk assumes.
+  const cases = {
+    'alias sibling, ungoverned write': 'const f = () => { const s = {}, t = s; s.top = 1; t.left = 2; return s; };',
+    'alias sibling, GOVERNED write': 'const f = () => { const s = {}, t = s; s.top = 1; t["--ds-evil"] = "1"; return s; };',
+    'closure sibling, GOVERNED write': 'const f = () => { const s = {}, g = () => { s["--ds-evil"] = "1"; }; s.top = 1; g(); return s; };',
+    'var binding': 'function f() { var s = {}; if (a) s.top = 1; return s; }',
+  };
+  for (const [name, body] of Object.entries(cases)) {
+    const out = branchProbe(`${body}\nexport const C = () => <div style={f()} />;`);
+    assert.equal(out.shape.reason, 'reassignment-or-mutation-present', `${name} must stay open`);
+    assert.equal(out.disposition, 'OPEN_UNKNOWN', `${name} must stay OPEN_UNKNOWN`);
+    assert.notEqual(out.disposition, ZERO_D, `${name} must never close as ZERO`);
+    assert.notEqual(out.disposition, 'CLOSED_PRODUCER', `${name} must never close as a PRODUCER`);
+    assert.equal(out.shape.sequentialAssignment, undefined, `${name} must not carry a sequential proof`);
+  }
+  // the guards are surgical: the proven single-declarator forms still close, and
+  // `let` -- which shares the ordering guarantee -- is not collateral damage
+  const constForm = branchProbe(
+    'const f = () => { const s = {}; if (a) s.top = 1; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(constForm.disposition, ZERO_D);
+  assert.equal(constForm.shape.sequentialAssignment.writeCount, 1);
+  const letForm = branchProbe(
+    'const f = () => { let s = {}; if (a) s.top = 1; return s; };\nexport const C = () => <div style={f()} />;',
+  );
+  assert.equal(letForm.disposition, ZERO_D);
+  assert.equal(letForm.shape.sequentialAssignment.writeCount, 1);
 });

@@ -395,6 +395,205 @@ function isPrimitiveCssScalarTypeNode(typeNode, source, depth = 0, seen = new Se
   return false;
 }
 
+/* ------------------------------ static sequential assignment (T-SEQ-8) --- */
+/**
+ * T-SEQUENTIAL-8 -- resolve `const X = {}` followed by a fixed, exhaustively
+ * proven sequence of property writes.
+ *
+ * `hasReassignmentOrMutation` is a deliberately COARSE detector: any write to a
+ * local aborts resolution. That is the right default, but it also refuses a
+ * shape that is fully decidable -- an empty literal filled by single-armed
+ * `if (cond) X.key = expr;` statements is exactly the procedural spelling of
+ * `...(cond ? { key: expr } : {})`, which this resolver already models. This
+ * pass proves that narrow form and builds the SAME `branches` shape; the coarse
+ * detector is untouched and every unproven form still falls through to it.
+ *
+ * ADMITTED, and nothing else:
+ *   - initializer is an object literal with ZERO properties (no key, no spread);
+ *   - a single, bare `return X;` and no statement after it;
+ *   - every statement mentioning X is either `X.key = expr;` at statement level,
+ *     or `if (cond) X.key = expr;` / `if (cond) { X.key = expr; }` with NO else
+ *     and exactly that one statement in the body, and `cond` not mentioning X;
+ *   - each key written at most ONCE across the whole function;
+ *   - keys are static (identifier, string literal or numeric literal).
+ *
+ * Everything else fails closed and returns null: alias or escape of X (passed
+ * to a call -- `Object.assign(X, …)` included -- spread, read in a condition,
+ * assigned elsewhere), reassignment of X, a repeated key, a computed key,
+ * `delete`, any write inside a loop, any `if` carrying an else/else-if, a
+ * multi-statement if body, a switch/try, several returns, or a return that is
+ * not the bare identifier.
+ */
+/** A key is static only in the position where it is written literally. */
+function staticPropertyKeyOf(nameNode) {
+  // `X.key` -- the identifier IS the key
+  if (ts.isIdentifier(nameNode)) return nameNode.text;
+  if (ts.isStringLiteralLike(nameNode) || ts.isNumericLiteral(nameNode)) return nameNode.text;
+  return null;
+}
+
+/** `X[expr]` -- ONLY a literal is a key. An identifier here is a COMPUTED key
+ *  whose value is unknown, and must never be treated as the literal name. */
+function staticElementKeyOf(argumentExpression) {
+  if (!argumentExpression) return null;
+  if (ts.isStringLiteralLike(argumentExpression) || ts.isNumericLiteral(argumentExpression)) return argumentExpression.text;
+  return null;
+}
+
+/** Does this subtree mention `name` at all? */
+function mentionsName(node, name) {
+  let hit = false;
+  const walk = (n) => {
+    if (hit || !n) return;
+    if (ts.isIdentifier(n) && n.text === name) { hit = true; return; }
+    ts.forEachChild(n, walk);
+  };
+  walk(node);
+  return hit;
+}
+
+/** `X.key` / `X['key']` with a static key, else null. */
+function staticWriteTargetOf(expr, name, source) {
+  if (ts.isPropertyAccessExpression(expr) && ts.isIdentifier(expr.expression) && expr.expression.text === name) {
+    return staticPropertyKeyOf(expr.name);
+  }
+  if (ts.isElementAccessExpression(expr) && ts.isIdentifier(expr.expression) && expr.expression.text === name) {
+    return staticElementKeyOf(expr.argumentExpression);
+  }
+  return null;
+}
+
+/** `X.key = expr;` at statement level -> {key, valueNode}, else null. */
+function simpleWriteStatement(stmt, name, source) {
+  if (!ts.isExpressionStatement(stmt)) return null;
+  const e = stmt.expression;
+  if (!ts.isBinaryExpression(e) || e.operatorToken.kind !== ts.SyntaxKind.EqualsToken) return null;
+  const key = staticWriteTargetOf(e.left, name, source);
+  if (key === null) return null;
+  // the VALUE must not mention X either (that would be a read/alias)
+  if (mentionsName(e.right, name)) return null;
+  return { key, valueNode: e.right, statement: stmt };
+}
+
+function resolveStaticSequentialAssignmentShape(binding, ctx, path, depth) {
+  const { name, declNode, funcScope, source } = binding;
+  if (!name || !declNode || !funcScope || !source) return null;
+  const init = declNode.initializer;
+  if (!init || !ts.isObjectLiteralExpression(init) || init.properties.length !== 0) return null;
+
+  // the statement list that holds the declaration
+  const body = ts.isSourceFile(funcScope) ? funcScope : funcScope.body;
+  if (!body || !ts.isBlock(body)) return null;
+  const statements = [...body.statements];
+  const declStmtIndex = statements.findIndex((st) => st === declNode.parent?.parent);
+  if (declStmtIndex < 0) return null;
+
+  // The walk below SKIPS the declaration statement, so anything else declared in
+  // that same list -- an alias `const s = {}, t = s;`, a closure `g = () => { s
+  // [...] }` -- would never be inspected. Only a statement whose ONE declarator
+  // is X may be skipped; any sibling declarator is an unproven form.
+  const declStmt = statements[declStmtIndex];
+  if (!ts.isVariableStatement(declStmt)) return null;
+  const declSiblings = declStmt.declarationList.declarations;
+  if (declSiblings.length !== 1 || declSiblings[0] !== declNode) return null;
+  // `var` hoists: a write may execute BEFORE the declaration statement, which the
+  // textual decl-to-return walk does not model. The proven form is `const X = {}`;
+  // `let` shares the same declaration-before-use ordering. `var` is never proven.
+  if ((declStmt.declarationList.flags & (ts.NodeFlags.Const | ts.NodeFlags.Let)) === 0) return null;
+
+  const writes = [];
+  const seenKeys = new Set();
+  let returned = false;
+
+  for (let i = 0; i < statements.length; i += 1) {
+    const stmt = statements[i];
+    if (i === declStmtIndex) continue;
+    if (returned) return null; // nothing may follow the return
+
+    if (ts.isReturnStatement(stmt)) {
+      // must be the bare identifier, and the only return in the scope
+      if (!stmt.expression || !ts.isIdentifier(stmt.expression) || stmt.expression.text !== name) return null;
+      returned = true;
+      continue;
+    }
+    if (!mentionsName(stmt, name)) continue;
+
+    // (A) unconditional write
+    const direct = simpleWriteStatement(stmt, name, source);
+    if (direct) {
+      if (seenKeys.has(direct.key)) return null; // a key may be written once
+      seenKeys.add(direct.key);
+      writes.push({ ...direct, conditional: false, conditionText: null });
+      continue;
+    }
+    // (B) single-armed conditional write
+    if (ts.isIfStatement(stmt) && !stmt.elseStatement && !mentionsName(stmt.expression, name)) {
+      const inner = ts.isBlock(stmt.thenStatement)
+        ? (stmt.thenStatement.statements.length === 1 ? stmt.thenStatement.statements[0] : null)
+        : stmt.thenStatement;
+      const write = inner ? simpleWriteStatement(inner, name, source) : null;
+      if (write) {
+        if (seenKeys.has(write.key)) return null;
+        seenKeys.add(write.key);
+        writes.push({
+          ...write,
+          statement: stmt,
+          conditional: true,
+          conditionText: stmt.expression.getText(source).slice(0, 120).replace(/\s+/g, " "),
+        });
+        continue;
+      }
+    }
+    // any other statement that mentions X is an unproven form
+    return null;
+  }
+
+  if (!returned || writes.length === 0) return null;
+  // every return in the whole scope must be the one we accepted
+  let returnCount = 0;
+  const countReturns = (n) => {
+    if (!n) return;
+    if (isFunctionLike(n) && n !== funcScope) return;
+    if (ts.isReturnStatement(n)) returnCount += 1;
+    ts.forEachChild(n, countReturns);
+  };
+  countReturns(body);
+  if (returnCount !== 1) return null;
+
+  const stepPath = [...path, { kind: "sequentialAssignment", declaredAt: binding.declaredAt }];
+  const order = [];
+  const receipts = [];
+  for (const w of writes) {
+    const valueShape = resolveShape(w.valueNode, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "objectProperty", key: w.key }] }));
+    const at = `${source.fileName}:${source.getLineAndCharacterOfPosition(w.statement.getStart(source)).line + 1}`;
+    receipts.push({ key: w.key, at, conditional: w.conditional, condition: w.conditionText });
+    if (!w.conditional) {
+      order.push({ kind: "leaf", key: w.key, node: w.valueNode, source, fileRel: source.fileName, declNode: w.statement, shape: valueShape, unresolvedKey: false });
+      continue;
+    }
+    // the SAME shape `...(cond ? {key: v} : {})` already produces
+    const present = { kind: "object", order: [{ kind: "leaf", key: w.key, node: w.valueNode, source, fileRel: source.fileName, declNode: w.statement, shape: valueShape, unresolvedKey: false }], closed: isShapeClosed(valueShape), path: stepPath, node: init, fileRel: source.fileName };
+    const absent = { kind: "object", order: [], closed: true, path: stepPath, node: init, fileRel: source.fileName };
+    order.push({ kind: "spread", node: w.statement, shape: { kind: "branches", branches: [present, absent], path: stepPath } });
+  }
+  const closed = order.every(entryIsClosed);
+  return {
+    kind: "object",
+    order,
+    closed,
+    path: stepPath,
+    node: init,
+    fileRel: source.fileName,
+    sequentialAssignment: {
+      binding: name,
+      declaredAt: binding.declaredAt,
+      returnAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(statements[statements.length - 1].getStart(source)).line + 1}`,
+      writeCount: receipts.length,
+      writes: receipts,
+    },
+  };
+}
+
 /* ------------------------------------------------------- binding lookup --- */
 function resolveBinding(name, useNode, source, moduleImports) {
   let current = useNode;
@@ -443,7 +642,19 @@ function resolveBinding(name, useNode, source, moduleImports) {
             if (!tdzOk) continue;
             if (!decl.initializer) return { kind: "uninitializedLocal", declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(declStart).line + 1}` };
             const mutated = hasReassignmentOrMutation(current === source ? current : nearestFunctionOrSource(current), name);
-            return { kind: "localConst", node: decl.initializer, declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(declStart).line + 1}`, mutated };
+            return {
+              kind: "localConst",
+              node: decl.initializer,
+              declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(declStart).line + 1}`,
+              mutated,
+              // T-SEQUENTIAL-8: what the fine-grained pass needs to walk the
+              // scope. `mutated` stays the coarse detector; it only decides
+              // whether the fine pass is worth attempting.
+              name,
+              declNode: decl,
+              funcScope: current === source ? current : nearestFunctionOrSource(current),
+              source,
+            };
           }
           if ((ts.isObjectBindingPattern(decl.name) || ts.isArrayBindingPattern(decl.name)) && decl.initializer) {
             if (!tdzOk) continue;
@@ -821,7 +1032,13 @@ export function resolveShape(node, ctx) {
     if (binding.kind === "hoistedFunction") return { kind: "nonObject", reason: "identifier-is-a-function-value", path: [...path, { kind: "hoistedFunction", name: n.text }] };
     if (binding.kind === "uninitializedLocal") return { kind: "openUnknown", reason: "uninitialized-local-let", path: [...path, { kind: "uninitializedLocal", declaredAt: binding.declaredAt }] };
     if (binding.kind === "localConst") {
-      if (binding.mutated) return { kind: "openUnknown", reason: "reassignment-or-mutation-present", path: [...path, { kind: "localConst-mutated", declaredAt: binding.declaredAt }] };
+      if (binding.mutated) {
+        // T-SEQUENTIAL-8: try the fine-grained, fail-closed pass first; any
+        // unproven form falls straight through to the existing bail-out.
+        const sequential = resolveStaticSequentialAssignmentShape(binding, ctx, path, depth);
+        if (sequential) return sequential;
+        return { kind: "openUnknown", reason: "reassignment-or-mutation-present", path: [...path, { kind: "localConst-mutated", declaredAt: binding.declaredAt }] };
+      }
       return resolveShape(binding.node, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "localConst", declaredAt: binding.declaredAt }] }));
     }
     if (binding.kind === "destructuredLocal") {

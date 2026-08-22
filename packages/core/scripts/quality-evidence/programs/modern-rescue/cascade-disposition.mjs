@@ -691,6 +691,8 @@ export function classifyCrossFileRows() {
           : [];
       // T-TYPED-RELAY: the annotation proofs that justified this row's closure.
       const typedRelays = normalizeTypedRelays(collectTypedRelays(shape));
+      // T-SEQUENTIAL-8: the static write sequences that justified it.
+      const sequentialAssignments = normalizeSequentialAssignments(collectSequentialAssignments(shape));
 
       if (governance && disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         governance.zeroEmissionSiteId = zeroEmissionSiteId(canonicalId, "");
@@ -730,6 +732,9 @@ export function classifyCrossFileRows() {
         // T-TYPED-RELAY: non-empty only on rows whose closure rests on a type
         // annotation proof. Absent everywhere else -- no empty/spurious field.
         typedRelays,
+        // T-SEQUENTIAL-8: non-empty only on rows closed by a proven static
+        // write sequence.
+        sequentialAssignments,
         sourceParts,
       });
     };
@@ -870,6 +875,58 @@ function collectTypedRelays(shape, visited = new WeakSet(), depth = 0, out = [])
   for (const el of shape.elements ?? []) collectTypedRelays(el.shape, visited, depth + 1, out);
   for (const b of shape.branches ?? []) collectTypedRelays(b, visited, depth + 1, out);
   return out;
+}
+
+/**
+ * T-SEQUENTIAL-8 -- collect the proofs produced by the static
+ * sequential-assignment pass, wherever they sit in the shape.
+ *
+ * Same precedent as `collectTypedRelays`: harvest across the WHOLE shape so a
+ * proof under a branch, a spread or a return is never dropped, and carry it out
+ * to the published row. The proof states the binding, its declaration, the
+ * return it was read at, and EVERY static write (key, statement coordinate,
+ * whether it was conditional and the condition text) -- enough to re-derive why
+ * no alias, escape or forbidden form was present, without asserting anything
+ * about governance.
+ */
+function collectSequentialAssignments(shape, visited = new WeakSet(), depth = 0, out = []) {
+  if (!shape || typeof shape !== "object" || depth > 80) return out;
+  if (visited.has(shape)) return out;
+  visited.add(shape);
+  if (shape.sequentialAssignment) {
+    const sa = shape.sequentialAssignment;
+    out.push({
+      binding: sa.binding ?? null,
+      declaredAt: sa.declaredAt ?? null,
+      returnAt: sa.returnAt ?? null,
+      writeCount: sa.writeCount ?? (sa.writes ?? []).length,
+      writes: [...(sa.writes ?? [])]
+        .map((w) => ({ key: w.key, at: w.at, conditional: !!w.conditional, condition: w.condition ?? null }))
+        .sort((a, b) => (`${a.key}|${a.at}` < `${b.key}|${b.at}` ? -1 : `${a.key}|${a.at}` > `${b.key}|${b.at}` ? 1 : 0)),
+    });
+  }
+  if (shape.viaComputedDomain) collectSequentialAssignments(shape.viaComputedDomain, visited, depth + 1, out);
+  for (const entry of shape.order ?? []) collectSequentialAssignments(entry.shape, visited, depth + 1, out);
+  for (const el of shape.elements ?? []) collectSequentialAssignments(el.shape, visited, depth + 1, out);
+  for (const b of shape.branches ?? []) collectSequentialAssignments(b, visited, depth + 1, out);
+  return out;
+}
+
+/** Stable order + exact-identity dedup for the sequential-assignment list. */
+function normalizeSequentialAssignments(list) {
+  const seen = new Set();
+  const unique = [];
+  for (const item of list) {
+    const identity = JSON.stringify(item);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    unique.push(item);
+  }
+  return unique.sort((a, b) => {
+    const ka = `${a.binding ?? ""}|${a.declaredAt ?? ""}|${a.returnAt ?? ""}`;
+    const kb = `${b.binding ?? ""}|${b.declaredAt ?? ""}|${b.returnAt ?? ""}`;
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
 }
 
 /** Stable order + exact-identity dedup for the typed-relay list. */
@@ -1045,6 +1102,8 @@ export function boundedReceiptOf(row) {
         // present when there ARE proofs -- a producer that closed by any other
         // route gains no field at all.
         ...(row.typedRelays?.length ? { typedRelays: row.typedRelays } : {}),
+        // T-SEQUENTIAL-8: same proof, when a producer rests on a write sequence.
+        ...(row.sequentialAssignments?.length ? { sequentialAssignments: row.sequentialAssignments } : {}),
         governedProducerSiteId: governance?.governedProducerSiteId ?? null,
         customPropertyScanComplete: governance?.customPropertyScanComplete ?? null,
         governedChannelKeys: [...(governance?.governedChannelKeys ?? [])].sort(),
@@ -1065,6 +1124,20 @@ export function boundedReceiptOf(row) {
       // arms; anything closed by an earlier route keeps `null` so nothing that
       // is already in the artifact moves.
       if (row.receipt?.kind === "computedKey") return computedDomainReceipt(row, path);
+      // T-SEQUENTIAL-8: a closure that rests on a proven static write sequence
+      // publishes it. Checked before the indirect-enumeration branch so a row
+      // that has both keeps each proof under its own key.
+      if (row.sequentialAssignments?.length) {
+        return {
+          sequentialAssignments: row.sequentialAssignments,
+          sequentialAssignmentCount: row.sequentialAssignments.length,
+          ...(row.nestedComputedDomains?.length ? { nestedComputedDomains: row.nestedComputedDomains } : {}),
+          customPropertyScanComplete: row.governance?.customPropertyScanComplete ?? null,
+          governedChannelKeys: [...(row.governance?.governedChannelKeys ?? [])].sort(),
+          internalSocketKeys: [...(row.governance?.internalSocketKeys ?? [])].sort(),
+          path,
+        };
+      }
       // P0: an INDIRECT closure names the enumerations that justified it.
       if (row.receipt?.kind !== "branches" && row.nestedComputedDomains?.length) {
         return {

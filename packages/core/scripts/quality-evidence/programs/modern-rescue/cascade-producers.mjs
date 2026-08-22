@@ -1054,9 +1054,11 @@ export function buildProducers({
         if (entry.receipt) {
           zeroRow.resolvedVia = entry.receipt.domainKind
             ? "computed-domain-enumeration"
-            : entry.receipt.nestedComputedDomains
-              ? "nested-computed-domain"
-              : "branch-union";
+            : entry.receipt.sequentialAssignments
+              ? "static-sequential-assignment"
+              : entry.receipt.nestedComputedDomains
+                ? "nested-computed-domain"
+                : "branch-union";
           zeroRow.evidence = entry.receipt;
         }
         closedZeroGoverned.push(zeroRow);
