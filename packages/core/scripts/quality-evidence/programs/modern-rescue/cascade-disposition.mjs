@@ -693,6 +693,9 @@ export function classifyCrossFileRows() {
       const typedRelays = normalizeTypedRelays(collectTypedRelays(shape));
       // T-SEQUENTIAL-8: the static write sequences that justified it.
       const sequentialAssignments = normalizeSequentialAssignments(collectSequentialAssignments(shape));
+      // T-SEALED-RELAY: the sealed-import proofs that justified this row's
+      // relay disposition.
+      const sealedImportRelays = normalizeSealedImportRelays(collectSealedImportRelays(shape));
 
       if (governance && disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         governance.zeroEmissionSiteId = zeroEmissionSiteId(canonicalId, "");
@@ -735,6 +738,9 @@ export function classifyCrossFileRows() {
         // T-SEQUENTIAL-8: non-empty only on rows closed by a proven static
         // write sequence.
         sequentialAssignments,
+        // T-SEALED-RELAY: non-empty only on rows whose relay disposition rests
+        // on a sealed-import proof. Absent everywhere else.
+        sealedImportRelays,
         sourceParts,
       });
     };
@@ -929,6 +935,48 @@ function normalizeSequentialAssignments(list) {
   });
 }
 
+/**
+ * T-SEALED-RELAY -- collect every SEALED-IMPORT-RELAY proof reachable inside a
+ * shape.
+ *
+ * The resolver attaches `sealedImportRelay` to the `relay` it produces when a
+ * `<ident>.<prop>` read is proven to be a passthrough of one imported call's
+ * sealed return type. That proof justifies the row's disposition, so it must
+ * reach the artifact: a reader of `producers.json` has to be able to audit WHY
+ * a row is a relay instead of authored-open, without re-running the resolver.
+ *
+ * Walks the LIVE shape exactly as `collectTypedRelays` does, so a proof buried
+ * under a branch, a spread or a return is never dropped.
+ */
+function collectSealedImportRelays(shape, visited = new WeakSet(), depth = 0, out = []) {
+  if (!shape || typeof shape !== "object" || depth > 80) return out;
+  if (visited.has(shape)) return out;
+  visited.add(shape);
+  if (shape.sealedImportRelay) out.push({ ...shape.sealedImportRelay });
+  if (shape.viaComputedDomain) collectSealedImportRelays(shape.viaComputedDomain, visited, depth + 1, out);
+  for (const entry of shape.order ?? []) collectSealedImportRelays(entry.shape, visited, depth + 1, out);
+  for (const el of shape.elements ?? []) collectSealedImportRelays(el.shape, visited, depth + 1, out);
+  for (const b of shape.branches ?? []) collectSealedImportRelays(b, visited, depth + 1, out);
+  return out;
+}
+
+/** Stable order + exact-identity dedup for the sealed-relay list. */
+function normalizeSealedImportRelays(list) {
+  const seen = new Set();
+  const unique = [];
+  for (const item of list) {
+    const identity = JSON.stringify(item);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    unique.push(item);
+  }
+  return unique.sort((a, b) => {
+    const ka = `${a.exportFile ?? ""}|${a.owner ?? ""}|${a.property ?? ""}|${a.localBinding ?? ""}`;
+    const kb = `${b.exportFile ?? ""}|${b.owner ?? ""}|${b.property ?? ""}|${b.localBinding ?? ""}`;
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
+}
+
 /** Stable order + exact-identity dedup for the typed-relay list. */
 function normalizeTypedRelays(list) {
   const seen = new Set();
@@ -1088,7 +1136,15 @@ export function boundedReceiptOf(row) {
       };
     }
     case "RELAY_PRIVATE_UNRESOLVED":
-      return { bindingKind: row.receipt?.kind ?? null, path };
+      return {
+        bindingKind: row.receipt?.kind ?? null,
+        // T-SEALED-RELAY: the durable proof -- binding, import/export, property,
+        // sole upstream owner and the exact relayed key set. Present ONLY on a
+        // row proven by that route; every relay published earlier gains no
+        // field at all and stays byte-identical.
+        ...(row.sealedImportRelays?.length ? { sealedImportRelay: row.sealedImportRelays } : {}),
+        path,
+      };
     case "CLOSED_PRODUCER": {
       const governance = row.governance;
       return {

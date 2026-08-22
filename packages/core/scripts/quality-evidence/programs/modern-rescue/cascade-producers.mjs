@@ -594,13 +594,29 @@ export function publicBoundaryRow(file, site, entry) {
 }
 
 export function privateRelayRow(file, site, entry) {
-  return cohortRow({
+  /* T-SEALED-RELAY: a relay the resolver PROVED -- it followed the read across
+   * the import graph, reached one sealed producer and re-derived its key set --
+   * must not be published under the "unresolved / not followed" label. That
+   * label is a statement about the resolver, and for these rows it would be
+   * false. The row is otherwise identical: same collection, same
+   * `consumable:false` / `tenantSafe:false`, no channel attributed, no cascade
+   * root invented. Only the reason and cause change, plus `resolvedVia`, which
+   * names the route exactly as a closed zero-governed row does.
+   *
+   * Every relay published before this tranche has no such proof and keeps its
+   * exact published form. */
+  const proven = Array.isArray(entry.receipt?.sealedImportRelay) && entry.receipt.sealedImportRelay.length > 0;
+  const row = cohortRow({
     file,
     site,
     entry,
-    reason: `private-relay-unresolved:${site.form}`,
-    cause: "private-passthrough-not-followed-by-resolver",
+    reason: proven ? `sealed-import-relay:${site.form}` : `private-relay-unresolved:${site.form}`,
+    cause: proven
+      ? "private-passthrough-of-a-sealed-imported-producer-attributed-to-no-cascade-root"
+      : "private-passthrough-not-followed-by-resolver",
   });
+  if (proven) row.resolvedVia = "sealed-import-relay";
+  return row;
 }
 
 export function closedProducerRow(file, site, entry) {

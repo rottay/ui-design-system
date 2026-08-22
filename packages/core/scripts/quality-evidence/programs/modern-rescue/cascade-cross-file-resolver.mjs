@@ -752,6 +752,249 @@ function findLocalDecl(targetSource, name) {
   return null;
 }
 
+/* ------------------------------- sealed imported relay (T-SEALED-RELAY) --- */
+/**
+ * T-SEALED-RELAY -- prove that `<ident>.<prop>` at a style sink is a PRIVATE
+ * RELAY of one externally-owned producer, not content authored here.
+ *
+ * The resolver already follows such a read across the import graph and reaches
+ * the upstream object literal. When that literal's VALUES are runtime
+ * expressions the object never closes, so the reading site is published as
+ * AUTHORED_OPEN -- which states something false about it: the site authors
+ * nothing. Its whole content is one property of one imported call's sealed
+ * return type.
+ *
+ * This pass proves exactly that, and nothing more. It never closes the values
+ * and never attributes a channel: the row stays non-consumable, non-tenant-safe
+ * and unattributed. What it buys is an HONEST disposition -- a relay with a
+ * durable receipt naming the binding, the import/export, the property, the sole
+ * upstream owner and the exact key set -- instead of open authored debt.
+ *
+ * The proof is 100% syntactic: no type checker, no inference, no name or path
+ * allowlist. `overlayMotion`, `pressMotion`, `stateMotion` and every other local
+ * alias are irrelevant to it -- the predicate keys off the BINDING FORM and the
+ * DECLARED TYPES it reaches. Everything not exhaustively proven stays open:
+ * a locally-declared lookalike, a non-`const` or mutated binding, a callee that
+ * is not a named import, a missing return annotation, a generic/extended/
+ * optional/indexed/method-bearing declaration, a branching producer, and any
+ * disagreement between the declared key set and the re-derived one.
+ */
+
+/** One nested type declaration is SEALED only in this exhaustive form. */
+function sealedMemberNamesOf(decl) {
+  if (!decl) return null;
+  // a generic declaration is instantiated per use -- never proven here
+  if (decl.typeParameters && decl.typeParameters.length > 0) return null;
+  let members = null;
+  if (ts.isInterfaceDeclaration(decl)) {
+    // `extends` imports members this walk does not enumerate
+    if (decl.heritageClauses && decl.heritageClauses.length > 0) return null;
+    members = decl.members;
+  } else if (ts.isTypeAliasDeclaration(decl)) {
+    let body = decl.type;
+    while (body && ts.isParenthesizedTypeNode(body)) body = body.type;
+    if (!body || !ts.isTypeLiteralNode(body)) return null; // unions/mapped/etc: not sealed
+    members = body.members;
+  } else {
+    return null;
+  }
+  if (!members || members.length === 0) return null;
+  const names = [];
+  for (const member of members) {
+    // an index signature, call/construct signature, method or accessor makes the
+    // key set non-enumerable or the value callable: fail closed on all of them
+    if (!ts.isPropertySignature(member)) return null;
+    if (member.questionToken) return null; // optional: the key may be absent
+    const name = member.name;
+    if (!name) return null;
+    if (ts.isIdentifier(name) || ts.isStringLiteralLike(name) || ts.isNumericLiteral(name)) {
+      names.push({ name: name.text, typeNode: member.type ?? null });
+      continue;
+    }
+    return null; // computed member name
+  }
+  return names;
+}
+
+/**
+ * Resolve a bare type REFERENCE to its sealed declaration, locally or through a
+ * real named import / re-export hop. A generic instantiation, a namespace or
+ * default import form, and an unresolvable specifier are all refused.
+ */
+function resolveSealedTypeDecl(typeNode, source, depth = 0, seen = new Set()) {
+  if (!typeNode || depth > 8) return null;
+  let node = typeNode;
+  while (ts.isParenthesizedTypeNode(node)) node = node.type;
+  if (!ts.isTypeReferenceNode(node) || !ts.isIdentifier(node.typeName)) return null;
+  if (node.typeArguments && node.typeArguments.length > 0) return null;
+  const name = node.typeName.text;
+  const key = `${source.fileName}::${name}`;
+  if (seen.has(key)) return null; // reference cycle -> fail closed
+  seen.add(key);
+  for (const stmt of source.statements) {
+    if (
+      (ts.isInterfaceDeclaration(stmt) || ts.isTypeAliasDeclaration(stmt)) &&
+      stmt.name.text === name
+    ) {
+      const members = sealedMemberNamesOf(stmt);
+      return members ? { members, declSource: source, declName: name } : null;
+    }
+  }
+  const imported = collectModuleImports(source).get(name);
+  if (!imported || imported.form !== "named") return null;
+  const targetFile = resolveImportTargetFile(imported.moduleSpecifier, source.fileName);
+  if (!targetFile) return null;
+  const entry = getSource(targetFile);
+  if (!entry) return null;
+  const wanted = imported.importedName ?? name;
+  const synthetic = ts.factory.createTypeReferenceNode(ts.factory.createIdentifier(wanted), undefined);
+  // the synthetic reference carries no position: resolve it against the target
+  // module's own statements exactly as a written reference would be
+  return resolveSealedTypeDecl(synthetic, entry.source, depth + 1, seen);
+}
+
+/** Follow `export { X } from '...'` hops to the declaration that owns the name. */
+function followExportedDecl(targetFile, importedName, depth = 0) {
+  if (depth > 8) return null;
+  const entry = getSource(targetFile);
+  if (!entry) return null;
+  const exported = findExportedDecl(entry.source, importedName, "named");
+  if (!exported) return null;
+  if (exported.kind === "reExport") {
+    if (!exported.moduleSpecifier) return null;
+    const next = resolveImportTargetFile(exported.moduleSpecifier, targetFile);
+    if (!next) return null;
+    return followExportedDecl(next, exported.importedName, depth + 1);
+  }
+  return { exported, file: targetFile, source: entry.source };
+}
+
+/** The nearest NAMED function-like owner of a node, for the receipt. */
+function owningFunctionNameOf(node) {
+  let current = node?.parent;
+  while (current) {
+    if (ts.isFunctionDeclaration(current) && current.name) return current.name.text;
+    if (
+      (ts.isArrowFunction(current) || ts.isFunctionExpression(current)) &&
+      current.parent &&
+      ts.isVariableDeclaration(current.parent) &&
+      ts.isIdentifier(current.parent.name)
+    ) {
+      return current.parent.name.text;
+    }
+    if (ts.isFunctionExpression(current) && current.name) return current.name.text;
+    current = current.parent;
+  }
+  return null;
+}
+
+/**
+ * The key set an object literal STATICALLY declares, or null when any member
+ * makes it non-enumerable (spread, computed key, getter/setter/method).
+ */
+function staticObjectLiteralKeys(objectNode) {
+  if (!objectNode || !ts.isObjectLiteralExpression(objectNode)) return null;
+  const keys = [];
+  for (const property of objectNode.properties) {
+    if (ts.isShorthandPropertyAssignment(property)) {
+      keys.push(property.name.text);
+      continue;
+    }
+    if (!ts.isPropertyAssignment(property)) return null; // spread/method/accessor
+    const name = property.name;
+    if (ts.isIdentifier(name) || ts.isStringLiteralLike(name) || ts.isNumericLiteral(name)) {
+      keys.push(name.text);
+      continue;
+    }
+    return null; // computed key
+  }
+  return keys.length ? keys : null;
+}
+
+/**
+ * The whole predicate. `valueShape` is what the ordinary property read already
+ * produced; it is the RE-DERIVATION the declared key set must agree with, and
+ * it is also the uniqueness proof: a single `object` shape means a single
+ * producer literal. A `branches` shape (two possible producers) is refused.
+ */
+function sealedImportRelayProof(n, ctx, valueShape) {
+  const { source, substitution = new Map() } = ctx;
+  if (!ts.isPropertyAccessExpression(n)) return null;
+  if (n.questionDotToken) return null; // optional chaining: the read may not happen
+  if (!ts.isIdentifier(n.name)) return null;
+  const property = n.name.text;
+  const objectIdent = n.expression;
+  if (!ts.isIdentifier(objectIdent)) return null;
+  // a substituted parameter is a caller's value, not a local binding
+  if (substitution.has(objectIdent.text)) return null;
+
+  const moduleImports = collectModuleImports(source);
+  const binding = resolveBinding(objectIdent.text, objectIdent, source, moduleImports);
+  if (!binding || binding.kind !== "localConst" || binding.mutated) return null;
+
+  const init = unwrap(binding.node);
+  if (!ts.isCallExpression(init)) return null;
+  const callee = unwrap(init.expression);
+  if (!ts.isIdentifier(callee)) return null;
+  const calleeBinding = resolveBinding(callee.text, callee, source, moduleImports);
+  if (!calleeBinding || calleeBinding.kind !== "import" || calleeBinding.form !== "named") return null;
+
+  const targetFile = resolveImportTargetFile(calleeBinding.moduleSpecifier, ctx.fileRel);
+  if (!targetFile) return null;
+  const resolvedExport = followExportedDecl(targetFile, calleeBinding.importedName ?? callee.text);
+  if (!resolvedExport || resolvedExport.exported.kind !== "namedFunction") return null;
+  const fnNode = resolvedExport.exported.node;
+  // an INFERRED return type is never accepted: the seal must be written down
+  if (!fnNode.type) return null;
+  const outer = resolveSealedTypeDecl(fnNode.type, resolvedExport.source);
+  if (!outer) return null;
+  const member = outer.members.find((m) => m.name === property);
+  if (!member || !member.typeNode) return null;
+  const relayed = resolveSealedTypeDecl(member.typeNode, outer.declSource);
+  if (!relayed) return null;
+  const declaredKeys = relayed.members.map((m) => m.name);
+
+  // uniqueness + re-derivation: ONE object literal, and its static key set is
+  // exactly the declared one. Anything else -- branches, a relay, a computed
+  // lookup, a spread inside the producer -- refuses the proof.
+  if (!valueShape || valueShape.kind !== "object" || !valueShape.node) return null;
+  const derivedKeys = staticObjectLiteralKeys(valueShape.node);
+  if (!derivedKeys) return null;
+  /* A REPEATED key is not an enumeration of the declared set. `{a: 1, a: 2}`
+   * against a declared `{a, b}` has the same LENGTH and every member is
+   * declared, so a length+membership test alone admits it -- while the literal
+   * actually produces one key and never produces `b`. Both sides must be sets
+   * before they can be compared as sets. */
+  if (new Set(derivedKeys).size !== derivedKeys.length) return null;
+  if (derivedKeys.length !== declaredKeys.length) return null;
+  const declaredSet = new Set(declaredKeys);
+  if (declaredSet.size !== declaredKeys.length) return null;
+  if (!derivedKeys.every((k) => declaredSet.has(k))) return null;
+
+  const ownerFunction = owningFunctionNameOf(valueShape.node);
+  if (!ownerFunction) return null; // an unnameable owner cannot be published
+  const declSource = valueShape.node.getSourceFile();
+  return {
+    localBinding: objectIdent.text,
+    localDeclaredAt: binding.declaredAt ?? null,
+    importedCallee: callee.text,
+    moduleSpecifier: calleeBinding.moduleSpecifier,
+    importedName: calleeBinding.importedName ?? callee.text,
+    exportFile: resolvedExport.file,
+    exportedFunction: fnNode.name ? fnNode.name.text : null,
+    returnType: outer.declName,
+    property,
+    propertyType: relayed.declName,
+    owner: ownerFunction,
+    ownerFile: valueShape.fileRel ?? null,
+    ownerDeclaredAt: declSource
+      ? `${declSource.fileName}:${declSource.getLineAndCharacterOfPosition(valueShape.node.getStart(declSource)).line + 1}`
+      : null,
+    keys: [...declaredKeys].sort(),
+    keyCount: declaredKeys.length,
+  };
+}
+
 /* --------------------------------------------------- domain enumeration --- */
 function enumerateKeyDomainByType(keyNode, useNode, source) {
   if (!ts.isIdentifier(keyNode)) return null;
@@ -1075,7 +1318,26 @@ export function resolveShape(node, ctx) {
       : n.name.text;
     if (literalKey !== null) {
       const lookup = readProperty(objShape, literalKey);
-      return shapeFromLookup(lookup);
+      const read = shapeFromLookup(lookup);
+      /* T-SEALED-RELAY: applied ONLY to a read that did not close, and only
+       * AFTER the ordinary resolution produced its own answer -- which is also
+       * the re-derivation the proof is checked against. A read that closes
+       * today keeps its exact shape and receipt; nothing that is already
+       * resolved moves. */
+      if (!isShapeClosed(read)) {
+        const proof = sealedImportRelayProof(n, ctx, read);
+        if (proof) {
+          return {
+            kind: "relay",
+            binding: { kind: "sealed-import-relay" },
+            sealedImportRelay: proof,
+            // keep the FULL resolution path the ordinary read walked, then the
+            // sealing step -- the receipt must show how the producer was reached
+            path: [...(read.path ?? path), { kind: "sealedImportRelay", name: proof.property }],
+          };
+        }
+      }
+      return read;
     }
     const typeDomain = enumerateKeyDomainByType(n.argumentExpression, n, source);
     const domainInfo = typeDomain
@@ -1597,3 +1859,7 @@ export function classifyRelayBoundary(binding, sinkTagName, fileRel) {
 }
 
 export { isShapeClosed };
+/** Test seam: the SEALED-declaration predicate, so the shape refusals
+ * (generic, optional, indexed, extended, method-bearing, union alias, cycle)
+ * can be drilled without a cross-file fixture tree. */
+export { resolveSealedTypeDecl };

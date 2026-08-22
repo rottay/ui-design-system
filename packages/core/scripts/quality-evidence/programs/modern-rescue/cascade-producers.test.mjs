@@ -31,7 +31,7 @@ import {
   DispositionJoinConflict,
   DISPOSITION_DECISION_FIELDS,
 } from './cascade-disposition.mjs';
-import { resolveShape } from './cascade-cross-file-resolver.mjs';
+import { REPO_ABS, resolveShape, resolveSealedTypeDecl } from './cascade-cross-file-resolver.mjs';
 import {
   adjudicateDeclarationOwner,
   provablyNonObject,
@@ -827,7 +827,7 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.deepEqual(byReason, {});
   assert.equal(out.stats.unknownProvenance, 0);
   // the reasons did NOT evaporate: they moved, with their forms, into the seven
-  assert.equal(openRows(out).length, 142);
+  assert.equal(openRows(out).length, 120);
   assert.equal(
     openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
     4,
@@ -886,12 +886,12 @@ test('Z-3 FALSE CLOSE GUARD: no boundary or relay row is ever drained', () => {
   assert.equal(leaked.length, 0, `boundary/relay leaked into the drain: ${JSON.stringify(leaked.slice(0, 3))}`);
 });
 
-test('Z-4 boundary 523 and relay 591 remain unknown and non-consumable', () => {
+test('Z-4 boundary 523 and relay 591+22 remain unknown and non-consumable', () => {
   const { rows } = classifyCrossFileRows();
   const by = {};
   for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
   assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 538); // 523 direct + 15 inherited
-  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 675); // 591 direct + 84 inherited
+  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 697); // 591 direct + 84 inherited + 22 sealed-import
   assert.equal(by[ZERO], 579); // + 8 closed by T-SEQUENTIAL-8
   assert.equal(by.BRANCH_CONDITIONAL_AUTHORED, 2); // the 2 that genuinely emit
   assert.equal(by.BRANCH_COMPOSITE_OPEN, 55); // 162 - 8 nested - 99 relay-inherited
@@ -1030,7 +1030,7 @@ const universeTotal = (out) => ALL_COLLECTIONS.reduce((acc, name) => acc + out[n
 test('T-1 the four cohorts have exactly the measured sizes and the residual is 352', () => {
   const out = buildProducers();
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   // stats mirror the arrays, never a bare counter
@@ -1040,7 +1040,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
   assert.equal(1470 - 1118, 352);
-  assert.equal(out.stats.openBlocking, 142); // T-SEQUENTIAL-8 closed 8 more
+  assert.equal(out.stats.openBlocking, 120); // T-SEALED-RELAY moved 22 more
   assert.equal(out.stats.unknownProvenance, 0);
 });
 
@@ -1064,8 +1064,18 @@ test('T-3 NEGATIVE: a relay row is never a producer and never joins the ZERO dra
     assert.equal(row.tenantSafe, false);
     assert.ok(!zeroKeys.has(`${row.file}|${row.ordinal}`), `relay ${row.file}:${row.line} leaked into the ZERO drain`);
     assert.ok(!producerKeys.has(`${row.file}|${row.ordinal}`), `relay ${row.file}:${row.line} claimed as a producer`);
-    assert.match(row.reason, /^private-relay-unresolved:/);
+    // T-SEALED-RELAY: the bucket now carries two labels and no third. A row is
+    // either an unexamined passthrough or one the resolver PROVED -- and a
+    // proven row must never be published under the "unresolved" label.
+    assert.match(row.reason, /^(private-relay-unresolved|sealed-import-relay):/);
+    assert.equal(
+      row.reason.startsWith('sealed-import-relay:'),
+      row.resolvedVia === 'sealed-import-relay',
+      `${row.file}:${row.line} label and resolvedVia disagree`,
+    );
   }
+  assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('sealed-import-relay:')).length, 22);
+  assert.equal(out.privateRelay.filter((r) => r.reason.startsWith('private-relay-unresolved:')).length, 675);
 });
 
 test('T-4 the six collections are pairwise DISJOINT and total the 2024 sites', () => {
@@ -1269,7 +1279,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
   // sites are now blocking under their own names.
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false, 'lot B must stay shut while open debt exists');
   // the residual dispositions are the ones NO tranche has proven anything about
@@ -1279,14 +1289,14 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
     'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
   ]);
   const residual = rows.filter((r) => !drained.has(r.disposition));
-  assert.equal(residual.length, 142);
+  assert.equal(residual.length, 120);
   const byDisposition = {};
   for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
   // COMPUTED_DOMAIN_PENDING is absent, not zero: this map counts rows, and
   // T-COMPUTED-DOMAIN left that disposition with none.
   assert.deepEqual(byDisposition, {
     BRANCH_COMPOSITE_OPEN: 55,
-    AUTHORED_OPEN: 66,
+    AUTHORED_OPEN: 44,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 14,
     DYNAMIC_SINK_PENDING: 4,
@@ -1375,7 +1385,8 @@ test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-s
     assert.ok(row.sinkTags.length > 1, 'a multi-kind coordinate reaches more than one sink');
   }
   // and multi-sink evidence more generally survives
-  assert.equal([...out.publicBoundary, ...out.privateRelay].filter((r) => r.sinkTags.length > 1).length, 20);
+  // 20 before T-SEALED-RELAY; 8 of its 22 arrivals also reach two sinks
+  assert.equal([...out.publicBoundary, ...out.privateRelay].filter((r) => r.sinkTags.length > 1).length, 28);
 
   // the receipt-bound digests COVER relayKinds: dropping it must move them
   const withKinds = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
@@ -1399,7 +1410,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   // the seven exact counts -- measured, not estimated
   assert.deepEqual(out.stats.openBacklogByDisposition, {
     BRANCH_COMPOSITE_OPEN: 55,
-    AUTHORED_OPEN: 66,
+    AUTHORED_OPEN: 44,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 14,
     COMPUTED_DOMAIN_PENDING: 0,
@@ -1407,14 +1418,14 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
     CALL_ARGS_PENDING: 1,
   });
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.authoredOpen.length, 44);
   assert.equal(out.branchConditionalAuthored.length, 2);
   assert.equal(out.openUnknown.length, 14);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
-  assert.equal(openRows(out).length, 142);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(openRows(out).length, 120);
+  assert.equal(out.stats.openBlocking, 120);
   // TOTAL conservation across every collection, closed and open
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2024);
@@ -1464,7 +1475,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
 test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
   const out = buildProducers();
   const rows = openRows(out);
-  assert.equal(rows.length, 142);
+  assert.equal(rows.length, 120);
   for (const row of rows) {
     assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
     assert.equal(row.consumable, false);
@@ -1481,7 +1492,7 @@ test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed',
     assert.match(row.reason, /:[a-zA-Z-]+$/, 'the reason must keep the site form');
   }
   // the rollup agrees with the rows, and does not pretend lot B opened
-  assert.equal(out.openBacklogRollup.total, 142);
+  assert.equal(out.openBacklogRollup.total, 120);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false);
   assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
@@ -1589,7 +1600,7 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   const out = buildProducers();
   // closed cohorts from the previous tranches
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.closedZeroGoverned, 579);
@@ -1799,7 +1810,7 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
     assert.ok(!('causalRootIds' in row));
     assert.ok(!('ownerId' in row));
   }
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
 });
 
 test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => {
@@ -1821,17 +1832,17 @@ test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => 
 test('B-11 the composite and every other open cohort is untouched by this tranche', () => {
   const out = buildProducers();
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.authoredOpen.length, 44);
   assert.equal(out.openUnknown.length, 14);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(openRows(out).length, 142);
+  assert.equal(openRows(out).length, 120);
   assert.equal(universeTotal(out), 2024);
   // frozen closed cohorts and producer counters
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.producerSites, 4872);
@@ -1864,7 +1875,7 @@ test('C-1 the composite bucket is 162 - 8 nested - 99 relay-inherited = 55', () 
   );
   assert.equal(relayInherited.length, 99);
   assert.equal(162 - 8 - 99, 55);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -2080,10 +2091,10 @@ test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
   assert.equal(relay.length, 84);
   assert.equal(boundary.length, 15);
   assert.equal(relay.length + boundary.length, 99);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -2133,7 +2144,13 @@ test('R-8 a public inheritance proves an export chain; a private one proves none
 
 test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   const out = buildProducers();
-  const directRelay = out.privateRelay.filter((r) => !INHERITED(r));
+  // T-SEALED-RELAY arrives in this same bucket but is NOT one of the 1114 this
+  // test freezes: it is excluded by its own label so the original claim stays
+  // exactly as strong as it was.
+  assert.equal(out.privateRelay.filter((r) => r.resolvedVia === 'sealed-import-relay').length, 22);
+  const directRelay = out.privateRelay.filter(
+    (r) => !INHERITED(r) && r.resolvedVia !== 'sealed-import-relay',
+  );
   const directBoundary = out.publicBoundary.filter((r) => !INHERITED(r));
   assert.equal(directRelay.length, 591);
   assert.equal(directBoundary.length, 523);
@@ -2151,7 +2168,7 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.authoredOpen.length, 44);
   assert.equal(out.openUnknown.length, 14);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
@@ -2364,8 +2381,8 @@ test('D-9 NEGATIVE: tampering with the domain receipt moves the bound digest', (
 test('D-10 the drain is exactly measured and openBlocking only went down', () => {
   const out = buildProducers();
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(out.stats.openBlocking, 142);
-  assert.ok(142 < 210, 'openBlocking must never grow');
+  assert.equal(out.stats.openBlocking, 120);
+  assert.ok(120 < 210, 'openBlocking must never grow');
   // 21 direct rows: 18 ZERO + 3 producer
   const directZero = out.closedZeroGoverned.filter((r) => r.resolvedVia === DOMAIN_VIA).length;
   const directProducer = out.closedProducer.filter((r) => r.evidence.computedDomain).length;
@@ -2375,7 +2392,7 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   assert.equal(universeTotal(out), 2024);
   // the cohorts this tranche must not touch
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.branchConditionalAuthored.length, 2);
@@ -2534,11 +2551,11 @@ test('E-8 the invariants the correction must not disturb', () => {
   const out = buildProducers();
   assert.equal(out.stats.closedZeroGoverned, 579);
   assert.equal(out.stats.closedProducer, 21);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
@@ -2633,9 +2650,9 @@ test('R-T7 NEGATIVE: getters are still never evaluated and mutation stays open',
 
 test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => {
   const out = buildProducers();
-  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.authoredOpen.length, 44);
   assert.equal(out.stats.closedProducer, 21);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
   // the five other OPEN buckets are untouched
   assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.branchConditionalAuthored.length, 2);
@@ -2647,7 +2664,7 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   assert.equal(out.stats.closedZeroGoverned, 579);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
@@ -2837,10 +2854,10 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
     assert.match(row.template, /resolveTypeRoleStyle/);
   }
   assert.equal(out.openUnknown.length, 14);
-  assert.equal(out.stats.openBlocking, 142);
+  assert.equal(out.stats.openBlocking, 120);
   // the five other open buckets are untouched
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.authoredOpen.length, 44);
   assert.equal(out.branchConditionalAuthored.length, 2);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
@@ -2848,7 +2865,7 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.publicBoundary, 538);
-  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.privateRelay, 697);
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
@@ -2953,4 +2970,384 @@ test('S-11 NEGATIVE: a SIBLING declarator or a `var` binding is never proven', (
   );
   assert.equal(letForm.disposition, ZERO_D);
   assert.equal(letForm.shape.sequentialAssignment.writeCount, 1);
+});
+
+/* ===================================================================== *
+ * T-SEALED-RELAY -- a `<ident>.<prop>` read at a style sink is a PRIVATE
+ * RELAY of one externally-owned producer, not authored content.
+ *
+ * The proof is 100% syntactic: binding form + declared types. It never
+ * closes a value, never attributes a channel and never invents a root --
+ * the rows stay non-consumable, non-tenant-safe and unattributed. What it
+ * buys is an honest disposition plus a durable receipt.
+ *
+ * NOT keyed off any local name: `overlayMotion` / `pressMotion` /
+ * `stateMotion` are incidental aliases and the drills below use arbitrary
+ * ones on purpose.
+ * ===================================================================== */
+
+const SEALED_VIA = 'sealed-import-relay';
+const RECIPE_MODULE = '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
+const RECIPE_KEYS = [
+  '--ds-recipe-curve', '--ds-recipe-cycle', '--ds-recipe-enter', '--ds-recipe-exit',
+  '--ds-recipe-scale-from', '--ds-recipe-settle', '--ds-recipe-x', '--ds-recipe-y',
+];
+/** A consumer fixture that imports the REAL sealed producer module. */
+const sealedProbe = (body) => branchProbe(`import { useMotionRecipePresentation } from '${RECIPE_MODULE}';\n${body}`);
+const isProven = (shape) => shape.kind === 'relay' && !!shape.sealedImportRelay;
+/** The shape of the single spread entry of an object fixture. */
+const spreadShapeOf = (shape) => (shape.order ?? []).find((e) => e.kind === 'spread')?.shape ?? shape;
+
+test('SR-1 POSITIVE: an ARBITRARY alias and either access form prove identically', () => {
+  const direct = sealedProbe(
+    'export const C = ({n}) => { const zqArbitrary$1 = useMotionRecipePresentation(n); return <div style={zqArbitrary$1.variables} />; };',
+  );
+  assert.ok(isProven(direct.shape), 'a bare member-access read must prove');
+  assert.equal(direct.disposition, 'RELAY_PRIVATE_UNRESOLVED');
+  assert.equal(direct.shape.sealedImportRelay.localBinding, 'zqArbitrary$1');
+  assert.equal(direct.shape.sealedImportRelay.property, 'variables');
+  assert.equal(direct.shape.sealedImportRelay.owner, 'motionRecipeCssVariables');
+  assert.deepEqual(direct.shape.sealedImportRelay.keys, RECIPE_KEYS);
+
+  const spread = sealedProbe(
+    'export const C = ({n}) => { const totallyOther = useMotionRecipePresentation(n); return <div style={{ ...totallyOther.variables }} />; };',
+  );
+  const inner = spreadShapeOf(spread.shape);
+  assert.ok(isProven(inner), 'the same read inside a spread must prove');
+  // the alias is cosmetic: the two receipts differ ONLY in the binding name
+  assert.deepEqual(
+    { ...inner.sealedImportRelay, localBinding: null, localDeclaredAt: null },
+    { ...direct.shape.sealedImportRelay, localBinding: null, localDeclaredAt: null },
+  );
+});
+
+test('SR-2 POSITIVE: a property other than `variables` proves through the same seal', () => {
+  const out = sealedProbe(
+    'export const C = ({n}) => { const m = useMotionRecipePresentation(n); return <div style={m.attributes} />; };',
+  );
+  // `attributes` is a DIFFERENT sealed property of the same return type: the
+  // rule keys off the declared shape, never off a property name.
+  assert.ok(isProven(out.shape));
+  assert.equal(out.shape.sealedImportRelay.property, 'attributes');
+  assert.equal(out.shape.sealedImportRelay.propertyType, 'MotionRecipeDataAttributes');
+  assert.deepEqual(out.shape.sealedImportRelay.keys, ['data-recipe', 'data-recipe-state']);
+});
+
+test('SR-3 NEGATIVE: eight binding/read forms that must never prove', () => {
+  const LOOKALIKE = `
+interface Vars { '--ds-recipe-enter': string }
+interface Pres { variables: Vars }
+function useLocalPresentation(n): Pres { return { variables: { '--ds-recipe-enter': openValue } }; }
+`;
+  const cases = {
+    'local lookalike (callee is not an import)':
+      `${LOOKALIKE}export const C = ({n}) => { const m = useLocalPresentation(n); return <div style={m.variables} />; };`,
+    'property absent from the sealed return type':
+      'export const C = ({n}) => { const m = useMotionRecipePresentation(n); return <div style={m.notAProperty} />; };',
+    'mutated binding':
+      'export const C = ({n, o}) => { let m = useMotionRecipePresentation(n); m = o; return <div style={m.variables} />; };',
+    'alias of the binding':
+      'export const C = ({n}) => { const m = useMotionRecipePresentation(n); const a = m; return <div style={a.variables} />; };',
+    'dynamic property':
+      'export const C = ({n, k}) => { const m = useMotionRecipePresentation(n); return <div style={m[k]} />; };',
+    'optional chaining':
+      'export const C = ({n}) => { const m = useMotionRecipePresentation(n); return <div style={m?.variables} />; };',
+    'binding initialised by a conditional, not a direct call':
+      'export const C = ({n, f}) => { const m = f ? useMotionRecipePresentation(n) : useMotionRecipePresentation(n); return <div style={m.variables} />; };',
+    'binding initialised by something that is not a call':
+      'export const C = ({o}) => { const m = o; return <div style={m.variables} />; };',
+  };
+  for (const [name, body] of Object.entries(cases)) {
+    const out = sealedProbe(body);
+    assert.ok(!isProven(out.shape), `${name} must NOT prove`);
+    assert.ok(!isProven(spreadShapeOf(out.shape)), `${name} must NOT prove inside a spread either`);
+  }
+});
+
+test('SR-4 NEGATIVE: an UNSEALED declared shape is never proven', () => {
+  /** Resolve the type of `declare const v: <T>` in a one-file fixture. */
+  const seal = (code) => {
+    const source = ts.createSourceFile(
+      'packages/core/src/ui/probe/seal.ts', `${code}\ndeclare const v: Target;\n`,
+      ts.ScriptTarget.Latest, true, ts.ScriptKind.TS,
+    );
+    let typeNode = null;
+    const walk = (n) => {
+      if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.name.text === 'v') typeNode = n.type;
+      ts.forEachChild(n, walk);
+    };
+    walk(source);
+    assert.ok(typeNode, 'fixture must declare `v`');
+    return resolveSealedTypeDecl(typeNode, source);
+  };
+  // POSITIVE controls: the only two admitted declaration forms
+  assert.deepEqual(seal("interface Target { '--ds-a': string; '--ds-b': string }").members.map((m) => m.name), ['--ds-a', '--ds-b']);
+  assert.deepEqual(seal("type Target = { '--ds-a': string }").members.map((m) => m.name), ['--ds-a']);
+  // NEGATIVES: each makes the key set or the value non-enumerable
+  const refusals = {
+    'index signature': 'interface Target { [k: string]: string }',
+    'optional member': "interface Target { '--ds-a': string; '--ds-b'?: string }",
+    'generic declaration': "interface Target<T> { '--ds-a': T }",
+    'heritage (extends)': "interface Base { '--ds-a': string }\ninterface Target extends Base { '--ds-b': string }",
+    'method member': "interface Target { '--ds-a': string; go(): void }",
+    'call signature': "interface Target { '--ds-a': string; (): string }",
+    'getter member': "interface Target { get a(): string }",
+    'union type alias': "type Target = { '--ds-a': string } | { '--ds-b': string }",
+    'alias to an interface': "interface Obj { '--ds-a': string }\ntype Target = Obj",
+    'alias to a primitive': 'type Target = string',
+    'empty declaration': 'interface Target {}',
+    'self-referential cycle': 'type Target = Target',
+    'undeclared reference': '',
+  };
+  for (const [name, code] of Object.entries(refusals)) {
+    assert.equal(seal(code), null, `${name} must NOT be accepted as sealed`);
+  }
+});
+
+test('SR-5 the proof reaches the ARTIFACT and never becomes governance', () => {
+  const out = buildProducers();
+  const proven = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA);
+  assert.equal(proven.length, 22);
+  for (const row of proven) {
+    assert.equal(row.reason.startsWith('sealed-import-relay:'), true);
+    assert.match(row.reason, /:(member-access|spread)$/, 'the reason must keep the site form');
+    assert.equal(row.nonConsumableCause, 'private-passthrough-of-a-sealed-imported-producer-attributed-to-no-cascade-root');
+    // a relay grants NOTHING -- the proof is evidence of provenance, never of governance
+    assert.equal(row.consumable, false);
+    assert.equal(row.tenantSafe, false);
+    assert.ok(!('causalRootIds' in row));
+    assert.ok(!('tenantReachable' in row));
+    assert.ok(!('ownerId' in row));
+    assert.ok(!('governedChannelKeys' in row.evidence));
+
+    const list = row.evidence.sealedImportRelay;
+    assert.ok(Array.isArray(list) && list.length === 1, `${row.file}:${row.line} published no single proof`);
+    const proof = list[0];
+    // exact object shape: no extra field, no missing field
+    assert.deepEqual(Object.keys(proof).sort(), [
+      'exportFile', 'exportedFunction', 'importedCallee', 'importedName', 'keyCount', 'keys',
+      'localBinding', 'localDeclaredAt', 'moduleSpecifier', 'owner', 'ownerDeclaredAt',
+      'ownerFile', 'property', 'propertyType', 'returnType',
+    ]);
+    // binding -> import/export -> property -> owner -> keys, all named
+    assert.match(proof.localBinding, /Motion$/);
+    assert.equal(proof.importedCallee, 'useMotionRecipePresentation');
+    assert.equal(proof.importedName, 'useMotionRecipePresentation');
+    assert.equal(proof.moduleSpecifier, RECIPE_MODULE);
+    assert.equal(proof.exportFile, 'packages/core/src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index.ts');
+    assert.equal(proof.exportedFunction, 'useMotionRecipePresentation');
+    assert.equal(proof.returnType, 'MotionRecipePresentation');
+    assert.equal(proof.property, 'variables');
+    assert.equal(proof.propertyType, 'MotionRecipeCssVariables');
+    assert.equal(proof.owner, 'motionRecipeCssVariables');
+    assert.equal(proof.ownerFile, proof.exportFile);
+    assert.equal(proof.keyCount, 8);
+    assert.deepEqual(proof.keys, RECIPE_KEYS);
+    // the path shows HOW the producer was reached, and ends on the sealing step
+    assert.equal(row.evidence.path[0], 'terminal-at-sink');
+    assert.equal(row.evidence.path[row.evidence.path.length - 1], 'sealedImportRelay');
+  }
+  // no relay that did NOT close by this route gains an empty or spurious field
+  for (const row of out.privateRelay.filter((r) => r.resolvedVia !== SEALED_VIA)) {
+    assert.equal(row.evidence.sealedImportRelay, undefined);
+    assert.equal(row.resolvedVia, undefined);
+  }
+});
+
+test('SR-6 NEGATIVE: tampering with a sealed-relay proof moves the bound digest', () => {
+  const out = buildProducers();
+  const rows = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA).slice(0, 4);
+  assert.equal(rows.length, 4);
+  const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const edit = (fn) => rows.map((r) => ({
+    ...r,
+    evidence: { ...r.evidence, sealedImportRelay: r.evidence.sealedImportRelay.map((p) => fn({ ...p })) },
+  }));
+  const mutations = {
+    'proof emptied': rows.map((r) => ({ ...r, evidence: { ...r.evidence, sealedImportRelay: [] } })),
+    'proof removed': rows.map((r) => ({ ...r, evidence: { ...r.evidence, sealedImportRelay: undefined } })),
+    'owner forged': edit((p) => ({ ...p, owner: 'somethingElse' })),
+    'export forged': edit((p) => ({ ...p, exportFile: 'fake/index.ts' })),
+    'property swapped': edit((p) => ({ ...p, property: 'attributes' })),
+    'a key dropped': edit((p) => ({ ...p, keys: p.keys.slice(1), keyCount: p.keyCount - 1 })),
+    'a key forged': edit((p) => ({ ...p, keys: [...p.keys.slice(1), '--ds-forged'].sort() })),
+  };
+  for (const [name, mutated] of Object.entries(mutations)) {
+    assert.equal(identity(rows), identity(mutated), `${name}: identity alone cannot see the proof`);
+    assert.notEqual(bound(rows), bound(mutated), `${name} did NOT move the receipt-bound digest`);
+  }
+});
+
+test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
+  const out = buildProducers();
+  // the two cohorts that moved, and the rollup that must only ever go down
+  assert.equal(out.authoredOpen.length, 44);
+  assert.equal(out.stats.privateRelay, 697);
+  assert.equal(out.stats.openBlocking, 120);
+  assert.ok(120 < 142, 'openBlocking must never grow');
+  assert.equal(66 - 22, 44);
+  assert.equal(675 + 22, 697);
+  assert.equal(142 - 22, 120);
+  // every other bucket, closed and open, is frozen
+  assert.equal(out.stats.closedZeroGoverned, 579);
+  assert.equal(out.stats.closedNonObject, 69);
+  assert.equal(out.stats.closedProducer, 21);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.stats.unknownProvenance, 0);
+  assert.equal(out.branchCompositeOpen.length, 55);
+  assert.equal(out.branchConditionalAuthored.length, 2);
+  assert.equal(out.openUnknown.length, 14);
+  assert.equal(out.computedDomainPending.length, 0);
+  assert.equal(out.dynamicSinkPending.length, 4);
+  assert.equal(out.callArgsPending.length, 1);
+  assert.equal(universeTotal(out), 2024);
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  assert.equal(out.stats.ownershipConflicts, 0);
+  // the arrivals are exactly the 18 authored coordinates of ONE expression
+  // family -- 9 source files x {member-access, spread}. The four Button rows
+  // that the extractor emits twice are NOT deduplicated by this tranche: they
+  // are a separate, pre-existing defect and 18 coordinates carry 22 rows.
+  const proven = out.privateRelay.filter((r) => r.resolvedVia === SEALED_VIA);
+  assert.equal(proven.length, 22);
+  const coordinates = new Set(proven.map((r) => `${r.file}|${r.ordinal}`));
+  assert.equal(coordinates.size, 18);
+  assert.equal(new Set(proven.map((r) => r.file)).size, 9);
+  assert.deepEqual(
+    [...new Set(proven.map((r) => r.reason.split(':')[1]))].sort(),
+    ['member-access', 'spread'],
+  );
+  assert.equal(proven.filter((r) => r.reason.endsWith(':member-access')).length, 11);
+  assert.equal(proven.filter((r) => r.reason.endsWith(':spread')).length, 11);
+  // and NO authoredOpen row of this family survives
+  for (const row of out.authoredOpen) {
+    assert.ok(!/Motion\.variables/.test(row.template), `${row.file}:${row.line} stayed authored-open`);
+  }
+});
+
+/**
+ * A CROSS-FILE fixture harness. The sealed-relay proof requires a REAL
+ * importable producer module (`resolveImportTargetFile` resolves on disk), so
+ * the single-file `branchProbe` cannot express the producer-side refusals.
+ *
+ * The modules are written under a `/fixtures/` path -- one of `TSX_EXCLUDE`'s
+ * needles -- so they can never enter the scan universe or the inventory, and
+ * they are removed again in `finally`.
+ */
+const withProducerModules = (run) => {
+  const dir = mkdtempSync(join(REPO_ABS, 'packages/core/src/ui/__sealed-relay-drill-'));
+  const dirName = dir.slice(dir.lastIndexOf('/') + 1);
+  const consumerFile = `packages/core/src/ui/${dirName}/consumer.tsx`;
+  mkdirSync(join(dir, 'fixtures'), { recursive: true });
+  let seq = 0;
+  /** Write one producer module and resolve `<alias>.vars` against it. */
+  const probe = (producerSource, consumerBody) => {
+    const name = `m${seq++}`;
+    writeFileSync(join(dir, 'fixtures', `${name}.ts`), producerSource);
+    const code = `import { make } from './fixtures/${name}';\n${consumerBody}`;
+    const source = ts.createSourceFile(consumerFile, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    let expression = null;
+    const walk = (node) => {
+      if (
+        ts.isJsxAttribute(node) && node.name.getText(source) === 'style' &&
+        node.initializer && ts.isJsxExpression(node.initializer)
+      ) expression = node.initializer.expression;
+      ts.forEachChild(node, walk);
+    };
+    walk(source);
+    assert.ok(expression, 'fixture must contain a style sink');
+    return resolveShape(expression, {
+      source, fileRel: consumerFile, depth: 0, path: [{ kind: 'terminal-at-sink', form: 'identifier' }],
+    });
+  };
+  try {
+    run(probe);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+};
+
+/** Consumer used by every producer-side drill: an arbitrary alias, one read. */
+const DRILL_CONSUMER = 'export const C = ({x, e, k}) => { const zz = make(x, e, k); return <div style={zz.vars} />; };';
+/** Values stay OPEN (`openValue` is unbound) so the read never closes on its own. */
+const DECLARED_AB = "export interface Vars { '--ds-a': string; '--ds-b': string }\nexport interface Out { vars: Vars }";
+
+test('SR-8 NEGATIVE: the four producer-side refusals, against a real imported module', () => {
+  withProducerModules((probe) => {
+    // POSITIVE CONTROL FIRST. Without it every refusal below could be passing
+    // for the wrong reason -- a broken harness refuses everything.
+    const control = probe(
+      `${DECLARED_AB}\nfunction build(x: number, e, k): Vars { return { '--ds-a': \`\${x}px\`, '--ds-b': openValue }; }\nexport function make(x: number, e, k): Out { return { vars: build(x, e, k) }; }`,
+      DRILL_CONSUMER,
+    );
+    assert.equal(control.kind, 'relay', 'the harness must be able to PROVE, or the negatives are vacuous');
+    assert.ok(control.sealedImportRelay, 'the control must carry a proof');
+    assert.deepEqual(control.sealedImportRelay.keys, ['--ds-a', '--ds-b']);
+    assert.equal(control.sealedImportRelay.owner, 'build');
+
+    const refusals = {
+      // two possible producer literals: the owner is not unique
+      'ambiguous owner (conditional producer)':
+        `${DECLARED_AB}\nexport function make(x: number, e, k): Out { return { vars: x > 1 ? { '--ds-a': 'p', '--ds-b': openValue } : { '--ds-a': 'q', '--ds-b': openValue } }; }`,
+      // the literal produces a key the declaration does not name
+      'declared/derived key-set disagreement':
+        `${DECLARED_AB}\nfunction build(x: number, e, k): Vars { return { '--ds-a': \`\${x}px\`, '--ds-c': openValue } as Vars; }\nexport function make(x: number, e, k): Out { return { vars: build(x, e, k) }; }`,
+      // a spread imports keys this walk cannot enumerate
+      'producer opened by a spread':
+        `${DECLARED_AB}\nfunction build(x: number, e, k): Vars { return { ...e, '--ds-a': \`\${x}px\`, '--ds-b': openValue }; }\nexport function make(x: number, e, k): Out { return { vars: build(x, e, k) }; }`,
+      // a computed key is not statically enumerable
+      'producer key is computed':
+        `${DECLARED_AB}\nfunction build(x: number, e, k): Vars { return { [k]: \`\${x}px\`, '--ds-b': openValue } as Vars; }\nexport function make(x: number, e, k): Out { return { vars: build(x, e, k) }; }`,
+    };
+    for (const [name, producer] of Object.entries(refusals)) {
+      const shape = probe(producer, DRILL_CONSUMER);
+      assert.ok(
+        !(shape.kind === 'relay' && shape.sealedImportRelay),
+        `${name} must NOT prove`,
+      );
+    }
+  });
+});
+
+test('SR-9 NEGATIVE: a REPEATED derived key is refused, and only set-uniqueness can refuse it', () => {
+  withProducerModules((probe) => {
+    /* The fail-closed hole this drill pins: declared `{--ds-a, --ds-b}` against
+     * a literal `{'--ds-a': p, '--ds-a': q}`.
+     *
+     *   derived  = ['--ds-a', '--ds-a']   length 2
+     *   declared = ['--ds-a', '--ds-b']   length 2   -> the LENGTH test passes
+     *   every derived member is declared             -> the MEMBERSHIP test passes
+     *
+     * so length + membership admit it, while the literal actually produces ONE
+     * key and never produces `--ds-b`. Only comparing the derived keys AS A SET
+     * refuses it. The two preconditions are asserted here, so this test fails
+     * the moment the uniqueness gate is removed rather than silently passing
+     * for some other reason. */
+    const derived = ['--ds-a', '--ds-a'];
+    const declared = ['--ds-a', '--ds-b'];
+    assert.equal(derived.length, declared.length, 'precondition: the length test must PASS');
+    assert.ok(derived.every((k) => new Set(declared).has(k)), 'precondition: the membership test must PASS');
+    assert.notEqual(new Set(derived).size, derived.length, 'precondition: only uniqueness distinguishes it');
+
+    const shape = probe(
+      `${DECLARED_AB}\nfunction build(x: number, e, k): Vars { return { '--ds-a': \`\${x}px\`, '--ds-a': openValue } as unknown as Vars; }\nexport function make(x: number, e, k): Out { return { vars: build(x, e, k) }; }`,
+      DRILL_CONSUMER,
+    );
+    assert.ok(
+      !(shape.kind === 'relay' && shape.sealedImportRelay),
+      'a repeated derived key must NOT prove',
+    );
+
+    // the same producer with the duplicate resolved to the declared second key
+    // DOES prove -- so the refusal above is the duplicate, not the fixture
+    const fixed = probe(
+      `${DECLARED_AB}\nfunction build(x: number, e, k): Vars { return { '--ds-a': \`\${x}px\`, '--ds-b': openValue }; }\nexport function make(x: number, e, k): Out { return { vars: build(x, e, k) }; }`,
+      DRILL_CONSUMER,
+    );
+    assert.equal(fixed.kind, 'relay');
+    assert.deepEqual(fixed.sealedImportRelay.keys, ['--ds-a', '--ds-b']);
+  });
 });
