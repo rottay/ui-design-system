@@ -366,13 +366,34 @@ export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
        * The last two keep the row in its own bucket and attach the governance
        * evidence that explains why it could not close.
        */
+      /* T-BRANCH-COMPOSITE-162: the exhaustiveness test is now RECURSIVE. A
+       * nested conditional (`a ? {..} : b ? {..} : {..}`) puts a `branches`
+       * shape inside an arm; if every one of ITS terminal arms is likewise a
+       * closed object/array or a proven non-object, the whole tree has no
+       * unexamined path and the union is decidable. `scanClosedShape` already
+       * recurses through nested `branches`, so each terminal arm keeps its own
+       * witnesses, order and astPath -- arms are never merged, and an arm from
+       * one nesting level is never mixed with an incompatible sibling.
+       *
+       * Every other arm kind -- relay, callArgsPending, computedKey,
+       * openUnknown, or an object that did not close -- makes the tree
+       * non-exhaustive and keeps the row blocking. */
+      const armExhaustive = (arm) => {
+        if (arm.kind === "nonObject") return true;
+        if (arm.kind === "object" || arm.kind === "array") return arm.closed === true;
+        if (arm.kind === "branches") {
+          const nested = arm.branches ?? [];
+          return nested.length > 0 && nested.every(armExhaustive);
+        }
+        return false;
+      };
+      const hasClosedObjectAnywhere = (arm) => {
+        if (arm.kind === "object" || arm.kind === "array") return arm.closed === true;
+        if (arm.kind === "branches") return (arm.branches ?? []).some(hasClosedObjectAnywhere);
+        return false;
+      };
       const armsExhaustivelyResolved =
-        !anyOpaque &&
-        !anyObjectOpen &&
-        anyObjectClosed &&
-        shape.branches.every(
-          (b) => ((b.kind === "object" || b.kind === "array") && b.closed) || b.kind === "nonObject",
-        );
+        shape.branches.every(armExhaustive) && shape.branches.some(hasClosedObjectAnywhere);
       if (armsExhaustivelyResolved) {
         const outcome = governanceOutcome(shape, ctx, sourceParts);
         if (outcome.disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") return outcome;
@@ -613,7 +634,7 @@ const stable = (value) => JSON.stringify(value ?? null);
 function branchUnionReceipt(row, arms, path) {
   const governance = row.governance ?? {};
   const witnesses = governance.keyWitnesses ?? [];
-  return {
+  const receipt = {
     branchCount: arms.length,
     branchKinds: [...new Set(arms.map((b) => b.kind))].sort(),
     allArmsClosed: arms.every((b) =>
@@ -626,6 +647,47 @@ function branchUnionReceipt(row, arms, path) {
     witnessCount: witnesses.length,
     path,
   };
+  /* T-BRANCH-COMPOSITE-162: a NESTED tree needs its own exhaustiveness proof --
+   * the top-level `branchCount` alone says nothing about the arms hidden one
+   * level down. These fields are emitted ONLY when nesting is actually present,
+   * so every flat row published by the previous tranche keeps its exact bytes
+   * and its exact meaning. */
+  const nesting = branchTreeCensus(arms);
+  if (nesting.depth > 0) {
+    receipt.nestingDepth = nesting.depth;
+    receipt.terminalArmCount = nesting.terminals;
+    receipt.terminalArmKinds = nesting.kinds;
+    receipt.allTerminalArmsResolved = nesting.allResolved;
+  }
+  return receipt;
+}
+
+/** Recursive census of a branch tree: how deep it nests, how many TERMINAL
+ * (non-branch) arms it has, which kinds those terminals are, and whether every
+ * one of them is resolved. Terminals are counted, never merged. */
+function branchTreeCensus(arms) {
+  let depth = 0;
+  let terminals = 0;
+  let allResolved = true;
+  const kinds = new Set();
+  const walk = (arm, level) => {
+    if (arm.kind === "branches") {
+      depth = Math.max(depth, level + 1);
+      const nested = arm.branches ?? [];
+      if (nested.length === 0) allResolved = false;
+      for (const child of nested) walk(child, level + 1);
+      return;
+    }
+    terminals += 1;
+    kinds.add(arm.kind);
+    if (arm.kind === "object" || arm.kind === "array") {
+      if (arm.closed !== true) allResolved = false;
+    } else if (arm.kind !== "nonObject") {
+      allResolved = false;
+    }
+  };
+  for (const arm of arms) walk(arm, 0);
+  return { depth, terminals, kinds: [...kinds].sort(), allResolved };
 }
 
 /**

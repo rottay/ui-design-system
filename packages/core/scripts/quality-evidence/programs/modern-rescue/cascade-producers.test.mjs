@@ -827,7 +827,7 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.deepEqual(byReason, {});
   assert.equal(out.stats.unknownProvenance, 0);
   // the reasons did NOT evaporate: they moved, with their forms, into the seven
-  assert.equal(openRows(out).length, 317);
+  assert.equal(openRows(out).length, 309);
   assert.equal(
     openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
     4,
@@ -855,8 +855,8 @@ const ZERO = 'CLOSED_ZERO_GOVERNED_EMISSION_OBJECT';
 
 test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conserved', () => {
   const out = buildProducers();
-  // 486 closed by the original route + 35 closed through the branch union
-  assert.equal(out.stats.closedZeroGoverned, 521);
+  // 486 by the original route + 43 through the branch union (35 flat + 8 nested)
+  assert.equal(out.stats.closedZeroGoverned, 529);
   assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
   assert.equal(out.stats.unknownProvenance, 0);
   // conservation: nothing vanished, everything is in exactly one bucket
@@ -892,8 +892,9 @@ test('Z-4 boundary 523 and relay 591 remain unknown and non-consumable', () => {
   for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
   assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 523);
   assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 591);
-  assert.equal(by[ZERO], 521); // 486 + the 35 closed by branch union (T-BRANCH-37)
+  assert.equal(by[ZERO], 529); // 486 + 43 by branch union (T-BRANCH-37 + -COMPOSITE-162)
   assert.equal(by.BRANCH_CONDITIONAL_AUTHORED, 2); // the 2 that genuinely emit
+  assert.equal(by.BRANCH_COMPOSITE_OPEN, 154); // 162 - 8 nested trees resolved
   assert.equal(by.CLOSED_NONOBJECT, 69); // 68 reachable by A4 + 1 member-access
   assert.equal(Object.values(by).reduce((a, b) => a + b, 0), 2024);
 });
@@ -917,8 +918,8 @@ test('Z-5 the drained buckets decompose exactly as the cohort does', () => {
   }
   assert.deepEqual(byForm, { identifier: 7, spread: 113, 'member-access': 305, call: 61 });
   assert.equal(Object.values(byForm).reduce((a, b) => a + b, 0), 486);
-  assert.deepEqual(byBranchForm, { 'member-access': 6, spread: 20, call: 9 });
-  assert.equal(Object.values(byBranchForm).reduce((a, b) => a + b, 0), 35);
+  assert.deepEqual(byBranchForm, { 'member-access': 6, spread: 25, call: 12 });
+  assert.equal(Object.values(byBranchForm).reduce((a, b) => a + b, 0), 43);
   // dynamic-setProperty has never been resolved by any tranche: it is still
   // whole, now as its own nominated OPEN collection rather than as residue.
   assert.equal(buildProducers().dynamicSinkPending.length, 4);
@@ -1033,7 +1034,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
   assert.equal(1470 - 1118, 352);
-  assert.equal(out.stats.openBlocking, 317); // 352 - 35 closed by branch union
+  assert.equal(out.stats.openBlocking, 309); // 352 - 35 flat - 8 nested
   assert.equal(out.stats.unknownProvenance, 0);
 });
 
@@ -1229,7 +1230,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
   // sites are now blocking under their own names.
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
-  assert.equal(out.stats.openBlocking, 317);
+  assert.equal(out.stats.openBlocking, 309);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false, 'lot B must stay shut while open debt exists');
   // the residual dispositions are the ones NO tranche has proven anything about
@@ -1239,11 +1240,11 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
     'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
   ]);
   const residual = rows.filter((r) => !drained.has(r.disposition));
-  assert.equal(residual.length, 317);
+  assert.equal(residual.length, 309);
   const byDisposition = {};
   for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
   assert.deepEqual(byDisposition, {
-    BRANCH_COMPOSITE_OPEN: 162,
+    BRANCH_COMPOSITE_OPEN: 154,
     AUTHORED_OPEN: 99,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 28,
@@ -1269,7 +1270,7 @@ test('T-14 the frozen counters survive this tranche untouched', () => {
   assert.equal(out.stats.distinctChannels, 4585);
   assert.equal(out.stats.emissionsWithCausalRoot, 186);
   assert.equal(out.stats.ownershipConflicts, 0);
-  assert.equal(out.stats.closedZeroGoverned, 521);
+  assert.equal(out.stats.closedZeroGoverned, 529);
 });
 
 test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-sink coordinates', () => {
@@ -1338,7 +1339,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   assert.deepEqual(out.unknownProvenance, []);
   // the seven exact counts -- measured, not estimated
   assert.deepEqual(out.stats.openBacklogByDisposition, {
-    BRANCH_COMPOSITE_OPEN: 162,
+    BRANCH_COMPOSITE_OPEN: 154,
     AUTHORED_OPEN: 99,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 28,
@@ -1346,15 +1347,15 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
     DYNAMIC_SINK_PENDING: 4,
     CALL_ARGS_PENDING: 1,
   });
-  assert.equal(out.branchCompositeOpen.length, 162);
+  assert.equal(out.branchCompositeOpen.length, 154);
   assert.equal(out.authoredOpen.length, 99);
   assert.equal(out.branchConditionalAuthored.length, 2);
   assert.equal(out.openUnknown.length, 28);
   assert.equal(out.computedDomainPending.length, 21);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
-  assert.equal(openRows(out).length, 317);
-  assert.equal(out.stats.openBlocking, 317);
+  assert.equal(openRows(out).length, 309);
+  assert.equal(out.stats.openBlocking, 309);
   // TOTAL conservation across every collection, closed and open
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2024);
@@ -1404,7 +1405,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
 test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
   const out = buildProducers();
   const rows = openRows(out);
-  assert.equal(rows.length, 317);
+  assert.equal(rows.length, 309);
   for (const row of rows) {
     assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
     assert.equal(row.consumable, false);
@@ -1421,7 +1422,7 @@ test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed',
     assert.match(row.reason, /:[a-zA-Z-]+$/, 'the reason must keep the site form');
   }
   // the rollup agrees with the rows, and does not pretend lot B opened
-  assert.equal(out.openBacklogRollup.total, 317);
+  assert.equal(out.openBacklogRollup.total, 309);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false);
   assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
@@ -1523,7 +1524,7 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   assert.equal(out.stats.privateRelay, 591);
   assert.equal(out.stats.closedProducer, 3);
   assert.equal(out.stats.closedNonObject, 69);
-  assert.equal(out.stats.closedZeroGoverned, 521);
+  assert.equal(out.stats.closedZeroGoverned, 529);
   // producer counters
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
@@ -1625,14 +1626,44 @@ test('B-6 NEGATIVE: a governed key reachable only THROUGH a spread still blocks'
   assert.deepEqual(out.governance.governedChannelKeys, ['--ds-deep']);
 });
 
-test('B-7 BOUNDARY: a NESTED conditional is not flattened by this tranche', () => {
-  // `a ? {...} : b ? {...} : {...}` gives the outer shape an arm that is itself
-  // a `branches` shape. That is an opaque arm under this rule, so the row stays
-  // in BRANCH_COMPOSITE_OPEN exactly as before -- T-BRANCH-37 deliberately does
-  // NOT reach into the 162 composite rows. Pinned so the boundary is explicit
-  // rather than accidental.
+test('B-7 a NESTED conditional whose terminals are all ZERO now closes', () => {
+  // This fixture was T-BRANCH-37's declared BOUNDARY: `a ? {..} : b ? {..} : {..}`
+  // gives the outer shape an arm that is itself a `branches` shape, and that
+  // tranche deliberately left it in BRANCH_COMPOSITE_OPEN. T-BRANCH-COMPOSITE-162
+  // crosses that boundary on purpose, so the assertion is INVERTED rather than
+  // deleted -- the same fixture keeps the history legible.
   const out = branchProbe('export const C = () => <div style={a ? {top:1} : b ? {left:2} : {right:3}} />;');
+  assert.equal(out.disposition, ZERO_D);
+  assert.equal(out.governance.customPropertyScanComplete, true);
+  assert.deepEqual(out.governance.governedChannelKeys, []);
+  // all THREE terminal arms were walked, not just the two at the top level
+  const ordinary = out.governance.ordinaryPropertyKeys.sort();
+  assert.deepEqual(ordinary, ['left', 'right', 'top']);
+});
+
+test('B-7b a nested conditional with ONE governed terminal stays blocking', () => {
+  // depth is not a licence: a governed key hidden in the deepest arm must still
+  // block the whole tree.
+  const out = branchProbe('export const C = () => <div style={a ? {top:1} : b ? {left:2} : {"--ds-deep":"3"}} />;');
+  assert.equal(out.disposition, 'BRANCH_CONDITIONAL_AUTHORED');
+  assert.deepEqual(out.governance.governedChannelKeys, ['--ds-deep']);
+});
+
+test('B-7c a nested conditional with an UNRESOLVED terminal stays composite', () => {
+  // one non-exhaustive terminal anywhere in the tree keeps the row blocking,
+  // and governance is never consulted at all
+  const out = branchProbe('export const C = () => <div style={a ? {top:1} : b ? {...mystery} : {right:3}} />;');
   assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
+  assert.equal(out.governance, null);
+});
+
+test('B-7d a nested conditional carrying a RELAY terminal stays composite', () => {
+  // relay arms are the largest real blocker in the live tree (99 of the 154)
+  const out = branchProbe(
+    'export const C = ({ handed }) => <div style={a ? {top:1} : b ? handed : {right:3}} />;',
+  );
+  assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
+  assert.equal(out.governance, null);
 });
 
 test('B-8 arm ORDER does not change the verdict or the union', () => {
@@ -1651,10 +1682,10 @@ test('B-8 arm ORDER does not change the verdict or the union', () => {
   assert.equal(z1.governance.keyWitnesses.length, z2.governance.keyWitnesses.length);
 });
 
-test('B-9 the live tree drains 35 of the 37 and the 2 survivors name their channel', () => {
+test('B-9 the live tree drains 43 branch rows and the 2 survivors name their channel', () => {
   const out = buildProducers();
   const branchZero = out.closedZeroGoverned.filter((r) => r.resolvedVia === 'branch-union');
-  assert.equal(branchZero.length, 35);
+  assert.equal(branchZero.length, 43); // 35 flat (T-BRANCH-37) + 8 nested (T-BRANCH-COMPOSITE-162)
   for (const row of branchZero) {
     assert.equal(row.evidence.customPropertyScanComplete, true, `${row.file}:${row.line} closed on an INCOMPLETE scan`);
     assert.deepEqual(row.evidence.governedChannelKeys, []);
@@ -1662,11 +1693,14 @@ test('B-9 the live tree drains 35 of the 37 and the 2 survivors name their chann
     assert.equal(row.evidence.allArmsClosed, true);
     assert.ok(row.evidence.branchCount >= 2, 'a branch row has at least two arms');
     assert.ok(row.evidence.branchWitnessCount > 0, 'the arms must have been walked, not assumed');
-    assert.deepEqual(row.evidence.branchKinds, ['object']);
   }
+  // the 35 FLAT rows keep the exact receipt shape the previous tranche published
+  const flat = branchZero.filter((r) => r.evidence.nestingDepth === undefined);
+  assert.equal(flat.length, 35);
+  for (const row of flat) assert.deepEqual(row.evidence.branchKinds, ['object']);
   // the 486 that closed by the earlier route keep NO receipt and are untouched
   assert.equal(out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined).length, 486);
-  assert.equal(out.stats.closedZeroGoverned, 521);
+  assert.equal(out.stats.closedZeroGoverned, 529);
 
   // the 2 survivors stay blocking, each naming the channel that blocked it
   assert.equal(out.branchConditionalAuthored.length, 2);
@@ -1684,7 +1718,7 @@ test('B-9 the live tree drains 35 of the 37 and the 2 survivors name their chann
     assert.ok(!('causalRootIds' in row));
     assert.ok(!('ownerId' in row));
   }
-  assert.equal(out.stats.openBlocking, 317);
+  assert.equal(out.stats.openBlocking, 309);
 });
 
 test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => {
@@ -1705,14 +1739,14 @@ test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => 
 
 test('B-11 the composite and every other open cohort is untouched by this tranche', () => {
   const out = buildProducers();
-  assert.equal(out.branchCompositeOpen.length, 162);
+  assert.equal(out.branchCompositeOpen.length, 154);
   assert.equal(out.authoredOpen.length, 99);
   assert.equal(out.openUnknown.length, 28);
   assert.equal(out.computedDomainPending.length, 21);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(openRows(out).length, 317);
+  assert.equal(openRows(out).length, 309);
   assert.equal(universeTotal(out), 2024);
   // frozen closed cohorts and producer counters
   assert.equal(out.stats.publicBoundary, 523);
@@ -1724,4 +1758,172 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   assert.equal(out.stats.distinctChannels, 4585);
   assert.equal(out.stats.emissionsWithCausalRoot, 186);
   assert.equal(out.stats.ownershipConflicts, 0);
+});
+
+/* ===================================================================== *
+ * T-BRANCH-COMPOSITE-162 -- recursive resolution of nested conditionals.
+ *
+ * A composite row closes ONLY when every TERMINAL arm of the whole tree is a
+ * closed object/array or a proven non-object, the scan is complete, and the
+ * union of emissions is empty. Every other blocker in the bucket -- a relay
+ * arm, an object that never closed, an unresolved computed key, an
+ * openUnknown, a pending call argument -- keeps the row blocking with its
+ * cause published. Measured on the live tree: 8 of 162 qualify.
+ * ===================================================================== */
+
+test('C-1 exactly 8 of the 162 composite rows close, and 154 stay blocking', () => {
+  const out = buildProducers();
+  assert.equal(out.branchCompositeOpen.length, 154);
+  const nested = out.closedZeroGoverned.filter(
+    (r) => r.resolvedVia === 'branch-union' && r.evidence.nestingDepth !== undefined,
+  );
+  assert.equal(nested.length, 8);
+  assert.equal(162 - 8, 154);
+  assert.equal(out.stats.openBlocking, 309);
+  assert.equal(universeTotal(out), 2024);
+});
+
+test('C-2 every newly closed row carries an EXHAUSTIVE recursive receipt', () => {
+  const out = buildProducers();
+  const nested = out.closedZeroGoverned.filter(
+    (r) => r.resolvedVia === 'branch-union' && r.evidence.nestingDepth !== undefined,
+  );
+  assert.equal(nested.length, 8);
+  for (const row of nested) {
+    const e = row.evidence;
+    // the tree was walked to its terminals, and every terminal resolved
+    assert.ok(e.nestingDepth >= 1, `${row.file}:${row.line} published as nested with depth 0`);
+    assert.ok(e.terminalArmCount >= e.branchCount, 'a nested tree has at least as many terminals as top-level arms');
+    assert.equal(e.allTerminalArmsResolved, true, `${row.file}:${row.line} closed with an UNRESOLVED terminal`);
+    // terminals may only be the two kinds that carry no unexamined path
+    for (const kind of e.terminalArmKinds) {
+      assert.ok(['object', 'array', 'nonObject'].includes(kind), `terminal kind ${kind} must never close`);
+    }
+    // and the emission proof
+    assert.equal(e.customPropertyScanComplete, true);
+    assert.deepEqual(e.governedChannelKeys, []);
+    assert.deepEqual(e.internalSocketKeys, []);
+    assert.ok(e.branchWitnessCount > 0, 'the arms must have been walked, not assumed');
+    assert.ok(e.branchKinds.includes('branches'), 'a nested row declares its nested arm');
+    // nothing invented
+    assert.ok(!('causalRootIds' in row));
+    assert.ok(!('ownerId' in row));
+  }
+});
+
+test('C-3 the 154 survivors publish a cause and none is silently dropped', () => {
+  const { rows } = classifyCrossFileRows();
+  const composite = rows.filter((r) => r.disposition === 'BRANCH_COMPOSITE_OPEN');
+  assert.equal(composite.length, 154);
+  // every survivor has a demonstrable blocker somewhere in its tree
+  const blockerOf = (arm) => {
+    if (arm.kind === 'nonObject') return null;
+    if (arm.kind === 'object' || arm.kind === 'array') return arm.closed === true ? null : `open-${arm.kind}`;
+    if (arm.kind === 'branches') {
+      for (const child of arm.branches ?? []) {
+        const found = blockerOf(child);
+        if (found) return found;
+      }
+      return (arm.branches ?? []).length === 0 ? 'empty-branches' : null;
+    }
+    return arm.kind;
+  };
+  const census = {};
+  for (const row of composite) {
+    const blockers = (row.receipt.branches ?? []).map(blockerOf).filter(Boolean);
+    assert.ok(blockers.length > 0, `${row.file}:${row.line} is composite with NO blocker -- it should have closed`);
+    census[blockers[0]] = (census[blockers[0]] || 0) + 1;
+  }
+  // the measured blocker profile; a drop here means a row was closed unsafely
+  assert.deepEqual(census, {
+    relay: 103,
+    'open-object': 42,
+    openUnknown: 6,
+    computedKey: 3,
+  });
+  assert.equal(Object.values(census).reduce((a, b) => a + b, 0), 154);
+});
+
+test('C-4 the 521 previously closed ZERO rows keep their exact semantics', () => {
+  const out = buildProducers();
+  // 486 by the original route, receipt-free
+  const original = out.closedZeroGoverned.filter((r) => r.resolvedVia === undefined);
+  assert.equal(original.length, 486);
+  for (const row of original) {
+    assert.equal(row.evidence, undefined, 'an originally-closed row must not gain a receipt');
+    assert.match(row.reason, /^zero-governed-emission-object:/);
+  }
+  // 35 flat branch rows, receipt WITHOUT any nesting field
+  const flat = out.closedZeroGoverned.filter(
+    (r) => r.resolvedVia === 'branch-union' && r.evidence.nestingDepth === undefined,
+  );
+  assert.equal(flat.length, 35);
+  for (const row of flat) {
+    assert.equal(row.evidence.terminalArmCount, undefined, 'a flat row must not gain nested fields');
+    assert.equal(row.evidence.allTerminalArmsResolved, undefined);
+    assert.deepEqual(row.evidence.branchKinds, ['object']);
+  }
+  assert.equal(486 + 35, 521);
+});
+
+test('C-5 the 2 BRANCH_CONDITIONAL_AUTHORED survivors are frozen and still flat', () => {
+  const out = buildProducers();
+  assert.equal(out.branchConditionalAuthored.length, 2);
+  const channels = out.branchConditionalAuthored.flatMap((r) => r.evidence.governedChannelKeys).sort();
+  assert.deepEqual(channels, ['--ds-carousel-dots-transform', '--ds-toast-stack-transform']);
+  for (const row of out.branchConditionalAuthored) {
+    assert.equal(row.blocking, true);
+    assert.equal(row.evidence.nestingDepth, undefined, 'neither survivor is a nested tree');
+    assert.equal(row.evidence.customPropertyScanComplete, true);
+  }
+});
+
+test('C-6 NEGATIVE: tampering with the recursive receipt moves the digest', () => {
+  const out = buildProducers();
+  const nested = out.closedZeroGoverned.filter(
+    (r) => r.resolvedVia === 'branch-union' && r.evidence.nestingDepth !== undefined,
+  );
+  const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.resolvedVia ?? null, r.evidence ?? null]));
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const mutations = {
+    'allTerminalArmsResolved flipped': nested.map((r) => ({ ...r, evidence: { ...r.evidence, allTerminalArmsResolved: false } })),
+    'terminalArmCount understated': nested.map((r) => ({ ...r, evidence: { ...r.evidence, terminalArmCount: 1 } })),
+    'nestingDepth erased': nested.map((r) => ({ ...r, evidence: { ...r.evidence, nestingDepth: 0 } })),
+    'terminalArmKinds widened': nested.map((r) => ({ ...r, evidence: { ...r.evidence, terminalArmKinds: ['relay'] } })),
+    'receipt removed': nested.map((r) => ({ ...r, evidence: null })),
+  };
+  for (const [name, mutated] of Object.entries(mutations)) {
+    assert.equal(identity(nested), identity(mutated), `identity must stay blind: ${name}`);
+    assert.notEqual(bound(nested), bound(mutated), `the bound digest MUST notice: ${name}`);
+  }
+  assert.match(out.digests.closedZeroGovernedReceipts, /^[0-9a-f]{64}$/);
+});
+
+test('C-7 nested resolution is deterministic and order-independent', () => {
+  // arm order inside a nested tree changes neither verdict nor union
+  const a = branchProbe('export const C = () => <div style={p ? {top:1} : q ? {left:2} : {right:3}} />;');
+  const b = branchProbe('export const C = () => <div style={p ? {right:3} : q ? {top:1} : {left:2}} />;');
+  assert.equal(a.disposition, ZERO_D);
+  assert.equal(b.disposition, ZERO_D);
+  assert.deepEqual(a.governance.ordinaryPropertyKeys.sort(), b.governance.ordinaryPropertyKeys.sort());
+  assert.equal(a.governance.keyWitnesses.length, b.governance.keyWitnesses.length);
+  // and two full builds agree row for row and digest for digest
+  const one = buildProducers();
+  const two = buildProducers();
+  assert.deepEqual(one.closedZeroGoverned, two.closedZeroGoverned);
+  assert.deepEqual(one.branchCompositeOpen, two.branchCompositeOpen);
+  assert.equal(one.digests.closedZeroGovernedReceipts, two.digests.closedZeroGovernedReceipts);
+  assert.equal(one.digests.branchCompositeOpenReceipts, two.digests.branchCompositeOpenReceipts);
+});
+
+test('C-8 deep nesting terminates and stays fail-closed', () => {
+  // three levels, all terminals zero -> closes
+  const deep = branchProbe('export const C = () => <div style={a ? {t:1} : b ? {l:2} : c ? {r:3} : {z:4}} />;');
+  assert.equal(deep.disposition, ZERO_D);
+  assert.equal(deep.governance.customPropertyScanComplete, true);
+  assert.deepEqual(deep.governance.ordinaryPropertyKeys.sort(), ['l', 'r', 't', 'z']);
+  // the SAME depth with one governed key at the deepest terminal -> blocking
+  const poisoned = branchProbe('export const C = () => <div style={a ? {t:1} : b ? {l:2} : c ? {r:3} : {"--ds-z":"4"}} />;');
+  assert.equal(poisoned.disposition, 'BRANCH_CONDITIONAL_AUTHORED');
+  assert.deepEqual(poisoned.governance.governedChannelKeys, ['--ds-z']);
 });

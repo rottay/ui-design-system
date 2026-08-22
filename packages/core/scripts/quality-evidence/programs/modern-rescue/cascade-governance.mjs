@@ -487,12 +487,22 @@ export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direc
  *     parts at all). No per-entry matching needed or possible.
  *   - >1 sourceParts: only reachable when `startExpr` is a directly-authored
  *     object literal with 2+ direct/spread properties (decomposeImmediate's
- *     only multi-part grammar rule -- conditional/logical sinks resolve to a
- *     `branches` shape, which never reaches governance at all; every other
- *     sink form decomposes to exactly one part). Build a `node identity ->
- *     sourcePartId` map from the row's OWN raw ordered parts (which still
- *     carry their original AST node references) and match each top-level
- *     `shape.order` entry against it.
+ *     only multi-part grammar rule; every other sink form decomposes to
+ *     exactly one part). Build a `node identity -> sourcePartId` map from the
+ *     row's OWN raw ordered parts (which still carry their original AST node
+ *     references) and match each top-level `shape.order` entry against it.
+ *
+ * A `branches` root does NOT consult that matcher. Before T-BRANCH-37 this
+ * paragraph claimed conditional sinks "never reach governance at all"; that is
+ * no longer true -- an exhaustively resolved conditional is scanned arm by arm.
+ * What holds instead is structural: `scanClosedShape`'s `branches` case
+ * recurses straight into the arms at `depthGuard + 1`, while `resolveCausalId`
+ * only runs at `depthGuard === 0`, so the matcher is never reached from a
+ * branch root. Measured on the live tree: of the 11 branch rows that decompose
+ * to more than one part, the 6 that reach governance carry witnesses with a
+ * null `sourcePartId` and `unprovenCausalLink: false`. That is sound for the
+ * ZERO verdict, which turns only on the ABSENCE of governed keys, and it is a
+ * further reason a branch row is never admitted as CLOSED_PRODUCER.
  */
 function buildCausalIndex(sourceParts) {
   if (!sourceParts || sourceParts.length <= 1) {
