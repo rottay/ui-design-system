@@ -827,7 +827,7 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.deepEqual(byReason, {});
   assert.equal(out.stats.unknownProvenance, 0);
   // the reasons did NOT evaporate: they moved, with their forms, into the seven
-  assert.equal(openRows(out).length, 159);
+  assert.equal(openRows(out).length, 150);
   assert.equal(
     openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
     4,
@@ -982,7 +982,7 @@ test('Z-10 ZERO and PRODUCER are disjoint, and PRODUCER is never drained', () =>
     assert.ok(!drained.has(`${p.file}|${p.ordinal}`), 'a CLOSED_PRODUCER was drained as ZERO');
   }
   // 3 original + 9 reached once T-COMPUTED-DOMAIN enumerated their lookups
-  assert.equal(producers.length, 12);
+  assert.equal(producers.length, 21);
 });
 
 test('Z-11 the frozen producer counters do not move with this tranche', () => {
@@ -1029,7 +1029,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   const out = buildProducers();
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.stats.privateRelay, 675);
-  assert.equal(out.stats.closedProducer, 12);
+  assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   // stats mirror the arrays, never a bare counter
   assert.equal(out.stats.publicBoundary, out.publicBoundary.length);
@@ -1038,7 +1038,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
   assert.equal(1470 - 1118, 352);
-  assert.equal(out.stats.openBlocking, 159); // T-COMPUTED-DOMAIN drained the computed lookups
+  assert.equal(out.stats.openBlocking, 150); // T-TYPED-RELAY closed 9 more
   assert.equal(out.stats.unknownProvenance, 0);
 });
 
@@ -1130,7 +1130,7 @@ test('T-5 every cohort row carries a receipt sufficient to audit origin and reas
 
 test('T-6 every producer row carries a full causal receipt and invents no root', () => {
   const out = buildProducers();
-  assert.equal(out.closedProducer.length, 12);
+  assert.equal(out.closedProducer.length, 21);
   // Two identity shapes, kept apart on purpose. A coordinate with ONE producer
   // occurrence publishes its scalar identity. A coordinate with SEVERAL cannot:
   // `governedProducerSiteId` is minted per occurrence, so publishing one of
@@ -1138,8 +1138,8 @@ test('T-6 every producer row carries a full causal receipt and invents no root',
   // sorted merged sets instead -- nothing discarded, nothing chosen.
   const single = out.closedProducer.filter((r) => !r.occurrenceProducerSiteIds);
   const multi = out.closedProducer.filter((r) => r.occurrenceProducerSiteIds);
-  assert.equal(single.length, 9);
-  assert.equal(multi.length, 3);
+  assert.equal(single.length, 14);
+  assert.equal(multi.length, 7);
   for (const row of multi) {
     assert.equal(row.evidence.governedProducerSiteId, undefined, 'a multi-occurrence coordinate must not publish one arbitrary id');
     assert.equal(row.evidence.sourcePartRefs, undefined);
@@ -1267,7 +1267,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
   // sites are now blocking under their own names.
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
-  assert.equal(out.stats.openBlocking, 159);
+  assert.equal(out.stats.openBlocking, 150);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false, 'lot B must stay shut while open debt exists');
   // the residual dispositions are the ones NO tranche has proven anything about
@@ -1277,14 +1277,14 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
     'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
   ]);
   const residual = rows.filter((r) => !drained.has(r.disposition));
-  assert.equal(residual.length, 159);
+  assert.equal(residual.length, 150);
   const byDisposition = {};
   for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
   // COMPUTED_DOMAIN_PENDING is absent, not zero: this map counts rows, and
   // T-COMPUTED-DOMAIN left that disposition with none.
   assert.deepEqual(byDisposition, {
     BRANCH_COMPOSITE_OPEN: 55,
-    AUTHORED_OPEN: 75,
+    AUTHORED_OPEN: 66,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 22,
     DYNAMIC_SINK_PENDING: 4,
@@ -1397,7 +1397,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   // the seven exact counts -- measured, not estimated
   assert.deepEqual(out.stats.openBacklogByDisposition, {
     BRANCH_COMPOSITE_OPEN: 55,
-    AUTHORED_OPEN: 75,
+    AUTHORED_OPEN: 66,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 22,
     COMPUTED_DOMAIN_PENDING: 0,
@@ -1405,14 +1405,14 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
     CALL_ARGS_PENDING: 1,
   });
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.authoredOpen.length, 75);
+  assert.equal(out.authoredOpen.length, 66);
   assert.equal(out.branchConditionalAuthored.length, 2);
   assert.equal(out.openUnknown.length, 22);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
-  assert.equal(openRows(out).length, 159);
-  assert.equal(out.stats.openBlocking, 159);
+  assert.equal(openRows(out).length, 150);
+  assert.equal(out.stats.openBlocking, 150);
   // TOTAL conservation across every collection, closed and open
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2024);
@@ -1462,7 +1462,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
 test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
   const out = buildProducers();
   const rows = openRows(out);
-  assert.equal(rows.length, 159);
+  assert.equal(rows.length, 150);
   for (const row of rows) {
     assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
     assert.equal(row.consumable, false);
@@ -1479,7 +1479,7 @@ test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed',
     assert.match(row.reason, /:[a-zA-Z-]+$/, 'the reason must keep the site form');
   }
   // the rollup agrees with the rows, and does not pretend lot B opened
-  assert.equal(out.openBacklogRollup.total, 159);
+  assert.equal(out.openBacklogRollup.total, 150);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false);
   assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
@@ -1588,7 +1588,7 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   // closed cohorts from the previous tranches
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.stats.privateRelay, 675);
-  assert.equal(out.stats.closedProducer, 12);
+  assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.closedZeroGoverned, 571);
   // producer counters
@@ -1797,7 +1797,7 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
     assert.ok(!('causalRootIds' in row));
     assert.ok(!('ownerId' in row));
   }
-  assert.equal(out.stats.openBlocking, 159);
+  assert.equal(out.stats.openBlocking, 150);
 });
 
 test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => {
@@ -1819,18 +1819,18 @@ test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => 
 test('B-11 the composite and every other open cohort is untouched by this tranche', () => {
   const out = buildProducers();
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.authoredOpen.length, 75);
+  assert.equal(out.authoredOpen.length, 66);
   assert.equal(out.openUnknown.length, 22);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(openRows(out).length, 159);
+  assert.equal(openRows(out).length, 150);
   assert.equal(universeTotal(out), 2024);
   // frozen closed cohorts and producer counters
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.stats.privateRelay, 675);
-  assert.equal(out.stats.closedProducer, 12);
+  assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.producerSites, 4872);
   assert.equal(out.stats.channelEmissions, 10313);
@@ -1862,7 +1862,7 @@ test('C-1 the composite bucket is 162 - 8 nested - 99 relay-inherited = 55', () 
   );
   assert.equal(relayInherited.length, 99);
   assert.equal(162 - 8 - 99, 55);
-  assert.equal(out.stats.openBlocking, 159);
+  assert.equal(out.stats.openBlocking, 150);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -2081,7 +2081,7 @@ test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
   assert.equal(out.stats.privateRelay, 675);
   assert.equal(out.stats.publicBoundary, 538);
   assert.equal(out.branchCompositeOpen.length, 55);
-  assert.equal(out.stats.openBlocking, 159);
+  assert.equal(out.stats.openBlocking, 150);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -2147,9 +2147,9 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // and the other cohorts did not move at all
   assert.equal(out.stats.closedZeroGoverned, 571);
   assert.equal(out.stats.closedNonObject, 69);
-  assert.equal(out.stats.closedProducer, 12);
+  assert.equal(out.stats.closedProducer, 21);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(out.authoredOpen.length, 75);
+  assert.equal(out.authoredOpen.length, 66);
   assert.equal(out.openUnknown.length, 22);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 4);
@@ -2362,8 +2362,8 @@ test('D-9 NEGATIVE: tampering with the domain receipt moves the bound digest', (
 test('D-10 the drain is exactly measured and openBlocking only went down', () => {
   const out = buildProducers();
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(out.stats.openBlocking, 159);
-  assert.ok(159 < 210, 'openBlocking must never grow');
+  assert.equal(out.stats.openBlocking, 150);
+  assert.ok(150 < 210, 'openBlocking must never grow');
   // 21 direct rows: 18 ZERO + 3 producer
   const directZero = out.closedZeroGoverned.filter((r) => r.resolvedVia === DOMAIN_VIA).length;
   const directProducer = out.closedProducer.filter((r) => r.evidence.computedDomain).length;
@@ -2531,8 +2531,8 @@ test('E-7 P1b NEGATIVE: setter and method are represented too', () => {
 test('E-8 the invariants the correction must not disturb', () => {
   const out = buildProducers();
   assert.equal(out.stats.closedZeroGoverned, 571);
-  assert.equal(out.stats.closedProducer, 12);
-  assert.equal(out.stats.openBlocking, 159);
+  assert.equal(out.stats.closedProducer, 21);
+  assert.equal(out.stats.openBlocking, 150);
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.stats.publicBoundary, 538);
@@ -2544,5 +2544,174 @@ test('E-8 the invariants the correction must not disturb', () => {
   assert.equal(out.stats.emissionsWithCausalRoot, 186);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the ratified join amendment survives
-  assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 3);
+  assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 7);
+});
+
+/* ===================================================================== *
+ * T-TYPED-RELAY -- close a relay ONLY when the type annotation proves it
+ * can never be an object. 100% syntactic: no type checker, no inference,
+ * no allowlist, no name heuristics.
+ * ===================================================================== */
+
+test('R-T1 POSITIVE: a parameter annotated `string` closes as a proven non-object', () => {
+  const out = branchProbe(
+    'const f = (color: string) => ({ "--ds-x": color });\nexport const C = () => <div style={f("red")} />;',
+  );
+  assert.equal(out.shape.closed, true, 'the annotation must seal the object');
+  assert.notEqual(out.disposition, 'AUTHORED_OPEN');
+});
+
+test('R-T2 POSITIVE: a literal union parameter closes, and a SEALED alias too', () => {
+  const union = branchProbe(
+    "const f = (a: 'left' | 'center' | 'right') => ({ textAlign: a, top: 1 });\nexport const C = () => <div style={f('left')} />;",
+  );
+  assert.equal(union.shape.closed, true);
+  assert.equal(union.disposition, ZERO_D);
+  const alias = branchProbe(
+    "type Align = 'left' | 'center';\nconst f = (a: Align) => ({ textAlign: a, top: 1 });\nexport const C = () => <div style={f('left')} />;",
+  );
+  assert.equal(alias.shape.closed, true, 'a SEALED local alias resolves');
+  assert.equal(alias.disposition, ZERO_D);
+});
+
+test('R-T3 POSITIVE: an explicit primitive RETURN type closes the call', () => {
+  const out = branchProbe(
+    'function n(x: number | undefined): number | undefined { return x; }\n' +
+      'export const C = ({ v }) => { const c = n(v); return <div style={{ top: c, left: 1 }} />; };',
+  );
+  assert.equal(out.shape.closed, true, 'the annotated return must seal the leaf');
+  assert.equal(out.disposition, ZERO_D);
+});
+
+test('R-T4 NEGATIVE: object / any / unknown / never / array / tuple / fn stay OPEN', () => {
+  for (const type of ['object', 'any', 'unknown', 'never', 'string[]', '[string, number]', '() => string']) {
+    const out = branchProbe(
+      `const f = (v: ${type}) => ({ top: v, left: 1 });\nexport const C = () => <div style={f(x)} />;`,
+    );
+    assert.notEqual(out.shape.closed, true, `type ${type} must NOT close`);
+  }
+});
+
+test('R-T5 NEGATIVE: interface, mixed union and unsealed reference stay OPEN', () => {
+  const iface = branchProbe(
+    'interface Opt { a: string }\nconst f = (v: Opt) => ({ top: v, left: 1 });\nexport const C = () => <div style={f(x)} />;',
+  );
+  assert.notEqual(iface.shape.closed, true, 'an interface names an object and must never close');
+  const mixed = branchProbe(
+    'interface Obj { a: string }\nconst f = (v: string | Obj) => ({ top: v, left: 1 });\nexport const C = () => <div style={f(x)} />;',
+  );
+  assert.notEqual(mixed.shape.closed, true, 'one non-primitive member must poison the union');
+  const unsealed = branchProbe(
+    'const f = (v: SomeUnknownType) => ({ top: v, left: 1 });\nexport const C = () => <div style={f(x)} />;',
+  );
+  assert.notEqual(unsealed.shape.closed, true, 'an unresolvable type reference must not close');
+  const aliasToIface = branchProbe(
+    'interface Obj { a: string }\ntype T = Obj;\nconst f = (v: T) => ({ top: v, left: 1 });\nexport const C = () => <div style={f(x)} />;',
+  );
+  assert.notEqual(aliasToIface.shape.closed, true, 'an alias to an interface must not close');
+});
+
+test('R-T6 NEGATIVE: no annotation and an INFERRED return type stay OPEN', () => {
+  const noAnn = branchProbe('const f = (v) => ({ top: v, left: 1 });\nexport const C = () => <div style={f(x)} />;');
+  assert.notEqual(noAnn.shape.closed, true, 'a missing annotation is never a proof');
+  const inferred = branchProbe(
+    'function n(x) { return x; }\nexport const C = ({ v }) => { const c = n(v); return <div style={{ top: c, left: 1 }} />; };',
+  );
+  assert.notEqual(inferred.shape.closed, true, 'an inferred return type is never a proof');
+});
+
+test('R-T7 NEGATIVE: getters are still never evaluated and mutation stays open', () => {
+  const getter = branchProbe('export const C = () => <div style={{ get width(): string { return "1px"; } }} />;');
+  assert.equal(getter.shape.closed, false, 'a getter stays unmodelled even with a primitive return type');
+  const mutated = branchProbe(
+    'export const C = ({ v }) => { let s = { top: 1 }; s.left = v; return <div style={s} />; };',
+  );
+  assert.notEqual(mutated.disposition, ZERO_D);
+});
+
+test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => {
+  const out = buildProducers();
+  assert.equal(out.authoredOpen.length, 66);
+  assert.equal(out.stats.closedProducer, 21);
+  assert.equal(out.stats.openBlocking, 150);
+  // the five other OPEN buckets are untouched
+  assert.equal(out.branchCompositeOpen.length, 55);
+  assert.equal(out.branchConditionalAuthored.length, 2);
+  assert.equal(out.openUnknown.length, 22);
+  assert.equal(out.dynamicSinkPending.length, 4);
+  assert.equal(out.callArgsPending.length, 1);
+  assert.equal(out.computedDomainPending.length, 0);
+  // every closed cohort except closedProducer is untouched
+  assert.equal(out.stats.closedZeroGoverned, 571);
+  assert.equal(out.stats.closedNonObject, 69);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(universeTotal(out), 2024);
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  assert.equal(out.stats.ownershipConflicts, 0);
+  // the 9 arrivals emit a governed channel -- that is WHY they are producers,
+  // not ZEROs, and they stay non-consumable
+  const arrivals = out.closedProducer.filter((r) => r.evidence.governedChannelKeys.includes('--ds-type-line-clamp'));
+  assert.equal(arrivals.length, 9);
+  for (const row of arrivals) {
+    assert.equal(row.consumable, false);
+    assert.equal(row.tenantSafe, false);
+    assert.equal(row.nonConsumableCause, 'governed-producer-with-no-attributed-cascade-root');
+    assert.ok(!('causalRootIds' in row));
+  }
+});
+
+test('R-T9 the typed-relay proof reaches the ARTIFACT, not just the shape', () => {
+  const out = buildProducers();
+  const proven = out.closedProducer.filter((r) => r.evidence.typedRelays);
+  assert.equal(proven.length, 9, 'exactly the 9 typed-relay closures publish their proof');
+  for (const row of proven) {
+    const list = row.evidence.typedRelays;
+    assert.ok(Array.isArray(list) && list.length > 0, `${row.file}:${row.line} published an empty proof`);
+    // exact object shape, no extra and no missing field
+    for (const proof of list) {
+      assert.deepEqual(Object.keys(proof).sort(), ['declaredAt', 'origin', 'ownerFunction', 'typeText']);
+      assert.equal(proof.origin, 'return-type');
+      assert.equal(proof.ownerFunction, 'normalizeLineClamp');
+      assert.equal(proof.typeText, 'number | undefined');
+      assert.equal(proof.declaredAt, 'packages/core/src/ui/primitives/display/Typography/runtime/index.ts:225');
+    }
+    // stable order + exact-tuple dedup
+    const keys = list.map((p) => `${p.origin}|${p.ownerFunction}|${p.declaredAt}|${p.typeText}`);
+    assert.deepEqual(keys, [...keys].sort());
+    assert.equal(new Set(list.map((p) => JSON.stringify(p))).size, list.length);
+    // the proof is evidence of CLOSURE, never governance
+    assert.ok(!('causalRootIds' in row));
+    assert.ok(!('tenantReachable' in row));
+    assert.ok(!('ownerId' in row));
+    assert.equal(row.consumable, false);
+    assert.equal(row.tenantSafe, false);
+  }
+  // no producer that closed by another route gains an empty or spurious field
+  const others = out.closedProducer.filter((r) => !r.evidence.typedRelays);
+  assert.equal(others.length, 12);
+  for (const row of others) assert.equal(row.evidence.typedRelays, undefined);
+});
+
+test('R-T10 NEGATIVE: tampering with a typed-relay proof moves the bound digest', () => {
+  const out = buildProducers();
+  const rows = out.closedProducer.filter((r) => r.evidence.typedRelays).slice(0, 4);
+  const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const mutations = {
+    'proof list emptied': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: [] } })),
+    'proof removed': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: undefined } })),
+    'owner forged': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, ownerFunction: 'somethingElse' })) } })),
+    'type widened': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, typeText: 'any' })) } })),
+    'declaration moved': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, declaredAt: 'fake:1' })) } })),
+    'origin swapped': rows.map((r) => ({ ...r, evidence: { ...r.evidence, typedRelays: r.evidence.typedRelays.map((p) => ({ ...p, origin: 'parameter' })) } })),
+  };
+  for (const [name, mutated] of Object.entries(mutations)) {
+    assert.equal(identity(rows), identity(mutated), `identity must stay blind: ${name}`);
+    assert.notEqual(bound(rows), bound(mutated), `the bound digest MUST notice: ${name}`);
+  }
+  assert.match(out.digests.closedProducerReceipts, /^[0-9a-f]{64}$/);
 });

@@ -689,6 +689,8 @@ export function classifyCrossFileRows() {
         shape && shape.kind !== "computedKey"
           ? normalizeNestedComputedDomains(collectNestedComputedDomains(shape))
           : [];
+      // T-TYPED-RELAY: the annotation proofs that justified this row's closure.
+      const typedRelays = normalizeTypedRelays(collectTypedRelays(shape));
 
       if (governance && disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         governance.zeroEmissionSiteId = zeroEmissionSiteId(canonicalId, "");
@@ -725,6 +727,9 @@ export function classifyCrossFileRows() {
         // P0: non-empty only on rows that closed because an enumeration nested
         // inside them resolved.
         nestedComputedDomains,
+        // T-TYPED-RELAY: non-empty only on rows whose closure rests on a type
+        // annotation proof. Absent everywhere else -- no empty/spurious field.
+        typedRelays,
         sourceParts,
       });
     };
@@ -831,6 +836,57 @@ function collectNestedComputedDomains(shape, visited = new WeakSet(), depth = 0,
       break;
   }
   return out;
+}
+
+/**
+ * T-TYPED-RELAY (Fable P0) -- collect every TYPED-RELAY proof reachable inside
+ * a shape.
+ *
+ * The resolver attaches `typedRelay` to the `nonObject` it produces when a type
+ * annotation proves a value can never be an object. That proof lived only in
+ * memory: it justified the closure but never reached the artifact, so a reader
+ * of `producers.json` could not audit WHY the row closed. This walks the LIVE
+ * shape -- exactly as `collectNestedComputedDomains` does -- and carries the
+ * proofs out to the published row.
+ *
+ * Every container is traversed (object entries, array elements, branch arms,
+ * computedKey arms and the `viaComputedDomain` back-reference), so a proof
+ * buried under a branch, a spread or a return is never dropped.
+ */
+function collectTypedRelays(shape, visited = new WeakSet(), depth = 0, out = []) {
+  if (!shape || typeof shape !== "object" || depth > 80) return out;
+  if (visited.has(shape)) return out;
+  visited.add(shape);
+  if (shape.typedRelay) {
+    out.push({
+      origin: shape.typedRelay.origin ?? null,
+      ownerFunction: shape.typedRelay.ownerFunction ?? null,
+      declaredAt: shape.typedRelay.declaredAt ?? null,
+      typeText: shape.typedRelay.typeText ?? null,
+    });
+  }
+  if (shape.viaComputedDomain) collectTypedRelays(shape.viaComputedDomain, visited, depth + 1, out);
+  for (const entry of shape.order ?? []) collectTypedRelays(entry.shape, visited, depth + 1, out);
+  for (const el of shape.elements ?? []) collectTypedRelays(el.shape, visited, depth + 1, out);
+  for (const b of shape.branches ?? []) collectTypedRelays(b, visited, depth + 1, out);
+  return out;
+}
+
+/** Stable order + exact-identity dedup for the typed-relay list. */
+function normalizeTypedRelays(list) {
+  const seen = new Set();
+  const unique = [];
+  for (const item of list) {
+    const identity = JSON.stringify(item);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    unique.push(item);
+  }
+  return unique.sort((a, b) => {
+    const ka = `${a.origin ?? ""}|${a.ownerFunction ?? ""}|${a.declaredAt ?? ""}|${a.typeText ?? ""}`;
+    const kb = `${b.origin ?? ""}|${b.ownerFunction ?? ""}|${b.declaredAt ?? ""}|${b.typeText ?? ""}`;
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
 }
 
 /** Stable order + exact-identity dedup for the nested-domain list. */
@@ -984,6 +1040,11 @@ export function boundedReceiptOf(row) {
         ...(row.receipt?.kind === "computedKey"
           ? { computedDomain: computedDomainReceipt(row, path) }
           : {}),
+        // T-TYPED-RELAY: the annotation proofs that closed this row, published
+        // so the artifact can be audited without re-running the resolver. Only
+        // present when there ARE proofs -- a producer that closed by any other
+        // route gains no field at all.
+        ...(row.typedRelays?.length ? { typedRelays: row.typedRelays } : {}),
         governedProducerSiteId: governance?.governedProducerSiteId ?? null,
         customPropertyScanComplete: governance?.customPropertyScanComplete ?? null,
         governedChannelKeys: [...(governance?.governedChannelKeys ?? [])].sort(),

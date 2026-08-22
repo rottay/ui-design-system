@@ -308,6 +308,93 @@ function nearestFunctionOrSource(node) {
   return c;
 }
 
+/* ------------------------------------------- typed relay closure (AST) --- */
+/**
+ * T-TYPED-RELAY -- prove from the TYPE ANNOTATION alone that a value can never
+ * be an object.
+ *
+ * The resolver already closes a leaf when the VALUE's syntax proves it is a
+ * non-object (T-NO-68, on `SyntaxKind`). This is the same principle applied to
+ * the declared TYPE: a parameter annotated `string`, or a callee whose return
+ * type is written `number | undefined`, cannot deliver a style object, so the
+ * relay is a proven non-object rather than an unexamined passthrough.
+ *
+ * The proof is 100% syntactic -- no type checker, no inference, no allowlist,
+ * no name heuristics. Everything that is not exhaustively proven stays OPEN:
+ * interfaces, object/array/tuple types, `any`, `unknown`, `never`, function
+ * types, mixed unions, an unsealed type reference, and a missing annotation.
+ *
+ * A type REFERENCE is followed only when it resolves to a SEALED type alias --
+ * a local `type X = ...`, or one reached through a real import binding -- and
+ * the alias body itself passes this same predicate. An interface never
+ * qualifies: an interface names an object.
+ */
+const PRIMITIVE_TYPE_KEYWORDS = new Set([
+  ts.SyntaxKind.StringKeyword,
+  ts.SyntaxKind.NumberKeyword,
+  ts.SyntaxKind.BooleanKeyword,
+]);
+const NULLISH_TYPE_KEYWORDS = new Set([ts.SyntaxKind.UndefinedKeyword, ts.SyntaxKind.NullKeyword, ts.SyntaxKind.VoidKeyword]);
+
+function literalTypeIsPrimitive(literal) {
+  if (!literal) return false;
+  if (ts.isStringLiteralLike(literal) || ts.isNumericLiteral(literal)) return true;
+  if (literal.kind === ts.SyntaxKind.TrueKeyword || literal.kind === ts.SyntaxKind.FalseKeyword) return true;
+  if (literal.kind === ts.SyntaxKind.NullKeyword) return true;
+  // `-1` arrives as a prefix unary over a numeric literal
+  if (ts.isPrefixUnaryExpression(literal) && ts.isNumericLiteral(literal.operand)) return true;
+  return false;
+}
+
+/** Find a SEALED type alias declaration for `name`, locally or through an import. */
+function resolveSealedTypeAlias(name, source, depth) {
+  if (depth > 8) return null;
+  for (const stmt of source.statements) {
+    if (ts.isTypeAliasDeclaration(stmt) && stmt.name.text === name) return { typeNode: stmt.type, source };
+    // an interface with this name is a definitive NEGATIVE: it names an object
+    if (ts.isInterfaceDeclaration(stmt) && stmt.name.text === name) return null;
+  }
+  const imports = collectModuleImports(source);
+  const imported = imports.get(name);
+  // only a real named import is followed; namespace/default forms are not proven
+  if (!imported || imported.form !== "named") return null;
+  const targetFile = resolveImportTargetFile(imported.moduleSpecifier, source.fileName);
+  if (!targetFile) return null;
+  const entry = getSource(targetFile);
+  if (!entry) return null;
+  const wanted = imported.importedName ?? name;
+  for (const stmt of entry.source.statements) {
+    if (ts.isTypeAliasDeclaration(stmt) && stmt.name.text === wanted) {
+      return { typeNode: stmt.type, source: entry.source };
+    }
+    if (ts.isInterfaceDeclaration(stmt) && stmt.name.text === wanted) return null;
+  }
+  // a re-export chain is followed one hop through the target's own imports
+  return resolveSealedTypeAlias(wanted, entry.source, depth + 1);
+}
+
+function isPrimitiveCssScalarTypeNode(typeNode, source, depth = 0, seen = new Set()) {
+  if (!typeNode || depth > 8) return false;
+  if (ts.isParenthesizedTypeNode(typeNode)) return isPrimitiveCssScalarTypeNode(typeNode.type, source, depth + 1, seen);
+  if (PRIMITIVE_TYPE_KEYWORDS.has(typeNode.kind)) return true;
+  if (NULLISH_TYPE_KEYWORDS.has(typeNode.kind)) return true;
+  if (ts.isLiteralTypeNode(typeNode)) return literalTypeIsPrimitive(typeNode.literal);
+  if (ts.isUnionTypeNode(typeNode)) {
+    return typeNode.types.length > 0 && typeNode.types.every((t) => isPrimitiveCssScalarTypeNode(t, source, depth + 1, seen));
+  }
+  if (ts.isTypeReferenceNode(typeNode) && ts.isIdentifier(typeNode.typeName)) {
+    // a generic instantiation is never proven primitive
+    if (typeNode.typeArguments && typeNode.typeArguments.length > 0) return false;
+    const key = `${source.fileName}::${typeNode.typeName.text}`;
+    if (seen.has(key)) return false; // alias cycle -> fail closed
+    seen.add(key);
+    const alias = resolveSealedTypeAlias(typeNode.typeName.text, source, depth);
+    if (!alias) return false;
+    return isPrimitiveCssScalarTypeNode(alias.typeNode, alias.source, depth + 1, seen);
+  }
+  return false;
+}
+
 /* ------------------------------------------------------- binding lookup --- */
 function resolveBinding(name, useNode, source, moduleImports) {
   let current = useNode;
@@ -329,6 +416,12 @@ function resolveBinding(name, useNode, source, moduleImports) {
               ownerFunction: ownerName,
               declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(param.getStart(source)).line + 1}`,
               paramText: param.getText(source).slice(0, 100),
+              // T-TYPED-RELAY: only a NON-destructured parameter carries its own
+              // annotation. A destructured one is typed by the pattern's type,
+              // whose property signatures live on an interface/type literal --
+              // never proven primitive here.
+              declaredType: leaf.isDestructured ? null : (param.type ?? null),
+              declaredTypeSource: leaf.isDestructured ? null : source,
               defaultInit: leaf.defaultInit,
             };
           }
@@ -698,6 +791,26 @@ export function resolveShape(node, ctx) {
     if (binding.kind === "param") {
       const stepPath = [...path, { kind: binding.isDestructured ? "destructuredParam" : "directParam", name: n.text, declaredAt: binding.declaredAt, ownerFunction: binding.ownerFunction }];
       if (binding.isRest) return { kind: "callArgsPending", reason: "rest-parameter-substitution-not-implemented", path: stepPath };
+      /* T-TYPED-RELAY: the annotation alone can prove this value is never an
+       * object. Only a syntactically primitive CSS scalar qualifies; anything
+       * unproven falls through to the relay exactly as before. */
+      if (
+        binding.declaredType &&
+        binding.declaredTypeSource &&
+        isPrimitiveCssScalarTypeNode(binding.declaredType, binding.declaredTypeSource)
+      ) {
+        return {
+          kind: "nonObject",
+          reason: "typed-relay-primitive",
+          typedRelay: {
+            origin: "parameter",
+            ownerFunction: binding.ownerFunction ?? null,
+            declaredAt: binding.declaredAt ?? null,
+            typeText: binding.declaredType.getText(binding.declaredTypeSource).slice(0, 120),
+          },
+          path: stepPath,
+        };
+      }
       const relayShape = { kind: "relay", binding, path: stepPath };
       if (binding.defaultInit) {
         const def = resolveShape(binding.defaultInit, freshCtx(ctx, { depth: depth + 1, path: stepPath }));
@@ -798,7 +911,10 @@ export function resolveShape(node, ctx) {
         if (visitedCalls.has(callKey)) return { kind: "openUnknown", reason: "recursive-call-cycle", path: [...path, { kind: "callToHoistedFunction-cycle", declaredAt: binding.declaredAt }] };
         const sub = buildSubstitution(binding.node, n, ctx);
         return withArgumentComputedDomains(
-          resolveFunctionBody(binding.node, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToHoistedFunction", declaredAt: binding.declaredAt }] })),
+          withAnnotatedPrimitiveReturn(
+            resolveFunctionBody(binding.node, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToHoistedFunction", declaredAt: binding.declaredAt }] })),
+            binding.node, source, [...path, { kind: "callToHoistedFunction", declaredAt: binding.declaredAt }],
+          ),
           n, ctx, path, depth,
         );
       }
@@ -817,7 +933,10 @@ export function resolveShape(node, ctx) {
           if (visitedCalls.has(callKey)) return { kind: "openUnknown", reason: "recursive-call-cycle", path: [...path, { kind: "callToLocalFunctionValue-cycle", declaredAt: binding.declaredAt }] };
           const sub = buildSubstitution(fnNode, n, ctx);
           return withArgumentComputedDomains(
-            resolveFunctionBody(fnNode, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToLocalFunctionValue", declaredAt: binding.declaredAt }] })),
+            withAnnotatedPrimitiveReturn(
+              resolveFunctionBody(fnNode, freshCtx(ctx, { substitution: sub, visitedCalls: new Set([...visitedCalls, callKey]), depth, path: [...path, { kind: "callToLocalFunctionValue", declaredAt: binding.declaredAt }] })),
+              fnNode, source, [...path, { kind: "callToLocalFunctionValue", declaredAt: binding.declaredAt }],
+            ),
             n, ctx, path, depth,
           );
         }
@@ -1032,6 +1151,32 @@ function withArgumentComputedDomains(result, callNode, ctx, path, depth) {
     ...result,
     viaComputedDomain:
       fresh.length === 1 ? fresh[0] : { kind: "branches", branches: fresh, path: result.path ?? [] },
+  };
+}
+
+/**
+ * T-TYPED-RELAY -- a callee whose RETURN TYPE is written as a primitive CSS
+ * scalar cannot hand back a style object, whatever its body does.
+ *
+ * Applied only AFTER the body has been resolved and only when the body left the
+ * value OPEN: a body that already resolved keeps its own, more specific
+ * evidence, so no row that closes today changes its receipt. The annotation
+ * must be present syntactically -- an inferred return type is never accepted.
+ */
+function withAnnotatedPrimitiveReturn(result, fnNode, source, path) {
+  if (!fnNode || !fnNode.type) return result;
+  if (result && isShapeClosed(result)) return result;
+  if (!isPrimitiveCssScalarTypeNode(fnNode.type, source)) return result;
+  return {
+    kind: "nonObject",
+    reason: "typed-relay-primitive",
+    typedRelay: {
+      origin: "return-type",
+      ownerFunction: fnNode.name ? fnNode.name.text : enclosingSymbol(fnNode),
+      declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(fnNode.getStart(source)).line + 1}`,
+      typeText: fnNode.type.getText(source).slice(0, 120),
+    },
+    path,
   };
 }
 
