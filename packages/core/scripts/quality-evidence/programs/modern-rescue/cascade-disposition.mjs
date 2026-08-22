@@ -15,7 +15,7 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
 import { resolveShape, readProperty, isShapeClosed, classifyRelayBoundary, getSource } from "./cascade-cross-file-resolver.mjs";
-import { governanceOutcome, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "./cascade-governance.mjs";
+import { governanceOutcome, governanceAnalysis, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "./cascade-governance.mjs";
 /**
  * v4 driver — READ-ONLY. Same verbatim sink-anchored walk as
  * cascade-producers.mjs's scanTsxSource() / v3's drive.mjs (byte-identical
@@ -400,6 +400,132 @@ export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
         return { disposition: "BRANCH_CONDITIONAL_AUTHORED", governance: outcome.governance };
       }
 
+      /* T-BRANCH-RELAY-99: a tree whose only non-authored terminals are RELAYS.
+       *
+       * A relay terminal can never be proven ZERO -- nobody can see the object
+       * the caller supplies -- so the tree cannot close as a zero emission. But
+       * it CAN inherit a relay disposition, and only under all of:
+       *
+       *   (a) every terminal is exhaustively resolved: a closed object/array, a
+       *       proven non-object, or a relay. One open/dynamic/computed/callArgs
+       *       terminal anywhere and the row stays composite;
+       *   (b) the AUTHORED terminals emit nothing governed and nothing socketed,
+       *       proven by a complete scan over just those terminals. A real
+       *       emission means the tree writes channels of its own, which no relay
+       *       disposition may absorb;
+       *   (c) every relay terminal is classified by the SAME typed authority the
+       *       top-level shapes use (`classifyRelayBoundary`), and they all land
+       *       on ONE disposition. A public/private mix, or any
+       *       PUBLIC_BOUNDARY_UNKNOWN, keeps the row blocking -- an
+       *       investigated-but-inconclusive relay is never a candidate.
+       *
+       * The composite site then inherits that single disposition, and with it
+       * `consumable:false` / `tenantSafe:false`. A relay is never turned into a
+       * ZERO, and no owner, root or tenant reach is invented: the receipt is
+       * exactly the per-terminal evidence the authority already produced.
+       */
+      const terminals = [];
+      const collect = (arm) => {
+        if (arm.kind === "branches") {
+          for (const child of arm.branches ?? []) collect(child);
+          return;
+        }
+        terminals.push(arm);
+      };
+      for (const arm of shape.branches) collect(arm);
+
+      const relayTerminals = terminals.filter((t) => t.kind === "relay");
+      const authoredTerminals = terminals.filter((t) => t.kind !== "relay");
+      const everyTerminalResolved = terminals.every(
+        (t) =>
+          t.kind === "relay" ||
+          t.kind === "nonObject" ||
+          ((t.kind === "object" || t.kind === "array") && t.closed === true),
+      );
+
+      if (relayTerminals.length > 0 && everyTerminalResolved) {
+        // (b) the authored half must be provably silent. Scanned on its OWN
+        // synthetic tree so the relays -- which would fail the scan closed by
+        // construction -- do not mask a real emission from the authored arms.
+        const authoredScan = governanceAnalysis(
+          { kind: "branches", branches: authoredTerminals },
+          ctx,
+          sourceParts,
+        );
+        const authoredSilent =
+          authoredScan.customPropertyScanComplete &&
+          authoredScan.governedChannelKeys.length === 0 &&
+          authoredScan.internalSocketKeys.length === 0;
+
+        /* The authority is asked about `ctx.fileRel`, so it is only sound when
+         * the relay's owning function is declared in THAT file. Every relay
+         * terminal in the live tree satisfies this (106/106 measured), but a
+         * cross-file owner would be classified against the wrong file, so it is
+         * refused explicitly rather than left as a latent assumption. */
+        const fileOf = (declaredAt) => (typeof declaredAt === "string" ? declaredAt.split(":")[0] : null);
+        const foreignOwner = relayTerminals.some(
+          (t) => fileOf(t.binding?.declaredAt) !== null && fileOf(t.binding?.declaredAt) !== ctx.fileRel,
+        );
+
+        // (c) one typed verdict for every relay terminal, from the same authority
+        const verdicts = relayTerminals.map((t) =>
+          classifyRelayBoundary(t.binding, ctx.sinkTagName ?? null, ctx.fileRel),
+        );
+        const dispositionOfVerdict = (v) =>
+          v.candidate ? "PUBLIC_BOUNDARY_CANDIDATE" : v.kind === "PUBLIC_BOUNDARY_UNKNOWN" ? "PUBLIC_BOUNDARY_UNKNOWN" : "RELAY_PRIVATE_UNRESOLVED";
+        const inherited = [...new Set(verdicts.map(dispositionOfVerdict))];
+        const singleDisposition = inherited.length === 1 ? inherited[0] : null;
+
+        if (authoredSilent && !foreignOwner && singleDisposition && singleDisposition !== "PUBLIC_BOUNDARY_UNKNOWN") {
+          return {
+            disposition: singleDisposition,
+            governance: null,
+            branchRelayReceipt: {
+              inheritedFrom: singleDisposition,
+              terminalCount: terminals.length,
+              relayTerminalCount: relayTerminals.length,
+              authoredTerminalCount: authoredTerminals.length,
+              authoredTerminalsSilent: true,
+              authoredScanComplete: authoredScan.customPropertyScanComplete,
+              relayKinds: [...new Set(verdicts.map((v) => v.kind))].sort(),
+              relayBindingKinds: [...new Set(relayTerminals.map((t) => t.binding?.kind ?? null))].filter(Boolean).sort(),
+              relayOwners: [...new Set(relayTerminals.map((t) => t.binding?.ownerFunction ?? null))].filter(Boolean).sort(),
+              exportEvidence: verdicts
+                .map((v) => v.exportEvidence)
+                .filter(Boolean)
+                .map((e) => ({ entrypoint: e.entrypoint ?? null, exportedAs: e.exportedAs ?? null, via: e.via ?? null, hopChainDepth: e.hopChain?.length ?? 0 }))
+                .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
+            },
+          };
+        }
+        // Otherwise the row stays composite, and the cause is published below.
+        return {
+          disposition: "BRANCH_COMPOSITE_OPEN",
+          governance: null,
+          branchRelayReceipt: {
+            inheritedFrom: null,
+            blockedBy: !authoredSilent
+              ? authoredScan.customPropertyScanComplete
+                ? "authored-terminals-emit-governed-channels"
+                : "authored-terminal-scan-incomplete"
+              : foreignOwner
+                ? "relay-terminal-owner-declared-in-another-file"
+                : inherited.length > 1
+                  ? "relay-terminals-disagree-on-disposition"
+                  : "relay-terminal-public-boundary-unknown",
+            terminalCount: terminals.length,
+            relayTerminalCount: relayTerminals.length,
+            authoredTerminalCount: authoredTerminals.length,
+            authoredTerminalsSilent: authoredSilent,
+            authoredScanComplete: authoredScan.customPropertyScanComplete,
+            governedChannelKeys: [...authoredScan.governedChannelKeys].sort(),
+            internalSocketKeys: [...authoredScan.internalSocketKeys].sort(),
+            relayDispositions: inherited.sort(),
+            relayKinds: [...new Set(verdicts.map((v) => v.kind))].sort(),
+          },
+        };
+      }
+
       if ((anyObjectClosed || anyObjectOpen || anyOpaque) && kinds.some((k) => k === "nonObject")) {
         return { disposition: anyOpaque || anyObjectOpen ? "BRANCH_COMPOSITE_OPEN" : "BRANCH_CONDITIONAL_AUTHORED", governance: null };
       }
@@ -468,6 +594,9 @@ export function classifyCrossFileRows() {
     const text = readFileSync(abs, "utf8");
 
     const onUnresolved = (node, form, reason, source, relFile, sinkNode) => {
+      // Hoisted: the SAME sink tag drives the relay authority for the top-level
+      // shape and for every relay terminal buried inside a conditional tree.
+      const sinkTagName = ts.isJsxAttribute(sinkNode) ? sinkTagNameOf(sinkNode) : null;
       const { line } = source.getLineAndCharacterOfPosition(node.getStart(source));
       const ordinal = node.getStart(source);
       const symbol = enclosingSymbol(node);
@@ -488,8 +617,7 @@ export function classifyCrossFileRows() {
         const baseCtx = { source, fileRel: relFile, depth: 0, path: [{ kind: "terminal-at-sink", form }] };
         shape = resolveShape(startExpr, baseCtx);
         if (shape.kind === "relay") {
-          const tagName = ts.isJsxAttribute(sinkNode) ? sinkTagNameOf(sinkNode) : null;
-          boundaryReceipt = classifyRelayBoundary(shape.binding, tagName, relFile);
+          boundaryReceipt = classifyRelayBoundary(shape.binding, sinkTagName, relFile);
         }
       }
 
@@ -538,8 +666,10 @@ export function classifyCrossFileRows() {
         rawOrderedParts = rawOrderedParts.map((p, i) => ({ ...p, sourcePartId: sourceParts[i].sourcePartId }));
       }
 
-      const govCtx = { sinkNode: startExpr, sourceFile: source, fileRel: relFile, line: line + 1 };
-      const { disposition, governance } = dispositionOf(shape, boundaryReceipt, govCtx, rawOrderedParts);
+      const govCtx = { sinkNode: startExpr, sourceFile: source, fileRel: relFile, line: line + 1, sinkTagName };
+      const { disposition, governance, branchRelayReceipt = null } = dispositionOf(
+        shape, boundaryReceipt, govCtx, rawOrderedParts,
+      );
 
       if (governance && disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         governance.zeroEmissionSiteId = zeroEmissionSiteId(canonicalId, "");
@@ -569,6 +699,10 @@ export function classifyCrossFileRows() {
         receipt: summary,
         boundaryReceipt,
         governance,
+        // T-BRANCH-RELAY-99: present only on conditional trees whose non-authored
+        // terminals are relays -- carries the per-terminal evidence for the
+        // inheritance, or the published cause when it was refused.
+        branchRelayReceipt,
         sourceParts,
       });
     };
@@ -697,6 +831,15 @@ function branchTreeCensus(arms) {
  */
 export function boundedReceiptOf(row) {
   const path = (row.resolutionPath ?? []).map((step) => step.kind);
+  /* T-BRANCH-RELAY-99: a conditional tree that INHERITED its relay disposition
+   * is structurally a different object from a direct relay -- it has terminals,
+   * an authored half that had to be proven silent, and possibly several export
+   * chains. It publishes that evidence instead of the direct-relay projection,
+   * which would have been degenerate here (no `boundaryReceipt` exists on these
+   * rows). Rows without `branchRelayReceipt` are untouched. */
+  if (row.branchRelayReceipt && row.branchRelayReceipt.inheritedFrom) {
+    return { ...row.branchRelayReceipt, resolvedVia: "branch-relay-inheritance", path };
+  }
   switch (row.disposition) {
     case "PUBLIC_BOUNDARY_CANDIDATE": {
       const evidence = row.boundaryReceipt?.exportEvidence ?? {};

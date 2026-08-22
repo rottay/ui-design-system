@@ -827,7 +827,7 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.deepEqual(byReason, {});
   assert.equal(out.stats.unknownProvenance, 0);
   // the reasons did NOT evaporate: they moved, with their forms, into the seven
-  assert.equal(openRows(out).length, 309);
+  assert.equal(openRows(out).length, 210);
   assert.equal(
     openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
     4,
@@ -890,11 +890,11 @@ test('Z-4 boundary 523 and relay 591 remain unknown and non-consumable', () => {
   const { rows } = classifyCrossFileRows();
   const by = {};
   for (const r of rows) by[r.disposition] = (by[r.disposition] || 0) + 1;
-  assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 523);
-  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 591);
+  assert.equal(by.PUBLIC_BOUNDARY_CANDIDATE, 538); // 523 direct + 15 inherited
+  assert.equal(by.RELAY_PRIVATE_UNRESOLVED, 675); // 591 direct + 84 inherited
   assert.equal(by[ZERO], 529); // 486 + 43 by branch union (T-BRANCH-37 + -COMPOSITE-162)
   assert.equal(by.BRANCH_CONDITIONAL_AUTHORED, 2); // the 2 that genuinely emit
-  assert.equal(by.BRANCH_COMPOSITE_OPEN, 154); // 162 - 8 nested trees resolved
+  assert.equal(by.BRANCH_COMPOSITE_OPEN, 55); // 162 - 8 nested - 99 relay-inherited
   assert.equal(by.CLOSED_NONOBJECT, 69); // 68 reachable by A4 + 1 member-access
   assert.equal(Object.values(by).reduce((a, b) => a + b, 0), 2024);
 });
@@ -1023,8 +1023,8 @@ const universeTotal = (out) => ALL_COLLECTIONS.reduce((acc, name) => acc + out[n
 
 test('T-1 the four cohorts have exactly the measured sizes and the residual is 352', () => {
   const out = buildProducers();
-  assert.equal(out.stats.publicBoundary, 523);
-  assert.equal(out.stats.privateRelay, 591);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.stats.privateRelay, 675);
   assert.equal(out.stats.closedProducer, 3);
   assert.equal(out.stats.closedNonObject, 69);
   // stats mirror the arrays, never a bare counter
@@ -1034,7 +1034,7 @@ test('T-1 the four cohorts have exactly the measured sizes and the residual is 3
   // T-TYPED-1118 moved exactly 1118 rows; T-FINAL-352 moved the remaining 352
   assert.equal(523 + 591 + 3 + 1, 1118);
   assert.equal(1470 - 1118, 352);
-  assert.equal(out.stats.openBlocking, 309); // 352 - 35 flat - 8 nested
+  assert.equal(out.stats.openBlocking, 210); // 352 - 35 flat - 8 nested - 99 relay-inherited
   assert.equal(out.stats.unknownProvenance, 0);
 });
 
@@ -1102,8 +1102,22 @@ test('T-5 every cohort row carries a receipt sufficient to audit origin and reas
     assert.ok(Array.isArray(row.relayKinds));
     assert.ok(row.occurrences >= 1);
   }
-  // a boundary receipt names the PUBLIC entrypoint that exposes it
+  // A boundary receipt names the PUBLIC entrypoint that exposes it. Since
+  // T-BRANCH-RELAY-99 there are two structurally different boundary rows and
+  // they are checked apart rather than flattened: a DIRECT relay carries one
+  // export chain inline; a conditional tree that INHERITED the disposition
+  // carries one chain per relay terminal under `exportEvidence`.
+  const inheritedB = (row) => row.evidence.resolvedVia === 'branch-relay-inheritance';
   for (const row of out.publicBoundary) {
+    if (inheritedB(row)) {
+      assert.ok(row.evidence.exportEvidence.length > 0, `${row.file}:${row.line} inherited boundary with no export chain`);
+      for (const chain of row.evidence.exportEvidence) {
+        assert.ok(chain.entrypoint, `${row.file}:${row.line} inherited chain must name its entrypoint`);
+        assert.ok(chain.exportedAs, `${row.file}:${row.line} inherited chain must name its export`);
+        assert.ok(chain.hopChainDepth >= 1);
+      }
+      continue;
+    }
     assert.ok(row.evidence.entrypoint, `${row.file}:${row.line} boundary receipt must name its entrypoint`);
     assert.ok(row.evidence.exportedAs, `${row.file}:${row.line} boundary receipt must name its export`);
     assert.ok(row.evidence.hopChainDepth >= 1);
@@ -1230,7 +1244,7 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
   // sites are now blocking under their own names.
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
-  assert.equal(out.stats.openBlocking, 309);
+  assert.equal(out.stats.openBlocking, 210);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false, 'lot B must stay shut while open debt exists');
   // the residual dispositions are the ones NO tranche has proven anything about
@@ -1240,11 +1254,11 @@ test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
     'RELAY_PRIVATE_UNRESOLVED', 'CLOSED_PRODUCER', 'CLOSED_NONOBJECT',
   ]);
   const residual = rows.filter((r) => !drained.has(r.disposition));
-  assert.equal(residual.length, 309);
+  assert.equal(residual.length, 210);
   const byDisposition = {};
   for (const r of residual) byDisposition[r.disposition] = (byDisposition[r.disposition] || 0) + 1;
   assert.deepEqual(byDisposition, {
-    BRANCH_COMPOSITE_OPEN: 154,
+    BRANCH_COMPOSITE_OPEN: 55,
     AUTHORED_OPEN: 99,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 28,
@@ -1282,7 +1296,26 @@ test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-s
 
   // A relay row exists BECAUSE a sink classified it, so its kind list is never
   // empty; an empty one would mean the evidence was dropped on the way out.
-  for (const row of out.privateRelay) {
+  // A row that INHERITED its disposition from a conditional tree has no single
+  // `boundaryReceipt` to merge, so its typed kinds live in the receipt instead
+  // of at row level. Fabricating a row-level value would invent a sink that
+  // does not exist, so the two shapes are asserted apart.
+  const inheritedRow = (row) => row.evidence && row.evidence.resolvedVia === 'branch-relay-inheritance';
+  assert.equal(out.privateRelay.filter(inheritedRow).length, 84);
+  assert.equal(out.publicBoundary.filter(inheritedRow).length, 15);
+  for (const row of [...out.privateRelay, ...out.publicBoundary].filter(inheritedRow)) {
+    assert.deepEqual(row.relayKinds, [], 'an inherited row has no single sink to merge');
+    assert.deepEqual(row.sinkTags, []);
+    assert.ok(row.evidence.relayKinds.length > 0, `${row.file}:${row.line} inherited row published no typed relay kind`);
+    assert.ok(isSorted(row.evidence.relayKinds) && !hasDuplicates(row.evidence.relayKinds));
+    for (const kind of row.evidence.relayKinds) {
+      assert.ok(
+        RELAY_KINDS.has(kind) || BOUNDARY_KINDS.has(kind),
+        `${row.file}:${row.line} unknown inherited relay kind ${kind}`,
+      );
+    }
+  }
+  for (const row of out.privateRelay.filter((r) => !inheritedRow(r))) {
     assert.ok(row.relayKinds.length > 0, `${row.file}:${row.line} relay published no relayKinds`);
     assert.ok(isSorted(row.relayKinds), `${row.file}:${row.line} relayKinds must be sorted`);
     assert.ok(!hasDuplicates(row.relayKinds), `${row.file}:${row.line} relayKinds must be a set`);
@@ -1291,7 +1324,7 @@ test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-s
     }
     assert.ok(row.sinkTags.length > 0 && isSorted(row.sinkTags) && !hasDuplicates(row.sinkTags));
   }
-  for (const row of out.publicBoundary) {
+  for (const row of out.publicBoundary.filter((r) => !inheritedRow(r))) {
     assert.ok(row.relayKinds.length > 0, `${row.file}:${row.line} boundary published no relayKinds`);
     assert.ok(isSorted(row.relayKinds) && !hasDuplicates(row.relayKinds));
     for (const kind of row.relayKinds) {
@@ -1339,7 +1372,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   assert.deepEqual(out.unknownProvenance, []);
   // the seven exact counts -- measured, not estimated
   assert.deepEqual(out.stats.openBacklogByDisposition, {
-    BRANCH_COMPOSITE_OPEN: 154,
+    BRANCH_COMPOSITE_OPEN: 55,
     AUTHORED_OPEN: 99,
     BRANCH_CONDITIONAL_AUTHORED: 2,
     OPEN_UNKNOWN: 28,
@@ -1347,15 +1380,15 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
     DYNAMIC_SINK_PENDING: 4,
     CALL_ARGS_PENDING: 1,
   });
-  assert.equal(out.branchCompositeOpen.length, 154);
+  assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.authoredOpen.length, 99);
   assert.equal(out.branchConditionalAuthored.length, 2);
   assert.equal(out.openUnknown.length, 28);
   assert.equal(out.computedDomainPending.length, 21);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
-  assert.equal(openRows(out).length, 309);
-  assert.equal(out.stats.openBlocking, 309);
+  assert.equal(openRows(out).length, 210);
+  assert.equal(out.stats.openBlocking, 210);
   // TOTAL conservation across every collection, closed and open
   assert.equal(universeTotal(out), 2024);
   assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2024);
@@ -1405,7 +1438,7 @@ test('T-17 coverage is 1:1: every site is in exactly ONE collection', () => {
 test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed', () => {
   const out = buildProducers();
   const rows = openRows(out);
-  assert.equal(rows.length, 309);
+  assert.equal(rows.length, 210);
   for (const row of rows) {
     assert.equal(row.blocking, true, `${row.file}:${row.line} open row must stay blocking`);
     assert.equal(row.consumable, false);
@@ -1422,7 +1455,7 @@ test('T-18 NEGATIVE: every open row is blocking, non-consumable and NOT closed',
     assert.match(row.reason, /:[a-zA-Z-]+$/, 'the reason must keep the site form');
   }
   // the rollup agrees with the rows, and does not pretend lot B opened
-  assert.equal(out.openBacklogRollup.total, 309);
+  assert.equal(out.openBacklogRollup.total, 210);
   assert.equal(out.openBacklogRollup.blocking, true);
   assert.equal(out.openBacklogRollup.lotBOpen, false);
   assert.match(out.openBacklogRollup.statement, /CLASSIFIED, not resolved/);
@@ -1520,8 +1553,8 @@ test('T-22 reordering the classifier input changes NEITHER output NOR digest', (
 test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched', () => {
   const out = buildProducers();
   // closed cohorts from the previous tranches
-  assert.equal(out.stats.publicBoundary, 523);
-  assert.equal(out.stats.privateRelay, 591);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.stats.privateRelay, 675);
   assert.equal(out.stats.closedProducer, 3);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.closedZeroGoverned, 529);
@@ -1657,13 +1690,22 @@ test('B-7c a nested conditional with an UNRESOLVED terminal stays composite', ()
   assert.equal(out.governance, null);
 });
 
-test('B-7d a nested conditional carrying a RELAY terminal stays composite', () => {
-  // relay arms are the largest real blocker in the live tree (99 of the 154)
+test('B-7d a nested conditional with a RELAY terminal INHERITS the relay disposition', () => {
+  // This was T-BRANCH-COMPOSITE-162's boundary: a relay terminal kept the tree
+  // composite. T-BRANCH-RELAY-99 crosses it, so the assertion is INVERTED on the
+  // same fixture rather than deleted. The authored terminals are silent and the
+  // single relay terminal has no public export path, so the tree inherits
+  // PRIVATE -- and is NEVER turned into a ZERO.
   const out = branchProbe(
     'export const C = ({ handed }) => <div style={a ? {top:1} : b ? handed : {right:3}} />;',
   );
-  assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
-  assert.equal(out.governance, null);
+  assert.equal(out.disposition, 'RELAY_PRIVATE_UNRESOLVED');
+  assert.notEqual(out.disposition, ZERO_D);
+  assert.equal(out.governance, null, 'an inherited row carries no governance verdict');
+  assert.equal(out.branchRelayReceipt.inheritedFrom, 'RELAY_PRIVATE_UNRESOLVED');
+  assert.equal(out.branchRelayReceipt.authoredTerminalsSilent, true);
+  assert.equal(out.branchRelayReceipt.relayTerminalCount, 1);
+  assert.equal(out.branchRelayReceipt.authoredTerminalCount, 2);
 });
 
 test('B-8 arm ORDER does not change the verdict or the union', () => {
@@ -1718,7 +1760,7 @@ test('B-9 the live tree drains 43 branch rows and the 2 survivors name their cha
     assert.ok(!('causalRootIds' in row));
     assert.ok(!('ownerId' in row));
   }
-  assert.equal(out.stats.openBlocking, 309);
+  assert.equal(out.stats.openBlocking, 210);
 });
 
 test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => {
@@ -1739,18 +1781,18 @@ test('B-10 NEGATIVE: mutating a branch witness moves the receipt digest', () => 
 
 test('B-11 the composite and every other open cohort is untouched by this tranche', () => {
   const out = buildProducers();
-  assert.equal(out.branchCompositeOpen.length, 154);
+  assert.equal(out.branchCompositeOpen.length, 55);
   assert.equal(out.authoredOpen.length, 99);
   assert.equal(out.openUnknown.length, 28);
   assert.equal(out.computedDomainPending.length, 21);
   assert.equal(out.dynamicSinkPending.length, 4);
   assert.equal(out.callArgsPending.length, 1);
   assert.equal(out.branchConditionalAuthored.length, 2);
-  assert.equal(openRows(out).length, 309);
+  assert.equal(openRows(out).length, 210);
   assert.equal(universeTotal(out), 2024);
   // frozen closed cohorts and producer counters
-  assert.equal(out.stats.publicBoundary, 523);
-  assert.equal(out.stats.privateRelay, 591);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.stats.privateRelay, 675);
   assert.equal(out.stats.closedProducer, 3);
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.producerSites, 4872);
@@ -1771,15 +1813,19 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
  * cause published. Measured on the live tree: 8 of 162 qualify.
  * ===================================================================== */
 
-test('C-1 exactly 8 of the 162 composite rows close, and 154 stay blocking', () => {
+test('C-1 the composite bucket is 162 - 8 nested - 99 relay-inherited = 55', () => {
   const out = buildProducers();
-  assert.equal(out.branchCompositeOpen.length, 154);
+  assert.equal(out.branchCompositeOpen.length, 55);
   const nested = out.closedZeroGoverned.filter(
     (r) => r.resolvedVia === 'branch-union' && r.evidence.nestingDepth !== undefined,
   );
   assert.equal(nested.length, 8);
-  assert.equal(162 - 8, 154);
-  assert.equal(out.stats.openBlocking, 309);
+  const relayInherited = [...out.publicBoundary, ...out.privateRelay].filter(
+    (r) => r.evidence && r.evidence.resolvedVia === 'branch-relay-inheritance',
+  );
+  assert.equal(relayInherited.length, 99);
+  assert.equal(162 - 8 - 99, 55);
+  assert.equal(out.stats.openBlocking, 210);
   assert.equal(universeTotal(out), 2024);
 });
 
@@ -1811,10 +1857,10 @@ test('C-2 every newly closed row carries an EXHAUSTIVE recursive receipt', () =>
   }
 });
 
-test('C-3 the 154 survivors publish a cause and none is silently dropped', () => {
+test('C-3 the 55 survivors publish a cause and none is silently dropped', () => {
   const { rows } = classifyCrossFileRows();
   const composite = rows.filter((r) => r.disposition === 'BRANCH_COMPOSITE_OPEN');
-  assert.equal(composite.length, 154);
+  assert.equal(composite.length, 55);
   // every survivor has a demonstrable blocker somewhere in its tree
   const blockerOf = (arm) => {
     if (arm.kind === 'nonObject') return null;
@@ -1835,13 +1881,15 @@ test('C-3 the 154 survivors publish a cause and none is silently dropped', () =>
     census[blockers[0]] = (census[blockers[0]] || 0) + 1;
   }
   // the measured blocker profile; a drop here means a row was closed unsafely
+  // relay drops 103 -> 4: those 4 also carry a callArgsPending terminal, so the
+  // tree is not exhaustively resolved and the relay inheritance never applies.
   assert.deepEqual(census, {
-    relay: 103,
+    relay: 4,
     'open-object': 42,
     openUnknown: 6,
     computedKey: 3,
   });
-  assert.equal(Object.values(census).reduce((a, b) => a + b, 0), 154);
+  assert.equal(Object.values(census).reduce((a, b) => a + b, 0), 55);
 });
 
 test('C-4 the 521 previously closed ZERO rows keep their exact semantics', () => {
@@ -1926,4 +1974,214 @@ test('C-8 deep nesting terminates and stays fail-closed', () => {
   const poisoned = branchProbe('export const C = () => <div style={a ? {t:1} : b ? {l:2} : c ? {r:3} : {"--ds-z":"4"}} />;');
   assert.equal(poisoned.disposition, 'BRANCH_CONDITIONAL_AUTHORED');
   assert.deepEqual(poisoned.governance.governedChannelKeys, ['--ds-z']);
+});
+
+/* ===================================================================== *
+ * T-BRANCH-RELAY-99 -- a conditional tree INHERITS a relay disposition.
+ *
+ * A relay terminal can never be proven ZERO, so these trees do not close as
+ * zero emissions. They inherit PRIVATE_RELAY or PUBLIC_BOUNDARY -- and only
+ * when every terminal is resolved, the authored terminals are provably silent,
+ * and every relay terminal lands on ONE typed disposition. The inherited site
+ * stays consumable:false / tenantSafe:false.
+ * ===================================================================== */
+
+const INHERITED = (row) => row.evidence && row.evidence.resolvedVia === 'branch-relay-inheritance';
+
+test('R-1 POSITIVE private-only: authored-silent + unexported relay -> PRIVATE_RELAY', () => {
+  const out = branchProbe('export const C = ({ s }) => <div style={flag ? {top:1} : s} />;');
+  assert.equal(out.disposition, 'RELAY_PRIVATE_UNRESOLVED');
+  assert.equal(out.branchRelayReceipt.inheritedFrom, 'RELAY_PRIVATE_UNRESOLVED');
+  assert.equal(out.branchRelayReceipt.relayTerminalCount, 1);
+  assert.equal(out.branchRelayReceipt.authoredTerminalCount, 1);
+  assert.equal(out.branchRelayReceipt.authoredTerminalsSilent, true);
+  assert.equal(out.branchRelayReceipt.authoredScanComplete, true);
+  assert.deepEqual(out.branchRelayReceipt.exportEvidence, [], 'a private relay proves no export path');
+  // a relay is NEVER converted into a zero emission
+  assert.notEqual(out.disposition, ZERO_D);
+});
+
+test('R-2 NEGATIVE mixed: a governed key in an authored terminal keeps it composite', () => {
+  const out = branchProbe('export const C = ({ s }) => <div style={flag ? {"--ds-mix":"1"} : s} />;');
+  assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
+  assert.equal(out.branchRelayReceipt.inheritedFrom, null);
+  assert.equal(out.branchRelayReceipt.blockedBy, 'authored-terminals-emit-governed-channels');
+  assert.deepEqual(out.branchRelayReceipt.governedChannelKeys, ['--ds-mix']);
+  assert.equal(out.branchRelayReceipt.authoredTerminalsSilent, false);
+});
+
+test('R-3 NEGATIVE: an internal socket in an authored terminal also blocks', () => {
+  const out = branchProbe('export const C = ({ s }) => <div style={flag ? {"--_ds-sock":"1"} : s} />;');
+  assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
+  assert.deepEqual(out.branchRelayReceipt.internalSocketKeys, ['--_ds-sock']);
+  assert.equal(out.branchRelayReceipt.inheritedFrom, null);
+});
+
+test('R-4 NEGATIVE: an unresolved terminal keeps the tree composite and unclassified', () => {
+  const out = branchProbe('export const C = ({ s }) => <div style={flag ? {...mystery} : s} />;');
+  assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
+  // the relay path is never entered at all, so no relay receipt is fabricated
+  assert.equal(out.branchRelayReceipt, undefined);
+});
+
+test('R-5 NEGATIVE: a dynamic/computed terminal keeps the tree composite', () => {
+  const out = branchProbe('export const C = ({ s, k }) => <div style={flag ? lookup[k] : s} />;');
+  assert.equal(out.disposition, 'BRANCH_COMPOSITE_OPEN');
+  assert.notEqual(out.disposition, 'RELAY_PRIVATE_UNRESOLVED');
+});
+
+test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
+  const out = buildProducers();
+  const relay = out.privateRelay.filter(INHERITED);
+  const boundary = out.publicBoundary.filter(INHERITED);
+  assert.equal(relay.length, 84);
+  assert.equal(boundary.length, 15);
+  assert.equal(relay.length + boundary.length, 99);
+  assert.equal(out.stats.privateRelay, 675);
+  assert.equal(out.stats.publicBoundary, 538);
+  assert.equal(out.branchCompositeOpen.length, 55);
+  assert.equal(out.stats.openBlocking, 210);
+  assert.equal(universeTotal(out), 2024);
+});
+
+test('R-7 every inherited row is non-consumable and keeps ONE typed disposition', () => {
+  const out = buildProducers();
+  for (const row of [...out.privateRelay, ...out.publicBoundary].filter(INHERITED)) {
+    assert.equal(row.consumable, false, `${row.file}:${row.line} inherited row must not be consumable`);
+    assert.equal(row.tenantSafe, false);
+    const e = row.evidence;
+    // exhaustive terminal receipt
+    assert.ok(e.terminalCount >= 2, 'a tree has at least two terminals');
+    assert.equal(e.terminalCount, e.relayTerminalCount + e.authoredTerminalCount);
+    assert.ok(e.relayTerminalCount >= 1, 'an inherited row has at least one relay terminal');
+    assert.equal(e.authoredTerminalsSilent, true, `${row.file}:${row.line} inherited with a NOISY authored terminal`);
+    assert.equal(e.authoredScanComplete, true, `${row.file}:${row.line} inherited on an INCOMPLETE scan`);
+    assert.ok(e.relayOwners.length > 0, 'the relay owner must be named');
+    // ONE disposition, matching the bucket it landed in
+    assert.equal(e.inheritedFrom, row.reason.startsWith('public-boundary') ? 'PUBLIC_BOUNDARY_CANDIDATE' : 'RELAY_PRIVATE_UNRESOLVED');
+    // nothing invented
+    assert.ok(!('causalRootIds' in row));
+    assert.ok(!('ownerId' in row));
+    assert.ok(!('tenantReachable' in row));
+  }
+});
+
+test('R-8 a public inheritance proves an export chain; a private one proves none', () => {
+  const out = buildProducers();
+  for (const row of out.publicBoundary.filter(INHERITED)) {
+    assert.deepEqual(row.evidence.relayKinds, ['PUBLIC_BOUNDARY_CANDIDATE']);
+    assert.ok(row.evidence.exportEvidence.length > 0, 'a public inheritance must show its export chain');
+    for (const chain of row.evidence.exportEvidence) {
+      assert.ok(chain.entrypoint && chain.exportedAs && chain.hopChainDepth >= 1);
+    }
+  }
+  for (const row of out.privateRelay.filter(INHERITED)) {
+    assert.deepEqual(row.evidence.exportEvidence, [], 'a private inheritance must prove NO export path');
+    for (const kind of row.evidence.relayKinds) {
+      assert.ok(['PRIVATE_RELAY_UNRESOLVED', 'CUSTOM_COMPONENT_SINK_NOT_FOLLOWED'].includes(kind));
+    }
+  }
+  // and the two sets never overlap
+  const pub = new Set(out.publicBoundary.filter(INHERITED).map((r) => `${r.file}|${r.ordinal}`));
+  for (const row of out.privateRelay.filter(INHERITED)) {
+    assert.ok(!pub.has(`${row.file}|${row.ordinal}`), `${row.file}:${row.line} inherited BOTH dispositions`);
+  }
+});
+
+test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
+  const out = buildProducers();
+  const directRelay = out.privateRelay.filter((r) => !INHERITED(r));
+  const directBoundary = out.publicBoundary.filter((r) => !INHERITED(r));
+  assert.equal(directRelay.length, 591);
+  assert.equal(directBoundary.length, 523);
+  // they keep the DIRECT receipt shape, untouched by this tranche
+  for (const row of directBoundary) {
+    assert.ok(row.evidence.entrypoint, 'a direct boundary keeps its inline entrypoint');
+    assert.equal(row.evidence.resolvedVia, undefined);
+  }
+  for (const row of directRelay) {
+    assert.ok(row.evidence.bindingKind !== undefined, 'a direct relay keeps its bindingKind');
+    assert.equal(row.evidence.resolvedVia, undefined);
+  }
+  // and the other cohorts did not move at all
+  assert.equal(out.stats.closedZeroGoverned, 529);
+  assert.equal(out.stats.closedNonObject, 69);
+  assert.equal(out.stats.closedProducer, 3);
+  assert.equal(out.branchConditionalAuthored.length, 2);
+  assert.equal(out.authoredOpen.length, 99);
+  assert.equal(out.openUnknown.length, 28);
+  assert.equal(out.computedDomainPending.length, 21);
+  assert.equal(out.dynamicSinkPending.length, 4);
+  assert.equal(out.callArgsPending.length, 1);
+  assert.equal(out.stats.producerSites, 4872);
+  assert.equal(out.stats.channelEmissions, 10313);
+  assert.equal(out.stats.distinctChannels, 4585);
+  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  assert.equal(out.stats.ownershipConflicts, 0);
+});
+
+test('R-10 NEGATIVE: tampering with an inherited receipt moves the bucket digest', () => {
+  const out = buildProducers();
+  const rows = out.privateRelay.filter(INHERITED).slice(0, 5);
+  const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence]));
+  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
+  const mutations = {
+    'silence claim flipped': rows.map((r) => ({ ...r, evidence: { ...r.evidence, authoredTerminalsSilent: false } })),
+    'scan completeness faked': rows.map((r) => ({ ...r, evidence: { ...r.evidence, authoredScanComplete: false } })),
+    'terminal count understated': rows.map((r) => ({ ...r, evidence: { ...r.evidence, terminalCount: 1 } })),
+    'disposition swapped': rows.map((r) => ({ ...r, evidence: { ...r.evidence, inheritedFrom: 'PUBLIC_BOUNDARY_CANDIDATE' } })),
+    'export chain injected': rows.map((r) => ({ ...r, evidence: { ...r.evidence, exportEvidence: [{ entrypoint: 'fake' }] } })),
+    'receipt removed': rows.map((r) => ({ ...r, evidence: null })),
+  };
+  for (const [name, mutated] of Object.entries(mutations)) {
+    assert.equal(identity(rows), identity(mutated), `identity must stay blind: ${name}`);
+    assert.notEqual(bound(rows), bound(mutated), `the bound digest MUST notice: ${name}`);
+  }
+  assert.match(out.digests.privateRelayReceipts, /^[0-9a-f]{64}$/);
+  assert.match(out.digests.publicBoundaryReceipts, /^[0-9a-f]{64}$/);
+  assert.notEqual(out.digests.privateRelay, out.digests.privateRelayReceipts);
+});
+
+test('R-11 inheritance is deterministic and independent of terminal order', () => {
+  const a = branchProbe('export const C = ({ s }) => <div style={flag ? {top:1} : s} />;');
+  const b = branchProbe('export const C = ({ s }) => <div style={flag ? s : {top:1}} />;');
+  assert.equal(a.disposition, b.disposition);
+  assert.equal(a.branchRelayReceipt.inheritedFrom, b.branchRelayReceipt.inheritedFrom);
+  assert.equal(a.branchRelayReceipt.terminalCount, b.branchRelayReceipt.terminalCount);
+  assert.deepEqual(a.branchRelayReceipt.relayKinds, b.branchRelayReceipt.relayKinds);
+  // two full builds agree row for row and digest for digest
+  const one = buildProducers();
+  const two = buildProducers();
+  assert.deepEqual(one.privateRelay, two.privateRelay);
+  assert.deepEqual(one.publicBoundary, two.publicBoundary);
+  assert.equal(one.digests.privateRelayReceipts, two.digests.privateRelayReceipts);
+  assert.equal(one.digests.publicBoundaryReceipts, two.digests.publicBoundaryReceipts);
+});
+
+test('R-12 the refusal vocabulary is closed, and two causes are DECLARED untested', () => {
+  // Fixtures cover three of the five refusal causes (R-2/R-3 emission,
+  // R-4/R-5 unresolved). The remaining two -- a public/private DISAGREEMENT
+  // between relay terminals, and a PUBLIC_BOUNDARY_UNKNOWN terminal -- have no
+  // honest single-file fixture: every relay terminal of one expression shares
+  // one owner function and one sink tag, so the authority necessarily returns
+  // the same verdict. Rather than fabricate a fixture that only appears to
+  // exercise them, this test pins that the guards EXIST and are fail-closed,
+  // and the memo declares them untested.
+  const source = readFileSync(join(HERE, 'cascade-disposition.mjs'), 'utf8');
+  for (const cause of [
+    'authored-terminals-emit-governed-channels',
+    'authored-terminal-scan-incomplete',
+    'relay-terminal-owner-declared-in-another-file',
+    'relay-terminals-disagree-on-disposition',
+    'relay-terminal-public-boundary-unknown',
+  ]) {
+    assert.ok(source.includes(`"${cause}"`), `refusal cause ${cause} disappeared from the guard`);
+  }
+  // fail-closed by construction: inheritance requires ALL of these to hold
+  assert.ok(source.includes('authoredSilent && !foreignOwner && singleDisposition && singleDisposition !== "PUBLIC_BOUNDARY_UNKNOWN"'));
+  // and PUBLIC_BOUNDARY_UNKNOWN is never inheritable anywhere in the live tree
+  const out = buildProducers();
+  for (const row of [...out.publicBoundary, ...out.privateRelay].filter(INHERITED)) {
+    assert.ok(!row.evidence.relayKinds.includes('PUBLIC_BOUNDARY_UNKNOWN'));
+  }
 });
