@@ -1059,6 +1059,127 @@ Este asiento NO adjudica diseño ni implementación. PRE_F4B queda con
 inventario mecánico completo; el diseño del gate real y su implementación
 son el siguiente paso, con dueño DT.
 
+##### Checkpoint PRE_F4B — Lote A implementado y BLOQUEADO (2026-08-22)
+
+**Supersedencia declarada.** Este checkpoint supersede, sin reescribirlo, el
+cierre del asiento anterior ("el diseño del gate real y su implementación son
+el siguiente paso") y la cláusula "diseño/implementación **NO aceptados**" de
+la fila `PRE_F4B` de la tabla de progreso: el diseño v3 fue ratificado y el
+Lote A está implementado y auditado. Lo que NO cambia: **PRE_F4B no cierra,
+F4B sigue bloqueado y el Lote B no está autorizado.** El resto del asiento de
+inventario mecánico se conserva íntegro como historia.
+
+**1. Lote A A1–A12, implementado.** Write-set de doce paths, ejecutado por
+Opus como único writer bajo Node 22. Diff material: **10 entradas nuevas**
+sobre el prestate congelado — `porcelain 29 → 39` — que son exactamente
+A1/A2/A10 (` M`) y A3–A9 (`??`); cero entradas retiradas, cero paths fuera de
+A1–A12, cero `src/**`, roots, catálogo, `manifest/index.json`, materialized,
+backlog, docs o GAT. **A12 (`scripts/ci/gates-manifest/index.mjs`) queda
+byte-idéntico al prestate** (`3b7f906f…`): anexar los tres drills nuevos a su
+`run[]` rompía `scripts/ci/runner/index.test.mjs:239`, que sella ese argv
+exacto desde fuera del write-set, así que por ruling del DT los suites viajan
+transitivamente por A11 y no nace gate id (R-3 intacto). **Las 31 autoridades
+read-only quedan intactas** (catálogo, 20 roots, fanout-facts, tenant-reach,
+5 fuentes de compilador, 3 artifacts), verificadas contra el freeze con cero
+drift. HEAD `9d5582dfdf1d02f1d7e8fd468720b1d829e50454`, `staged 0`, antes y
+después.
+
+**2. Postaudit Fable: `ACCEPT_SOURCE_READY_BLOCKED`.** La instrumentación se
+**conserva** — honesta, aislada y verificada byte-exacta, con los 12 paths
+recomputados uno por uno y B1/B2/B3 intocados. Pero **PRE_F4B queda
+abierto-bloqueado** en la rama F-5/S7 contratada: **F4B sigue bloqueado y el
+Lote B NO está autorizado.**
+
+**3. Evidencia del lote.** Suites: **A3 23 · A6 36 · A9 18 · A11 48**, cero
+fallas. **R-1 `1817/1804/12/1`**, con el **mismo failure-set nominal de 12**
+que la vara previa — identidad de conjunto verificada por Fable (diferencia
+simétrica vacía contra el log canónico de Lote C) y cero fallas nuevas.
+Aritmética F-7 exacta: `1735 − 10 + 10 + 23 + 36 + 18 + 5 = 1817`. Queda
+abierta la condición **C-3**: el literal `4d6eda2d…` no se reproduce desde la
+receta en prosa, así que el próximo SOURCE_READY publica el serializador
+canónico o el DT re-ancla el canon; hasta entonces la vara se verifica por
+identidad de conjunto más contadores. `gates:ci` **89 blocking + 2 excluded**,
+verde. **El ratchet viejo sigue intacto en `2171/4374`** (corrido por el
+postaudit sobre el árbol vivo): el aislamiento S2 queda probado, no reportado.
+
+**4. Causa del bloqueo.** `producers.json` publica **2 024 filas de
+`unknownProvenance` en 525 archivos** — cada una con `plane/file/symbol/
+reason/template/detail`, identidad y no contador desnudo. La condición de
+entrada del Lote B (F-5.1, `unknownProvenance == []`) **no se cumple**. Cuatro
+ítems quedan además **PARCIALES**, brechas de garantía y no de honestidad:
+**P0-3** (binding léxico AST en V3-3: el guard de chart-category aún se
+verifica por substring del `then`), **P0-4** (`srcCompilers` sella sólo tres
+archivos; faltan el módulo lector y cuatro fuentes efectivas — hoy el lote
+está protegido por el freeze de `/tmp`, no por el artefacto), **P1-1** (el
+doble owner sólo se produce desde el helper unitario, no desde
+`buildProducers()`) y **P2** (`order` lleva nombres de contexto, no owner IDs).
+El **plan de corrección Opus v1 fue RECHAZADO** por auditoría independiente
+(cinco defectos bloqueantes: taxonomía heurística, `[]` no demostrado, retirar
+`plane` contradice el schema, schema de precedencia sin addendum, y
+`CONSTANT_SOURCES` no exportada). **Ningún writer queda liberado.**
+
+**5. Censo Sonnet v1 — identidad ACEPTADA, clasificación RECHAZADA.** El censo
+prueba la **identidad exacta de las 2 024 filas** (mismo orden, cero pérdida,
+cero duplicado, índice 0..2023 como identidad estable) y esa mitad se acepta.
+Su **taxonomía causal terminal se rechaza**: el clasificador detiene el walk
+en el primer binding, de modo que **944 filas** rotuladas
+`localConstOrDestructureResolvable` llevan en el propio mapping
+`isSourceItselfAParamOrImport = directParam` — son destructurings de un
+parámetro y su frontera terminal es relay/prop, no "local resolvable"; y
+**3 llamadas** quedaron mal domiciliadas en la familia `undefined`
+(`spreadOf:noBindingFound`), de modo que el conteo acreditable de `undefined`
+literal es 58 y no 61. **Un censo v2 terminal-recursivo está EN CURSO.**
+**Prohibido pinear los conteos de v1** — ni las nueve familias, ni el 1626
+"sin autoridad nueva", ni el 244 de relay: lo único vinculante hoy es la
+identidad de las 2 024 filas y la partición uno-a-uno contra sus índices.
+
+**6. Decisiones DT ya firmes.** (a) **`plane` permanece dentro de
+`producerSiteId`**: es la fórmula del contrato v3 y separa dos semánticas
+productivas que pueden observar el mismo archivo; el conflicto de ownership se
+vuelve falsable inyectando claims al materializador real, no cambiando la
+coordenada. (b) El **write-set eventual mínimo es `A4/A5/A6`** — tres paths,
+no cuatro: A7/A9 quedan fuera del tranche y A8 no se vuelve stale (cero
+referencias a `extracted/producers.json`). (c) El **Lote B sólo abre con
+`unknownProvenance == []` real y doble postaudit** (reauditoría independiente
+A4–A9 más postaudit Fable del diff completo); mientras quede una sola fila, el
+receipt es `SOURCE_READY_BLOCKED`, B2 no existe y el ratchet viejo sigue
+siendo el gate de CI.
+
+**7. BC-0 — `PAINT_DENOMINATOR`, deuda asentada (verbatim).** *Tranche propio
+con build permitido; **prohibido pinear `3661` / `1918` / `1823`** sin
+derivación reproducible.* Este asiento **no fija esas cifras y no las
+reinterpreta**: el denominador de pintura y sus contadores se derivan
+**únicamente del artefacto vivo y de su fórmula ejecutable**, y sólo entonces
+se certifica pintura. La deuda venía arrastrándose en memos volátiles de
+`/private/tmp` contra la doctrina de escribanía durable; queda asentada aquí y
+sigue con dueño DT.
+
+**8. Progreso de programa — sin cambio.** Sigue en **39–43% realizado /
+57–61% pendiente**. Esta instrumentación **no suma certificación de F4B**: el
+Lote A reconstruye el instrumento y su procedencia, no drena deuda ni acepta
+un solo control. Por la regla de reporte vigente, producir memos e
+instrumentación read-only no infla progreso.
+
+**9. Memos de referencia (paths y SHA-256 completos).**
+
+| Memo | Path | SHA-256 |
+|---|---|---|
+| SOURCE_READY del writer (`SOURCE_READY_BLOCKED`) | `/private/tmp/pre-f4b-lot-a-opus-source-ready.md` | `e81ee0fe30e45951806f7cd930424393f27fa3074f01d4fdf67429f8ecf52611` |
+| Postaudit Fable Lote A (`ACCEPT_SOURCE_READY_BLOCKED`) | `/private/tmp/pre-f4b-lot-a-fable-postaudit.md` | `caa9c481e9e5f7adf7220625305da673a8f73ad22921b2847d36ce5f9ed46885` |
+| Auditoría independiente del plan de corrección (`REJECT`) | `/private/tmp/pre-f4b-lot-a-correction-plan-independent-audit.md` | `092cd49ce47163e0a514de64fd19732bd7dde94187635de57e0ecb91086330cc` |
+| Challenge Fable del plan (`ACCEPT_WITH_BINDING_CORRECTIONS`) | `/private/tmp/pre-f4b-lot-a-correction-plan-fable-challenge.md` | `37dcdf461f4ff7741cec8c04976f01113c6abd27f19e8565148e0ef204ef1a2d` |
+| Censo causal Sonnet v1 (`CENSUS_READY`) | `/private/tmp/pre-f4b-unknown-sonnet-census.md` | `4b0c3e5da33b44032a425cff5504c6d59fe4a567110aa47390d028eec4d1aab4` |
+| Auditoría del censo (identidad ACCEPT / clasificación REJECT) | `/private/tmp/pre-f4b-unknown-sonnet-census-independent-audit.md` | `43bef9bf9471016ff733255010f4028030f87fb0399dc3aff94526c00b9c1c5a` |
+| Revisión Fable del censo (`ACCEPT` con C1–C6) | `/private/tmp/pre-f4b-unknown-sonnet-census-fable-review.md` | `97207ad3bfd9b9f4ae2037e5f15b2171790e593e201a3621bfb5b0efabfdc0e9` |
+| Plan de corrección Opus v1 (rechazado) | `/private/tmp/pre-f4b-lot-a-correction-plan-opus.md` | `979b5187e2d97394a1000a66ba264363944709b620c16144b4eff716cbedc459` |
+| Lista completa de las 2 024 unknown | `/private/tmp/pre-f4b-lot-a-unknown-provenance.md` | `f97642537049b03fc642f5a3ee2f0e2e750b7ee280f247f8cec8572d69f60f3f` |
+| Diff completo del Lote A (prestate sucio → poststate) | `/private/tmp/pre-f4b-lot-a.diff` | `72b8002b1d788b2d24e40024f16fc07488c78a019884ed8518013b55bcc06186` |
+
+**Cadena vigente para el siguiente tranche:** ruling DT sobre el plan corregido
+→ freeze-r2 con fórmula de agregado ejecutable → writer (`A4/A5/A6`) →
+reauditoría independiente A4–A9 → postaudit Fable del diff completo. Ningún
+paso de esa cadena está autorizado por este checkpoint.
+
 #### Progreso operativo, no certificación
 
 | Hito | Avance vigente |

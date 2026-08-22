@@ -13,6 +13,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
+import { spawnSync } from "node:child_process";
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -1273,5 +1274,148 @@ test("F6: a missing controlFamilyCells denominator fails closed", () => {
     );
   } finally {
     writeFileSync(target, original);
+  }
+});
+
+/* ==========================================================================
+ * A11 -- integracion de la CERCA DE CONSUMIBILIDAD (PRE_F4B lote A).
+ *
+ * `program-check.mjs` es el lector blocking de la cerca: llama SOLO a
+ * `validateInventory()`. Estos drills prueban ese cableado contra los
+ * directorios REALES (42 artefactos) sin mutar ni un byte de ellos: la unica
+ * cosa que se muta es una COPIA de la cerca en tmpdir.
+ * ========================================================================== */
+
+test("A11: program-check llama validateInventory() y NUNCA assertConsumable()", () => {
+  const source = readFileSync(
+    join(LIVE, programDir, "cascade-consumability.mjs"),
+    "utf8",
+  );
+  assert.ok(source.includes("export function validateInventory"), "la cerca expone el gate");
+  assert.ok(source.includes("export function assertConsumable"), "y la API del consumidor");
+
+  const gate = readFileSync(join(LIVE, programDir, "program-check.mjs"), "utf8");
+  assert.match(gate, /import \{ validateInventory \} from '\.\/cascade-consumability\.mjs';/);
+  assert.match(gate, /failures\.push\(\.\.\.validateInventory\(\)\);/);
+  // Se mide CODIGO, no prosa: el docblock del gate explica por que no la llama,
+  // asi que un grep crudo se dispararia con su propio comentario.
+  const code = gate
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .split("\n")
+    .map((line) => line.replace(/(^|\s)\/\/.*$/, ""))
+    .join("\n");
+  assert.ok(
+    !/assertConsumable\s*\(/.test(code),
+    "assertConsumable lanza para un path cercado: llamarla aqui dejaria el gate rojo por hacer su trabajo",
+  );
+  assert.ok(/assertConsumable/.test(gate), "pero el gate SI documenta por que no la llama");
+});
+
+test("A11: la cerca real valida limpia y no declara nada consumible", async () => {
+  const { validateInventory: live, OUT_PATH: fencePath } = await import(
+    pathToFileURL(join(LIVE, programDir, "cascade-consumability.mjs")).href
+  );
+  assert.deepEqual(live(), [], "el arbol real tiene la cerca intacta");
+  const inventory = JSON.parse(readFileSync(fencePath, "utf8"));
+  assert.equal(inventory.stats.consumable, 0);
+  assert.equal(inventory.outputs.length, 42, "20 materialized + 22 backlog");
+  assert.deepEqual(inventory.stats.byState, {
+    UNVERIFIED_PRODUCER_IMPURE: 20,
+    UNREPRODUCIBLE_BLOCKED: 22,
+  });
+  for (const entry of inventory.outputs) {
+    assert.ok(entry.reason && entry.owner && entry.blockedFor.includes("F4B"));
+  }
+});
+
+test("A11: la MISMA funcion que corre el gate detecta una cerca rota, sobre los directorios reales", async () => {
+  const { validateInventory: live, OUT_PATH: fencePath } = await import(
+    pathToFileURL(join(LIVE, programDir, "cascade-consumability.mjs")).href
+  );
+  // Se copia la cerca a tmpdir y se rompe la COPIA. Los 42 artefactos reales,
+  // el sustrato real y los dos directorios reales entran como estan.
+  const box = mkdtempSync(join(tmpdir(), "a11-fence-"));
+  const broken = join(box, "consumability.json");
+  const inventory = JSON.parse(readFileSync(fencePath, "utf8"));
+  inventory.outputs = inventory.outputs.slice(0, 40); // dos artefactos dejan de estar enumerados
+  rawWriteFileSync(broken, `${JSON.stringify(inventory, null, 2)}\n`);
+  const findings = live({ inventoryPath: broken });
+  assert.ok(findings.length > 0, "una cerca incompleta no puede validar limpia");
+  assert.ok(
+    findings.some((f) => f.includes("is not enumerated")),
+    `esperaba una falla de membresia; hubo: ${findings.join(" | ")}`,
+  );
+  assert.ok(findings.some((f) => f.includes("membership digest")));
+  // y la cerca real sigue intacta despues del drill
+  assert.deepEqual(live(), []);
+});
+
+/* ==========================================================================
+ * A11 -- REACHABILITY TRANSITIVA de los tres suites nuevos (ruling DT A12).
+ *
+ * El gate blocking `modern-rescue-tooling-drills` lleva un argv EXACTO de
+ * cuatro elementos, sellado por `scripts/ci/runner/index.test.mjs:239`, que
+ * esta fuera del write-set del lote. Anexar rutas a ese `run[]` rompia ese
+ * drill; ampliar el write-set o crear un gate id nuevo estaba prohibido.
+ *
+ * La salida ordenada por el DT: este archivo YA lo transporta el gate, asi que
+ * corre los tres suites el mismo. Se usa `spawnSync` por suite -- un proceso
+ * limpio cada uno -- para no depender de efectos laterales de import, y se
+ * falla con el stdout/stderr real en vez de un booleano.
+ * ========================================================================== */
+
+const TRANSITIVE_SUITES = [
+  "packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-extract.test.mjs",
+  "packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-producers.test.mjs",
+  "packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-consumability.test.mjs",
+];
+
+test("A11: los tres suites nuevos son blocking por transporte, y pasan en proceso limpio", () => {
+  for (const suite of TRANSITIVE_SUITES) {
+    const abs = join(LIVE, suite);
+    assert.ok(existsSync(abs), `${suite} debe existir para ser alcanzable`);
+    // `node --test` REFUSES to run when it detects it is nested inside another
+    // test process ("run() is being called recursively"), and it does so by
+    // exiting 0 with empty stdout -- a green that proves nothing. The marker
+    // travels in the environment, so the child gets a clean one.
+    const childEnv = { ...process.env };
+    delete childEnv.NODE_TEST_CONTEXT;
+    delete childEnv.NODE_OPTIONS;
+    const run = spawnSync(process.execPath, ["--test", abs], {
+      cwd: join(LIVE, "packages/core"),
+      encoding: "utf8",
+      env: childEnv,
+    });
+    assert.equal(
+      run.status,
+      0,
+      `${suite} salio ${run.status}\n--- stdout ---\n${run.stdout ?? ""}\n--- stderr ---\n${run.stderr ?? ""}`,
+    );
+    assert.match(
+      run.stdout ?? "",
+      /^# fail 0$/m,
+      `${suite} debe reportar 0 fallas\n--- stdout (cola) ---\n${(run.stdout ?? "").split("\n").slice(-40).join("\n")}\n--- stderr ---\n${run.stderr ?? ""}`,
+    );
+  }
+});
+
+test("A11: guard estatico -- retirar una ruta de la lista transitiva falla aqui", () => {
+  // Sin este guard, borrar una linea de TRANSITIVE_SUITES dejaria de ejecutar
+  // un suite entero sin que nada se pusiera rojo: exactamente el defecto que el
+  // gate `modern-rescue-tooling-drills` existe para cerrar, un nivel mas abajo.
+  const required = [
+    "cascade-extract.test.mjs",
+    "cascade-producers.test.mjs",
+    "cascade-consumability.test.mjs",
+  ];
+  for (const name of required) {
+    assert.ok(
+      TRANSITIVE_SUITES.some((suite) => suite.endsWith(`/${name}`)),
+      `${name} debe seguir en la lista transitiva: si sale, deja de ser blocking`,
+    );
+  }
+  assert.equal(TRANSITIVE_SUITES.length, required.length, "ni de mas ni de menos");
+  for (const suite of TRANSITIVE_SUITES) {
+    assert.ok(suite.startsWith("packages/core/scripts/quality-evidence/programs/modern-rescue/"));
   }
 });

@@ -28,15 +28,23 @@
  *
  * Output: manifest/cascade/extracted/css-edges.json  (generated: true)
  *
- * Usage: node cascade-extract.mjs [--write]   (default: write)
+ * CLI CONTRACT (PRE_F4B lote A; contrato v3 sec 8.3 + addendum):
+ *   node cascade-extract.mjs            -> --check  (DEFAULT, FAIL-CLOSED)
+ *   node cascade-extract.mjs --check    -> recompute, byte-compare, exit 1 on diff, NEVER write
+ *   node cascade-extract.mjs --write    -> write OUT
+ *   any other flag                      -> exit 2 with usage
+ * `buildEdges()` is PURE: it reads the css tree and returns the object.
+ * Importing this module writes nothing (canonical main guard at the bottom).
  */
 import {
   readdirSync,
   readFileSync,
   mkdirSync,
+  realpathSync,
   writeFileSync,
 } from "node:fs";
 import { join, dirname, relative } from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
@@ -302,7 +310,21 @@ const PLANES_NOT_SCANNED = [
  * string-concat PREFIXES quoted in documentation, not channels). Those 10 are
  * correctly absent from the denominator.
  */
-const COVERAGE = {
+/**
+ * AUTHORED CENSUS -- prosa autorada, NO un computo.
+ *
+ * Renombrado desde `COVERAGE` (contrato v3, A1). Cada cifra de abajo se
+ * conto A MANO el 2026-08-18 y esta CONGELADA: ninguna ejecucion la
+ * recalcula. Viaja junto a campos `stats.*` VIVOS, y hasta ahora el
+ * esquema no distinguia unos de otros: un consumidor podia leer
+ * `coverage.denominator.channels` como si describiera el arbol que
+ * acababa de parsear. `measuredOn` e `isComputed:false` cierran eso.
+ */
+const AUTHORED_CENSUS = {
+  measuredOn: "2026-08-18",
+  isComputed: false,
+  note:
+    "prosa autorada congelada: ninguna ejecucion la recalcula. Vive junto a stats.* vivos y por eso lleva measuredOn e isComputed:false.",
   denominator: {
     channels: 4547,
     definition:
@@ -508,9 +530,20 @@ const COVERAGE = {
   },
 };
 
+
 const DERIVATION_KINDS = [
   "calc-multiply",
   "calc-divide",
+  // `calc-offset` (ruling DT, PRE_F4B lote A / H1): a declaration whose value
+  // has refs and a calc() with NEITHER `*` NOR `/`. It covers additive and
+  // subtractive geometry (`calc(var(--ds-z-index-base) + 1)`) and paint
+  // compositions that merely contain an additive calc. It exists because the
+  // previous vocabulary had no row for that shape and the extractor answered
+  // by DISCARDING the declaration: six heads left the substrate entirely, five
+  // of them with zero inbound edges, which silently falsified `Declared` vs
+  // `Undeclared` downstream. A vocabulary gap must widen the vocabulary or
+  // fail loudly; it may never drop evidence.
+  "calc-offset",
   "clamp",
   "alias",
   "identity",
@@ -522,18 +555,250 @@ const DERIVATION_KINDS = [
   "literal-pin",
 ];
 
-/* ---------- file walk (artifacts excluded) ---------- */
+/* ==========================================================================
+ * ENGINE SCOPE — path scope INTERSECT selector scope, as SETS
+ *
+ * The three engine trees ship in ONE bundle: `facade/entrypoints/base.css`
+ * (and `styles.css`) import `runtime/engines/index.css`, which imports
+ * classic/modern/rustic, plus the 157 agnostic skins. Engine selection is by
+ * SELECTOR, not by bundle. So the path alone cannot say which engine a
+ * declaration or a paint site belongs to: a file under
+ * `presentation/components/skin/` is shared, but a block inside it guarded by
+ * `.ds-engine-modern` or `.rottay-input--rustic` is not.
+ *
+ * `unknown` SUB-ACCREDITS and never expands to every engine. A row whose
+ * selector names an engine through a shape the closed grammar does not cover
+ * is inadmissible everywhere and is published in `unadjudicatedSelectors`.
+ * A row whose recognised discriminators intersect to nothing is published in
+ * `scopeContradictions`. Both lists must be empty to close PRE_F4B.
+ * ========================================================================== */
+
+const ENGINE_VOCABULARY = ["modern", "rustic", "classic"];
+
+/**
+ * The CLOSED grammar, seeded BY PATTERN FAMILY and never by a literal census
+ * of the discriminators that happen to exist today. Three families, each with
+ * live evidence in the tree.
+ */
+const SCOPE_GRAMMAR = {
+  families: [
+    {
+      id: "engine-root-class",
+      pattern: "\\.ds-engine-(modern|rustic|classic)\\b",
+      evidence: "presentation/components/skin/data-table-interactions.css",
+    },
+    {
+      id: "component-engine-modifier",
+      pattern: "\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*--(modern|rustic|classic)\\b",
+      evidence:
+        "presentation/components/skin/search-command-bar.css (.rottay-input--rustic) y .ds-card--modern",
+    },
+    {
+      id: "component-engine-suffix",
+      pattern: "\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*-(modern|rustic|classic)\\b",
+      evidence: ".rottay-scroll-area-classic / -rustic / -modern",
+    },
+  ],
+  atRulePreludesExcluded: true,
+  atRulePreludeNote:
+    "un `@keyframes ds-button-pulse-modern` nombra una ANIMACION, no un engine: los nombres de at-rule son globales y el targeting ocurre donde la animacion se usa. Las preludes de at-rule se enmascaran antes de detectar discriminadores.",
+  unknownLaw:
+    "una palabra de engine en el selector que ninguna familia cubre produce `unknown`; `unknown` sub-acredita y JAMAS expande a todos los engines.",
+};
+
+const GRAMMAR_RES = SCOPE_GRAMMAR.families.map((f) => ({
+  id: f.id,
+  re: new RegExp(f.pattern, "g"),
+}));
+const ENGINE_WORD_RE = /\b(modern|rustic|classic)\b/g;
+
+/** Mask at-rule preludes: `@x ...` until a token that starts a real selector. */
+function maskAtRulePreludes(selector) {
+  const parts = selector.split(/(\s+)/);
+  let masking = false;
+  return parts
+    .map((tok) => {
+      if (tok === "" || /^\s+$/.test(tok)) return tok;
+      if (tok.startsWith("@")) {
+        masking = true;
+        return " ".repeat(tok.length);
+      }
+      if (masking) {
+        if (/^[.#[:*]/.test(tok)) {
+          masking = false;
+          return tok;
+        }
+        return " ".repeat(tok.length);
+      }
+      return tok;
+    })
+    .join("");
+}
+
+/** Split a selector on TOP-LEVEL commas (not inside (), [] or quotes). */
+function splitTopLevelCommas(selector) {
+  const out = [];
+  let depth = 0;
+  let quote = null;
+  let cur = "";
+  for (let i = 0; i < selector.length; i++) {
+    const c = selector[i];
+    if (quote) {
+      if (c === quote) quote = null;
+      cur += c;
+      continue;
+    }
+    if (c === '"' || c === "'") {
+      quote = c;
+      cur += c;
+      continue;
+    }
+    if (c === "(" || c === "[") depth++;
+    else if (c === ")" || c === "]") depth--;
+    else if (c === "," && depth === 0) {
+      out.push(cur);
+      cur = "";
+      continue;
+    }
+    cur += c;
+  }
+  out.push(cur);
+  return out;
+}
+
+const sortEngines = (list) =>
+  ENGINE_VOCABULARY.filter((e) => list.includes(e));
+
+/**
+ * `selectorEngines` as a SET, plus the two failure modes kept apart.
+ *
+ * Within one comma-part, several discriminators are a DESCENDANT narrowing and
+ * therefore INTERSECT (`.ds-engine-modern .x--rustic` reaches nothing). Across
+ * comma-parts they are alternatives and therefore UNION.
+ */
+export function selectorEnginesOf(selector) {
+  if (!selector) return { mode: "set", engines: [...ENGINE_VOCABULARY], parts: ["all"] };
+  const masked = maskAtRulePreludes(selector);
+  const parts = splitTopLevelCommas(masked);
+  const union = new Set();
+  const perPart = [];
+  let unknown = false;
+  for (const part of parts) {
+    const covered = new Set();
+    const found = new Set();
+    for (const fam of GRAMMAR_RES) {
+      fam.re.lastIndex = 0;
+      let m;
+      while ((m = fam.re.exec(part))) {
+        found.add(m[1]);
+        covered.add(m.index + m[0].lastIndexOf(m[1]));
+      }
+    }
+    ENGINE_WORD_RE.lastIndex = 0;
+    let w;
+    let partUnknown = false;
+    while ((w = ENGINE_WORD_RE.exec(part))) {
+      if (!covered.has(w.index)) partUnknown = true;
+    }
+    if (partUnknown) {
+      unknown = true;
+      perPart.push("unknown");
+      continue;
+    }
+    if (found.size === 0) {
+      perPart.push("all");
+      for (const e of ENGINE_VOCABULARY) union.add(e);
+      continue;
+    }
+    const engines = found.size === 1 ? [...found] : [];
+    perPart.push(engines.length ? sortEngines(engines) : "empty-intersection");
+    for (const e of engines) union.add(e);
+  }
+  if (unknown) return { mode: "unknown", engines: [], parts: perPart };
+  return { mode: "set", engines: sortEngines([...union]), parts: perPart };
+}
+
+/** The engines a PATH admits. Everything outside an engine tree is shared. */
+export function pathEnginesOf(rel) {
+  for (const engine of ENGINE_VOCABULARY) {
+    if (rel.includes(`/runtime/engines/${engine}/`)) return [engine];
+  }
+  return [...ENGINE_VOCABULARY];
+}
+
+/** pathEngines INTERSECT selectorEngines, with both failure modes named. */
+export function scopeOf(rel, selector) {
+  const pathEngines = pathEnginesOf(rel);
+  const sel = selectorEnginesOf(selector);
+  if (sel.mode === "unknown") {
+    return {
+      pathEngines,
+      selectorEngines: "unknown",
+      effectiveEngines: [],
+      status: "unadjudicated",
+    };
+  }
+  const effectiveEngines = pathEngines.filter((e) => sel.engines.includes(e));
+  return {
+    pathEngines,
+    selectorEngines: sel.engines,
+    effectiveEngines,
+    status: effectiveEngines.length === 0 ? "contradiction" : "ok",
+  };
+}
+
+/* ---------- stable ids ---------- */
+const sha256 = (value) => createHash("sha256").update(value).digest("hex");
+
+/**
+ * The tuple a digest seals for one edge row, in a fixed field order.
+ *
+ * EXACT SERIALISATION: `JSON.stringify(rows.map(edgeSealTuple))` over the array
+ * in its own emission order, each row as
+ * `[from, to, kind, edgeClass, guardPrimary, file, line, scopeId, reason]`
+ * with `null` for any field the row does not carry.
+ */
+export const edgeSealTuple = (edge) => [
+  edge.from,
+  edge.to,
+  edge.kind ?? null,
+  edge.edgeClass,
+  edge.guardPrimary ?? null,
+  edge.file,
+  edge.line,
+  edge.scopeId ?? null,
+  edge.reason ?? null,
+];
+
+/** The sealed graph vocabulary: `--ds-*` governed, `--_ds-*` internal socket. */
+export const isGraphRef = (name) =>
+  typeof name === "string" && (name.startsWith("--ds-") || name.startsWith("--_ds-"));
+
+/**
+ * The canonical ref identity, materialised so B1 never has to reinvent it.
+ *
+ * EXACT SERIALISATION: sha256 over `${readSiteId}|${refIndex}` -- the read
+ * site's hex digest, one literal pipe, and the decimal refIndex, with nothing
+ * else and no trailing separator. `readRefInstanceId` adds the engine and
+ * belongs to B1, because instancing a shared site per engine is B1's law.
+ */
+export const readRefIdOf = (readSiteId, refIndex) =>
+  sha256(`${readSiteId}|${refIndex}`);
+const readSiteIdOf = (scopeKey, file, line, column, property, occurrence) =>
+  sha256(`${scopeKey}|${file}|${line}|${column}|${property}|${occurrence}`);
+
+/* ---------- file walk (artifacts excluded, SORTED for determinism) ---------- */
 function walk(dir, out = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+  const entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+    a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+  );
+  for (const entry of entries) {
     const p = join(dir, entry.name);
     if (entry.isDirectory()) walk(p, out);
     else if (entry.isFile() && entry.name.endsWith(".css")) out.push(p);
   }
   return out;
 }
-const files = walk(CSS_ROOT).filter(
-  (f) => !relative(CSS_ROOT, f).startsWith(join("facade", "artifacts"))
-);
 
 /* ---------- comment strip, line numbers preserved ---------- */
 function stripComments(text) {
@@ -544,20 +809,34 @@ function stripComments(text) {
  * Tracks a selector stack on '{' / '}'. When, inside a block, the pending
  * text is a custom-property name and the next char is ':', reads the value
  * until ';' (or '}') at paren depth 0. Multi-line values are handled.
+ *
+ * PRE_F4B: reads now carry the RAW value plus line AND column, so a read site
+ * has a stable identity and its var() references can be enumerated with
+ * position. The selector is returned in FULL (truncation happens at emit
+ * time only) because a 160-char cut can drop the very discriminator that
+ * decides the engine scope.
  */
 function parseDeclarations(text) {
   const s = stripComments(text);
   const decls = [];
-  const reads = []; // regular-property reads of governed channels (leaf sites)
+  const reads = [];
   const selStack = [];
   let pending = "";
   let pendingStart = 0;
   let i = 0;
+  const lineStarts = [0];
+  for (let k = 0; k < s.length; k++) if (s[k] === "\n") lineStarts.push(k + 1);
   const lineOf = (idx) => {
-    let line = 1;
-    for (let k = 0; k < idx; k++) if (s[k] === "\n") line++;
-    return line;
+    let lo = 0;
+    let hi = lineStarts.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (lineStarts[mid] <= idx) lo = mid;
+      else hi = mid - 1;
+    }
+    return lo + 1;
   };
+  const colOf = (idx) => idx - lineStarts[lineOf(idx) - 1] + 1;
   const readValue = (start) => {
     let j = start;
     let depth = 0;
@@ -594,18 +873,19 @@ function parseDeclarations(text) {
       /^\s*--[_A-Za-z0-9-]+\s*$/.test(pending)
     ) {
       const name = pending.trim();
-      const nameLine = lineOf(pendingStart + pending.indexOf("--"));
+      const nameIdx = pendingStart + pending.indexOf("--");
       const { value, end } = readValue(i + 1);
       decls.push({
         name,
         value,
-        line: nameLine,
+        line: lineOf(nameIdx),
+        column: colOf(nameIdx),
         selector: selStack.filter(Boolean).join(" "),
         endsAtBrace: s[end] === "}",
       });
       pending = "";
       pendingStart = end + 1;
-      i = end; // continue from the terminator; '}' will pop the block
+      i = end;
       continue;
     }
     if (
@@ -615,15 +895,19 @@ function parseDeclarations(text) {
       !pending.trim().startsWith("--")
     ) {
       const name = pending.trim();
+      const nameIdx =
+        pendingStart + (pending.length - pending.trimStart().length);
       const { value, end } = readValue(i + 1);
       if (/var\(\s*--_?ds-/.test(value)) {
         reads.push({
           property: name,
+          value,
           channels: parseVarRefs(value)
             .map((r) => r.name)
             .filter((n) => n.startsWith("--ds-") || n.startsWith("--_ds-")),
-          line: lineOf(pendingStart),
-          selector: selStack.filter(Boolean).join(" ").slice(0, 160),
+          line: lineOf(nameIdx),
+          column: colOf(nameIdx),
+          selector: selStack.filter(Boolean).join(" "),
         });
       }
       pending = "";
@@ -659,7 +943,6 @@ function parseVarRefs(value) {
       j++;
     }
     const inner = value.slice(hit + 4, j - 1);
-    // split top-level comma
     let d = 0;
     let comma = -1;
     for (let k = 0; k < inner.length; k++) {
@@ -682,6 +965,42 @@ function parseVarRefs(value) {
   return refs;
 }
 
+/**
+ * Enumerate EVERY var() reference of a value in textual order -- top level and
+ * nested inside fallbacks -- each with its position in the tree.
+ *
+ * `role`   primary = the reference CSS evaluates first; fallback = an
+ *          alternative that only runs when its parent is missing.
+ * `terminal` none = bare reference (no fallback at all);
+ *          literal = the fallback has no var() (paint ends in a literal);
+ *          var = the fallback contains another reference.
+ * `governed` marks a `--ds-*` channel. `--_ds-*` internal sockets are graph
+ *          refs (transitable nodes) but NEVER governed refs: they stay out of
+ *          D1, D2, buckets and rollup.
+ */
+export function enumerateRefs(value) {
+  const out = [];
+  const walkRefs = (text, depth, parentRefIndex, role) => {
+    for (const ref of parseVarRefs(text)) {
+      const refIndex = out.length;
+      out.push({
+        refIndex,
+        channel: ref.name,
+        depth,
+        role,
+        parentRefIndex,
+        terminal:
+          ref.fallback === null ? "none" : ref.nested ? "var" : "literal",
+        governed: ref.name.startsWith("--ds-"),
+        internalSocket: ref.name.startsWith("--_ds-"),
+      });
+      if (ref.nested) walkRefs(ref.fallback, depth + 1, refIndex, "fallback");
+    }
+  };
+  walkRefs(value, 0, null, "primary");
+  return out;
+}
+
 /* ---------- kind classification (closed R4 vocabulary) ---------- */
 function classify(decl, refs) {
   const v = decl.value.trim();
@@ -693,144 +1012,473 @@ function classify(decl, refs) {
   if (/calc\(/.test(v)) {
     if (v.includes("/")) return "calc-divide";
     if (v.includes("*")) return "calc-multiply";
-    return "UNCLASSIFIED_CALC"; // reported, never silently bucketed
+    return "calc-offset";
   }
   if (/^var\([\s\S]*\)$/.test(v) && refs.length === 1) return "alias";
-  return "identity"; // multi-ref shorthands and var()-in-composite values
+  return "identity";
 }
 
-/* ---------- run ---------- */
-const edges = [];
-const literalPins = [];
-const leafReads = [];
-const byKind = Object.fromEntries(DERIVATION_KINDS.map((k) => [k, 0]));
-let unclassifiedCalc = 0;
-const unclassifiedSamples = [];
-let declarations = 0;
-let declarationsWithVar = 0;
-let nestedFallbacks = 0;
+/* ==========================================================================
+ * buildEdges() -- PURE. Reads the css tree, returns the artifact object.
+ *
+ * FALLBACK TOPOLOGY, NORMALISED (contrato v3 sec 3.2). For
+ *
+ *     --ds-x: var(--ds-y, var(--ds-root));
+ *
+ * the stored edges are
+ *
+ *     { from: y,    to: x, edgeClass: 'decl',          guardPrimary: null }
+ *     { from: root, to: y, edgeClass: 'decl-fallback', guardPrimary: y    }
+ *
+ * and the reverse traversal is x -> y -> root. The shortcut `root -> x` --
+ * which the schemaVersion 1 extractor emitted as `{from: root, to: x,
+ * viaFallback: true}` -- is FORBIDDEN: it hides whether `y` has a producer,
+ * which is exactly the predicate STRICT admission turns on.
+ *
+ * At a paint site `prop: var(A, var(B))` the same normalisation yields the
+ * new `leaf-fallback` class: `{ from: B, to: A, guardPrimary: A }`.
+ * ========================================================================== */
+export function buildEdges({ cssRoot = CSS_ROOT, cssRootRel = CSS_ROOT_REL } = {}) {
+  const files = walk(cssRoot).filter(
+    (f) => !relative(cssRoot, f).startsWith(join("facade", "artifacts"))
+  );
 
-for (const file of files) {
-  const rel = join(CSS_ROOT_REL, relative(CSS_ROOT, file));
-  const text = readFileSync(file, "utf8");
-  for (const { decls, reads: fileReads } of [parseDeclarations(text)]) {
-    for (const r of fileReads) leafReads.push({ ...r, file: rel });
+  const edges = [];
+  const foreignEdges = [];
+  const literalPins = [];
+  const leafReads = [];
+  const readSites = [];
+  const unadjudicatedSelectors = [];
+  const scopeContradictions = [];
+  const byKind = Object.fromEntries(DERIVATION_KINDS.map((k) => [k, 0]));
+  let unclassifiedCalc = 0;
+  const unclassifiedSamples = [];
+  let declarations = 0;
+  let declarationsWithVar = 0;
+  let nestedFallbacks = 0;
+  let readRefs = 0;
+  let governedReadRefs = 0;
+  let internalSocketReadRefs = 0;
+
+  const noteScope = (scope, where) => {
+    if (scope.status === "unadjudicated") unadjudicatedSelectors.push(where);
+    else if (scope.status === "contradiction") scopeContradictions.push(where);
+  };
+
+  /**
+   * Scope combinations are INTERNED. The three engine sets repeated on every
+   * one of the ~28k rows would be pure duplication; the table publishes the
+   * whole scope vocabulary in one auditable place and each row carries its
+   * `scopeId`. Lossless: `scopeTable[row.scopeId]` restores the triple.
+   */
+  const scopeTable = [];
+  const scopeIndex = new Map();
+  const internScope = (scope) => {
+    const sel = scope.selectorEngines === "unknown"
+      ? "unknown"
+      : scope.selectorEngines.join("+");
+    const key = `${scope.pathEngines.join("+")}|${sel}|${scope.effectiveEngines.join("+")}|${scope.status}`;
+    if (scopeIndex.has(key)) return scopeIndex.get(key);
+    const id = scopeTable.length;
+    scopeTable.push({
+      scopeId: id,
+      pathEngines: scope.pathEngines,
+      selectorEngines: scope.selectorEngines,
+      effectiveEngines: scope.effectiveEngines,
+      status: scope.status,
+    });
+    scopeIndex.set(key, id);
+    return id;
+  };
+
+  for (const file of files) {
+    const rel = join(cssRootRel, relative(cssRoot, file));
+    const text = readFileSync(file, "utf8");
+    const { decls, reads } = parseDeclarations(text);
+
+    const siteOccurrenceOf = new Map();
+    for (const r of reads) {
+      const scope = scopeOf(rel, r.selector);
+      const key = `${r.line}|${r.property}`;
+      const occurrence = (siteOccurrenceOf.get(key) ?? 0) + 1;
+      siteOccurrenceOf.set(key, occurrence);
+      const scopeKey = scope.effectiveEngines.join("+") || scope.status;
+      const readSiteId = readSiteIdOf(
+        scopeKey,
+        rel,
+        r.line,
+        r.column,
+        r.property,
+        occurrence
+      );
+      const refs = enumerateRefs(r.value)
+        .filter((ref) => ref.governed || ref.internalSocket)
+        .map((ref) => ({ readRefId: readRefIdOf(readSiteId, ref.refIndex), ...ref }));
+      noteScope(scope, {
+        readSiteId,
+        file: rel,
+        line: r.line,
+        property: r.property,
+        selector: r.selector.slice(0, 160),
+        pathEngines: scope.pathEngines,
+        selectorEngines: scope.selectorEngines,
+      });
+      readRefs += refs.length;
+      for (const ref of refs) {
+        if (ref.governed) governedReadRefs++;
+        else internalSocketReadRefs++;
+      }
+      readSites.push({
+        readSiteId,
+        file: rel,
+        line: r.line,
+        column: r.column,
+        property: r.property,
+        siteOccurrence: occurrence,
+        scopeId: internScope(scope),
+        ...(r.selector ? { selector: r.selector.slice(0, 160) } : {}),
+        refs,
+      });
+      // leaf-fallback edges: B -> A, guarded by the PARENT PRIMARY.
+      for (const ref of refs) {
+        if (ref.parentRefIndex === null) continue;
+        const parent = refs.find((p) => p.refIndex === ref.parentRefIndex);
+        if (!parent) continue;
+        edges.push({
+          from: ref.channel,
+          to: parent.channel,
+          edgeClass: "leaf-fallback",
+          guardPrimary: parent.channel,
+          depth: ref.depth,
+          file: rel,
+          line: r.line,
+          property: r.property,
+          readSiteId,
+          scopeId: internScope(scope),
+          ...(r.selector ? { selector: r.selector.slice(0, 160) } : {}),
+        });
+      }
+      // schemaVersion 1 shape, preserved byte-for-byte in FIELDS so the two
+      // non-gate downstream consumers keep the input they were written for.
+      leafReads.push({
+        property: r.property,
+        channels: r.channels,
+        line: r.line,
+        selector: r.selector.slice(0, 160),
+        file: rel,
+      });
+    }
+
     for (const decl of decls) {
-    declarations++;
-    const refs = parseVarRefs(decl.value);
-    const kind = classify(decl, refs);
-    if (kind === "UNCLASSIFIED_CALC") {
-      unclassifiedCalc++;
-      if (unclassifiedSamples.length < 10)
-        unclassifiedSamples.push({
+      declarations++;
+      const refs = parseVarRefs(decl.value);
+      const kind = classify(decl, refs);
+      if (!DERIVATION_KINDS.includes(kind)) {
+        // A shape outside the closed vocabulary is a HARD FAILURE, never a
+        // silent drop: the artifact does not get written at all.
+        throw new Error(
+          `cascade-extract: unadjudicated derivation shape at ${rel}:${decl.line}\n` +
+            `  head:  ${decl.name}\n` +
+            `  value: ${decl.value}\n` +
+            "  widen DERIVATION_KINDS with a DT ruling; never discard a declaration that has refs.",
+        );
+      }
+      byKind[kind]++;
+      // Scope is computed and interned BEFORE branching on the kind: a literal
+      // pin is a DECLARATION, and F1 decides literalTerminalDeclared against
+      // literalTerminalUndeclared inside the ref's ADMISSIBLE PARTITION. A pin
+      // without scope makes that question unanswerable downstream.
+      const scope = scopeOf(rel, decl.selector);
+      noteScope(scope, {
+        file: rel,
+        line: decl.line,
+        channel: decl.name,
+        selector: decl.selector.slice(0, 160),
+        pathEngines: scope.pathEngines,
+        selectorEngines: scope.selectorEngines,
+      });
+      const declScopeId = internScope(scope);
+      if (kind === "literal-pin") {
+        literalPins.push({
           channel: decl.name,
-          value: decl.value.slice(0, 120),
+          value: decl.value,
           file: rel,
           line: decl.line,
+          scopeId: declScopeId,
         });
-      continue;
-    }
-    byKind[kind]++;
-    if (kind === "literal-pin") {
-      literalPins.push({
-        channel: decl.name,
-        value: decl.value,
-        file: rel,
-        line: decl.line,
-      });
-      continue;
-    }
-    declarationsWithVar++;
-    // top-level refs are the direct hops; nested fallback refs are hops too
-    // (X reads Y, and Y-unset reads Z) and are marked viaFallback.
-    const emit = (ref, viaFallback) => {
-      edges.push({
-        from: ref.name,
-        to: decl.name,
-        kind,
-        file: rel,
-        line: decl.line,
-        ...(decl.selector ? { selector: decl.selector.slice(0, 160) } : {}),
-        ...(ref.fallback !== null && !viaFallback
-          ? { fallback: ref.fallback.slice(0, 160) }
-          : {}),
-        ...(viaFallback ? { viaFallback: true } : {}),
-      });
-      if (ref.nested) nestedFallbacks++;
-    };
-    const walkRefs = (refList, viaFallback) => {
-      for (const ref of refList) {
-        emit(ref, viaFallback);
-        if (ref.nested) walkRefs(parseVarRefs(ref.fallback), true);
+        continue;
       }
-    };
-    walkRefs(refs, false);
+      declarationsWithVar++;
+      const enumerated = enumerateRefs(decl.value);
+      for (const ref of enumerated) {
+        if (ref.terminal === "var") nestedFallbacks++;
+        const isPrimary = ref.parentRefIndex === null;
+        const parent = isPrimary
+          ? null
+          : enumerated.find((p) => p.refIndex === ref.parentRefIndex);
+        const to = isPrimary ? decl.name : parent.channel;
+        const row = {
+          from: ref.channel,
+          to,
+          kind,
+          edgeClass: isPrimary ? "decl" : "decl-fallback",
+          guardPrimary: isPrimary ? null : parent.channel,
+          depth: ref.depth,
+          file: rel,
+          line: decl.line,
+          ...(decl.selector ? { selector: decl.selector.slice(0, 160) } : {}),
+          scopeId: declScopeId,
+          ...(isPrimary ? {} : { viaFallback: true }),
+        };
+        // `edges[]` is the NORMATIVE graph and its vocabulary is sealed:
+        // `graphRef` is `--ds-*` or `--_ds-*`. A relation with a foreign
+        // endpoint (`--rh-*`, `--ant-*`, an Ant Design variable) is real and is
+        // NOT deleted -- it is kept in `foreignEdges[]`, a DIAGNOSTIC
+        // collection that B1 must not consume. Widening `graphRef` silently to
+        // fit them would break the sealed definition; dropping them would burn
+        // evidence.
+        const fromGraph = isGraphRef(ref.channel);
+        const toGraph = isGraphRef(to);
+        if (fromGraph && toGraph) {
+          edges.push(row);
+        } else {
+          foreignEdges.push({
+            ...row,
+            reason: !fromGraph && !toGraph
+              ? "foreign-both"
+              : fromGraph
+                ? "foreign-head"
+                : "foreign-source",
+          });
+        }
+      }
     }
   }
-}
 
-const output = {
-  generated: true,
-  generator: "cascade-extract.mjs",
-  schemaVersion: 1,
-  sourceRoot: CSS_ROOT_REL,
-  excluded: ["facade/artifacts/** (generated snapshots, never authority)"],
-  derivationKinds: DERIVATION_KINDS,
-  stats: {
-    files: files.length,
-    declarations,
-    declarationsWithVar,
-    edges: edges.length,
-    edgesViaFallback: edges.filter((e) => e.viaFallback).length,
-    nestedFallbacks,
-    literalPins: literalPins.length,
-    leafReads: leafReads.length,
-    unclassifiedCalc,
-    byKind,
-    // Counting units, so a zero or a diff is never read as absence:
-    countUnit: {
-      declarationsWithVar:
-        "una por declaracion --X unica (file,linea) cuyo valor contiene var()",
-      edges:
-        "una arista por CADA referencia var() de primer nivel, mas una por cada referencia dentro de fallbacks (viaFallback: true)",
-      nestedFallbacks:
-        "referencias (de cualquier profundidad) cuyo fallback contiene a su vez var()",
+  return {
+    generated: true,
+    generator: "cascade-extract.mjs",
+    schemaVersion: 2,
+    sourceRoot: cssRootRel,
+    excluded: ["facade/artifacts/** (generated snapshots, never authority)"],
+    derivationKinds: DERIVATION_KINDS,
+    engineVocabulary: ENGINE_VOCABULARY,
+    scopeGrammar: SCOPE_GRAMMAR,
+    scopeTable,
+    refVocabulary: {
+      graphRef:
+        "toda referencia --ds-* o --_ds-*; participa en aristas, caminos y witnesses.",
+      governedRef:
+        "graphRef cuyo channel empieza --ds-; se instancia y clasifica. D1/D2 se cuentan SOLO sobre estos.",
+      internalSocket:
+        "--_ds-*; nodo intermedio transitable del grafo, JAMAS en D1, D2, cubetas ni rollup.",
     },
-    // The TS planes are NOT scanned. ramp-derive and table-lookup live in
-    // compiler tables (radius-dial/index.ts:69-79 applyRadiusDial, call-site
-    // chrome-variables:3014; appearance-posture/index.ts:47-53
-    // BUTTON_STYLE_RADIUS) and are declared AUTHORED in
-    // cascade/roots/<controlId>.json with ruta:linea. A 0 in those kinds
-    // means plane-not-scanned, never absence. Machine-readable:
-    planeVocabulary: PLANE_VOCABULARY,
-    planeScanned: PLANE_SCANNED,
-    planesNotScanned: PLANES_NOT_SCANNED,
-    coverage: COVERAGE,
-  },
-  edges,
-  literalPins,
-  // Regular-property reads of governed channels (border-radius: var(--ds-x)):
-  // the LEAF read sites. The channel graph above only sees channel-to-channel
-  // hops; this is where a channel meets paint, and where a class-A socket
-  // gets opened (cascade-backlog.mjs consumes this list).
-  leafReads,
-};
-
-mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, JSON.stringify(output, null, 2) + "\n");
-
-console.log(`files:                ${files.length}`);
-console.log(`declarations:         ${declarations}`);
-console.log(`with var():           ${declarationsWithVar}`);
-console.log(`edges:                ${edges.length} (via fallback: ${output.stats.edgesViaFallback})`);
-console.log(`nested fallbacks:     ${nestedFallbacks}`);
-console.log(`literal pins:         ${literalPins.length}`);
-console.log(`leaf reads:           ${leafReads.length}`);
-console.log(`unclassified calc:    ${unclassifiedCalc}`);
-console.log(`byKind: ${JSON.stringify(byKind)}`);
-if (unclassifiedSamples.length) {
-  console.log("unclassified samples:");
-  for (const smp of unclassifiedSamples)
-    console.log(`  ${smp.file}:${smp.line} ${smp.channel}: ${smp.value}`);
+    foreignEdgeLaw:
+      "edges[] esta CERRADO al vocabulario graphRef (--ds-*, --_ds-*) en AMBOS extremos. Toda relacion con un extremo extranjero (--rh-*, --ant-*, variables de terceros) se conserva en foreignEdges[]: coleccion DIAGNOSTICA, no consumible por el gate, con file/line/scopeId/kind/endpoints/reason y digest propio. Ni se ensancha graphRef ni se borra evidencia.",
+    edgeClasses: {
+      decl: "la declaracion de D lee S en primer nivel => S -> D",
+      "decl-fallback":
+        "alternativa dentro del valor de una declaracion => B -> A, guardPrimary A. Sin atajo al head.",
+      "leaf-fallback":
+        "alternativa dentro de un sitio de pintura => B -> A, guardPrimary A. Clase nueva de schemaVersion 2.",
+    },
+    stats: {
+      files: files.length,
+      declarations,
+      declarationsWithVar,
+      edges: edges.length,
+      foreignEdges: foreignEdges.length,
+      edgesByClass: {
+        decl: edges.filter((e) => e.edgeClass === "decl").length,
+        "decl-fallback": edges.filter((e) => e.edgeClass === "decl-fallback")
+          .length,
+        "leaf-fallback": edges.filter((e) => e.edgeClass === "leaf-fallback")
+          .length,
+      },
+      edgesViaFallback: edges.filter((e) => e.viaFallback).length,
+      nestedFallbacks,
+      literalPins: literalPins.length,
+      leafReads: leafReads.length,
+      readSites: readSites.length,
+      readRefs,
+      governedReadRefs,
+      internalSocketReadRefs,
+      unclassifiedCalc,
+      unclassifiedSamples,
+      byKind,
+      foreignEdgesByReason: foreignEdges.reduce((acc, e) => {
+        acc[e.reason] = (acc[e.reason] ?? 0) + 1;
+        return acc;
+      }, {}),
+      scope: {
+        unadjudicatedSelectors: unadjudicatedSelectors.length,
+        scopeContradictions: scopeContradictions.length,
+        scopeTableSize: scopeTable.length,
+        readSitesByEffectiveEngines: readSites.reduce((acc, site) => {
+          const key =
+            scopeTable[site.scopeId].effectiveEngines.join("+") || "(empty)";
+          acc[key] = (acc[key] ?? 0) + 1;
+          return acc;
+        }, {}),
+      },
+      // Counting units, so a zero or a diff is never read as absence:
+      countUnit: {
+        declarationsWithVar:
+          "una por declaracion --X unica (file,linea) cuyo valor contiene var()",
+        edges:
+          "una arista por CADA referencia var(): las de primer nivel apuntan al head declarado (decl), las anidadas apuntan a SU REFERENCIA PADRE (decl-fallback / leaf-fallback), nunca al head. Cambio de schemaVersion 2: la v1 apuntaba las anidadas al head, que es el atajo prohibido por el contrato.",
+        byKind:
+          "una por DECLARACION clasificada, no por arista. Una declaracion con varios var() emite mas de una arista con el mismo kind: por eso byKind['data-attr-select'] y el conteo de filas de edges con ese kind son cifras distintas y ambas reales.",
+        nestedFallbacks:
+          "referencias (de cualquier profundidad) cuyo fallback contiene a su vez var()",
+        readSites:
+          "una por declaracion de PROPIEDAD DE PINTURA con al menos un var(--ds-*|--_ds-*). No incluye declaraciones de custom property: esas son aristas.",
+        readRefs:
+          "una por referencia var() dentro de un read site, incluidas las anidadas. governedReadRefs son las --ds-*; internalSocketReadRefs las --_ds-*.",
+      },
+      // The TS planes are NOT scanned. ramp-derive and table-lookup live in
+      // compiler tables (radius-dial/index.ts:69-79 applyRadiusDial, call-site
+      // chrome-variables:3014; appearance-posture/index.ts:47-53
+      // BUTTON_STYLE_RADIUS) and are declared AUTHORED in
+      // cascade/roots/<controlId>.json with ruta:linea. A 0 in those kinds
+      // means plane-not-scanned, never absence. Machine-readable:
+      planeVocabulary: PLANE_VOCABULARY,
+      planeScanned: PLANE_SCANNED,
+      planesNotScanned: PLANES_NOT_SCANNED,
+    },
+    authoredCensus: AUTHORED_CENSUS,
+    digests: {
+      // FULL-EVIDENCE SEAL. An earlier form hashed endpoints, class, file and
+      // line only, which left `scopeId` and `kind` unsealed: moving a relation
+      // to a different admissible partition, or reclassifying its derivation
+      // kind, changed the evidence while the digest stayed put. A digest that
+      // cannot move when the evidence moves is not a seal. Both collections
+      // carry the identical defect class, so both are sealed the same way, in
+      // the deterministic order of the array itself.
+      edges: sha256(JSON.stringify(edges.map(edgeSealTuple))),
+      foreignEdges: sha256(JSON.stringify(foreignEdges.map(edgeSealTuple))),
+      readSites: sha256(JSON.stringify(readSites.map((site) => site.readSiteId))),
+      literalPins: sha256(JSON.stringify(literalPins.map((pin) => [pin.channel, pin.file, pin.line, pin.scopeId]))),
+    },
+    edges,
+    foreignEdges,
+    literalPins,
+    leafReads,
+    readSites,
+    unadjudicatedSelectors,
+    scopeContradictions,
+  };
 }
-console.log(`wrote ${OUT}`);
+
+/**
+ * Stable serialisation. The ONLY shape written to disk.
+ *
+ * Record arrays are emitted ONE ROW PER LINE (compact JSON per row) instead of
+ * fully indented: a 466-file scan produces ~28k rows, and full indentation
+ * tripled the artifact for no information. One row per line keeps a diff
+ * readable line-by-line, which fully-compact JSON would not.
+ */
+const ROW_ARRAYS = new Set([
+  "scopeTable",
+  "edges",
+  "foreignEdges",
+  "literalPins",
+  "leafReads",
+  "readSites",
+  "unadjudicatedSelectors",
+  "scopeContradictions",
+]);
+
+export function serialize(output) {
+  const keys = Object.keys(output);
+  const lines = ["{"];
+  keys.forEach((key, index) => {
+    const comma = index === keys.length - 1 ? "" : ",";
+    if (ROW_ARRAYS.has(key)) {
+      const rows = output[key];
+      if (rows.length === 0) {
+        lines.push(`  ${JSON.stringify(key)}: []${comma}`);
+        return;
+      }
+      lines.push(`  ${JSON.stringify(key)}: [`);
+      rows.forEach((row, rowIndex) => {
+        lines.push(
+          `    ${JSON.stringify(row)}${rowIndex === rows.length - 1 ? "" : ","}`
+        );
+      });
+      lines.push(`  ]${comma}`);
+      return;
+    }
+    const body = JSON.stringify(output[key], null, 2)
+      .split("\n")
+      .map((line, lineIndex) => (lineIndex === 0 ? line : `  ${line}`))
+      .join("\n");
+    lines.push(`  ${JSON.stringify(key)}: ${body}${comma}`);
+  });
+  lines.push("}");
+  return lines.join("\n") + "\n";
+}
+
+export const OUT_PATH = OUT;
+
+/* ---------- CLI ---------- */
+function usage(stream) {
+  stream.write(
+    "usage: node cascade-extract.mjs [--check|--write]\n" +
+      "  --check  (default) recompute and byte-compare against the committed artifact; never writes\n" +
+      "  --write  regenerate the artifact\n"
+  );
+}
+
+function main(argv) {
+  const mode = argv.length === 0 ? "--check" : argv[0];
+  if (argv.length > 1 || (mode !== "--check" && mode !== "--write")) {
+    usage(process.stderr);
+    process.exit(2);
+  }
+  const text = serialize(buildEdges());
+  if (mode === "--check") {
+    let onDisk = null;
+    try {
+      onDisk = readFileSync(OUT, "utf8");
+    } catch {
+      console.error(`cascade-extract --check FAILED: ${OUT} does not exist`);
+      process.exit(1);
+    }
+    if (onDisk !== text) {
+      console.error(
+        "cascade-extract --check FAILED: the committed artifact is not what the tree produces.\n" +
+          "  run: node cascade-extract.mjs --write"
+      );
+      process.exit(1);
+    }
+    console.log(`cascade-extract --check OK -- ${OUT} matches the tree`);
+    return;
+  }
+  mkdirSync(dirname(OUT), { recursive: true });
+  writeFileSync(OUT, text);
+  const out = buildEdges();
+  console.log(`files:                ${out.stats.files}`);
+  console.log(`declarations:         ${out.stats.declarations}`);
+  console.log(`with var():           ${out.stats.declarationsWithVar}`);
+  console.log(
+    `edges:                ${out.stats.edges} (decl ${out.stats.edgesByClass.decl}, decl-fallback ${out.stats.edgesByClass["decl-fallback"]}, leaf-fallback ${out.stats.edgesByClass["leaf-fallback"]})`
+  );
+  console.log(`nested fallbacks:     ${out.stats.nestedFallbacks}`);
+  console.log(`literal pins:         ${out.stats.literalPins}`);
+  console.log(`leaf reads:           ${out.stats.leafReads}`);
+  console.log(
+    `read sites:           ${out.stats.readSites} (governed refs ${out.stats.governedReadRefs}, internal sockets ${out.stats.internalSocketReadRefs})`
+  );
+  console.log(`unclassified calc:    ${out.stats.unclassifiedCalc}`);
+  console.log(
+    `scope:                unadjudicated ${out.stats.scope.unadjudicatedSelectors}, contradictions ${out.stats.scope.scopeContradictions}`
+  );
+  console.log(`byKind: ${JSON.stringify(out.stats.byKind)}`);
+  console.log(`wrote ${OUT}`);
+}
+
+const isMain =
+  process.argv[1] &&
+  realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+if (isMain) main(process.argv.slice(2));

@@ -21,6 +21,7 @@ import { loadProgramContracts } from '../../v2/contracts.mjs';
 import { validateCustomizationManifest } from '../../../../manifest/generator/index.mjs';
 import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from '../../../../manifest/rules/index.mjs';
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
+import { validateInventory } from './cascade-consumability.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -402,6 +403,20 @@ function collectTextualFailures() {
       }
     }
   }
+
+  // 6d. CERCA DE CONSUMIBILIDAD downstream (PRE_F4B lote A, A10).
+  //
+  // `manifest/cascade/materialized/**` y `backlog/**` estan stale, y el
+  // productor del segundo ni siquiera corre de punta a punta en un checkout
+  // limpio. Ningun gate los leia, que es justamente como pudieron pudrirse sin
+  // que nadie lo notara. La cerca los enumera y los declara bloqueados; ESTE
+  // gate, que ya es blocking, es quien la valida.
+  //
+  // Se llama SOLO `validateInventory()`. `assertConsumable()` es la API del
+  // consumidor de F4B y lanza para un path cercado: invocarla aqui dejaria el
+  // gate rojo permanentemente por hacer su trabajo, y una cerca asi se borra en
+  // vez de respetarse.
+  failures.push(...validateInventory());
 
   const controlsDir = join(repoRoot, MANIFEST_DIR, 'controls');
   if (existsSync(controlsDir)) {
