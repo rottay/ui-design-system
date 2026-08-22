@@ -1,0 +1,41 @@
+{
+  "main": {
+    "surface": {
+      "canvas": "#0C0C0E",
+      "raised": "#131316"
+    },
+    "edge": {
+      "strong": "#2A2A2F"
+    },
+    "veil": {
+      "hover": "rgba(255, 255, 255, 0.025)",
+      "selected": "rgba(255, 255, 255, 0.05)"
+    },
+    "typeDetail": {
+      "tableHeaderWeight": 600,
+      "tableHeaderSize": "0.6875rem",
+      "tableHeaderTrackingRatio": 0.75
+    },
+    "rhythm": {
+      "tableCellPadding": "0.875rem 1rem"
+    },
+    "scrim": {
+      "loading": "rgba(12, 12, 14, 0.7)"
+    }
+  },
+  "overlay": {
+    "surface": {
+      "card": "#FFFFFF",
+      "wash": "#FAFAF9"
+    },
+    "edge": {
+      "strong": "#E5E5E3"
+    },
+    "veil": {
+      "selected": "rgba(10, 10, 10, 0.04)"
+    },
+    "scrim": {
+      "loading": "rgba(255, 255, 255, 0.7)"
+    }
+  }
+}

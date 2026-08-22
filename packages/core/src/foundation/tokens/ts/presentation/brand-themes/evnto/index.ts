@@ -36,6 +36,8 @@ import {
   EVNTO_CANONICAL_SURFACES,
 } from '@/foundation/presets/policy/experience-baselines/evnto';
 
+import seedValues from './seeds.json';
+
 // ──────────────────────── AUTHORED DECISIONS ────────────────────────
 // Every brand-specific value and every justified shipped pin of this vertical
 // is authored below, in the roster order the skeleton consumes it. Nothing
@@ -46,6 +48,11 @@ const THEME_ID = 'evnto' satisfies FirstPartyBrandTheme['id'];
 const THEME_NAME = 'Evnto';
 const DEFAULT_MODE = 'light' satisfies BrandThemeMode;
 const OVERLAY_MODE = 'dark' satisfies BrandThemeMode;
+
+
+// ── SEEDS — valores en ./seeds.json (ausencia = placeholder) ──
+const SEED = seedValues.main;
+const OVERLAY_SEED = seedValues.overlay;
 
 // ── OVERLAY — the non-default mode ──
 /**
@@ -666,9 +673,9 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
     table: {
-      headerBg: "#1C1A16",
-      headerColor: "#A8A898",
-      border: "#222018",
+      headerBg: OVERLAY_SEED.surface.raised,
+      headerColor: OVERLAY_SEED.ink.tableHeader,
+      border: OVERLAY_SEED.edge.divider,
     },
     sidebar: {
       /**
@@ -4202,7 +4209,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor sin coincidencia con PALETTE, con raiz del catalogo ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1)
      */
-    headerBg: 'rgba(0, 0, 0, 0.02)',
+    headerBg: SEED.surface.raised,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de PALETTE.textMutedColor (#737373)
@@ -4212,12 +4219,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor coincide con itemFontWeightActive (evnto/index.ts:2656), mismo rol de font-weight: relacion declarada; DIVERGE del valor autorado por rottay y bithire para el mismo eje (600): divergencia medida declarada; cardinalidad medida 2
      */
-    headerFontWeight: 500,
+    headerFontWeight: SEED.typeDetail.tableHeaderWeight,
     /**
      * @domicile seed
      * @governor sin coincidencia con PALETTE ni con ninguna otra clave del tema (cardinalidad medida 1); NO converge con el valor autorado por bithire para el mismo eje (0.6875rem): la razon de convergencia que aplica en bithire seria falsa aqui
      */
-    headerFontSize: '0.75rem',
+    headerFontSize: SEED.typeDetail.tableHeaderSize,
   },
   /**
    * @absent CHROME.table.actionBg

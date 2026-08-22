@@ -35,6 +35,8 @@ import type {
   FirstPartyBrandTheme,
 } from '../../../../../contracts/composition/tenants/themes';
 
+import seedValues from './seeds.json';
+
 // ──────────────────────── AUTHORED DECISIONS ────────────────────────
 // Every brand-specific value and every justified shipped pin of this vertical
 // is authored below, in the roster order the skeleton consumes it. Nothing
@@ -45,6 +47,11 @@ const THEME_ID = 'rottay' satisfies FirstPartyBrandTheme['id'];
 const THEME_NAME = 'Rottay';
 const DEFAULT_MODE = 'dark' satisfies BrandThemeMode;
 const OVERLAY_MODE = 'light' satisfies BrandThemeMode;
+
+
+// ── SEEDS — valores en ./seeds.json (ausencia = placeholder) ──
+const SEED = seedValues.main;
+const OVERLAY_SEED = seedValues.overlay;
 
 // ── OVERLAY — the non-default mode ──
 /**
@@ -1637,15 +1644,15 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
     table: {
-      bg: "#FFFFFF",
-      border: "#E5E5E3",
-      headerBg: "#FAFAF9",
-      rowBg: "#FFFFFF",
-      rowBgHover: "#FAFAF9",
-      rowBgStriped: "#FAFAF9",
-      rowBgSelected: "rgba(10, 10, 10, 0.04)",
+      bg: OVERLAY_SEED.surface.card,
+      border: OVERLAY_SEED.edge.strong,
+      headerBg: OVERLAY_SEED.surface.wash,
+      rowBg: OVERLAY_SEED.surface.card,
+      rowBgHover: OVERLAY_SEED.surface.wash,
+      rowBgStriped: OVERLAY_SEED.surface.wash,
+      rowBgSelected: OVERLAY_SEED.veil.selected,
       rowBorder: "#EDEDEC",
-      loadingOverlayBg: "rgba(255, 255, 255, 0.7)",
+      loadingOverlayBg: OVERLAY_SEED.scrim.loading,
       cellColor: "#1A1A1A",
     },
     /**
@@ -7259,17 +7266,17 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor coincide en color con la emision de tier.base.bg; byte-identico medido (#0C0C0E)
      */
-    bg: '#0C0C0E',
+    bg: SEED.surface.canvas,
     /**
      * @domicile seed
      * @governor coincide en color con la familia de rol borde del tema (#2A2A2F, 72 claves: border ×20, headerBorder ×4, borderColor ×4, footerBorder ×3, dividerColor ×2, cardBorder ×2, …): relacion por rol declarada; NO coincide con PALETTE.borderColor (rottay:3466, #28282C); la unica coincidencia en PALETTE es interactiveBgActiveColor (:3512), rol distinto: accidente declarado
      */
-    border: '#2A2A2F',
+    border: SEED.edge.strong,
     /**
      * @domicile seed
      * @governor coincide en color con la familia de rol fondo secundario del tema (#131316, 22 claves: bg ×13, headerBg ×3, …): relacion por rol declarada; sin coincidencia en PALETTE (backgroundSecondaryColor #0F0F12, backgroundTertiaryColor #141417 difieren); converge internamente con CHROME.table.rowBgStriped
      */
-    headerBg: '#131316',
+    headerBg: SEED.surface.raised,
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-text-page (raiz de tinta de pagina, K3)
@@ -7279,32 +7286,32 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor sin coincidencia con PALETTE ni con raiz; converge con el valor autorado por bithire para el mismo eje (600) y diverge de evnto (500); cardinalidad medida 4, toda en claves de rol font-weight
      */
-    headerFontWeight: 600,
+    headerFontWeight: SEED.typeDetail.tableHeaderWeight,
     /**
      * @domicile seed
      * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2); converge con el valor autorado por bithire para el mismo eje (0.6875rem)
      */
-    headerFontSize: '0.6875rem',
+    headerFontSize: SEED.typeDetail.tableHeaderSize,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de tier.base.bg; byte-identico medido (#0C0C0E)
      */
-    rowBg: '#0C0C0E',
+    rowBg: SEED.surface.canvas,
     /**
      * @domicile seed
      * @governor superposicion alfa propia del eje; 3 ocurrencias en el archivo: esta hoja, iconBg (:7686) y un ingrediente de gradiente (:7742), ambas de rol distinto: accidente declarado; sin coincidencia de mismo rol
      */
-    rowBgHover: 'rgba(255, 255, 255, 0.025)',
+    rowBgHover: SEED.veil.hover,
     /**
      * @domicile seed
      * @governor coincide en color con la familia de rol fondo secundario del tema (#131316, 22 claves: bg ×13, headerBg ×3, …): relacion por rol declarada; sin coincidencia en PALETTE (backgroundSecondaryColor #0F0F12, backgroundTertiaryColor #141417 difieren); converge internamente con CHROME.table.headerBg
      */
-    rowBgStriped: '#131316',
+    rowBgStriped: SEED.surface.raised,
     /**
      * @domicile seed
      * @governor 6 ocurrencias en el archivo; las otras 5 (headerBorder :4426, bgHover de botones :5669/:5710, closeBgHover :7566, borderColor :7977) son de rol distinto (hover/borde vs seleccionado): accidente declarado; NO coincide con --ds-select-option-bg-selected de rottay (#2A2A2F, artefacto, evidencia de valor) — a diferencia del mismo eje en bithire
      */
-    rowBgSelected: 'rgba(255, 255, 255, 0.05)',
+    rowBgSelected: SEED.veil.selected,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de --ds-border-color-muted (delta medido +17)
@@ -7314,7 +7321,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2)
      */
-    cellPadding: '0.875rem 1rem',
+    cellPadding: SEED.rhythm.tableCellPadding,
     /**
      * @domicile seed
      * @governor coincide con la emision rottay de --ds-text-body-size (facade/artifacts/rottay/index.css:997, 0.875rem): relacion declarada (K-4 packet v2)
@@ -7329,7 +7336,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor sin coincidencia medida con raiz ni canal vivo (limpia, K-4 packet v2)
      */
-    loadingOverlayBg: 'rgba(12, 12, 14, 0.7)',
+    loadingOverlayBg: SEED.scrim.loading,
     /**
      * @domicile derived
      * @governor deriva de: --ds-input-md-height
@@ -7339,7 +7346,7 @@ const CHROME: BrandChrome = {
      * @domicile derived
      * @governor deriva de: --ds-text-eyebrow-letter-spacing
      */
-    headerLetterSpacing: 'calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * 0.75)',
+    headerLetterSpacing: `calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * ${SEED.typeDetail.tableHeaderTrackingRatio})`,
     /**
      * @domicile seed
      * @governor valor keyword none: declara ausencia de efecto, no un color; sin coincidencia de color posible

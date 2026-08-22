@@ -42,6 +42,8 @@ const ROSTER = [
   "THEME_NAME",
   "DEFAULT_MODE",
   "OVERLAY_MODE",
+  "SEED",
+  "OVERLAY_SEED",
   "OVERLAY",
   "RECIPES",
   "EXPRESSIVE",

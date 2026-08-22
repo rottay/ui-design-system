@@ -1,0 +1,22 @@
+{
+  "main": {
+    "surface": {
+      "raised": "rgba(0, 0, 0, 0.02)"
+    },
+    "typeDetail": {
+      "tableHeaderWeight": 500,
+      "tableHeaderSize": "0.75rem"
+    }
+  },
+  "overlay": {
+    "surface": {
+      "raised": "#1C1A16"
+    },
+    "edge": {
+      "divider": "#222018"
+    },
+    "ink": {
+      "tableHeader": "#A8A898"
+    }
+  }
+}

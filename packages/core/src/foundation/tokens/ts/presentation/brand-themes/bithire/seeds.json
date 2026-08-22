@@ -1,0 +1,50 @@
+{
+  "main": {
+    "surface": {
+      "raised": "#f3f2ef",
+      "mistTint": "#F5F8FA",
+      "stripeTint": "#FAFCFF",
+      "selectedTint": "#E8F3FF"
+    },
+    "edge": {
+      "divider": "#E3EAF0"
+    },
+    "typeDetail": {
+      "tableHeaderWeight": 600,
+      "tableHeaderSize": "0.6875rem",
+      "tableHeaderTrackingRatio": 0.8125,
+      "tableCellSize": "0.8125rem"
+    },
+    "rhythm": {
+      "tableCellPaddingCompact": "7px 10px",
+      "tableCellPaddingComfortable": "10px 12px",
+      "tableCellPaddingSpacious": "14px 16px",
+      "tableHeaderBlockSize": "34px"
+    },
+    "geometry": {
+      "tableRadius": "10px"
+    },
+    "material": {
+      "pageButtonShadow": "0 1px 2px rgba(20, 40, 59, 0.06)"
+    }
+  },
+  "overlay": {
+    "surface": {
+      "card": "#0f1520",
+      "raised": "#151d2b",
+      "hoverTint": "#1b2535",
+      "stripeTint": "#131a26",
+      "selectedTint": "#112840"
+    },
+    "edge": {
+      "divider": "#1d2a38"
+    },
+    "typeDetail": {
+      "tableHeaderSize": "0.75rem",
+      "tableCellSize": "0.875rem"
+    },
+    "rhythm": {
+      "tableCellPadding": "0.875rem 1rem"
+    }
+  }
+}

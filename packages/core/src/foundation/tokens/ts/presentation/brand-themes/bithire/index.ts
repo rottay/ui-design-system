@@ -42,6 +42,8 @@ import type {
   FirstPartyBrandTheme,
 } from '../../../../../contracts/composition/tenants/themes';
 
+import seedValues from './seeds.json';
+
 // ──────────────────────── AUTHORED DECISIONS ────────────────────────
 // Every brand-specific value and every justified shipped pin of this vertical
 // is authored below, in the roster order the skeleton consumes it. Nothing
@@ -52,6 +54,11 @@ const THEME_ID = "bithire" satisfies FirstPartyBrandTheme['id'];
 const THEME_NAME = "BitHire";
 const DEFAULT_MODE = "light" satisfies BrandThemeMode;
 const OVERLAY_MODE = 'dark' satisfies BrandThemeMode;
+
+
+// ── SEEDS — valores en ./seeds.json (ausencia = placeholder) ──
+const SEED = seedValues.main;
+const OVERLAY_SEED = seedValues.overlay;
 
 // ── OVERLAY — the non-default mode ──
 /**
@@ -1582,12 +1589,12 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      bg: "#0f1520",
+      bg: OVERLAY_SEED.surface.card,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      border: "#1d2a38",
+      border: OVERLAY_SEED.edge.divider,
       /**
        * @domicile derived
        * @governor deriva de: --ds-radius-lg
@@ -1597,7 +1604,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      headerBg: "#151d2b",
+      headerBg: OVERLAY_SEED.surface.raised,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1607,42 +1614,42 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      headerFontSize: "0.75rem",
+      headerFontSize: OVERLAY_SEED.typeDetail.tableHeaderSize,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      rowBg: "#0f1520",
+      rowBg: OVERLAY_SEED.surface.card,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      rowBgHover: "#1b2535",
+      rowBgHover: OVERLAY_SEED.surface.hoverTint,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      rowBgStriped: "#131a26",
+      rowBgStriped: OVERLAY_SEED.surface.stripeTint,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      rowBgSelected: "#112840",
+      rowBgSelected: OVERLAY_SEED.surface.selectedTint,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      rowBorder: "#1d2a38",
+      rowBorder: OVERLAY_SEED.edge.divider,
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      cellPadding: "0.875rem 1rem",
+      cellPadding: OVERLAY_SEED.rhythm.tableCellPadding,
       /**
        * @domicile seed
        * @governor dial: typography.scale
        */
-      cellFontSize: "0.875rem",
+      cellFontSize: OVERLAY_SEED.typeDetail.tableCellSize,
       /**
        * @domicile derived
        * @governor deriva de: --ds-surface-control
@@ -7247,17 +7254,17 @@ const CHROME: BrandChrome = {
      * @governor el propio archivo declara la relacion en bithire/index.ts:7237 ("Tables/panels ride the lg radius step"), pero el valor DIVERGE del peldano: --ds-radius-lg efectivo de bithire = 14px (base calc(14px/1.25) × escala 1.25, artefacto bithire :812-:814; DS default 12px, default.css:774) frente a 10px autorado
      */
     // Tables/panels ride the lg radius step (design-language §2.3).
-    radius: "10px",
+    radius: SEED.geometry.tableRadius,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de PALETTE.backgroundSecondaryColor (#f3f2ef)
      */
-    headerBg: "#f3f2ef",
+    headerBg: SEED.surface.raised,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de PALETTE.primaryColor (#3A6FB0), literal dentro de color-mix()
      */
-    headerBgHover: "color-mix(in srgb, #3A6FB0 5%, #F5F8FA)",
+    headerBgHover: `color-mix(in srgb, ${PALETTE.primaryColor} 5%, ${SEED.surface.mistTint})`,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de PALETTE.textPageColor (#53697E)
@@ -7267,12 +7274,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor coincide con la familia de rol font-weight del tema — groupFontWeight (bithire/index.ts:4346), itemFontWeightActive (:4391), labelFontWeight (:5791), itemFontWeightSelected (:6099) —: relacion por rol declarada; converge ademas con el valor autorado por rottay para el mismo eje (600) y diverge de evnto (500); cardinalidad medida 7
      */
-    headerFontWeight: 600,
+    headerFontWeight: SEED.typeDetail.tableHeaderWeight,
     /**
      * @domicile seed
      * @governor sin coincidencia de raiz; razon falsable: converge con el valor autorado por rottay para el mismo eje (mismo valor, convergencia medida)
      */
-    headerFontSize: "0.6875rem",
+    headerFontSize: SEED.typeDetail.tableHeaderSize,
     /**
      * @domicile seed
      * @governor sin coincidencia con PALETTE; DIVERGE de --ds-text-eyebrow-letter-spacing (0.08em), la rampa a la que default.css:1713 enruta este canal: divergencia medida declarada; cardinalidad medida 1
@@ -7287,7 +7294,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor coincide con mdHeight (bithire/index.ts:8809), mismo rol de altura de control md: relacion declarada; NO coincide con --ds-input-md-height (artefacto bithire, 36px); cardinalidad medida 2
      */
-    headerBlockSize: "34px",
+    headerBlockSize: SEED.rhythm.tableHeaderBlockSize,
     /**
      * @domicile seed
      * @governor coincide en color con la emision de PALETTE.borderColor (#d4e0ea), literal dentro de color-mix()
@@ -7313,12 +7320,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor sin coincidencia con PALETTE, con raiz del catalogo ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1)
      */
-    rowBgStriped: "#FAFCFF",
+    rowBgStriped: SEED.surface.stripeTint,
     /**
      * @domicile seed
      * @governor coincide en color con --ds-select-option-bg-selected (#e8f3ff), mismo rol de fondo de opcion/fila seleccionada: relacion declarada; sin coincidencia con PALETTE; cardinalidad medida 1
      */
-    rowBgSelected: "#E8F3FF",
+    rowBgSelected: SEED.surface.selectedTint,
     /**
      * @domicile seed
      * @governor coincide en color con el tinte compartido #F4F8FD del tema pero en roles distintos: accidente declarado; converge internamente con rowBgHover y filterRowBg del mismo bloque; cardinalidad medida 13
@@ -7328,7 +7335,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor coincide en color con la familia de rol borde/divisor del tema — divider (bithire/index.ts:4854), resultBorder (:5404), headerBorder (:7380), footerBorder (:7436) —: relacion por rol declarada; no coincide con PALETTE.borderColor (:3462, #d4e0ea); cardinalidad medida 13
      */
-    rowBorder: "#E3EAF0",
+    rowBorder: SEED.edge.divider,
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-primary
@@ -7345,22 +7352,22 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor sin coincidencia con PALETTE ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1); es el peldano compacto del eje de densidad
      */
-    cellPaddingCompact: "7px 10px",
+    cellPaddingCompact: SEED.rhythm.tableCellPaddingCompact,
     /**
      * @domicile seed
      * @governor coincide con padding (bithire/index.ts:8061), mismo rol de padding de celda/control: relacion declarada; cardinalidad medida 2
      */
-    cellPaddingComfortable: "10px 12px",
+    cellPaddingComfortable: SEED.rhythm.tableCellPaddingComfortable,
     /**
      * @domicile seed
      * @governor sin coincidencia con PALETTE ni con ninguna otra clave del tema: valor exclusivo de este eje (cardinalidad medida 1); es el peldano espacioso del eje de densidad
      */
-    cellPaddingSpacious: "14px 16px",
+    cellPaddingSpacious: SEED.rhythm.tableCellPaddingSpacious,
     /**
      * @domicile seed
      * @governor dial: typography.scale
      */
-    cellFontSize: "0.8125rem",
+    cellFontSize: SEED.typeDetail.tableCellSize,
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-text-primary
@@ -7411,7 +7418,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor coincide con el peldano sm de la escala de sombra del tema (bithire/index.ts:580), mismo rol de elevacion baja: relacion declarada; cardinalidad medida 8, toda en claves de rol shadow
      */
-    pageButtonHoverShadow: "0 1px 2px rgba(20, 40, 59, 0.06)",
+    pageButtonHoverShadow: SEED.material.pageButtonShadow,
     /**
      * @domicile seed
      * @governor sin coincidencia de raiz; razon falsable: el piso de default.css:1723 ya emite el mismo valor (rgba(255,255,255,0.7)); 0 consumo en modern/skin, consumido en rustic/skin/data-table.css:101

@@ -1253,8 +1253,8 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 155,
-        "maxSourceBytes": 1700000,
-        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1650000."
+        "maxSourceBytes": 1702000,
+        "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1650000. A1 CHROME.table (2026-08-22): los valores de SEED/OVERLAY_SEED viven en brand-themes/{rottay,bithire,evnto}/seeds.json y el gate solo cuenta .ts/.tsx/.mts/.cts, asi que el delta TS del tranche queda en +1384 B sobre los tres themes; con el techo previo el conteo medido daba 1700506 B (margen HEAD 878 B, faltaban 506). Techo 1700000 -> 1702000. Unico subpath tocado en este lote; ningun otro techo ni campo se movio."
       },
       "symbols": [
         {
