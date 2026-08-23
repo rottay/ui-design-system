@@ -377,6 +377,10 @@
               "moved": false,
               "value": "rgb(24, 24, 27)"
             },
+            "background-image": {
+              "moved": false,
+              "value": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
+            },
             "border-bottom-color": {
               "moved": false,
               "value": "rgb(42, 42, 47)"
@@ -476,6 +480,116 @@
             "transition-timing-function": {
               "moved": false,
               "value": "ease, ease, ease"
+            }
+          },
+          "card-modern-md/title": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13.125px"
+            },
+            "font-style": {
+              "moved": false,
+              "value": "normal"
+            },
+            "font-weight": {
+              "moved": false,
+              "value": "600"
+            },
+            "letter-spacing": {
+              "moved": false,
+              "value": "-0.196875px"
+            },
+            "line-height": {
+              "moved": false,
+              "value": "16.4062px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "flex-modern-numeric-gap/root": {
@@ -1833,6 +1947,22 @@
               "moved": false,
               "value": "calc(14px * 1)"
             },
+            "--ds-edge-standard-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-effect-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-elevation-lift-strength": {
+              "moved": false,
+              "value": "6"
+            },
+            "--ds-experience-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -1844,6 +1974,14 @@
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
+            },
+            "--ds-letter-spacing-heading": {
+              "moved": false,
+              "value": "-0.015em"
+            },
+            "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -2339,6 +2477,10 @@
               "moved": false,
               "value": "rgb(255, 255, 255)"
             },
+            "background-image": {
+              "moved": false,
+              "value": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
+            },
             "border-bottom-color": {
               "moved": false,
               "value": "rgb(229, 229, 227)"
@@ -2438,6 +2580,116 @@
             "transition-timing-function": {
               "moved": false,
               "value": "ease, ease, ease"
+            }
+          },
+          "card-modern-md/title": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13.125px"
+            },
+            "font-style": {
+              "moved": false,
+              "value": "normal"
+            },
+            "font-weight": {
+              "moved": false,
+              "value": "600"
+            },
+            "letter-spacing": {
+              "moved": false,
+              "value": "-0.196875px"
+            },
+            "line-height": {
+              "moved": false,
+              "value": "16.4062px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "flex-modern-numeric-gap/root": {
@@ -3795,6 +4047,22 @@
               "moved": false,
               "value": "calc(14px * 1)"
             },
+            "--ds-edge-standard-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-effect-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-elevation-lift-strength": {
+              "moved": false,
+              "value": "0"
+            },
+            "--ds-experience-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -3806,6 +4074,14 @@
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
+            },
+            "--ds-letter-spacing-heading": {
+              "moved": false,
+              "value": "-0.015em"
+            },
+            "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -3989,11 +4265,11 @@
         }
       },
       "negativeControls": {
-        "checkedRows": 910,
-        "expectedRows": 910,
+        "checkedRows": 964,
+        "expectedRows": 964,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 910,
+        "observedRows": 964,
         "violations": []
       },
       "position": "root-inline-style",
@@ -4028,6 +4304,7 @@
               }
             }
           },
+          "ingressValue": "tight",
           "path": "appearance.general.rhythm",
           "stopId": "tight"
         },
@@ -4040,7 +4317,7 @@
         "sourceOfTruth": "src/infrastructure/compilers/composition/tenant-theme/index.ts"
       },
       "restore": {
-        "comparedRows": 978,
+        "comparedRows": 1046,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -4052,7 +4329,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 930,
+        "inertProperties": 998,
         "movedProperties": 28,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -4404,6 +4681,10 @@
               "moved": false,
               "value": "rgb(24, 24, 27)"
             },
+            "background-image": {
+              "moved": false,
+              "value": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
+            },
             "border-bottom-color": {
               "moved": false,
               "value": "rgb(42, 42, 47)"
@@ -4503,6 +4784,116 @@
             "transition-timing-function": {
               "moved": false,
               "value": "ease, ease, ease"
+            }
+          },
+          "card-modern-md/title": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(236, 236, 236)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13.125px"
+            },
+            "font-style": {
+              "moved": false,
+              "value": "normal"
+            },
+            "font-weight": {
+              "moved": false,
+              "value": "600"
+            },
+            "letter-spacing": {
+              "moved": false,
+              "value": "-0.196875px"
+            },
+            "line-height": {
+              "moved": false,
+              "value": "16.4062px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "flex-modern-numeric-gap/root": {
@@ -5860,6 +6251,22 @@
               "moved": false,
               "value": "calc(14px * 1)"
             },
+            "--ds-edge-standard-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-effect-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-elevation-lift-strength": {
+              "moved": false,
+              "value": "6"
+            },
+            "--ds-experience-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -5871,6 +6278,14 @@
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
+            },
+            "--ds-letter-spacing-heading": {
+              "moved": false,
+              "value": "-0.015em"
+            },
+            "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -6366,6 +6781,10 @@
               "moved": false,
               "value": "rgb(255, 255, 255)"
             },
+            "background-image": {
+              "moved": false,
+              "value": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
+            },
             "border-bottom-color": {
               "moved": false,
               "value": "rgb(229, 229, 227)"
@@ -6465,6 +6884,116 @@
             "transition-timing-function": {
               "moved": false,
               "value": "ease, ease, ease"
+            }
+          },
+          "card-modern-md/title": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13.125px"
+            },
+            "font-style": {
+              "moved": false,
+              "value": "normal"
+            },
+            "font-weight": {
+              "moved": false,
+              "value": "600"
+            },
+            "letter-spacing": {
+              "moved": false,
+              "value": "-0.196875px"
+            },
+            "line-height": {
+              "moved": false,
+              "value": "16.4062px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "flex-modern-numeric-gap/root": {
@@ -7822,6 +8351,22 @@
               "moved": false,
               "value": "calc(14px * 1)"
             },
+            "--ds-edge-standard-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-effect-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-elevation-lift-strength": {
+              "moved": false,
+              "value": "0"
+            },
+            "--ds-experience-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -7833,6 +8378,14 @@
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
+            },
+            "--ds-letter-spacing-heading": {
+              "moved": false,
+              "value": "-0.015em"
+            },
+            "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -8016,11 +8569,11 @@
         }
       },
       "negativeControls": {
-        "checkedRows": 910,
-        "expectedRows": 910,
+        "checkedRows": 964,
+        "expectedRows": 964,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 910,
+        "observedRows": 964,
         "violations": []
       },
       "position": "tenant-scoped-stylesheet-block",
@@ -8050,6 +8603,7 @@
               "rhythm": "tight"
             }
           },
+          "ingressValue": "tight",
           "path": "surfaces.rhythm",
           "stopId": "tight"
         },
@@ -8061,7 +8615,7 @@
         "sourceOfTruth": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
       },
       "restore": {
-        "comparedRows": 978,
+        "comparedRows": 1046,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -8073,7 +8627,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 930,
+        "inertProperties": 998,
         "movedProperties": 28,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -8376,10 +8930,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "bad4759d3a2e86a22aa89714f3c4d8153d08dedf91b1502517d3bdd463ed06f2",
-      "observedDigest": "bad4759d3a2e86a22aa89714f3c4d8153d08dedf91b1502517d3bdd463ed06f2",
-      "postMeasurementDigest": "bad4759d3a2e86a22aa89714f3c4d8153d08dedf91b1502517d3bdd463ed06f2",
-      "preMeasurementDigest": "bad4759d3a2e86a22aa89714f3c4d8153d08dedf91b1502517d3bdd463ed06f2",
+      "declaredDigest": "583577786e1991948730e140efb97e2b4f7d72ce4950a0835e79e43a8089b086",
+      "observedDigest": "583577786e1991948730e140efb97e2b4f7d72ce4950a0835e79e43a8089b086",
+      "postMeasurementDigest": "583577786e1991948730e140efb97e2b4f7d72ce4950a0835e79e43a8089b086",
+      "preMeasurementDigest": "583577786e1991948730e140efb97e2b4f7d72ce4950a0835e79e43a8089b086",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

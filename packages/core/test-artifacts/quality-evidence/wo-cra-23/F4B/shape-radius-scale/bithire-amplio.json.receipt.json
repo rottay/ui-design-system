@@ -5,12 +5,13 @@
   "scenarioId": "shape.radius-scale/amplio/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@5535576df27b",
+  "toolVersion": "resolution-probe@ef75a323e403",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
     "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
     "packages/core/dist/server.js",
+    "packages/core/manifest/controls/experience.profile.json",
     "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
     "packages/core/manifest/families/primitive/display/card.json",
@@ -63,10 +64,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "6517da6c2f1d1a1a21a848be1742bcb57162eebe9c26faaf1230297c7dabe183",
+  "sourceDigest": "7a8846bdc24c23005153aa93a4ed6e14c565fced3b295d8f600448bc7324b4a0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-amplio.json",
-  "artifactSha256": "1d177275e31d517bbc5e87476c97f0e625f3575b1e76b434ac07365a4e974958",
-  "createdAt": "2026-08-23T08:16:02.819Z",
+  "artifactSha256": "e535690a60784338b4c7d6ec1105c692466311fcc53586416a37fafa86dba4ed",
+  "createdAt": "2026-08-23T10:49:00.981Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

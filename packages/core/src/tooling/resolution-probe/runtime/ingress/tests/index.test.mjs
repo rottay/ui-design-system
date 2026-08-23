@@ -584,8 +584,125 @@ test('negative drill: a bounded stop with no finite numeric value is refused, no
   }
 });
 
+/* ------------------------------------------------------------------------ *
+ * A PROFILE-ID control writes its stop's opaque registry ID.
+ *
+ * The third shape, and not a spelling of `closed-enum`: the written value IS
+ * the stop id, but the closed set is `calibration.catalog` (a first-party
+ * REGISTRY that grows by registration) rather than `domain.enumValues`, which
+ * is empty by contract for this kind. Reading the closure from the catalog is
+ * what keeps the branch fail-closed instead of turning "enumValues is empty"
+ * into "anything may be written".
+ * ------------------------------------------------------------------------ */
+
+const PROFILE_ID_CONTROL_MANIFEST = readManifest(
+  resolve(CORE_ROOT, 'manifest/controls/experience.profile.json'),
+);
+
+test('a PROFILE-ID control lowers the opaque registry id VERBATIM at both doors', () => {
+  const staticInput = buildIngressInput({
+    armId: 'static-brand-theme',
+    controlManifest: PROFILE_ID_CONTROL_MANIFEST,
+    stopId: 'rottay/bithire-technical@1',
+  });
+  // Verbatim: the slash, the vendor prefix and the @version all survive. A
+  // trimmed or version-stripped id is rejected fail-closed by
+  // `validateExperienceProfileSelection`, and a rejected selection paints
+  // exactly what the baseline paints — the false negative this asserts against.
+  assert.deepEqual(staticInput.document, {
+    expressive: { experienceProfile: 'rottay/bithire-technical@1' },
+  });
+  assert.equal(staticInput.ingressValue, 'rottay/bithire-technical@1');
+
+  const dbInput = buildIngressInput({
+    armId: 'db-tenant-theme',
+    controlManifest: PROFILE_ID_CONTROL_MANIFEST,
+    stopId: 'rottay/management-editorial@1',
+  });
+  assert.deepEqual(dbInput.document, {
+    appearance: { general: { experienceProfile: 'rottay/management-editorial@1' } },
+  });
+  assert.equal(dbInput.ingressValue, 'rottay/management-editorial@1');
+});
+
+test('negative drill: a profile id outside the closed REGISTRY catalog is refused', () => {
+  assert.throws(
+    () =>
+      buildIngressInput({
+        armId: 'static-brand-theme',
+        controlManifest: {
+          ...PROFILE_ID_CONTROL_MANIFEST,
+          calibration: {
+            ...PROFILE_ID_CONTROL_MANIFEST.calibration,
+            // A plausible-looking id that is NOT registered. `enumValues` is
+            // empty here, so only the catalog can catch this.
+            normalizedStops: [{ id: 'rottay/bithire-technical@2' }],
+            catalog: ['rottay/bithire-technical@1', 'rottay/management-editorial@1'],
+          },
+        },
+        stopId: 'rottay/bithire-technical@2',
+      }),
+    /is not in the closed profile registry/,
+  );
+});
+
+test('negative drill: a profile-id control with no catalog is refused, not treated as open', () => {
+  for (const catalog of [[], undefined]) {
+    assert.throws(
+      () =>
+        buildIngressInput({
+          armId: 'static-brand-theme',
+          controlManifest: {
+            ...PROFILE_ID_CONTROL_MANIFEST,
+            calibration: {
+              ...PROFILE_ID_CONTROL_MANIFEST.calibration,
+              normalizedStops: [{ id: 'rottay/bithire-technical@1' }],
+              catalog,
+            },
+          },
+          stopId: 'rottay/bithire-technical@1',
+        }),
+      /no `calibration.catalog`|closed registry that bounds it is unreadable/,
+      `catalog ${JSON.stringify(catalog)} must fail closed rather than open the domain`,
+    );
+  }
+});
+
+test('negative drill: a profile-id stop with no non-empty string id is refused', () => {
+  for (const id of [undefined, null, '', 42]) {
+    assert.throws(
+      () =>
+        ingressValueForStopViaBuild({
+          controlManifest: PROFILE_ID_CONTROL_MANIFEST,
+          stop: { id },
+        }),
+      /no non-empty string id|is not a normalized stop/,
+      `stop id ${JSON.stringify(id)} must be refused`,
+    );
+  }
+});
+
+/**
+ * `ingressValueForStop` is private, so the id checks are driven through the
+ * public `buildIngressInput` with the stop planted in `normalizedStops` —
+ * which is also the only way a real caller can reach it.
+ */
+function ingressValueForStopViaBuild({ controlManifest, stop }) {
+  return buildIngressInput({
+    armId: 'static-brand-theme',
+    controlManifest: {
+      ...controlManifest,
+      calibration: { ...controlManifest.calibration, normalizedStops: [stop] },
+    },
+    stopId: stop.id,
+  });
+}
+
 test('negative drill: a domain kind this harness cannot write fails closed', () => {
-  for (const kind of ['profile-id', 'token-map', 'color-set', 'scale', undefined]) {
+  // `profile-id` is deliberately ABSENT from this list — it is now a supported
+  // third shape, drilled positively above. Every other unsupported kind must
+  // still refuse rather than fall back to writing the stop id.
+  for (const kind of ['token-map', 'color-set', 'scale', undefined]) {
     assert.throws(
       () =>
         buildIngressInput({
@@ -593,7 +710,7 @@ test('negative drill: a domain kind this harness cannot write fails closed', () 
           controlManifest: { ...BOUNDED_CONTROL_MANIFEST, domain: { kind } },
           stopId: 'sobrio',
         }),
-      /only knows how to write a closed-enum stop id or a bounded stop value/,
+      /only knows how to write a closed-enum stop id, a bounded stop value, or a profile-id/,
       `domain kind ${String(kind)} must fail closed rather than write the stop id`,
     );
   }

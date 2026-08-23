@@ -1196,7 +1196,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | K5 | 100% implementación + postaudit + GAT/CI |
 | F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
 | PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
-| F4B | **3/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity` y `shape.radius-scale`, los tres en `COMPUTED_VERIFIED` (rank 3), ninguno `SIGHTED_ACCEPTED`; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}` y 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{sutil,amplio}`, todos con receipts válidos (R2 los dos primeros, R3 el tercero). Los 17 restantes siguen `UNKNOWN` |
+| F4B | **4/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity`, `shape.radius-scale` y `experience.profile`, los cuatro en `COMPUTED_VERIFIED` (rank 3), **ninguno `SIGHTED_ACCEPTED`**; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{sutil,amplio}` y 4 escenarios `primitive/display/card` x `{rottay,evnto}` x `{technical,editorial}` — **8+6+6+4 = 24 receipts, todos válidos y frescos**, con los `roundId` cronológicamente correctos: `spacing.rhythm` y `surfaces.effect-intensity` en **R2**, `shape.radius-scale` en **R3** y `experience.profile` en **R4** como cuarto packet. `experience.profile` planificaba 5 positivos y entrega 4: `bithire`x`editorial` no logró `static=DB` y **no lleva receipt**, y `bithire`x`technical` es `DESIGNED_NULL` porque el baseline del vertical ya ES ese perfil; ambos quedan como **2 artefactos medidos NO receipted**. Los 16 restantes siguen `UNKNOWN` |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
@@ -1467,6 +1467,188 @@ reemitidos de `surfaces.effect-intensity`, el build y los focales se corrieron
 **sólo** en Node **v22.17.0** (el pineado). No se hizo cruce en otra versión, así
 que este packet no reclama el contraste de reproducibilidad que el asiento
 anterior sí tenía.
+
+**F4B — `experience.profile` COMPUTED_VERIFIED (2026-08-23), 4/20.** Cuarto
+control con evidencia causal de navegador; los asientos de `spacing.rhythm`,
+`surfaces.effect-intensity` y `shape.radius-scale` quedan intactos. Base
+`48fa4f20a`, `staged=0`, sin commit ni push. **4 escenarios positivos**
+`primitive/display/card` x `{rottay,evnto}` x `{technical,editorial}`, cada uno
+midiendo **los dos ingress en una sola escena** y en los dos temas: 4 artifacts +
+4 receipts en
+`packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/`.
+Ningún run receipted `harness-suspect`; `ingressEquivalence` con 0 filas
+divergentes en los 4; `restore.exact = true` y `negativeControls.held = true` en
+cada brazo. **Se planificaron 5 positivos y se entregan 4**: el quinto
+(`bithire` x `editorial`) no logró `static=DB` y por eso **no lleva receipt** —
+ver nota 3. **24/24 receipts frescos, NO 25/25**; la diferencia es un hallazgo, no
+una omisión.
+
+**El instrumento no podía bajar este control, y ése es el primer hallazgo.**
+`experience.profile` declara `domain.kind: "profile-id"`, e
+`ingressValueForStop` sólo conocía `closed-enum` y `bounded`: `profile-id` estaba
+nombrado en un **drill negativo existente** que exigía que fallara cerrado. El
+preflight terminó en **STOP** con memo durable
+(`PREFLIGHT-STOP-2026-08-23.md`, sha256 `f32379b2…`), y el DT autorizó el packet
+expandido después de leerlo. Soporte agregado en
+`runtime/ingress/index.mjs`: el id se escribe **verbatim** (sin trim, sin
+normalizar, sin quitar `@version`) y falla cerrado en tres direcciones — id que no
+sea string no vacío, `calibration.catalog` ausente o vacío, e id fuera de ese
+catálogo. La clausura se lee del **REGISTRO** (`calibration.catalog`), nunca de
+`domain.enumValues`, que para este kind está vacío por contrato: leerlo de ahí
+convertiría "enumValues vacío" en "se puede escribir cualquier cosa". En el drill
+negativo se removió **sólo** `'profile-id'`; `token-map`, `color-set`, `scale` y
+`undefined` siguen rechazándose. 4 drills nuevos (bajada verbatim en los dos
+doors, id fuera de catálogo, catálogo ausente/vacío, id no-string): **37/37**.
+
+**Fixture: Card gana un `title` real.** `--ds-letter-spacing-heading` es el único
+canal declarado con cadena pintada inequívoca y no-radial, y sólo existe en
+`[data-part='title']`, que el fixture no renderizaba. El markup se obtuvo
+**renderizando el `ModernCard` real** con `title="Card title"` y pegando la salida
+de `renderToStaticMarkup`, así que el drift test lo cubre igual que al root
+(**19/19**). Sin fixture id nuevo; `root` intacto.
+
+Números medidos. Pintado en `card-modern-md/title` (`letter-spacing`, idéntico en
+ambos brazos y ambos temas, **8 de 8 celdas**): rottay `-0.196875px -> 0.13125px`
+(technical) y `-> normal` (editorial); evnto `-0.3px -> 0.15px` y `-> normal`.
+Segundo testigo pintado en `card-modern-md/root` (`background-image` vía
+`--ds-elevation-lift-strength`): **6 de 8 celdas** — el stop `technical` (lift 0)
+mueve **sólo en dark**, porque en light el canal ya resuelve a 0 y el stop es un
+**no-op verdadero** para ese eje. Canal directo `--ds-letter-spacing-heading`
+sobre `token-readout`, ambos brazos, los 4 escenarios: rottay
+`-0.015em -> 0.01em` (technical) y `-> 0` (editorial).
+
+Notas honestas:
+
+1. **`experience.profile` reaches Card, y eso refuta la razón que la celda traía.**
+   El cell pasó de `MUST_NOT_REACH` a **`MUST_REACH`**. La razón vieja era una
+   cadena `Idem` hacia *"nobody reads `--ds-experience-profile`"*, que confunde el
+   **marcador de procedencia** del control con sus **canales declarados**: el
+   marcador efectivamente no lo lee `card.css`, pero dos de los otros cuatro
+   canales sí y pintan. De los 5 declarados, sólo 2 pintan en este fixture;
+   `--ds-edge-standard-width` no (la variante `elevated` lee el hairline, y ambos
+   stops emiten `1px` = baseline) y `--ds-material-canvas-texture` tampoco (es
+   canal de `semantic-surface.css`, y sólo el stop editorial lo emite porque
+   `motif:'none'` expande a `{}`).
+2. **`bithire` x `technical` es `DESIGNED_NULL`, medido y NO receipted.**
+   `brand-themes/bithire/index.ts:3190` ya declara
+   `experienceProfile: "rottay/bithire-technical@1"`: un tenant de bithire que
+   elige ese stop elige **el perfil que el vertical ya tiene**. Se retiene como
+   `bithire-technical.DESIGNED-NULL.json`. No debe leerse como control inerte.
+3. **`bithire` x `editorial` es una DIVERGENCIA static/DB real, reproducida dos
+   veces, y por eso NO lleva receipt.** `harness-live`, restore exacto y negativos
+   sostenidos, pero `ingressEquivalence: DIVERGES (3 filas)`. Dos causas distintas,
+   ambas confirmadas en fuente. (a) **Sombreado por especificidad, sólo en dark:**
+   el artifact de bithire declara `--ds-letter-spacing-heading` dos veces — a
+   especificidad de tenant base (`artifacts/bithire/index.css:644`, `-0.025em`) y
+   otra vez en un bloque dark cuyo selector lleva atributo/clase extra
+   (`…[data-theme='dark'], ….dark`, `:1496`, `-0.01em`). El brazo estático aterriza
+   detrás del selector **base**, así que el bloque dark de bithire le gana y el door
+   estático queda **inerte en dark**; el door DB escribe inline en `documentElement`
+   y siempre gana. Las mismas 2 filas aparecen en el stop technical, así que es
+   propiedad de la cascada del vertical, no del stop. (b) **Asimetría de brazos, en
+   light:** `--ds-material-canvas-texture` se mueve en estático y no en DB porque
+   `compileTenantThemeConfig` emite sólo 3 de los 5 canales declarados para
+   bithire/editorial — la expansión **pierde contra un canal que el baseline del
+   vertical ya autora**, que es el `defaultBehavior` declarado del propio control.
+   El lowering estático no tiene baseline contra el cual perder. Ninguna de las dos
+   es defecto *de* `experience.profile`; ambas quedan como `knownDefects` con
+   remediación y están **por encima** de un packet de un solo control.
+4. **La instrucción B del DT se revirtió, con ruling explícito.** Agregar
+   `--ds-table-header-{letter-spacing,text-transform}` a `derivedChannels` estaba
+   ordenado para conseguir un direct-read control fixture. Medido: hace lo
+   contrario. `directControlFixtureIds` exige que **UN target lea TODOS** los
+   canales declarados, así que ensanchar el conjunto **quita** el fixture en vez de
+   darlo; y esos dos canales eran la **única** fuente de divergencia static/DB en
+   rottay y bithire, porque ambos verticales los **autoran** en su artifact
+   (`* 0.75` y `* 0.8125`) mientras evnto no. Revertido: `capabilities/index.ts`
+   queda **byte-idéntico a HEAD** y el repin de 20 manifests que el DT había
+   preautorizado **no ocurrió**. El fixture se resolvió extendiendo `token-readout`
+   con los 5 canales **ya declarados**.
+5. **Rojo falso reproducible del guard `unhydrated-target`, arreglado a nivel
+   fixture por ruling del DT.** `color remains fixed` es `every-measured-target`, así
+   que inyecta `background-color` en el plan de **todos** los targets; en un div
+   pelado ese longhand está legítimamente en su valor inicial, y el guard reportó
+   como no hidratado a un `token-readout` cuyas custom properties demostrablemente
+   se movieron. Lo mismo en `card-modern-md/title` en fase de mutación, porque el
+   stop editorial lleva `letter-spacing` legítimamente a `normal`. Experimento de
+   control que lo aísla: el mismo par de fixtures bajo los 8 negativos de
+   `spacing.rhythm` da **0** guard failures. Arreglado declarando `border-top-style`
+   en ambos targets — la capa base del DS lo pone en `solid`, es decidible, no
+   inicial y no es canal de ningún control. **No se declaró ningún negativo falso
+   para hacer pasar un guard.** El arreglo estructural (que una propiedad inyectada
+   por un negativo `every-measured-target` no vuelva decidible a un target por sí
+   sola) vive en `foundation/guards`, fuera de los paths autorizados: queda como
+   deuda.
+6. **Negativos: sólo `color remains fixed`, y es un piso deliberado.**
+   `font metrics remain fixed` **no puede** declararse: `--ds-letter-spacing-heading`
+   es canal declarado de este control y el testigo pintado principal, así que esa
+   entrada afirmaría que el canal bajo prueba no debe moverse. `border-fixed` y
+   `border-width-style-fixed` quedan fuera por la misma clase de razón (el eje edge
+   posee `--ds-edge-standard-width`; el eje geometry mueve `radiusScale` como field
+   default). `motion remains fixed` queda fuera porque es **cierto por stop, no por
+   control**: `management-editorial` fija `{intensity 0.7, durationScale 1.1,
+   ambient subtle}` como field default, así que declararlo control-wide sería falso
+   sobre el control aunque el payload de 5 canales no cargue ningún canal de motion.
+7. **`internalChannels` de la celda: `--ds-card-title-letter-spacing`, y el dueño lo
+   decide el lector.** `components/card.css:133` lo declara como
+   `var(--ds-letter-spacing-heading)` — es decir, el **productor** del socket lo
+   resuelve directamente desde el canal declarado de este control — y la skin modern
+   lo lee en `card.css:521` con ese mismo canal como fallback. Por eso el dueño es
+   `experience.profile` y no `typography.scale`. Único dueño: verificado que ninguna
+   otra celda lo reclama.
+8. **`anatomy.propertyGroups` de Card NO se tocó, y eso deja un hueco nombrado.**
+   La celda declara sólo `surface-decoration`, el único grupo que la anatomía de
+   Card posee y que cubre una cadena que este control mueve (root
+   `background-image`). El testigo **principal** — title `letter-spacing` — no tiene
+   grupo type-metrics en Card, así que se evidencia por `computedProperties` e
+   `internalChannels` en vez de por grupo. Agregar ese grupo es una edición de
+   `anatomy`, dueño revisado aparte y fuera del alcance autorizado: registrado como
+   deuda, no rodeado.
+9. **Los 20 receipts previamente cerrados se reemitieron y validan.** Circularidad
+   que conviene dejar escrita: `sourceFiles` de un receipt incluye los manifests de
+   control y de familia, así que **toda edición de manifest stalea todo receipt que
+   lo nombre**. El orden correcto — y el usado — es congelar source y manifests,
+   `--sync`, rebuild, y **recién entonces** emitir en una sola pasada. Verificación
+   final con `verifyReceipt` (+`loadProgramContracts`) y `artifactStillMatches`
+   sobre el árbol congelado: **24/24 VALID+FRESH, 0 stale**. **Ningún receipt
+   cerrado queda stale.**
+10. `manifest --check` pasa de **36** hallazgos en `48fa4f20a` a **24**: se
+    eliminaron los 12 de digest stale y **no se introdujo ninguno nuevo**; los 24
+    restantes son los de `spacing.rhythm` que ya existían. Verificado por diff del
+    conjunto completo contra la línea base de HEAD.
+11. `disposition` de la celda sigue `UNKNOWN` **no por falta de medición**, misma
+    razón que los packets anteriores; **`SIGHTED_ACCEPTED` no se reclama** y
+    `nextAction` es `OBTAIN_CODEX_SIGHTED_ACCEPTANCE`.
+12. **Deuda explícita: 254 de 255 celdas de familia de `experience.profile` siguen
+    con la razón conflacionada `MUST_NOT_REACH`.** Sólo se readjudicó
+    `primitive/display/card`, y sólo porque ahora tiene testigo pintado. **Este
+    packet no es evidencia sobre las otras 254 en ninguna dirección**; cada una
+    necesita su propio testigo, y un flip masivo repetiría el error original en
+    sentido contrario.
+13. **Sin medir**: divergencia responsive (un solo viewport), cualquier consumidor
+    de los 5 canales que no sea Card, y los tres canales declarados que no pintan en
+    este fixture.
+14. **Dos defectos propios, encontrados revisando mi propio diff y corregidos**:
+    `json.dump` había escapado los em-dash a `\uXXXX` en todo `fixtures.json`
+    (re-serializado con `ensure_ascii=False`), y una nota seguía diciendo "seven
+    declared channels" después de la reversión a cinco.
+
+15. **`roundId` cronológico, corregido dentro del packet.** La primera reemisión de
+    los 20 receipts previos se corrió con `--round-id R2` para todos, lo que bajó a R2
+    los 6 de `shape.radius-scale` que estaban en **R3** y habría contradicho su propio
+    asiento. Detectado comparando contra `48fa4f20a` antes de cerrar. Corregido por
+    orden del DT: los 6 de `shape.radius-scale` reemitidos con **R3** (cierre previo
+    restaurado) y los 4 de `experience.profile` con **R4** como cuarto packet;
+    `spacing.rhythm` y `surfaces.effect-intensity` **no** se reemitieron y quedan en
+    **R2**. Mismos escenarios, mismos binds, mismo árbol final. Revalidación posterior:
+    **24/24 VALID+FRESH**. Ningún asiento anterior queda contradicho.
+
+Toolchain de este packet: los 4 escenarios de `experience.profile`, los 2
+artifacts no receipted, los 20 receipts reemitidos, los builds y los focales se
+corrieron **sólo** en Node **v22.17.0** (el pineado; el `node` por defecto de la
+máquina es v25.2.1 y el PATH se fijó en cada invocación). No se hizo cruce en otra
+versión, así que este packet no reclama contraste de reproducibilidad.
+
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

@@ -353,6 +353,15 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
  * INERT — while the arm still carried a non-empty variable map, so no
  * existing guard would fire.
  *
+ * A `profile-id` control is a THIRD shape and not a spelling of the first. The
+ * tenant writes an opaque versioned registry id (`rottay/bithire-technical@1`),
+ * so `id` is the written value exactly as `closed-enum`'s is — but the closed
+ * set is NOT `domain.enumValues`, which is empty by contract for this kind. It
+ * is `calibration.catalog`, the closed first-party REGISTRY that grows by
+ * registration rather than by schema change. Reading the closure from the
+ * catalog is what keeps this branch fail-closed instead of turning
+ * "enumValues is empty" into "anything may be written".
+ *
  * So the shape is read from `domain.kind` rather than guessed per control, and
  * every other kind fails closed: a control whose ingress value this function
  * cannot derive from the contract must not be lowered on a remembered
@@ -384,10 +393,43 @@ function ingressValueForStop({ controlManifest, stop }) {
     }
     return stop.value;
   }
+  if (kind === 'profile-id') {
+    // A profile id is an OPAQUE, versioned registry id — `rottay/bithire-technical@1`.
+    // It is written verbatim: no trimming, no normalisation, no version stripping.
+    // A silently-rewritten id is the same class of false negative the bounded
+    // branch guards against, because `validateExperienceProfileSelection` rejects
+    // fail-closed and a rejected selection paints exactly what the baseline paints.
+    if (typeof stop.id !== 'string' || stop.id.length === 0) {
+      throw new Error(
+        `resolution-probe: ${controlId} has a profile-id domain, so a tenant writes the registry ` +
+          `ID at the ingress path — but this stop declares no non-empty string id ` +
+          `(got ${JSON.stringify(stop.id)}).`,
+      );
+    }
+    // Closed by REGISTRY, not by schema: `domain.enumValues` is empty by contract
+    // for this kind, and the closed set lives in `calibration.catalog`. So the
+    // closure check reads the catalog — the same law `closed-enum` applies to
+    // `enumValues`. An empty/absent catalog does not open the domain silently.
+    const catalog = controlManifest?.calibration?.catalog ?? [];
+    if (!Array.isArray(catalog) || catalog.length === 0) {
+      throw new Error(
+        `resolution-probe: ${controlId} declares a profile-id domain but no ` +
+          '`calibration.catalog`, so the closed registry that bounds it is unreadable. ' +
+          'Refusing to lower an unbounded profile id.',
+      );
+    }
+    if (!catalog.includes(stop.id)) {
+      throw new Error(
+        `resolution-probe: stop "${stop.id}" of ${controlId} is not in the closed profile ` +
+          `registry (${catalog.join(', ')}), so a tenant could not write it at the ingress path.`,
+      );
+    }
+    return stop.id;
+  }
   throw new Error(
     `resolution-probe: ${controlId} declares domain kind "${kind ?? 'none'}", and this harness ` +
-      'only knows how to write a closed-enum stop id or a bounded stop value at an ingress ' +
-      'path. Refusing to lower a stop on a remembered convention.',
+      'only knows how to write a closed-enum stop id, a bounded stop value, or a profile-id ' +
+      'registry id at an ingress path. Refusing to lower a stop on a remembered convention.',
   );
 }
 

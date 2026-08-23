@@ -44,7 +44,11 @@ import { FIXTURES } from '../index.mjs';
  */
 const COMPONENT_RENDERS: Readonly<Record<string, () => React.ReactElement>> = {
   'card-modern-md': () => (
-    <ModernCard variant="elevated" size="md" padding="md" radius="md">
+    // `title` is not decoration: it is the only element that carries
+    // [data-part='title'], and therefore the only place
+    // --ds-letter-spacing-heading is painted. experience.profile's causal run
+    // binds its title target to it.
+    <ModernCard variant="elevated" size="md" padding="md" radius="md" title="Card title">
       card body
     </ModernCard>
   ),

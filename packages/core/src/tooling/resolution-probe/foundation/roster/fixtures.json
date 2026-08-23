@@ -4,13 +4,14 @@
   "fixtures": [
     {
       "id": "card-modern-md",
-      "why": "The canonical derived-radius consumer. Chain: border-radius <- --ds-card-radius <- --ds-card-border-radius <- --ds-radius-lg <- calc(--ds-radius-lg-base * --ds-radius-scale). Four hops from the tenant dial to a painted pixel. It is ALSO the decoration-intensity consumer: this fixture is data-variant='elevated', and the elevated rule is the one that composes --ds-effect-intensity into two painted properties -- box-shadow's inset optical keyline (calc(72% * EI) inside a color-mix) and background-image's surface tint (--ds-card-surface-gradient <- --ds-gradient-surface, whose three rgba alphas are each calc(k * EI)). background-image was added 2026-08-23 because the tint is a second, independent painted witness of the same channel and measuring only the keyline would have reported a tenant that flattens one but not the other as fully flattened.",
+      "why": "The canonical derived-radius consumer. Chain: border-radius <- --ds-card-radius <- --ds-card-border-radius <- --ds-radius-lg <- calc(--ds-radius-lg-base * --ds-radius-scale). Four hops from the tenant dial to a painted pixel. It is ALSO the decoration-intensity consumer: this fixture is data-variant='elevated', and the elevated rule is the one that composes --ds-effect-intensity into two painted properties -- box-shadow's inset optical keyline (calc(72% * EI) inside a color-mix) and background-image's surface tint (--ds-card-surface-gradient <- --ds-gradient-surface, whose three rgba alphas are each calc(k * EI)). background-image was added 2026-08-23 because the tint is a second, independent painted witness of the same channel and measuring only the keyline would have reported a tenant that flattens one but not the other as fully flattened. A real header/title was added 2026-08-23 for experience.profile: --ds-letter-spacing-heading is the one declared channel of that control with an unambiguous, non-radius painted chain, and it only exists on [data-part='title']. The title is rendered by the REAL ModernCard (title=\"Card title\"), so the roster drift test covers it exactly like the root; the markup here is renderToStaticMarkup output with data-probe re-added, not hand-derived.",
       "requiresSelectors": [
         ".ds-card.ds-card--modern[data-part='root'][data-radius='md']",
         "--ds-card-border-radius: var(--ds-radius-lg)",
-        "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)"
+        "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)",
+        "letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading))"
       ],
-      "html": "<div class=\"ds-card ds-card--elevated ds-card--modern\" data-variant=\"elevated\" data-radius=\"md\" data-size=\"md\" data-padding=\"md\" data-part=\"root\" data-probe=\"card-modern-md\"><div data-part=\"body\">card body</div></div>",
+      "html": "<div class=\"ds-card ds-card--elevated ds-card--modern\" data-variant=\"elevated\" data-radius=\"md\" data-size=\"md\" data-padding=\"md\" data-has-header=\"true\" data-part=\"root\" data-probe=\"card-modern-md\"><div data-part=\"body\"><div data-part=\"header\"><div data-part=\"header-main\"><h3 data-part=\"title\">Card title</h3></div></div>card body</div></div>",
       "targets": [
         {
           "id": "root",
@@ -27,6 +28,18 @@
             "padding-top",
             "font-family",
             "font-size"
+          ]
+        },
+        {
+          "id": "title",
+          "selector": "[data-probe='card-modern-md'] [data-part='title']",
+          "properties": [
+            "letter-spacing",
+            "font-family",
+            "font-size",
+            "color",
+            "background-color",
+            "border-top-style"
           ]
         }
       ]
@@ -123,7 +136,11 @@
         {
           "id": "line",
           "selector": "[data-probe='skeleton-card-line']",
-          "properties": ["border-top-left-radius", "background-color", "height"]
+          "properties": [
+            "border-top-left-radius",
+            "background-color",
+            "height"
+          ]
         }
       ]
     },
@@ -140,14 +157,18 @@
         {
           "id": "action",
           "selector": "[data-probe='skeleton-form-action']",
-          "properties": ["border-top-left-radius", "background-color", "height"]
+          "properties": [
+            "border-top-left-radius",
+            "background-color",
+            "height"
+          ]
         }
       ]
     },
     {
       "id": "token-readout",
       "synthetic": true,
-      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control. Extended 2026-08-23 with --ds-effect-intensity, the single declared channel of surfaces.effect-intensity. It is a REGISTERED @property (syntax '<number>', initial-value 1), which is exactly why a direct read matters here: an invalid lowering is replaced by the initial value rather than dropped, so a broken ingress arm and a genuinely unreachable channel both paint the baseline. Reading the channel itself separates them.",
+      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control. Extended 2026-08-23 with --ds-effect-intensity, the single declared channel of surfaces.effect-intensity. It is a REGISTERED @property (syntax '<number>', initial-value 1), which is exactly why a direct read matters here: an invalid lowering is replaced by the initial value rather than dropped, so a broken ingress arm and a genuinely unreachable channel both paint the baseline. Reading the channel itself separates them. Extended 2026-08-23 with the five channels experience.profile declares that this readout did not already carry -- directControlFixtureIds requires ONE target to read EVERY declared channel, so a partial read gives the control no direct-read fixture and every causal run resolves harness-suspect. border-top-style is a HYDRATION WITNESS, not a channel: `color remains fixed` is every-measured-target, so it injects background-color into every target's plan, and on a bare div that longhand is legitimately at its initial value - which made the unhydrated guard fire on an element whose custom properties demonstrably moved. The DS base layer sets border-top-style to `solid` on every element, so it is decidable, non-initial, and not a channel any control can move.",
       "requiresSelectors": [
         "--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))",
         "--ds-rhythm-scale: 1",
@@ -184,7 +205,13 @@
             "--ds-font-size-xs",
             "--ds-rhythm-scale",
             "--ds-rhythm-effective-scale",
-            "--ds-effect-intensity"
+            "--ds-effect-intensity",
+            "--ds-experience-profile",
+            "--ds-letter-spacing-heading",
+            "--ds-edge-standard-width",
+            "--ds-material-canvas-texture",
+            "--ds-elevation-lift-strength",
+            "border-top-style"
           ]
         }
       ]
@@ -202,7 +229,11 @@
         {
           "id": "root",
           "selector": "[data-probe='flex-modern-preset-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -219,7 +250,11 @@
         {
           "id": "root",
           "selector": "[data-probe='grid-modern-preset-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -236,7 +271,11 @@
         {
           "id": "root",
           "selector": "[data-probe='stack-modern-preset-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -253,7 +292,11 @@
         {
           "id": "root",
           "selector": "[data-probe='space-modern-preset-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -270,7 +313,11 @@
         {
           "id": "root",
           "selector": "[data-probe='flex-modern-numeric-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -286,7 +333,11 @@
         {
           "id": "root",
           "selector": "[data-probe='grid-modern-numeric-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -303,7 +354,11 @@
         {
           "id": "root",
           "selector": "[data-probe='stack-modern-numeric-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     },
@@ -320,7 +375,11 @@
         {
           "id": "root",
           "selector": "[data-probe='space-modern-numeric-gap']",
-          "properties": ["gap", "column-gap", "row-gap"]
+          "properties": [
+            "gap",
+            "column-gap",
+            "row-gap"
+          ]
         }
       ]
     }

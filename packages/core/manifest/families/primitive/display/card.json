@@ -17032,20 +17032,79 @@
     {
       "controlId": "experience.profile",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, two verticals x two stops x two themes, the painted title letter-spacing moving on every one of those 8 cells with 0 differing rows between the doors, negative controls held and restore exact. disposition stays UNKNOWN for reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings plus states and stressCases, which this cell shape does not carry, and SIGHTED_ACCEPTED is not claimable from a computed run.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-editorial.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE",
       "targetBinding": {
-        "status": "MUST_NOT_REACH",
+        "status": "MUST_REACH",
         "reasons": [
           {
             "root": "experience.profile",
-            "why": "Idem (todos los grupos de primitives)."
+            "why": "REFUTED BY MEASUREMENT 2026-08-23. The previous reason - an 'Idem' chain back to \"nobody reads --ds-experience-profile\" - conflated the control's own PROVENANCE MARKER with its declared CHANNELS. The marker is indeed unread by card.css; two of the other four declared channels are read by it and paint. Measured: [data-part='title'] letter-spacing resolves through var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading)) (card.css:521) and moved in 8 of 8 measured cells; [data-part='root'] background-image resolves --ds-card-elevation-surface from --ds-elevation-lift-strength (card.css:73,147) and moved in 6 of 8 - the technical stop is a true no-op for that axis in light themes, where the lift already resolves to 0."
           }
         ],
-        "reviewedFrom": "anatomy"
-      }
+        "reviewedFrom": "computed-causal-run",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx"
+        ],
+        "scopeNote": "This row is about primitive/display/card ONLY. The other 254 experience.profile family cells were NOT re-adjudicated by this packet and still carry the conflated reason; that debt is recorded in the control manifest's nextAction and in the packet's SOURCE-READY.md. Nothing here licenses flipping them in bulk - each needs its own painted witness."
+      },
+      "mechanism": "THEME_CONTROL",
+      "stableParts": [
+        "root",
+        "title"
+      ],
+      "propertyGroups": [
+        "surface-decoration"
+      ],
+      "computedProperties": [
+        "background-image",
+        "letter-spacing"
+      ],
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+        "packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx",
+        "packages/core/manifest/controls/experience.profile.json"
+      ],
+      "negativeControls": [
+        "color remains fixed"
+      ],
+      "internalChannels": [
+        {
+          "channelId": "--ds-card-title-letter-spacing",
+          "semanticOwner": "experience.profile",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/card"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          },
+          "note": "components/card.css:133 declares it as var(--ds-letter-spacing-heading) - i.e. this socket's PRODUCER resolves it directly from experience.profile's own declared channel - and the modern skin reads it at card.css:521 with the same channel as fallback. That is why the owner is experience.profile and not typography.scale: the reader decides the owner, and both ends of this socket are this control's channel."
+        }
+      ],
+      "propertyGroupsScopeNote": "Only `surface-decoration` is declared, because it is the only group Card's own anatomy owns that covers a chain this control moves (root background-image, via --ds-elevation-lift-strength). The control's PRIMARY painted witness - [data-part='title'] letter-spacing via --ds-letter-spacing-heading - has NO anatomy-owned property group on Card: anatomy.propertyGroups is ['surface-decoration', 'surface-radius'] and neither is a type-metrics group. That chain is therefore evidenced through computedProperties and internalChannels instead of through a group. Adding a type-metrics group is an `anatomy` edit, which is a separate reviewed owner and outside this packet's authorized scope. Recorded as debt rather than worked around.",
+      "restoreRequirements": [
+        "exact restore of letter-spacing and background-image on removal, with no tolerance; verified on both arms of all four receipted scenarios (restore.exact=true)"
+      ],
+      "stressCases": [
+        "both themes on every scenario",
+        "a stop whose value computes to the property's INITIAL value (management-editorial drives letter-spacing to `normal`), which is why both measured targets carry border-top-style as a hydration witness",
+        "a vertical whose baseline already IS the selected profile (bithire x technical) - measured, DESIGNED_NULL, not receipted"
+      ]
     },
     {
       "controlId": "chrome.families",

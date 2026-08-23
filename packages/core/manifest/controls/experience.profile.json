@@ -39,17 +39,79 @@
     "symbol": "resolveExpressiveAxes"
   },
   "calibration": {
-    "assessmentState": "UNKNOWN",
-    "normalizedStops": [],
-    "staticDbParityEvidenceIds": [],
-    "exactRestoreEvidenceIds": [],
-    "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "assessmentState": "COMPUTED_VERIFIED",
+    "normalizedStops": [
+      {
+        "id": "rottay/bithire-technical@1",
+        "value": null,
+        "law": "profile-id: the tenant writes this opaque registry ID verbatim; there is no normalized NUMBER for a profile stop, so `value` is null by contract rather than 0 (which would read as a bounded stop at zero). Axes: geometry sharp, edge hairline, material flat, elevation hairline-lift, motif none, density normal, motion unset."
+      },
+      {
+        "id": "rottay/management-editorial@1",
+        "value": null,
+        "law": "profile-id: written verbatim, as above. Axes: geometry soft, edge ruled, material paper, elevation soft-depth, motif contour, density spacious, motion {intensity 0.7, durationScale 1.1, ambient subtle} — the motion field default is why `motion remains fixed` is NOT declared control-wide (see negativeControlsScopeNote)."
+      }
+    ],
+    "staticDbParityEvidenceIds": [
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json.receipt.json"
+    ],
+    "exactRestoreEvidenceIds": [
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-editorial.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json.receipt.json"
+    ],
+    "negativeControls": [
+      "color remains fixed"
+    ],
+    "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE. The computed half is done and receipted on two verticals through both doors at both stops, in both themes, with a painted title witness in 8 cells. experience.profile stays COMPUTED_VERIFIED (rank 3) until a sighted reviewer accepts it; SIGHTED_ACCEPTED is not claimable from a computed run. Open before any wider claim: the two bithire cascade/arm findings in knownDefects, and the 254 other family cells still carrying the conflated MUST_NOT_REACH reason (only primitive/display/card was re-adjudicated here).",
     "catalog": [
       "rottay/bithire-technical@1",
       "rottay/management-editorial@1"
     ],
-    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por REGISTRO first-party versionado (crece por registro, no por schema); ids permanentes, superseded por @N+1"
+    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por REGISTRO first-party versionado (crece por registro, no por schema); ids permanentes, superseded por @N+1",
+    "sourceBindings": {
+      "profileRegistry": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts",
+      "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "semanticAuthority": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+      "productiveConsumer": "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
+      "ingressShapeFence": "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs"
+    },
+    "negativeControlsScopeNote": "Only `color remains fixed` is declared, and that is a deliberate floor rather than an omission. `font metrics remain fixed` must NEVER be declared here: --ds-letter-spacing-heading is one of this control's own five declared channels and is the packet's primary painted witness, so that entry would report the control's intended effect as a violation. `border remains fixed` and `border width and style remain fixed` are excluded for the same class of reason: the edge axis owns --ds-edge-standard-width and the geometry axis moves radiusScale as a FIELD DEFAULT, so both entries would fence the control against itself. `motion remains fixed` is excluded because it is TRUE PER STOP, not control-wide: management-editorial sets {intensity 0.7, durationScale 1.1, ambient subtle} as a field default, so a control-wide declaration would be a false claim about the control even though no motion channel is carried in the declared five-channel payload. `control height remains fixed` is bound to control-bearing targets and the only bindable target here is a Card root, which is not one.",
+    "measuredResult": {
+      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1, Node 22.17.0",
+      "scenarios": "4 receipted positives = {rottay,evnto} x {technical,editorial}, both ingress doors on ONE scene, both themes. All four self-check harness-live; ingressEquivalence identical with 0 differing rows; restore.exact true and negativeControls.held true on every arm of every scenario. Two further scenarios were measured and deliberately NOT receipted: bithire/technical (DESIGNED_NULL) and bithire/editorial (DIVERGENCE) - see knownDefects.",
+      "directChannel": "token-readout reads all five declared channels directly and is therefore the direct-read control fixture (directControlFixtureIds requires ONE target to read EVERY declared channel). --ds-letter-spacing-heading moved on both arms in all four scenarios: rottay -0.015em -> 0.01em (technical) and -> 0 (editorial); evnto likewise from its own baseline.",
+      "paintedDelta": "card-modern-md/title letter-spacing, identical on both arms, in BOTH themes, in all four receipted scenarios: rottay -0.196875px -> 0.13125px (technical) and -> normal (editorial); evnto -0.3px -> 0.15px (technical) and -> normal (editorial). That is 8 painted cells. card-modern-md/root background-image also moves via --ds-elevation-lift-strength, but ASYMMETRICALLY BY THEME: the editorial stop (lift 2) moves it in both themes, while the technical stop (lift 0) moves it in DARK ONLY, because light themes already resolve the lift to 0 and the stop is then a true no-op for that axis.",
+      "chain": "letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading)) at .ds-card--modern > body > header > header-main > title (card.css:521). The title part had to be added to the card-modern-md fixture for this packet; it is rendered by the REAL ModernCard, so the roster drift test covers it.",
+      "titleWitnessNote": "The editorial stop drives letter-spacing to the INITIAL value (normal) because --ds-letter-spacing-heading: 0 is substituted unitless and is invalid at computed-value time. The movement is real and reversible; it is the unhydrated guard that cannot decide such a target from its longhands alone, which is why both measured targets carry border-top-style as a hydration witness."
+    },
+    "knownDefects": [
+      {
+        "familyId": "VERTICAL_CASCADE/bithire",
+        "finding": "On bithire and in DARK ONLY, the STATIC ingress door cannot move --ds-letter-spacing-heading while the DB door can. bithire's compiled artifact declares the channel twice: at base tenant specificity (artifacts/bithire/index.css:644, -0.025em) and again in a dark block whose selector carries an EXTRA attribute/class - :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'], ....dark (line 1496, -0.01em). The static arm lands behind the BASE selector, so the dark block outranks it; the DB arm writes inline on documentElement and outranks everything. Reproduced twice, identical rows. Measured on both bithire stops.",
+        "sourceCensusRequired": true,
+        "sourceState": "OPEN_VERTICAL_CASCADE_DEFECT",
+        "evidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.DIVERGENCE.json and packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.DESIGNED-NULL.json",
+        "remediation": "Emit the vertical's theme-scoped token blocks at the same specificity as the base tenant block, or give the static ingress block the theme-scoped selector when the stop carries theme-conditional channels. Out of scope for a single-control packet: it is a property of the vertical artifact generator, not of experience.profile."
+      },
+      {
+        "familyId": "VERTICAL_CASCADE/bithire",
+        "finding": "On bithire/editorial and in LIGHT, --ds-material-canvas-texture moves on the STATIC arm and not on the DB arm. Distinct cause from the row above: compileTenantThemeConfig emits only 3 of the 5 declared channels for bithire/editorial (--ds-edge-standard-width and --ds-material-canvas-texture are absent), because the profile expansion loses to a channel the vertical baseline already authors - the control's own declared defaultBehavior. The static lowering has no vertical baseline to lose to, so it emits.",
+        "sourceCensusRequired": false,
+        "sourceState": "OPEN_ARM_ASYMMETRY",
+        "boundedBy": "The asymmetry is bounded to channels a vertical authors. rottay and evnto author neither channel and both arms agree there, which is why their four scenarios are byte-identical across doors.",
+        "remediation": "Owner adjudication: decide whether the static door should also lose to an authored vertical channel (making the doors symmetric) or whether the DB door should stop losing (making the control uniformly stronger). Either way it is a compiler decision above this packet."
+      },
+      {
+        "familyId": "DESIGNED_NULL/bithire-technical",
+        "finding": "bithire x rottay/bithire-technical@1 is a STRUCTURAL IDENTITY, not a calibration cell: brand-themes/bithire/index.ts:3190 already declares experienceProfile 'rottay/bithire-technical@1', so a bithire tenant selecting that stop selects the profile the vertical already has. It is measured and retained as evidence, deliberately NOT receipted, and must not be read as an inert-control finding.",
+        "sourceCensusRequired": false,
+        "sourceState": "DESIGNED_NULL",
+        "evidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.DESIGNED-NULL.json"
+      }
+    ]
   },
   "retiredAliases": []
 }

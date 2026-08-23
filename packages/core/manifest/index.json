@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "ed6046c31a86a21ad24844f0dedb96fc50363af00a60b3e89367011f4441b3ba",
+  "inputsDigest": "6f239ff5181f4ec08dc3fc3ab227f2cbb56ed792fc7df8adb8a7d9b36ebee8ea",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -959,13 +959,40 @@
       },
       {
         "controlId": "experience.profile",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
-        "parts": [],
-        "propertyGroups": [],
-        "channels": [],
+        "parts": [
+          "root",
+          "title"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--ds-card-title-letter-spacing"
+        ],
         "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root",
+              "title"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "background-image",
+              "letter-spacing"
+            ],
+            "channels": [
+              "--ds-card-title-letter-spacing"
+            ]
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1437,7 +1464,7 @@
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "018ce0c461e8f9a416122f44f2e68e962058a7a79e610b1f0ee482b582638463"
+      "digest": "868b28313a29ace23c69f2ce5e02ba5a7128132e1b7bdf4a878e7f907a052b38"
     },
     {
       "controlId": "chrome.families",
@@ -2049,7 +2076,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "manifest/families/primitive/display/card.json",
-      "digest": "c3e4c346a9ceda4591a83fb5c8370c7c387f04b4f111c441320ecf15a39f87e3",
+      "digest": "93be7a5f71dba423dedbf777bcf8bd952bce2ad7fb69bb131913ed206db1eedc",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
