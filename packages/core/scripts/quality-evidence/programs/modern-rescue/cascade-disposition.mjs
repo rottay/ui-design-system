@@ -14,7 +14,7 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { resolveShape, readProperty, isShapeClosed, classifyRelayBoundary, getSource } from "./cascade-cross-file-resolver.mjs";
+import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, getSource } from "./cascade-cross-file-resolver.mjs";
 import { governanceOutcome, governanceAnalysis, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "./cascade-governance.mjs";
 /**
  * v4 driver — READ-ONLY. Same verbatim sink-anchored walk as
@@ -337,12 +337,16 @@ export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
   // distinct from an unexamined relay, and NEVER a candidate.
   if (shape.kind === "relay" && boundaryReceipt && boundaryReceipt.kind === "PUBLIC_BOUNDARY_UNKNOWN") return { disposition: "PUBLIC_BOUNDARY_UNKNOWN", governance: null };
   switch (shape.kind) {
-    case "object": {
-      if (!shape.closed) return { disposition: "AUTHORED_OPEN", governance: null };
-      return governanceOutcome(shape, ctx, sourceParts);
-    }
+    case "object":
     case "array": {
-      if (!shape.closed) return { disposition: "AUTHORED_OPEN", governance: null };
+      /* T-STATIC-KEYSET: a shape whose VALUES did not all resolve can still
+       * have a fully enumerated KEY SET. When it does, the census can decide
+       * emission without inventing a value, so it is scanned instead of being
+       * parked as authored debt. A shape that closes outright is unaffected --
+       * it takes the same route it always did. */
+      if (!shape.closed && !keySetEnumerable(shape)) {
+        return { disposition: "AUTHORED_OPEN", governance: null };
+      }
       return governanceOutcome(shape, ctx, sourceParts);
     }
     case "nonObject":
@@ -538,6 +542,16 @@ export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
         };
       }
 
+      /* T-STATIC-KEYSET -- placed AFTER every earlier branch route on purpose.
+       * `armsExhaustivelyResolved` and the relay-inheritance verdict are more
+       * specific claims and keep their priority; this only picks up trees they
+       * both declined, where every arm is an object with a fully enumerated key
+       * set (or a clean `undefined` guard) and the only openness left is in
+       * leaf values. A tree with any unenumerated arm -- relay, spread of a
+       * prop, computed key -- never reaches here as enumerable. */
+      if (keySetEnumerable(shape)) {
+        return governanceOutcome(shape, ctx, sourceParts);
+      }
       if ((anyObjectClosed || anyObjectOpen || anyOpaque) && kinds.some((k) => k === "nonObject")) {
         return { disposition: anyOpaque || anyObjectOpen ? "BRANCH_COMPOSITE_OPEN" : "BRANCH_CONDITIONAL_AUTHORED", governance: null };
       }
@@ -1164,6 +1178,18 @@ export function boundedReceiptOf(row) {
         customPropertyScanComplete: governance?.customPropertyScanComplete ?? null,
         governedChannelKeys: [...(governance?.governedChannelKeys ?? [])].sort(),
         internalSocketKeys: [...(governance?.internalSocketKeys ?? [])].sort(),
+        // T-STATIC-KEYSET: custom properties outside both governed namespaces.
+        // They are REAL emissions and they are what keeps such a row out of the
+        // ZERO bucket, so the key union has to name them. Present only when
+        // there are any -- every producer published earlier is byte-identical.
+        ...(governance?.ungovernedCustomPropertyKeys?.length
+          ? { ungovernedCustomPropertyKeys: [...governance.ungovernedCustomPropertyKeys].sort() }
+          : {}),
+        // T-STATIC-KEYSET: how much stayed unresolved in a VALUE position. A
+        // reader must be able to see that the KEY SET closed, not the values.
+        ...(governance?.openLeafValues
+          ? { openLeafValues: governance.openLeafValues, openLeafValueKinds: [...(governance.openLeafValueKinds ?? [])] }
+          : {}),
         sourcePartRefs: [...(governance?.sourcePartRefs ?? [])].sort(),
         path,
       };
@@ -1202,6 +1228,24 @@ export function boundedReceiptOf(row) {
           customPropertyScanComplete: row.governance?.customPropertyScanComplete ?? null,
           governedChannelKeys: [...(row.governance?.governedChannelKeys ?? [])].sort(),
           internalSocketKeys: [...(row.governance?.internalSocketKeys ?? [])].sort(),
+          path,
+        };
+      }
+      /* T-STATIC-KEYSET: a ZERO that rests on admitting open VALUES must not
+       * present itself as a fully resolved shape. It publishes the admission
+       * and the (empty) custom-property union that justifies the verdict. */
+      if (row.governance?.openLeafValues) {
+        return {
+          resolvedVia: "static-key-set",
+          openLeafValues: row.governance.openLeafValues,
+          openLeafValueKinds: [...(row.governance.openLeafValueKinds ?? [])],
+          customPropertyScanComplete: row.governance.customPropertyScanComplete ?? null,
+          governedChannelKeys: [...(row.governance.governedChannelKeys ?? [])].sort(),
+          internalSocketKeys: [...(row.governance.internalSocketKeys ?? [])].sort(),
+          ungovernedCustomPropertyKeys: [...(row.governance.ungovernedCustomPropertyKeys ?? [])].sort(),
+          ...(row.receipt?.kind === "branches"
+            ? { branchCensus: branchTreeCensus(row.receipt.branches ?? []) }
+            : {}),
           path,
         };
       }

@@ -620,15 +620,30 @@ export function privateRelayRow(file, site, entry) {
 }
 
 export function closedProducerRow(file, site, entry) {
+  /* T-STATIC-KEYSET: a producer whose ONLY custom properties sit outside the
+   * `--ds-` / `--_ds-` namespaces is still a producer -- it really stamps them
+   * -- but calling it "governed" would assert a governance relationship this
+   * programme does not have over that namespace. It gets its own honest label
+   * and cause; it is no more consumable and no more tenant-safe than any other
+   * producer, and it still has no attributed root. A producer with at least one
+   * governed channel or internal socket keeps its exact published form. */
+  const ungovernedOnly =
+    (entry.receipt?.governedChannelKeys?.length ?? 0) === 0 &&
+    (entry.receipt?.internalSocketKeys?.length ?? 0) === 0 &&
+    (entry.receipt?.ungovernedCustomPropertyKeys?.length ?? 0) > 0;
   const row = cohortRow({
     file,
     site,
     entry,
-    reason: `governed-producer-object:${site.form}`,
+    reason: ungovernedOnly
+      ? `ungoverned-custom-property-producer-object:${site.form}`
+      : `governed-producer-object:${site.form}`,
     // It DOES emit governed channels -- that is why it is a producer -- but no
     // cascade root claims it. Inventing a root or a tenant reach for it is
     // exactly the relabel this programme forbids.
-    cause: "governed-producer-with-no-attributed-cascade-root",
+    cause: ungovernedOnly
+      ? "custom-property-producer-outside-any-governed-namespace-with-no-attributed-cascade-root"
+      : "governed-producer-with-no-attributed-cascade-root",
   });
   // T-COMPUTED-DOMAIN: when one coordinate carries SEVERAL producer
   // occurrences, their per-occurrence causal identities are merged by the join
@@ -1068,13 +1083,20 @@ export function buildProducers({
         // Rows closed by an earlier route have no receipt and keep their exact
         // published form.
         if (entry.receipt) {
-          zeroRow.resolvedVia = entry.receipt.domainKind
-            ? "computed-domain-enumeration"
-            : entry.receipt.sequentialAssignments
-              ? "static-sequential-assignment"
-              : entry.receipt.nestedComputedDomains
-                ? "nested-computed-domain"
-                : "branch-union";
+          zeroRow.resolvedVia =
+            // T-STATIC-KEYSET: checked FIRST. The receipt already names this
+            // route, and labelling such a row "branch-union" would put two
+            // contradictory provenance claims in the same row. A row that
+            // closed by any earlier route is untouched.
+            entry.receipt.resolvedVia === "static-key-set"
+              ? "static-key-set"
+              : entry.receipt.domainKind
+                ? "computed-domain-enumeration"
+                : entry.receipt.sequentialAssignments
+                  ? "static-sequential-assignment"
+                  : entry.receipt.nestedComputedDomains
+                    ? "nested-computed-domain"
+                    : "branch-union";
           zeroRow.evidence = entry.receipt;
         }
         closedZeroGoverned.push(zeroRow);

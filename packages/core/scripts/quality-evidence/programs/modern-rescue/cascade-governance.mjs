@@ -310,6 +310,14 @@ export function astPathFromSinkToPart(sinkNode, partNode, sourceFile) {
 
 const GOVERNED_CHANNEL_RE = /^--ds-/;
 const INTERNAL_SOCKET_RE = /^--_ds-/;
+/* T-STATIC-KEYSET: ANY literal key beginning with `--` is a custom property
+ * the element really emits. `--ds-` is the governed channel namespace and
+ * `--_ds-` the internal socket namespace; everything else (`--rottay-*` and any
+ * other authored prefix) is still a REAL emission -- it is simply not governed
+ * by this programme. Counting it as an ordinary CSS property would let a shape
+ * that stamps custom properties certify as a ZERO emission, which is the one
+ * verdict that must never be reachable by omission. */
+const CUSTOM_PROPERTY_RE = /^--/;
 const VAR_REF_RE = /var\(\s*(--(?:ds|_ds)-[a-zA-Z0-9-]+)/g;
 
 function fullText(node) {
@@ -387,7 +395,7 @@ function readRefsIn(node, sourceLabel, fileRel, acc, causalSourcePartId) {
  * (`incomplete`/`cycleDetected`/`hasUnresolvedKey`) always land on the SAME
  * object `governanceAnalysis()` reads back at the root.
  */
-export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direct", causalSourcePartId = null) {
+export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direct", causalSourcePartId = null, valuePosition = false) {
   if (!shape || depthGuard > 80) {
     acc.incomplete = true;
     acc.depthOverflow = true;
@@ -430,7 +438,7 @@ export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direc
     for (const entry of shape.order) {
       if (entry.kind === "spread") {
         const partId = resolveCausalId(entry.node);
-        scanClosedShape(entry.shape, ctx, acc, depthGuard + 1, "spread", partId);
+        scanClosedShape(entry.shape, ctx, acc, depthGuard + 1, "spread", partId, valuePosition);
         continue;
       }
       // leaf
@@ -442,13 +450,29 @@ export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direc
       const partId = resolveCausalId(entry.declNode ?? entry.node);
       const partNode = entry.declNode ?? entry.node;
       const astPath = shape.node && localRootSourceFile && partNode ? astPathFromSinkToPart(shape.node, partNode, localRootSourceFile) : null;
-      const kind = entry.key && INTERNAL_SOCKET_RE.test(entry.key) ? "internal-socket" : entry.key && GOVERNED_CHANNEL_RE.test(entry.key) ? "governed" : "ordinary";
+      const kind = entry.key && INTERNAL_SOCKET_RE.test(entry.key)
+        ? "internal-socket"
+        : entry.key && GOVERNED_CHANNEL_RE.test(entry.key)
+          ? "governed"
+          // T-STATIC-KEYSET: a custom property outside both governed namespaces
+          : entry.key && CUSTOM_PROPERTY_RE.test(entry.key)
+            ? "ungoverned-custom"
+            : "ordinary";
       acc.keyWitnesses.push({ astPath, localRootFile: shape.fileRel ?? null, localRootAt: localRootCoord, key: entry.key, kind, origin, sourcePartId: partId });
       const readAt = entry.node && localRootSourceFile ? `${shape.fileRel ?? localRootSourceFile.fileName}:${localRootSourceFile.getLineAndCharacterOfPosition(entry.node.getStart(localRootSourceFile)).line + 1}` : localRootCoord;
       readRefsIn(entry.node, readAt, fileForReads, acc, partId);
       // recurse into the LEAF'S OWN VALUE SHAPE -- this is exactly the
       // recursion the v4 blocker found missing.
-      scanClosedShape(entry.shape, ctx, acc, depthGuard + 1, "direct", partId);
+      // T-STATIC-KEYSET: this recursion ENTERS a value position, and every
+      // recursion below inherits it -- nothing nested under a leaf value can
+      // put a key on the style object either. That makes this walk agree
+      // exactly with `keySetEnumerable`, which likewise never descends into a
+      // leaf value. A spread or branch reached OUTSIDE a value position keeps
+      // its old fail-closed behaviour.
+      // Whatever it resolves to lands under `entry.key`, which is already
+      // witnessed above, so an unresolved value here cannot hide a key. Every
+      // other recursion below stays key-bearing and keeps failing closed.
+      scanClosedShape(entry.shape, ctx, acc, depthGuard + 1, "direct", partId, true);
     }
     return;
   }
@@ -458,16 +482,16 @@ export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direc
     const fileForReads = shape.fileRel ?? (arraySourceFile ? arraySourceFile.fileName : null);
     for (const el of shape.elements) {
       readRefsIn(el.node, arrayAt, fileForReads, acc, causalSourcePartId);
-      scanClosedShape(el.shape, ctx, acc, depthGuard + 1, el.kind === "spread" ? "spread" : "array-element", causalSourcePartId);
+      scanClosedShape(el.shape, ctx, acc, depthGuard + 1, el.kind === "spread" ? "spread" : "array-element", causalSourcePartId, valuePosition);
     }
     return;
   }
   if (shape.kind === "branches") {
-    for (const b of shape.branches) scanClosedShape(b, ctx, acc, depthGuard + 1, "branch", causalSourcePartId);
+    for (const b of shape.branches) scanClosedShape(b, ctx, acc, depthGuard + 1, "branch", causalSourcePartId, valuePosition);
     return;
   }
   if (shape.kind === "computedKey") {
-    for (const b of shape.branches ?? []) scanClosedShape(b, ctx, acc, depthGuard + 1, "branch", causalSourcePartId);
+    for (const b of shape.branches ?? []) scanClosedShape(b, ctx, acc, depthGuard + 1, "branch", causalSourcePartId, valuePosition);
     if (shape.reason) acc.incomplete = true; // an unresolved computed key domain
     return;
   }
@@ -475,9 +499,21 @@ export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direc
     readRefsIn(shape.node, `${ctx.fileRel ?? "<fixture>"}:${ctx.line ?? "?"}`, ctx.fileRel ?? null, acc, causalSourcePartId);
     return;
   }
-  // relay / callArgsPending / dynamicSink / openUnknown reached UNDER a
-  // supposedly-closed container should not be possible (closedness is
-  // recursive and would already be false) -- but fail-closed regardless.
+  /* relay / callArgsPending / dynamicSink / openUnknown.
+   *
+   * T-STATIC-KEYSET: reached in a VALUE position this is not a gap in the key
+   * census -- the key is already witnessed and an unresolved value cannot add
+   * another. It is recorded as evidence (the row must be able to say how much
+   * of it stayed unresolved) and the scan continues.
+   *
+   * Reached anywhere else -- a spread, a branch arm, an array element, or the
+   * root itself -- it CAN still hide a key, and fails closed exactly as before.
+   */
+  if (valuePosition) {
+    acc.openLeafValues += 1;
+    acc.openLeafValueKinds.add(shape.kind);
+    return;
+  }
   acc.incomplete = true;
 }
 
@@ -546,16 +582,23 @@ export function governanceAnalysis(shape, ctx, sourceParts = []) {
     cycleDetected: false,
     depthOverflow: false,
     unprovenCausalLink: false,
+    // T-STATIC-KEYSET: how much of the shape stayed unresolved in a VALUE
+    // position. Evidence, never a licence: a row publishes it so a reader can
+    // see the census closed the KEY SET, not the values.
+    openLeafValues: 0,
+    openLeafValueKinds: new Set(),
     causalMatcher: causal.matcher,
   };
   scanClosedShape(shape, ctx, acc, 0, "direct", causal.trivialId);
   const governedSet = new Map();
   const internalSet = new Map();
+  const ungovernedCustomSet = new Map();
   const ordinarySet = new Set();
   for (const w of acc.keyWitnesses) {
     if (!w.key) continue;
     if (w.kind === "internal-socket") internalSet.set(w.key, true);
     else if (w.kind === "governed") governedSet.set(w.key, true);
+    else if (w.kind === "ungoverned-custom") ungovernedCustomSet.set(w.key, true);
     else ordinarySet.add(w.key);
   }
   const customPropertyScanComplete = !acc.incomplete && !acc.hasUnresolvedKey && !acc.cycleDetected && !acc.unprovenCausalLink;
@@ -563,6 +606,8 @@ export function governanceAnalysis(shape, ctx, sourceParts = []) {
     keyWitnesses: acc.keyWitnesses,
     governedChannelKeys: [...governedSet.keys()],
     internalSocketKeys: [...internalSet.keys()],
+    // T-STATIC-KEYSET: real emissions outside both governed namespaces
+    ungovernedCustomPropertyKeys: [...ungovernedCustomSet.keys()],
     ordinaryPropertyKeys: [...ordinarySet],
     readChannelRefs: [...acc.readByOccurrence.values()],
     customPropertyScanComplete,
@@ -571,6 +616,8 @@ export function governanceAnalysis(shape, ctx, sourceParts = []) {
     depthOverflow: acc.depthOverflow,
     hasUnresolvedKey: acc.hasUnresolvedKey,
     unprovenCausalLink: acc.unprovenCausalLink,
+    openLeafValues: acc.openLeafValues,
+    openLeafValueKinds: [...acc.openLeafValueKinds].sort(),
   };
 }
 
@@ -585,6 +632,13 @@ export function governanceAnalysis(shape, ctx, sourceParts = []) {
 export function governanceOutcome(shape, ctx, sourceParts = []) {
   const gov = governanceAnalysis(shape, ctx, sourceParts);
   if (!gov.customPropertyScanComplete) return { disposition: "OPEN_UNKNOWN", governance: gov };
-  const isReal = gov.governedChannelKeys.length > 0 || gov.internalSocketKeys.length > 0;
+  /* T-STATIC-KEYSET: a shape is ZERO only when NO branch enumerates ANY custom
+   * property. An ungoverned one (`--rottay-*`) is still an emission: it makes
+   * the row a producer -- one with no governed root, no tenant reach and no
+   * consumability -- never a zero. */
+  const isReal =
+    gov.governedChannelKeys.length > 0 ||
+    gov.internalSocketKeys.length > 0 ||
+    gov.ungovernedCustomPropertyKeys.length > 0;
   return { disposition: isReal ? "CLOSED_PRODUCER" : "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT", governance: gov };
 }

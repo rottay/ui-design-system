@@ -1858,7 +1858,83 @@ export function classifyRelayBoundary(binding, sinkTagName, fileRel) {
   };
 }
 
-export { isShapeClosed };
+/* ----------------------------- static key-set proof (T-STATIC-KEYSET) --- */
+/**
+ * T-STATIC-KEYSET -- prove a shape's KEY SET is fully enumerable, even when
+ * some of its leaf VALUES stay open.
+ *
+ * `isShapeClosed` answers a STRONGER question than the census needs: "is every
+ * value resolved?". The load-bearing question for a style sink is narrower --
+ * "can this expression still contribute a custom property this walk has not
+ * seen?". A plain leaf VALUE cannot: whatever it evaluates to at runtime, it
+ * lands UNDER a key this walk already named. Only a spread, a computed or
+ * dynamic key, or a branch that was never enumerated can introduce a key.
+ *
+ * So this predicate ignores leaf value shapes entirely and interrogates only
+ * the things that can create keys. Everything else stays open exactly as
+ * before -- fail-closed on every one of them:
+ *
+ *   - a spread whose own key set is not enumerable (a caller-supplied or
+ *     otherwise unbounded `style`/prop object is the canonical case);
+ *   - a computed or dynamic key (`{ [side]: 0 }`), and a computedKey shape
+ *     whose domain was not closed;
+ *   - a getter/setter/method member, which `resolveShape` already models as an
+ *     open spread entry and which therefore fails here too;
+ *   - a branch tree with any arm that is not itself enumerable -- relay,
+ *     callArgsPending, dynamicSink, openUnknown, an unresolved import;
+ *   - a cycle, or any shape reached twice, which is refused rather than
+ *     assumed benign;
+ *   - the depth guard.
+ *
+ * A proven `nonObject` is enumerable and contributes nothing -- that is what
+ * makes a clean `cond ? {…} : undefined` guard admissible: the guard arm
+ * enumerates the empty key set.
+ *
+ * This is NOT a closedness claim and must never be used as one: the values
+ * really are unresolved. It licenses exactly one thing -- that the KEY UNION
+ * is complete, so the census can decide emission without inventing a value.
+ */
+function keySetEnumerable(shape, depth = 0, seen = new WeakSet()) {
+  if (!shape || typeof shape !== "object" || depth > 40) return false;
+  // a shape reached twice is a cycle or a shared node: refuse, never assume
+  if (seen.has(shape)) return false;
+  seen.add(shape);
+  switch (shape.kind) {
+    // a proven non-object cannot carry a key -- this is the `undefined` guard
+    case "nonObject":
+      return true;
+    case "object":
+    case "array": {
+      for (const entry of shape.order ?? []) {
+        // a spread CAN introduce keys: it must prove its own key set
+        if (entry.kind === "spread") {
+          if (!keySetEnumerable(entry.shape, depth + 1, seen)) return false;
+          continue;
+        }
+        // a computed/dynamic key is exactly what this predicate refuses
+        if (entry.unresolvedKey) return false;
+        if (entry.key === null || entry.key === undefined) return false;
+        // entry.shape -- the VALUE -- is deliberately NOT interrogated
+      }
+      for (const el of shape.elements ?? []) {
+        if (!keySetEnumerable(el.shape, depth + 1, seen)) return false;
+      }
+      return true;
+    }
+    case "branches": {
+      const arms = shape.branches ?? [];
+      // a branch tree with no arms enumerates nothing provable
+      return arms.length > 0 && arms.every((b) => keySetEnumerable(b, depth + 1, seen));
+    }
+    case "computedKey":
+      return shape.closed === true;
+    default:
+      // relay, callArgsPending, dynamicSink, openUnknown
+      return false;
+  }
+}
+
+export { isShapeClosed, keySetEnumerable };
 /** Test seam: the SEALED-declaration predicate, so the shape refusals
  * (generic, optional, indexed, extended, method-bearing, union alias, cycle)
  * can be drilled without a cross-file fixture tree. */
