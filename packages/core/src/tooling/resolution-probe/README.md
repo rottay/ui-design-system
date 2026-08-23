@@ -379,6 +379,42 @@ The DB arm needs no equivalent and must not be given one:
 it composed correctly all along. Passing `base` to it would apply the vertical
 twice, silently — so `lowerStop` throws instead.
 
+**The arm must ENCODE the stop, not merely emit something** (H-2, 2026-08-23).
+Before measuring, `assertStopDiscrimination` lowers every normalized stop of the
+control on that arm and asks whether ANY declared channel takes two different
+values across them. If none does, the run is refused: an arm carrying a constant
+default is non-empty, so the empty-lowering guard passes it, while it encodes no
+stop at all. That is the false-INERT vector `shape.radius-scale` recorded as open
+in its `knownDefects`, and two real instances were measured before it closed —
+radius pointed at `surfaces.borderRadius` lowered `--ds-radius-scale: 1` at all
+four stops, and density pointed at a prose double keypath lowered
+`--ds-density-scale: 1` at all three with the stop's own channel absent entirely.
+
+The predicate is a property of the CHANNEL across the stop set, never of a stop,
+and that is what makes an identity stop free: `suave`=1 lowers exactly `1` both
+inside a healthy set (`0.75/0.9/1/1.15`) and inside an anti-doored one
+(`1/1/1/1`). Only the second is an absence. It is EXISTS and not FOR-ALL: a
+healthy `density.mode` discriminates on one of its two declared channels, because
+`--ds-density-scale` is the vertical's structural scale and is constant within a
+vertical by construction. `K` is `declaredOutputs.channels` and nothing wider —
+the full emitted map would turn "this control declared its channels badly" into
+"this control is alive". Fewer than two lowerable stops is `NOT DECIDABLE` and is
+refused too, unless an adjudicated
+`calibration.stopDiscriminationException { armId, reason, adjudicatedBy }` says
+otherwise; that list is born empty.
+
+**THE LIMIT, and it is a real one: this guard proves the arm ENCODES the stop,
+never that the stop PAINTS.** A channel that discriminates but nobody reads still
+passes. Per-channel liveness is a different question with different owners:
+`ingressEquivalence`, the painted witness, and the scenario's own per-channel
+expectations. The live example is `experience.profile` on the static arm — it
+PASSES this guard, because accessory channels discriminate, while its principal
+channel `--ds-letter-spacing-heading` is pinned by the vertical's authored value
+and does not move at all. That inertness is real, it is what degraded that
+control from COMPUTED_VERIFIED, and it was found by the painted witness rather
+than here. A PASS from this guard is never a claim that every declared channel
+lives.
+
 A stop lowered in **isolation** is still a meaningful question — it isolates the
 stop's own contribution from the vertical's — but it is not representable in
 production, so it must never carry a receipt from this arm. Keep it as an

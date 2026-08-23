@@ -33,6 +33,7 @@ import {
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
   loadCompilerArms,
+  assertStopDiscrimination,
   loadStaticBaselines,
   lowerStop,
   RETIRED_DB_COMPILER_EXPORTS,
@@ -1172,4 +1173,261 @@ test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verificati
   assert.equal(lowered.producedBy.input.baseline.source, 'dist/index.js#rottayBrandTheme');
   assert.match(lowered.producedBy.input.baseline.digest, /^[0-9a-f]{64}$/);
   assert.doesNotThrow(() => assertArmProvenance(lowered.producedBy));
+});
+
+/* ===================================================================== *
+ * H-2 — the stop-discrimination guard.
+ *
+ * Closes the false-INERT vector shape.radius-scale left recorded open: an arm
+ * that emits a declared channel at a CONSTANT default is non-empty, so the
+ * empty-lowering guard passes it, while it encodes no stop at all.
+ *
+ * The predicate is a property of the CHANNEL across the stop set, never of a
+ * stop. That is what makes an identity stop free: `suave`=1 lowers exactly `1`
+ * both inside a healthy set (0.75/0.9/1/1.15) and inside an anti-doored one
+ * (1/1/1/1); only the second is an absence. Drill 3 fences that, and drill 4
+ * fences the EXISTS -- if anyone hardened the predicate to FOR-ALL, healthy
+ * density would start failing on its structural channel.
+ * ===================================================================== */
+
+const RADIUS_H2 = readManifest(resolve(CORE_ROOT, 'manifest/controls/shape.radius-scale.json'));
+const TYPO_H2 = readManifest(resolve(CORE_ROOT, 'manifest/controls/typography.scale.json'));
+
+/** The guard, on the real compilers, with the arm's own baseline tuple. */
+const discriminate = async (manifest, armId, vertical, overrides = {}) => {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  return assertStopDiscrimination({
+    armId,
+    controlManifest: manifest,
+    compile: arms[armId].compile,
+    vertical,
+    provenance: arms[armId].provenance,
+    baseline: armId === 'static-brand-theme' ? baselines[vertical] : null,
+    ...overrides,
+  });
+};
+
+test('H-2 drill 1 [needs dist]: the radius anti-door lowers a CONSTANT and is refused', async () => {
+  // The historical mutation, reconstructed in memory: surfaces.borderRadius sets
+  // the ramp OPERANDS and is divided by the live scale, so it cancels the dial.
+  const antiDoor = {
+    ...RADIUS_H2,
+    ingress: { ...RADIUS_H2.ingress, staticBrandThemePath: 'surfaces.borderRadius' },
+  };
+  await assert.rejects(
+    () => discriminate(antiDoor, 'static-brand-theme', 'rottay'),
+    /encodes NO stop.*lowers a constant across/s,
+    'every stop lowering --ds-radius-scale: 1 is the absence of the dial, not a measurement',
+  );
+});
+
+test('H-2 drill 2 [needs dist]: the density anti-door is refused, and the mechanism is asserted', async () => {
+  const antiDoor = {
+    ...DENSITY_MANIFEST_H1,
+    ingress: {
+      ...DENSITY_MANIFEST_H1.ingress,
+      staticBrandThemePath: 'surfaces.density / surfaces.densityScale',
+    },
+  };
+  await assert.rejects(() => discriminate(antiDoor, 'static-brand-theme', 'rottay'), /encodes NO stop/);
+
+  // Not just the symptom: the stop's OWN channel is absent entirely, and the
+  // arm stayed non-empty on the unconditional seed alone. That is the mechanism.
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const lowered = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: antiDoor,
+    stopId: 'compact',
+    compile: arms['static-brand-theme'].compile,
+    vertical: 'rottay',
+    base: baselines.rottay.theme,
+    baselineSource: baselines.rottay.source,
+  });
+  assert.equal(Object.hasOwn(lowered.variables, '--ds-density-mode-factor'), false);
+  assert.equal(lowered.variables['--ds-density-scale'], '1');
+});
+
+test('H-2 drill 3 [needs dist]: an IDENTITY stop does not fail the guard', async () => {
+  const verdict = await discriminate(RADIUS_H2, 'static-brand-theme', 'rottay');
+  assert.equal(verdict.outcome, 'PASS');
+  // `suave` = 1 is present among the witnesses and among the observed values.
+  assert.ok(verdict.witnesses.includes('suave'), 'the identity stop must be a witness, not an exile');
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const valueAt = (stopId) =>
+    lowerStop({
+      armId: 'static-brand-theme',
+      controlManifest: RADIUS_H2,
+      stopId,
+      compile: arms['static-brand-theme'].compile,
+      vertical: 'rottay',
+      base: baselines.rottay.theme,
+      baselineSource: baselines.rottay.source,
+    }).variables['--ds-radius-scale'];
+  assert.equal(valueAt('suave'), '1', 'the identity stop lowers the identity, and that is fine');
+  assert.notEqual(valueAt('sutil'), '1', 'because some OTHER stop moves the channel');
+});
+
+test('H-2 drill 4 [needs dist]: the predicate is EXISTS, not FOR-ALL', async () => {
+  const verdict = await discriminate(DENSITY_MANIFEST_H1, 'static-brand-theme', 'bithire');
+  assert.equal(verdict.outcome, 'PASS');
+  assert.deepEqual(verdict.discriminating, ['--ds-density-mode-factor']);
+  // The structural scale is CONSTANT within a vertical, by construction. A
+  // FOR-ALL predicate would fail this healthy control; this assertion is what
+  // reddens if anyone hardens it.
+  assert.deepEqual(verdict.constant, ['--ds-density-scale']);
+});
+
+test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both arms', async () => {
+  const { readdirSync } = await import('node:fs');
+  const dir = resolve(CORE_ROOT, 'manifest/controls');
+  let checked = 0;
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.json')).sort()) {
+    const manifest = readManifest(resolve(dir, file));
+    // "Carries receipts" read from the manifest state, not a hardcoded list, so
+    // a control closing later is covered the day it closes (the V3 pattern).
+    const evidence = [
+      ...(manifest.calibration?.staticDbParityEvidenceIds ?? []),
+      ...(manifest.calibration?.exactRestoreEvidenceIds ?? []),
+    ];
+    if (evidence.length === 0) continue;
+    for (const armId of INGRESS_ARM_IDS) {
+      for (const vertical of FIRST_PARTY) {
+        const verdict = await discriminate(manifest, armId, vertical);
+        assert.ok(
+          verdict.outcome.startsWith('PASS'),
+          `${manifest.controlId}/${armId}/${vertical} must keep passing: H-2 may not invalidate receipted work`,
+        );
+        checked += 1;
+      }
+    }
+  }
+  assert.ok(checked >= 12, `the invariance fence must cover the receipted catalogue; checked ${checked}`);
+});
+
+test('H-2 drill 6 [needs dist]: the verdict is PER ARM — typography.scale proves it', async () => {
+  // Same control, same run: the static door encodes nothing while the DB door does.
+  for (const vertical of FIRST_PARTY) {
+    await assert.rejects(
+      () => discriminate(TYPO_H2, 'static-brand-theme', vertical),
+      /encodes NO stop/,
+      `typography.scale/static/${vertical} lowers --ds-type-scale: 1 at every stop`,
+    );
+    const db = await discriminate(TYPO_H2, 'db-tenant-theme', vertical);
+    assert.equal(db.outcome, 'PASS', `typography.scale/db/${vertical} does encode its stops`);
+  }
+});
+
+test('H-2 drill 7 [needs dist]: fewer than two witnesses is NOT DECIDABLE, not a pass', async () => {
+  // A control whose stop set collapses to one lowerable stop cannot show that
+  // its arm encodes anything. Built by keeping a single stop.
+  const oneStop = {
+    ...RADIUS_H2,
+    calibration: {
+      ...RADIUS_H2.calibration,
+      normalizedStops: RADIUS_H2.calibration.normalizedStops.slice(0, 1),
+    },
+  };
+  await assert.rejects(
+    () => discriminate(oneStop, 'static-brand-theme', 'rottay'),
+    /NOT DECIDABLE below two/,
+    'a silent pass on one witness is exactly the failure mode this guard removes',
+  );
+});
+
+test('H-2 drill 8 (W-B): an adjudicated exception turns the refusal into a VISIBLE pass', async () => {
+  const oneStop = {
+    ...RADIUS_H2,
+    calibration: {
+      ...RADIUS_H2.calibration,
+      normalizedStops: RADIUS_H2.calibration.normalizedStops.slice(0, 1),
+    },
+  };
+  // Absent -> refused (drill 7). Present and complete -> PASS_WITH_EXCEPTION,
+  // and the exception is published in the verdict rather than swallowed.
+  const excepted = {
+    ...oneStop,
+    calibration: {
+      ...oneStop.calibration,
+      stopDiscriminationException: {
+        armId: 'static-brand-theme',
+        reason: 'drill fixture: a control that legitimately exhibits one witness on this arm',
+        adjudicatedBy: 'drill',
+      },
+    },
+  };
+  const verdict = await discriminate(excepted, 'static-brand-theme', 'rottay');
+  assert.equal(verdict.outcome, 'PASS_WITH_EXCEPTION');
+  assert.equal(verdict.exception.adjudicatedBy, 'drill');
+  // An exception for the OTHER arm must not rescue this one.
+  const wrongArm = {
+    ...oneStop,
+    calibration: {
+      ...oneStop.calibration,
+      stopDiscriminationException: {
+        armId: 'db-tenant-theme',
+        reason: 'wrong arm',
+        adjudicatedBy: 'drill',
+      },
+    },
+  };
+  await assert.rejects(() => discriminate(wrongArm, 'static-brand-theme', 'rottay'), /NOT DECIDABLE/);
+  // An incomplete exception is not an exception.
+  const incomplete = {
+    ...oneStop,
+    calibration: {
+      ...oneStop.calibration,
+      stopDiscriminationException: { armId: 'static-brand-theme', reason: 'no adjudicator' },
+    },
+  };
+  await assert.rejects(() => discriminate(incomplete, 'static-brand-theme', 'rottay'), /NOT DECIDABLE/);
+});
+
+test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it', async () => {
+  const baselines = await loadStaticBaselines();
+
+  // The shape is enforced, because getting it wrong is SILENT: passing the
+  // wrapper where the theme belongs lowers bithire's --ds-density-scale as 1
+  // instead of 0.9, with no error, and this guard runs outside the
+  // composeStaticArm path where assertArmProvenance would have caught it.
+  await assert.rejects(
+    () => discriminate(DENSITY_MANIFEST_H1, 'static-brand-theme', 'bithire', { baseline: baselines.bithire.theme }),
+    /baseline TUPLE \{ theme, source \}/,
+    'a bare theme is not the tuple, and the difference is invisible at run time',
+  );
+
+  // Same-digest cross-check: the arm's digest and the guard's must agree.
+  const arms = await loadCompilerArms();
+  const armLowered = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: DENSITY_MANIFEST_H1,
+    stopId: 'compact',
+    compile: arms['static-brand-theme'].compile,
+    vertical: 'bithire',
+    base: baselines.bithire.theme,
+    baselineSource: baselines.bithire.source,
+  });
+  const armDigest = armLowered.producedBy.input.baseline.digest;
+  const ok = await discriminate(DENSITY_MANIFEST_H1, 'static-brand-theme', 'bithire', {
+    armBaselineDigest: armDigest,
+  });
+  assert.equal(ok.outcome, 'PASS');
+
+  // A DIFFERENT baseline than the arm's is refused rather than measured.
+  await assert.rejects(
+    () =>
+      discriminate(DENSITY_MANIFEST_H1, 'static-brand-theme', 'bithire', {
+        armBaselineDigest: 'a'.repeat(64),
+      }),
+    /is not the arm's baseline/,
+    'the guard must not certify a scene the scenario does not compile',
+  );
+
+  // And the DB arm refuses a baseline outright: its compiler resolves one itself.
+  await assert.rejects(
+    () => discriminate(DENSITY_MANIFEST_H1, 'db-tenant-theme', 'rottay', { baseline: baselines.rottay }),
+    /only the static arm takes a baseline/,
+  );
 });

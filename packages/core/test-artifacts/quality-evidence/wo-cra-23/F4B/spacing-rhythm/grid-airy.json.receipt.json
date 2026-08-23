@@ -5,7 +5,7 @@
   "scenarioId": "spacing.rhythm/airy/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@61eb915d3608",
+  "toolVersion": "resolution-probe@da5271fcad55",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -60,10 +60,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "3ddb6af0904c51fbd4094cac19bea825cb882bb2b035b0b39c6eb9f03efe3057",
+  "sourceDigest": "d4a4cc8e7c57a3b44c417cb892ae3177855df632b6252c80d4f6c5c27bae2d67",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/grid-airy.json",
   "artifactSha256": "3e620624f01ed60f993b5c9cd795bc730921b4a76e5bd5cb1d3b3783289dc5b2",
-  "createdAt": "2026-08-23T19:44:57.585Z",
+  "createdAt": "2026-08-23T20:21:22.927Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

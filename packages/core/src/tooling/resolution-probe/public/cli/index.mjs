@@ -39,6 +39,7 @@ import {
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
   loadCompilerArms,
+  assertStopDiscrimination,
   loadStaticBaselines,
   lowerStop,
 } from '../../runtime/ingress/index.mjs';
@@ -602,13 +603,33 @@ async function commandCausal(options) {
           }
         : {}),
     });
+    /* H-2: does this arm ENCODE the stop, or only emit a constant? Runs here,
+     * per arm, because it is a property of the whole stop set and the arm is
+     * where the set's compiler and baseline are already in hand. Fail-closed:
+     * it throws, and a run that cannot show its arm encodes anything must not
+     * proceed to measure one.
+     *
+     * W-C: it is handed the SAME baseline tuple the arm just used, and the
+     * arm's own recorded digest, so the guard cannot end up standing on a
+     * different scene than the scenario. */
+    const discrimination = assertStopDiscrimination({
+      armId,
+      controlManifest,
+      compile: loaded.compile,
+      vertical: options.verticals[0],
+      provenance: loaded.provenance,
+      baseline: armId === 'static-brand-theme' ? staticBaselines[options.verticals[0]] : null,
+      armBaselineDigest: lowered.producedBy.input.baseline?.digest ?? null,
+    });
+    const producedBy = { ...lowered.producedBy, stopDiscrimination: discrimination };
+
     return armId === 'static-brand-theme'
       ? composeStaticArm({
           vertical: options.verticals[0],
           variables: lowered.variables,
-          producedBy: lowered.producedBy,
+          producedBy,
         })
-      : composeDbArm({ variables: lowered.variables, producedBy: lowered.producedBy });
+      : composeDbArm({ variables: lowered.variables, producedBy });
   });
 
   // The stale-source guard (foundation/guards#detectStaleSource), wired so a

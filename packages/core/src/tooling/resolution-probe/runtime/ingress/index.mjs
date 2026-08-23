@@ -805,6 +805,180 @@ function baselineProvenance(armId, base, baselineSource) {
 }
 
 /**
+ * Does this arm ENCODE the stop at all, or does it merely emit a constant?
+ *
+ * THE DEFECT THIS CLOSES, twice recorded before it was fixed:
+ * `shape.radius-scale#knownDefects[1]` -- "lowerStop fails closed when a
+ * compiler emits NONE of the declared channels, but not when it emits one at a
+ * constant default. Any control whose declared channel has a non-conditional
+ * default can therefore carry a non-empty arm that encodes no stop."
+ * Two real instances were measured before this guard existed: radius pointed at
+ * `surfaces.borderRadius` lowered `--ds-radius-scale: 1` at all four stops, and
+ * density pointed at a prose double keypath lowered `--ds-density-scale: 1` at
+ * all three -- with `--ds-density-mode-factor` absent entirely, so the
+ * unconditional seed satisfied the empty-lowering guard on its own.
+ *
+ * THE PREDICATE, and why it is shaped this way. The distinction between a
+ * constant default and a legitimate identity stop is NOT a property of any stop:
+ * it is a property of the CHANNEL across the stop set. `suave`=1 lowers exactly
+ * `1` both when radius is healthy (0.75/0.9/1/1.15 -- it is a value) and when it
+ * is anti-doored (1/1/1/1 -- it is the absence of the dial). So an identity stop
+ * never needs an exemption; it falls out of a set-level predicate for free.
+ *
+ * It is EXISTS, not FOR-ALL: a healthy `density.mode` discriminates on ONE of
+ * its two declared channels, because `--ds-density-scale` is the vertical's
+ * structural scale and is constant within a vertical by construction. A
+ * for-all rule would fail a healthy control. Per-channel liveness is a
+ * different question, and it belongs to `ingressEquivalence` and the painted
+ * witness -- see the README: this guard proves the arm ENCODES the stop, never
+ * that the stop PAINTS.
+ *
+ * K is `declaredOutputs.channels` and nothing wider. The full emitted map would
+ * turn "this control declared its channels badly" into "this control is alive".
+ *
+ * @param {object} input
+ * @param {{theme: object, source: string}} [input.baseline]
+ *   The static arm's baseline TUPLE, exactly as `loadStaticBaselines()` returns
+ *   it. Taking the tuple rather than a bare theme is deliberate: passing the
+ *   wrapper where a theme belongs degrades SILENTLY to an empty theme (measured:
+ *   bithire lowers `--ds-density-scale: 1` instead of `0.9`, with no error),
+ *   and this guard lowers stops OUTSIDE the `composeStaticArm` path where
+ *   `assertArmProvenance` would have caught it. So the shape is enforced here,
+ *   and the digest is cross-checked against the arm's own.
+ */
+export function assertStopDiscrimination({
+  armId,
+  controlManifest,
+  compile,
+  vertical = null,
+  baseline = null,
+  provenance = {},
+  armBaselineDigest = null,
+}) {
+  const spec = INGRESS_ARMS[armId];
+  if (!spec) throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
+
+  let base;
+  if (armId === 'static-brand-theme') {
+    const shapeOk =
+      baseline &&
+      typeof baseline === 'object' &&
+      baseline.theme &&
+      typeof baseline.theme === 'object' &&
+      typeof baseline.source === 'string' &&
+      baseline.source.length > 0;
+    if (!shapeOk) {
+      throw new Error(
+        'resolution-probe: assertStopDiscrimination needs the static arm\'s baseline TUPLE ' +
+          '{ theme, source }, exactly as loadStaticBaselines() returns it. A bare theme, or the ' +
+          'wrapper passed where the theme belongs, degrades silently to an empty theme and the ' +
+          'guard would then measure a scene the scenario never compiles.',
+      );
+    }
+    base = baseline.theme;
+    // W-C: the guard and the arm must stand on the SAME baseline. Recomputing
+    // the digest and comparing it to the one the arm recorded turns "they
+    // should match" into "they are proven to match, per run".
+    const digest = baselineProvenance(armId, base, baseline.source)?.digest ?? null;
+    if (armBaselineDigest !== null && digest !== armBaselineDigest) {
+      throw new Error(
+        `resolution-probe: the discrimination guard's baseline (${String(digest).slice(0, 12)}) is ` +
+          `not the arm's baseline (${String(armBaselineDigest).slice(0, 12)}). The guard would be ` +
+          'certifying a different scene from the one the scenario measures.',
+      );
+    }
+  } else if (baseline) {
+    throw new Error(
+      'resolution-probe: only the static arm takes a baseline; the DB arm resolves the vertical ' +
+        'inside its own compiler (see lowerStop).',
+    );
+  }
+
+  const channels = controlManifest?.declaredOutputs?.channels ?? [];
+  if (channels.length === 0) {
+    throw new Error(
+      'resolution-probe: the control manifest declares no output channels, so there is no vector ' +
+        'in which a stop could be encoded.',
+    );
+  }
+  const stops = controlManifest?.calibration?.normalizedStops ?? [];
+
+  const witnesses = [];
+  const excluded = [];
+  for (const stop of stops) {
+    try {
+      const lowered = lowerStop({
+        armId,
+        controlManifest,
+        stopId: stop.id,
+        compile,
+        vertical,
+        provenance,
+        ...(armId === 'static-brand-theme' ? { base, baselineSource: baseline.source } : {}),
+      });
+      witnesses.push({ stopId: stop.id, variables: lowered.variables });
+    } catch (error) {
+      // A stop that cannot lower on this arm is not a violation. Three
+      // legitimate kinds were measured: the compiler eliding a vertical default
+      // (radius/suave, typography/normal), the vertical envelope rejecting a
+      // stop (radius/recto, effect/estandar), and a domain kind this harness
+      // does not lower (motion.dial). They are PUBLISHED with their reason so a
+      // small witness set never looks arbitrary.
+      excluded.push({ stopId: stop.id, reason: error.message });
+    }
+  }
+
+  const valuesOf = (channel) =>
+    new Set(witnesses.map((w) => (Object.hasOwn(w.variables, channel) ? String(w.variables[channel]) : '\u0000absent')));
+  const discriminating = channels.filter((channel) => valuesOf(channel).size > 1);
+  const constant = channels.filter((channel) => !discriminating.includes(channel));
+
+  const exception = controlManifest?.calibration?.stopDiscriminationException ?? null;
+  const exceptionApplies =
+    exception &&
+    typeof exception === 'object' &&
+    exception.armId === armId &&
+    typeof exception.reason === 'string' &&
+    exception.reason.length > 0 &&
+    typeof exception.adjudicatedBy === 'string' &&
+    exception.adjudicatedBy.length > 0;
+
+  const verdict = {
+    armId,
+    vertical,
+    witnesses: witnesses.map((w) => w.stopId),
+    discriminating,
+    constant,
+    excluded,
+    exception: exceptionApplies ? { ...exception } : null,
+  };
+
+  if (witnesses.length < 2) {
+    if (exceptionApplies) return Object.freeze({ ...verdict, outcome: 'PASS_WITH_EXCEPTION' });
+    throw new Error(
+      `resolution-probe: ${armId} lowered ${witnesses.length} witness stop(s) for ` +
+        `${controlManifest?.controlId}; discrimination is NOT DECIDABLE below two. A single ` +
+        'witness cannot show that this arm encodes anything. Excluded: ' +
+        `${excluded.map((e) => e.stopId).join(', ') || 'none'}. If this control legitimately ` +
+        'cannot exhibit two witnesses on this arm, that needs an adjudicated ' +
+        'calibration.stopDiscriminationException { armId, reason, adjudicatedBy }, not a silent pass.',
+    );
+  }
+
+  if (discriminating.length === 0) {
+    if (exceptionApplies) return Object.freeze({ ...verdict, outcome: 'PASS_WITH_EXCEPTION' });
+    throw new Error(
+      `resolution-probe: ${armId} encodes NO stop for ${controlManifest?.controlId}: every ` +
+        `declared channel (${channels.join(', ')}) lowers a constant across ` +
+        `${witnesses.length} witness stops (${verdict.witnesses.join(', ')}). A non-empty arm ` +
+        'carrying a constant default is the false-INERT vector; it is not a measurement.',
+    );
+  }
+
+  return Object.freeze({ ...verdict, outcome: 'PASS' });
+}
+
+/**
  * The published BrandTheme of each first-party vertical, for the static arm to
  * compose its stop onto (H-1).
  *

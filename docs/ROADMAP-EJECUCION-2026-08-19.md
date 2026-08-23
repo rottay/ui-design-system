@@ -2129,6 +2129,75 @@ artifacts byte-idénticos; roundIds preservados). Postaudit Fable:
 **ACCEPT**, memo `/private/tmp/h1h3-spacing-fable-postaudit.md`
 (SHA en su `.ready`), con la nota de latencia asentada arriba.
 
+##### H-2 — guard estructural de discriminación de stops (vector falso-INERTE cerrado) (2026-08-23)
+
+El vector abierto desde `shape.radius-scale#knownDefects[1]` («`lowerStop`
+falla cerrado cuando un compilador no emite NADA, pero no cuando emite un
+default constante incondicional») queda **cerrado estructuralmente** por un
+guard nuevo del instrumento, con preaudit Fable (ACCEPT, W-A…W-E) y la
+recomendación Codex registrada. Writer: Opus. SOURCE_READY
+`/private/tmp/h2-lowerstop-opus-source-ready.md`.
+
+**Predicado (por brazo/escenario, adjudicado):** `K =
+declaredOutputs.channels` (fuente normativa, W-D); FAIL «constant default
+encodes no stop» ⟺ |W_ok|≥2 ∧ ningún canal de K discrimina (|valores|≥2
+entre stops); FAIL «not decidable» ⟺ |W_ok|<2 (salvo excepción adjudicada
+del mecanismo W-B: `calibration.stopDiscriminationException` con
+`adjudicatedBy` obligatorio — la lista nace VACÍA y ningún manifest fue
+tocado); PASS si ∃ canal discriminante. **∃, no ∀** — density sano da 1/2
+(el scale es estructural, no el dial); el stop identidad sale gratis por
+construcción (suave=1 convive con stops que discriminan; drill con doble
+aserción que impide endurecer a ∀). W = todos los stops normalizados del
+dominio: nadie elige su propio examen. Los excluidos viajan con razón
+(identidad elidida, rechazo de envelope, domain.kind no soportado) en
+`producedBy.stopDiscrimination`.
+
+**W-C (la más filosa):** el guard usa EXACTAMENTE la misma tupla baseline
+`{theme, source}` que el brazo del escenario — la firma exige la tupla y un
+cross-check de digest por corrida prueba que coincide con
+`armBaselineDigest`. La degradación silenciosa (wrapper como base → escala
+bithire `1` en vez de `0.9` sin error) quedó reproducida y cerrada por dos
+vías independientes.
+
+**Límite honesto asentado en el README (W-A):** el guard prueba que el
+brazo CODIFICA el stop, nunca que el stop PINTE — la vida por canal es de
+`ingressEquivalence` + testigo pintado + expectativas por canal (caso vivo
+citado: `experience.profile/static`, accesorio discrimina con principal
+clavado por authored — inercia que encontró el testigo pintado y que
+degradó ese control).
+
+**Consecuencia elegida (W-E):** el guard es **blocking desde el aterrizaje**
+y `typography.scale/static` queda bloqueado de inmediato en los tres
+verticales (FAIL 0/1 medido: `--ds-type-scale` constante `1` — su
+`staticBrandThemePath` es prosa no caminable Y su canal es semilla literal;
+su packet futuro necesita LAS DOS cosas: keypath real en la autoridad —
+mismo fix que density en `capabilities/index.ts` — y verificación de que el
+stop sobreescribe la semilla). No tiene receipts: no invalida nada;
+convierte una mentira silenciosa en una negativa explícita.
+
+**Retrospectiva regenerada desde K normativo:** 30 PASS / 0 FAIL sobre el
+catálogo receipted (spacing.rhythm 1/2, no 1/1 como decía el diseño — el
+segundo canal declarado es constante; los veredictos no cambian, los
+números ahora salen de la fuente de ley). **Los 30 receipts NO se
+re-miden** (invariancia medida); se re-emiten sólo por frescura del
+contacto con `ownedSourceFiles`, artifacts byte-idénticos, roundIds
+preservados.
+
+Verificación: 56/56 drills (47 H-1 intactos + 9 nuevos; corridas propias
+del DT); `CONSTITUTION_READY`; validador 30/30; `tsc --noEmit` limpio.
+Preaudit Fable: ACCEPT W-A…W-E, memo
+`/private/tmp/h2-lowerstop-fable-preaudit.md`, SHA
+`28a772ea654862b5c4f28f356b5e62a618f9e81555eb99e6a038871344ea5ab6`.
+Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/h2-lowerstop-fable-postaudit.md` (SHA en su `.ready`) — el
+guard real ejercitado por el auditor en sus cinco caras (sano PASS,
+typography/static THROW vivo, y las tres negativas W-C tirando);
+retrospectiva 30/30 coincidente entrada por entrada; sentinel `'\0absent'`
+no colisionable verificado. Regla de proceso adoptada (segunda ocurrencia,
+mandato Fable): **el asiento del ledger se escribe ANTES de despachar el
+postaudit o DESPUÉS de recibirlo, nunca durante** — aplicada desde el
+próximo packet.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
