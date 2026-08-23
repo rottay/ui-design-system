@@ -97,6 +97,7 @@
       "border remains fixed",
       "motion remains fixed"
     ],
+    "evidenceKindLabellingRule": "Every one of the eight artifacts proves BOTH a computed delta and an exact restore; each is a three-phase both-arm run. evidenceKind names the ROLE the receipt is claimed for, not the only thing its artifact contains: the four tight receipts are claimed as static-db-computed-parity and the four airy receipts as exact-restore. A reader who wants the other half of either receipt will find it in the same artifact.",
     "knownDefects": [
       {
         "familyId": "structure/dashboard/dashboard-insights",

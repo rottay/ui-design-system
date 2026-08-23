@@ -548,8 +548,8 @@
         "Switching preset to numeric, none or unset must clear stale custom properties and preserve consumer style precedence."
       ],
       "evidenceIds": [
-        "R2:primitive/layout/stack:spacing.rhythm/tight/static-and-db",
-        "R2:primitive/layout/stack:spacing.rhythm/airy/static-and-db"
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/stack-tight.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/stack-airy.json.receipt.json"
       ],
       "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
@@ -578,7 +578,57 @@
           ]
         },
         "reviewedFrom": "anatomy"
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--ds-stack-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stack-gap-current",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-rhythm-effective-scale",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
+      "mechanism": "THEME_CONTROL"
     },
     {
       "controlId": "motion.dial",

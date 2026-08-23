@@ -1805,6 +1805,81 @@ owner-gated (al reabrirse: apuntar al asiento por rol o derivarla de
 constante viva, no a otro nombre propio); (3) las sesiones tmux declaradas en
 este asiento son declaración del DT, no hecho auditado.
 
+##### C2 — `program-check` VERDE (`CONSTITUTION_READY`) por primera vez desde `56847146f` (2026-08-23)
+
+Los 24 fallos heredados de `spacing.rhythm` (4 familias × 6 clases) se
+resolvieron **causalmente**: la ley del gate NO se enmendó (cero diff en
+`manifest/rules/**`, `program-check*`, `v2/**`) y ninguna celda se reancló a
+otra evidencia. Writer: Claude Opus (único writer), SOURCE_READY
+`/private/tmp/c2-spacing-rhythm-opus-source-ready.md`. Postaudit Fable:
+**ACCEPT**, memo `/private/tmp/c2-spacing-rhythm-fable-postaudit.md`, SHA-256
+`236d1ab34f390ee7db0e6f4d2a429526ea242e6a0a9d1d02c4a0bd55d34963ae`.
+
+**Write-set (14 paths):** 4 celdas `spacing.rhythm`
+(flex/grid/space/stack) — `mechanism: THEME_CONTROL`, 11 edges
+`internalChannels` reales (subconjunto exacto de los `outputBindings`
+preexistentes, `extra=[]`, ley de cardinalidad verificada: cero dueños en
+disputa sobre las 255 familias), `evidenceIds` como rutas repo-relativas del
+evidence root (la forma de los otros 3 controles); control manifest **+1
+línea** (`calibration.evidenceKindLabellingRule`: tight→
+`static-db-computed-parity`, airy→`exact-restore`; cada artifact prueba ambas
+mitades — Fable muestreó 4/4); `manifest/index.json` regenerado por el
+productor canónico (6 hojas digest, cero drift semántico); 8 receipts
+**re-emitidos por el productor** (`writeEvidence`/`buildReceipt`, nunca a
+mano): 3 campos cada uno (`evidenceKind`, `sourceDigest`, `createdAt`),
+artifacts byte-idénticos a HEAD, `roundId` R2 preservado. `disposition`
+sigue `UNKNOWN` y `unknownReason` íntegro en las 4 celdas (honesto: sin
+aceptación sighted).
+
+**Verificación DT de primera mano:** `program-check.mjs` =
+`CONSTITUTION_READY` (corrida propia); validador v2 = 24/24 VALID (corrida
+propia); Fable re-verificó por tres validadores: 24/24, 0 stale. Suite
+constitucional tras el packet: test 1 pasa de 46 errores a **22** (los 24 de
+spacing.rhythm resueltos; los 22 restantes son el artefacto sandbox
+`CLOSURE_MEMBERS` sin `test-artifacts`, deuda T-1a/F4B ya asentada con packet
+futuro propio).
+
+**Obligaciones vinculantes del ACCEPT (F1/F2 del postaudit):**
+
+1. **ROJO CONOCIDO declarado:** `resolution-probe` negative-controls test #20
+   queda **19/20** (verde en HEAD analíticamente). Conflicto de leyes
+   PREEXISTENTE: ese test exige `evidenceIds` de celda ⊆ listas del control
+   en forma `R2:…` mientras `program-check` (constitucional, blocking) exige
+   rutas resolubles bajo el evidence root; ambas son insatisfacibles a la vez
+   y el packet obedeció la constitucional. No es gate-wired (`test:scripts`
+   no cubre `src/tooling`). Evidencia: el memo Fable de este packet.
+2. **FOLLOW-UP OBLIGATORIO** antes del próximo packet que toque
+   `spacing.rhythm`: re-legislar **una sola vez** el test negative-controls
+   (el test entra en su write-set), preservando la protección causal
+   histórica («evidence is OUTPUT, never hashed as source binding») en la
+   forma nueva; verificar en ese packet que el runner no hashea
+   `evidenceIds` de celda (no asumirlo). Puede fusionarse con el de H1 en UN
+   packet atómico.
+3. **H1 (follow-up atómico):** 4 canales `--_ds-` reales
+   (`--_ds-grid-column-gap`, `--_ds-grid-row-gap`,
+   `--_ds-stack-divider-gap-block`, `--_ds-stack-divider-gap-inline`) sin
+   declarar porque el cross-check inverso exige fila en `terminalReach` de
+   `manifest/cascade/roots/spacing.rhythm.json` (fuera del write-set C2).
+   Correspondencia a preservar 1:1: `terminalReach` 88 filas = 88 edges.
+   Corrección de censo (F2): las listas `staticDbParityEvidenceIds`/
+   `exactRestoreEvidenceIds` las leen el generador Y el test #20; el fix
+   cosmético propuesto por el writer queda descartado en favor del follow-up
+   legislativo. Observación (F3): criterio `fallbackAuthority` consistente
+   al declarar esos 4 edges.
+4. **H2/H4/H5:** correctos y asentados (`--ds-density-effective-scale` no
+   reclamado — dueño `density.mode`; `SIGHTED_APPROVER` doblemente stale y
+   owner-gated; rótulo de flex lista canales de stack — adjudicación DT
+   pendiente, no urgente).
+
+**C3 — resello GAT-07 ejecutado como paso obligatorio del cierre (regla
+vigente desde T-1):** `gat07:write` + `--check-artifact` verdes — 2 corridas
+deterministas idénticas, hash `a24805069cf45ee25cebde62e5feb635052dac3baa2260c996261467c636e6d4`,
+3326 counters / 3226 exact zeros / 542 data-part entries. Artefactos:
+`packages/core/test-artifacts/gates/gat-07/semantic-evidence.json` y
+`semantic-hash.txt`. El sello `1c127bf0e` invalidado por la serie F4B queda
+superseded por este. **Regla operativa adoptada:** el resello `gat07:write`
+es paso obligatorio del cierre de TODO packet F4B, antes de su commit.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

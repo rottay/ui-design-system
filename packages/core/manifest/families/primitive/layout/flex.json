@@ -484,8 +484,8 @@
         "Responsive gap remediation must preserve consumer style precedence and exact numeric geometry."
       ],
       "evidenceIds": [
-        "R2:primitive/layout/flex:spacing.rhythm/tight/static-and-db",
-        "R2:primitive/layout/flex:spacing.rhythm/airy/static-and-db"
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/flex-tight.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/flex-airy.json.receipt.json"
       ],
       "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
@@ -504,7 +504,74 @@
             "--ds-stack-divider-size"
           ]
         }
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--ds-flex-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/flex"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-flex-column-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/flex"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-flex-row-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/flex"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-rhythm-effective-scale",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/flex"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
+      "mechanism": "THEME_CONTROL"
     },
     {
       "controlId": "motion.dial",

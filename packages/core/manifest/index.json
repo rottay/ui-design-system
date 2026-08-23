@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "6f239ff5181f4ec08dc3fc3ab227f2cbb56ed792fc7df8adb8a7d9b36ebee8ea",
+  "inputsDigest": "7588cdd09190233312aa01d9b02877f33b8b8095d14d1de7d0049536460572d7",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1439,7 +1439,7 @@
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "b14165dce51d55f6d326c0627b124612bf8b3a53f87b50034bd04b91d7f8e1b4"
+      "digest": "95d6c0988017a9707928d673ca9f12db8ba96d5120fe393475a0a172a05460f5"
     },
     {
       "controlId": "motion.dial",
@@ -2545,14 +2545,14 @@
     {
       "familyId": "primitive/layout/flex",
       "path": "manifest/families/primitive/layout/flex.json",
-      "digest": "3556163b6af60340d73aedfd06cc7d481ffd68d8b1981db5eef09037f7d4472c",
+      "digest": "2e38f45f9ca731f573725fb5c594f03e496d0c2e40c819eb390131942a567e76",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/layout/grid",
       "path": "manifest/families/primitive/layout/grid.json",
-      "digest": "2748804c0ce2467d111c2eb439822b5b047f26f187cd3cb30960b5d9add1cbca",
+      "digest": "4248c99b921574d5bae1e32823455dccbf8e1370f7d80dc5b8bff8ee6c26d7c7",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2608,7 +2608,7 @@
     {
       "familyId": "primitive/layout/space",
       "path": "manifest/families/primitive/layout/space.json",
-      "digest": "1f38000e40c24a09e2a675f5c204bbbd77330bad8bc1f4c1a7330d47e4bfce9a",
+      "digest": "e9ba80dee1704575e04915dc705b6f0fc5c9c937da88c9733c07e3e2deb0c869",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2622,7 +2622,7 @@
     {
       "familyId": "primitive/layout/stack",
       "path": "manifest/families/primitive/layout/stack.json",
-      "digest": "b13491b375a6ba53610a6713c5f7c996f2896c92b45e7e7e6ed9fbaf5b93748b",
+      "digest": "318e1972dd62f13cc4accb10677a49f4e995edb4e984977ebd7553295ec4ac80",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

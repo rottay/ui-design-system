@@ -3,7 +3,7 @@
   "roundId": "R2",
   "familyId": "primitive/layout/stack",
   "scenarioId": "spacing.rhythm/tight/static-and-db",
-  "evidenceKind": "computed-causal-run",
+  "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
   "toolVersion": "resolution-probe@ef75a323e403",
   "exitCode": 0,
@@ -60,10 +60,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "ccbecb9d4a9ff914f78167458332417a368943b44f44223a4ea1c4b4fcc0cb99",
+  "sourceDigest": "9ade31e3225385a45e23b6bb3ab01a24fe56a733af75233d21841a2b3b252e1f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/stack-tight.json",
   "artifactSha256": "3a77668165f690e59e06d3e9d1dada2709539d5f77694fda1e82950a6b50c56d",
-  "createdAt": "2026-08-23T10:12:17.976Z",
+  "createdAt": "2026-08-23T16:50:09.287Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

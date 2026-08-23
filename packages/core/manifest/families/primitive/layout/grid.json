@@ -512,8 +512,8 @@
         "Track templates, item placement and consumer inline style must remain identical through control set and reset."
       ],
       "evidenceIds": [
-        "R2:primitive/layout/grid:spacing.rhythm/tight/static-and-db",
-        "R2:primitive/layout/grid:spacing.rhythm/airy/static-and-db"
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/grid-tight.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/grid-airy.json.receipt.json"
       ],
       "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
@@ -525,7 +525,42 @@
           }
         ],
         "reviewedFrom": "anatomy"
-      }
+      },
+      "internalChannels": [
+        {
+          "channelId": "--ds-grid-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/grid"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-rhythm-effective-scale",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/grid"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
+      "mechanism": "THEME_CONTROL"
     },
     {
       "controlId": "motion.dial",
