@@ -1196,7 +1196,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | K5 | 100% implementación + postaudit + GAT/CI |
 | F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
 | PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
-| F4B | **1/20 controles** — `spacing.rhythm` en `COMPUTED_VERIFIED` (rank 3), no `SIGHTED_ACCEPTED`; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}` con receipts R2 válidos. Los 19 restantes siguen `UNKNOWN` |
+| F4B | **2/20 controles** — `spacing.rhythm` y `surfaces.effect-intensity`, ambos en `COMPUTED_VERIFIED` (rank 3), ninguno `SIGHTED_ACCEPTED`; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}` y 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}`, todos con receipts R2 válidos. Los 18 restantes siguen `UNKNOWN` |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
@@ -1254,6 +1254,113 @@ no se reclama: no hay aceptación sighted. El eje `responsive-preset` no lo
 cubren estos fixtures y queda sin medir. Deuda no bloqueante registrada:
 `compileAppearanceVariables` sigue declarado en un `.d.ts` de `dist` sin existir
 en el JS — divergencia tipo/runtime, ajena a este control.
+
+**F4B — `surfaces.effect-intensity` COMPUTED_VERIFIED (2026-08-23), 2/20.**
+Segundo control con evidencia causal de navegador; el asiento de `spacing.rhythm`
+de arriba queda intacto. Base `56847146f`, worktree limpio, `staged=0`, sin
+commit ni push. 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}`
+x `{mate,sobrio}`, cada uno midiendo **los dos ingress en una sola escena** y en
+los dos temas: 6 artifacts + 6 receipts (12 archivos) en
+`packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/`,
+los 6 receipts válidos contra `scripts/quality-evidence/v2/receipts.mjs`. Ningún
+run `harness-suspect`; `ingressEquivalence` con 0 filas divergentes en los 6;
+`restore.exact = true` y `negativeControls.held = true` en cada brazo de cada
+escenario.
+
+Números medidos. Canal directo `--ds-effect-intensity` sobre `token-readout`:
+`1 -> 0` y `1 -> 0.6` en rottay y evnto, `0.58 -> 0` y `0.58 -> 0.6` en bithire
+(su artifact compila ese piso, que es además el precedente que cita la ley de
+`estandar`). Pintura sobre `card-modern-md/root`: el alfa del primer stop de
+`background-image` va `0.024 -> 0` en `mate` y `0.024 -> 0.016` en `sobrio`, en
+rottay y evnto, en ambos brazos y ambos temas, monótono (`0 < 0.016 < 0.024`).
+La rampa autorada es `0.025 * effectIntensity`; Chromium serializa el alfa a 8
+bits, así que `0.025` lee `0.024` y `0.015` lee `0.016` — la cuantización es del
+navegador, se registra en vez de suavizarse.
+
+Ingress: static `surfaces.effectIntensity` por `compileBrandTheme`; DB
+`appearance.general.surfaces.effectIntensity` por `compileTenantThemeConfig`
+desde el subpath publicado. Ningún segundo emitter, ningún compilador retirado.
+
+Un defecto real del arnés, encontrado por la propia corrida y no enmascarado:
+`buildIngressInput` escribía el **id** del stop en el path de ingress para
+cualquier `domain.kind`. `spacing.rhythm` es `closed-enum`, donde el id ES el
+valor que un tenant escribe, así que la otra forma nunca se había ejercitado.
+Con un control `bounded` habría bajado `--ds-effect-intensity: mate`: la bajada
+estática es `String(su.effectIntensity ?? 1)` sin guarda numérica, el nombre
+llega literal al canal, y como `--ds-effect-intensity` es un `@property`
+registrado con `syntax: '<number>'` e `initial-value: 1`, la declaración es
+inválida a computed-value time y el navegador sustituye 1. **Todos los stops
+habrían pintado el baseline y la corrida habría reportado como inerte un control
+vivo**, con el brazo cargando igual un mapa no vacío, así que ninguna guarda
+existente habría disparado. El arnés ahora deriva el valor escrito de
+`domain.kind` y falla cerrado ante cualquier kind que no sepa escribir; hay
+drill contrafáctico que maneja el `compileBrandTheme` compilado real y clava que
+emite el literal `mate` (31 aserciones verdes en
+`runtime/ingress/tests/index.test.mjs`).
+
+Sobre `estandar` (1) no se simula paridad. `surfaces-effect-intensity-envelope.test.ts`
+(20 aserciones verdes) prueba que el door DB lo **rechaza** en los tres
+verticales con `invalid_value` en `$.appearance.surfaces.effectIntensity`, que el
+techo mismo (`0.65/0.65/0.75`) **sí** se acepta — que es lo que separa un rechazo
+de un clamp — y que el sobre es intervalo cerrado (`-0.1` y `1.5` también
+rechazados). El door estático acepta 1 en los tres.
+
+**Límites y deudas, ninguna disimulada.**
+1. `estandar` no tiene corrida causal recibida, y la razón es del instrumento,
+   no falta de medición: por contrato sólo es alcanzable por el door estático, y
+   una corrida causal de un solo brazo reporta `ingressEquivalenceHeld=false`
+   (dobla `comparable=false` en «no se sostuvo»), lo que fuerza `pass=false` y
+   `exitCode 1`, y el validador rechaza exit no-cero salvo `negative-drill`.
+   Forzar los dos brazos es imposible: el brazo DB lanza al bajar, que es
+   justamente la conducta bajo prueba. Medido igual: un run estático de un brazo
+   en bithire fue `harness-live` (`0.58 -> 1`, negativos sostenidos, restore
+   exacto); rottay y evnto se rechazaron correctamente como `harness-suspect`
+   por otra razón honesta — su baseline compilado **ya es 1**, así que ahí el
+   stop es no-op y no hay movimiento que observar. Queda como
+   `openContractQuestion` para adjudicación del DT; este packet **no** tocó esa
+   semántica de veredicto: debilitar una regla de gate es decisión del dueño.
+2. El keyline óptico intensity-scaled del card elevado **no responde al dial**.
+   `card.css` declara `inset 0 1px 0 color-mix(... calc(72% * var(--ds-effect-intensity)) ...)`
+   y su propio comentario dice que se disuelve en 0; medido, `box-shadow` es
+   idéntico entre baseline y mutación en las 24 filas de brazo de los 6
+   escenarios, en ambos temas y ambos doors. Registrado como medido-no-
+   diagnosticado por ruling del dueño (no perseguirlo): el control queda probado
+   vivo sobre el mismo elemento por una propiedad pintada independiente
+   (`background-image`) y por la lectura directa del canal.
+3. En bithire el dial llega al canal y **no pinta nada** en el card: su artifact
+   declara plano `--ds-gradient-surface` como literal opaco de tres stops sin
+   término de intensidad, mientras rottay y evnto heredan la definición escalada
+   de `foundation/animations/premium.css`. Divergencia de autoría por tenant, no
+   bajada rota: los dos doors coinciden también en bithire (0 filas divergentes).
+4. **Responsive sin medir**: la sonda clava un viewport (1280x800, dpr 1).
+5. Se midió **una** familia. 21 owners CSS de `runtime/engines/modern/skin` leen
+   este canal; el `productiveConsumerWitness` declarado en el manifest
+   (`overlay-modal.css`) no tiene fixture en el roster y **no** se midió. Por
+   ruling del DT el canary primario es `card-modern-md/card.css` y el witness
+   documental no se reemplazó. La afirmación a nivel control es sobre el canal y
+   los dos doors, no sobre cada superficie que el canal decora.
+6. `disposition` de la celda sigue `UNKNOWN` **no por falta de medición** sino
+   porque `APPLICABLE` exige `staticSourceBindings`/`dbSourceBindings` separados
+   más `states` y `stressCases`, forma que esta celda no tiene.
+   `SIGHTED_ACCEPTED` **no se reclama**: no hay aceptación sighted.
+7. `anatomy.propertyGroups` de `primitive/display/card` estaba vacío y bloqueaba
+   `IMPLEMENTED`; se declaró **sólo** el grupo que esta calibración midió
+   (`surface-decoration`), igual que el packet de `spacing.rhythm` pobló los
+   cuatro layout. Taxonomía parcial declarada como tal, no inventada completa.
+8. `program-check` pasa de **25 a 24** hallazgos: 0 nuevos, y se resuelve
+   `manifest/index.json is stale`. Advertencia honesta: regenerar ese índice
+   **también** absorbió cuatro filas que el packet 1/20 había dejado sin
+   regenerar (`primitive/layout/{flex,grid,space,stack}`, de `SOURCE_BOUND`
+   a `COMPUTED_VERIFIED`). No es trabajo de este packet y se nombra para que no
+   viaje escondido. Los 24 restantes son los de `spacing.rhythm` heredados.
+9. Rojo heredado fuera de alcance por ruling del dueño: el drill
+   `composition/receipt` 11/12 (`producer may not be the sighted approver`)
+   compara contra `SIGHTED_APPROVER = 'Codex (DT)'` pasando `'Codex'`. Ajeno a
+   este edit-set.
+
+Toolchain: los 6 escenarios se corrieron en Node **v22.17.0** (el pineado);
+una corrida previa idéntica en v25.2.1 dio veredictos y conteos byte-iguales, lo
+que sirve además de cruce de reproducibilidad. `tsc --noEmit` limpio.
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

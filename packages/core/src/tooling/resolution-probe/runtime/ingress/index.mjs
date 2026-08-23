@@ -312,12 +312,14 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
     );
   }
   const stops = controlManifest?.calibration?.normalizedStops ?? [];
-  if (!stops.some((entry) => entry.id === stopId)) {
+  const stop = stops.find((entry) => entry.id === stopId);
+  if (!stop) {
     throw new Error(
       `resolution-probe: "${stopId}" is not a normalized stop of ${controlManifest?.controlId}. ` +
         `Declared: ${stops.map((entry) => entry.id).join(', ') || 'none'}.`,
     );
   }
+  const ingressValue = ingressValueForStop({ controlManifest, stop });
 
   const segments = path.split('.');
   const document = structuredClone(base);
@@ -326,8 +328,67 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
     if (typeof cursor[segment] !== 'object' || cursor[segment] === null) cursor[segment] = {};
     cursor = cursor[segment];
   }
-  cursor[segments.at(-1)] = stopId;
-  return { path, document, stopId };
+  cursor[segments.at(-1)] = ingressValue;
+  return { path, document, stopId, ingressValue };
+}
+
+/**
+ * What a tenant actually WRITES at the ingress path for one normalized stop.
+ *
+ * A stop has two halves and they are not always the same thing. `id` is the
+ * stop's NAME; `value` is the normalized number it stands for. For a
+ * `closed-enum` control the tenant writes the name — `surfaces.rhythm: 'airy'`
+ * — and `value` records the factor that name resolves to downstream. For a
+ * `bounded` control the tenant writes the NUMBER — `surfaces.effectIntensity:
+ * 0.6` — and `id` is only a human label this programme gave it.
+ *
+ * Writing the id for a bounded control produces the most convincing false
+ * negative this harness can produce, and it is not hypothetical: the static
+ * lowering of `surfaces.effectIntensity` is `String(su.effectIntensity ?? 1)`
+ * with no numeric guard, so it would emit `--ds-effect-intensity: mate`. That
+ * name is not a `<number>`, `--ds-effect-intensity` is a registered
+ * `@property` with `initial-value: 1`, and an invalid value on a registered
+ * property falls back to the initial value. Every stop would then paint
+ * exactly what the baseline paints and the run would report a live control as
+ * INERT — while the arm still carried a non-empty variable map, so no
+ * existing guard would fire.
+ *
+ * So the shape is read from `domain.kind` rather than guessed per control, and
+ * every other kind fails closed: a control whose ingress value this function
+ * cannot derive from the contract must not be lowered on a remembered
+ * convention.
+ */
+function ingressValueForStop({ controlManifest, stop }) {
+  const kind = controlManifest?.domain?.kind;
+  const controlId = controlManifest?.controlId ?? 'unknown control';
+  if (kind === 'closed-enum') {
+    const enumValues = controlManifest?.domain?.enumValues ?? [];
+    if (enumValues.length > 0 && !enumValues.includes(stop.id)) {
+      throw new Error(
+        `resolution-probe: stop "${stop.id}" of ${controlId} is not one of the closed-enum ` +
+          `domain values (${enumValues.join(', ')}), so a tenant could not write it at the ` +
+          'ingress path.',
+      );
+    }
+    return stop.id;
+  }
+  if (kind === 'bounded') {
+    if (typeof stop.value !== 'number' || !Number.isFinite(stop.value)) {
+      throw new Error(
+        `resolution-probe: ${controlId} has a bounded domain, so a tenant writes the NUMBER at ` +
+          `the ingress path — but stop "${stop.id}" declares no finite numeric value ` +
+          `(got ${JSON.stringify(stop.value)}). Writing the stop NAME into a numeric field ` +
+          'lowers an invalid value, which a registered @property silently replaces with its ' +
+          'initial value, and the run then reports a live control as inert.',
+      );
+    }
+    return stop.value;
+  }
+  throw new Error(
+    `resolution-probe: ${controlId} declares domain kind "${kind ?? 'none'}", and this harness ` +
+      'only knows how to write a closed-enum stop id or a bounded stop value at an ingress ' +
+      'path. Refusing to lower a stop on a remembered convention.',
+  );
 }
 
 /**
@@ -516,7 +577,17 @@ export function lowerStop({
       // builds); `compilerInput` is what was ACTUALLY handed to `compile()`
       // after `toCompilerInput` reshaped it. Both are recorded so a reader can
       // see the reshape happened rather than trust it happened.
-      input: { path: input.path, stopId, document: input.document, compilerInput },
+      input: {
+        path: input.path,
+        stopId,
+        // The VALUE the tenant writes at `path`, which is the stop id for a
+        // closed-enum control and the stop's number for a bounded one. Recorded
+        // separately from `stopId` so a reader can see which of the two was
+        // lowered instead of inferring it from the document.
+        ingressValue: input.ingressValue,
+        document: input.document,
+        compilerInput,
+      },
       declaredChannels: [...channels],
       emittedChannels: Object.keys(variables).sort(),
       omittedChannels: channels.filter((channel) => !Object.hasOwn(variables, channel)),

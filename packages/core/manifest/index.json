@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "85951b03acbe74e853da3789ac06dbea54b4441215645f2a466d69e5f25392fb",
+  "inputsDigest": "9dacd2fbb1fb663157cb71ea391e2caca2786af2bc9a53fd333a1cb96a9a3b4e",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -545,7 +545,7 @@
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "SOURCE_BOUND",
+            "verificationState": "COMPUTED_VERIFIED",
             "stableParts": [
               "root"
             ],
@@ -573,7 +573,7 @@
             "familyId": "primitive/layout/grid",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "SOURCE_BOUND",
+            "verificationState": "COMPUTED_VERIFIED",
             "stableParts": [
               "root"
             ],
@@ -599,7 +599,7 @@
             "familyId": "primitive/layout/space",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "SOURCE_BOUND",
+            "verificationState": "COMPUTED_VERIFIED",
             "stableParts": [
               "root",
               "separator"
@@ -624,7 +624,7 @@
             "familyId": "primitive/layout/stack",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "SOURCE_BOUND",
+            "verificationState": "COMPUTED_VERIFIED",
             "stableParts": [
               "divider",
               "root"
@@ -789,13 +789,42 @@
       },
       {
         "controlId": "surfaces.effect-intensity",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
-        "parts": [],
-        "propertyGroups": [],
-        "channels": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--_ds-card-loading-backdrop-blur",
+          "--_ds-card-skeleton-highlight",
+          "--_ds-card-surface-gradient"
+        ],
         "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "background-image",
+              "box-shadow"
+            ],
+            "channels": [
+              "--_ds-card-loading-backdrop-blur",
+              "--_ds-card-skeleton-highlight",
+              "--_ds-card-surface-gradient"
+            ]
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1344,7 +1373,7 @@
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "f47f2bb46d55d0341d74e23b5f0aec7b136d022bcad8908fb64ea61079733c1d"
+      "digest": "c36220c1769e5cc031b2bf5260138dbba559adf0384354562b8e13e922f01f52"
     },
     {
       "controlId": "motion.dial",
@@ -1359,7 +1388,7 @@
     {
       "controlId": "surfaces.effect-intensity",
       "path": "manifest/controls/surfaces.effect-intensity.json",
-      "digest": "4e6b09ed266aae4f48e142067e7b9da9cfc9c6fc57831f0b960d3104fcb35a54"
+      "digest": "c77042f768676891eeb907cd0ed1cd710fc5fa809bd13104b715a477e71746ed"
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -1981,7 +2010,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "manifest/families/primitive/display/card.json",
-      "digest": "fa3193a6d022a18eeab2ab8a6a05056d04537ceb989faca1e00c71819cc5fa0e",
+      "digest": "3dbb738843079d834b8ba547daac14fac649eb00336c3882ac74172ec7e036c7",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2450,14 +2479,14 @@
     {
       "familyId": "primitive/layout/flex",
       "path": "manifest/families/primitive/layout/flex.json",
-      "digest": "60823f5ca74d077d536179f37bf00c5d281d3f2ec1d92bc8a67a431395498f46",
+      "digest": "3556163b6af60340d73aedfd06cc7d481ffd68d8b1981db5eef09037f7d4472c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/layout/grid",
       "path": "manifest/families/primitive/layout/grid.json",
-      "digest": "864e9120717cd09399d4a914d9a1e399a9b6a4470c68a6e964593054ca43b57e",
+      "digest": "2748804c0ce2467d111c2eb439822b5b047f26f187cd3cb30960b5d9add1cbca",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2513,7 +2542,7 @@
     {
       "familyId": "primitive/layout/space",
       "path": "manifest/families/primitive/layout/space.json",
-      "digest": "f3382a2e77a2427e2c6e560512196daa49ac68e6946830aaa6b32a4e8d0dafe4",
+      "digest": "1f38000e40c24a09e2a675f5c204bbbd77330bad8bc1f4c1a7330d47e4bfce9a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2527,7 +2556,7 @@
     {
       "familyId": "primitive/layout/stack",
       "path": "manifest/families/primitive/layout/stack.json",
-      "digest": "0f5ee2bf9c989cdc68e60969651205f6020063f88b6d5d16a715ec5927dc1ebb",
+      "digest": "b13491b375a6ba53610a6713c5f7c996f2896c92b45e7e7e6ed9fbaf5b93748b",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

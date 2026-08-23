@@ -15,6 +15,7 @@
  */
 
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { pathToFileURL } from 'node:url';
@@ -466,4 +467,149 @@ test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel
     assert.equal(lowered['static-brand-theme'].producedBy.input.path, 'surfaces.rhythm');
     assert.equal(lowered['db-tenant-theme'].producedBy.input.path, 'appearance.general.rhythm');
   }
+});
+
+/* ------------------------------------------------------------------------ *
+ * A BOUNDED control writes its stop's NUMBER, not the stop's NAME.
+ *
+ * `spacing.rhythm` is `closed-enum`, so its stop id IS the value a tenant
+ * writes and the two halves of a stop were indistinguishable in every drill
+ * above. `surfaces.effect-intensity` is `bounded`: the tenant writes `0.6`,
+ * and `sobrio` is only the label this programme gave that number.
+ * ------------------------------------------------------------------------ */
+
+const BOUNDED_CONTROL_MANIFEST = readManifest(
+  resolve(CORE_ROOT, 'manifest/controls/surfaces.effect-intensity.json'),
+);
+
+test('a BOUNDED control lowers the stop VALUE at the ingress path, never the stop id', () => {
+  const staticInput = buildIngressInput({
+    armId: 'static-brand-theme',
+    controlManifest: BOUNDED_CONTROL_MANIFEST,
+    stopId: 'sobrio',
+  });
+  assert.deepEqual(staticInput.document, { surfaces: { effectIntensity: 0.6 } });
+  assert.equal(staticInput.ingressValue, 0.6);
+  assert.equal(staticInput.stopId, 'sobrio');
+
+  const dbInput = buildIngressInput({
+    armId: 'db-tenant-theme',
+    controlManifest: BOUNDED_CONTROL_MANIFEST,
+    stopId: 'mate',
+  });
+  assert.deepEqual(dbInput.document, {
+    appearance: { general: { surfaces: { effectIntensity: 0 } } },
+  });
+  // 0 is a real stop, not an absent one. A truthiness test anywhere on this
+  // path would erase the single most interesting stop this control has.
+  assert.equal(dbInput.ingressValue, 0);
+
+  // The closed-enum contract is unchanged: its id IS the written value.
+  assert.equal(
+    buildIngressInput({
+      armId: 'static-brand-theme',
+      controlManifest: CONTROL_MANIFEST,
+      stopId: 'airy',
+    }).ingressValue,
+    'airy',
+  );
+});
+
+test('counterfactual: writing the stop NAME into the bounded field is a FALSE NEGATIVE, not a smaller number', async () => {
+  // This is the defect the fix above retires, reproduced through the REAL
+  // static lowering rather than asserted in prose. `compileBrandTheme` lowers
+  // `surfaces.effectIntensity` as `String(su.effectIntensity ?? 1)` with no
+  // numeric guard, so the name survives into the channel verbatim.
+  const arms = await loadCompilerArms();
+  const compile = arms['static-brand-theme'].compile;
+
+  const withName = compile({
+    brandTheme: { surfaces: { effectIntensity: 'mate' } },
+    tenantSlug: 'rottay',
+  });
+  // Same resolution `lowerStop` performs: compileBrandTheme returns its map as
+  // `cssVariables`, compileTenantThemeConfig as `variables`.
+  const emittedForName = (withName?.variables ?? withName?.cssVariables)['--ds-effect-intensity'];
+  assert.equal(
+    emittedForName,
+    'mate',
+    'the static lowering has no numeric guard, so the stop NAME reaches the channel verbatim',
+  );
+  // `--ds-effect-intensity` is a registered @property with syntax '<number>'
+  // and initial-value 1, so that declaration is invalid at computed-value time
+  // and the browser substitutes the INITIAL value. Every stop would then paint
+  // exactly the baseline and the run would report a live control as inert --
+  // while the arm still carried a non-empty variable map, so no existing guard
+  // would have fired. Pin the two facts that make it invalid rather than the
+  // browser behaviour this unit cannot observe.
+  assert.equal(Number.isNaN(Number(emittedForName)), true);
+  const properties = readFileSync(
+    resolve(CORE_ROOT, 'src/foundation/tokens/css/foundation/base/properties.css'),
+    'utf8',
+  );
+  assert.match(
+    properties,
+    /@property --ds-effect-intensity \{\s*syntax: '<number>';\s*inherits: true;\s*initial-value: 1;/,
+    'the registered @property is what turns an invalid value into a silent baseline reading',
+  );
+
+  // And the fixed path lowers a real number for the same stop.
+  const lowered = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: BOUNDED_CONTROL_MANIFEST,
+    stopId: 'mate',
+    compile,
+    provenance: arms['static-brand-theme'].provenance,
+    vertical: 'rottay',
+  });
+  assert.equal(lowered.variables['--ds-effect-intensity'], '0');
+  assert.equal(lowered.producedBy.input.ingressValue, 0);
+});
+
+test('negative drill: a bounded stop with no finite numeric value is refused, not coerced', () => {
+  for (const value of [undefined, null, 'mate', Number.NaN, Number.POSITIVE_INFINITY]) {
+    assert.throws(
+      () =>
+        buildIngressInput({
+          armId: 'static-brand-theme',
+          controlManifest: {
+            ...BOUNDED_CONTROL_MANIFEST,
+            calibration: { normalizedStops: [{ id: 'sobrio', value }] },
+          },
+          stopId: 'sobrio',
+        }),
+      /declares no finite numeric value/,
+      `stop value ${JSON.stringify(value)} must be refused`,
+    );
+  }
+});
+
+test('negative drill: a domain kind this harness cannot write fails closed', () => {
+  for (const kind of ['profile-id', 'token-map', 'color-set', 'scale', undefined]) {
+    assert.throws(
+      () =>
+        buildIngressInput({
+          armId: 'static-brand-theme',
+          controlManifest: { ...BOUNDED_CONTROL_MANIFEST, domain: { kind } },
+          stopId: 'sobrio',
+        }),
+      /only knows how to write a closed-enum stop id or a bounded stop value/,
+      `domain kind ${String(kind)} must fail closed rather than write the stop id`,
+    );
+  }
+});
+
+test('negative drill: a closed-enum stop outside the declared domain values is refused', () => {
+  assert.throws(
+    () =>
+      buildIngressInput({
+        armId: 'static-brand-theme',
+        controlManifest: {
+          ...CONTROL_MANIFEST,
+          calibration: { normalizedStops: [{ id: 'roomy', value: 1.4 }] },
+        },
+        stopId: 'roomy',
+      }),
+    /is not one of the closed-enum domain values/,
+  );
 });

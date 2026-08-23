@@ -81,7 +81,9 @@
       "loading"
     ],
     "variantAxes": [],
-    "propertyGroups": [],
+    "propertyGroups": [
+      "surface-decoration"
+    ],
     "invariants": [
       "Every interaction rule is written :not([data-disabled='true']), so a disabled card cannot be made to look interactive by a tenant control. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:101, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:212, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:225, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:240]",
       "Focus-visible paint is gated on data-actionable and re-asserts under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:240, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:756]",
@@ -14431,7 +14433,8 @@
       }
     },
     "evidenceIds": [],
-    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS",
+    "propertyGroupsScopeNote": "PARTIAL BY CONSTRUCTION, and populated by the calibration that measured it -- the same way primitive/layout/{flex,grid,stack,space} were populated by the spacing.rhythm packet. 'surface-decoration' is the additive gradient/keyline layer the Card root paints OVER its base fill: background-image (the --ds-card-surface-gradient <- --ds-gradient-surface tint) and the elevated variant's inset optical keyline inside box-shadow. It is deliberately NOT the base fill, the border or the radius, which belong to groups a later calibration must name when it measures them. An empty list here would have blocked every cell from IMPLEMENTED; a full invented taxonomy would have declared groups nothing has measured."
   },
   "themeControls": [
     {
@@ -16848,10 +16851,17 @@
     {
       "controlId": "surfaces.effect-intensity",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene in three verticals and both themes, the painted surface tint scaling 0.024 -> 0.016 -> 0 monotonically, negative controls held and restore exact. disposition stays UNKNOWN for reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings plus states and stressCases, which this cell shape does not carry, and SIGHTED_ACCEPTED is not claimable from a computed run.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-mate.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/bithire-mate.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-sobrio.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/bithire-sobrio.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-sobrio.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. Computed half done for mate and sobrio on both doors. Two measured findings stay open at source and are recorded in the control's knownDefects: the elevated keyline inside box-shadow does not respond to the dial, and bithire paints no tint because its artifact flat-declares --ds-gradient-surface.",
       "targetBinding": {
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -16926,6 +16936,43 @@
             "state": "LIVE"
           }
         }
+      ],
+      "mechanism": "THEME_CONTROL",
+      "stableParts": [
+        "root"
+      ],
+      "propertyGroups": [
+        "surface-decoration"
+      ],
+      "computedProperties": [
+        "background-image",
+        "box-shadow"
+      ],
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+        "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/properties.css",
+        "packages/core/manifest/controls/surfaces.effect-intensity.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "font metrics remain fixed",
+        "color remains fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same five the control declares, restated on this root so the cell is self-describing; the effective set is the union, so this narrows nothing and loosens nothing. 'control height remains fixed' is bound to card-modern-md/root in every run and therefore checked rather than assumed.",
+      "stressCases": [
+        "effectIntensity=0 must remove decoration and keep hierarchy: base fill, border colour, border width, radius, type and motion all unmoved (measured, held on 24 arm-rows)",
+        "effectIntensity equal to the vertical's own compiled baseline is a no-op with no painted delta (measured: rottay and evnto already compile 1, so estandar moves nothing there)",
+        "a tenant whose vertical flat-declares --ds-gradient-surface with no intensity term reaches the channel but paints no tint (measured: bithire)",
+        "estandar (1) is refused by the DB door in all three verticals and accepted by the static door (proven in the envelope test, not in a causal run -- see the control's openContractQuestions)",
+        "UNMEASURED: any viewport other than 1280x800 dpr1"
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door must restore the baseline tint and the baseline channel value exactly, with no tolerance (measured: restore.exact true on every arm of all six scenarios).",
+        "The DB door's inline root write must leave no residual style attribute the baseline did not have."
       ]
     },
     {

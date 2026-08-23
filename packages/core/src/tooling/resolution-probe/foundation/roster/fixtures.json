@@ -4,10 +4,11 @@
   "fixtures": [
     {
       "id": "card-modern-md",
-      "why": "The canonical derived-radius consumer. Chain: border-radius <- --ds-card-radius <- --ds-card-border-radius <- --ds-radius-lg <- calc(--ds-radius-lg-base * --ds-radius-scale). Four hops from the tenant dial to a painted pixel.",
+      "why": "The canonical derived-radius consumer. Chain: border-radius <- --ds-card-radius <- --ds-card-border-radius <- --ds-radius-lg <- calc(--ds-radius-lg-base * --ds-radius-scale). Four hops from the tenant dial to a painted pixel. It is ALSO the decoration-intensity consumer: this fixture is data-variant='elevated', and the elevated rule is the one that composes --ds-effect-intensity into two painted properties -- box-shadow's inset optical keyline (calc(72% * EI) inside a color-mix) and background-image's surface tint (--ds-card-surface-gradient <- --ds-gradient-surface, whose three rgba alphas are each calc(k * EI)). background-image was added 2026-08-23 because the tint is a second, independent painted witness of the same channel and measuring only the keyline would have reported a tenant that flattens one but not the other as fully flattened.",
       "requiresSelectors": [
         ".ds-card.ds-card--modern[data-part='root'][data-radius='md']",
-        "--ds-card-border-radius: var(--ds-radius-lg)"
+        "--ds-card-border-radius: var(--ds-radius-lg)",
+        "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)"
       ],
       "html": "<div class=\"ds-card ds-card--elevated ds-card--modern\" data-variant=\"elevated\" data-radius=\"md\" data-size=\"md\" data-padding=\"md\" data-part=\"root\" data-probe=\"card-modern-md\"><div data-part=\"body\">card body</div></div>",
       "targets": [
@@ -22,6 +23,7 @@
             "border-top-color",
             "border-top-width",
             "box-shadow",
+            "background-image",
             "padding-top",
             "font-family",
             "font-size"
@@ -145,11 +147,12 @@
     {
       "id": "token-readout",
       "synthetic": true,
-      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control.",
+      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control. Extended 2026-08-23 with --ds-effect-intensity, the single declared channel of surfaces.effect-intensity. It is a REGISTERED @property (syntax '<number>', initial-value 1), which is exactly why a direct read matters here: an invalid lowering is replaced by the initial value rather than dropped, so a broken ingress arm and a genuinely unreachable channel both paint the baseline. Reading the channel itself separates them.",
       "requiresSelectors": [
         "--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))",
         "--ds-rhythm-scale: 1",
-        "--ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)"
+        "--ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)",
+        "@property --ds-effect-intensity"
       ],
       "html": "<div data-probe=\"token-readout\"></div>",
       "targets": [
@@ -180,7 +183,8 @@
             "--ds-type-scale",
             "--ds-font-size-xs",
             "--ds-rhythm-scale",
-            "--ds-rhythm-effective-scale"
+            "--ds-rhythm-effective-scale",
+            "--ds-effect-intensity"
           ]
         }
       ]
